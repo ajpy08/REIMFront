@@ -22,7 +22,7 @@ export class Agencia {
         public fAlta?: string,
         public usuarioMod?: string,
         public fMod?: string,
-        public _id?: string,
-        public propiedadprueba?: string
+        public _id?: string
+        
     ) {}
 }
