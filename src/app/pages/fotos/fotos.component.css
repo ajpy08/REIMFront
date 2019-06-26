@@ -1,0 +1,21 @@
+.main-conteiner {
+    margin-top: 40px;
+}
+
+
+/* Drop zone */
+
+.drop-zone {
+    border: dotted 3px lightgray;
+    opacity: 0.5;
+    color: #666;
+    text-align: center
+}
+
+.file-over {
+    border: dotted 3px dodgerblue;
+}
+
+.table {
+    margin-top: green
+}

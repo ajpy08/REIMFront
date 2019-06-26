@@ -1,0 +1,91 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarUsuarios(input.value)" type="text" class="form-control" placeholder="Buscar usuarios...">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn" *ngIf="cargando">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fas fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor</span>
+        </div>
+    </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="!cargando">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Usuarios registrados (<small>{{totalRegistros}}</small>)</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Correo</th>
+                                <th>Nombre</th>
+                                <th>Role</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let usuario of usuarios">
+                                <td class=".w70"><img (click)="mostarModal(usuario._id)" [src]="usuario.img | imagen" class="img-50 img-circle pointer"></td>
+                                <td>{{usuario.email}}</td>
+                                <td>{{usuario.nombre}}</td>
+                                <td>
+                                    <select disabled [(ngModel)]="usuario.role" name="role" class="form-control">
+                                  <option value="ADMIN_ROLE">ADMINISTRADOR</option>
+                                  <option value="REIMADMIN_ROLE">REIM ADMIN</option>
+                                  <option value="REIM_ROLE">REIM USER</option>
+                                  <option value="NAVIERA_ROLE">NAVIERA USER</option>
+                                  <option value="TRANSPORTISTA_ROLE">TRANSPORTISTA USER</option>
+                                  <option value="AA_ROLE">AGENCIA ADUANAL USER</option>
+                                  <option value="CLIENT_ROLE">CLIENTE</option>
+                                </select>
+                                </td>
+                                <td>
+                                    <!--========Combombox EMPRESAS=========-->
+                                    <mat-form-field>
+                                        <mat-select placeholder="Seleccione las empresas" [(ngModel)]="usuario.empresas" name="empresas" multiple required>
+                                            <mat-option *ngFor="let agencia of agencias" [value]="agencia._id">
+                                                {{ agencia.razonSocial }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <button (click)="guardarUsuario(usuario)" class="btn btn-primary">
+                              <i class="fas fa-save"></i>
+                              </button>
+
+                                    <button (click)="borrarUsuario(usuario)" class="btn btn-danger">
+                              <i class="fas fa-trash"></i>
+                              </button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+                  <i class="fas fa-angle-left"></i> Anteriores
+                </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                    Siguientes <i class="fas fa-angle-right"></i>
+              </button>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h3 class="box-title m-b-0">Buque: {{ buque.buque }}</h3>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarBuque(f)">
+                        <div class="my-container">
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="buque.buque" name="buque" type="text" class="form-control" placeholder="Nombre del buque" required>
+                            </mat-form-field>
+                        </div>
+
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                        <i class="fa fa-save"></i>
+                        Guardar
+                      </button>
+                        <a routerLink="/buques" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

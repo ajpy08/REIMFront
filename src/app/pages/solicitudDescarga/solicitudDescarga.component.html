@@ -1,0 +1,295 @@
+<!-- Row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-info">
+                <h4 class="m-b-0 text-white">Solicitud de descarga</h4>
+            </div>
+            <div class="card-body">
+                <form ngNativeValidate #f='ngForm' (ngSubmit)="guardarSolicitud(f)">
+                    <div class="form-body">
+                        <h3 class="card-title">Datos generales</h3>
+                        <hr>
+                        <div class="row p-t-20">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label"><b>Agente Aduanal</b></label>
+                                    <mat-select placeholder="Seleccione un agente" (selectionChange)="cargarDatos($event.value)" [(ngModel)]="solicitud.agencia" name="agencia" type="text" required>
+                                        <mat-option *ngFor="let usuario of usuario.empresas" [value]="usuario._id">
+                                            {{usuario.razonSocial}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group has-danger">
+                                    <label class="control-label"><b>Naviera</b></label>
+                                    <mat-select placeholder="Seleccione una naviera" (selectionChange)="cargarBuques($event.value)" [(ngModel)]="solicitud.naviera" name="naviera" type="text" required>
+                                        <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
+                                            {{naviera.razonSocial}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group has-success">
+                                    <label class="control-label"><b>Transportista</b></label>
+                                    <mat-select placeholder="Seleccione un transportista" [(ngModel)]="solicitud.transportista" name="transportista" type="text" required>
+                                        <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                                            {{transportista.razonSocial}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                        <div class="row p-t-20">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label"><b>Facturar a: </b></label>
+                                    <mat-radio-group class="example-radio-group">
+                                        <mat-radio-button class="example-radio-button" *ngFor="let factura of facturas" [value]="factura">
+                                            {{factura}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-select placeholder="Seleccione un cliente" [(ngModel)]="solicitud.cliente" name="cliente" type="text" required>
+                                    <mat-option *ngFor="let cliente of clientes" [value]="cliente._id">
+                                        {{cliente.razonSocial}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                            <div class="col-md-4">
+                                <mat-select placeholder="Seleccione un buque" [(ngModel)]="solicitud.buque" name="buque" type="text" required>
+                                    <mat-option *ngFor="let buque of buques" [value]="buque._id">
+                                        {{buque.buque}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/span-->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <!--<mat-select placeholder="Seleccione un viaje" [(ngModel)]="solicitud.viaje" name="viaje" type="text" required>
+                                        <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                                            <span>Viaje: {{ viaje.viaje }}</span>
+                                            <span> | Buque: {{viaje.buque.buque}}</span>
+                                        </mat-option>
+                                    </mat-select>-->
+                                    <input matInput [(ngModel)]="solicitud.viaje" name="viaje" type="text" placeholder="Viaje requerido" required>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+
+                        <h3 class="box-title m-t-40">Detalles de la descarga</h3>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <label><b>Observaciones</b></label>
+                                    <textarea matInput rows="3" cols="40" class="form-control" [(ngModel)]="solicitud.observaciones" name="observaciones"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><b>Anexar BL</b></label>
+                                    <input (change)="seleccionBL($event.target.files[0])" type="file" name='file' accept=".pdf, image/*" class="form-control">
+                                </div>
+                            </div>
+
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><b>Formas de pago: </b></label>
+                                    <mat-radio-group class="example-radio-group" [(ngModel)]="solicitud.credito" name="credito">
+                                        <mat-radio-button class="example-radio-button" *ngFor="let pago of pagos" [value]="pago">
+                                            {{pago}}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><b>Anexar comprobante</b></label>
+                                    <input (change)="seleccionComprobante($event.target.files[0])" type="file" name='file2' accept=".pdf, image/*" class="form-control">
+                                </div>
+                            </div>
+                            <!--/span-->
+
+                        </div>
+
+                        <!--/span-->
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><b>Correo Personal</b></label>
+                                    <textarea matInput rows="3" cols="40" class="form-control" [(ngModel)]="solicitud.correo" [value]="solicitud.correo" name="correo"></textarea>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <div class="form-group">
+                                        <label><b>Correo Facturación</b></label>
+                                        <textarea matInput rows="3" cols="40" class="form-control" [(ngModel)]="solicitud.correoFac" name="correoFac"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <h3 class="box-title m-t-40">Detalles del contenedor</h3>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label><b>Contenedor</b></label>
+                                    <input #box type="text" class="form-control">
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-3">
+                                <div class="form-group">
+
+                                    <label class="control-label"><b>Tamaño - Tipo</b></label>
+                                    <mat-select [(value)]="selectedTipo" name="tipo" required class="form-control" tabindex="1">
+                                        <mat-option value="Contenedor Estandar 20'">Contenedor Estandar 20'</mat-option>
+                                        <mat-option value="Contenedor Estandar 40">Contenedor Estandar 40'</mat-option>
+                                        <mat-option value="Contenedor Estandar De Cubo Alto 40'">Contenedor Estandar De Cubo Alto 40'</mat-option>
+                                        <mat-option value="Contenedor Tapa Dura 20'">Contenedor Tapa Dura 20'</mat-option>
+                                        <mat-option value="Contenedor Tapa Dura 40'">Contenedor Tapa Dura 40'</mat-option>
+                                        <mat-option value="Contenedor Tapa Abierta 20'">Contenedor Tapa Abierta 20'</mat-option>
+                                        <mat-option value="Contenedor Tapa Abierta 40'">Contenedor Tapa Abierta 40'</mat-option>
+                                        <mat-option value="Flat 20'">Flat 20'</mat-option>
+                                        <mat-option value="Flat 40">Flat 40'</mat-option>
+                                        <mat-option value="Plataforma 20'">Plataforma 20'</mat-option>
+                                        <mat-option value="Plataforma 40'">Plataforma 40'</mat-option>
+                                        <mat-option value="Contenedor Ventilado 20'">Contenedor Ventilado 20'</mat-option>
+                                        <mat-option value="Contenedor Termico 20'">Contenedor Termico 20'</mat-option>
+                                        <mat-option value="Contenedor Termico 40'">Contenedor Termico 40'</mat-option>
+                                        <mat-option value="Contenedor Refrigerante 20'">Contenedor Refrigerante 20'</mat-option>
+                                        <mat-option value="Contenedor Refrigerante 40'">Contenedor Refrigerante 40'</mat-option>
+                                        <mat-option value="Contenedor Refrigerante Cubo Alto 40'">Contenedor Refrigerante Cubo Alto 40'</mat-option>
+                                        <mat-option value="Contenedor Carga a Granel 20'">Contenedor Carga a Granel 20'</mat-option>
+                                        <mat-option value="Contenedor Tipo Tanque 20'">Contenedor Tipo Tanque 20'</mat-option>
+                                        <mat-option value="Contenedor Estandar 45'">Contenedor Estandar 45'</mat-option>
+                                        <mat-option value="Contenedor Estandar 48'">Contenedor Estandar 48'</mat-option>
+                                        <mat-option value="Contenedor Estandar 53'">Contenedor Estandar 53'</mat-option>
+                                        <mat-option value="Contenedor Estandar 8'">Contenedor Estandar 8'</mat-option>
+                                        <mat-option value="Contenedor Estandar 10'">Contenedor Estandar 10'</mat-option>
+                                        <mat-option value="Contenedor Estandar De Cubo Alto 45'">Contenedor Estandar De Cubo Alto 45'</mat-option>
+                                        <mat-option value="Semirremolque Con Racks Para Envases De Bebidas">Semirremolque Con Racks Para Envases De Bebidas</mat-option>
+                                        <mat-option value="Semirremolque Cuello De Ganzo">Semirremolque Cuello De Ganzo</mat-option>
+                                        <mat-option value="Contenedor Tolva Cubierto">Contenedor Tolva Cubierto</mat-option>
+                                        <mat-option value="Contenedor Tolva (Abierto)">Contenedor Tolva (Abierto)</mat-option>
+                                        <mat-option value="Auto-Tolva Cubierto/Descarga Neumatica">Auto-Tolva Cubierto/Descarga Neumatica</mat-option>
+                                        <mat-option value="Semirremolque Chasis">Semirremolque Chasis</mat-option>
+                                        <mat-option value="Semirremolque Autocargable (Con Sistema De Elevación)">Semirremolque Autocargable (Con Sistema De Elevación)</mat-option>
+                                        <mat-option value="Semirremolque Con Temperatura Controlada">Semirremolque Con Temperatura Controlada</mat-option>
+                                        <mat-option value="Contenedor Corto Trasero">Contenedor Corto Trasero</mat-option>
+                                        <mat-option value="Contenedor De Cama Baja">Contenedor De Cama Baja</mat-option>
+                                        <mat-option value="Plataforma de 28'">Plataforma de 28'</mat-option>
+                                        <mat-option value="Plataforma de 45'">Plataforma de 45'</mat-option>
+                                        <mat-option value="Plataforma de 48'">Plataforma de 48'</mat-option>
+                                        <mat-option value="Semirremolque Para Transporte De Caballos">Semirremolque Para Transporte De Caballos</mat-option>
+                                        <mat-option value="Semirremolque Para Transporte De Ganado">Semirremolque Para Transporte De Ganado</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Liquidos)/Sin Calefacción/Sin Aislar">Semirremolque Tanque (Liquidos)/Sin Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Liquidos)/Con Calefacción/Sin Aislar">Semirremolque Tanque (Liquidos)/Con Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Liquidos)/Sin Calefacción/Aislado">Semirremolque Tanque (Liquidos)/Sin Calefacción/Aislado</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Gas)/Sin Calefacción/Sin Aislar">Semirremolque Tanque (Gas)/Sin Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Gas)/Con Calefacción/Sin Aislar">Semirremolque Tanque (Gas)/Con Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Gas)/Sin Calefacción/Aislado">Semirremolque Tanque (Gas)/Sin Calefacción/Aislado</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Gas)/Con Calefacción/Aislado">Semirremolque Tanque (Gas)/Con Calefacción/Aislado</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Quimicos)/Sin Calefacción/Sin Aislar">Semirremolque Tanque (Quimicos)/Sin Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Quimicos)/Con Calefacción/Sin Aislar">Semirremolque Tanque (Quimicos)/Con Calefacción/Sin Aislar</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Quimicos)/Sin Calefacción/Aislado">Semirremolque Tanque (Quimicos)/Sin Calefacción/Aislado</mat-option>
+                                        <mat-option value="Semirremolque Tanque (Quimicos)/Con Calefacción/Aislado">Semirremolque Tanque (Quimicos)/Con Calefacción/Aislado</mat-option>
+                                        <mat-option value="Semirremolque Tanque Gondola-Cerrada">Semirremolque Tanque Gondola-Cerrada</mat-option>
+                                        <mat-option value="Semirremolque Tanque Gondola-Abierta">Semirremolque Tanque Gondola-Abierta</mat-option>
+                                        <mat-option value="Semirremolque Tanque Tipo Caja Cerrada 48'">Semirremolque Tanque Tipo Caja Cerrada 48'</mat-option>
+                                        <mat-option value="Semirremolque Tanque Tipo Caja Cerrada 53'">Semirremolque Tanque Tipo Caja Cerrada 53'</mat-option>
+                                        <mat-option value="Semirremolque Tanque Tipo Caja Refrigerada 48'">Semirremolque Tanque Tipo Caja Refrigerada 48'</mat-option>
+                                        <mat-option value="Semirremolque Tanque Tipo Caja Refrigerada 53'">Semirremolque Tanque Tipo Caja Refrigerada 53'</mat-option>
+                                        <mat-option value="Doble Semirremolque">Doble Semirremolque</mat-option>
+                                        <mat-option value="Otros">Otros</mat-option>
+                                        <mat-option value="Tanque 20'">Tanque 20'</mat-option>
+                                        <mat-option value="Tanque 40'">Tanque 40'</mat-option>
+                                        <mat-option value="Carro De Ferrocarril">Carro De Ferrocarril</mat-option>
+                                        <mat-option value="High Cube 20'">High Cube 20'</mat-option>
+                                    </mat-select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+
+                                    <label class="control-label"><b>Estado</b></label>
+                                    <mat-select [(value)]="selectedEstado" name="estado" required class="form-control" tabindex="1">
+                                        <mat-option value="Vacio">Vacio</mat-option>
+                                        <mat-option value="LLeno">LLeno</mat-option>
+                                    </mat-select>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label"><b>Añadir</b></label>
+                                    <button (click)="anadirContenedores(box.value)" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+                                </div>
+                            </div>
+
+                            <!--/span-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <table matNativeControl class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <!--<th scope="col">#</th>-->
+                                                    <th scope="col">Contenedor</th>
+                                                    <th scope="col">Tamaño - Tipo</th>
+                                                    <th scope="col">Estado contenedor</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let contenedor of contenedores">
+                                                    <!--<th scope="row">{{dato.contador}}</th>-->
+                                                    <td>{{contenedor.Contenedor}}</td>
+                                                    <td>{{contenedor.Tipo}}</td>
+                                                    <td>{{contenedor.Estado}}</td>
+                                                    <td>
+                                                        <button (click)="remover(contenedor.Contenedor)" class="btn btn-danger">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
+                        <button type="button" class="btn btn-inverse">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Row -->

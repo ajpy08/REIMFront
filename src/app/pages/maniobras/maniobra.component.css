@@ -1,0 +1,75 @@
+.my-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-container2 {
+    display: flex;
+    flex-direction: row;
+}
+
+.my-container3 {
+    display: flex;
+    flex-direction: row;
+}
+
+.my-container4 {
+    display: flex;
+    flex-direction: row;
+}
+
+.my-container>* {
+    width: 100%;
+}
+
+.my-container2>* {
+    width: 40%;
+    margin-right: 10px;
+}
+
+.my-container3>* {
+    margin-right: 10px;
+}
+
+.my-container4>* {
+    width: 50%;
+    margin-right: 10px;
+}
+
+.time {
+    width: 20%;
+    margin-right: 10px;
+}
+
+.input {
+    width: 20%;
+    margin-right: 10px;
+}
+
+.operador {
+    width: 50%;
+    margin-right: 10px;
+}
+
+
+/*---------------------------------------------
+EMPIEZAN LAS MEDIAS QUERIES
+--------------------------------------------*/
+
+@media (min-width: 360px) {
+    .my-container {
+        margin: 1rem 0;
+        flex-direction: column;
+    }
+    .my-container2 {
+        margin: 1rem 0;
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 992px) {
+    .my-container2 {
+        display: flex;
+        flex-direction: row;
+    }
+}

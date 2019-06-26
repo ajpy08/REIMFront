@@ -1,0 +1,167 @@
+<!-- Row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-info">
+                <h4 class="m-b-0 text-white">Información de la solicitud</h4>
+            </div>
+            <div class="card-body">
+                <form class="form-horizontal" ngNativeValidate #f='ngForm' (ngSubmit)="updateSolicitud(f)">
+                    <div class="form-body">
+                        <h3 class="box-title">Datos generales</h3>
+                        <hr class="m-t-0 m-b-40">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Agencia Aduanal:</label>
+                                    <div class="col-md-9">
+                                        <p name="agencia" class="form-control-static"> {{agencia}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Naviera:</label>
+                                    <div class="col-md-9">
+                                        <p name="naviera" class="form-control-static"> {{naviera}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Transportista:</label>
+                                    <div class="col-md-9">
+                                        <p name="transportista" class="form-control-static"> {{transportista}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Cliente:</label>
+                                    <div class="col-md-9">
+                                        <p name="cliente" class="form-control-static"> {{cliente}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Buque:</label>
+                                    <div class="col-md-9">
+                                        <p name="buque" class="form-control-static"> {{buque}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Viaje:</label>
+                                    <div class="col-md-9">
+                                        <p name="viaje" class="form-control-static"> {{solicitud.viaje}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <h3 class="box-title">Datos de facturación</h3>
+                        <hr class="m-t-0 m-b-40">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Credito:</label>
+                                    <div class="col-md-9">
+                                        <p name="credito" class="form-control-static"> {{solicitud.credito}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Correo:</label>
+                                    <div class="col-md-9">
+                                        <p name="correo" class="form-control-static"> {{solicitud.correo}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Correo de facturación:</label>
+                                    <div class="col-md-9">
+                                        <p name="correoFac" class="form-control-static"> {{solicitud.correoFac}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Archivo BL:</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static"> BL.pdf </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="control-label text-right col-md-3">Comprobante de pago:</label>
+                                    <div class="col-md-9">
+                                        <p class="form-control-static"> Pago.pdf </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <table matNativeControl class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <!--<th scope="col">#</th>-->
+                                            <th scope="col">Contenedor</th>
+                                            <th scope="col">Tamaño - Tipo</th>
+                                            <th scope="col">Estado contenedor</th>
+                                            <th scope="col">Maniobra Encontrada</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let contenedor of contenedores">
+                                            <!--<th scope="row">{{dato.contador}}</th>-->
+                                            <td>{{contenedor.Contenedor}}</td>
+                                            <td>{{contenedor.Tipo}}</td>
+                                            <td>{{contenedor.Estado}}</td>
+                                            <td>{{contenedor.Maniobra}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
+                        <button type="button" class="btn btn-inverse">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Row -->

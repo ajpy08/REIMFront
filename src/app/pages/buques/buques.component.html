@@ -1,0 +1,59 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarBuque( input.value )" type="text" class="form-control" placeholder="Buscar Buque...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/buque','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i> 
+            Añadir nuevo buque
+          </button>
+                </div>
+
+                <h3 class="card-title">Buques registrados ( <small>{{_buqueService.totalBuques}}</small> )</h3>
+
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Buque</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let buque of buques">
+                            <td>{{buque.buque}}</td>
+                            <td>
+                                <button [routerLink]="['/buque', buque._id ]" class="btn btn-primary">
+                        <i class="fa fa-edit"></i>
+                      </button>
+
+                                <button (click)="borrarBuque( buque )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+              <i class="fas fa-angle-left"></i> Anteriores
+            </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                Siguientes <i class="fas fa-angle-right"></i>
+          </button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarCamion(f)">
+                        <div class="my-container">
+                            <!--========Combombox Operador=========-->
+                            <mat-form-field>
+                                <mat-select placeholder="Seleccione un Transportista" [(ngModel)]="camion.transportista" name="transportista" required>
+                                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                                        {{ transportista.razonSocial }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <!--========input placas=========-->
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="camion.placa" name="placa" type="text" class="form-control" placeholder="Ingrese las placas" required>
+                            </mat-form-field>
+                            <!--========input numeroEconomico=========-->
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="camion.noEconomico" name="noEconomico" type="text" class="form-control" placeholder="Ingrese el numero economico" required>
+                            </mat-form-field>
+                            <!--========datePiker vigencia del seguro=========-->
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="camion.vigenciaSeguro" name="vigenciaSeguro" type="text" class="form-control" placeholder="Vigencia del seguro" required>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                        </div>
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                          <i class="fa fa-save"></i>
+                          Guardar
+                        </button>
+                        <a routerLink="/camiones" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

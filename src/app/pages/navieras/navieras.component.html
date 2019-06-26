@@ -1,0 +1,90 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarNaviera( input.value )" type="text" class="form-control" placeholder="Buscar naviera...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/naviera','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i> 
+            Añadir nueva naviera
+          </button>
+                </div>
+
+                <h3 class="card-title">Navieras registradas ( <small>{{_navieraService.totalNavieras}}</small> )</h3>
+
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <!--<th>Cliente</th>-->
+                            <th>Razon Social</th>
+                            <th>RFC</th>
+                            <th>Calle</th>
+                            <th>Numero Exterior</th>
+                            <th>Numero Interior</th>
+                            <th>Colonia</th>
+                            <th>Municipio/Delegacion</th>
+                            <th>Ciudad</th>
+                            <th>Estado</th>
+                            <th>Codigo Postal</th>
+                            <th>Formato R1</th>
+                            <th>Correo</th>
+                            <th>Correo de Facturación</th>
+                            <th>Credito</th>
+                            <th>Patente</th>
+                            <th>Nombre Comercial</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let naviera of navieras">
+                            <!--<td>{{cliente.cliente}}</td>-->
+                            <td>{{naviera.razonSocial}}</td>
+                            <td>{{naviera.rfc}}</td>
+                            <td>{{naviera.calle}}</td>
+                            <td>{{naviera.numeroExterior}}</td>
+                            <td>{{naviera.numeroInterior}}</td>
+                            <td>{{naviera.colonia}}</td>
+                            <td>{{naviera.municipioDelegacion}}</td>
+                            <td>{{naviera.ciudad}}</td>
+                            <td>{{naviera.estado}}</td>
+                            <td>{{naviera.cp}}</td>
+                            <td>{{naviera.formatoR1}}</td>
+                            <td>{{naviera.correo}}</td>
+                            <td>{{naviera.correoFac}}</td>
+                            <td>{{naviera.credito}}</td>
+                            <td>{{naviera.patente}}</td>
+                            <td>{{naviera.nombreComercial}}</td>
+                            <td>
+                                <button [routerLink]="['/naviera', naviera._id ]" class="btn btn-primary">
+                        <i class="fa fa-edit"></i>
+                      </button>
+
+                                <button (click)="borrarNaviera( naviera )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+              <i class="fas fa-angle-left"></i> Anteriores
+            </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                Siguientes <i class="fas fa-angle-right"></i>
+          </button>
+            </div>
+        </div>
+    </div>
+</div>

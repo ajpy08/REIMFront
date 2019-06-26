@@ -1,0 +1,62 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h3 class="box-title m-b-0">Transportista: {{ transportista.razonSocial }}</h3>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarTransportista(f)">
+                        <div class="my-container">
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.rfc" name="rfc" type="text" class="form-control" placeholder="RFC" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.razonSocial" name="razonSocial" type="text" class="form-control" placeholder="Razon Social" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.nombreComercial" name="nombreComercial" type="text" class="form-control" placeholder="Nombre Comercial">
+                                </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.calle" name="calle" type="text" class="form-control" placeholder="Dirección">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.noExterior" name="noExterior" type="text" class="form-control" placeholder="Numero Exterior">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.noInterior" name="noInterior" type="text" class="form-control" placeholder="Numero Interior">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.colonia" name="colonia" type="text" class="form-control" placeholder="Colonia">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.municipio" name="municipio" type="text" class="form-control" placeholder="Municipio/Delegacion">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.ciudad" name="ciudad" type="text" class="form-control" placeholder="Ciudad" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.estado" name="estado" type="text" class="form-control" placeholder="Estado" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.cp" name="cp" type="text" class="form-control" placeholder="Codigo Postal" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.correo" name="cp" type="text" class="form-control" placeholder="Correo Personal" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.correoFac" name="correoFac" type="text" class="form-control" placeholder="Correo De facturación" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="transportista.credito" name="credito" type="text" class="form-control" placeholder="Credito" required>
+                            </mat-form-field>
+                        </div>
+
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                          <i class="fa fa-save"></i>
+                          Guardar
+                        </button>
+                        <a routerLink="/transportistas" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>

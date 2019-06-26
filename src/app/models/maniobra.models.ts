@@ -1,0 +1,26 @@
+export class Maniobra {
+    constructor(
+        public viaje?: string,
+        public transportista?: string,
+        public camion?: string,
+        public operador?: string,
+        public contenedor?: string,
+        public tipo?: string,
+        public grado?: string,
+        public estado?: string,
+        public estatus?: string,
+        public FLlegada?: string,
+        public HLlegada?: string,
+        public HEntrada?: string,
+        public HSalida?: string,
+        public lavado?: string,
+        public rep?: string,
+        public cliente?: string,
+        public agencia?: string,
+        public usuarioAlta?: string,
+        public fechaAlta?: Date,
+        public usuarioModificado?: string,
+        public fModificado?: Date,
+        public _id?: string,
+    ) {}
+}

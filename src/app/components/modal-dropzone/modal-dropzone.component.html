@@ -1,0 +1,24 @@
+<div class="fondo-negro animated fadeIn" [ngClass]="_modalDropzoneService.oculto">
+    <div class="modal" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button (click)="cerrarModal()" type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    <h5 class="modal-title">Subir Imagenes</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <img *ngIf="!imagenTemp" [src]="'xxx' | imagen" class="w150">
+                    <img *ngIf="imagenTemp" [src]="imagenTemp" class="w150">
+                    <input (change)="seleccionImagen($event)" type="file" #inputFile>
+
+                </div>
+                <div class="modal-footer">
+                    <button (click)="cerrarModal()" type="button" class="btn btn-secondary">Cerrar</button>
+                    <button (click)="subirImagen()" type="button" class="btn btn-primary">Subir imagen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarManiobra( input.value )" type="text" class="form-control" placeholder="Buscar maniobra...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/maniobra','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+              <i class="fa fa-plus"></i> 
+              Añadir nueva maniobra
+            </button>
+                </div>
+
+                <h3 class="card-title">Maniobras registrados ( <small>{{_maniobraService.totalManiobras}}</small> )</h3>
+                <div class="form-group">
+                    <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" />
+                </div>
+                <div class="form-group">
+                    <input #inputInicio matInput [matDatepicker]="picker" name="fechaInicio" placeholder="Ingresar fecha">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+
+                    <input #inputFin matInput [matDatepicker]="picker1" name="fechaFin" placeholder="Ingresar fecha">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                    <button type="buttom" (click)='buscarManiobraFecha(inputInicio.value,inputFin.value )' class="btn btn-success waves-effect waves-light m-r-10"><i class="fa fa-search"></i>
+                            Buscar
+                            </button>
+                </div>
+
+                <table id="contentToConvert" class="table table-sm table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Entrada</th>
+                            <th>Salida</th>
+                            <th>Operador</th>
+                            <th>Placas</th>
+                            <th>Transportista</th>
+                            <th>Contetedor</th>
+                            <th>AA</th>
+                            <th>Cliente</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Transporte</th>
+                            <th>Lavado</th>
+                            <th>Rep</th>
+                            <th>Tipo</th>
+                            <th>Grado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let maniobra of maniobras">
+                            <td>{{maniobra.fechaCreado.toString()}}</td>
+                            <td>{{maniobra.entrada}}</td>
+                            <td>{{maniobra.salida}}</td>
+                            <td>{{maniobra.operador.operador}}</td>
+                            <td>{{maniobra.camiones.placa}}</td>
+                            <td>{{maniobra.camiones.transportista.nombre}}</td>
+                            <td>{{maniobra.contenedor.contenedor}}</td>
+                            <td>{{maniobra.agencia.nombre}}</td>
+                            <td>{{maniobra.cliente.cliente}}</td>
+                            <td>{{maniobra.inicio}}</td>
+                            <td>{{maniobra.fin}}</td>
+                            <td>{{maniobra.transporte}}</td>
+                            <td>{{maniobra.lavado}}</td>
+                            <td>{{maniobra.rep}}</td>
+                            <td>{{maniobra.contenedor.tipo}}</td>
+                            <td>{{maniobra.grado}}</td>
+                            <td>
+                                <button [routerLink]="['/maniobra', maniobra._id ]" class="btn btn-primary">
+                          <i class="fa fa-edit"></i>
+                        </button>
+
+                                <button (click)="borrarManiobra( maniobra )" class="btn btn-danger">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+
+                                <button [routerLink]="['/fotos', maniobra._id ]" class="btn btn-primary">
+                            <i class="fa fa-edit">Añadir Fotos</i>
+                          </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+                <i class="fas fa-angle-left"></i> Anteriores
+              </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                  Siguientes <i class="fas fa-angle-right"></i>
+            </button>
+            </div>
+
+        </div>
+    </div>
+</div>

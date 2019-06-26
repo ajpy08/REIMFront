@@ -1,0 +1,46 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-9">
+        <mat-card>
+            <!--<h3 class="box-title m-b-0">Maniobra: {{ maniobra.entrada }}</h3>-->
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarManiobra(f)">
+                        <div class="my-container">
+                            <h3>Datos de la maniobra</h3>
+                            <div class="my-container2">
+                                    <mat-form-field class="inputpersonalizado">
+                                            <input matInput [matDatepicker]="picker" [(ngModel)]="maniobra.FLlegada" name="fllegada" type="text" class="form-control" placeholder="Fecha de llegada" required>
+                                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker></mat-datepicker>
+                                    </mat-form-field>
+                                    <br>
+                                    <mat-form-field class="time">
+                                        <input matInput [(ngModel)]="maniobra.HLlegada" name="hllegada" type="time" placeholder="Hora Llegada">
+                                    </mat-form-field>
+                            </div>
+                            <div class="my-container3">
+                                    <!--========Combombox Operador=========-->
+                                    <mat-form-field class="transportista">
+                                        <mat-select placeholder="Seleccione un Transportista" (selectionChange)="cambioTransportista( $event.value )" [(ngModel)]="maniobra.transportista" name="transportista" required>
+                                            <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                                                <span>{{ transportista.nombreComercial }}</span>
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                          <i class="fa fa-save"></i>
+                          Guardar
+                        </button>
+                        <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+
+
+</div>

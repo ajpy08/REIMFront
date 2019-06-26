@@ -1,0 +1,75 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h3 class="box-title m-b-0">Viaje: {{ viaje.viaje }}</h3>
+            <h3 class="box-title m-b-0">Buque: {{ viaje.buque.buque }}</h3>
+            <h3 class="box-title m-b-0">Naviera: {{ viaje.naviera.naviera }}</h3>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="actualizarContenedor(f)">
+                        <div class="my-container">
+                            <!--========Combombox Buque=========-->
+                            <mat-form-field class="buque">
+                                <mat-select placeholder="Seleccione un contenedor" (selectionChange)="cambioContenedor( $event.value )" [(ngModel)]="viaje.contenedor" name="contenedor" required>
+                                    <mat-option *ngFor="let contenedor of contenedores" [value]="contenedor._id">
+                                        {{ contenedor.contenedor }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="v/i">
+                                <mat-select placeholder="Seleccione si es vacio o importación" [(ngModel)]="viaje.vacioimportacion" name="vacioimportacion" required>
+                                    <mat-option *ngFor="let vacioimport of vacioimports" [value]="vacioimport.value">
+                                        {{vacioimport.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+
+                        </div>
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                            <i class="fa fa-save"></i>
+                            Añadir
+                          </button>
+                        <a routerLink="/viajes" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row animated fadeIn" *ngIf="cargando">
+        <div class="col-sm-12">
+            <div class="alert alert-warning text-center">
+                <strong>Cargando</strong>
+                <br>
+                <i class="fas fa-refresh fa-spin fa-2x"></i>
+                <br>
+                <span>Espere por favor</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <mat-card>
+            <h3>Lista de contenedores</h3>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Contenedor</th>
+                        <th>Tipo</th>
+                        <th>Vacio / Importacion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let viajec of viaje.contenedores">
+                        <th>{{viajec.contenedor.contenedor}}</th>
+                        <th>{{viajec.contenedor.tipo}}</th>
+                        <th>{{viajec.vacioimportacion}}</th>
+                        <td><button (click)="removerContenedor( viaje._id, viajec.contenedor._id )" class="btn btn-danger"><i class="fa fa-trash-o"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </mat-card>
+    </div>
+</div>

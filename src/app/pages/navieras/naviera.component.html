@@ -1,0 +1,70 @@
+<div class="row animated fadeIn">
+
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h3 class="box-title m-b-0">Naviera: {{ naviera.razonSocial }}</h3>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarNaviera(f)">
+                        <div class="my-container">
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.cliente" name="cliente" type="text" class="form-control" placeholder="Nombre del cliente" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.razonSocial" name="razonSocial" type="text" class="form-control" placeholder="Razon Social" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.rfc" name="rfc" type="text" class="form-control" placeholder="RFC" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.calle" name="calle" type="text" class="form-control" placeholder="Dirección" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.numeroExterior" name="numeroExterior" type="text" class="form-control" placeholder="Numero Exterior" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.numeroInterior" name="numeroInterior" type="text" class="form-control" placeholder="Numero Interior">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.colonia" name="colonia" type="text" class="form-control" placeholder="Colonia" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.municipioDelegacion" name="municipioDelegacion" type="text" class="form-control" placeholder="Municipio/Delegacion" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.ciudad" name="ciudad" type="text" class="form-control" placeholder="Ciudad" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.estado" name="estado" type="text" class="form-control" placeholder="Estado" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.cp" name="cp" type="text" class="form-control" placeholder="Codigo Postal" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.correo" name="cp" type="text" class="form-control" placeholder="Correo Personal" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.correoFac" name="correoFac" type="text" class="form-control" placeholder="Correo De facturación" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.credito" name="credito" type="text" class="form-control" placeholder="Credito" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.patente" name="patente" type="text" class="form-control" placeholder="Patente" required>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput [(ngModel)]="naviera.nombreComercial" name="nombreComercial" type="text" class="form-control" placeholder="Nombre Comercial" required>
+                            </mat-form-field>
+                        </div>
+
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                          <i class="fa fa-save"></i>
+                          Guardar
+                        </button>
+                        <a routerLink="/navieras" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

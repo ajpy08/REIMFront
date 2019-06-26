@@ -1,0 +1,67 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarCamion( input.value )" type="text" class="form-control" placeholder="Buscar camion...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/camion','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+                <i class="fa fa-plus"></i> 
+                Añadir nueva camion
+              </button>
+                </div>
+
+                <h3 class="card-title">Camiones registrados ( <small>{{_camionService.totalCamiones}}</small> )</h3>
+
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Transportista</th>
+                            <th>Placas</th>
+                            <th>Numero Economico</th>
+                            <th>Vigencia Del Seguro</th>
+                            <th>PDF Del Seguro</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let camion of camiones">
+                            <td>{{camion.transportista.razonSocial}}</td>
+                            <td>{{camion.noEconomico}}</td>
+                            <td>{{camion.placa}}</td>
+                            <td>{{camion.vigenciaSeguro}}</td>
+                            <td>{{camion.pdfSeguro}}</td>
+                            <td>
+                                <button [routerLink]="['/camion', camion._id ]" class="btn btn-primary">
+                            <i class="fa fa-edit"></i>
+                          </button>
+
+                                <button (click)="borrarCamion( camion )" class="btn btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                          </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+                  <i class="fas fa-angle-left"></i> Anteriores
+                </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                    Siguientes <i class="fas fa-angle-right"></i>
+              </button>
+            </div>
+
+        </div>
+    </div>
+</div>

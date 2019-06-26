@@ -1,0 +1,61 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarContenedor( input.value )" type="text" class="form-control" placeholder="Buscar contenedor...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/contenedor','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+              <i class="fa fa-plus"></i> 
+              Añadir nuevo contenedor
+            </button>
+                </div>
+
+                <h3 class="card-title">Contenedor registrados ( <small>{{_contenedorService.totalContenedores}}</small> )</h3>
+
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Contenedor</th>
+                            <th>Tipo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contenedor of contenedor">
+                            <td>{{contenedor.contenedor}}</td>
+                            <td>{{contenedor.tipo}}</td>
+                            <td>
+                                <button [routerLink]="['/contenedor', contenedor._id ]" class="btn btn-primary">
+                          <i class="fa fa-edit"></i>
+                        </button>
+
+                                <button (click)="borrarContenedor( contenedor )" class="btn btn-danger">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+                <i class="fas fa-angle-left"></i> Anteriores
+              </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                  Siguientes <i class="fas fa-angle-right"></i>
+            </button>
+            </div>
+
+        </div>
+    </div>
+</div>

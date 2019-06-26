@@ -1,0 +1,77 @@
+<div class="row animated fadeIn">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <input #input (keyup)="buscarViaje( input.value )" type="text" class="form-control" placeholder="Buscar viaje...">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="text-right">
+                    <button [routerLink]="['/viaje','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+              <i class="fa fa-plus"></i> 
+              Añadir nuevo viaje
+            </button>
+                </div>
+
+                <h3 class="card-title">Viajes registrados ( <small>{{_viajeService.totalViajes}}</small> )</h3>
+
+                <table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Viaje</th>
+                            <th>Buque</th>
+                            <th>Fecha de Arrivo</th>
+                            <th>Temporal</th>
+                            <th>Vigencia del temporaL</th>
+                            <!--<th>Contenedor</th>
+                            <th>Tipo</th>
+                            <th>Vacio / Importación</th>-->
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let viaje of viajes">
+                            <td>{{viaje.viaje}}</td>
+                            <td>{{viaje.buque.buque}}</td>
+                            <td>{{viaje.fechaArrivo}}</td>
+                            <td>{{viaje.pdfTemporal}}</td>
+                            <td>{{viaje.fechaVigenciaTemporal}}</td>
+                            <!--<td>{{viaje.contenedores.contenedor.contenedor}}</td>
+                            <td>{{viaje.contenedores.contenedor.tipo}}</td>
+                            <td>{{viaje.vacioimportacion}}</td>-->
+                            <td>
+                                <button [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary">
+                          <i class="fa fa-edit"> Editar</i>
+                        </button>
+
+                                <button (click)="borrarViaje( viaje )" class="btn btn-danger">
+                          <i class="fa fa-trash-o"> Eliminar</i>
+                        </button>
+                                <button [routerLink]="['/addcontainers', viaje._id ]" class="btn btn-primary">
+                            <i class="fa fa-edit"> Ver Contenedores</i>
+                          </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
+                <i class="fas fa-angle-left"></i> Anteriores
+              </button>
+                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                  Siguientes <i class="fas fa-angle-right"></i>
+            </button>
+            </div>
+
+        </div>
+    </div>
+</div>
