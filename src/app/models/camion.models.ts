@@ -1,5 +1,4 @@
 export class Camion {
-
     constructor(
         public transportista? : string,
         public placa?: string,

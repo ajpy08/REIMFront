@@ -1,5 +1,4 @@
 export class Agencia {
-
     constructor(
         public rfc?: string,
         public razonSocial?: string,
@@ -24,7 +23,5 @@ export class Agencia {
         public usuarioMod?: string,
         public fMod?: string,
         public _id?: string
-
-        
     ) {}
 }
