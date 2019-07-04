@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit {
       this.forma.value.empresas
     );
 console.log(usuario);
-    this._usuarioService.crearUsuario( usuario )
+    this._usuarioService.altaUsuario( usuario )
               .subscribe( resp => this.forma.reset());
 
 

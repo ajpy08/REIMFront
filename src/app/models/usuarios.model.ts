@@ -7,6 +7,7 @@ export class Usuario {
         public role?: string,
         public empresas?: string,
         public img?: string,
+        public rutaImg?:string,
         public _id?: string
 
     ) {}

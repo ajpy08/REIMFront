@@ -13,9 +13,9 @@ import { IngresoCamionComponent } from './transito/ingreso_camion.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { RegisterComponent } from './register/register.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioComponent } from './usuarios/usuario.component';
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
@@ -73,14 +73,14 @@ import {
     declarations: [
         // PagesComponent,
         DashboardComponent,
+        UsuariosComponent,
+        UsuarioComponent,
         ManiobrasComponent,
         TransitoComponent,
         IngresoCamionComponent,
         ManiobraComponent,
         AccountSettingsComponent,
-        RegisterComponent,
         ProfileComponent,
-        UsuariosComponent,
         OperadoresComponent,
         OperadorComponent,
         CamionesComponent,
