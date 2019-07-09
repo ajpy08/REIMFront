@@ -11,14 +11,9 @@ declare var swal: any;
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
-  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
-   // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
-  // tslint:disable-next-line:typedef-whitespace
-
 
   constructor(public _usuarioService: UsuarioService,
     public _modalUploadSevice: ModalUploadService) {
@@ -33,10 +28,12 @@ export class UsuariosComponent implements OnInit {
   mostarModal(id: string) {
     this._modalUploadSevice.mostrarModal('usuarios', id);
   }
+  resetPassword(usuario:Usuario)
+  {}
 
   cargarUsuarios() {
     this.cargando = true;
-    this._usuarioService.cargarUsuarios(this.desde)
+    this._usuarioService.getUsuarios(this.desde)
     .subscribe((resp: any) => {
       console.log(resp.usuarios);
       this.totalRegistros = resp.total;

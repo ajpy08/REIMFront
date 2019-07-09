@@ -9,6 +9,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { ProfileComponent } from './profile/profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioComponent } from './usuarios/usuario.component';
+import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
@@ -56,6 +57,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Dashboard' }
     },
     {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
+    {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
     {path: 'usuarios',component: UsuariosComponent,canActivate: [ AdminGuard ],data: { titulo: 'Mantenimiento de Usuarios' }},
     {
         path: 'solicitudes_de_descarga',

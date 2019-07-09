@@ -2,9 +2,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <input #input (keyup)="buscarUsuarios(input.value)" type="text" class="form-control" placeholder="Buscar usuarios...">
-
             </div>
         </div>
     </div>
@@ -45,7 +43,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let usuario of usuarios">
-                                <td class=".w70"><img (click)="mostarModal(usuario._id)" [src]="usuario.img | imagen" class="img-50 img-circle pointer"></td>
+                                <td class=".w70"><img [src]="usuario.img | imagen" class="img-50 img-circle pointer"></td>
                                 <td>{{usuario.email}}</td>
                                 <td>{{usuario.nombre}}</td>
                                 <td>
@@ -61,14 +59,6 @@
                                 </td>
                                 <td>
                                     <p  *ngFor="let empresa of usuario.empresas">{{empresa.razonSocial}}</p>
-                                    <!-- ========Combombox EMPRESAS=========
-                                    <mat-form-field>
-                                        <mat-select placeholder="Seleccione las empresas" [(ngModel)]="usuario.empresas" name="empresas" multiple required>
-                                            <mat-option *ngFor="let agencia of agencias" [value]="agencia._id">
-                                                {{ agencia.razonSocial }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field> -->
                                 </td>
                                 <td>
                                     <button [routerLink]="['/usuarios', usuario._id ]" class="btn btn-primary">
@@ -77,15 +67,18 @@
                                     <button (click)="borrarUsuario(usuario)" class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>
+                                    <button [routerLink]="['/usuarios/resetPass', usuario._id ]" class="btn btn-primary">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <button (click)="cambiarDesde(-3)" class="btn btn-secondary">
+                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
                   <i class="fas fa-angle-left"></i> Anteriores
                 </button>
-                <button (click)="cambiarDesde(3)" class="btn btn-secondary">
+                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
                     Siguientes <i class="fas fa-angle-right"></i>
               </button>
 

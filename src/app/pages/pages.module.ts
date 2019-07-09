@@ -16,6 +16,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { ProfileComponent } from './profile/profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioComponent } from './usuarios/usuario.component';
+import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
@@ -75,6 +76,7 @@ import {
         DashboardComponent,
         UsuariosComponent,
         UsuarioComponent,
+        UsuarioResetPassComponent,
         ManiobrasComponent,
         TransitoComponent,
         IngresoCamionComponent,

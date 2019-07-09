@@ -30,18 +30,14 @@ export class UsuarioService {
     return localStorage.getItem('token');
   }
   renuevaToken(): Observable<any> {
-
     let url = URL_SERVICIOS + '/login/renuevatoken';
     url += '?token=' + this.token;
-
     return this.http.get( url )
     .pipe(
                 map( (resp: any) => {
-
                   this.token = resp.token;
                   localStorage.setItem('token', this.token );
                   console.log('Token renovado');
-
                   return true;
                 }),
                 catchError( err => {
@@ -121,7 +117,7 @@ export class UsuarioService {
   //OBTIENE EL CATALOGO DE USUARIOS 
   //POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios?desde=Y
   // desde = offset para el paginado de datos.
-  cargarUsuarios(desde: number = 0): Observable<any> {
+  getUsuarios(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/usuarios?desde=' + desde;
     return this.http.get(url);
   }
@@ -129,7 +125,7 @@ export class UsuarioService {
   //OBTIENE UN USUARIO DADO SU ID
   //POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
   // id = Identificador unico de usuario
-  cargarUsuario( id: string ): Observable<any> {
+  getUsuarioxID( id: string ): Observable<any> {
     let url = URL_SERVICIOS + '/usuarios/' + id;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.usuario ));
@@ -151,16 +147,11 @@ export class UsuarioService {
   
     const formData = new FormData();
     formData.append('file', archivo, archivo.name);
-  
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/uploadFileTemp';
-         // url += '?token=' + this._usuarioService.token;
          return this.http.put( url, formData )
          .pipe(map( (resp: any) => {
-           swal('Archivo Cargado', archivo.name, 'success');
-           console.log(resp.nombreArchivo);
+           swal('Archivo Cargado', resp.nombreArchivo, 'success');
            return resp.nombreArchivo;
-   
          }),
          catchError( err => {
            swal( err.error.mensaje, err.error.errors.message, 'error' );
@@ -174,6 +165,8 @@ export class UsuarioService {
     else // creando
       return (this.altaUsuario(usuario));
   }
+
+
 
   altaUsuario( usuario: Usuario ): Observable<any> {
     let url = URL_SERVICIOS + '/usuarios';
@@ -202,6 +195,7 @@ actualizarUsuario(usuario: Usuario)
                       this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
+                    //swal('Usuario actualizado', usuario.img, 'success' );
                     return true;
                   }),
                   catchError( err => {
@@ -209,6 +203,24 @@ actualizarUsuario(usuario: Usuario)
                     return throwError(err);
                   }));
 
+}
+
+resetPass( usuario: Usuario ): Observable<any> {
+  let url = URL_SERVICIOS + '/reset_password/' + usuario._id;
+  url += '?token=' + this.token;
+  return this.http.put( url, usuario )
+            .pipe(map( (resp: any) => {
+                    if ( usuario._id === this.usuario._id ) {
+                      let usuarioDB: Usuario = resp.usuario;
+                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                    }
+                    swal('Usuario actualizado', usuario.nombre, 'success' );
+                    return true;
+                  }),
+                  catchError( err => {
+                    swal( err.error.mensaje, err.error.errors.message, 'error' );
+                    return throwError(err);
+                  }));
 }
   cambiarImagen( archivo: File, id: string ) {
 
@@ -240,19 +252,15 @@ actualizarUsuario(usuario: Usuario)
     .pipe( map( (resp: any) => resp.usuarios ));
 
   }
-
-   borrarUsuario( id: string ): Observable<any> {
-
-    let url = URL_SERVICIOS + '/usuarios/' + id;
-    url += '?token=' + this.token;
-
-    return this.http.delete( url )
-    .pipe(
-                map( resp => {
-                  swal('Usuario borrado', 'El usuario a sido eliminado correctamente', 'success');
-                  return true;
-                }));
+  borrarUsuario( id: string ): Observable<any> {
+  let url = URL_SERVICIOS + '/usuarios/' + id;
+  url += '?token=' + this.token;
+  return this.http.delete( url )
+  .pipe(
+        map( resp => {
+          swal('Usuario borrado', 'El usuario a sido eliminado correctamente', 'success');
+          return true;
+        }));
 
   }
-
 }
