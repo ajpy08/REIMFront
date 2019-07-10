@@ -17,23 +17,13 @@ export class NavieraService {
     public _usuarioService: UsuarioService
   ) { }
 
-  cargarNavieras(desde: number = 0): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/naviera?desde=' + desde;
-    return this.http.get(url)
-    .pipe(map( (resp: any) => {
-
-      this.totalNavieras = resp.total;
-      console.log(resp.total);
-    return resp.naviera;
-    }));
+  getNavieras(desde: number = 0): Observable<any> {
+    const url = URL_SERVICIOS + '/naviera?desde=' + desde;
+    return this.http.get(url);
   }
 
-  cargarNaviera( id: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/naviera/' + id;
+  getNavieraXID( id: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/naviera/' + id;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.naviera ));
 

@@ -114,19 +114,19 @@ export class UsuarioService {
 
 
 
-  //OBTIENE EL CATALOGO DE USUARIOS 
-  //POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios?desde=Y
+  // OBTIENE EL CATALOGO DE USUARIOS
+  // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios?desde=Y
   // desde = offset para el paginado de datos.
   getUsuarios(desde: number = 0): Observable<any> {
-    let url = URL_SERVICIOS + '/usuarios?desde=' + desde;
+    const url = URL_SERVICIOS + '/usuarios?desde=' + desde;
     return this.http.get(url);
   }
 
-  //OBTIENE UN USUARIO DADO SU ID
-  //POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
+  // OBTIENE UN USUARIO DADO SU ID
+  // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
   // id = Identificador unico de usuario
   getUsuarioxID( id: string ): Observable<any> {
-    let url = URL_SERVICIOS + '/usuarios/' + id;
+    const url = URL_SERVICIOS + '/usuarios/' + id;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.usuario ));
   }

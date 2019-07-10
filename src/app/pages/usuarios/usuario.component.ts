@@ -4,8 +4,7 @@ import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/cliente/cliente.service';
-import { NgForm } from '@angular/forms';
-import { FormGroup, FormControl, FormBuilder,  Validators,AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-usuario',
@@ -15,9 +14,9 @@ import { FormGroup, FormControl, FormBuilder,  Validators,AbstractControl } from
 export class UsuarioComponent implements OnInit {
   regForm: FormGroup;
   empresas: Cliente[] = [];
-  fileFoto: File=null;
-  fotoTemporal: boolean=false;
-  edicion : boolean = false;
+  fileFoto: File = null;
+  fotoTemporal = false;
+  edicion = false;
   constructor(
     public _usuarioService: UsuarioService,
     public _clienteService: ClienteService,
@@ -29,24 +28,23 @@ export class UsuarioComponent implements OnInit {
   ngOnInit() {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if (id!=="nuevo")
-    {
+    if (id !== 'nuevo') {
       this.edicion = true;
       this.cargarUsuario( id );
     }
   }
-  
+
   createFormGroup() {
     this.regForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       password: ['', [Validators.required]],
-      passwordConfirm: ['',[Validators.required,this.match('password')]],
+      passwordConfirm: ['', [ Validators.required, this.match('password')]],
       role: ['', [Validators.required]],
       empresas: [''],
       img: [''],
       _id: ['']
-    })
+    });
   }
 
   match(controlKey: string) {
@@ -63,8 +61,6 @@ export class UsuarioComponent implements OnInit {
       return null;
     };
   }
-
-
 
   get nombre() {
     return this.regForm.get('nombre');
@@ -85,26 +81,22 @@ export class UsuarioComponent implements OnInit {
     return this.regForm.get('passwordConfirm');
   }
 
-reset(){
-  //
-}
-  
-cargarUsuario( id: string ){
+cargarUsuario( id: string ) {
   this._usuarioService.getUsuarioxID(id).subscribe(usuario => {
     this._clienteService.cargarClientesRole( usuario.role ).subscribe( empresas => this.empresas = empresas );
-    this.regForm.controls["nombre"].setValue(usuario.nombre);
-    this.regForm.controls["email"].setValue(usuario.email);
-    this.regForm.controls["password"].setValue(usuario.password);
-    this.regForm.controls["passwordConfirm"].setValue(usuario.password);
-    this.regForm.controls["role"].setValue(usuario.role);
-    this.regForm.controls["role"].disable();
-    this.regForm.controls["empresas"].setValue(usuario.empresas);
-    this.regForm.controls["img"].setValue(usuario.img);
-    this.regForm.controls["_id"].setValue(usuario._id);
+    this.regForm.controls['nombre'].setValue(usuario.nombre);
+    this.regForm.controls['email'].setValue(usuario.email);
+    this.regForm.controls['password'].setValue(usuario.password);
+    this.regForm.controls['passwordConfirm'].setValue(usuario.password);
+    this.regForm.controls['role'].setValue(usuario.role);
+    this.regForm.controls['role'].disable();
+    this.regForm.controls['empresas'].setValue(usuario.empresas);
+    this.regForm.controls['img'].setValue(usuario.img);
+    this.regForm.controls['_id'].setValue(usuario._id);
   });
 }
 
-  
+
 cambioRole( role: string ) {
   this._clienteService.cargarClientesRole( role )
     .subscribe( empresas => this.empresas = empresas );
@@ -112,16 +104,14 @@ cambioRole( role: string ) {
 
 guardarUsuario() {
   console.log(this.regForm.value);
-  if (this.regForm.valid)
-  {
+  if (this.regForm.valid) {
     this._usuarioService.guardarUsuario( this.regForm.value )
               .subscribe( usuario => {
-                this.fileFoto=null;
-                this.fotoTemporal=false;
-                if (this.regForm.get('_id').value==="")
-                {
+                this.fileFoto = null;
+                this.fotoTemporal = false;
+                if (this.regForm.get('_id').value === '') {
                   this.regForm.get('_id').setValue(usuario._id);
-                  this.router.navigate(['/usuarios',this.regForm.get('_id').value ]);
+                  this.router.navigate(['/usuarios', this.regForm.get('_id').value ]);
                   this.edicion = true;
                 }
                 this.regForm.markAsPristine();
@@ -129,14 +119,13 @@ guardarUsuario() {
   }
 }
 
-onFileSelected(event){
+onFileSelected(event) {
   console.log(event);
   this.fileFoto = <File> event.target.files[0];
   this.subirFoto();
-
 }
 
-subirFoto(){
+subirFoto() {
       this._usuarioService.subirFotoTemporal(this.fileFoto)
       .subscribe( nombreArchivo => {
         this.regForm.get('img').setValue(nombreArchivo);

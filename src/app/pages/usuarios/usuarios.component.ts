@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 
 declare var swal: any;
 @Component({
@@ -11,25 +10,20 @@ declare var swal: any;
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
+  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
+  // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
+  // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
 
-  constructor(public _usuarioService: UsuarioService,
-    public _modalUploadSevice: ModalUploadService) {
+  constructor(public _usuarioService: UsuarioService) {
      }
 
   ngOnInit() {
     this.cargarUsuarios();
-    this._modalUploadSevice.notification
-    .subscribe(resp => this.cargarUsuarios());
   }
 
-  mostarModal(id: string) {
-    this._modalUploadSevice.mostrarModal('usuarios', id);
-  }
-  resetPassword(usuario:Usuario)
-  {}
 
   cargarUsuarios() {
     this.cargando = true;
@@ -79,9 +73,8 @@ export class UsuariosComponent implements OnInit {
 
         }
       });
-
   }
-  
+
   buscarUsuarios(termino: string) {
     if (termino.length <= 0) {
       this.cargarUsuarios();
@@ -96,5 +89,5 @@ export class UsuariosComponent implements OnInit {
     });
   }
 
-  
+
 }
