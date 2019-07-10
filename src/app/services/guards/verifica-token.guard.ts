@@ -14,7 +14,7 @@ export class VerificaTokenGuard implements CanActivateChild {
   ) { }
 
   canActivateChild(): Promise<boolean> | boolean {
-    console.log('Token guard');
+    //console.log('Token guard');
 
     // tslint:disable-next-line:prefer-const
     let token = this._usuarioService.token;
@@ -45,8 +45,8 @@ export class VerificaTokenGuard implements CanActivateChild {
 
       ahora.setTime( ahora.getTime() + ( 1 * 60 * 60 * 1000 ) );
 
-       console.log( tokenExp );
-       console.log( ahora );
+       //console.log( tokenExp );
+       //console.log( ahora );
 
       if ( tokenExp.getTime() > ahora.getTime() ) {
         resolve(true);

@@ -16,7 +16,7 @@ export class Naviera {
         public correo?: string,
         public correoFac?: string,
         public credito?: string,
-        public patente?: string,
+        public caat?: string,
         public nombreComercial?: string,
         public usuario?: string,
         public _id?: string
