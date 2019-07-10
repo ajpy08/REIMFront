@@ -5,9 +5,11 @@ import { TransitoComponent } from './transito/transito.component';
 import { IngresoCamionComponent } from './transito/ingreso_camion.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { RegisterComponent } from './register/register.component';
+
 import { ProfileComponent } from './profile/profile.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioComponent } from './usuarios/usuario.component';
+import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
@@ -54,6 +56,9 @@ const pagesRoutes: Routes = [
         component: DashboardComponent,
         data: { titulo: 'Dashboard' }
     },
+    {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
+    {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
+    {path: 'usuarios',component: UsuariosComponent,canActivate: [ AdminGuard ],data: { titulo: 'Mantenimiento de Usuarios' }},
     {
         path: 'solicitudes_de_descarga',
         component: SolicitudesDComponent,
@@ -70,13 +75,7 @@ const pagesRoutes: Routes = [
     {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},
     {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
-    // Register
-    {
-        path: 'register',
-        component: RegisterComponent,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Registrar Usuarios' }
-    },
+
     // Solicitud Descarga
     {
         path: 'solicitudes_descargas',
@@ -87,12 +86,7 @@ const pagesRoutes: Routes = [
     // tslint:disable-next-line:max-line-length
     {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
     // Mantenimientos ADMIN ROLE
-    {
-        path: 'usuarios',
-        component: UsuariosComponent,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Mantenimiento de Usuarios' }
-    },
+
     {
         path: 'operadores',
         component: OperadoresComponent,

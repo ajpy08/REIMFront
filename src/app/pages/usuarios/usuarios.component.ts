@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
-import { Agencia } from '../../models/agencia.models';
-import { AgenciaService } from '../../services/service.index';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 
 declare var swal: any;
 @Component({
@@ -17,42 +14,26 @@ export class UsuariosComponent implements OnInit {
   desde: number = 0;
   // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
-   // tslint:disable-next-line:no-inferrable-types
+  // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
-  // tslint:disable-next-line:typedef-whitespace
-  agencias: Agencia[] = [];
-  agencia: Agencia = new Agencia();
 
-
-  constructor(public _usuarioService: UsuarioService,
-    public _agenciaService: AgenciaService,
-    public _modalUploadSevice: ModalUploadService) {
+  constructor(public _usuarioService: UsuarioService) {
      }
 
   ngOnInit() {
-    this._agenciaService.cargarAgencias()
-    .subscribe( agencias => this.agencias = agencias );
     this.cargarUsuarios();
-    this._modalUploadSevice.notification
-    .subscribe(resp => this.cargarUsuarios());
   }
 
-  mostarModal(id: string) {
-    this._modalUploadSevice.mostrarModal('usuarios', id);
-  }
 
   cargarUsuarios() {
     this.cargando = true;
-    this._usuarioService.cargarUsuarios(this.desde)
+    this._usuarioService.getUsuarios(this.desde)
     .subscribe((resp: any) => {
       console.log(resp.usuarios);
       this.totalRegistros = resp.total;
       this.usuarios = resp.usuarios;
       this.cargando = false;
-     // console.log(this.totalRegistros);
     });
-
-
   }
 
   cambiarDesde(valor: number) {
@@ -67,21 +48,6 @@ export class UsuariosComponent implements OnInit {
     }
     this.desde += valor;
     this.cargarUsuarios();
-
-  }
-
-  buscarUsuarios(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarUsuarios();
-      return;
-    }
-    this.cargando = true;
-    this._usuarioService.buscarUsuarios(termino)
-    .subscribe((usuarios: Usuario[]) => {
-      this.usuarios = usuarios;
-      this.cargando = false;
-
-    });
   }
 
   borrarUsuario(usuario: Usuario) {
@@ -107,15 +73,21 @@ export class UsuariosComponent implements OnInit {
 
         }
       });
-
   }
 
-  guardarUsuario(usuario: Usuario) {
-    this._usuarioService.actualizarUsuario(usuario)
-    .subscribe(resp => {
+  buscarUsuarios(termino: string) {
+    if (termino.length <= 0) {
       this.cargarUsuarios();
-    });
+      return;
+    }
+    this.cargando = true;
+    this._usuarioService.buscarUsuarios(termino)
+    .subscribe((usuarios: Usuario[]) => {
+      this.usuarios = usuarios;
+      this.cargando = false;
 
+    });
   }
+
 
 }

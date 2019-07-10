@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Naviera } from '../../models/navieras.models';
 import { NavieraService } from '../../services/service.index';
-
+declare var swal: any;
 @Component({
   selector: 'app-navieras',
   templateUrl: './navieras.component.html',
@@ -13,41 +13,59 @@ export class NavierasComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
   // tslint:disable-next-line:no-inferrable-types
-  // totalRegistros: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
+  // tslint:disable-next-line:no-inferrable-types
+  totalRegistros: number = 0;
 
   constructor(public _navieraService: NavieraService) { }
 
   ngOnInit() {
-    this.cargarNavieras();
+    this.cargarRegistros();
   }
 
-  cargarNavieras() {
+  cargarRegistros() {
     this.cargando = true;
-    this._navieraService.cargarNavieras(this.desde)
-    .subscribe(navieras =>
-      this.navieras = navieras
-      );
+    this._navieraService.getNavieras(this.desde)
+    .subscribe((navieras: any) => {
+      this.totalRegistros = navieras.total;
+      this.navieras  = navieras.navieras;
+      this.cargando = false;
+    });
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
-    let desde = this.desde + valor;
-    console.log(desde);
-    if (desde >= this._navieraService.totalNavieras) {
+    const desde = this.desde + valor;
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {
       return;
     }
     this.desde += valor;
-    this.cargarNavieras();
+    this.cargarRegistros();
+  }
+
+  borrarRegistro( naviera: Naviera ) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + naviera.razonSocial,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      })
+      .then(borrar => {
+        if (borrar) {
+          this._navieraService.borrarNaviera(naviera._id)
+          .subscribe(borrado => {
+            this.cargarRegistros();
+          });
+        }
+      });
   }
 
   buscarNaviera(termino: string) {
     if (termino.length <= 0) {
-      this.cargarNavieras();
+      this.cargarRegistros();
       return;
     }
     this.cargando = true;
@@ -56,11 +74,6 @@ export class NavierasComponent implements OnInit {
       this.navieras = navieras;
       this.cargando = false;
     });
-  }
-
-  borrarNaviera( naviera: Naviera ) {
-    this._navieraService.borrarNaviera(naviera._id)
-    .subscribe(() => this.cargarNavieras());
   }
 
 }

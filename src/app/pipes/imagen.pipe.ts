@@ -19,21 +19,19 @@ export class ImagenPipe implements PipeTransform {
     switch (tipo) {
       case 'usuario':
       url += '/usuarios/' + img;
-
       break;
-
       case 'operador':
       url += '/operadores/' + img;
-
       break;
-
       case 'fotos_lavado':
       url += '/fotos_lavado/' + img;
-
       break;
       case 'fotos_reparacion':
       url += '/fotos_reparacion/' + img;
       break;
+      case 'temp':
+        url += '/temp/' + img;
+        break;
       default:
       console.log('tipo de imagen no existe');
       url += '/usuarios/xxx';
