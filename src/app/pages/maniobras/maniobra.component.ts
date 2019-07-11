@@ -93,7 +93,7 @@ export class ManiobraComponent implements OnInit {
           .subscribe( clientes => this.clientes = clientes );
     this._agenciaService.cargarAgencias()
           .subscribe( agencias => this.agencias = agencias );
-    this._transportistaService.cargarTransportistas()
+    this._transportistaService.getTransportistas()
           .subscribe( transportistas => this.transportistas = transportistas );
     this._viajeService.cargarViajes()
           .subscribe( viajes => this.viajes = viajes );
@@ -202,7 +202,7 @@ export class ManiobraComponent implements OnInit {
 
   cambioTransportista( id: string ) {
 
-    this._transportistaService.cargarTransportista( id )
+    this._transportistaService.getTransportistaXID( id )
           .subscribe( transportista => this.transportista = transportista );
 
   }

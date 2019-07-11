@@ -16,6 +16,7 @@ export class Transportista {
         public correo?: string,
         public correoFac?: string,
         public credito?: string,
+        public caat?: string,
         public img?: string,
         public usuarioAlta?: string,
         public fAlta?: string,

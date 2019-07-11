@@ -114,7 +114,7 @@ export class SolicitudDescargaComponent implements OnInit {
     .subscribe( navieras => {
       this.navieras = navieras;
     });
-    this._transportistaService.cargarTransportistas()
+    this._transportistaService.getTransportistas()
     .subscribe( transportistas => this.transportistas = transportistas );
   }
 
@@ -141,7 +141,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
   cambioTransportista( id: string ) {
 
-    this._transportistaService.cargarTransportista( id )
+    this._transportistaService.getTransportistaXID( id )
           .subscribe( transportista => this.transportista = transportista );
 
   }

@@ -54,7 +54,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let naviera of navieras">
-                                <td>
+                                <td >
                                     <button [routerLink]="['/naviera', naviera._id ]" class="btn btn-primary">
                                         <i class="fa fa-edit"></i>
                                     </button>
@@ -65,16 +65,16 @@
                                 <td>{{naviera.razonSocial}}</td>
                                 <td>{{naviera.rfc}}</td>
                                 <td>{{naviera.calle}}</td>
-                                <td>{{naviera.numeroExterior}}</td>
-                                <td>{{naviera.numeroInterior}}</td>
+                                <td>{{naviera.noExterior}}</td>
+                                <td>{{naviera.noInterior}}</td>
                                 <td>{{naviera.colonia}}</td>
-                                <td>{{naviera.municipioDelegacion}}</td>
+                                <td>{{naviera.municipio}}</td>
                                 <td>{{naviera.ciudad}}</td>
                                 <td>{{naviera.estado}}</td>
                                 <td>{{naviera.cp}}</td>
                                 <td>
                                     <a *ngIf="naviera.formatoR1" [href]="naviera.formatoR1 | imagen:'cliente'" download="Reporte2Mayo2010" target="_blank">
-                                        <img src="\assets\images\icon\pdf.png">
+                                        <img src="\assets\images\icon\pdf_32x32.png">
                                     </a>
                                 </td>
                                 <td>{{naviera.correo}}</td>

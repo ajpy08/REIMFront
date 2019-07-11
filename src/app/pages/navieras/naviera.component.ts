@@ -5,7 +5,6 @@ import { NavieraService } from 'src/app/services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 
-
 @Component({
   selector: 'app-naviera',
   templateUrl: './naviera.component.html',
@@ -23,8 +22,7 @@ export class NavieraComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
-    private fb: FormBuilder
-    ) {}
+    private fb: FormBuilder) {}
 
   ngOnInit() {
     this.createFormGroup();
@@ -33,16 +31,22 @@ export class NavieraComponent implements OnInit {
       this.edicion = true;
       this.cargarNaviera( id );
     }
+    else
+    {
+    this.regForm.controls['noInterior'].setValue(undefined);
+    this.regForm.controls['noExterior'].setValue(undefined);
+    }
   }
+
   createFormGroup() {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
       rfc: ['', [Validators.required,  Validators.minLength(12)]],
       calle: [''],
-      numeroExterior: [''],
-      numeroInterior: [''],
+      noExterior: [''],
+      noInterior: [''],
       colonia: [''],
-      municipioDelegacion: [''],
+      municipio: [''],
       ciudad: [''],
       estado: [''],
       cp: [''],
@@ -67,16 +71,16 @@ export class NavieraComponent implements OnInit {
     return this.regForm.get('calle');
   }
   get numeroExterior() {
-    return this.regForm.get('numeroExterior');
+    return this.regForm.get('noExterior');
   }
   get numeroInterior() {
-    return this.regForm.get('numeroInterior');
+    return this.regForm.get('noInterior');
   }
   get colonia() {
     return this.regForm.get('colonia');
   }
   get municipioDelegacion() {
-    return this.regForm.get('municipioDelegacion');
+    return this.regForm.get('municipio');
   }
   get ciudad() {
     return this.regForm.get('ciudad');
@@ -117,10 +121,10 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['razonSocial'].setValue(naviera.razonSocial);
       this.regForm.controls['rfc'].setValue(naviera.rfc);
       this.regForm.controls['calle'].setValue(naviera.calle);
-      this.regForm.controls['numeroExterior'].setValue(naviera.numeroExterior);
-      this.regForm.controls['numeroInterior'].setValue(naviera.numeroInterior);
+      this.regForm.controls['noExterior'].setValue(naviera.noExterior);
+      this.regForm.controls['noInterior'].setValue(naviera.noInterior);
       this.regForm.controls['colonia'].setValue(naviera.colonia);
-      this.regForm.controls['municipioDelegacion'].setValue(naviera.municipioDelegacion);
+      this.regForm.controls['municipio'].setValue(naviera.municipio);
       this.regForm.controls['ciudad'].setValue(naviera.ciudad);
       this.regForm.controls['estado'].setValue(naviera.estado);
       this.regForm.controls['cp'].setValue(naviera.cp);
@@ -137,6 +141,7 @@ export class NavieraComponent implements OnInit {
 
   guardarNaviera() {
     if (this.regForm.valid) {
+      console.log (this.regForm.value);
       this._navieraService.guardarNaviera( this.regForm.value )
                 .subscribe( res => {
                   this.fileImg = null;
@@ -158,11 +163,11 @@ export class NavieraComponent implements OnInit {
      this.fileImg = <File> event.target.files[0];
     this.subirFoto();
   }
+  
   onFileSelected2(event) {
     this.file = <File> event.target.files[0];
    this.subirFormato();
  }
-
  subirFoto() {
         this._subirArchivoService.subirArchivoTemporal(this.fileImg, '')
         .subscribe( nombreArchivo => {
