@@ -75,7 +75,7 @@ export class OperadorComponent implements OnInit {
 
   ngOnInit() {
 
-    this._transportistaService.cargarTransportistas()
+    this._transportistaService.getTransportistas()
     .subscribe( transportistas => this.transportistas = transportistas );
 
     this._modalUploadService.notification

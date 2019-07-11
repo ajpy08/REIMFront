@@ -1,10 +1,10 @@
-export { SolicitudDService } from './solicitudD/solicitudD.service';
+export { UsuarioService } from './usuario/usuario.service';
 export { NavieraService } from './naviera/naviera.service';
+export { SolicitudDService } from './solicitudD/solicitudD.service';
 export { BuqueService } from './buque/buque.service';
 export { SharedService } from './shared/shared.service';
 export { SettingsService } from './settings/settings.service';
 export { SidebarService } from './shared/sidebar.service';
-export { UsuarioService } from './usuario/usuario.service';
 export { OperadorService } from './operador/operador.service';
 export { ClienteService } from './cliente/cliente.service';
 export { CamionService } from './camion/camion.service';

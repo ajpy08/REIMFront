@@ -10,12 +10,9 @@ declare var swal: any;
 export class NavierasComponent implements OnInit {
 
   navieras: Naviera[] = [];
-  // tslint:disable-next-line:no-inferrable-types
-  cargando: boolean = true;
-  // tslint:disable-next-line:no-inferrable-types
-  desde: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
-  totalRegistros: number = 0;
+  cargando = true;
+  desde = 0;
+  totalRegistros = 0;
 
   constructor(public _navieraService: NavieraService) { }
 

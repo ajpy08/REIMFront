@@ -79,7 +79,7 @@ export class IngresoCamionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._transportistaService.cargarTransportistas()
+    this._transportistaService.getTransportistas()
     .subscribe( transportistas => this.transportistas = transportistas );
     console.log("aqui");
     console.log(this.transportistas);
@@ -87,7 +87,7 @@ export class IngresoCamionComponent implements OnInit {
 
 
     cambioTransportista( id: string ) {
-        this._transportistaService.cargarTransportista( id )
+        this._transportistaService.getTransportistaXID( id )
               .subscribe( transportista => this.transportista = transportista );
     
     

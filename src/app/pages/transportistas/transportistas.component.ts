@@ -1,21 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Transportista } from '../../models/transportista.models';
 import { TransportistaService } from '../../services/service.index';
-
+declare var swal: any;
 @Component({
   selector: 'app-transportistas',
   templateUrl: './transportistas.component.html',
   styles: []
 })
 export class TransportistasComponent implements OnInit {
-  // tslint:disable-next-line:typedef-whitespace
+  
   transportistas : Transportista[] = [];
-  // tslint:disable-next-line:no-inferrable-types
-  cargando: boolean = true;
-  // tslint:disable-next-line:no-inferrable-types
-  totalRegistros: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
-  desde: number = 0;
+  cargando = true;
+  totalRegistros = 0;
+  desde = 0;
 
   constructor(public _transportistaService: TransportistaService) { }
 
@@ -24,17 +21,16 @@ export class TransportistasComponent implements OnInit {
   }
   cargarTransportistas() {
     this.cargando = true;
-    this._transportistaService.cargarTransportistas(this.desde)
-    .subscribe(transportistas =>
-      // this.totalRegistros = resp.total;
-      this.transportistas = transportistas
-
-    );
+    this._transportistaService.getTransportistas(this.desde)
+    .subscribe(transportistas =>{
+              this.totalRegistros = transportistas.total;
+              this.transportistas = transportistas.transportistas;
+              this.cargando = false;
+            });
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
-    let desde = this.desde + valor;
+    const desde = this.desde + valor;
     console.log(desde);
     if (desde >= this._transportistaService.totalTransportistas) {
       return;
@@ -44,9 +40,26 @@ export class TransportistasComponent implements OnInit {
     }
     this.desde += valor;
     this.cargarTransportistas();
-
   }
 
+  borrarTransportista( transportista: Transportista ) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + transportista.razonSocial,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      })
+      .then(borrar => {
+        if (borrar) {
+          this._transportistaService.borrarTransportista(transportista._id)
+          .subscribe(borrado => {
+            this.cargarTransportistas();
+          });
+        }
+      });
+  }
+  
   buscarTransportista(termino: string) {
     if (termino.length <= 0) {
       this.cargarTransportistas();
@@ -59,13 +72,6 @@ export class TransportistasComponent implements OnInit {
       this.cargando = false;
 
     });
-  }
-
-  borrarTransportista( transportista: Transportista ) {
-
-    this._transportistaService.borrarTransportista( transportista._id )
-            .subscribe( () =>  this.cargarTransportistas() );
-
   }
 
 }
