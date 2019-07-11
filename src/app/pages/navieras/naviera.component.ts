@@ -137,7 +137,6 @@ export class NavieraComponent implements OnInit {
 
   guardarNaviera() {
     if (this.regForm.valid) {
-      
       this._navieraService.guardarNaviera( this.regForm.value )
                 .subscribe( res => {
                   this.fileImg = null;
@@ -163,9 +162,9 @@ export class NavieraComponent implements OnInit {
     this.file = <File> event.target.files[0];
    this.subirFormato();
  }
-  
+
  subirFoto() {
-        this._subirArchivoService.subirArchivoTemporal(this.fileImg,'')
+        this._subirArchivoService.subirArchivoTemporal(this.fileImg, '')
         .subscribe( nombreArchivo => {
           this.regForm.get('img').setValue(nombreArchivo);
           this.regForm.get('img').markAsDirty();
@@ -174,7 +173,7 @@ export class NavieraComponent implements OnInit {
     });
   }
   subirFormato() {
-    this._subirArchivoService.subirArchivoTemporal(this.file,'')
+    this._subirArchivoService.subirArchivoTemporal(this.file, '')
     .subscribe( nombreArchivo => {
       this.regForm.get('formatoR1').setValue(nombreArchivo);
       this.regForm.get('formatoR1').markAsDirty();

@@ -43,9 +43,9 @@
                                 <input matInput formControlName="correoFac" name="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
                             </mat-form-field>
                             <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
-                            Credito
+                                Credito
                             </mat-checkbox>
-                            
+
                             <mat-form-field>
                                 <input matInput formControlName="caat" name="caat " type="text " class="form-control " placeholder="caat">
                             </mat-form-field>
@@ -59,37 +59,40 @@
                         </button>
                         <a routerLink="/navieras" class="btn btn-danger waves-effect waves-light ">Regresar Catálogo</a>
                     </form>
-                                    <p>Form value {{ regForm.value | json }} </p>
-                <p> Form status {{ regForm.status | json}} </p>
-                <p> Form status2 {{ regForm.pristine | json}} </p>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-            <div class="card card-body">
-                <h4 class="box-title m-b-0">Fotografía</h4>
+        <div class="card text-center">
+            <div class="card-header">Fotografía</div>
+            <div class="card-body">
                 <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
-                        <img (click)="fileFoto.click()"  [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
-                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!    
+                    <img (click)="fileFoto.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
                 </p>
                 <ng-template #notShow>
                     <img (click)="fileFoto.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
                 </ng-template>
                 <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*" #fileFoto>
+                <br><br>
                 <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click()"><i class="fa fa-file"></i> Cambiar foto</button>
             </div>
-            <div class="card card-body">
-                    <h4 class="box-title m-b-0">Formato R1 
-                        <a [href]="formatoR1.value | imagen:'cliente'" download="Reporte2Mayo2010" target="_blank">
-                        Descargar Archivo
-                        </a>
-                    </h4>
-                    <input (change)="onFileSelected2($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
-                    <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Formato R1</button>
-                </div>
+        </div>
+        <div class="card  text-center">
+            <div class="card-header">Formato R1</div>
+            <div class="card-body">
+                <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'" download="Reporte2Mayo2010" target="_blank">
+                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                </a>
+                <input (change)="onFileSelected2($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
+                <br><br>
+                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Cambiar Formato R1</button>
+            </div>
+        </div>
     </div>
-    
-            
-    
+
+
+
+
+
 </div>

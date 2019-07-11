@@ -72,7 +72,11 @@
                                 <td>{{naviera.ciudad}}</td>
                                 <td>{{naviera.estado}}</td>
                                 <td>{{naviera.cp}}</td>
-                                <td>{{naviera.formatoR1}}</td>
+                                <td>
+                                    <a *ngIf="naviera.formatoR1" [href]="naviera.formatoR1 | imagen:'cliente'" download="Reporte2Mayo2010" target="_blank">
+                                        <img src="\assets\images\icon\pdf.png">
+                                    </a>
+                                </td>
                                 <td>{{naviera.correo}}</td>
                                 <td>{{naviera.correoFac}}</td>
                                 <td>{{naviera.credito}}</td>
