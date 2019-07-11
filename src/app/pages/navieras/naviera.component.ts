@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from '../../models/navieras.models';
 import { NavieraService } from 'src/app/services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-
+import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class NavieraComponent implements OnInit {
   constructor(public _navieraService: NavieraService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
+    public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder
     ) {}
 
@@ -48,7 +49,7 @@ export class NavieraComponent implements OnInit {
       formatoR1: [''],
       correo: [''],
       correoFac: [''],
-      credito: [''],
+      credito: [false],
       img: [''],
       caat: [''],
       nombreComercial: [''],
@@ -136,14 +137,16 @@ export class NavieraComponent implements OnInit {
 
   guardarNaviera() {
     if (this.regForm.valid) {
+      
       this._navieraService.guardarNaviera( this.regForm.value )
-                .subscribe( usuario => {
+                .subscribe( res => {
                   this.fileImg = null;
                   this.fileImgTemporal = false;
                   this.file = null;
                   this.fileTemporal = false;
+                  console.log (res);
                   if (this.regForm.get('_id').value === '') {
-                    this.regForm.get('_id').setValue(usuario._id);
+                    this.regForm.get('_id').setValue(res._id);
                     this.router.navigate(['/naviera', this.regForm.get('_id').value ]);
                     this.edicion = true;
                   }
@@ -151,5 +154,33 @@ export class NavieraComponent implements OnInit {
                 });
     }
   }
+
+  onFileSelected(event) {
+     this.fileImg = <File> event.target.files[0];
+    this.subirFoto();
+  }
+  onFileSelected2(event) {
+    this.file = <File> event.target.files[0];
+   this.subirFormato();
+ }
+  
+ subirFoto() {
+        this._subirArchivoService.subirArchivoTemporal(this.fileImg,'')
+        .subscribe( nombreArchivo => {
+          this.regForm.get('img').setValue(nombreArchivo);
+          this.regForm.get('img').markAsDirty();
+          this.fileImgTemporal = true;
+          this.guardarNaviera();
+    });
+  }
+  subirFormato() {
+    this._subirArchivoService.subirArchivoTemporal(this.file,'')
+    .subscribe( nombreArchivo => {
+      this.regForm.get('formatoR1').setValue(nombreArchivo);
+      this.regForm.get('formatoR1').markAsDirty();
+      this.fileTemporal = true;
+      this.guardarNaviera();
+});
+}
 
 }

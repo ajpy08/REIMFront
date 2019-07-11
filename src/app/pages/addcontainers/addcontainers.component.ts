@@ -61,7 +61,7 @@ export class AddcontainersComponent implements OnInit {
     .subscribe( viajes => this.viajes = viajes );
     this._buqueService.cargarBuques()
     .subscribe( buques => this.buques = buques );
-    this._navieraService.cargarNavieras()
+    this._navieraService.getNavieras()
     .subscribe( navieras => this.navieras = navieras );
     this._contenedorService.cargarContenedores()
     .subscribe( contenedores => this.contenedores = contenedores );

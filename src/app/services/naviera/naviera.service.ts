@@ -39,41 +39,53 @@ export class NavieraService {
 
   }
 
+  DownloadFiles() {
+    //return this.http.get('../uploads/clientes/111.pdf', {responseType: 'text'});
+    return this.http.get(URL_SERVICIOS+ '/uploads/clientes/111.pdf');
+  }
+
+  DownloadFile(){
+console.log('hola');
+    this.DownloadFiles()
+        .subscribe(
+            (data:any) => this.downloadFile2(data)), // console.log(data),
+            (error) => console.log("Error downloading the file."),
+            () => console.info("OK");
+}
+
+downloadFile2(data: any){
+var blob = new Blob([data], { type: 'application/pdf' });
+var url= window.URL.createObjectURL(blob);
+window.open(url);
+}
+
 
   guardarNaviera( naviera: Naviera ): Observable<any> {
-
     let url = URL_SERVICIOS + '/naviera';
-
-    if ( naviera._id ) {
-      // actualizando
+    if ( naviera._id ) {// actualizando
       url += '/' + naviera._id;
       url += '?token=' + this._usuarioService.token;
-
       return this.http.put( url, naviera )
                 .pipe(map( (resp: any) => {
-                  swal('Naviera Actualizado', naviera.cliente, 'success');
+                  swal('Naviera Actualizado', naviera.razonSocial, 'success');
                   return resp.naviera;
                 }),
                 catchError( err => {
                   swal( err.error.mensaje, err.error.errors.message, 'error' );
                   return throwError(err);
                 }));
-
-    } else {
-      // creando
+    } else {      // creando
       url += '?token=' + this._usuarioService.token;
       return this.http.post( url, naviera )
               .pipe(map( (resp: any) => {
-                swal('Naviera Creado', naviera.cliente, 'success');
+                swal('Naviera Creado', naviera.razonSocial, 'success');
                 return resp.naviera;
               }),
               catchError( err => {
-                console.log(err);
                 swal( err.error.mensaje, err.error.errors.message, 'error' );
                 return throwError(err);
               }));
     }
-
   }
   buscarNaviera( termino: string ): Observable<any> {
 

@@ -130,7 +130,7 @@ export interface datos {
       .subscribe( viajes => this.viajes = viajes );
       this._buqueService.cargarBuques()
       .subscribe( buques => this.buques = buques );
-      this._navieraService.cargarNavieras()
+      this._navieraService.getNavieras()
       .subscribe( navieras => this.navieras = navieras );
     }
 
@@ -161,7 +161,7 @@ export interface datos {
 
     cambioNaviera( id: string ) {
 
-      this._navieraService.cargarNaviera( id )
+      this._navieraService.getNavieraXID( id )
             .subscribe( naviera => this.naviera = naviera );
 
     }

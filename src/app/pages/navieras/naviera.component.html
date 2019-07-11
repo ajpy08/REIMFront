@@ -42,24 +42,54 @@
                             <mat-form-field>
                                 <input matInput formControlName="correoFac" name="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
                             </mat-form-field>
+                            <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
+                            Credito
+                            </mat-checkbox>
+                            
                             <mat-form-field>
-                                <input matInput formControlName="credito" name="credito " type="text " class="form-control " placeholder="Credito" required>
+                                <input matInput formControlName="caat" name="caat " type="text " class="form-control " placeholder="caat">
                             </mat-form-field>
                             <mat-form-field>
-                                <input matInput formControlName="caat" name="caat " type="text " class="form-control " placeholder="caat " required>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="nombreComercial" name="nombreComercial " type="text " class="form-control " placeholder="Nombre Comercial " required>
+                                <input matInput formControlName="nombreComercial" name="nombreComercial " type="text " class="form-control " placeholder="Nombre Comercial ">
                             </mat-form-field>
                         </div>
                         <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
                             <i class="fa fa-save "></i>
                             Guardar
                         </button>
-                        <a routerLink="/navieras " class="btn btn-danger waves-effect waves-light ">Regresar Catálogo</a>
+                        <a routerLink="/navieras" class="btn btn-danger waves-effect waves-light ">Regresar Catálogo</a>
                     </form>
+                                    <p>Form value {{ regForm.value | json }} </p>
+                <p> Form status {{ regForm.status | json}} </p>
+                <p> Form status2 {{ regForm.pristine | json}} </p>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+            <div class="card card-body">
+                <h4 class="box-title m-b-0">Fotografía</h4>
+                <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
+                        <img (click)="fileFoto.click()"  [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
+                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!    
+                </p>
+                <ng-template #notShow>
+                    <img (click)="fileFoto.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
+                </ng-template>
+                <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*" #fileFoto>
+                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click()"><i class="fa fa-file"></i> Cambiar foto</button>
+            </div>
+            <div class="card card-body">
+                    <h4 class="box-title m-b-0">Formato R1 
+                        <a [href]="formatoR1.value | imagen:'cliente'" download="Reporte2Mayo2010" target="_blank">
+                        Descargar Archivo
+                        </a>
+                    </h4>
+                    <input (change)="onFileSelected2($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
+                    <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Formato R1</button>
+                </div>
+    </div>
+    
+            
+    
 </div>

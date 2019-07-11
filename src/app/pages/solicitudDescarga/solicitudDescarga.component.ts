@@ -110,7 +110,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._navieraService.cargarNavieras()
+    this._navieraService.getNavieras()
     .subscribe( navieras => {
       this.navieras = navieras;
     });

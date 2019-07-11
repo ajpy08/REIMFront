@@ -1,28 +1,49 @@
 import { Injectable } from '@angular/core';
 import { URL_SERVICIOS } from '../../config/config';
 import { FileItem } from '../../models/file-item.models';
+import swal from 'sweetalert';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError} from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable()
 export class SubirArchivoService {
 
-  constructor() { }
+  constructor(public http: HttpClient,) { }
+
+  subirArchivoTemporal(archivo: File, tipo: string ): Observable<any> {
+
+      if (!archivo) {
+      return;
+    }
+  //   if (archivo.type.indexOf('image') < 0 && archivo.type.indexOf('pdf') < 0) {
+  //    swal('Solo Archivos De Imagen', 'El archivo seleccionado no tiene formato Imagen', 'error');
+  //    this.fotoTemporal = null;
+  //    return;
+  //  }
+  //      this.fotoTemporal = archivo;
+    const formData = new FormData();
+    formData.append('file', archivo, archivo.name);
+    let url = URL_SERVICIOS + '/uploadFileTemp';
+         return this.http.put( url, formData )
+         .pipe(map( (resp: any) => {
+           swal('Archivo Cargado', resp.nombreArchivo, 'success');
+           return resp.nombreArchivo;
+         }),
+         catchError( err => {
+           swal( err.error.mensaje, err.error.errors.message, 'error' );
+           return throwError(err);
+         }));
+   }
 
   subirArchivo(archivo: File, tipo: string, id: string) {
-
-    // tslint:disable-next-line:no-shadowed-variable
     return new Promise((resolve, reject) => {
-
-      // tslint:disable-next-line:prefer-const
     let formData = new FormData();
-    // tslint:disable-next-line:prefer-const
     let xhr = new XMLHttpRequest();
-
     formData.append('imagen', archivo, archivo.name);
-
     xhr.onreadystatechange = function() {
-
       if (xhr.readyState === 4) {
-
         if (xhr.status === 200) {
           console.log('Imagen Subida');
           resolve(JSON.parse(xhr.response));
@@ -30,21 +51,13 @@ export class SubirArchivoService {
           console.log('Fallo la subida');
           reject(xhr.response);
         }
-
       }
-
     };
-
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/upload/' + tipo + '/' + id;
-
     xhr.open('put', url , true);
     xhr.send(formData);
     var result = JSON.parse(xhr.response);
-  // now you can access it's params:
   console.log(result.data);
-
-
     });
   }
 
