@@ -40,7 +40,7 @@ if ( id !== 'nuevo' ) {
   }
 
   cargarAgencia( id: string) {
-    this._agenciaService.cargarAgencia( id )
+    this._agenciaService.getAgencia( id )
     .subscribe( agencia => {
       console.log(agencia);
       this.agencia = agencia;

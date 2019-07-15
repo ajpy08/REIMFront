@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Agencia } from '../../models/agencia.models';
+import { Observable, throwError, pipe } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError} from 'rxjs/operators';
 
 @Injectable()
 export class AgenciaService {
@@ -17,87 +17,56 @@ export class AgenciaService {
     public _usuarioService: UsuarioService
   ) { }
 
-  cargarAgencias(desde: number = 0): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  getAgencias(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/agencia?desde=' + desde;
-    return this.http.get(url)
-    .pipe(
-    map( (resp: any) => {
-
-      this.totalAgencias = resp.total;
-      console.log(resp.total);
-    return resp.agencia;
-    }));
+    return this.http.get(url);
   }
 
-  cargarAgencia( id: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  getAgencia(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/agencia/' + id;
-    return this.http.get( url )
-    .pipe( map( (resp: any) => resp.agencia ));
-
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.agencia));
   }
 
-  borrarAgencia( id: string ): Observable<any> {
-
+  borrarAgencia(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/agencia/' + id;
     url += '?token=' + this._usuarioService.token;
-
-    return this.http.delete( url )
-    .pipe(map( resp => swal('Agencia Borrado', 'Eliminado correctamente', 'success') ));
-
+    return this.http.delete(url)
+      .pipe(map(resp => swal('Agencia Borrada', 'Eliminado correctamente', 'success')));
   }
 
-  guardarAgencia( agencia: Agencia ): Observable<any> { // probar
-
+  guardarAgencia(agencia: Agencia): Observable<any> { // probar
     let url = URL_SERVICIOS + '/agencia';
-
-    if ( agencia._id ) {
-      // actualizando
+    if (agencia._id) { // actualizando
       url += '/' + agencia._id;
       url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, agencia)
+        .pipe(map((resp: any) => {
+          swal('Agencia Actualizada', agencia.razonSocial, 'success');
+          return resp.agencia;
+        }),
+          catchError(err => {
+            swal(err.error.mensaje, err.error.errors.message, 'error');
+            return throwError(err);
+          }));
 
-      return this.http.put( url, agencia )
-      .pipe(
-                map( (resp: any) => {
-                  swal('Agencia Actualizado', agencia.razonSocial, 'success');
-                  return resp.agencia;
-
-                }),
-                catchError( err => {
-                  swal( err.error.mensaje, err.error.errors.message, 'error' );
-                  return throwError(err);
-                }));
-
-    } else {
-      // creando
+    } else {      // creando
       url += '?token=' + this._usuarioService.token;
-      return this.http.post( url, agencia )
-      .pipe(
-              map( (resp: any) => {
-                swal('Agencia Creada', agencia.razonSocial, 'success');
-                return resp.agencia;
-              }),
-              catchError( err => {
-                swal( err.error.mensaje, err.error.errors.message, 'error' );
-                return throwError(err);
-              }));
+      return this.http.post(url, agencia)
+        .pipe(map((resp: any) => {
+          swal('Agencia Creada', agencia.razonSocial, 'success');
+          return resp.agencia;
+        }),
+          catchError(err => {
+            swal(err.error.mensaje, err.error.errors.message, 'error');
+            return throwError(err);
+          }));
     }
-
   }
 
-
-  buscarAgencia( termino: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  buscarAgencia(termino: string): Observable<any> {
     let url = URL_SERVICIOS + '/busqueda/coleccion/agencias/' + termino;
-    return this.http.get( url )
-    .pipe(map( (resp: any) => resp.agencias ));
-
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.agencias));
   }
-
-
-
 }

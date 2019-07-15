@@ -33,7 +33,7 @@ export class ClienteComponent implements OnInit {
     }
 
   ngOnInit() {
-    this._agenciaService.cargarAgencias()
+    this._agenciaService.getAgencias()
     .subscribe( agencias => this.agencias = agencias );
 
   }

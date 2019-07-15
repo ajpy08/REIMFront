@@ -54,7 +54,7 @@ export class TransportistaService {
       url += '?token=' + this._usuarioService.token;
       return this.http.post( url, transportista )
               .pipe(map( (resp: any) => {
-                swal('Transportista Creada', transportista.razonSocial, 'success');
+                swal('Transportista Creado', transportista.razonSocial, 'success');
                 return resp.transportista;
               }),
               catchError( err => {

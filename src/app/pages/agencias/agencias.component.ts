@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Agencia } from '../../models/agencia.models';
 import { AgenciaService } from '../../services/service.index';
-
+declare var swal: any;
 @Component({
   selector: 'app-agencias',
   templateUrl: './agencias.component.html',
   styles: []
 })
 export class AgenciasComponent implements OnInit {
-  // tslint:disable-next-line:typedef-whitespace
   agencias: Agencia[] = [];
-  // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
-  // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
 
   constructor(public _agenciaService: AgenciaService) { }
@@ -24,16 +20,15 @@ export class AgenciasComponent implements OnInit {
   }
   cargarAgencias() {
     this.cargando = true;
-    this._agenciaService.cargarAgencias(this.desde)
-    .subscribe(agencias =>
-      // this.totalRegistros = resp.total;
-      this.agencias = agencias
-
-    );
+    this._agenciaService.getAgencias(this.desde)
+      .subscribe(agencias => {
+        this.totalRegistros = agencias.total;
+        this.agencias = agencias.agencias;
+        this.cargando = false;
+      });
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
     let desde = this.desde + valor;
     console.log(desde);
     if (desde >= this._agenciaService.totalAgencias) {
@@ -54,18 +49,28 @@ export class AgenciasComponent implements OnInit {
     }
     this.cargando = true;
     this._agenciaService.buscarAgencia(termino)
-    .subscribe((agencias: Agencia[]) => {
-      this.agencias = agencias;
-      this.cargando = false;
-
-    });
+      .subscribe((agencias: Agencia[]) => {
+        this.agencias = agencias;
+        this.cargando = false;
+      });
   }
 
-  borrarAgencia( agencia: Agencia ) {
-
-    this._agenciaService.borrarAgencia( agencia._id )
-            .subscribe( () =>  this.cargarAgencias() );
-
+  borrarAgencia(agencia: Agencia) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + agencia.razonSocial,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then(borrar => {
+        if (borrar) {
+          this._agenciaService.borrarAgencia(agencia._id)
+            .subscribe(borrado => {
+              this.cargarAgencias();
+            });
+        }
+      });
   }
 
 }
