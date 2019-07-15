@@ -17,31 +17,29 @@ export class TransportistaComponent implements OnInit {
   file: File = null;
   fileTemporal = false;
   edicion = false;
-  
   constructor(public _transportistaService: TransportistaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
-    private fb: FormBuilder){}
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.edicion = true;
-      this.cargarTransportista( id );
+      this.cargarTransportista(id);
     }
-    else
-    {
-    this.regForm.controls['noInterior'].setValue(undefined);
-    this.regForm.controls['noExterior'].setValue(undefined);
+    else {
+      this.regForm.controls['noInterior'].setValue(undefined);
+      this.regForm.controls['noExterior'].setValue(undefined);
     }
   }
-  
+
   createFormGroup() {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
-      rfc: ['', [Validators.required,  Validators.minLength(12)]],
+      rfc: ['', [Validators.required, Validators.minLength(12)]],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
@@ -114,10 +112,11 @@ export class TransportistaComponent implements OnInit {
   }
   get _id() {
     return this.regForm.get('_id');
-  }  
+  }
 
-  cargarTransportista( id: string ) {
+  cargarTransportista(id: string) {
     this._transportistaService.getTransportistaXID(id).subscribe(res => {
+      console.log(res);
       this.regForm.controls['razonSocial'].setValue(res.razonSocial);
       this.regForm.controls['rfc'].setValue(res.rfc);
       this.regForm.controls['calle'].setValue(res.calle);
@@ -141,51 +140,51 @@ export class TransportistaComponent implements OnInit {
 
   guardarTransportista() {
     if (this.regForm.valid) {
-      console.log (this.regForm.value);
-      this._transportistaService.guardarTransportista( this.regForm.value )
-                .subscribe( res => {
-                  this.fileImg = null;
-                  this.fileImgTemporal = false;
-                  this.file = null;
-                  this.fileTemporal = false;
-                  console.log (res);
-                  if (this.regForm.get('_id').value === '') {
-                    this.regForm.get('_id').setValue(res._id);
-                    this.router.navigate(['/transportista', this.regForm.get('_id').value ]);
-                    this.edicion = true;
-                  }
-                  this.regForm.markAsPristine();
-                });
+      console.log(this.regForm.value);
+      this._transportistaService.guardarTransportista(this.regForm.value)
+        .subscribe(res => {
+          this.fileImg = null;
+          this.fileImgTemporal = false;
+          this.file = null;
+          this.fileTemporal = false;
+          console.log(res);
+          if (this.regForm.get('_id').value === '') {
+            this.regForm.get('_id').setValue(res._id);
+            this.router.navigate(['/transportista', this.regForm.get('_id').value]);
+            this.edicion = true;
+          }
+          this.regForm.markAsPristine();
+        });
     }
   }
 
   onFileSelected(event) {
-     this.fileImg = <File> event.target.files[0];
+    this.fileImg = <File>event.target.files[0];
     this.subirFoto();
   }
-  
+
   onFileSelected2(event) {
-    this.file = <File> event.target.files[0];
-   this.subirFormato();
- }
- subirFoto() {
-        this._subirArchivoService.subirArchivoTemporal(this.fileImg, '')
-        .subscribe( nombreArchivo => {
-          this.regForm.get('img').setValue(nombreArchivo);
-          this.regForm.get('img').markAsDirty();
-          this.fileImgTemporal = true;
-          this.guardarTransportista();
-    });
+    this.file = <File>event.target.files[0];
+    this.subirFormato();
+  }
+  subirFoto() {
+    this._subirArchivoService.subirArchivoTemporal(this.fileImg, '')
+      .subscribe(nombreArchivo => {
+        this.regForm.get('img').setValue(nombreArchivo);
+        this.regForm.get('img').markAsDirty();
+        this.fileImgTemporal = true;
+        this.guardarTransportista();
+      });
   }
   subirFormato() {
     this._subirArchivoService.subirArchivoTemporal(this.file, '')
-    .subscribe( nombreArchivo => {
-      this.regForm.get('formatoR1').setValue(nombreArchivo);
-      this.regForm.get('formatoR1').markAsDirty();
-      this.fileTemporal = true;
-      this.guardarTransportista();
-});
-}
+      .subscribe(nombreArchivo => {
+        this.regForm.get('formatoR1').setValue(nombreArchivo);
+        this.regForm.get('formatoR1').markAsDirty();
+        this.fileTemporal = true;
+        this.guardarTransportista();
+      });
+  }
 
 
 }

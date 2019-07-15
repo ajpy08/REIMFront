@@ -2,88 +2,103 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
-                <input #input (keyup)="buscarAgencia( input.value )" type="text" class="form-control" placeholder="Buscar agencia...">
-
+                <input #input (keyup)="buscarAgencia( input.value )" type="text" class="form-control"
+                    placeholder="Buscar agencia...">
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
+<div class="row animated fadeIn" *ngIf="cargando">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fas fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor</span>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <div class="text-right">
-                    <button [routerLink]="['/agencia','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                <i class="fa fa-plus"></i> 
-                Añadir nueva agencia
-              </button>
+                    <button [routerLink]="['/agencia','nuevo']" type="button"
+                        class="btn waves-effect waves-light btn-rounded btn-primary">
+                        <i class="fa fa-plus"></i>
+                        Añadir nueva agencia
+                    </button>
                 </div>
-
                 <h3 class="card-title">Agencias registradas ( <small>{{_agenciaService.totalAgencias}}</small> )</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Razon Social</th>
+                                <th>RFC</th>
+                                <th>Calle</th>
+                                <th>Numero Exterior</th>
+                                <th>Numero Interior</th>
+                                <th>Colonia</th>
+                                <th>Municipio/Delegacion</th>
+                                <th>Ciudad</th>
+                                <th>Estado</th>
+                                <th>Codigo Postal</th>
+                                <th>Formato R1</th>
+                                <th>Correo</th>
+                                <th>Correo de Facturación</th>
+                                <th>Credito</th>
+                                <th>Patente</th>
+                                <th>Nombre Comercial</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let agencia of agencias">
+                                <td>
+                                    <button [routerLink]="['/agencia', agencia._id ]" class="btn btn-primary">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
 
-                <table class="table table-hover table-responsive">
-                    <thead>
-                        <tr>
-                            <!--<th>Cliente</th>-->
-                            <th>Razon Social</th>
-                            <th>RFC</th>
-                            <th>Calle</th>
-                            <th>Numero Exterior</th>
-                            <th>Numero Interior</th>
-                            <th>Colonia</th>
-                            <th>Municipio/Delegacion</th>
-                            <th>Ciudad</th>
-                            <th>Estado</th>
-                            <th>Codigo Postal</th>
-                            <th>Formato R1</th>
-                            <th>Correo</th>
-                            <th>Correo de Facturación</th>
-                            <th>Credito</th>
-                            <th>Patente</th>
-                            <th>Nombre Comercial</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let agencia of agencias">
-                            <!--<td>{{cliente.cliente}}</td>-->
-                            <td>{{agencia.razonSocial}}</td>
-                            <td>{{agencia.rfc}}</td>
-                            <td>{{agencia.calle}}</td>
-                            <td>{{agencia.noExterior}}</td>
-                            <td>{{agencia.noInterior}}</td>
-                            <td>{{agencia.colonia}}</td>
-                            <td>{{agencia.municipio}}</td>
-                            <td>{{agencia.ciudad}}</td>
-                            <td>{{agencia.estado}}</td>
-                            <td>{{agencia.cp}}</td>
-                            <td>{{agencia.formatoR1}}</td>
-                            <td>{{agencia.correo}}</td>
-                            <td>{{agencia.correoFac}}</td>
-                            <td>{{agencia.credito}}</td>
-                            <td>{{agencia.patente}}</td>
-                            <td>{{agencia.nombreComercial}}</td>
-                            <td>
-                                <button [routerLink]="['/agencia', agencia._id ]" class="btn btn-primary">
-                            <i class="fa fa-edit"></i>
-                          </button>
-
-                                <button (click)="borrarAgencia( agencia )" class="btn btn-danger">
-                            <i class="fa fa-trash-o"></i>
-                          </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
-                  <i class="fas fa-angle-left"></i> Anteriores
+                                    <button (click)="borrarAgencia( agencia )" class="btn btn-danger">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </td>
+                                <!--<td>{{cliente.cliente}}</td>-->
+                                <td>{{agencia.razonSocial}}</td>
+                                <td>{{agencia.rfc}}</td>
+                                <td>{{agencia.calle}}</td>
+                                <td>{{agencia.noExterior}}</td>
+                                <td>{{agencia.noInterior}}</td>
+                                <td>{{agencia.colonia}}</td>
+                                <td>{{agencia.municipio}}</td>
+                                <td>{{agencia.ciudad}}</td>
+                                <td>{{agencia.estado}}</td>
+                                <td>{{agencia.cp}}</td>
+                                <td>
+                                    <a *ngIf="agencia.formatoR1" [href]="agencia.formatoR1 | imagen:'cliente'"
+                                        download="Reporte2Mayo2010" target="_blank">
+                                        <img src="\assets\images\icon\pdf_32x32.png">
+                                    </a>
+                                </td>
+                                <!-- <td>{{agencia.formatoR1}}</td> -->
+                                <td>{{agencia.correo}}</td>
+                                <td>{{agencia.correoFac}}</td>
+                                <td>{{agencia.credito}}</td>
+                                <td>{{agencia.patente}}</td>
+                                <td>{{agencia.nombreComercial}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
+                    <i class="fas fa-angle-left"></i> Anteriores
                 </button>
-                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
                     Siguientes <i class="fas fa-angle-right"></i>
-              </button>
+                </button>
             </div>
         </div>
     </div>

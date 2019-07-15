@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { Agencia } from '../../models/agencia.models';
-import { AgenciaService } from '../../services/service.index';
-import { NgForm } from '@angular/forms';
+import { AgenciaService, SubirArchivoService } from '../../services/service.index';
+import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 
@@ -10,58 +10,190 @@ import { ModalUploadService } from '../../components/modal-upload/modal-upload.s
   templateUrl: './agencia.component.html',
   styles: []
 })
+
 export class AgenciaComponent implements OnInit {
-  agencia: Agencia = new Agencia();
+  tipoFile = '';
+  regForm: FormGroup;
+  fileImg: File = null;
+  fileImgTemporal = false;
+  file: File = null;
+  fileTemporal = false;
+  edicion = false;
   constructor(public _agenciaService: AgenciaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
+    public _subirArchivoService: SubirArchivoService,
+    private fb: FormBuilder,
     public _modalUploadService: ModalUploadService) {
-
-      activatedRoute.params.subscribe( params => {
-
-        // tslint:disable-next-line:prefer-const
-        let id = params['id'];
-
-        if ( id !== 'nuevo' ) {
-          this.cargarAgencia( id );
-        }
-
-      });
-    }
+  }
 
   ngOnInit() {
-
-  }
-
-  cargarAgencia( id: string ) {
-    this._agenciaService.cargarAgencia( id )
-          .subscribe( agencia => {
-
-            console.log( agencia );
-            this.agencia = agencia;
-            this.agencia.usuarioAlta = agencia.usuario._id;
-          });
-  }
-
-  guardarAgencia( f: NgForm ) {
-
-    console.log( f.valid );
-    console.log( f.value );
-
-    if ( f.invalid ) {
-      return;
+    this.createFormGroup();
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id !== 'nuevo') {
+      this.edicion = true;
+      this.cargarAgencia(id);
     }
-
-    this._agenciaService.guardarAgencia( this.agencia )
-            .subscribe( agencia => {
-
-              this.agencia._id = agencia._id;
-
-              this.router.navigate(['/agencia', agencia._id ]);
-
-            });
-
+    else {
+      this.regForm.controls['noInterior'].setValue(undefined);
+      this.regForm.controls['noExterior'].setValue(undefined);
+    }
   }
 
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      razonSocial: ['', [Validators.required, Validators.minLength(5)]],
+      rfc: ['', [Validators.required, Validators.minLength(12)]],
+      calle: [''],
+      noExterior: [''],
+      noInterior: [''],
+      colonia: [''],
+      municipio: [''],
+      ciudad: [''],
+      estado: [''],
+      cp: [''],
+      formatoR1: [''],
+      correo: [''],
+      correoFac: [''],
+      credito: [false],
+      img: [''],
+      patente: [''],
+      nombreComercial: [''],
+      _id: ['']
+    });
+  }
 
+  get razonSocial() {
+    return this.regForm.get('razonSocial');
+  }
+  get rfc() {
+    return this.regForm.get('rfc');
+  }
+  get calle() {
+    return this.regForm.get('calle');
+  }
+  get numeroExterior() {
+    return this.regForm.get('noExterior');
+  }
+  get numeroInterior() {
+    return this.regForm.get('noInterior');
+  }
+  get colonia() {
+    return this.regForm.get('colonia');
+  }
+  get municipioDelegacion() {
+    return this.regForm.get('municipio');
+  }
+  get ciudad() {
+    return this.regForm.get('ciudad');
+  }
+  get estado() {
+    return this.regForm.get('estado');
+  }
+  get cp() {
+    return this.regForm.get('cp');
+  }
+  get formatoR1() {
+    return this.regForm.get('formatoR1');
+  }
+  get correo() {
+    return this.regForm.get('correo');
+  }
+  get correoFac() {
+    return this.regForm.get('correoFac');
+  }
+  get credito() {
+    return this.regForm.get('credito');
+  }
+  get img() {
+    return this.regForm.get('img');
+  }
+  get patente() {
+    return this.regForm.get('patente');
+  }
+  get nombreComercial() {
+    return this.regForm.get('nombreComercial');
+  }
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
+  cargarAgencia(id: string) {
+    this._agenciaService.getAgencia(id)
+      .subscribe(res => {
+        // console.log(res);
+        this.regForm.controls['razonSocial'].setValue(res.razonSocial);
+        this.regForm.controls['rfc'].setValue(res.rfc);
+        this.regForm.controls['calle'].setValue(res.calle);
+        this.regForm.controls['noExterior'].setValue(res.noExterior);
+        this.regForm.controls['noInterior'].setValue(res.noInterior);
+        this.regForm.controls['colonia'].setValue(res.colonia);
+        this.regForm.controls['municipio'].setValue(res.municipio);
+        this.regForm.controls['ciudad'].setValue(res.ciudad);
+        this.regForm.controls['estado'].setValue(res.estado);
+        this.regForm.controls['cp'].setValue(res.cp);
+        this.regForm.controls['formatoR1'].setValue(res.formatoR1);
+        this.regForm.controls['correo'].setValue(res.correo);
+        this.regForm.controls['correoFac'].setValue(res.correoFac);
+        this.regForm.controls['credito'].setValue(res.credito);
+        this.regForm.controls['img'].setValue(res.img);
+        this.regForm.controls['patente'].setValue(res.patente);
+        this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
+        this.regForm.controls['_id'].setValue(res._id);
+      });
+  }
+
+  guardarAgencia() {
+    if (this.regForm.valid) {
+      // console.log (this.regForm.value);
+      this._agenciaService.guardarAgencia(this.regForm.value)
+        .subscribe(res => {
+          this.fileImg = null;
+          this.fileImgTemporal = false;
+          this.file = null;
+          this.fileTemporal = false;
+          // console.log (res);
+          if (this.regForm.get('_id').value === '') {
+            this.regForm.get('_id').setValue(res._id);
+            this.router.navigate(['/agencia', this.regForm.get('_id').value]);
+            this.edicion = true;
+          }
+          this.regForm.markAsPristine();
+        });
+    }
+  }
+
+  onFileSelected(event) {
+    if (this.tipoFile == 'img') {
+      //console.log('Fue Foto');
+      this.fileImg = <File>event.target.files[0];
+      this.subirArchivo(this.tipoFile);
+    } else {
+      if (this.tipoFile == 'formatoR1') {
+        //console.log('Fue R1');
+        this.file = <File>event.target.files[0];
+        this.subirArchivo(this.tipoFile);
+      } else {
+        console.log('No conozco el tipo de archivo para subir')
+      }
+    }
+  }
+
+  subirArchivo(tipo: string) {
+    let file: File;
+    if (this.fileImg != null) {
+      file = this.fileImg;
+    } else {
+      if (this.file != null) {
+        file = this.file;
+      }
+    }
+    this._subirArchivoService.subirArchivoTemporal(file, '')
+      .subscribe(nombreArchivo => {
+        this.regForm.get(tipo).setValue(nombreArchivo);
+        this.regForm.get(tipo).markAsDirty();
+        this.fileImgTemporal = true;
+        this.guardarAgencia();
+      });
+  }
 }
