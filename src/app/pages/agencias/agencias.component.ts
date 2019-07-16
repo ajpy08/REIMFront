@@ -30,7 +30,7 @@ export class AgenciasComponent implements OnInit {
 
   cambiarDesde(valor: number) {
     let desde = this.desde + valor;
-    console.log(desde);
+    //console.log(desde);
     if (desde >= this._agenciaService.totalAgencias) {
       return;
     }
@@ -39,7 +39,6 @@ export class AgenciasComponent implements OnInit {
     }
     this.desde += valor;
     this.cargarAgencias();
-
   }
 
   buscarAgencia(termino: string) {
@@ -72,5 +71,4 @@ export class AgenciasComponent implements OnInit {
         }
       });
   }
-
 }

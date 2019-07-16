@@ -30,13 +30,14 @@
                         Añadir nueva agencia
                     </button>
                 </div>
-                <h3 class="card-title">Agencias registradas ( <small>{{_agenciaService.totalAgencias}}</small> )</h3>
+                <h3 class="card-title">Agencias registradas ( <small>{{totalRegistros}}</small> )</h3>
                 <div class="table-responsive">
                     <table class="table table-hover table-responsive">
                         <thead>
                             <tr>
-                                <th>Cliente</th>
+                                <th></th>
                                 <th>Razon Social</th>
+                                <th>Nombre Comercial</th>
                                 <th>RFC</th>
                                 <th>Calle</th>
                                 <th>Numero Exterior</th>
@@ -50,9 +51,7 @@
                                 <th>Correo</th>
                                 <th>Correo de Facturación</th>
                                 <th>Credito</th>
-                                <th>Patente</th>
-                                <th>Nombre Comercial</th>
-                                <th></th>
+                                <th>Patente</th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -66,8 +65,8 @@
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 </td>
-                                <!--<td>{{cliente.cliente}}</td>-->
                                 <td>{{agencia.razonSocial}}</td>
+                                <td>{{agencia.nombreComercial}}</td>
                                 <td>{{agencia.rfc}}</td>
                                 <td>{{agencia.calle}}</td>
                                 <td>{{agencia.noExterior}}</td>
@@ -79,7 +78,7 @@
                                 <td>{{agencia.cp}}</td>
                                 <td>
                                     <a *ngIf="agencia.formatoR1" [href]="agencia.formatoR1 | imagen:'cliente'"
-                                        download="Reporte2Mayo2010" target="_blank">
+                                        target="_blank">
                                         <img src="\assets\images\icon\pdf_32x32.png">
                                     </a>
                                 </td>
@@ -88,7 +87,6 @@
                                 <td>{{agencia.correoFac}}</td>
                                 <td>{{agencia.credito}}</td>
                                 <td>{{agencia.patente}}</td>
-                                <td>{{agencia.nombreComercial}}</td>
                             </tr>
                         </tbody>
                     </table>

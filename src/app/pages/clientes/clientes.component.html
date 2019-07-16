@@ -2,81 +2,102 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
-                <input #input (keyup)="buscarCliente( input.value )" type="text" class="form-control" placeholder="Buscar cliente...">
-
+                <input #input (keyup)="buscarCliente( input.value )" type="text" class="form-control"
+                    placeholder="Buscar cliente...">
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
+<div class="row animated fadeIn" *ngIf="cargando">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fas fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor</span>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <div class="text-right">
-                    <button [routerLink]="['/cliente','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                <i class="fa fa-plus"></i> 
-                Añadir nuevo cliente
-              </button>
+                    <button [routerLink]="['/cliente','nuevo']" type="button"
+                        class="btn waves-effect waves-light btn-rounded btn-primary">
+                        <i class="fa fa-plus"></i>
+                        Añadir nuevo cliente
+                    </button>
                 </div>
-
-                <h3 class="card-title">Clientes registrados ( <small>{{_clienteService.totalClientes}}</small> )</h3>
-
-                <table class="table table-hover table-responsive">
-                    <thead>
-                        <tr>
-                            <th>RFC</th>
-                            <th>Razon Social</th>
-                            <th>Calle</th>
-                            <th>Numero Exterior</th>
-                            <th>Numero Interior</th>
-                            <th>Colonia</th>
-                            <th>Municipio/Delegacion</th>
-                            <th>Ciudad</th>
-                            <th>Estado</th>
-                            <th>Codigo Postal</th>
-                            <th>Formato R1</th>
-                            <th>Correo</th>
-                            <th>Correo de Facturación</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let cliente of clientes">
-                            <td>{{cliente.rfc}}</td>
-                            <td>{{cliente.razonSocial}}</td>
-                            <td>{{cliente.calle}}</td>
-                            <td>{{cliente.numeroExterior}}</td>
-                            <td>{{cliente.numeroInterior}}</td>
-                            <td>{{cliente.colonia}}</td>
-                            <td>{{cliente.municipioDelegacion}}</td>
-                            <td>{{cliente.ciudad}}</td>
-                            <td>{{cliente.estado}}</td>
-                            <td>{{cliente.cp}}</td>
-                            <td>{{cliente.formatoR1}}</td>
-                            <td>{{cliente.correo}}</td>
-                            <td>{{cliente.correoFac}}</td>
-                            <td>
-                                <button [routerLink]="['/cliente', cliente._id ]" class="btn btn-primary">
-                            <i class="fa fa-edit"></i>
-                          </button>
-                          <button (click)="borrarCliente( cliente )" class="btn btn-danger">
-                            <i class="fa fa-trash-o"></i>
-                          </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
-                  <i class="fas fa-angle-left"></i> Anteriores
+                <h3 class="card-title">Clientes registrados ( <small>{{totalRegistros}}</small> )</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover table-responsive">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Razon Social</th>
+                                <th>Nombre Comercial</th>
+                                <th>RFC</th>
+                                <th>Calle</th>
+                                <th>Numero Exterior</th>
+                                <th>Numero Interior</th>
+                                <th>Colonia</th>
+                                <th>Municipio/Delegacion</th>
+                                <th>Ciudad</th>
+                                <th>Estado</th>
+                                <th>Codigo Postal</th>
+                                <th>Formato R1</th>
+                                <th>Correo</th>
+                                <th>Correo de Facturación</th>
+                                <th>Credito</th>
+                                <th>Empresas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cliente of clientes">
+                                <td>
+                                    <button [routerLink]="['/cliente', cliente._id ]" class="btn btn-primary">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button (click)="borrarCliente( cliente )" class="btn btn-danger">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
+                                </td>
+                                <td>{{cliente.razonSocial}}</td>
+                                <td>{{cliente.nombreComercial}}</td>
+                                <td>{{cliente.rfc}}</td>
+                                <td>{{cliente.calle}}</td>
+                                <td>{{cliente.noExterior}}</td>
+                                <td>{{cliente.noInterior}}</td>
+                                <td>{{cliente.colonia}}</td>
+                                <td>{{cliente.municipio}}</td>
+                                <td>{{cliente.ciudad}}</td>
+                                <td>{{cliente.estado}}</td>
+                                <td>{{cliente.cp}}</td>
+                                <td>
+                                    <a *ngIf="cliente.formatoR1" [href]="cliente.formatoR1 | imagen:'cliente'"
+                                        target="_blank">
+                                        <img src="\assets\images\icon\pdf_32x32.png">
+                                    </a>
+                                </td>
+                                <td>{{cliente.correo}}</td>
+                                <td>{{cliente.correoFac}}</td>
+                                <td>{{cliente.credito}}</td>
+                                <td>
+                                    <p *ngFor="let empresa of cliente.empresas"> {{empresa.razonSocial}} </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
+                    <i class="fas fa-angle-left"></i> Anteriores
                 </button>
-                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
                     Siguientes <i class="fas fa-angle-right"></i>
-              </button>
+                </button>
             </div>
-
         </div>
     </div>
 </div>
