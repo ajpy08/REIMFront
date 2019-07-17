@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Agencia } from '../../models/agencia.models';
-import { Observable, throwError, pipe } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 
@@ -49,7 +49,6 @@ export class AgenciaService {
             swal(err.error.mensaje, err.error.errors.message, 'error');
             return throwError(err);
           }));
-
     } else {      // creando
       url += '?token=' + this._usuarioService.token;
       return this.http.post(url, agencia)

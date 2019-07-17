@@ -116,7 +116,7 @@ export class TransportistaComponent implements OnInit {
 
   cargarTransportista(id: string) {
     this._transportistaService.getTransportistaXID(id).subscribe(res => {
-      console.log(res);
+      //console.log(res);
       this.regForm.controls['razonSocial'].setValue(res.razonSocial);
       this.regForm.controls['rfc'].setValue(res.rfc);
       this.regForm.controls['calle'].setValue(res.calle);
@@ -140,14 +140,14 @@ export class TransportistaComponent implements OnInit {
 
   guardarTransportista() {
     if (this.regForm.valid) {
-      console.log(this.regForm.value);
+      //console.log(this.regForm.value);
       this._transportistaService.guardarTransportista(this.regForm.value)
         .subscribe(res => {
           this.fileImg = null;
           this.fileImgTemporal = false;
           this.file = null;
           this.fileTemporal = false;
-          console.log(res);
+          //console.log(res);
           if (this.regForm.get('_id').value === '') {
             this.regForm.get('_id').setValue(res._id);
             this.router.navigate(['/transportista', this.regForm.get('_id').value]);

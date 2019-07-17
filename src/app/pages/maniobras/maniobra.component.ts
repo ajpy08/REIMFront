@@ -188,7 +188,7 @@ export class ManiobraComponent implements OnInit {
 
   cambioCliente( id: string ) {
 
-    this._clienteService.cargarCliente( id )
+    this._clienteService.getCliente( id )
           .subscribe( cliente => this.cliente = cliente );
 
   }

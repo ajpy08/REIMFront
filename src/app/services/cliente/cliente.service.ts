@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Cliente } from '../../models/cliente.models';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError} from 'rxjs/operators';
+import { Observable, throwError, pipe } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 
 @Injectable()
@@ -17,103 +17,78 @@ export class ClienteService {
     public _usuarioService: UsuarioService
   ) { }
 
-  cargarClientesRole(role: string): Observable<any> {
+  getClientesRole(role: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/cliente/role/' + role;
-    return this.http.get( url )
-              .pipe( map( (resp: any) => resp.cliente  ));
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.cliente));
   }
 
-  cargarClientesEmpresa(id: string, desde: number = 0): Observable<any> {
+  getClientesEmpresa(id: string, desde: number = 0): Observable<any> {
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/cliente/empresa/' + id + '?desde' + desde;
     return this.http.get(url)
-    .pipe(
-    map( (resp: any) => {
+      .pipe(
+        map((resp: any) => {
 
-      this.totalClientes = resp.total;
-      console.log(resp.total);
-    return resp.cliente;
-    }));
+          this.totalClientes = resp.total;
+          //console.log(resp.total);
+          return resp.cliente;
+        }));
   }
 
-  cargarClientes(desde: number = 0): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  getClientes(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/cliente?desde=' + desde;
-    return this.http.get(url)
-    .pipe(
-    map( (resp: any) => {
-
-      this.totalClientes = resp.total;
-      console.log(resp.total);
-    return resp.cliente;
-    }));
+    return this.http.get(url);
   }
 
-  cargarCliente( id: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  getCliente(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/cliente/' + id;
-    return this.http.get( url )
-              .pipe( map( (resp: any) => resp.cliente ));
-
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.cliente));
   }
 
-  borrarCliente( id: string ): Observable<any> {
-
+  borrarCliente(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/cliente/' + id;
     url += '?token=' + this._usuarioService.token;
-
-    return this.http.delete( url )
-              .pipe( map( resp => swal('Cliente Borrado', 'Eliminado correctamente', 'success') ));
-
+    return this.http.delete(url)
+      .pipe(map(resp => swal('Cliente Borrado', 'Eliminado correctamente', 'success')));
   }
 
-  guardarCliente( cliente: Cliente ): Observable<any> {
-
+  guardarCliente(cliente: Cliente): Observable<any> {
     let url = URL_SERVICIOS + '/cliente';
-
-    if ( cliente._id ) {
+    if (cliente._id) {
       // actualizando
       url += '/' + cliente._id;
       url += '?token=' + this._usuarioService.token;
-
-      return this.http.put( url, cliente )
-                .pipe (map( (resp: any) => {
-                  swal('Cliente Actualizado', cliente.razonSocial, 'success');
-                  return resp.cliente;
-                }),
-                catchError( err => {
-                  console.error(err);
-                  swal( err.error.mensaje, err.error.errors.message, 'error' );
-                  return throwError(err);
-                }));
-
-    } else {
-      // creando
+      return this.http.put(url, cliente)
+        .pipe(map((resp: any) => {
+          swal('Cliente Actualizado', cliente.razonSocial, 'success');
+          return resp.cliente;
+        }),
+          catchError(err => {
+            console.error(err);
+            swal(err.error.mensaje, err.error.errors.message, 'error');
+            return throwError(err);
+          }));
+    } else {      // creando
       url += '?token=' + this._usuarioService.token;
-      return this.http.post( url, cliente )
-              .pipe(map( (resp: any) => {
-                swal('Cliente Creado', cliente.razonSocial, 'success');
-                return resp.cliente;
-              }),
-              catchError( err => {
-                console.log(err);
-                swal( err.error.mensaje, err.error.errors.message, 'error' );
-                return throwError(err);
-              }));
+      return this.http.post(url, cliente)
+        .pipe(map((resp: any) => {
+          swal('Cliente Creado', cliente.razonSocial, 'success');
+          return resp.cliente;
+        }),
+          catchError(err => {
+            console.log(err);
+            swal(err.error.mensaje, err.error.errors.message, 'error');
+            return throwError(err);
+          }));
     }
-
   }
-  buscarCliente( termino: string ): Observable<any> {
 
-    // tslint:disable-next-line:prefer-const
+  buscarCliente(termino: string): Observable<any> {
     let url = URL_SERVICIOS + '/busqueda/coleccion/clientes/' + termino;
-    return this.http.get( url )
-                .pipe(map( (resp: any) => resp.clientes ));
-
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.clientes));
   }
-
-
 }

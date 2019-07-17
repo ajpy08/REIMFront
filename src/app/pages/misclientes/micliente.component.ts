@@ -29,7 +29,7 @@ export class MiclienteComponent implements OnInit {
         let id = params['id'];
 
         if ( id !== 'nuevo' ) {
-          this.cargarCliente( id );
+          this.getCliente( id );
         }
 
       });
@@ -38,9 +38,9 @@ export class MiclienteComponent implements OnInit {
   ngOnInit() {
   }
 
-  cargarCliente( id: string ) {
+  getCliente( id: string ) {
     // this.cargando = true;
-    this._clienteService.cargarCliente( id )
+    this._clienteService.getCliente( id )
           .subscribe( cliente => {
 
             console.log( cliente );

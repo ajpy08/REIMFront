@@ -8,11 +8,14 @@
                         <div class="my-container">
                             <mat-form-field>
                                 <input matInput formControlName="razonSocial" type="text" class="form-control"
-                                    placeholder="Razón Social" required>
+                                    placeholder="Razón Social">
                             </mat-form-field>
                             <mat-form-field>
-                                <input matInput formControlName="rfc" type="text" class="form-control" placeholder="RFC"
-                                    required>
+                                <input matInput formControlName="rfc" type="text" class="form-control" placeholder="RFC">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput formControlName="nombreComercial" type="text" class="form-control"
+                                    placeholder="Nombre Comercial">
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="calle" type="text" class="form-control"
@@ -61,10 +64,6 @@
                                 <input matInput formControlName="patente" type="text " class="form-control "
                                     placeholder="patente">
                             </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="nombreComercial" type="text " class="form-control "
-                                    placeholder="Nombre Comercial ">
-                            </mat-form-field>
                         </div>
                         <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
                             [disabled]="regForm.pristine || regForm.invalid">
@@ -103,7 +102,7 @@
         <div class="card  text-center">
             <div class="card-header">Formato R1</div>
             <div class="card-body">
-                <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'" download="Reporte2Mayo2010"
+                <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'"
                     target="_blank">
                     <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                 </a>
