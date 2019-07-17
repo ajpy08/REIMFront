@@ -39,7 +39,7 @@ export class TransportistaService {
     let url = URL_SERVICIOS + '/transportista';
     if ( transportista._id ) {// actualizando
       url += '/' + transportista._id;
-      url += '?token=' + this._usuarioService.token;
+      url += '?token=' + this._usuarioService.token;           
       return this.http.put( url, transportista )
                 .pipe(map( (resp: any) => {
                   swal('Transportista Actualizado', transportista.razonSocial, 'success');

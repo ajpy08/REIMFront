@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Cliente } from '../../models/cliente.models';
-import { ClienteService } from '../../services/service.index';
-import { Agencia } from '../../models/agencia.models';
+import { ClienteService, SubirArchivoService, UsuarioService } from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgenciaService } from '../../services/service.index';
-import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+import { Usuario } from 'src/app/models/usuarios.model';
 
 @Component({
   selector: 'app-cliente',
@@ -13,58 +12,191 @@ import { ModalUploadService } from '../../components/modal-upload/modal-upload.s
   styles: []
 })
 export class ClienteComponent implements OnInit {
-  cliente: Cliente = new Cliente();
-  agencias: Agencia[] = [];
-  constructor(public _clienteService: ClienteService,public _agenciaService: AgenciaService,
+  tipoFile = '';
+  regForm: FormGroup;
+  fileImg: File = null;
+  fileImgTemporal = false;
+  file: File = null;
+  fileTemporal = false;
+  edicion = false;
+  usuarioLogueado = new Usuario;
+  constructor(public _clienteService: ClienteService,
+    public _agenciaService: AgenciaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    public _modalUploadService: ModalUploadService) {
-
-      activatedRoute.params.subscribe( params => {
-
-        // tslint:disable-next-line:prefer-const
-        let id = params['id'];
-
-        if ( id !== 'nuevo' ) {
-          this.cargarCliente( id );
-        }
-
-      });
-    }
+    public _subirArchivoService: SubirArchivoService,
+    private fb: FormBuilder,
+    public _modalUploadService: ModalUploadService,
+    private usuarioService: UsuarioService) {}
 
   ngOnInit() {
-    this._agenciaService.getAgencias()
-    .subscribe( agencias => this.agencias = agencias );
-
-  }
-  cargarCliente( id: string ) {
-    this._clienteService.cargarCliente( id )
-          .subscribe( cliente => {
-            console.log( cliente );
-            this.cliente = cliente;
-            this.cliente.usuarioAlta = cliente.usuario._id;
-          });
-  }
-
-  guardarCliente( f: NgForm ) {
-
-    console.log( f.valid );
-    console.log( f.value );
-
-    if ( f.invalid ) {
-      return;
+    this.createFormGroup();
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id !== 'nuevo') {
+      this.edicion = true;
+      this.cargarCliente(id);
     }
-
-    this._clienteService.guardarCliente( this.cliente )
-            .subscribe( cliente => {
-
-              this.cliente._id = cliente._id;
-
-              this.router.navigate(['/cliente', cliente._id ]);
-
-            });
-
+    else {
+      this.usuarioLogueado = this.usuarioService.usuario;
+      this.regForm.controls['noInterior'].setValue(undefined);
+      this.regForm.controls['noExterior'].setValue(undefined);
+    }
   }
 
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      razonSocial: ['', [Validators.required, Validators.minLength(5)]],
+      nombreComercial: [''],
+      rfc: ['', [Validators.required, Validators.minLength(12)]],
+      calle: [''],
+      noExterior: [''],
+      noInterior: [''],
+      colonia: [''],
+      municipio: [''],
+      ciudad: [''],
+      estado: [''],
+      cp: [''],
+      formatoR1: [''],
+      correo: [''],
+      correoFac: [''],
+      credito: [false],
+      img: [''],
+      empresas: [''],
+      _id: ['']
+    });
+  }
 
+  get razonSocial() {
+    return this.regForm.get('razonSocial');
+  }
+  get nombreComercial() {
+    return this.regForm.get('nombreComercial');
+  }
+  get rfc() {
+    return this.regForm.get('rfc');
+  }
+  get calle() {
+    return this.regForm.get('calle');
+  }
+  get numeroExterior() {
+    return this.regForm.get('noExterior');
+  }
+  get numeroInterior() {
+    return this.regForm.get('noInterior');
+  }
+  get colonia() {
+    return this.regForm.get('colonia');
+  }
+  get municipioDelegacion() {
+    return this.regForm.get('municipio');
+  }
+  get ciudad() {
+    return this.regForm.get('ciudad');
+  }
+  get estado() {
+    return this.regForm.get('estado');
+  }
+  get cp() {
+    return this.regForm.get('cp');
+  }
+  get formatoR1() {
+    return this.regForm.get('formatoR1');
+  }
+  get correo() {
+    return this.regForm.get('correo');
+  }
+  get correoFac() {
+    return this.regForm.get('correoFac');
+  }
+  get credito() {
+    return this.regForm.get('credito');
+  }
+  get img() {
+    return this.regForm.get('img');
+  }
+  get empresas() {
+    return this.regForm.get('empresas');
+  }
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
+  cargarCliente(id: string) {
+    this._clienteService.getCliente(id)
+      .subscribe(res => {
+        // console.log(res);
+        this.regForm.controls['razonSocial'].setValue(res.razonSocial);
+        this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
+        this.regForm.controls['rfc'].setValue(res.rfc);
+        this.regForm.controls['calle'].setValue(res.calle);
+        this.regForm.controls['noExterior'].setValue(res.noExterior);
+        this.regForm.controls['noInterior'].setValue(res.noInterior);
+        this.regForm.controls['colonia'].setValue(res.colonia);
+        this.regForm.controls['municipio'].setValue(res.municipio);
+        this.regForm.controls['ciudad'].setValue(res.ciudad);
+        this.regForm.controls['estado'].setValue(res.estado);
+        this.regForm.controls['cp'].setValue(res.cp);
+        this.regForm.controls['formatoR1'].setValue(res.formatoR1);
+        this.regForm.controls['correo'].setValue(res.correo);
+        this.regForm.controls['correoFac'].setValue(res.correoFac);
+        this.regForm.controls['credito'].setValue(res.credito);
+        this.regForm.controls['img'].setValue(res.img);
+        this.regForm.controls['empresas'].setValue(res.empresas);
+        this.regForm.controls['_id'].setValue(res._id);
+      });
+  }
+
+  guardarCliente() {
+    if (this.regForm.valid) {
+      // console.log (this.regForm.value);
+      this._clienteService.guardarCliente(this.regForm.value)
+        .subscribe(res => {
+          this.fileImg = null;
+          this.fileImgTemporal = false;
+          this.file = null;
+          this.fileTemporal = false;
+          // console.log (res);
+          if (this.regForm.get('_id').value === '') {
+            this.regForm.get('_id').setValue(res._id);
+            this.router.navigate(['/cliente', this.regForm.get('_id').value]);
+            this.edicion = true;
+          }
+          this.regForm.markAsPristine();
+        });
+    }
+  }
+
+  onFileSelected(event) {
+    if (this.tipoFile == 'img') {
+      //console.log('Fue Foto');
+      this.fileImg = <File>event.target.files[0];
+      this.subirArchivo(this.tipoFile);
+    } else {
+      if (this.tipoFile == 'formatoR1') {
+        //console.log('Fue R1');
+        this.file = <File>event.target.files[0];
+        this.subirArchivo(this.tipoFile);
+      } else {
+        console.log('No conozco el tipo de archivo para subir')
+      }
+    }
+  }
+
+  subirArchivo(tipo: string) {
+    let file: File;
+    if (this.fileImg != null) {
+      file = this.fileImg;
+    } else {
+      if (this.file != null) {
+        file = this.file;
+      }
+    }
+    this._subirArchivoService.subirArchivoTemporal(file, '')
+      .subscribe(nombreArchivo => {
+        this.regForm.get(tipo).setValue(nombreArchivo);
+        this.regForm.get(tipo).markAsDirty();
+        this.fileImgTemporal = true;
+        this.guardarCliente();
+      });
+  }
 }

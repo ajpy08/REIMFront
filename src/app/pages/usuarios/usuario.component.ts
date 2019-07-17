@@ -83,7 +83,7 @@ export class UsuarioComponent implements OnInit {
 
 cargarUsuario( id: string ) {
   this._usuarioService.getUsuarioxID(id).subscribe(usuario => {
-    this._clienteService.cargarClientesRole( usuario.role ).subscribe( empresas => this.empresas = empresas );
+    this._clienteService.getClientesRole( usuario.role ).subscribe( empresas => this.empresas = empresas );
     this.regForm.controls['nombre'].setValue(usuario.nombre);
     this.regForm.controls['email'].setValue(usuario.email);
     this.regForm.controls['password'].setValue(usuario.password);
@@ -98,7 +98,7 @@ cargarUsuario( id: string ) {
 
 
 cambioRole( role: string ) {
-  this._clienteService.cargarClientesRole( role )
+  this._clienteService.getClientesRole( role )
     .subscribe( empresas => this.empresas = empresas );
 }
 

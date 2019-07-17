@@ -23,7 +23,6 @@ export class Agencia {
         public usuarioMod?: string,
         public fMod?: string,
         public _id?: string,
-        public pronueva?: string
-        
+        public pronueva?: string        
     ) {}
 }

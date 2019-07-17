@@ -1,7 +1,6 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Agencia } from '../../models/agencia.models';
+import { Component, OnInit } from '@angular/core';
 import { AgenciaService, SubirArchivoService } from '../../services/service.index';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 
@@ -43,6 +42,7 @@ export class AgenciaComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
+      nombreComercial: [''],
       rfc: ['', [Validators.required, Validators.minLength(12)]],
       calle: [''],
       noExterior: [''],
@@ -57,14 +57,16 @@ export class AgenciaComponent implements OnInit {
       correoFac: [''],
       credito: [false],
       img: [''],
-      patente: [''],
-      nombreComercial: [''],
+      patente: [''],      
       _id: ['']
     });
   }
 
   get razonSocial() {
     return this.regForm.get('razonSocial');
+  }
+  get nombreComercial() {
+    return this.regForm.get('nombreComercial');
   }
   get rfc() {
     return this.regForm.get('rfc');
@@ -110,10 +112,7 @@ export class AgenciaComponent implements OnInit {
   }
   get patente() {
     return this.regForm.get('patente');
-  }
-  get nombreComercial() {
-    return this.regForm.get('nombreComercial');
-  }
+  }  
   get _id() {
     return this.regForm.get('_id');
   }
@@ -123,6 +122,7 @@ export class AgenciaComponent implements OnInit {
       .subscribe(res => {
         // console.log(res);
         this.regForm.controls['razonSocial'].setValue(res.razonSocial);
+        this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
         this.regForm.controls['rfc'].setValue(res.rfc);
         this.regForm.controls['calle'].setValue(res.calle);
         this.regForm.controls['noExterior'].setValue(res.noExterior);
@@ -138,7 +138,6 @@ export class AgenciaComponent implements OnInit {
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
         this.regForm.controls['patente'].setValue(res.patente);
-        this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
         this.regForm.controls['_id'].setValue(res._id);
       });
   }
