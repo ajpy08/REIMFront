@@ -49,6 +49,7 @@ import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/report
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
 import { SolicitudesDComponent } from './approval-page/solicitudes-d.component';
+import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
 import { PipesModule } from '../pipes/pipes.module';
 // import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
@@ -114,7 +115,8 @@ import {
         ReporteContenedoresRLComponent,
         BuquesComponent,
         BuqueComponent,
-        SolicitudesDComponent
+        SolicitudesDComponent,
+        RegisterComponent
     ],
     exports: [
         DashboardComponent

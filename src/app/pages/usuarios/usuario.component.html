@@ -10,7 +10,7 @@
                             <mat-error *ngIf="nombre.touched && nombre.invalid && !nombre.errors?.minlength">
                                 <sup>*</sup>Por Favor Ingrese un Nombre de Usuario
                             </mat-error>
-                            <mat-error *ngIf="nombre.errors?.minlength">
+                            <mat-error *ngIf="!nombre.errors?.minlength">
                                 <sup>*</sup>El nombre de usuario debe contener al menos 5 caracteres<br>
                             </mat-error>
                         </mat-form-field>
@@ -18,9 +18,9 @@
                         <mat-form-field>
                             <input matInput formControlName="email" type="text" class="form-control" placeholder="Correo electrónico del usuario" >
                             <mat-error *ngIf="email.touched && email.invalid && !email.errors?.pattern">
-                                <sup>*</sup>Por Favor Ingreso un Correo electrónico
+                                <sup>*</sup>Por Favor Ingrese un Correo electrónico
                             </mat-error>
-                            <mat-error *ngIf="email.errors?.pattern">
+                            <mat-error *ngIf="!email.errors?.pattern">
                                 <sup>*</sup>Por favor ingrese un Correo electrónico válido.
                             </mat-error>
                         </mat-form-field>
