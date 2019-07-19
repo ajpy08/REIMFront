@@ -28,6 +28,7 @@ export class SubirArchivoService {
     let url = URL_SERVICIOS + '/uploadFileTemp';
          return this.http.put( url, formData )
          .pipe(map( (resp: any) => {
+           //console.log(resp.nombreArchivo)
            swal('Archivo Cargado', resp.nombreArchivo, 'success');
            return resp.nombreArchivo;
          }),
