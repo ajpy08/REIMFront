@@ -2,64 +2,71 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
-                <input #input (keyup)="buscarCamion( input.value )" type="text" class="form-control" placeholder="Buscar camion...">
-
+                <input #input (keyup)="buscarCamion( input.value )" type="text" class="form-control"
+                    placeholder="Buscar camion...">
             </div>
         </div>
     </div>
 </div>
-
-<div class="row">
+<div class="row animated fadeIn" *ngIf="cargando">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fas fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor</span>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
                 <div class="text-right">
-                    <button [routerLink]="['/camion','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                <i class="fa fa-plus"></i> 
-                Añadir nueva camion
-              </button>
+                    <button [routerLink]="['/camion','nuevo']" type="button"
+                        class="btn waves-effect waves-light btn-rounded btn-primary">
+                        <i class="fa fa-plus"></i>
+                        Añadir nuevo camion
+                    </button>
                 </div>
-
-                <h3 class="card-title">Camiones registrados ( <small>{{_camionService.totalCamiones}}</small> )</h3>
-
+                <h3 class="card-title">Camiones registrados ( <small>{{totalRegistros}}</small> )</h3>
                 <table class="table table-hover table-responsive">
                     <thead>
                         <tr>
                             <th>Transportista</th>
-                            <th>Placas</th>
                             <th>Numero Economico</th>
+                            <th>Placas</th>
                             <th>Vigencia Del Seguro</th>
-                            <th>PDF Del Seguro</th>
+                            <th>Poliza de Seguro</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let camion of camiones">
+                            <td>
+                                <button [routerLink]="['/camion', camion._id ]" class="btn btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+
+                                <button (click)="borrarCamion( camion )" class="btn btn-danger">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </td>
                             <td>{{camion.transportista.razonSocial}}</td>
                             <td>{{camion.noEconomico}}</td>
                             <td>{{camion.placa}}</td>
                             <td>{{camion.vigenciaSeguro}}</td>
                             <td>{{camion.pdfSeguro}}</td>
-                            <td>
-                                <button [routerLink]="['/camion', camion._id ]" class="btn btn-primary">
-                            <i class="fa fa-edit"></i>
-                          </button>
-
-                                <button (click)="borrarCamion( camion )" class="btn btn-danger">
-                            <i class="fa fa-trash-o"></i>
-                          </button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <button (click)="cambiarDesde(-5)" class="btn btn-secondary">
-                  <i class="fas fa-angle-left"></i> Anteriores
+                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
+                    <i class="fas fa-angle-left"></i> Anteriores
                 </button>
-                <button (click)="cambiarDesde(5)" class="btn btn-secondary">
+                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
                     Siguientes <i class="fas fa-angle-right"></i>
-              </button>
+                </button>
             </div>
 
         </div>

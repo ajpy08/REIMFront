@@ -18,14 +18,15 @@ export class ClientesComponent implements OnInit {
   ngOnInit() {
     this.cargarClientes();
   }
+
   cargarClientes() {
     this.cargando = true;
     this._clienteService.getClientes(this.desde)
       .subscribe(clientes => {
         this.totalRegistros = clientes.total;
-        this.clientes = clientes.cliente;
+        this.clientes = clientes.clientes;
         this.cargando = false;
-      });    
+      });
   }
 
   cambiarDesde(valor: number) {

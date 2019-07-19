@@ -11,7 +11,8 @@
                                     placeholder="Razón Social">
                             </mat-form-field>
                             <mat-form-field>
-                                <input matInput formControlName="rfc" type="text" class="form-control" placeholder="RFC">
+                                <input matInput formControlName="rfc" type="text" class="form-control"
+                                    placeholder="RFC">
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="nombreComercial" type="text" class="form-control"
@@ -89,26 +90,32 @@
                     para confirmar!
                 </p>
                 <ng-template #notShow>
-                    <img (click)="file.click()" [src]="img.value | imagen:'cliente'"
-                        class="w150 img-circle pointer">
+                    <img (click)="file.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
                 </ng-template>
-                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file"
-                    #tipo accept="image/*" #file>
-                <br><br>
-                <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'img'"><i
-                        class="fa fa-file"></i> Cambiar foto</button>
+                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo
+                    accept="image/*" #file>
+                <br>
+                <button class="btn btn-info waves-effect waves-light" type="button"
+                    (click)="file.click(); tipoFile = 'img'"><i class="fa fa-file"></i> Cambiar foto</button>
             </div>
         </div>
         <div class="card  text-center">
             <div class="card-header">Formato R1</div>
             <div class="card-body">
-                <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'"
-                    target="_blank">
-                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                </a>
+                <p *ngIf="fileTemporal; else notShow2" class="text-danger">
+                    <a [href]="formatoR1.value | imagen:'temp'" target="_blank">
+                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                    </a><br>
+                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                </p>
+                <ng-template #notShow2>
+                    <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'" target="_blank">
+                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                    </a>
+                </ng-template>
                 <input (change)="onFileSelected($event)" type="file" style="display:none" name="file"
                     #tipo accept="pdf" #file>
-                <br><br>
+                <br>
                 <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i
                         class="fa fa-file"></i> Cambiar Formato R1</button>
             </div>

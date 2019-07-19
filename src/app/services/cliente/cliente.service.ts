@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Cliente } from '../../models/cliente.models';
-import { Observable, throwError, pipe } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 
