@@ -93,7 +93,7 @@ console.log(usuario);
 
   cambioRole( role: string ) {
     console.log(role);
-     this._clienteService.cargarClientesRole( role )
+     this._clienteService.getClientesRole( role )
        .subscribe( clientes => this.clientes = clientes );
 
   }

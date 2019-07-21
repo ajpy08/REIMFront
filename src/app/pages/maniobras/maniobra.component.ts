@@ -33,7 +33,7 @@ export class ManiobraComponent implements OnInit {
   operadores: Operador[] = [];
   operador: Operador = new Operador('');
   camiones: Camion[] = [];
-  camion: Camion = new Camion('');
+  camion: Camion = new Camion();
   contenedores: Contenedor[] = [];
   contenedor: Contenedor = new Contenedor('');
   clientes: Cliente[] = [];
@@ -85,11 +85,11 @@ export class ManiobraComponent implements OnInit {
 
     this._operadorService.cargarOperadores()
           .subscribe( operadores => this.operadores = operadores );
-    this._camionService.cargarCamiones()
+    this._camionService.getCamiones()
           .subscribe( camiones => this.camiones = camiones );
     /* this._contenedorService.cargarContenedores()
           .subscribe( contenedores => this.contenedores = contenedores );*/
-    this._clienteService.cargarClientes()
+    this._clienteService.getClientes()
           .subscribe( clientes => this.clientes = clientes );
     this._agenciaService.getAgencias()
           .subscribe( agencias => this.agencias = agencias );
@@ -174,7 +174,7 @@ export class ManiobraComponent implements OnInit {
 
   cambioCamion( id: string ) {
 
-    this._camionService.cargarCamion( id )
+    this._camionService.getCamion( id )
           .subscribe( camion => this.camion = camion );
 
   }

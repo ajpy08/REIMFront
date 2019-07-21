@@ -17,7 +17,7 @@ export class OperadorService {
     public _usuarioService: UsuarioService
   ) { }
 
-  cargarOperadores(desde: number = 0): Observable<any> {
+  getOperadores(desde: number = 0): Observable<any> {
 
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/operador?desde=' + desde;
@@ -25,12 +25,12 @@ export class OperadorService {
     .pipe(map( (resp: any) => {
 
       this.totalOperadores = resp.total;
-      console.log(resp.total);
+      console.log(resp);
     return resp.operadores;
     }));
   }
 
-  cargarOperador( id: string ): Observable<any> {
+  getOperador( id: string ): Observable<any> {
 
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/operador/' + id;

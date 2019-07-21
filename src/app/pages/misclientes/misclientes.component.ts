@@ -39,7 +39,7 @@ export class MisclientesComponent implements OnInit {
 
   cargarClientes( id: string ) {
     this.cargando = true;
-    this._clienteService.cargarClientesEmpresa( id )
+    this._clienteService.getClientesEmpresa( id )
           .subscribe( clientes => {
 
             console.log( clientes );

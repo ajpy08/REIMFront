@@ -1,43 +1,85 @@
 <div class="row animated fadeIn">
-
     <div class="col-md-6">
         <div class="card card-body">
             <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3>
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
-                    <form #f="ngForm" ngNativeValidate (ngSubmit)="guardarCamion(f)">
+                    <form [formGroup]="regForm" (ngSubmit)="guardarCamion()" novalidate>
                         <div class="my-container">
-                            <!--========Combombox Operador=========-->
+                            <!-- <button (click)="cargar()">Javi</button> -->
+                            <!--========Combombox Transportistas=========-->
                             <mat-form-field>
-                                <mat-select placeholder="Seleccione un Transportista" [(ngModel)]="camion.transportista" name="transportista" required>
-                                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                                <mat-select placeholder="Seleccione un transportista" formControlName="transportista"
+                                    name="transportista">
+                                    <mat-option *ngFor="let transportista of transportistas"
+                                        [value]="transportista._id">
                                         {{ transportista.razonSocial }}
                                     </mat-option>
                                 </mat-select>
-                            </mat-form-field>
+                            </mat-form-field>                            
+                            <!--========Combombox Operadores=========-->
+                            <mat-form-field>
+                                    <mat-select placeholder="Seleccione un operador" formControlName="operador"
+                                        name="operadores" multiple>
+                                        <mat-option *ngFor="let operador of operadores" [value]="operador._id">
+                                            {{ operador.operador }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                             <!--========input placas=========-->
                             <mat-form-field>
-                                <input matInput [(ngModel)]="camion.placa" name="placa" type="text" class="form-control" placeholder="Ingrese las placas" required>
+                                <input matInput formControlName="placa" name="placa" type="text" class="form-control"
+                                    placeholder="Ingrese las placas">
                             </mat-form-field>
                             <!--========input numeroEconomico=========-->
                             <mat-form-field>
-                                <input matInput [(ngModel)]="camion.noEconomico" name="noEconomico" type="text" class="form-control" placeholder="Ingrese el numero economico" required>
+                                <input matInput formControlName="noEconomico" name="noEconomico" type="text"
+                                    class="form-control" placeholder="Ingrese el numero economico">
                             </mat-form-field>
                             <!--========datePiker vigencia del seguro=========-->
                             <mat-form-field>
-                                <input matInput [matDatepicker]="picker" [(ngModel)]="camion.vigenciaSeguro" name="vigenciaSeguro" type="text" class="form-control" placeholder="Vigencia del seguro" required>
+                                <input matInput [matDatepicker]="picker" formControlName="vigenciaSeguro"
+                                    name="vigenciaSeguro" type="text" class="form-control"
+                                    placeholder="Vigencia del seguro">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
-
                         </div>
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-                          <i class="fa fa-save"></i>
-                          Guardar
+                        <button (click)="cargar()">Angel</button>
+                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
+                            [disabled]="regForm.pristine || regForm.invalid">
+                            <i class="fa fa-save"></i>
+                            Guardar
                         </button>
-                        <a routerLink="/camiones" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                        <a routerLink="/camiones" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
                     </form>
+                    <!-- <p>Form value {{ transportistas | json }} </p> -->
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card  text-center">
+            <div class="card-header">Poliza de Seguro</div>
+            <div class="card-body">
+                <p *ngIf="fileTemporal; else notShow" class="text-danger">
+                    <a [href]="pdfSeguro.value | imagen:'temp'" target="_blank">
+                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                    </a><br>
+                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                </p>
+                <ng-template #notShow>
+                    <a *ngIf="pdfSeguro.value" [href]="pdfSeguro.value | imagen:'camion'" target="_blank">
+                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                    </a>
+                </ng-template>
+                <!-- ///////////////////////////////////////////////////////////////////// -->
+                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf"
+                    #file>
+                <br><br>
+                <button class="btn btn-info waves-effect waves-light" type="button"
+                    (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
+                </button>
             </div>
         </div>
     </div>

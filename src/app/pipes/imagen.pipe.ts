@@ -32,6 +32,9 @@ export class ImagenPipe implements PipeTransform {
       case 'fotos_reparacion':
       url += '/fotos_reparacion/' + img;
       break;
+      case 'camion':
+      url += '/camiones/' + img;
+      break;
       case 'temp':
         url += '/temp/' + img;
         break;

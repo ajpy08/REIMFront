@@ -120,7 +120,7 @@ export class AgenciaComponent implements OnInit {
   cargarAgencia(id: string) {
     this._agenciaService.getAgencia(id)
       .subscribe(res => {
-        // console.log(res);
+        //console.log(res);
         this.regForm.controls['razonSocial'].setValue(res.razonSocial);
         this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
         this.regForm.controls['rfc'].setValue(res.rfc);
@@ -165,13 +165,17 @@ export class AgenciaComponent implements OnInit {
   onFileSelected(event) {
     if (this.tipoFile == 'img') {
       //console.log('Fue Foto');
-      this.fileImg = <File>event.target.files[0];
-      this.subirArchivo(this.tipoFile);
+      if(event.target.files[0] != undefined) {
+        this.fileImg = <File>event.target.files[0];
+        this.subirArchivo(this.tipoFile);
+      }
     } else {
       if (this.tipoFile == 'formatoR1') {
         //console.log('Fue R1');
-        this.file = <File>event.target.files[0];
-        this.subirArchivo(this.tipoFile);
+        if(event.target.files[0] != undefined) {
+          this.file = <File>event.target.files[0];
+          this.subirArchivo(this.tipoFile);
+        }
       } else {
         console.log('No conozco el tipo de archivo para subir')
       }
@@ -180,18 +184,23 @@ export class AgenciaComponent implements OnInit {
 
   subirArchivo(tipo: string) {
     let file: File;
-    if (this.fileImg != null) {
+    if (this.fileImg != null && tipo == 'img') {
       file = this.fileImg;
+      this.fileImgTemporal = true;  
+      //console.log('FileImgTemporal ' + this.fileImgTemporal)  
     } else {
-      if (this.file != null) {
+      if (this.file != null && tipo == 'formatoR1') {
         file = this.file;
+        this.fileTemporal = true;
+        //console.log('FileTemporal ' + this.fileTemporal)
       }
-    }
+    }   
+    
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
-        this.regForm.get(tipo).markAsDirty();
-        this.fileImgTemporal = true;
+        this.regForm.get(tipo).markAsDirty();        
+            
         this.guardarAgencia();
       });
   }

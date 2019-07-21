@@ -126,7 +126,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
   cargarDatos( id: string ) {
-    this._clienteService.cargarClientesEmpresa( id )
+    this._clienteService.getClientesEmpresa( id )
           .subscribe( clientes => {
             console.log( clientes );
             this.clientes = clientes;
