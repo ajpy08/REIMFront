@@ -25,7 +25,7 @@ export class OperadoresComponent implements OnInit {
 
   cargarOperadores() {
     this.cargando = true;
-    this._operadorService.cargarOperadores(this.desde)
+    this._operadorService.getOperadores(this.desde)
     .subscribe(operadores =>
       // this.totalRegistros = resp.total;
       this.operadores = operadores

@@ -6,7 +6,7 @@ import { Operador } from '../../models/operador.models';
 import { OperadorService } from '../../services/service.index';
 import { Camion } from '../../models/camion.models';
 import { CamionService } from '../../services/service.index';
-import { Viaje } from '../../models/viajes.models';
+import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
 import { Contenedor } from '../../models/contenedores.models';
 import { ContenedorService } from '../../services/service.index';
@@ -83,7 +83,7 @@ export class ManiobraComponent implements OnInit {
 
   ngOnInit() {
 
-    this._operadorService.cargarOperadores()
+    this._operadorService.getOperadores()
           .subscribe( operadores => this.operadores = operadores );
     this._camionService.getCamiones()
           .subscribe( camiones => this.camiones = camiones );
@@ -95,7 +95,7 @@ export class ManiobraComponent implements OnInit {
           .subscribe( agencias => this.agencias = agencias );
     this._transportistaService.getTransportistas()
           .subscribe( transportistas => this.transportistas = transportistas );
-    this._viajeService.cargarViajes()
+    this._viajeService.getViajes()
           .subscribe( viajes => this.viajes = viajes );
 
     /* this.filteredOptions = this.myControl.valueChanges
@@ -160,14 +160,14 @@ export class ManiobraComponent implements OnInit {
   }
 
   cambioViaje( id: string ) {
-    this._viajeService.cargarViaje( id )
+    this._viajeService.getViajeXID( id )
           .subscribe( viaje => this.viaje = viaje );
 
   }
 
   cambioOperador( id: string ) {
 
-    this._operadorService.cargarOperador( id )
+    this._operadorService.getOperador( id )
           .subscribe( operador => this.operador = operador );
 
   }
