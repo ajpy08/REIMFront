@@ -66,11 +66,7 @@ export class CamionComponent implements OnInit {
     this._transportistaService.getTransportistas()
       .subscribe((transportistas) => {
         this.transportistas = transportistas.transportistas;
-      });   
-      
-    this.serviceOperadores.getOperadores().subscribe((operadores) => {
-      this.operadores = operadores.operadores;
-    });
+      });  
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
@@ -89,8 +85,10 @@ export class CamionComponent implements OnInit {
     }
   }
 
-  cargar(){
-    console.log(this.operadores)
+  cambioTransportista( role: string ) {
+    this.serviceOperadores.getOperadores().subscribe((operadores) => {
+      this.operadores = operadores.operadores;
+    });
   }
 
   cargarCamion(id: string) {

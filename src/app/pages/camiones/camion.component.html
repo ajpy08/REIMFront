@@ -10,7 +10,7 @@
                             <!--========Combombox Transportistas=========-->
                             <mat-form-field>
                                 <mat-select placeholder="Seleccione un transportista" formControlName="transportista"
-                                    name="transportista">
+                                    name="transportista" (selectionChange)="cambioTransportista( $event.value )">
                                     <mat-option *ngFor="let transportista of transportistas"
                                         [value]="transportista._id">
                                         {{ transportista.razonSocial }}
@@ -45,7 +45,6 @@
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
                         </div>
-                        <button (click)="cargar()">Angel</button>
                         <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
                             [disabled]="regForm.pristine || regForm.invalid">
                             <i class="fa fa-save"></i>
