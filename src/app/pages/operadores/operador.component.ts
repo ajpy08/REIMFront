@@ -85,7 +85,7 @@ export class OperadorComponent implements OnInit {
   }
 
   cargarOperador( id: string ) {
-    this._operadorService.cargarOperador( id )
+    this._operadorService.getOperador( id )
           .subscribe( operador => {
             console.log( operador );
             this.operador = operador;

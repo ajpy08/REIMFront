@@ -13,7 +13,7 @@ import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/service.index';
 import { Buque } from '../../models/buques.models';
 import { BuqueService } from '../../services/service.index';
-import { Viaje } from '../../models/viajes.models';
+import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
 import { SolicitudD } from '../../models/solicitudD.models';
 import { SolicitudDService } from '../../services/service.index';
@@ -147,7 +147,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarViajes() {
-    this._viajeService.cargarViajes(this.desde)
+    this._viajeService.getViajes(this.desde)
     .subscribe(viajes =>
     this.viajes = viajes
 

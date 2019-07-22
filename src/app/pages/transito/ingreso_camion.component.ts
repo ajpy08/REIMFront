@@ -9,7 +9,7 @@ import { Operador } from '../../models/operador.models';
 import { OperadorService } from '../../services/service.index';
 import { Camion } from '../../models/camion.models';
 import { CamionService } from '../../services/service.index';
-import { Viaje } from '../../models/viajes.models';
+import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
 import { Contenedor } from '../../models/contenedores.models';
 import { ContenedorService } from '../../services/service.index';
@@ -38,7 +38,7 @@ export class IngresoCamionComponent implements OnInit {
   operadores: Operador[] = [];
   operador: Operador = new Operador('');
   camiones: Camion[] = [];
-  camion: Camion = new Camion('');
+  camion: Camion = new Camion();
   contenedores: Contenedor[] = [];
   contenedor: Contenedor = new Contenedor('');
   clientes: Cliente[] = [];

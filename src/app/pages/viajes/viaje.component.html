@@ -1,201 +1,107 @@
 <div class="row animated fadeIn">
-
-    <div class="col-lg-7">
+    <div class="col-md-10">
         <div class="card card-body">
-            <h3 class="box-title m-b-0">Viaje: {{ viaje.viaje }}</h3>
-            <div class="row">
-                <div class="col-sm-12 col-xs-12">
-                    <form ngNativeValidate #f='ngForm' (ngSubmit)="guardarViaje(f)">
+            <h3 class="box-title m-b-0">Viaje: </h3>
+            <form [formGroup]="regForm" (ngSubmit)="guardarViaje()" novalidate>
+                <div class="row">
+                    <div class="col-sm-8 col-xs-8">
                         <div class="my-container">
-                            <div class="my-container2">
-                                <!--========Cargar Excel=========-->
-                                <h3>Seleccione archivos</h3>
-                                <input (change)="seleccionExcel($event.target.files[0])" type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-                                <h4>Cargar archivos</h4>
-                                <button (click)="cargarExcel()" class="btn btn-success">Cargar Excel</button>
-                                <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
-                            </div>
-                            <div class="my-container2">
-                                <!--========input viaje=========-->
-                                <mat-form-field class="inputpersonalizado">
-                                    <input matInput [(ngModel)]="viaje.viaje" name="viaje" type="text" class="form-control" placeholder="Ingrese el viaje" required>
-                                </mat-form-field>
-                                <!--========Combombox Buque=========-->
-                                <mat-form-field class="inputpersonalizado">
-                                    <mat-select placeholder="Seleccione un Buque" (selectionChange)="cambioBuque( $event.value )" [(ngModel)]="viaje.buque" name="buque" required>
-                                        <mat-option *ngFor="let buque of buques" [value]="buque._id">
-                                            {{ buque.buque }}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div class="my-container2">
-                                <!--========input fecha arrivo=========-->
-                                <mat-form-field class="inputpersonalizado">
-                                    <input matInput [matDatepicker]="picker" [(ngModel)]="viaje.fechaArrivo" name="fechaArrivo" type="text" class="form-control" placeholder="Fecha de arrivo" required>
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
-                                <!--========input fecha temporal=========-->
-                                <mat-form-field class="inputpersonalizado">
-                                    <input matInput [matDatepicker]="picker2" [(ngModel)]="viaje.fechaVigenciaTemporal" name="fechaVigenciaTemporal" type="text" class="form-control" placeholder="Vigencia del temporal" required>
-                                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker2></mat-datepicker>
-                                </mat-form-field>
-                                <!-- <input (change)="seleccionPDF($event.target.files[0])" type="file" name="file2" accept="*.pdf" />-->
+                            <h3>Seleccione archivos</h3>
+                            <input (change)="onFileExcelSelected($event)" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
 
+                            <mat-form-field class="inputpersonalizado">
+                                <input matInput formControlName="viaje" type="text" class="form-control" placeholder="Ingrese el viaje">
+                            </mat-form-field>
+                            <mat-form-field class="inputpersonalizado">
+                                <mat-select formControlName="buque" placeholder="Seleccione un Buque">
+                                    <mat-option *ngFor="let buque of buques" [value]="buque._id">
+                                        {{ buque.buque }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="inputpersonalizado">
+                                <input matInput formControlName="fArribo" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de arribo">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field class="inputpersonalizado">
+                                <input matInput formControlName="fVigenciaTemporal" [matDatepicker]="picker2" type="text" class="form-control" placeholder="Vigencia del temporal">
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-4">
+                        <div class="card  text-center">
+                            <div class="card-header">Temporal de Viaje</div>
+                            <div class="card-body">
+                                <a *ngIf="pdfTemporal.value" [href]="pdfTemporal.value | imagen:'viaje'" target="_blank">
+                                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                                </a>
+                                <input (change)="onFilePDFSelected($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
+                                <br><br>
+                                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Cambiar Temporal</button>
                             </div>
-                            <!--========Combombox Naviera=========
-                            <mat-form-field class="naviera">
-                                <mat-select placeholder="Seleccione una Naviera" (selectionChange)="cambioNaviera( $event.value )" [(ngModel)]="viaje.naviera" name="naviera" required>
-                                    <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
-                                        {{ naviera.naviera }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>-->
-                            <!--<mat-form-field>
-                                <input matInput [(ngModel)]="viaje.contenedor" name="contenedor" type="text" class="form-control" placeholder="Ingrese el contenedor" required>
-                            </mat-form-field>
-                            <mat-form-field class="example-full-width">
-                                <input type="text" placeholder="Seleccione una contenedor" name="contenedor" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                                <mat-autocomplete #auto="matAutocomplete">
-                                    <mat-option *ngFor="let contenedor of contenedores" [value]="contenedor.contenedor">
-                                        {{contenedor.contenedor}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                            <mat-form-field class="tipo">
-                                <mat-select placeholder="Seleccione el tamaño" [(ngModel)]="viaje.tipo" name="tipo" required>
-                                    <mat-option *ngFor="let tipo of tipos" [value]="tipo.value">
-                                        {{tipo.viewValue}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="v/i">
-                                <mat-select placeholder="Seleccione si es vacio o importación" [(ngModel)]="viaje.vacioimportacion" name="vacioimportacion" required>
-                                    <mat-option *ngFor="let vacioimport of vacioimports" [value]="vacioimport.value">
-                                        {{vacioimport.viewValue}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <div *ngFor="let contenedor of contenedores; let i = index">
-                                <mat-slide-toggle [checked]="flagArray[i]">
-                                    {{contenedor.contenedor}}
-                                </mat-slide-toggle>
-                            </div>-->
-                            <table matNativeControl class="table table-striped">
-                                <thead class="thead-dark">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+                        <i class="fa fa-save "></i>
+                        Guardar
+                    </button>
+                    <a routerLink="/viajes" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <h3 class="box-title m-b-0">
+                            <P>
+                                <BR>CONTENEDORES
+                            </P>
+                        </h3>
+                        <div class="table-responsive">
+                            <table class="table table-hover table-responsive">
+                                <thead>
                                     <tr>
+                                        <th>
+                                            <button class="btn btn-success" (click)="addContenedor2(contenedor.value, tipo.value, estado.value, destinatario.value)" type="button">
+                                                Agregar
+                                            </button>
+                                        </th>
+                                        <th><input #contenedor placeholder="Contenedor" size="11"></th>
+                                        <th><input #tipo placeholder="Tipo" size="6"></th>
+                                        <th><input #estado placeholder="Estado" size="6"></th>
+                                        <th><input #destinatario placeholder="destinatario"></th>
+                                    </tr>
+                                    <tr>
+                                        <th>#</th>
                                         <th>Contenedor</th>
                                         <th>Tipo</th>
                                         <th>Estado</th>
                                         <th>Cliente</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr *ngFor="let contenedor of contenedores">
-                                        <th>{{contenedor.Contenedor}}</th>
-                                        <th>{{contenedor.Tipo}}</th>
-                                        <th>{{contenedor.Estado}}</th>
-                                        <th>{{contenedor.Cliente}}</th>
+                                <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                                    <tr [formGroupName]="i">
+                                        <td>
+                                            {{i+1}}
+                                            <button (click)="quitarContenedor( i )" class="btn btn-danger" type="button">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button> {{item.get('estatus').value}}
+                                        </td>
+                                        <td><input formControlName="contenedor" placeholder="Contenedor" size="11"></td>
+                                        <td><input formControlName="tipo" placeholder="Tipo" size="6"></td>
+                                        <td><input formControlName="estado" placeholder="Estado" size="6"></td>
+                                        <td><input formControlName="destinatario" placeholder="Destinatario"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-                              <i class="fa fa-save"></i>
-                              Guardar
-                            </button>
-                        <a routerLink="/viajes" class="btn btn-danger waves-effect waves-light">Cancelar</a>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
+
         </div>
     </div>
-    <div class="col-lg-5">
-        <mat-card>
-            <div class="card-body" align="center">
-                <h4 class="card-title">Archivo Temporal</h4>
-                <h6 class="card-subtitle">{{viaje.pdfTemporal}}</h6>
-                <img *ngIf="!fileTemp" [src]="viaje.pdfTemporal | imagen" class="w150">
-                <img *ngIf="fileTemp" [src]="fileTemp" class="w150">
-                <input (change)="seleccionTemporal($event.target.files[0])" type="file" name="file2" accept=".pdf, image/*">
-                <br>
-                <br>
-                <!-- <button (click)="cambiarImagen()" [disabled]="!imagenSubir" type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10"><i class="fas fa-save"> Actulizar</i></button>-->
-            </div>
-        </mat-card>
-    </div>
-
-    <!--<div class="col-md-6">
-        <mat-card>
-            <h3>Seleccione archivos</h3>
-            <input (change)="seleccionExcel($event.target.files[0])" type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-            <h4>Cargar archivos</h4>
-            <button (click)="cargarExcel()" class="btn btn-success">Cargar Excel</button>
-            <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
-            <label><b>Contenedor</b></label>
-            <input #contenedor type="text" class="form-control">
-            <label><b>Tipo</b></label>
-            <input #tipo type="text" class="form-control">
-            <label><b>Estado</b></label>
-            <input #estado type="text" class="form-control">
-            <label><b>cliente</b></label>
-            <input #cliente type="text" class="form-control">
-            <button (click)="anadirContenedor(contenedor.value, tipo.value, estado.value, cliente.value)" class="btn btn-success">Añadir</button>
-            <table matNativeControl class="table table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Contenedor</th>
-                        <th>Tipo</th>
-                        <th>Estado</th>
-                        <th>Cliente</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let contenedor of contenedores">
-                        <th>{{contenedor.Contenedor}}</th>
-                        <th>{{contenedor.Tipo}}</th>
-                        <th>{{contenedor.Estado}}</th>
-                        <th>{{contenedor.Cliente}}</th>
-                    </tr>
-                </tbody>
-            </table>
-        </mat-card>
-    </div>-->
 </div>
-
-<!--<div class="container" style="margin-top: 15px;text-align: -webkit-center;">
-    <div class="panel panel-default" style="width: 70%;text-align: -webkit-center;">
-
-     
-        <div class="panel-body" style="text-align: -webkit-center;">
-            <div *ngFor="let data of myItems;let i= index" class="alert alert-info" style="width: 50%;">
-                {{data.Value}}
-                <a href="#" (click)="DeleteItem(i)" style="float: right;">
-                    <span class="fa fa-save"></span>
-                </a>
-                <a href="#" (click)="EditItem(i)" style="float: right;padding-right: 8px;">
-                    <span class="fa fa-save"></span>
-                </a>
-            </div>
-            <div *ngIf="myItems.length == 0" class="alert alert-info" style="width: 50%;">
-                Items Are Empty !!!
-            </div>
-        </div>
-      
-        <div class="panel-footer">
-            <div class="form-group">
-               
-                <form name="itemForm">
-                    <input id="Value" name="Value" required [(ngModel)]="newItem.Value" minlength="3" maxlength="10" style="width: 50%;" placeholder="Enter Any Item" class="form-control">
-                </form>
-                <br>
-               
-                <button type="submit" (click)="AddItem()" [disabled]="IsForUpdate == true" class="btn btn-default">Add</button>
-              
-                <button type="submit" (click)="UpdateItem()" [disabled]="IsForUpdate == false" class="btn btn-default">Update</button>
-            </div>
-        </div>
-    </div>
-</div>-->

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Viaje } from '../../models/viajes.models';
+import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
 import { Buque } from '../../models/buques.models';
 import { BuqueService } from '../../services/service.index';
@@ -57,7 +57,7 @@ export class AddcontainersComponent implements OnInit {
      }
 
   ngOnInit() {
-    this._viajeService.cargarViajes()
+    this._viajeService.getViajes()
     .subscribe( viajes => this.viajes = viajes );
     this._buqueService.cargarBuques()
     .subscribe( buques => this.buques = buques );
@@ -67,7 +67,7 @@ export class AddcontainersComponent implements OnInit {
     .subscribe( contenedores => this.contenedores = contenedores );
   }
   cargarViaje( id: string) {
-    this._viajeService.cargarViaje( id )
+    this._viajeService.getViajeXID( id )
           .subscribe( viaje => {
 
             console.log( viaje );
@@ -87,24 +87,24 @@ export class AddcontainersComponent implements OnInit {
       return;
     }
 
-    this._viajeService.actualizarContenedor( this.viaje )
-            .subscribe( viaje => {
+    // this._viajeService.actualizarContenedor( this.viaje )
+    //         .subscribe( viaje => {
 
-              this.viaje._id = viaje._id;
-              this.cargarViaje(this.viaje._id);
+    //           this.viaje._id = viaje._id;
+    //           this.cargarViaje(this.viaje._id);
 
-            });
+    //         });
 
   }
 
   removerContenedor(id: string, viaje: Viaje) {
-   // console.log(viaje);
-   this._viajeService.removerContenedor( id, viaje )
-   .subscribe( cviaje => {
-    this.viaje._id = this.viaje._id;
-    // console.log(this.viaje);
-    this.cargarViaje(this.viaje._id);
-   });
+  //  // console.log(viaje);
+  //  this._viajeService.removerContenedor( id, viaje )
+  //  .subscribe( cviaje => {
+  //   this.viaje._id = this.viaje._id;
+  //   // console.log(this.viaje);
+  //   this.cargarViaje(this.viaje._id);
+  //  });
 
   }
 
