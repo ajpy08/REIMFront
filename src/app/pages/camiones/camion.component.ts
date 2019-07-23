@@ -159,7 +159,7 @@ export class CamionComponent implements OnInit {
           // this.fileImgTemporal = false;
           this.file = null;
           this.fileTemporal = false;
-          if (this.regForm.get('_id').value === '') {
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.router.navigate(['/camion', this.regForm.get('_id').value]);
             this.edicion = true;

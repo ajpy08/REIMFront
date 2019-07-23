@@ -157,7 +157,7 @@ export class ClienteComponent implements OnInit {
           this.file = null;
           this.fileTemporal = false;
           // console.log (res);
-          if (this.regForm.get('_id').value === '') {
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.router.navigate(['/cliente', this.regForm.get('_id').value]);
             this.edicion = true;

@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Operador } from '../../models/operador.models';
-import { OperadorService } from '../../services/service.index';
+import { OperadorService, SubirArchivoService } from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Operador } from 'src/app/models/operador.models';
 import { Transportista } from '../../models/transportista.models';
 import { TransportistaService } from '../../services/service.index';
-
-import { NgForm } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+
 // datapiker
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import swal from 'sweetalert';
 
@@ -32,134 +32,175 @@ export const MY_FORMATS = {
   templateUrl: './operador.component.html',
   styleUrls: ['./operador.component.css'],
   providers: [
-      // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-      // application's root module. We provide it at the component level here, due to limitations of
-      // our example generation script.
-      {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-      {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-      {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
-    ],
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
+  ],
 })
 export class OperadorComponent implements OnInit {
-
-  fotoTemporal: File;
-  rutaFoto : string;
-  licenciaTemporal: File;
+  tipoFile = '';
+  regForm: FormGroup;
+  fileFoto: File = null;
+  fileFotoTemporal = false;
+  fileLicencia: File = null;
+  fileLicenciaTemporal = false;
+  edicion = false;
   transportistas: Transportista[] = [];
   operador: Operador = new Operador();
-
 
   constructor(
     public _operadorService: OperadorService,
     public _transportistaService: TransportistaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
+    public _subirArchivoService: SubirArchivoService,
+    private fb: FormBuilder,
     public _modalUploadService: ModalUploadService
-  ) {
-    activatedRoute.params.subscribe( params => {
-
-      // tslint:disable-next-line:prefer-const
-      let id = params['id'];
-
-      if ( id !== 'nuevo' ) {
-        this.cargarOperador( id );
-        this.rutaFoto = '';
-      }
-      else
-      {
-        this.rutaFoto = './uploads/operadores/';
-      }
-
-    });
-  }
+  ) { }
 
   ngOnInit() {
+    this.createFormGroup();
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id !== 'nuevo') {
+      this.edicion = true;
+      this.cargarOperador(id);
+    }
+    else {
+      for (var control in this.regForm.controls) {
+        this.regForm.controls[control.toString()].setValue(undefined);
+      }
+    }
 
     this._transportistaService.getTransportistas()
-    .subscribe( transportistas => this.transportistas = transportistas );
+      .subscribe(transportistas => this.transportistas = transportistas.transportistas);
+  }
 
-    this._modalUploadService.notification
-    .subscribe( resp => {
-      this.operador.img = resp.operador.img;
+  cargarOperador(id: string) {
+    this._operadorService.getOperador(id)
+      .subscribe(res => {
+        for (var propiedad in this.operador) {
+          //console.log(propiedad);
+          for (var control in this.regForm.controls) {
+            //console.log(control);
+            //if( propiedad == control.toString() && res[propiedad] != null && res[propiedad] != undefined) {
+            if (propiedad == control.toString()) {
+              //console.log(propiedad + ': ' + res[propiedad]);
+              this.regForm.controls[propiedad].setValue(res[propiedad]);
+            }
+          }
+        }
+      });
+  }
+
+  get transportista() {
+    return this.regForm.get('transportista');
+  }
+
+  get nombre() {
+    return this.regForm.get('nombre');
+  }
+
+  get foto() {
+    return this.regForm.get('foto');
+  }
+
+  get vigenciaLicencia() {
+    return this.regForm.get('vigenciaLicencia');
+  }
+
+  get licencia() {
+    return this.regForm.get('licencia');
+  }
+
+  get fotoLicencia() {
+    return this.regForm.get('fotoLicencia');
+  }
+
+  get activo() {
+    return this.regForm.get('activo');
+  }
+
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      transportista: ['', [Validators.required]],
+      nombre: ['', [Validators.required]],
+      foto: [''],
+      vigenciaLicencia: ['', [Validators.required]],
+      licencia: ['', [Validators.required, Validators.minLength(5)]],
+      fotoLicencia: [''],
+      activo: ['', [Validators.required]],
+      _id: ['']
     });
   }
 
-  cargarOperador( id: string ) {
-    this._operadorService.getOperador( id )
-          .subscribe( operador => {
-            console.log( operador );
-            this.operador = operador;
-          });
+  guardarOperador() {
+    if (this.regForm.valid) {
+      // console.log (this.regForm.value);
+      this._operadorService.guardarOperador(this.regForm.value)
+        .subscribe(res => {
+          this.fileFoto = null;
+          this.fileFotoTemporal = false;
+          this.fileLicencia = null;
+          this.fileLicenciaTemporal = false;
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
+            this.regForm.get('_id').setValue(res._id);
+            this.router.navigate(['/operador', this.regForm.get('_id').value]);
+            this.edicion = true;
+          }
+          this.regForm.markAsPristine();
+        });
+    }
   }
 
-  guardarOperador( f: NgForm ) {
-
-    console.log( f.valid );
-    console.log( f.value );
-
-    if ( f.invalid ) {
-      return;
+  onFileSelected(event) {
+    if (this.tipoFile == 'foto') {
+      //console.log('Fue Foto');
+      if (event.target.files[0] != undefined) {
+        this.fileFoto = <File>event.target.files[0];
+        this.subirArchivo(this.tipoFile);
+      }
+    } else {
+      if (this.tipoFile == 'fotoLicencia') {
+        //console.log('Fue FotoLicencia');
+        if (event.target.files[0] != undefined) {
+          this.fileLicencia = <File>event.target.files[0];
+          this.subirArchivo(this.tipoFile);
+        }
+      } else {
+        console.log('No conozco el tipo de archivo para subir')
+      }
     }
-
-    this._operadorService.guardarOperador( this.operador )
-            .subscribe( operador => {
-
-              this.operador._id = operador._id;
-
-              this.router.navigate(['/operador', operador._id ]);
-
-            });
-
   }
 
-  subirFotoTermporal(archivo: File) {
-    console.log(archivo);
-
-     if (!archivo) {
-       this.fotoTemporal = null;
-       return;
-     }
-     if (archivo.type.indexOf('image') < 0 && archivo.type.indexOf('pdf') < 0) {
-      swal('Solo Archivos De Imagen', 'El archivo seleccionado no tiene formato Imagen', 'error');
-      this.fotoTemporal = null;
-      return;
+  subirArchivo(tipo: string) {
+    let file: File;
+    if (this.fileFoto != null && tipo == 'foto') {
+      file = this.fileFoto;
+      this.fileFotoTemporal = true;
+      // console.log('FileFotoTemporal ' + this.fileFotoTemporal)  
+    } else {
+      if (this.fileLicencia != null && tipo == 'fotoLicencia') {
+        file = this.fileLicencia;
+        this.fileLicenciaTemporal = true;
+        // console.log('FileLicenciaTemporal ' + this.fileLicenciaTemporal)
+      }
     }
-        this.fotoTemporal = archivo;
-        this._operadorService.subirArchivoTemporal(this.fotoTemporal)
-        // tslint:disable-next-line:no-shadowed-variable
-        .subscribe( nombreArchivo => {
-          this.rutaFoto = './uploads/temp/';
-          this.operador.img = nombreArchivo;
-          console.log(this.operador.img);
+    
+    this._subirArchivoService.subirArchivoTemporal(file, '')
+      .subscribe(nombreArchivo => {
+        // console.log(tipo + ' ' + nombreArchivo)
+        this.regForm.get(tipo).setValue(nombreArchivo);
+        this.regForm.get(tipo).markAsDirty();
+        // this.fileFotoTemporal = true;
+        // this.fileLicenciaTemporal = true;
+        this.guardarOperador();
       });
-   }
-
-   subirLicenciaTermporal(archivo: File) {
-    console.log(archivo);
-
-     if (!archivo) {
-       this.licenciaTemporal = null;
-       return;
-     }
-     if (archivo.type.indexOf('image') < 0 && archivo.type.indexOf('pdf') < 0) {
-      swal('Solo Archivos De Imagen', 'El archivo seleccionado no tiene formato Imagen', 'error');
-      this.licenciaTemporal = null;
-      return;
-    }
-        this.licenciaTemporal = archivo;
-        this._operadorService.subirArchivoTemporal(this.licenciaTemporal)
-        // tslint:disable-next-line:no-shadowed-variable
-        .subscribe( nombreArchivo => {
-          this.operador.licencia = nombreArchivo;
-          console.log(this.operador.licencia);
-      });
-   }
-
-  cambiarFoto() {
-
-    this._modalUploadService.mostrarModal( 'operadores', this.operador._id );
-
   }
-
-
 }
