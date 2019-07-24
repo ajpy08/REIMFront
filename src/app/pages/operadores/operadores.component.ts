@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Operador } from '../../models/operador.models';
 import { OperadorService } from '../../services/service.index';
-
+declare var swal: any;
 @Component({
   selector: 'app-operadores',
   templateUrl: './operadores.component.html',
   styles: []
 })
 export class OperadoresComponent implements OnInit {
-  // tslint:disable-next-line:typedef-whitespace
-  operadores : Operador[] = [];
-  // tslint:disable-next-line:no-inferrable-types
+  operadores: Operador[] = [];
   cargando: boolean = true;
-  // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
 
   constructor(public _operadorService: OperadorService) { }
@@ -26,16 +22,16 @@ export class OperadoresComponent implements OnInit {
   cargarOperadores() {
     this.cargando = true;
     this._operadorService.getOperadores(this.desde)
-    .subscribe(operadores =>
-      // this.totalRegistros = resp.total;
-      this.operadores = operadores
-    );
+      .subscribe(operadores => {
+        this.totalRegistros = operadores.totalRegistros;
+        this.operadores = operadores.operadores;
+        this.cargando = false;
+      });
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
     let desde = this.desde + valor;
-    console.log(desde);
+    //console.log(desde);
     if (desde >= this._operadorService.totalOperadores) {
       return;
     }
@@ -44,7 +40,6 @@ export class OperadoresComponent implements OnInit {
     }
     this.desde += valor;
     this.cargarOperadores();
-
   }
 
   buscarOperador(termino: string) {
@@ -54,17 +49,27 @@ export class OperadoresComponent implements OnInit {
     }
     this.cargando = true;
     this._operadorService.buscarOperador(termino)
-    .subscribe((operadores: Operador[]) => {
-      this.operadores = operadores;
-      this.cargando = false;
-
-    });
+      .subscribe((operadores: Operador[]) => {
+        this.operadores = operadores;
+        this.cargando = false;
+      });
   }
 
-  borrarOperador( operador: Operador ) {
-
-    this._operadorService.borrarOperador( operador._id )
-            .subscribe( () =>  this.cargarOperadores() );
-
+  borrarOperador(operador: Operador) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + operador.nombre,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then(borrar => {
+        if (borrar) {
+          this._operadorService.borrarOperador(operador._id)
+            .subscribe(borrado => {
+              this.cargarOperadores();
+            });
+        }
+      });
   }
 }

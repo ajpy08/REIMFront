@@ -34,12 +34,12 @@
                 <table class="table table-hover table-responsive">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Transportista</th>
                             <th>Numero Economico</th>
                             <th>Placas</th>
                             <th>Vigencia Del Seguro</th>
                             <th>Poliza de Seguro</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,7 +56,7 @@
                             <td>{{camion.transportista.razonSocial}}</td>
                             <td>{{camion.noEconomico}}</td>
                             <td>{{camion.placa}}</td>
-                            <td>{{camion.vigenciaSeguro}}</td>
+                            <td>{{camion.vigenciaSeguro | date:'dd/MM/yyyy'}}</td>
                             <td>{{camion.pdfSeguro}}</td>
                         </tr>
                     </tbody>

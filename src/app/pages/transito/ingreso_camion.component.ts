@@ -36,7 +36,7 @@ export class IngresoCamionComponent implements OnInit {
   transportistas: any [] = [];
   transportista: Transportista = new Transportista('', '');
   operadores: Operador[] = [];
-  operador: Operador = new Operador('');
+  operador: Operador = new Operador();
   camiones: Camion[] = [];
   camion: Camion = new Camion();
   contenedores: Contenedor[] = [];

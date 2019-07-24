@@ -27,14 +27,11 @@ export class CamionesComponent implements OnInit {
       this.camiones = camiones.camiones
       this.cargando = false;
     });
-    console.log(this.camiones)
    }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
     let desde = this.desde + valor;
-    //console.log(desde);
-    if (desde >= this._camionService.totalCamiones) {
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {
