@@ -33,7 +33,7 @@ export class TransportistasComponent implements OnInit {
 
   cambiarDesde(valor: number) {
     const desde = this.desde + valor;
-    if (desde >= this._transportistaService.totalTransportistas) {
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {

@@ -1,7 +1,7 @@
 <div class="row animated fadeIn">
     <div class="col-md-6">
         <div class="card card-body">
-            <h3 class="box-title m-b-0">Cliente: {{ razonSocial.value }}</h3>
+            <h3 class="box-title m-b-0">Cliente: {{ razonSocial.value }}</h3><br>
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
                     <form [formGroup]="regForm" (ngSubmit)="guardarCliente()" novalidate>
@@ -66,7 +66,7 @@
                                 <mat-select placeholder="Seleccione una empresa" formControlName="empresas"
                                     name="empresas" multiple>
                                     <mat-option *ngFor="let empresa of usuarioLogueado.empresas" [value]="empresa._id">
-                                        {{ empresa.razonSocial }}
+                                        {{ role(empresa.role) + ' | ' + empresa.razonSocial }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>

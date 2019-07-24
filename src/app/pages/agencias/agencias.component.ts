@@ -32,7 +32,7 @@ export class AgenciasComponent implements OnInit {
   cambiarDesde(valor: number) {
     let desde = this.desde + valor;
     //console.log(desde);
-    if (desde >= this._agenciaService.totalAgencias) {
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {

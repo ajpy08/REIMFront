@@ -20,7 +20,7 @@ export class ClienteComponent implements OnInit {
   fileTemporal = false;
   edicion = false;
   usuarioLogueado = new Usuario;
-  
+
   constructor(public _clienteService: ClienteService,
     public _agenciaService: AgenciaService,
     public router: Router,
@@ -28,7 +28,7 @@ export class ClienteComponent implements OnInit {
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
-    private usuarioService: UsuarioService) {}
+    private usuarioService: UsuarioService) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -39,9 +39,22 @@ export class ClienteComponent implements OnInit {
     }
     else {
       this.usuarioLogueado = this.usuarioService.usuario;
+      if (this.usuarioLogueado.role != 'ADMIN_ROLE') {
+        this._clienteService.getClientesRole(this.usuarioLogueado.role).subscribe(empresas => this.usuarioLogueado.empresas = empresas);
+      } else {
+        this._clienteService.getClientesRole().subscribe((empresas) => {
+          this.usuarioLogueado.empresas = empresas;
+        });
+      }
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
+  }
+
+  role(role : string){
+    var result = role.substr(0, role.indexOf('_'));
+
+    return result;
   }
 
   createFormGroup() {
@@ -125,7 +138,6 @@ export class ClienteComponent implements OnInit {
   cargarCliente(id: string) {
     this._clienteService.getCliente(id)
       .subscribe(res => {
-        // console.log(res);
         this.regForm.controls['razonSocial'].setValue(res.razonSocial);
         this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
         this.regForm.controls['rfc'].setValue(res.rfc);
@@ -170,14 +182,14 @@ export class ClienteComponent implements OnInit {
   onFileSelected(event) {
     if (this.tipoFile == 'img') {
       //console.log('Fue Foto');
-      if(event.target.files[0] != undefined) {
+      if (event.target.files[0] != undefined) {
         this.fileImg = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
       if (this.tipoFile == 'formatoR1') {
         //console.log('Fue R1');
-        if(event.target.files[0] != undefined) {
+        if (event.target.files[0] != undefined) {
           this.file = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
@@ -191,7 +203,7 @@ export class ClienteComponent implements OnInit {
     let file: File;
     if (this.fileImg != null && tipo == 'img') {
       file = this.fileImg;
-      this.fileImgTemporal = true;  
+      this.fileImgTemporal = true;
       //console.log('FileImgTemporal ' + this.fileImgTemporal)  
     } else {
       if (this.file != null && tipo == 'formatoR1') {
@@ -199,13 +211,11 @@ export class ClienteComponent implements OnInit {
         this.fileTemporal = true;
         //console.log('FileTemporal ' + this.fileTemporal)
       }
-    }   
-    
+    }
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
-        this.regForm.get(tipo).markAsDirty();        
-            
+        this.regForm.get(tipo).markAsDirty();
         this.guardarCliente();
       });
   }

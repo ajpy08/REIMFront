@@ -191,13 +191,11 @@ export class NavieraComponent implements OnInit {
         this.fileTemporal = true;
         //console.log('FileTemporal ' + this.fileTemporal)
       }
-    }   
-    
+    }
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
-        this.regForm.get(tipo).markAsDirty();        
-            
+        this.regForm.get(tipo).markAsDirty();
         this.guardarNaviera();
       });
   }

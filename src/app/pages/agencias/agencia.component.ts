@@ -194,8 +194,7 @@ export class AgenciaComponent implements OnInit {
         this.fileTemporal = true;
         //console.log('FileTemporal ' + this.fileTemporal)
       }
-    }   
-    
+    }       
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);

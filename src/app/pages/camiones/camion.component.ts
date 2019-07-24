@@ -81,7 +81,7 @@ export class CamionComponent implements OnInit {
   }
 
   cambioTransportista(transportista: string) {
-    this.serviceOperadores.getOperadoresTransportista(transportista).subscribe((operadores) => {
+    this.serviceOperadores.getOperadoresTransportista(transportista, true).subscribe((operadores) => {
       this.operadores = operadores.operadores;
     });
   }

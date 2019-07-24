@@ -83,7 +83,12 @@
                                 </td>
                                 <td>{{cliente.correo}}</td>
                                 <td>{{cliente.correoFac}}</td>
-                                <td>{{cliente.credito}}</td>
+                                <td align="center" *ngIf="cliente.credito; else notShow">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </td>
+                                <ng-template #notShow>
+                                    <td></td>
+                                </ng-template>
                                 <td>
                                     <p *ngFor="let empresa of cliente.empresas"> {{empresa.razonSocial}} </p>
                                 </td>
