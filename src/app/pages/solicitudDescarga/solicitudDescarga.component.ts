@@ -100,8 +100,8 @@ export class SolicitudDescargaComponent implements OnInit {
       cliente: ['', [Validators.required]],
       credito: ['', [Validators.required]],
       observaciones: [''],
-      pdfBL: [''],
-      pdfComprobante: [''],
+      rutaBL: [''],
+      rutaComprobante: [''],
       correo: [''],
       correoFac: [''],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '') ]),
@@ -152,11 +152,11 @@ export class SolicitudDescargaComponent implements OnInit {
   get credito() {
     return this.regForm.get('credito');
   }
-  get pdfBL() {
-    return this.regForm.get('pdfBL');
+  get rutaBL() {
+    return this.regForm.get('rutaBL');
   }
-  get pdfComprobante() {
-    return this.regForm.get('pdfComprobante');
+  get rutaComprobante() {
+    return this.regForm.get('rutaComprobante');
   }
   get correo() {
     return this.regForm.get('correo');
@@ -179,8 +179,8 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
       this.regForm.controls['credito'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
-      this.regForm.controls['pdfBL'].setValue(solicitud.pdfBL);
-      this.regForm.controls['pdfComprobante'].setValue(solicitud.pdfComprobante);
+      this.regForm.controls['rutaBL'].setValue(solicitud.rutaBL);
+      this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFacturacion);
 
@@ -230,10 +230,10 @@ export class SolicitudDescargaComponent implements OnInit {
 
   onChangeCredito( event ) {
     if (event.checked) {
-      this.pdfComprobante.setValue(undefined);
-      this.pdfComprobante.disable({ onlySelf : true});
+      this.rutaComprobante.setValue(undefined);
+      this.rutaComprobante.disable({ onlySelf : true});
     } else {
-      this.pdfComprobante.enable({ onlySelf : true});
+      this.rutaComprobante.enable({ onlySelf : true});
     }
   }
 
@@ -244,8 +244,8 @@ export class SolicitudDescargaComponent implements OnInit {
 
   subirBL() {
     this._subirArchivoService.subirArchivoTemporal(this.fileBL, '').subscribe(nombreArchivo => {
-      this.regForm.get('pdfBL').setValue(nombreArchivo);
-      this.regForm.get('pdfBL').markAsDirty();
+      this.regForm.get('rutaBL').setValue(nombreArchivo);
+      this.regForm.get('rutaBL').markAsDirty();
       this.temporalBL = true;
       this.guardarSolicitud();
     });
@@ -258,8 +258,8 @@ export class SolicitudDescargaComponent implements OnInit {
 
   subirComprobante() {
     this._subirArchivoService.subirArchivoTemporal(this.fileComprobante, '').subscribe(nombreArchivo => {
-      this.regForm.get('pdfComprobante').setValue(nombreArchivo);
-      this.regForm.get('pdfComprobante').markAsDirty();
+      this.regForm.get('rutaComprobante').setValue(nombreArchivo);
+      this.regForm.get('rutaComprobante').markAsDirty();
       this.temporalComprobante = true;
       this.guardarSolicitud();
     });

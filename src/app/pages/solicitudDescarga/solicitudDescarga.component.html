@@ -67,7 +67,7 @@
                                 <div class="form-group">
                                     <label class="control-label"><b>Facturar a: </b></label>
                                     <mat-radio-group class="example-radio-group">
-                                        <mat-radio-button class="example-radio-button" *ngFor="let facturaA of facturarA" [value]="facturarA">
+                                        <mat-radio-button class="example-radio-button" *ngFor="let facturaA of facturarA" [value]="facturaA">
                                             {{facturaA}}
                                         </mat-radio-button>
                                     </mat-radio-group>
@@ -97,12 +97,12 @@
                                     <label><b>Anexar BL</b></label>
                                     <input (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf" class="form-control">
                                     <p *ngIf="temporalBL; else notShow" class="text-danger">
-                                        <a [href]="pdfBL.value | imagen:'solicitud'" target="_blank">
+                                        <a [href]="rutaBL.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                                         </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
                                     </p>
                                     <ng-template #notShow>
-                                        <a *ngIf="pdfBL.value" [href]="pdfBL.value | imagen:'solicitud'" target="_blank">
+                                        <a *ngIf="rutaBL.value" [href]="rutaBL.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                                         </a>
                                     </ng-template>
@@ -126,12 +126,12 @@
 
                                     <input (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf" class="form-control">
                                     <p *ngIf="temporalComprobante; else notShow" class="text-danger">
-                                        <a [href]="pdfComprobante.value | imagen:'solicitud'" target="_blank">
+                                        <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                                         </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
                                     </p>
                                     <ng-template #notShow>
-                                        <a *ngIf="pdfComprobante.value" [href]="pdfComprobante.value | imagen:'solicitud'" target="_blank">
+                                        <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                                         </a>
                                     </ng-template>
