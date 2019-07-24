@@ -25,16 +25,8 @@ export class ClienteService {
   }
 
   getClientesEmpresa(id: string, desde: number = 0): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/cliente/empresa/' + id + '?desde' + desde;
-    return this.http.get(url)
-      .pipe(
-        map((resp: any) => {
-
-          this.totalClientes = resp.total;
-          //console.log(resp.total);
-          return resp.cliente;
-        }));
+    const url = URL_SERVICIOS + '/cliente/empresa/' + id + '?desde' + desde;
+    return this.http.get(url);
   }
 
   getClientes(desde: number = 0): Observable<any> {
