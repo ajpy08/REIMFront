@@ -19,7 +19,6 @@ export class ClienteService {
 
   getClientesRole(role?: string): Observable<any> {
     let url = URL_SERVICIOS + '/cliente/role/' + role;
-    console.log(url)
     return this.http.get(url)
       .pipe(map((resp: any) => resp.clientes));
   }

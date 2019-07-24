@@ -39,9 +39,7 @@ export class ClienteComponent implements OnInit {
     }
     else {
       this.usuarioLogueado = this.usuarioService.usuario;
-      if (this.usuarioLogueado.role != 'ADMIN_ROLE') {
-        this._clienteService.getClientesRole(this.usuarioLogueado.role).subscribe(empresas => this.usuarioLogueado.empresas = empresas);
-      } else {
+      if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
         this._clienteService.getClientesRole().subscribe((empresas) => {
           this.usuarioLogueado.empresas = empresas;
         });
@@ -53,7 +51,6 @@ export class ClienteComponent implements OnInit {
 
   role(role : string){
     var result = role.substr(0, role.indexOf('_'));
-
     return result;
   }
 

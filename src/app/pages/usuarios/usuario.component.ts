@@ -98,12 +98,15 @@ cargarUsuario( id: string ) {
 
 
 cambioRole( role: string ) {
+  console.log(role)
   this._clienteService.getClientesRole(role)
-    .subscribe( empresas => this.empresas = empresas );    
+    .subscribe( empresas => this.empresas = empresas );  
+    
+    console.log(this.empresas)
 }
 
 guardarUsuario() {
-  console.log(this.regForm.value);
+  //console.log(this.regForm.value);
   if (this.regForm.valid) {
     this._usuarioService.guardarUsuario( this.regForm.value )
               .subscribe( usuario => {
@@ -120,7 +123,7 @@ guardarUsuario() {
 }
 
 onFileSelected(event) {
-  console.log(event);
+  //console.log(event);
   this.fileFoto = <File> event.target.files[0];
   this.subirFoto();
 }

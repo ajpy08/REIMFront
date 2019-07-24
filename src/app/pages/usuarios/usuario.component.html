@@ -3,10 +3,12 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Formulario de altas / Edición de usuarios</h4>
-                <form [formGroup]="regForm"  (ngSubmit)="guardarUsuario()" novalidate>
+                <form [formGroup]="regForm" (ngSubmit)="guardarUsuario()" novalidate>
                     <div class="my-container">
                         <mat-form-field>
-                            <input matInput formControlName="nombre" type="text" class="form-control" placeholder="Nombre del usuario" [ngClass]="{'form-control is-invalid': nombre.errors && nombre.touched}">
+                            <input matInput formControlName="nombre" type="text" class="form-control"
+                                placeholder="Nombre del usuario"
+                                [ngClass]="{'form-control is-invalid': nombre.errors && nombre.touched}">
                             <mat-error *ngIf="nombre.touched && nombre.invalid && !nombre.errors?.minlength">
                                 <sup>*</sup>Por Favor Ingrese un Nombre de Usuario
                             </mat-error>
@@ -14,9 +16,10 @@
                                 <sup>*</sup>El nombre de usuario debe contener al menos 5 caracteres<br>
                             </mat-error>
                         </mat-form-field>
-                        
+
                         <mat-form-field>
-                            <input matInput formControlName="email" type="text" class="form-control" placeholder="Correo electrónico del usuario" >
+                            <input matInput formControlName="email" type="text" class="form-control"
+                                placeholder="Correo electrónico del usuario">
                             <mat-error *ngIf="email.touched && email.invalid && !email.errors?.pattern">
                                 <sup>*</sup>Por Favor Ingrese un Correo electrónico
                             </mat-error>
@@ -24,23 +27,26 @@
                                 <sup>*</sup>Por favor ingrese un Correo electrónico válido.
                             </mat-error>
                         </mat-form-field>
-                        
-                        
+
+
                         <mat-form-field *ngIf="!edicion">
-                            <input  matInput formControlName="password" type="password" class="form-control" placeholder="Password" >
+                            <input matInput formControlName="password" type="password" class="form-control"
+                                placeholder="Password">
                             <mat-error *ngIf="password.touched && password.invalid && !nombre.errors?.minlength">
-                                    <sup>*</sup>Por Favor Ingrese una contraseña
-                                </mat-error>
+                                <sup>*</sup>Por Favor Ingrese una contraseña
+                            </mat-error>
                         </mat-form-field>
                         <mat-form-field *ngIf="!edicion">
-                            <input matInput  formControlName="passwordConfirm"  type="password" class="form-control" placeholder="Confirmar Password" required compare="password">
+                            <input matInput formControlName="passwordConfirm" type="password" class="form-control"
+                                placeholder="Confirmar Password" required compare="password">
                             <mat-error *ngIf="passwordConfirm.errors">
-                                    <sup>*</sup>La confirmación de la contraseña no coincide...
+                                <sup>*</sup>La confirmación de la contraseña no coincide...
                             </mat-error>
                         </mat-form-field>
                         <!--========Combombox ROLE=========-->
                         <mat-form-field>
-                            <mat-select formControlName="role" (selectionChange)="cambioRole( $event.value )" type="text" placeholder="ROLE">
+                            <mat-select formControlName="role" (selectionChange)="cambioRole( $event.value )"
+                                type="text" placeholder="ROLE">
                                 <mat-option value="ADMIN_ROLE">ADMIN_ROLE</mat-option>
                                 <mat-option value="PATIOADMIN_ROLE">PATIOADMIN_ROLE</mat-option>
                                 <mat-option value="PATIO_ROLE">PATIO_ROLE</mat-option>
@@ -57,11 +63,11 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
- 
-                        </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" 
-                    [disabled]="regForm.pristine || regForm.invalid" >
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+                        [disabled]="regForm.pristine || regForm.invalid">
                         <i class="fa fa-save"></i>
                         Guardar
                     </button>
@@ -78,17 +84,42 @@
         </div>
     </div>
     <div class="col-md-3">
-            <div class="card card-body">
-                <h4 class="box-title m-b-0">Fotografía</h4>
+        <div class="card text-center">
+            <div class="card-header">Fotografía</div>
+            <div class="card-body">
                 <p *ngIf="fotoTemporal; else notShow" class="text-danger">
-                        <img (click)="fileFoto.click()"  [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
-                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!    
+                    <img (click)="fileFoto.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
+                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                </p>
+                <ng-template #notShow>
+                    <img (click)="fileFoto.click()" [src]="img.value | imagen:'usuario'" class="w150 img-circle pointer">
+                </ng-template>
+                <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto"
+                    accept="image/*" #fileFoto>
+                <br><br>
+                <button class="btn btn-info waves-effect waves-light" type="button"
+                    (click)="fileFoto.click(); tipoFile = 'img'"><i class="fa fa-file"></i> Cambiar foto</button>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-header">Fotografía</div>
+            <div class="card card-body">
+                <p *ngIf="fotoTemporal; else notShow" class="text-danger">
+                    <img (click)="fileFoto.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
+                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
                 </p>
                 <ng-template #notShow>
                     <img (click)="fileFoto.click()" [src]="img.value | imagen" class="w150 img-circle pointer">
                 </ng-template>
-                <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*" #fileFoto>
-                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click()"><i class="fa fa-file"></i> Cambiar foto</button>
+                <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto"
+                    accept="image/*" #fileFoto>
+                <br>
+                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click()"><i
+                        class="fa fa-file"></i> Cambiar foto
+                </button>
             </div>
-    </div>
+        </div>
+    </div> -->
 </div>
