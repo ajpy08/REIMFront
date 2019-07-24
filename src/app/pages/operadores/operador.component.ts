@@ -95,6 +95,7 @@ export class OperadorComponent implements OnInit {
       });
   }
 
+
   get transportista() {
     return this.regForm.get('transportista');
   }

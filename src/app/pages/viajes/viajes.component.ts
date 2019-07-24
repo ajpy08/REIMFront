@@ -1,49 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { Viaje } from '../../models/viajes.models';
+import { Viaje } from './viaje.models';
 import { ViajeService } from '../../services/service.index';
-import { Contenedor } from '../../models/contenedores.models';
-import { ContenedorService } from '../../services/service.index';
+declare var swal: any;
 
 @Component({
   selector: 'app-viajes',
   templateUrl: './viajes.component.html',
   styles: []
 })
+
 export class ViajesComponent implements OnInit {
-   // tslint:disable-next-line:typedef-whitespace
-   viajes: Viaje[] = [];
-  // viajes: Viaje = new Viaje('', []);
-   contenedores: Contenedor[] = [];
-    // contenedor: Contenedor = new Contenedor('');
-   // tslint:disable-next-line:no-inferrable-types
-   cargando: boolean = true;
-   // tslint:disable-next-line:no-inferrable-types
-   totalRegistros: number = 0;
-   // tslint:disable-next-line:no-inferrable-types
-   desde: number = 0;
+
+  viajes: Viaje[] = [];
+  cargando = true;
+  totalRegistros = 0;
+  desde = 0;
 
   constructor(public _viajeService: ViajeService) { }
-
   ngOnInit() {
     this.cargarViajes();
   }
 
   cargarViajes() {
     this.cargando = true;
-    this._viajeService.cargarViajes(this.desde)
-    .subscribe(viajes =>
-      // this.totalRegistros = resp.total;
-    // console.log(viajes),
-    this.viajes = viajes
-
-    );
+    this._viajeService.getViajes(this.desde)
+    .subscribe(viajes => {
+      this.totalRegistros = viajes.total;
+      this.viajes = viajes.viajes;
+      this.cargando = false;
+    });
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
-    let desde = this.desde + valor;
-    // console.log(desde);
-    if (desde >= this._viajeService.totalViajes) {
+    const desde = this.desde + valor;
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {
@@ -51,8 +41,26 @@ export class ViajesComponent implements OnInit {
     }
     this.desde += valor;
     this.cargarViajes();
-
   }
+
+  borrarViaje (viaje: Viaje) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a el viaje ' + viaje.viaje,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      })
+      .then(borrar => {
+        if (borrar) {
+          this._viajeService.borrarViaje(viaje._id)
+          .subscribe(borrado => {
+            this.cargarViajes();
+          });
+        }
+      });
+  }
+
 
   buscarViaje(termino: string) {
     if (termino.length <= 0) {
@@ -68,10 +76,5 @@ export class ViajesComponent implements OnInit {
     });
   }
 
-  borrarViaje( viajes: Viaje ) {
 
-    this._viajeService.borrarViaje( viajes._id )
-            .subscribe( () =>  this.cargarViajes() );
-
-  }
 }
