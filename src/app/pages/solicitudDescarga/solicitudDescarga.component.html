@@ -23,7 +23,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                        <label class="control-label"><b>Buque: </b></label>
+                                    <label class="control-label"><b>Buque: </b></label>
                                     <mat-select formControlName="buque" type="text" placeholder="Seleccione un buque">
                                         <mat-option *ngFor="let buque of buques" [value]="buque._id">
                                             {{buque.buque}}
@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                            <label class="control-label"><b>Viaje: </b></label>
+                                        <label class="control-label"><b>Viaje: </b></label>
                                         <input matInput formControlName="viaje" type="text" placeholder="Viaje requerido">
                                     </div>
                                 </div>
@@ -55,26 +55,26 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label"><b>Agente Aduanal</b></label>
-                                    <mat-select  formControlName="agente" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
+                                    <mat-select formControlName="agente" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
                                         <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                                             {{ag.razonSocial}}
                                         </mat-option>
                                     </mat-select>
                                 </div>
-                            </div>                            
-                            
+                            </div>
+
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label"><b>Facturar a: </b></label>
                                     <mat-radio-group class="example-radio-group">
                                         <mat-radio-button class="example-radio-button" *ngFor="let facturaA of facturarA" [value]="facturarA">
-                                                {{facturaA}}
+                                            {{facturaA}}
                                         </mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <mat-select placeholder="Seleccione un cliente" type="text">
+                                <mat-select formControlName="cliente" type="text" placeholder="Seleccione un cliente" (selectionChange)="cargaCliente($event)">
                                     <mat-option *ngFor="let cli of clientes" [value]="cli._id">
                                         {{cli.razonSocial}}
                                     </mat-option>
@@ -97,11 +97,10 @@
                                     <label><b>Anexar BL</b></label>
                                     <input (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf" class="form-control">
                                     <p *ngIf="temporalBL; else notShow" class="text-danger">
-                                            <a [href]="pdfBL.value | imagen:'solicitud'" target="_blank">
-                                                <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                                            </a><br>
-                                            ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
-                                        </p>
+                                        <a [href]="pdfBL.value | imagen:'solicitud'" target="_blank">
+                                            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                                        </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                                    </p>
                                     <ng-template #notShow>
                                         <a *ngIf="pdfBL.value" [href]="pdfBL.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -115,25 +114,22 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label><b>Formas de pago: </b></label>
-                                    <mat-radio-group class="example-radio-group">
-                                        <mat-radio-button class="example-radio-button" *ngFor="let pago of pagos" [value]="pago">
-                                            {{pago}}
-                                        </mat-radio-button>
-                                    </mat-radio-group>
+                                    <label><b>Credito: </b></label>
+                                    <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
+                                        Credito
+                                    </mat-checkbox>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="!credito.value">
                                     <label><b>Anexar comprobante</b></label>
-                                    <label><b>Anexar BL</b></label>
+
                                     <input (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf" class="form-control">
                                     <p *ngIf="temporalComprobante; else notShow" class="text-danger">
-                                            <a [href]="pdfComprobante.value | imagen:'solicitud'" target="_blank">
-                                                <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                                            </a><br>
-                                            ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
-                                        </p>
+                                        <a [href]="pdfComprobante.value | imagen:'solicitud'" target="_blank">
+                                            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                                        </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                                    </p>
                                     <ng-template #notShow>
                                         <a *ngIf="pdfComprobante.value" [href]="pdfComprobante.value | imagen:'solicitud'" target="_blank">
                                             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -155,7 +151,7 @@
 
                                     <div class="form-group">
                                         <label><b>Correo Facturación</b></label>
-                                        <textarea matInput formControlName="correoFacturacion" rows="3" cols="40" class="form-control" ></textarea>
+                                        <textarea matInput formControlName="correoFac" rows="3" cols="40" class="form-control"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +170,7 @@
                                 <div class="form-group">
                                     <label class="control-label"><b>Tamaño - Tipo</b></label>
                                     <mat-select #tipo class="form-control" tabindex="1">
-                                        <mat-option *ngFor="let tipo of tiposContenedor" [value]="tipo" >
+                                        <mat-option *ngFor="let tipo of tiposContenedor" [value]="tipo">
                                             {{tipo}}
                                         </mat-option>
                                     </mat-select>
@@ -205,22 +201,22 @@
                                         <table matNativeControl class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <!--<th scope="col">#</th>-->
+                                                    <th scope="col">#</th>
                                                     <th scope="col">Contenedor</th>
                                                     <th scope="col">Tamaño - Tipo</th>
                                                     <th scope="col">Estado contenedor</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr *ngFor="let contenedor of contenedores">
-                                                    <!--<th scope="row">{{dato.contador}}</th>-->
-                                                    <td>{{contenedor.Contenedor}}</td>
-                                                    <td>{{contenedor.Tipo}}</td>
-                                                    <td>{{contenedor.Estado}}</td>
+                                            <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                                                <tr [formGroupName]="i">
+                                                    <th scope="row">{{i+1}}</th>
+                                                    <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
+                                                    <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                                                    <td>{{this.contenedores.controls[i].get('estado').value}}</td>
                                                     <td>
-                                                        <button (click)="remover(contenedor.Contenedor)" class="btn btn-danger">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
+                                                        <button (click)="removeContenedor( i )" class="btn btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             </tbody>

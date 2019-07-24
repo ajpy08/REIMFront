@@ -44,21 +44,22 @@ export class SolicitudDescargaComponent implements OnInit {
   fileComprobante: File = null;
   temporalComprobante = false;
   edicion = false;
- 
+
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
   buques: Buque[] = [];
   viajes: Viaje[] = [];
   transportistas: Transportista[] = [];
   clientes: Cliente[] = [];
- 
 
-  
+
+
    facturarA: string[] = ['Agencia Aduanal', 'Otro'];
-   tiposContenedor: string[] = ['20\' DC','20 HC','40 DC','40 HC'];
-   estadosContenedor : string[] = ['VACIO','LLENO'];
+   tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
+   estadosContenedor: string[] = ['VACIO', 'LLENO'];
+   formasPago: string [] = ['', ''];
 
-  
+
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -76,15 +77,17 @@ export class SolicitudDescargaComponent implements OnInit {
     public _modalUploadService: ModalUploadService) { }
 
     ngOnInit() {
-      this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias});
+      this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
       this._navieraService.getNavieras().subscribe( navieras => { this.navieras = navieras.navieras; });
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
+      this.credito.disable({onlySelf: true});
       if (id !== 'nuevo') {
         this.edicion = true;
         this.cargarSolicitud ( id );
       }
+      this.contenedores.removeAt(0);
     }
 
   createFormGroup() {
@@ -95,11 +98,12 @@ export class SolicitudDescargaComponent implements OnInit {
       buque: ['', [Validators.required]],
       transportista: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
+      credito: ['', [Validators.required]],
       observaciones: [''],
       pdfBL: [''],
       pdfComprobante: [''],
       correo: [''],
-      correoFacturacion: [''],
+      correoFac: [''],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '') ]),
       _id: ['']
     });
@@ -117,7 +121,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.contenedores.push(this.creaContenedor(cont, tipo, estado));
   }
 
-  removeContenedor( index: number ){
+  removeContenedor( index: number ) {
     this.contenedores.removeAt(index);
   }
 
@@ -145,6 +149,9 @@ export class SolicitudDescargaComponent implements OnInit {
   get observaciones() {
     return this.regForm.get('observaciones');
   }
+  get credito() {
+    return this.regForm.get('credito');
+  }
   get pdfBL() {
     return this.regForm.get('pdfBL');
   }
@@ -154,13 +161,13 @@ export class SolicitudDescargaComponent implements OnInit {
   get correo() {
     return this.regForm.get('correo');
   }
-  get correoFacturacion() {
-    return this.regForm.get('correoFacturacion');
+  get correoFac() {
+    return this.regForm.get('correoFac');
   }
   get contenedores() {
     return this.regForm.get('contenedores') as FormArray;
   }
-    
+
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
@@ -170,13 +177,13 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['buque'].setValue(solicitud.buque);
       this.regForm.controls['transportista'].setValue(solicitud.transportista);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
+      this.regForm.controls['credito'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['pdfBL'].setValue(solicitud.pdfBL);
       this.regForm.controls['pdfComprobante'].setValue(solicitud.pdfComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
-      this.regForm.controls['correoFActuracion'].setValue(solicitud.correoFacturacion);
+      this.regForm.controls['correoFac'].setValue(solicitud.correoFacturacion);
 
-    
     });
   }
 
@@ -185,11 +192,25 @@ export class SolicitudDescargaComponent implements OnInit {
     .subscribe( buques => this.buques = buques.buques);
   }
 
-  cargaClientes(event){
+  cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
     .subscribe( cliente => this.clientes = cliente.clientes);
   }
-  
+  cargaCliente(event) {
+    let cliente = new Cliente();
+    cliente = this.clientes.find(x => x._id === event.value);
+    if (cliente.credito) {
+      this.credito.enable({onlySelf : true});
+      this.credito.setValue(true);
+    } else {
+      this.credito.disable({onlySelf : true});
+      this.credito.setValue(false);
+    }
+    this.correo.setValue(cliente.correo);
+    this.correoFac.setValue(cliente.correoFac);
+
+
+  }
   guardarSolicitud( ) {
     if (this.regForm.valid) {
       this._SolicitudDService.guardarSolicitud(this.regForm.value).subscribe(res => {
@@ -203,7 +224,16 @@ export class SolicitudDescargaComponent implements OnInit {
           this.router.navigate(['/solicitud_descarga', this.regForm.get('_id').value]);
         }
         this.regForm.markAsPristine();
-      })
+      });
+    }
+  }
+
+  onChangeCredito( event ) {
+    if (event.checked) {
+      this.pdfComprobante.setValue(undefined);
+      this.pdfComprobante.disable({ onlySelf : true});
+    } else {
+      this.pdfComprobante.enable({ onlySelf : true});
     }
   }
 
@@ -211,7 +241,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.fileBL = <File> event.target.files[0];
     this.subirBL();
   }
-  
+
   subirBL() {
     this._subirArchivoService.subirArchivoTemporal(this.fileBL, '').subscribe(nombreArchivo => {
       this.regForm.get('pdfBL').setValue(nombreArchivo);
@@ -225,7 +255,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.fileComprobante = <File> event.target.files[0];
     this.subirComprobante();
   }
-  
+
   subirComprobante() {
     this._subirArchivoService.subirArchivoTemporal(this.fileComprobante, '').subscribe(nombreArchivo => {
       this.regForm.get('pdfComprobante').setValue(nombreArchivo);
@@ -237,27 +267,27 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
 
-  addContenedor(contenedor: string) {
-       // console.log(value);
-    // // tslint:disable-next-line:prefer-const
-    // // tslint:disable-next-line:triple-equals
-    // let index = this.contenedores.find( dato => dato.Contenedor == contenedor);
+//   addContenedor(contenedor: string) {
+//        // console.log(value);
+//     // // tslint:disable-next-line:prefer-const
+//     // // tslint:disable-next-line:triple-equals
+//     // let index = this.contenedores.find( dato => dato.Contenedor == contenedor);
 
-    // // tslint:disable-next-line:triple-equals
-    // if (contenedor == '') {
-    //   swal( 'Error esta vacio', 'No fue posible insertar', 'error' );
-    //   // console.log('Error esta vacio');
-    //   return;
-    //  }
-    //  if (index != null) {
-    //   swal( 'Error Contenedor Duplicado', 'No fue posible insertar: ' + index.Contenedor, 'error' );
-    //   // console.log('Contenedor duplicado ' + index.contenedor);
-    //  } else {
-    //   // tslint:disable-next-line:max-line-length
-    //   this.contenedores.push({Contenedor: contenedor, Tipo: this.selectedTipo, Estado: this.selectedEstado});
-    // }
+//     // // tslint:disable-next-line:triple-equals
+//     // if (contenedor == '') {
+//     //   swal( 'Error esta vacio', 'No fue posible insertar', 'error' );
+//     //   // console.log('Error esta vacio');
+//     //   return;
+//     //  }
+//     //  if (index != null) {
+//     //   swal( 'Error Contenedor Duplicado', 'No fue posible insertar: ' + index.Contenedor, 'error' );
+//     //   // console.log('Contenedor duplicado ' + index.contenedor);
+//     //  } else {
+//     //   // tslint:disable-next-line:max-line-length
+//     //   this.contenedores.push({Contenedor: contenedor, Tipo: this.selectedTipo, Estado: this.selectedEstado});
+//     // }
 
-}
+// }
 
   remover(element: any) {
     // console.log(element);
