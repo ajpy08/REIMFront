@@ -17,12 +17,6 @@ export class SubirArchivoService {
       if (!archivo) {
       return;
     }
-  //   if (archivo.type.indexOf('image') < 0 && archivo.type.indexOf('pdf') < 0) {
-  //    swal('Solo Archivos De Imagen', 'El archivo seleccionado no tiene formato Imagen', 'error');
-  //    this.fotoTemporal = null;
-  //    return;
-  //  }
-  //      this.fotoTemporal = archivo;
     const formData = new FormData();
     formData.append('file', archivo, archivo.name);
     let url = URL_SERVICIOS + '/uploadFileTemp';

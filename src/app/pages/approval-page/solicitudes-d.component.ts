@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SolicitudD } from '../../models/solicitudD.models';
+import { SolicitudD } from '../solicitudDescarga/solicitudD.models';
 import { SolicitudDService } from '../../services/service.index';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';

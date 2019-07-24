@@ -40,12 +40,9 @@ export class BuqueService {
 
   }
 
-  cargarBuqueNaviera( id: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
+  getBuqueXNaviera( id: string ): Observable<any> {
     let url = URL_SERVICIOS + '/buque/naviera/' + id;
-    return this.http.get( url )
-    .pipe( map( (resp: any) => resp.buques));
+    return this.http.get( url );
 
   }
 

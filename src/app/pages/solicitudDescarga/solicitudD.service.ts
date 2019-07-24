@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import { UsuarioService } from '../usuario/usuario.service';
-import { SolicitudD } from '../../models/solicitudD.models';
+import { UsuarioService } from '../../services/usuario/usuario.service';
+import { SolicitudD } from './solicitudD.models';
 import swal from 'sweetalert';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
