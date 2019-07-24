@@ -31,7 +31,7 @@ export class ManiobraComponent implements OnInit {
 
   maniobra: Maniobra = new Maniobra('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
   operadores: Operador[] = [];
-  operador: Operador = new Operador('');
+  operador: Operador = new Operador();
   camiones: Camion[] = [];
   camion: Camion = new Camion();
   contenedores: Contenedor[] = [];

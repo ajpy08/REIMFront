@@ -27,6 +27,12 @@ export class OperadorService {
       .pipe(map((resp: any) => resp.operadores));
   }
 
+  getOperadoresTransportista(transportista: string, activo?: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/operador/transportista/' + transportista + '&' + activo;
+    return this.http.get(url)
+      // .pipe(map((resp: any) => resp.operadores));
+  }
+
   borrarOperador(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/operador/' + id;
     url += '?token=' + this._usuarioService.token;

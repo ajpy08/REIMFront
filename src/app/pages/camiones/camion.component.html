@@ -1,7 +1,7 @@
 <div class="row animated fadeIn">
     <div class="col-md-6">
         <div class="card card-body">
-            <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3>
+            <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3><br>
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
                     <form [formGroup]="regForm" (ngSubmit)="guardarCamion()" novalidate>
@@ -20,9 +20,9 @@
                             <!--========Combombox Operadores=========-->
                             <mat-form-field>
                                     <mat-select placeholder="Seleccione un operador" formControlName="operador"
-                                        name="operadores" multiple>
+                                        name="operadores">
                                         <mat-option *ngFor="let operador of operadores" [value]="operador._id">
-                                            {{ operador.operador }}
+                                            {{ operador.nombre }}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
@@ -77,7 +77,7 @@
                     #file>
                 <br><br>
                 <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
+                    (click)="file.click(); tipoFile = 'poliza'"><i class="fa fa-file"></i> Cambiar Poliza
                 </button>
             </div>
         </div>

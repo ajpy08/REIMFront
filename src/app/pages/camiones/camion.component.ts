@@ -59,59 +59,53 @@ export class CamionComponent implements OnInit {
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
-    private serviceOperadores: OperadorService) {}
+    private serviceOperadores: OperadorService) { }
 
   ngOnInit() {
     this.createFormGroup();
     this._transportistaService.getTransportistas()
       .subscribe((transportistas) => {
         this.transportistas = transportistas.transportistas;
-      });  
+      });    
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.edicion = true;
-      this.cargarCamion(id);
+      this.cargarCamion(id);     
     }
     else {
       for (var control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
-      // this.regForm.controls['transportista'].setValue(undefined);
-      // this.regForm.controls['placa'].setValue(undefined);
-      // this.regForm.controls['noEconomico'].setValue(undefined);
-      // this.regForm.controls['vigenciaSeguro'].setValue(undefined);
-      // this.regForm.controls['pdfSeguro'].setValue(undefined);
     }
   }
 
-  cambioTransportista( role: string ) {
-    this.serviceOperadores.getOperadores().subscribe((operadores) => {
+  cambioTransportista(transportista: string) {
+    this.serviceOperadores.getOperadoresTransportista(transportista).subscribe((operadores) => {
       this.operadores = operadores.operadores;
     });
   }
 
   cargarCamion(id: string) {
     this._camionService.getCamion(id)
-      .subscribe(res => {      
+      .subscribe(res => {
+        this.camion = res;
+        console.log(this.camion)
+        this.serviceOperadores.getOperadoresTransportista(this.camion.transportista.toString(), true).subscribe((operadores) => {
+          this.operadores = operadores.operadores;
+        });
         for (var propiedad in this.camion) {
           //console.log(propiedad);
           for (var control in this.regForm.controls) {
             //console.log(control);
             //if( propiedad == control.toString() && res[propiedad] != null && res[propiedad] != undefined) {
-            if( propiedad == control.toString()) {
-              console.log(propiedad + ': ' + res[propiedad]);
+            if (propiedad == control.toString()) {
+              //console.log(propiedad + ': ' + res[propiedad]);
               this.regForm.controls[propiedad].setValue(res[propiedad]);
-             } 
-          }                   
-        }
-        //this.regForm.controls['transportista'].setValue(res.transportista);
-        // this.regForm.controls['placa'].setValue(res.placa);
-        // this.regForm.controls['noEconomico'].setValue(res.noEconomico);
-        //this.regForm.controls['vigenciaSeguro'].setValue(res.vigenciaSeguro);
-        //this.regForm.controls['pdfSeguro'].setValue(res.pdfSeguro);
-        //this.regForm.controls['_id'].setValue(res._id);
-      });
+            }
+          }
+        }        
+      });     
   }
 
   get transportista() {
@@ -141,7 +135,7 @@ export class CamionComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       transportista: ['', [Validators.required]],
-      operador: ['', [Validators.required]],
+      operador: [''],
       placa: ['', [Validators.required, Validators.minLength(7)]],
       noEconomico: ['', [Validators.required, Validators.minLength(2)]],
       vigenciaSeguro: [''],
@@ -152,7 +146,7 @@ export class CamionComponent implements OnInit {
 
   guardarCamion() {
     if (this.regForm.valid) {
-      console.log (this.regForm.value);
+      console.log(this.regForm.value);
       this._camionService.guardarCamion(this.regForm.value)
         .subscribe(res => {
           // this.fileImg = null;
@@ -172,13 +166,16 @@ export class CamionComponent implements OnInit {
   onFileSelected(event) {
     // if (this.tipoFile == 'img') {
     //   //console.log('Fue Foto');
+    // if (event.target.files[0] != undefined) {
     //   this.fileImg = <File>event.target.files[0];
     //   this.subirArchivo(this.tipoFile);
     // } else {
     if (this.tipoFile == 'pdfSeguro') {
       //console.log('Fue pdfSeguro');
-      this.file = <File>event.target.files[0];
-      this.subirArchivo(this.tipoFile);
+      if (event.target.files[0] != undefined) {
+        this.file = <File>event.target.files[0];
+        this.subirArchivo(this.tipoFile);
+      }
     } else {
       console.log('No conozco el tipo de archivo para subir')
     }
@@ -187,19 +184,19 @@ export class CamionComponent implements OnInit {
 
   subirArchivo(tipo: string) {
     let file: File;
-    // if (this.fileImg != null) {
+    // if (this.fileImg != null && tipo == 'foto') {
     //   file = this.fileImg;
+    //   this.fileImgTemporal = true;
     // } else {
-    if (this.file != null) {
+    if (this.file != null && tipo == 'poliza') {
       file = this.file;
+      this.fileTemporal = true;
     }
     // }
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
         this.regForm.get(tipo).markAsDirty();
-        // this.fileImgTemporal = true;
-        this.fileTemporal = true;
         this.guardarCamion();
       });
   }

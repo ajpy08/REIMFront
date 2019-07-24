@@ -184,22 +184,16 @@ export class OperadorComponent implements OnInit {
     if (this.fileFoto != null && tipo == 'foto') {
       file = this.fileFoto;
       this.fileFotoTemporal = true;
-      // console.log('FileFotoTemporal ' + this.fileFotoTemporal)  
     } else {
       if (this.fileLicencia != null && tipo == 'fotoLicencia') {
         file = this.fileLicencia;
         this.fileLicenciaTemporal = true;
-        // console.log('FileLicenciaTemporal ' + this.fileLicenciaTemporal)
       }
-    }
-    
+    }    
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
-        // console.log(tipo + ' ' + nombreArchivo)
         this.regForm.get(tipo).setValue(nombreArchivo);
         this.regForm.get(tipo).markAsDirty();
-        // this.fileFotoTemporal = true;
-        // this.fileLicenciaTemporal = true;
         this.guardarOperador();
       });
   }
