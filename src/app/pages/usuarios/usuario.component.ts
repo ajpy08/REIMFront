@@ -109,7 +109,7 @@ guardarUsuario() {
               .subscribe( usuario => {
                 this.fileFoto = null;
                 this.fotoTemporal = false;
-                if (this.regForm.get('_id').value === '') {
+                if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
                   this.regForm.get('_id').setValue(usuario._id);
                   this.router.navigate(['/usuarios', this.regForm.get('_id').value ]);
                   this.edicion = true;

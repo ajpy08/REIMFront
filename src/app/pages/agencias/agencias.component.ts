@@ -18,6 +18,7 @@ export class AgenciasComponent implements OnInit {
   ngOnInit() {
     this.cargarAgencias();
   }
+  
   cargarAgencias() {
     this.cargando = true;
     this._agenciaService.getAgencias(this.desde)
