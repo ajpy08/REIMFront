@@ -1,6 +1,7 @@
 import {RouterModule, Routes} from '@angular/router';
 // import { PagesComponent } from './pages.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
+
 import { TransitoComponent } from './transito/transito.component';
 import { IngresoCamionComponent } from './transito/ingreso_camion.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -27,18 +28,24 @@ import { ViajeComponent } from './viajes/viaje.component';
 import { FotosComponent } from './fotos/fotos.component';
 import { NavierasComponent } from './navieras/navieras.component';
 import { NavieraComponent } from './navieras/naviera.component';
+
 import { SolicitudesDescargasComponent } from './solicitudDescarga/solicitudes-descargas.component';
 import { SolicitudDescargaComponent } from './solicitudDescarga/solicitudDescarga.component';
+
+import { SolicitudesAprobacionesComponent } from './solicitudDescarga/solicitudesAprobaciones.component';
+import { SolicitudAprobacionComponent } from './solicitudDescarga/solicitudAprobacion.component';
+
 import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
-import { ApprovalPageComponent } from './approval-page/approval-page.component';
+
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
 import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
-import { SolicitudesDComponent } from './approval-page/solicitudes-d.component';
+
+
 // Guards
 // import { LoginGuardGuard } from '../services/service.index';
 import { AdminGuard } from '../services/service.index';
@@ -59,14 +66,9 @@ const pagesRoutes: Routes = [
     {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
     {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
     {path: 'usuarios',component: UsuariosComponent,canActivate: [ AdminGuard ],data: { titulo: 'Mantenimiento de Usuarios' }},
-    {
-        path: 'solicitudes_de_descarga',
-        component: SolicitudesDComponent,
-        canActivate: [AdminGuard],
-        data: { titulo: 'Solicitudes de descargas'}
-    },
-    // tslint:disable-next-line:max-line-length
-    {path: 'aprobacion_de_descarga/:id', component: ApprovalPageComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Aprobar descarga'}},
+    
+    
+    
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
     {path: 'transito', component: TransitoComponent, data: {titulo: 'transito'}},
     {path: 'ingreso_camion/:id', component: IngresoCamionComponent, data: {titulo: 'ingreso_camion'}},
@@ -77,16 +79,12 @@ const pagesRoutes: Routes = [
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
     // Solicitud Descarga
-    {
-        path: 'solicitudes_descargas',
-        component: SolicitudesDescargasComponent,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Solicitud de descargas' }
-    },
-    // tslint:disable-next-line:max-line-length
+    {path: 'solicitudes_descargas', component: SolicitudesDescargasComponent, canActivate: [ AdminGuard ], data: { titulo: 'Solicitud de descargas' }},
     {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    
+    {path: 'solicitudes_aprobaciones', component: SolicitudesAprobacionesComponent, canActivate: [AdminGuard], data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas'}},
+    {path: 'solicitud_aprobacion/:id', component: SolicitudAprobacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Aprobar descarga'}},
     // Mantenimientos ADMIN ROLE
-
     {
         path: 'operadores',
         component: OperadoresComponent,
