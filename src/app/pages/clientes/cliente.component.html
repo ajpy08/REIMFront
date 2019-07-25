@@ -66,12 +66,12 @@
                                 <mat-select placeholder="Seleccione una empresa" formControlName="empresas"
                                     name="empresas" multiple>
                                     <mat-option *ngFor="let empresa of usuarioLogueado.empresas" [value]="empresa._id">
-                                        <mat-label *ngIf="empresa.role; else notShowEmpresa">{{ role(empresa.role) + ' | ' + empresa.razonSocial }}</mat-label>
+                                        <div *ngIf="empresa.role; else notShowEmpresa">
+                                            {{ role(empresa.role) + ' | ' + empresa.razonSocial }}</div>
                                         <ng-template #notShowEmpresa>
-                                                <mat-label>{{ empresa.razonSocial }} </mat-label>
+                                            <div>{{ empresa.razonSocial }} </div>
                                         </ng-template>
-                                        <!-- {{ role(empresa.role) + ' | ' + empresa.razonSocial }} -->
-                                    </mat-option>                                    
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>

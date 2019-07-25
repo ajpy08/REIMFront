@@ -98,11 +98,8 @@ cargarUsuario( id: string ) {
 
 
 cambioRole( role: string ) {
-  console.log(role)
   this._clienteService.getClientesRole(role)
-    .subscribe( empresas => this.empresas = empresas );  
-    
-    console.log(this.empresas)
+    .subscribe( empresas => this.empresas = empresas );
 }
 
 guardarUsuario() {
