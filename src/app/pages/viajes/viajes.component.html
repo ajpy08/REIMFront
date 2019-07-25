@@ -46,7 +46,7 @@
                         <tbody>
                             <tr *ngFor="let viaje of viajes">
                                 <td>{{viaje.viaje}}</td>
-                                <td>{{viaje.buque.buque}}</td>
+                                <td>{{viaje.buque.nombre}}</td>
                                 <td>{{viaje.fArribo}}</td>
                                 <td>
                                     <a *ngIf="viaje.pdfTemporal" [href]="viaje.pdfTemporal | imagen:'viaje'" target="_blank">

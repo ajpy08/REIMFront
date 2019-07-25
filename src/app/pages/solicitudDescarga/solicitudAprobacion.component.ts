@@ -7,7 +7,6 @@ import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
-import { triggerAsyncId } from 'async_hooks';
 import { Contenedor } from '../../models/contenedores.models';
 import { Buque } from '../../models/buques.models';
 
@@ -54,7 +53,7 @@ export class SolicitudAprobacionComponent implements OnInit {
       contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
       tipo: [tipo],
       estado: [estado],
-      maniobra: [maniobra]
+      maniobra: [maniobra,[Validators.required]]
     });
   }
   addContenedor(cont: string, tipo: string, estado: string, maniobra: string): void {
@@ -83,29 +82,23 @@ export class SolicitudAprobacionComponent implements OnInit {
 
   validaSolicitud() {
       this.contenedores.controls.forEach( cont => {
-        console.log(cont.value.contenedor);
-      this._ManiobraService.getManiobraXContenedorViajeBuque(cont.value.contenedor, this.solicitud.viaje, this.buque.value)
+      this._ManiobraService.getManiobraXContenedorViajeBuque(cont.get('contenedor').value, this.solicitud.viaje, this.buque.value)
       .subscribe( maniobra => {
-        cont.value.contenedor.setValue(maniobra[0]._id);
+        if (maniobra.length>0){
+          console.log(maniobra[0]._id);
+         cont.get('maniobra').setValue(maniobra[0]._id);
+        }
       });
-       
-      // console.log(this.solicitud.viaje);
-      // console.log(this.idbuque)
     });
   }
 
-  // updateSolicitud( f: NgForm ) {
-  //   if ( f.invalid ) {
-  //     return;
-  //     }
-  //   this.solicitud.contenedores = this.contenedores;
-  //   console.log(this.solicitud);
-  //  this._SolicitudDService.guardarSolicitudManiobra(this.solicitud)
-  //  .subscribe(solicitud => {
-  //   // console.log(solicitud);
-  //  });
-
-  // }
+  apruebaSolicitud( ) {
+    if ( this.regForm.valid ) {
+     this._SolicitudService.apruebaSolicitud(this.regForm.value).subscribe(res => {
+      this.regForm.markAsPristine();
+      });
+    }
+  }
 
   // cambioEstado(SolicitudD: Solicitud) {
   //   this._SolicitudDService.cambioEstado(SolicitudD)

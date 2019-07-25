@@ -18,7 +18,6 @@ export class BuqueService {
   ) { }
 
   getBuques(desde: number = 0): Observable<any> {
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/buque?desde=' + desde;
     return this.http.get(url)
   }
