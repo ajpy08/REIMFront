@@ -17,11 +17,10 @@ export class ClienteService {
     public _usuarioService: UsuarioService
   ) { }
 
-  getClientesRole(role: string): Observable<any> {
-    // tslint:disable-next-line:prefer-const
+  getClientesRole(role?: string): Observable<any> {
     let url = URL_SERVICIOS + '/cliente/role/' + role;
     return this.http.get(url)
-      .pipe(map((resp: any) => resp.cliente));
+      .pipe(map((resp: any) => resp.clientes));
   }
 
   getClientesEmpresa(id: string, desde: number = 0): Observable<any> {

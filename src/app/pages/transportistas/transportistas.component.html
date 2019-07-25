@@ -78,7 +78,12 @@
                                 </td>
                                 <td>{{transportista.correo}}</td>
                                 <td>{{transportista.correoFac}}</td>
-                                <td>{{transportista.credito}}</td>
+                                <td align="center" *ngIf="transportista.credito; else notShow">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </td>
+                                    <ng-template #notShow>
+                                        <td></td>
+                                    </ng-template>
                                 <td>{{transportista.caat}}</td>
                             </tr>
                         </tbody>

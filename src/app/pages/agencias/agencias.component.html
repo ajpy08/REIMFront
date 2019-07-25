@@ -51,7 +51,7 @@
                                 <th>Correo</th>
                                 <th>Correo de Facturación</th>
                                 <th>Credito</th>
-                                <th>Patente</th>                                
+                                <th>Patente</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +85,12 @@
                                 <!-- <td>{{agencia.formatoR1}}</td> -->
                                 <td>{{agencia.correo}}</td>
                                 <td>{{agencia.correoFac}}</td>
-                                <td>{{agencia.credito}}</td>
+                                <td align="center" *ngIf="agencia.credito; else notShow">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </td>
+                                <ng-template #notShow>
+                                    <td></td>
+                                </ng-template>
                                 <td>{{agencia.patente}}</td>
                             </tr>
                         </tbody>

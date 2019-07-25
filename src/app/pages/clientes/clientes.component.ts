@@ -32,7 +32,7 @@ export class ClientesComponent implements OnInit {
   cambiarDesde(valor: number) {
     let desde = this.desde + valor;
     //console.log(desde);
-    if (desde >= this._clienteService.totalClientes) {
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {
