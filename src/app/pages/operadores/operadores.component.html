@@ -61,9 +61,12 @@
                                 <td>{{operador.nombre}}</td>
                                 <td>{{operador.vigenciaLicencia}}</td>
                                 <td>{{operador.licencia}}</td>
-                                <td align="center" *ngIf="operador.activo">
+                                <td align="center" *ngIf="operador.activo; else notShow">
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </td>
+                                <ng-template #notShow>
+                                    <td></td>
+                                </ng-template>
                             </tr>
                         </tbody>
                     </table>

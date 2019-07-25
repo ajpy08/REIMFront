@@ -28,7 +28,7 @@ export class AddcontainersComponent implements OnInit {
   viaje: Viaje = new Viaje('');
   viajec: Viaje = new Viaje('');
   buques: Buque[] = [];
-  buque: Buque = new Buque('');
+  buque: Buque = new Buque();
   navieras: Naviera[] = [];
   naviera: Naviera = new Naviera('');
   contenedores: Contenedor[] = [];
@@ -59,7 +59,7 @@ export class AddcontainersComponent implements OnInit {
   ngOnInit() {
     this._viajeService.getViajes()
     .subscribe( viajes => this.viajes = viajes );
-    this._buqueService.cargarBuques()
+    this._buqueService.getBuques()
     .subscribe( buques => this.buques = buques );
     this._navieraService.getNavieras()
     .subscribe( navieras => this.navieras = navieras );
