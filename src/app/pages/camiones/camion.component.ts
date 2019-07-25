@@ -90,7 +90,7 @@ export class CamionComponent implements OnInit {
     this._camionService.getCamion(id)
       .subscribe(res => {
         this.camion = res;
-        console.log(this.camion)
+        //console.log(this.camion)
         this.serviceOperadores.getOperadoresTransportista(this.camion.transportista.toString(), true).subscribe((operadores) => {
           this.operadores = operadores.operadores;
         });
@@ -146,7 +146,7 @@ export class CamionComponent implements OnInit {
 
   guardarCamion() {
     if (this.regForm.valid) {
-      console.log(this.regForm.value);
+      //console.log(this.regForm.value);
       this._camionService.guardarCamion(this.regForm.value)
         .subscribe(res => {
           // this.fileImg = null;

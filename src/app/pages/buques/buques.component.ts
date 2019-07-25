@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Buque } from '../../models/buques.models';
 import { BuqueService } from '../../services/service.index';
-
+declare var swal: any;
 @Component({
   selector: 'app-buques',
   templateUrl: './buques.component.html',
   styles: []
 })
 export class BuquesComponent implements OnInit {
-  // tslint:disable-next-line:typedef-whitespace
   buques: Buque[] = [];
-  // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
-  // tslint:disable-next-line:no-inferrable-types
   totalRegistros: number = 0;
-  // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
 
   constructor(public _buqueService: BuqueService) { }
@@ -25,19 +21,17 @@ export class BuquesComponent implements OnInit {
 
   cargarBuques() {
     this.cargando = true;
-    this._buqueService.cargarBuques(this.desde)
-    .subscribe(buques =>
-      // this.totalRegistros = resp.total;
-      this.buques = buques
-
-    );
+    this._buqueService.getBuques(this.desde)
+      .subscribe(buques => {
+        this.totalRegistros = buques.total,
+          this.buques = buques.buques
+        this.cargando = false;
+      });    
   }
 
   cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
     let desde = this.desde + valor;
-    console.log(desde);
-    if (desde >= this._buqueService.totalBuques) {
+    if (desde >= this.totalRegistros) {
       return;
     }
     if (desde < 0) {
@@ -55,19 +49,25 @@ export class BuquesComponent implements OnInit {
     }
     this.cargando = true;
     this._buqueService.buscarBuque(termino)
-    .subscribe((buque: Buque[]) => {
-      this.buques = buque;
-      this.cargando = false;
-
-    });
+      .subscribe((buques: Buque[]) => {
+        this.buques = buques;
+        this.cargando = false;
+      });
   }
 
-  borrarBuque( buque: Buque ) {
-
-    this._buqueService.borrarBuque( buque._id )
-            .subscribe( () =>  this.cargarBuques() );
-
+  borrarBuque(buque: Buque) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + buque.nombre,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then(borrar => {
+        if (borrar) {
+          this._buqueService.borrarBuque(buque._id)
+            .subscribe(() => this.cargarBuques());
+        }
+      });
   }
-
-
 }
