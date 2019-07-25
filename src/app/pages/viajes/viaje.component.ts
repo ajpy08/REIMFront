@@ -58,7 +58,7 @@ export const MY_FORMATS = {
       public _modalUploadService: ModalUploadService) {}
 
     ngOnInit() {
-      this._buqueService.cargarBuques().subscribe( buques => this.buques = buques );
+      this._buqueService.getBuques().subscribe( buques => this.buques = buques );
       this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -196,7 +196,7 @@ export const MY_FORMATS = {
         this.addContenedor(element.Contenedor, element.Tipo, element.Estado, element.Cliente, 'NUEVO');
       });
       this.regForm.controls['viaje'].setValue(excel[0].Viaje);
-      const index = this.buques.find( dato => dato.buque === excel[0].Buque);
+      const index = this.buques.find( dato => dato.nombre === excel[0].Buque);
       if (!index) {
         swal( 'El nombre del Buque', 'No fue encontrado en el catalogo', 'error' );
       } else {
