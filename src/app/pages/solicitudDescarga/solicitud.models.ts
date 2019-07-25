@@ -1,4 +1,4 @@
-export class SolicitudD {
+export class Solicitud {
 
     constructor (
         public agencia?: string,
@@ -15,6 +15,10 @@ export class SolicitudD {
         public correo?: string,
         public correoFac?: string,
         public contenedores?: Array<any>,
+        public tipo?: string,
+        public estatus?: string,
+        public usuarioAprobo?: string,
+        public fAprobacion?: string,
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,

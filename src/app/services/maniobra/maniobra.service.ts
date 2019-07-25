@@ -20,6 +20,14 @@ export class ManiobraService {
     public _subirArchivoService: SubirArchivoService
   ) { }
 
+
+  getManiobraXContenedorViajeBuque(contenedor: string, viaje: string, buque: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/buscaxcontenedorviaje?contenedor=' + contenedor + '&viaje=' + viaje + '&buque=' + buque;
+    return this.http.get(url)
+        .pipe(map((resp: any) => resp.maniobra));
+}
+
+
   getManiobrasTransito( contenedor? : string ) : Observable<any>{
     if (contenedor===undefined)  contenedor="";
     let url = URL_SERVICIOS + '/maniobra/transito?contenedor='+ contenedor;

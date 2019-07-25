@@ -6,7 +6,6 @@
                 <h4 class="m-b-0 text-white">Información de la solicitud</h4>
             </div>
             <div class="card-body">
-                <form class="form-horizontal" ngNativeValidate #f='ngForm' (ngSubmit)="updateSolicitud(f)">
                     <div class="form-body">
                         <h3 class="box-title">Datos generales</h3>
                         <hr class="m-t-0 m-b-40">
@@ -15,7 +14,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Agencia Aduanal:</label>
                                     <div class="col-md-9">
-                                        <p name="agencia" class="form-control-static"> {{agencia}} </p>
+                                        <p class="form-control-static"> {{solicitud.agencia.razonSocial}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -24,7 +23,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Naviera:</label>
                                     <div class="col-md-9">
-                                        <p name="naviera" class="form-control-static"> {{naviera}} </p>
+                                        <p class="form-control-static"> {{solicitud.naviera.razonSocial}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +35,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Transportista:</label>
                                     <div class="col-md-9">
-                                        <p name="transportista" class="form-control-static"> {{transportista}} </p>
+                                        <p class="form-control-static"> {{solicitud.transportista.razonSocial}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +44,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Cliente:</label>
                                     <div class="col-md-9">
-                                        <p name="cliente" class="form-control-static"> {{cliente}} </p>
+                                        <p class="form-control-static"> {{solicitud.cliente.razonSocial}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +56,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Buque:</label>
                                     <div class="col-md-9">
-                                        <p name="buque" class="form-control-static"> {{buque}} </p>
+                                        <p class="form-control-static"> {{solicitud.buque.nombre}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +65,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Viaje:</label>
                                     <div class="col-md-9">
-                                        <p name="viaje" class="form-control-static"> {{solicitud.viaje}} </p>
+                                        <p class="form-control-static"> {{solicitud.viaje}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +79,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Credito:</label>
                                     <div class="col-md-9">
-                                        <p name="credito" class="form-control-static"> {{solicitud.credito}} </p>
+                                        <p class="form-control-static"> {{solicitud.credito}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +89,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Correo:</label>
                                     <div class="col-md-9">
-                                        <p name="correo" class="form-control-static"> {{solicitud.correo}} </p>
+                                        <p class="form-control-static"> {{solicitud.correo}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +98,7 @@
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-3">Correo de facturación:</label>
                                     <div class="col-md-9">
-                                        <p name="correoFac" class="form-control-static"> {{solicitud.correoFac}} </p>
+                                        <p class="form-control-static"> {{solicitud.correoFac}} </p>
                                     </div>
                                 </div>
                             </div>
@@ -127,36 +126,37 @@
                             <!--/span-->
                         </div>
                     </div>
-                    <!--/span-->
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <table matNativeControl class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <!--<th scope="col">#</th>-->
-                                            <th scope="col">Contenedor</th>
-                                            <th scope="col">Tamaño - Tipo</th>
-                                            <th scope="col">Estado contenedor</th>
-                                            <th scope="col">Maniobra Encontrada</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let contenedor of contenedores">
-                                            <!--<th scope="row">{{dato.contador}}</th>-->
-                                            <td>{{contenedor.Contenedor}}</td>
-                                            <td>{{contenedor.Tipo}}</td>
-                                            <td>{{contenedor.Estado}}</td>
-                                            <td>{{contenedor.Maniobra}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <form class="form-horizontal" [formGroup]="regForm">
+                        <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <table matNativeControl class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Contenedor</th>
+                                                    <th scope="col">Tamaño - Tipo</th>
+                                                    <th scope="col">Estado contenedor</th>
+                                                    <th scope="col">Maniobra Encontrada</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                                                <tr [formGroupName]="i">
+                                                    <th scope="row">{{i+1}}</th>
+                                                    <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
+                                                    <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                                                    <td>{{this.contenedores.controls[i].get('estado').value}}</td>
+                                                    <td>SASAS                                                  </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>                    
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
+                        <button type="button" class="btn btn-success" (click)="validaSolicitud()"> <i class="fa fa-check"></i> Validar</button>
+                        <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Aprobar</button>
                         <button type="button" class="btn btn-inverse">Cancelar</button>
                     </div>
                 </form>

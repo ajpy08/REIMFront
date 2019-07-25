@@ -42,13 +42,13 @@ import { NgDropFilesDirective } from '.././directives/ng-drop-files.directive';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
-import { ApprovalPageComponent } from './approval-page/approval-page.component';
+import { SolicitudAprobacionComponent } from './solicitudDescarga/solicitudAprobacion.component';
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
 import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
-import { SolicitudesDComponent } from './approval-page/solicitudes-d.component';
+import { SolicitudesAprobacionesComponent } from './solicitudDescarga/solicitudesAprobaciones.component';
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
 import { PipesModule } from '../pipes/pipes.module';
@@ -109,13 +109,13 @@ import {
         EmpresaComponent,
         MisclientesComponent,
         MiclienteComponent,
-        ApprovalPageComponent,
+        SolicitudAprobacionComponent,
         ContenedoresDisponiblesComponent,
         ContenedoresRLComponent,
         ReporteContenedoresRLComponent,
         BuquesComponent,
         BuqueComponent,
-        SolicitudesDComponent,
+        SolicitudesAprobacionesComponent,
         RegisterComponent
     ],
     exports: [

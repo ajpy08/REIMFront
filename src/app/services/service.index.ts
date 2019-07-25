@@ -1,6 +1,6 @@
 export { UsuarioService } from './usuario/usuario.service';
 export { NavieraService } from './naviera/naviera.service';
-export { SolicitudDService } from '../pages/solicitudDescarga/solicitudD.service';
+export { SolicitudService } from '../pages/solicitudDescarga/solicitud.service';
 export { BuqueService } from './buque/buque.service';
 export { SharedService } from './shared/shared.service';
 export { SettingsService } from './settings/settings.service';

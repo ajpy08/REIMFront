@@ -15,19 +15,12 @@ import { Buque } from '../../models/buques.models';
 import { BuqueService } from '../../services/service.index';
 import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
-import { SolicitudD } from './solicitudD.models';
-import { SolicitudDService } from '../../services/service.index';
+import { Solicitud } from './solicitud.models';
+import { SolicitudService } from '../../services/service.index';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';
 import { AgenciaComponent } from '../agencias/agencia.component';
-
-// tslint:disable-next-line:class-name
-export interface datos {
-  Contenedor: string;
-  Tipo: string;
-  Estado: string;
-}
 
 
 @Component({
@@ -67,7 +60,7 @@ export class SolicitudDescargaComponent implements OnInit {
     public _navieraService: NavieraService,
     public _transportistaService: TransportistaService,
     public _clienteService: ClienteService,
-    public _SolicitudDService: SolicitudDService,
+    public _SolicitudDService: SolicitudService,
     public _buqueService: BuqueService,
     public _viajeService: ViajeService,
     public activatedRoute: ActivatedRoute,
@@ -82,17 +75,19 @@ export class SolicitudDescargaComponent implements OnInit {
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
-      this.credito.disable({onlySelf: true});
+      
       if (id !== 'nuevo') {
         this.edicion = true;
         this.cargarSolicitud ( id );
+      } else {
+        this.credito.disable({onlySelf: true});
       }
       this.contenedores.removeAt(0);
     }
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      agente: ['', [Validators.required]],
+      agencia: ['', [Validators.required]],
       naviera: ['', [Validators.required]],
       viaje: ['', [Validators.required]],
       buque: ['', [Validators.required]],
@@ -128,8 +123,8 @@ export class SolicitudDescargaComponent implements OnInit {
   get _id() {
     return this.regForm.get('_id');
   }
-  get agente() {
-    return this.regForm.get('agente');
+  get agencia() {
+    return this.regForm.get('agencia');
   }
   get naviera() {
     return this.regForm.get('naviera');
@@ -171,19 +166,23 @@ export class SolicitudDescargaComponent implements OnInit {
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
-      this.regForm.controls['agente'].setValue(solicitud.agente);
+      this.regForm.controls['agencia'].setValue(solicitud.agencia);
+      this.cargaClientes({value: solicitud.agencia});
       this.regForm.controls['naviera'].setValue(solicitud.naviera);
+      this.cargarBuques({value : solicitud.naviera});
       this.regForm.controls['viaje'].setValue(solicitud.viaje);
       this.regForm.controls['buque'].setValue(solicitud.buque);
       this.regForm.controls['transportista'].setValue(solicitud.transportista);
+      this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
-      this.regForm.controls['credito'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaBL'].setValue(solicitud.rutaBL);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFacturacion);
-
+      solicitud.contenedores.forEach(element => {
+        this.addContenedor(element.contenedor, element.tipo, element.estado);
+      });
     });
   }
 
@@ -198,6 +197,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
   cargaCliente(event) {
     let cliente = new Cliente();
+    console.log("asas");
     cliente = this.clientes.find(x => x._id === event.value);
     if (cliente.credito) {
       this.credito.enable({onlySelf : true});

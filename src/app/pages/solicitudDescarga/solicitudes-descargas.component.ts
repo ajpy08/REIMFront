@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SolicitudD } from './solicitudD.models';
-import { SolicitudDService } from '../../services/service.index';
+import { Solicitud } from './solicitud.models';
+import { SolicitudService } from '../../services/service.index';
 
 @Component({
   selector: 'app-solicitudes-descargas',
@@ -9,7 +9,7 @@ import { SolicitudDService } from '../../services/service.index';
 })
 export class SolicitudesDescargasComponent implements OnInit {
   // tslint:disable-next-line:typedef-whitespace
-  prealtas: SolicitudD[] = [];
+  prealtas: Solicitud[] = [];
   // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
   // tslint:disable-next-line:no-inferrable-types
@@ -17,7 +17,7 @@ export class SolicitudesDescargasComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   desde: number = 0;
 
-  constructor(public _prealtaService: SolicitudDService) { }
+  constructor(public _prealtaService: SolicitudService) { }
 
   ngOnInit() {
     this.cargarSolicitudesAgencia();
@@ -25,7 +25,7 @@ export class SolicitudesDescargasComponent implements OnInit {
 
   cargarSolicitudesAgencia() {
     this.cargando = true;
-    this._prealtaService.cargarSolicitudes(this.desde)
+    this._prealtaService.getSolicitudes(this.desde)
     .subscribe(solicitudesD =>
       // this.totalRegistros = resp.total;
       this.prealtas = solicitudesD
@@ -54,14 +54,14 @@ export class SolicitudesDescargasComponent implements OnInit {
     }
     this.cargando = true;
     this._prealtaService.buscarSolicitud(termino)
-    .subscribe((prealtas: SolicitudD[]) => {
+    .subscribe((prealtas: Solicitud[]) => {
       this.prealtas = prealtas;
       this.cargando = false;
 
     });
   }
 
-  borrarSolicitud( praalta: SolicitudD ) {
+  borrarSolicitud( praalta: Solicitud ) {
 
     this._prealtaService.borrarSolicitud( praalta._id )
             .subscribe( () =>  this.cargarSolicitudesAgencia() );
