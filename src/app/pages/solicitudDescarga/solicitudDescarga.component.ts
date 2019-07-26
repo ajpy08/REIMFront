@@ -75,7 +75,7 @@ export class SolicitudDescargaComponent implements OnInit {
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
-      
+
       if (id !== 'nuevo') {
         this.edicion = true;
         this.cargarSolicitud ( id );

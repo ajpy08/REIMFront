@@ -7,9 +7,6 @@ import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
-import { Contenedor } from '../../models/contenedores.models';
-import { Buque } from '../../models/buques.models';
-
 
 
 @Component({
@@ -19,7 +16,7 @@ import { Buque } from '../../models/buques.models';
 })
 export class SolicitudAprobacionComponent implements OnInit {
   regForm: FormGroup;
-  solicitud : Solicitud;
+  solicitud: Solicitud;
   usuario: Usuario;
 
   constructor( public _usuarioService: UsuarioService,
@@ -29,12 +26,11 @@ export class SolicitudAprobacionComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder ) {
     this.usuario = this._usuarioService.usuario;
-   
   }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.solicitud = new Solicitud('','','','','','','','','',false,'','','',null,'','','','','','','','','');
+    this.solicitud = new Solicitud('', '', '', '', '', '', '', '', '', false, '', '', '', null, '', '', '', '', '', '', '', '', '');
     this.createFormGroup ();
     this.contenedores.removeAt(0);
     this.cargarSolicitud( id );
@@ -53,7 +49,7 @@ export class SolicitudAprobacionComponent implements OnInit {
       contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
       tipo: [tipo],
       estado: [estado],
-      maniobra: [maniobra,[Validators.required]]
+      maniobra: [maniobra, [Validators.required]]
     });
   }
   addContenedor(cont: string, tipo: string, estado: string, maniobra: string): void {
@@ -84,7 +80,7 @@ export class SolicitudAprobacionComponent implements OnInit {
       this.contenedores.controls.forEach( cont => {
       this._ManiobraService.getManiobraXContenedorViajeBuque(cont.get('contenedor').value, this.solicitud.viaje, this.buque.value)
       .subscribe( maniobra => {
-        if (maniobra.length>0){
+        if (maniobra.length > 0) {
           console.log(maniobra[0]._id);
          cont.get('maniobra').setValue(maniobra[0]._id);
         }

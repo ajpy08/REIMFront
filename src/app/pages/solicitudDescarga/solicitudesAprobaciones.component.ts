@@ -9,11 +9,11 @@ import { SolicitudService } from '../../services/service.index';
   styles: []
 })
 export class SolicitudesAprobacionesComponent implements OnInit {
-  solicitudes: Solicitud[] = [];
-  cargando: boolean = true;
-  totalRegistros: number = 0;
-  desde: number = 0;
-   
+  solicitudes: any[] = [];
+  cargando = true;
+  totalRegistros = 0;
+  desde = 0;
+
   constructor(public _solicitudesService: SolicitudService) { }
 
   ngOnInit() {
@@ -23,10 +23,10 @@ export class SolicitudesAprobacionesComponent implements OnInit {
   cargaSolicitudes() {
     this.cargando = true;
     this._solicitudesService.getSolicitudes(this.desde)
-    .subscribe(resp =>{
+    .subscribe(resp => {
       this.totalRegistros = resp.total;
       this.solicitudes = resp.solicitudes;
-      this.cargando = false
+      this.cargando = false;
     });
   }
 
