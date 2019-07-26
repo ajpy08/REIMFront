@@ -71,14 +71,11 @@ export class SolicitudService {
         console.log(solicitud);
         return this.http.put(url, solicitud)
             .pipe(map((resp: any) => {
-
-                console.log(resp);
-                //swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+                swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
                 return resp.solicitud;
             }),
                 catchError(err => {
-                    console.log(err);
-                    //swal(err.error.mensaje, err.error.errors.message, 'error');
+                    swal(err.error.mensaje, err.error.errors.message, 'error');
                     return throwError(err);
                 }));
     }

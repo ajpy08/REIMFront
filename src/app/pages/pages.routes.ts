@@ -2,8 +2,8 @@ import {RouterModule, Routes} from '@angular/router';
 // import { PagesComponent } from './pages.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 
-import { TransitoComponent } from './transito/transito.component';
-import { IngresoCamionComponent } from './transito/ingreso_camion.component';
+import { TransitoComponent } from './maniobras/transito.component';
+import { LlegadaComponent } from './maniobras/llegada.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
@@ -64,14 +64,15 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Dashboard' }
     },
     {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
-    {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
-    {path: 'usuarios',component: UsuariosComponent,canActivate: [ AdminGuard ],data: { titulo: 'Mantenimiento de Usuarios' }},
-    
-    
-    
+
+    {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,
+    canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
+
+    {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
+
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
-    {path: 'transito', component: TransitoComponent, data: {titulo: 'transito'}},
-    {path: 'ingreso_camion/:id', component: IngresoCamionComponent, data: {titulo: 'ingreso_camion'}},
+    {path: 'transito', component: TransitoComponent, data: {titulo: 'Transito'}},
+    {path: 'llegada/:id', component: LlegadaComponent, data: {titulo: 'Llegada'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},
@@ -79,11 +80,17 @@ const pagesRoutes: Routes = [
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
     // Solicitud Descarga
-    {path: 'solicitudes_descargas', component: SolicitudesDescargasComponent, canActivate: [ AdminGuard ], data: { titulo: 'Solicitud de descargas' }},
-    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
-    
-    {path: 'solicitudes_aprobaciones', component: SolicitudesAprobacionesComponent, canActivate: [AdminGuard], data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas'}},
-    {path: 'solicitud_aprobacion/:id', component: SolicitudAprobacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Aprobar descarga'}},
+    {path: 'solicitudes_descargas', component: SolicitudesDescargasComponent,
+    canActivate: [ AdminGuard ], data: { titulo: 'Solicitud de descargas' }},
+
+    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,
+    canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+
+    {path: 'solicitudes_aprobaciones', component: SolicitudesAprobacionesComponent,
+    canActivate: [AdminGuard], data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas'}},
+
+    {path: 'solicitud_aprobacion/:id', component: SolicitudAprobacionComponent,
+    canActivate: [ AdminGuard ], data: {titulo: 'Aprobar descarga'}},
     // Mantenimientos ADMIN ROLE
     {
         path: 'operadores',
