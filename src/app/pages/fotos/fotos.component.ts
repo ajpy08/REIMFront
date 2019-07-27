@@ -37,7 +37,7 @@ export class FotosComponent implements OnInit {
   }
 
   cargarManiobra( id: string) {
-    this._maniobraService.cargarManiobra( id )
+    this._maniobraService.getManiobra( id )
           .subscribe( maniobra => {
 
             console.log( maniobra );

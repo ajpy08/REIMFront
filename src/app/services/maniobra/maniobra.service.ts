@@ -26,14 +26,14 @@ export class ManiobraService {
   }
 
   getManiobraXContenedorViajeBuque(contenedor: string, viaje: string, buque: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobra/buscaxcontenedorviaje?contenedor=' + contenedor + '&viaje=' + viaje + '&buque=' + buque;
+    const url = URL_SERVICIOS + '/maniobras/buscaxcontenedorviaje?contenedor=' + contenedor + '&viaje=' + viaje + '&buque=' + buque;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
   }
 
   getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
     // if (contenedor===undefined)  contenedor="";
     // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-    const url = URL_SERVICIOS + '/maniobra/transito?desde=' + desde;
+    const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde+'';
     return this.http.get( url );
   }
 
@@ -42,7 +42,7 @@ export class ManiobraService {
   cargarManiobras(desde: number = 0): Observable<any> {
 
     // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/maniobra?desde=' + desde;
+    let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
     return this.http.get( url )
     .pipe(map( (resp: any) => {
 

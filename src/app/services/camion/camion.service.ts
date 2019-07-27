@@ -22,7 +22,10 @@ export class CamionService {
     let url = URL_SERVICIOS + '/camion?desde=' + desde;
     return this.http.get(url);
   }
-
+  getCamionesXIdTransportista( id: string): Observable<any> {
+    const url = URL_SERVICIOS + '/camion/transportista/' + id
+    return this.http.get(url);
+  }
   getCamion(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/camion/' + id;
     return this.http.get(url)
