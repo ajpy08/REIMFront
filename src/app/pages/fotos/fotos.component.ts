@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FileItem } from '../../models/file-item.models';
-import { ManiobraService } from '../../services/maniobra/maniobra.service';
+import { ManiobraService } from '../maniobras/maniobra.service';
 import { Maniobra } from '../../models/maniobras.models';
 import { SubirArchivoService } from 'src/app/services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -37,7 +37,7 @@ export class FotosComponent implements OnInit {
   }
 
   cargarManiobra( id: string) {
-    this._maniobraService.cargarManiobra( id )
+    this._maniobraService.getManiobra( id )
           .subscribe( maniobra => {
 
             console.log( maniobra );

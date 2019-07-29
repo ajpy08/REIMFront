@@ -9,7 +9,7 @@ export { OperadorService } from './operador/operador.service';
 export { ClienteService } from './cliente/cliente.service';
 export { CamionService } from './camion/camion.service';
 export { ContenedorService } from './contenedor/contenedor.service';
-export { ManiobraService } from './maniobra/maniobra.service';
+export { ManiobraService } from '../pages/maniobras/maniobra.service';
 export { ViajeService } from '../pages/viajes/viaje.service';
 export { AgenciaService } from './agencia/agencia.service';
 export { TransportistaService } from './transportista/transportista.service';

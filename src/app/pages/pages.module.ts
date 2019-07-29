@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
 // MODULES
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
-import { TransitoComponent } from './transito/transito.component';
-import { IngresoCamionComponent } from './transito/ingreso_camion.component';
+import { TransitoComponent } from './maniobras/transito.component';
+import { LlegadaComponent } from './maniobras/llegada.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -80,7 +80,7 @@ import {
         UsuarioResetPassComponent,
         ManiobrasComponent,
         TransitoComponent,
-        IngresoCamionComponent,
+        LlegadaComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,

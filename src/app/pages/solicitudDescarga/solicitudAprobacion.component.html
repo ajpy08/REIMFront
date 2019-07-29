@@ -126,7 +126,7 @@
                             <!--/span-->
                         </div>
                     </div>
-                    <form class="form-horizontal" [formGroup]="regForm">
+                    <form class="form-horizontal" [formGroup]="regForm" (click)="apruebaSolicitud()">
                         <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -146,7 +146,7 @@
                                                     <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
                                                     <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                                                     <td>{{this.contenedores.controls[i].get('estado').value}}</td>
-                                                    <td>SASAS                                                  </td>
+                                                    <td>{{this.contenedores.controls[i].get('maniobra').value}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -160,6 +160,9 @@
                         <button type="button" class="btn btn-inverse">Cancelar</button>
                     </div>
                 </form>
+                                    <p>Form value {{ regForm.value | json }} </p>
+                    <p> Form status {{ regForm.status | json}} </p>
+                    <p> Form status2 {{ regForm.pristine | json}} </p>
             </div>
         </div>
     </div>

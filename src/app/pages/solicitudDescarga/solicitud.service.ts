@@ -64,6 +64,25 @@ export class SolicitudService {
         }
     }
 
+    apruebaSolicitud(solicitud: Solicitud): Observable<any> {
+        let url = URL_SERVICIOS + '/solicitud/aprueba';
+        url += '/' + solicitud._id;
+        url += '?token=' + this._usuarioService.token;
+        console.log(solicitud);
+        return this.http.put(url, solicitud)
+            .pipe(map((resp: any) => {
+                swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+                return resp.solicitud;
+            }),
+                catchError(err => {
+                    swal(err.error.mensaje, err.error.errors.message, 'error');
+                    return throwError(err);
+                }));
+    }
+
+
+
+
 
 
 
@@ -110,24 +129,6 @@ export class SolicitudService {
     }
 
 
-
-    guardarSolicitudManiobra(solicitud: Solicitud): Observable<any> {
-        // tslint:disable-next-line: prefer-const
-        let url = URL_SERVICIOS + '/solicitudD/solicitudmaniobra';
-        // Actualiazando
-        url += '/' + solicitud._id;
-        url += '?token=' + this._usuarioService.token;
-
-        return this.http.put(url, solicitud)
-            .pipe(map((resp: any) => {
-                swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
-                return resp.solicitud;
-            }),
-                catchError(err => {
-                    swal(err.error.mensaje, err.error.errors.message, 'error');
-                    return throwError(err);
-                }));
-    }
 
     buscarSolicitud(termino: string): Observable<any> {
         // tslint:disable-next-line: prefer-const

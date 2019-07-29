@@ -29,7 +29,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "i": "^0.3.6",
     "jspdf": "^1.4.1",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "rxjs": "^6.3.3",
     "sweetalert": "^2.1.2",
     "zone.js": "^0.8.26"

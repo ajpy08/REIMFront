@@ -58,7 +58,7 @@ export const MY_FORMATS = {
       public _modalUploadService: ModalUploadService) {}
 
     ngOnInit() {
-      this._buqueService.getBuques().subscribe( buques => this.buques = buques );
+      this._buqueService.getBuques().subscribe( buques => this.buques = buques.buques );
       this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');

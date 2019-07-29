@@ -26,7 +26,7 @@
                                     <label class="control-label"><b>Buque: </b></label>
                                     <mat-select formControlName="buque" type="text" placeholder="Seleccione un buque">
                                         <mat-option *ngFor="let buque of buques" [value]="buque._id">
-                                            {{buque.buque}}
+                                            {{buque.nombre}}
                                         </mat-option>
                                     </mat-select>
                                 </div>

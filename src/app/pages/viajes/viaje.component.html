@@ -15,7 +15,7 @@
                             <mat-form-field class="inputpersonalizado">
                                 <mat-select formControlName="buque" placeholder="Seleccione un Buque">
                                     <mat-option *ngFor="let buque of buques" [value]="buque._id">
-                                        {{ buque.buque }}
+                                        {{ buque.nombre }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
