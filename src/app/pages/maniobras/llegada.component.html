@@ -1,10 +1,14 @@
-
 <div class="row animated fadeIn">
     <div class="col-md-6">
         <div class="card card-body">
             <div class="row">
                 <div class="col-sm-12 col-xs-12">
                     <form [formGroup]="regForm" (ngSubmit)="registraLlegada()" novalidate>
+                        <div class="my-container">
+                            <mat-form-field>
+                                <input matInput formControlName="contenedor" type="text" placeholder="Contenedor">
+                            </mat-form-field>
+                        </div>
                         <div class="form-group has-success">
                             <label class="control-label"><b>A.A</b></label>
                             <mat-select formControlName="agencia" type="text" placeholder="Seleccione una agencia">
@@ -25,7 +29,7 @@
                             <label class="control-label"><b>Camion</b></label>
                             <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
                                 <mat-option *ngFor="let camion of camiones" [value]="camion._id">
-                                    {{camion.placa}}
+                                    {{camion.placa + ' | ' + camion.noEconomico}}
                                 </mat-option>
                             </mat-select>
                         </div>
@@ -41,13 +45,13 @@
                             <label class="control-label"><b>Fecha y Hora de llegada</b></label>
                             <div>
                                 <mat-form-field class="inputpersonalizado">
-                                    <input matInput formControlName="fLlegada"  [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de llegada">
+                                    <input matInput formControlName="fLlegada" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de llegada">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker #picker></mat-datepicker>
-                                    
+
                                 </mat-form-field>
                                 <br>
-                                <mat-form-field class="time"  >
+                                <mat-form-field class="time">
                                     <input matInput formControlName="hLlegada" type="time" placeholder="Hora Llegada">
                                 </mat-form-field>
                             </div>
@@ -56,15 +60,15 @@
                             <i class="fa fa-save"></i>
                             Registrar Llegada
                         </button>
-                            <a routerLink="/transito" class="btn btn-danger waves-effect waves-light">Regresar</a>
+                        <a routerLink="/transito" class="btn btn-danger waves-effect waves-light">Regresar</a>
                     </form>
                     <p>Form value {{ regForm.value | json }} </p>
                 </div>
             </div>
+        </div>
     </div>
-</div>   
 
-                        <!-- <div class="my-container">
+    <!-- <div class="my-container">
                             <h3>Datos de la maniobra</h3>
                             <h3>Contenedor: {{maniobra.contenedor}}</h3>
                             <div class="col-md-3">
@@ -84,5 +88,3 @@
                             </div>
 
                         </div> -->
- 
-                   

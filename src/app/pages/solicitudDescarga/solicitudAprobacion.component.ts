@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Solicitud } from './solicitud.models';
 import { SolicitudService } from '../../services/service.index';
-import { ManiobraService } from '../../services/maniobra/maniobra.service';
+import { ManiobraService } from '../maniobras/maniobra.service';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';

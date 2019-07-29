@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Maniobra } from '../../models/maniobra.models';
 import { ManiobraService } from '../../services/service.index';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Transportista } from '../../models/transportista.models';
 import { TransportistaService } from '../../services/service.index';
 import { Agencia } from '../../models/agencia.models';
@@ -10,32 +11,35 @@ import { Operador } from '../../models/operador.models';
 import { OperadorService } from '../../services/service.index';
 import { Camion } from '../../models/camion.models';
 import { CamionService } from '../../services/service.index';
-
-import {MatDatepickerModule} from '@angular/material/datepicker'
-
 import { Router, ActivatedRoute } from '@angular/router';
-import { ModalDropzoneService } from '../../components/modal-dropzone/modal-dropzone.service';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
-import {default as _rollupMoment} from 'moment';
-const moment = _rollupMoment || _moment;
+const moment = _moment;
 
- 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: ['l', 'L'],
+  },
+  display: {
+    dateInput: 'L',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-llegada',
   templateUrl: './llegada.component.html',
-  providers: [
+  providers: [DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
     {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
   ],
 })
+
 
 
 export class LlegadaComponent implements OnInit {
@@ -46,17 +50,15 @@ export class LlegadaComponent implements OnInit {
   regForm: FormGroup;
   maniobra: Maniobra;
 
-
-
   constructor(
     public _maniobraService: ManiobraService,
     public _transportistaService: TransportistaService,
-    public _agenciaService: AgenciaService,        
+    public _agenciaService: AgenciaService,
     public _operadorService: OperadorService,
     public _camionService: CamionService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder, private datePipe: DatePipe) { }
 
 
   ngOnInit() {
@@ -66,22 +68,35 @@ export class LlegadaComponent implements OnInit {
     this.maniobra = new Maniobra('', '', '', '', '', '', '', '', '', '' , '', '', '', null, '', '', '', null, null, '', null, '');
     this.createFormGroup();
     this.cargarManiobra( id );
+
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
-      agencia: [''],
+      contenedor: [{value: '', disabled: true}],
+      tipo: [{value: '', disabled: true}],
+      cliente: [{value: '', disabled: true}],
+      agencia: [{value: '', disabled: true}],
       transportista: [''],
       camion: [''],
       operador: [''],
-      fLlegada: [new Date()],
-      hLlegada: [''],
+      fLlegada: [moment()],
+      hLlegada: [this.datePipe.transform(new Date(), 'HH:mm')],
     });
   }
 
   get _id() {
     return this.regForm.get('_id');
+  }
+  get contenedor() {
+    return this.regForm.get('contenedor');
+  }
+  get tipo() {
+    return this.regForm.get('tipo');
+  }
+  get cliente() {
+    return this.regForm.get('cliente');
   }
   get agencia() {
     return this.regForm.get('agencia');
@@ -107,7 +122,12 @@ export class LlegadaComponent implements OnInit {
       this.maniobra = maniob.maniobra;
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia);
-      if(maniob.maniobra.transportista) this.cargaOperadores(maniob.maniobra.transportista);
+      this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
+      this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
+      this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
+      if ( maniob.maniobra.transportista ) {
+        this.cargaOperadores(maniob.maniobra.transportista);
+      }
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
@@ -115,19 +135,21 @@ export class LlegadaComponent implements OnInit {
   }
 
   cargaOperadores( id: string) {
-    console.log(id);
-    this._operadorService.getOperadoresTransportista( id )
+    this._operadorService.getOperadoresTransportista( id, true )
     .subscribe( resp => this.operadores = resp.operadores);
     this.cargaCamiones(id);
   }
-  
+
   cargaCamiones( id: string ) {
     this._camionService.getCamionesXIdTransportista( id )
     .subscribe(resp => this.camiones = resp.camiones);
   }
 
   registraLlegada() {
-
+    if (this.regForm.valid) {
+      this._maniobraService.registraLlegada(this.regForm.value).subscribe(res => {
+        this.regForm.markAsPristine();
+        });
+      }
   }
-
 }

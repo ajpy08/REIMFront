@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Maniobra } from '../../models/maniobra.models';
-import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
+import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
 import swal from 'sweetalert';
@@ -11,8 +11,8 @@ import { FileItem } from '../../models/file-item.models';
 
 @Injectable()
 export class ManiobraService {
-  // tslint:disable-next-line:no-inferrable-types
-  totalManiobras: number = 0;
+
+  totalManiobras = 0;
   maniobra: Maniobra;
   constructor(
     public http: HttpClient,
@@ -33,11 +33,24 @@ export class ManiobraService {
   getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
     // if (contenedor===undefined)  contenedor="";
     // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-    const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde+'';
+    const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
     return this.http.get( url );
   }
 
-
+  registraLlegada( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/registra_llegada';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Maniobra actualizada', '', 'success');
+      return resp.viaje;
+    }),
+    catchError( err => {
+      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      return throwError(err);
+    }));
+  }
 
   cargarManiobras(desde: number = 0): Observable<any> {
 
