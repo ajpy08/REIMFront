@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
-import { Maniobra } from '../../models/maniobra.models';
+import { Maniobra } from './maniobra.models';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
@@ -36,8 +36,21 @@ export class ManiobraService {
     const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
     return this.http.get( url );
   }
-
-  registraLlegada( maniobra: Maniobra ): Observable<any> {
+  
+  getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
+    // if (contenedor===undefined)  contenedor="";
+    // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+    const url = URL_SERVICIOS + '/maniobras/espera/?desde=' + desde ;
+    return this.http.get( url );
+  }
+  getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
+    // if (contenedor===undefined)  contenedor="";
+    // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+    const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
+    return this.http.get( url );
+  }
+  
+  registraLlegadaEntrada( maniobra: Maniobra ): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/registra_llegada';
     url += '/' + maniobra._id;
     url += '?token=' + this._usuarioService.token;

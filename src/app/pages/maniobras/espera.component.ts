@@ -34,8 +34,8 @@ export const MY_FORMATS = {
 
 declare var jQuery: any;
 @Component({
-  selector: 'app-transito',
-  templateUrl: './transito.component.html',
+  selector: 'app-espera',
+  templateUrl: './espera.component.html',
   styles: [],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
@@ -43,7 +43,7 @@ declare var jQuery: any;
   ],
 })
 
-export class TransitoComponent implements OnInit {
+export class EnEsperaComponent implements OnInit {
   date = new FormControl(moment());
   maniobras: any[] = [];
   data: any = {fechaCreado: ''};
@@ -59,7 +59,7 @@ export class TransitoComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getManiobrasTransito()
+    this._maniobraService.getManiobrasEnEspera()
     .subscribe(maniobras => {
         if (maniobras.code !== 200) {
           this.totalRegistros = maniobras.total;

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Maniobra } from '../../models/maniobra.models';
+import { Maniobra } from './maniobra.models';
 import { ManiobraService } from '../../services/service.index';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Transportista } from '../../models/transportista.models';
@@ -31,8 +31,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-llegada',
-  templateUrl: './llegada.component.html',
+  selector: 'app-revisa',
+  templateUrl: './revisa.component.html',
   providers: [DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
@@ -40,9 +40,7 @@ export const MY_FORMATS = {
   ],
 })
 
-
-
-export class LlegadaComponent implements OnInit {
+export class RevisaComponent implements OnInit {
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
   operadores: Operador[] = [];
@@ -60,7 +58,6 @@ export class LlegadaComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder, private datePipe: DatePipe) { }
 
-
   ngOnInit() {
     this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
     this._transportistaService.getTransportistas().subscribe( resp => this.transportistas = resp.transportistas );
@@ -70,7 +67,6 @@ export class LlegadaComponent implements OnInit {
     this.cargarManiobra( id );
 
   }
-
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
@@ -83,6 +79,7 @@ export class LlegadaComponent implements OnInit {
       operador: [''],
       fLlegada: [moment()],
       hLlegada: [this.datePipe.transform(new Date(), 'HH:mm')],
+      hEntrada: [''],
     });
   }
 
@@ -116,6 +113,9 @@ export class LlegadaComponent implements OnInit {
   get hLlegada() {
     return this.regForm.get('hLlegada');
   }
+  get hEntrada() {
+    return this.regForm.get('hEntrada');
+  }
 
   cargarManiobra( id: string) {
     this._maniobraService.getManiobra( id ).subscribe( maniob => {
@@ -131,6 +131,9 @@ export class LlegadaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
+      this.regForm.controls['fLlegada'].setValue(maniob.manibra.fLlegada);
+      this.regForm.controls['hLlegada'].setValue(maniob.manibra.hLlegada);
+      this.regForm.controls['hEntrada'].setValue(maniob.manibra.hEntrada);
     });
   }
 
@@ -145,9 +148,9 @@ export class LlegadaComponent implements OnInit {
     .subscribe(resp => this.camiones = resp.camiones);
   }
 
-  registraLlegada() {
+  guardaCambios() {
     if (this.regForm.valid) {
-      this._maniobraService.registraLlegada(this.regForm.value).subscribe(res => {
+      this._maniobraService.registraLlegadaEntrada(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         });
       }
