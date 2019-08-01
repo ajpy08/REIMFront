@@ -1,0 +1,28 @@
+<div class="row animated fadeIn">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0" *ngIf="reparacion">Buque: {{ reparacion.descripcion }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarReparacion()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
+                  placeholder="Descripcion de la reparación">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="costo" name="costo" type="text" class="form-control"
+                  placeholder="Costo de la reparación">
+              </mat-form-field>
+            </div>
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <a routerLink="/reparaciones" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
