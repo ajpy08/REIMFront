@@ -9,7 +9,10 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { TransitoComponent } from './maniobras/transito.component';
-import { LlegadaComponent } from './maniobras/llegada.component';
+import { LlegadaEntradaComponent } from './maniobras/llegada_entrada.component';
+import { EnEsperaComponent } from './maniobras/espera.component';
+import { RevisionComponent } from './maniobras/revision.component';
+import { RevisaComponent } from './maniobras/revisa.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -81,7 +84,10 @@ import {
         UsuarioResetPassComponent,
         ManiobrasComponent,
         TransitoComponent,
-        LlegadaComponent,
+        LlegadaEntradaComponent,
+        EnEsperaComponent,
+        RevisionComponent,
+        RevisaComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,
