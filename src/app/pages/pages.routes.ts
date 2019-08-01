@@ -44,6 +44,8 @@ import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.compo
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
+import { ReparacionesComponent } from './reparaciones/reparaciones.component';
+import { ReparacionComponent } from './reparaciones/reparacion.component';
 
 
 // Guards
@@ -182,6 +184,13 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Buques' }
     },
     {path: 'buque/:id', component: BuqueComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    {
+        path: 'reparaciones',
+        component: ReparacionesComponent,
+        canActivate: [ AdminGuard ],
+        data: { titulo: 'Mantenimiento de Reparaciones' }
+    },
+    {path: 'reparacion/:id', component: ReparacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     ];
     export const PAGES_ROUTES = RouterModule.forChild( pagesRoutes );

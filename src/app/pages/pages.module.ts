@@ -48,6 +48,8 @@ import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.compo
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
+import { ReparacionesComponent } from './reparaciones/reparaciones.component';
+import { ReparacionComponent } from './reparaciones/reparacion.component';
 import { SolicitudesAprobacionesComponent } from './solicitudDescarga/solicitudesAprobaciones.component';
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
@@ -69,7 +71,6 @@ import {
     MatRadioModule,
     MatStepperModule
   } from '@angular/material';
-
 
 @NgModule({
     declarations: [
@@ -116,7 +117,9 @@ import {
         BuquesComponent,
         BuqueComponent,
         SolicitudesAprobacionesComponent,
-        RegisterComponent
+        RegisterComponent,
+        ReparacionesComponent,
+        ReparacionComponent
     ],
     exports: [
         DashboardComponent
