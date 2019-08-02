@@ -13,6 +13,7 @@ import { LlegadaEntradaComponent } from './maniobras/llegada_entrada.component';
 import { EnEsperaComponent } from './maniobras/espera.component';
 import { RevisionComponent } from './maniobras/revision.component';
 import { RevisaComponent } from './maniobras/revisa.component';
+import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -88,6 +89,7 @@ import {
         EnEsperaComponent,
         RevisionComponent,
         RevisaComponent,
+        LavadoReparacionComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,
