@@ -49,6 +49,11 @@ export class ManiobraService {
     const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
     return this.http.get( url );
   }
+
+  getManiobrasVacio(viaje?: string, estado?: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/vacio/?viaje=' + viaje + '/?estado=' + estado ;
+    return this.http.get( url );
+  }
   
   registraLlegadaEntrada( maniobra: Maniobra ): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/registra_llegada';
