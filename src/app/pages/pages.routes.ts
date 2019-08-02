@@ -9,6 +9,8 @@ import { EnEsperaComponent } from './maniobras/espera.component';
 import { RevisionComponent } from './maniobras/revision.component';
 import { RevisaComponent } from './maniobras/revisa.component';
 
+import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
+
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
@@ -83,7 +85,8 @@ const pagesRoutes: Routes = [
     {path: 'espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
     {path: 'revision', component: RevisionComponent, data: {titulo: 'Revision'}},
     {path: 'revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
-    
+    {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},

@@ -25,6 +25,11 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
+  getManiobraConIncludes( id: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobra/' + id + '/includes';
+    return this.http.get( url );
+  }
+
   getManiobraXContenedorViajeBuque(contenedor: string, viaje: string, buque: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/buscaxcontenedorviaje?contenedor=' + contenedor + '&viaje=' + viaje + '&buque=' + buque;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
@@ -49,9 +54,29 @@ export class ManiobraService {
     const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
     return this.http.get( url );
   }
-  
+
+  getManiobrasLavadoReparacion(desde: number = 0, contenedor?: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
+    return this.http.get( url );
+  }
+
   registraLlegadaEntrada( maniobra: Maniobra ): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/registra_llegada';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Maniobra actualizada', '', 'success');
+      return resp.viaje;
+    }),
+    catchError( err => {
+      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      return throwError(err);
+    }));
+  }
+
+  registraLavRepDescarga( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/registra_descarga';
     url += '/' + maniobra._id;
     url += '?token=' + this._usuarioService.token;
     return this.http.put( url, maniobra )
