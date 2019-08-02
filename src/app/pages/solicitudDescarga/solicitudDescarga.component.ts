@@ -197,7 +197,6 @@ export class SolicitudDescargaComponent implements OnInit {
   }
   cargaCliente(event) {
     let cliente = new Cliente();
-    console.log("asas");
     cliente = this.clientes.find(x => x._id === event.value);
     if (cliente.credito) {
       this.credito.enable({onlySelf : true});
