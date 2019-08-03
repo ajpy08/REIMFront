@@ -22,7 +22,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Contenedores en transito( <small>{{totalRegistros}}</small> )</h3>
+                <h3 class="card-title">Contenedores en Lavado Reparación( <small>{{totalRegistros}}</small> )</h3>
                 <div class="form-group">
                     <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" />
                 </div>
@@ -40,6 +40,7 @@
                                 <th>A.A.</th>
                                 <th>Lavado</th>
                                 <th>Reparaciones</th>
+                                <th>Grado</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -53,16 +54,26 @@
                                 <td>{{maniobra.estado}}</td>
                                 <td>{{maniobra.cliente?.razonSocial}}</td>
                                 <td>{{maniobra.agencia?.razonSocial}}</td>
-                                <td>{{maniobra.lavado}}</td>
+                                <td>{{maniobra.lavado}}
+                                    <button [routerLink]="['/fotos', maniobra._id ]" class="btn btn-primary">
+                                        <i class="fa fa-edit"></i>
+                                        Fotos 
+                                    </button>
+                                </td>
                                 <td>
+                                    <button [routerLink]="['/fotos', maniobra._id ]" class="btn btn-primary">
+                                        <i class="fa fa-edit"></i>
+                                        Fotos
+                                    </button>
                                     <p *ngFor="let rep of maniobra.reparaciones">
                                         {{rep.reparacion}}
                                     </p>
-
+                                    
                                 </td>
+                                <td>{{maniobra.grado}}</td>
                                 <td>
                                     <button [routerLink]="['/termina_lavado_reparacion', maniobra._id ]" class="btn btn-primary">
-                                    <i class="fa fa-edit"></i>
+                                        <i class="fa fa-edit"></i>
                                     </button>
                                 </td>
                             </tr>

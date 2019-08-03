@@ -8,13 +8,14 @@ import { CommonModule } from '@angular/common';
 // MODULES
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
-import { TransitoComponent } from './maniobras/transito.component';
-import { LlegadaEntradaComponent } from './maniobras/llegada_entrada.component';
-import { EnEsperaComponent } from './maniobras/espera.component';
-import { RevisionComponent } from './maniobras/revision.component';
-import { RevisaComponent } from './maniobras/revisa.component';
-import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
-import { TerminaLavadoReparacionComponent } from './maniobras/termina_lavado_reparacion.component';
+import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
+import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
+import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
+import { RevisionComponent } from './maniobras/revision_revisa/revision.component';
+import { RevisaComponent } from './maniobras/revision_revisa/revisa.component';
+import { LavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/lavado_reparacion.component';
+import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/termina_lavado_reparacion.component';
+import { DisponiblesComponent } from './maniobras/disponibles.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -40,14 +41,17 @@ import { ViajeComponent } from './viajes/viaje.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
 import { NavierasComponent } from './navieras/navieras.component';
 import { NavieraComponent } from './navieras/naviera.component';
-import { SolicitudesDescargasComponent } from './solicitudDescarga/solicitudes-descargas.component';
-import { SolicitudDescargaComponent } from './solicitudDescarga/solicitudDescarga.component';
+import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
+import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
+
+import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
+import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
 import { FotosComponent } from './fotos/fotos.component';
 import { NgDropFilesDirective } from '.././directives/ng-drop-files.directive';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
-import { SolicitudAprobacionComponent } from './solicitudDescarga/solicitudAprobacion.component';
+import { SolicitudAprobacionComponent } from './solicitudes/solicitudAprobacion.component';
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
 import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
@@ -55,7 +59,7 @@ import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
 import { ReparacionesComponent } from './reparaciones/reparaciones.component';
 import { ReparacionComponent } from './reparaciones/reparacion.component';
-import { SolicitudesAprobacionesComponent } from './solicitudDescarga/solicitudesAprobaciones.component';
+import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
 import { PipesModule } from '../pipes/pipes.module';
@@ -92,6 +96,7 @@ import {
         RevisaComponent,
         LavadoReparacionComponent,
         TerminaLavadoReparacionComponent,
+        DisponiblesComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,
@@ -115,8 +120,10 @@ import {
         AddcontainersComponent,
         NavierasComponent,
         NavieraComponent,
-        SolicitudesDescargasComponent,
+        SolicitudesDescargaComponent,
         SolicitudDescargaComponent,
+        SolicitudesCargaComponent,
+        SolicitudCargaComponent,
         EmpresaComponent,
         MisclientesComponent,
         MiclienteComponent,

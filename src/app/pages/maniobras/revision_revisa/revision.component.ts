@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { Maniobra } from './maniobra.models';
-import { ManiobraService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
+import { Maniobra } from '../maniobra.models';
+import { ManiobraService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -34,8 +34,8 @@ export const MY_FORMATS = {
 
 declare var jQuery: any;
 @Component({
-  selector: 'app-lavado_reparacion',
-  templateUrl: './lavado_reparacion.component.html',
+  selector: 'app-revision',
+  templateUrl: './revision.component.html',
   styles: [],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
@@ -43,7 +43,7 @@ declare var jQuery: any;
   ],
 })
 
-export class LavadoReparacionComponent implements OnInit {
+export class RevisionComponent implements OnInit {
   date = new FormControl(moment());
   maniobras: any[] = [];
   data: any = {fechaCreado: ''};
@@ -59,7 +59,7 @@ export class LavadoReparacionComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getManiobrasLavadoReparacion()
+    this._maniobraService.getManiobrasRevision()
     .subscribe(maniobras => {
         if (maniobras.code !== 200) {
           this.totalRegistros = maniobras.total;

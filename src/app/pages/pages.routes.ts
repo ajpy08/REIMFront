@@ -2,15 +2,18 @@ import {RouterModule, Routes} from '@angular/router';
 // import { PagesComponent } from './pages.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 
-import { TransitoComponent } from './maniobras/transito.component';
-import { LlegadaEntradaComponent } from './maniobras/llegada_entrada.component';
+import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
+import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
 
-import { EnEsperaComponent } from './maniobras/espera.component';
-import { RevisionComponent } from './maniobras/revision.component';
-import { RevisaComponent } from './maniobras/revisa.component';
+import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
 
-import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
-import { TerminaLavadoReparacionComponent } from './maniobras/termina_lavado_reparacion.component';
+import { RevisionComponent } from './maniobras/revision_revisa/revision.component';
+import { RevisaComponent } from './maniobras/revision_revisa/revisa.component';
+
+import { LavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/lavado_reparacion.component';
+import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/termina_lavado_reparacion.component';
+
+import { DisponiblesComponent } from './maniobras/disponibles.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -37,11 +40,14 @@ import { FotosComponent } from './fotos/fotos.component';
 import { NavierasComponent } from './navieras/navieras.component';
 import { NavieraComponent } from './navieras/naviera.component';
 
-import { SolicitudesDescargasComponent } from './solicitudDescarga/solicitudes-descargas.component';
-import { SolicitudDescargaComponent } from './solicitudDescarga/solicitudDescarga.component';
+import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
+import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
 
-import { SolicitudesAprobacionesComponent } from './solicitudDescarga/solicitudesAprobaciones.component';
-import { SolicitudAprobacionComponent } from './solicitudDescarga/solicitudAprobacion.component';
+import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
+import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
+
+import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
+import { SolicitudAprobacionComponent } from './solicitudes/solicitudAprobacion.component';
 
 import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
@@ -88,6 +94,7 @@ const pagesRoutes: Routes = [
     {path: 'revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
     {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
     {path: 'termina_lavado_reparacion/:id', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+    {path: 'disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
 
     
 
@@ -98,11 +105,13 @@ const pagesRoutes: Routes = [
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
     // Solicitud Descarga
-    {path: 'solicitudes_descargas', component: SolicitudesDescargasComponent,
-    canActivate: [ AdminGuard ], data: { titulo: 'Solicitud de descargas' }},
+    {path: 'solicitudes_descarga', component: SolicitudesDescargaComponent,canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de descarga' }},
+    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
-    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,
-    canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    // Solicitud Carga
+    {path: 'solicitudes_carga', component: SolicitudesCargaComponent,canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga' }},
+    {path: 'solicitud_carga/:id', component: SolicitudCargaComponent,canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos carga'}},
+
 
     {path: 'solicitudes_aprobaciones', component: SolicitudesAprobacionesComponent,
     canActivate: [AdminGuard], data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas'}},

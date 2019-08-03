@@ -36,9 +36,12 @@ export class ManiobraService {
   }
 
   getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
-    // if (contenedor===undefined)  contenedor="";
-    // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
     const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
+    return this.http.get( url );
+  }
+
+  getContenedoresDisponibles( ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
     return this.http.get( url );
   }
   

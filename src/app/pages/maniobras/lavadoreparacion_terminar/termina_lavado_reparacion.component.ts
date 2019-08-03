@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Lavado } from '../../models/lavado.models';
-import { ManiobraService } from '../../services/service.index';
-import { Reparacion } from '../../models/reparacion.models';
-import { ReparacionService } from '../../services/reparacion/reparacion.service';
+import { Lavado } from '../../../models/lavado.models';
+import { ManiobraService } from '../../../services/service.index';
+import { Reparacion } from '../../../models/reparacion.models';
+import { ReparacionService } from '../../../services/reparacion/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
-import { Cliente } from '../../models/cliente.models';
+import { Cliente } from '../../../models/cliente.models';
 const moment = _moment;
 
 export const MY_FORMATS = {

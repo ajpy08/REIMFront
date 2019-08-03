@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Solicitud } from './solicitud.models';
-import { SolicitudService } from '../../services/service.index';
+import { Solicitud } from '../solicitud.models';
+import { SolicitudService } from '../../../services/service.index';
 
 @Component({
-  selector: 'app-solicitudes-descargas',
-  templateUrl: './solicitudes-descargas.component.html',
+  selector: 'app-solicitudes_descarga',
+  templateUrl: './solicitudes_descarga.component.html',
   styles: []
 })
-export class SolicitudesDescargasComponent implements OnInit {
+export class SolicitudesDescargaComponent implements OnInit {
   // tslint:disable-next-line:typedef-whitespace
   prealtas: Solicitud[] = [];
   // tslint:disable-next-line:no-inferrable-types
