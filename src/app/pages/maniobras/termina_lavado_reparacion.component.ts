@@ -26,8 +26,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-revisa',
-  templateUrl: './revisa.component.html',
+  selector: 'app-termina_lavado_reparacion',
+  templateUrl: './termina_lavado_reparacion.component.html',
   providers: [DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
@@ -35,11 +35,11 @@ export const MY_FORMATS = {
   ],
 })
 
-export class RevisaComponent implements OnInit {
+export class TerminaLavadoReparacionComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado: Lavado[] = [new Lavado('B','Basico'),new Lavado('E','Especial')];
-  grados: string[] = ['A','B','C'];
   tiposReparaciones: Reparacion[] = [];
+  grados: string[] = ['A','B','C'];
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -69,11 +69,15 @@ export class RevisaComponent implements OnInit {
       hLlegada: [{value: '', disabled: true}],
       hEntrada: [{value: '', disabled: true}],
       hSalida: [''],
-      grado: [''],
       lavado: [''],
       lavadoObservacion: [''],
       reparaciones: this.fb.array([ this.creaReparacion('', '', 0) ]),
-      reparacionesObservacion: ['']
+      reparacionesObservacion: [''],
+      fTerminacionLavado: [''],
+      hTerminacionLavado: [''],
+      fTerminacionReparacion: [''],
+      hTerminacionReparacion: [''],
+      grado: ['']
     });
   }
 
@@ -113,14 +117,26 @@ export class RevisaComponent implements OnInit {
   get hSalida() {
     return this.regForm.get('hSalida');
   }
-  get grado() {
-    return this.regForm.get('grado');
-  }
   get lavado() {
     return this.regForm.get('lavado');
   }
   get lavadoOperacion() {
     return this.regForm.get('lavadoOperacion');
+  }
+  get fTerminacionLavado() {
+    return this.regForm.get('fTerminacionLavado');
+  }
+  get hTerminacionLavado() {
+    return this.regForm.get('hTerminacionLavado');
+  }
+  get fTerminacionReparacion() {
+    return this.regForm.get('fTerminacionReparacion');
+  }
+  get hTerminacionReparacion() {
+    return this.regForm.get('hTerminacionReparacion');
+  }
+  get grado() {
+    return this.regForm.get('grado');
   }
   get reparaciones() {
     return this.regForm.get('reparaciones') as FormArray;
@@ -192,6 +208,12 @@ export class RevisaComponent implements OnInit {
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
       }else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
+      }
+
+      if (maniob.maniobra.grado){
+        this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      }else {
+        this.regForm.controls['grado'].setValue(undefined);
       }
 
     });

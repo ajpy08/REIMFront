@@ -104,13 +104,13 @@ cargarImagenesMongo(imagenes: FileItem[], tipo: string, id: string) {
   }
 }*/
 
- // tslint:disable-next-line:no-shadowed-variable
+ 
  return new Promise((resolve, reject) => {
-   // tslint:disable-next-line:prefer-const
+   
    for (let item of imagenes) {
-       // tslint:disable-next-line:prefer-const
+       
    let formData: any = new FormData();
-   // tslint:disable-next-line:prefer-const
+   
    let xhr = new XMLHttpRequest();
    formData.append('imagen', item.archivo, item.nombreArchivo);
    xhr.onload = function() {
@@ -130,8 +130,6 @@ cargarImagenesMongo(imagenes: FileItem[], tipo: string, id: string) {
       statusText: xhr.statusText
     });
   };
-
-       // tslint:disable-next-line:prefer-const
        let url = URL_SERVICIOS + '/upload/' + tipo + '/' + id;
 
        xhr.open('put', url , true);

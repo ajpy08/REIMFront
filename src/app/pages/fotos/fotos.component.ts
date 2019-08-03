@@ -11,6 +11,10 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './fotos.component.html',
   styleUrls: ['./fotos.component.css']
 })
+
+
+
+
 export class FotosComponent implements OnInit {
   // maniobra: Maniobra;
   estaSobreElemento = false;
@@ -19,6 +23,11 @@ export class FotosComponent implements OnInit {
   maniobra: Maniobra = new Maniobra();
   foto: Maniobra = new Maniobra('');
   selected = 'fotos_lavado';
+
+
+
+  items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},{ruta: '../../../assets/images/2.jpg', estado: ''},{ruta: '../../../assets/images/1.jpg', estado: ''}];
+  
   constructor(public _maniobraService: ManiobraService, public _subirArchivoService: SubirArchivoService, public router: Router,
     public activatedRoute: ActivatedRoute) {
       activatedRoute.params.subscribe( params => {

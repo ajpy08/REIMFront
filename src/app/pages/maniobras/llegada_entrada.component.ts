@@ -131,9 +131,16 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
-      this.regForm.controls['fLlegada'].setValue(maniob.manibra.fLlegada);
-      this.regForm.controls['hLlegada'].setValue(maniob.manibra.hLlegada);
-      this.regForm.controls['hEntrada'].setValue(maniob.manibra.hEntrada);
+      if (maniob.maniobra.fLlegada){
+        this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
+      }
+      if (maniob.maniobra.hLlegada){
+        this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
+      }
+      if (maniob.maniobra.hEntrada){
+        this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
+      }
+      
     });
   }
 
