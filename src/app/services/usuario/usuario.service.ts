@@ -224,17 +224,17 @@ resetPass( usuario: Usuario ): Observable<any> {
 }
   cambiarImagen( archivo: File, id: string ) {
 
-    this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )
-          .then( (resp: any) => {
+    // this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )
+    //       .then( (resp: any) => {
 
-            this.usuario.img = resp.usuario.img;
-            swal( 'Imagen Actualizada', this.usuario.nombre, 'success' );
-            this.guardarStorage( id, this.token, this.usuario, this.menu );
+    //         this.usuario.img = resp.usuario.img;
+    //         swal( 'Imagen Actualizada', this.usuario.nombre, 'success' );
+    //         this.guardarStorage( id, this.token, this.usuario, this.menu );
 
-          })
-          .catch( resp => {
-            console.log( resp );
-          }) ;
+    //       })
+    //       .catch( resp => {
+    //         console.log( resp );
+    //       }) ;
   }
 
   cargarUsuarioEmpresa(id: string): Observable<any> {

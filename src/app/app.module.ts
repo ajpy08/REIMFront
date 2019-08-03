@@ -23,7 +23,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RefreshTokenInterceptor } from './services/service.index';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import {Ng2CarouselamosModule} from 'ng2-carouselamos';
+
 
 @NgModule({
   declarations: [
@@ -39,8 +39,7 @@ import {Ng2CarouselamosModule} from 'ng2-carouselamos';
     ReactiveFormsModule,
     ServiceModule,
     SharedModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    Ng2CarouselamosModule
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {

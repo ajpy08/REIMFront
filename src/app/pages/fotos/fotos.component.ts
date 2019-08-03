@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FileItem } from '../../models/file-item.models';
 import { ManiobraService } from '../maniobras/maniobra.service';
-import { Maniobra } from '../../models/maniobras.models';
-import { SubirArchivoService } from 'src/app/services/service.index';
+import { SubirArchivoService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Maniobra } from '../maniobras/maniobra.models';
 
 
 @Component({
@@ -24,42 +24,33 @@ export class FotosComponent implements OnInit {
   foto: Maniobra = new Maniobra('');
   selected = 'fotos_lavado';
 
+  items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},
+            {ruta: '../../../assets/images/2.jpg', estado: ''},
+            {ruta: '../../../assets/images/1.jpg', estado: ''}];
 
-
-  items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},{ruta: '../../../assets/images/2.jpg', estado: ''},{ruta: '../../../assets/images/1.jpg', estado: ''}];
-  
-  constructor(public _maniobraService: ManiobraService, public _subirArchivoService: SubirArchivoService, public router: Router,
+  constructor(public _maniobraService: ManiobraService,
+    public _subirArchivoService: SubirArchivoService,
+    public router: Router,
     public activatedRoute: ActivatedRoute) {
-      activatedRoute.params.subscribe( params => {
-
-        // tslint:disable-next-line:prefer-const
-        let id = params['id'];
-
-        if ( id !== 'nuevo' ) {
-          this.cargarManiobra( id );
-        }
-
-      });
+      activatedRoute.params.subscribe();
     }
 
   ngOnInit() {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.cargarManiobra( id );
   }
 
   cargarManiobra( id: string) {
     this._maniobraService.getManiobra( id )
           .subscribe( maniobra => {
-
-            console.log( maniobra );
-            this.maniobra = maniobra;
-            // this.viaje.buque = viaje.buque._id;
-            // this.cambioBuque( this.viaje.contenedor );
+            console.log(maniobra);
+            this.maniobra = maniobra.maniobra;
           });
   }
 
   cargarImagenes() {
-    console.log(this.selected);
-    this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
 
+    this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
   }
 
   cargarImgenesSelect() {

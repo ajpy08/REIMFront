@@ -30,7 +30,6 @@
     "i": "^0.3.6",
     "jspdf": "^1.4.1",
     "moment": "^2.24.0",
-    "ng2-carouselamos": "^3.2.0",
     "rxjs": "^6.3.3",
     "sweetalert": "^2.1.2",
     "zone.js": "^0.8.26"
