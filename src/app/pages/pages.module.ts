@@ -14,6 +14,7 @@ import { EnEsperaComponent } from './maniobras/espera.component';
 import { RevisionComponent } from './maniobras/revision.component';
 import { RevisaComponent } from './maniobras/revisa.component';
 import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
+import { VaciosComponent } from './maniobras/vacios.component';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -90,6 +91,7 @@ import {
         RevisionComponent,
         RevisaComponent,
         LavadoReparacionComponent,
+        VaciosComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,
