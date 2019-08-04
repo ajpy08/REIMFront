@@ -10,6 +10,7 @@ import { RevisionComponent } from './maniobras/revision.component';
 import { RevisaComponent } from './maniobras/revisa.component';
 
 import { LavadoReparacionComponent } from './maniobras/lavado_reparacion.component';
+import { VaciosComponent } from './maniobras/vacios.component';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
@@ -75,7 +76,7 @@ const pagesRoutes: Routes = [
     {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
 
     {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,
-    canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
+    canActivate: [ AdminGuard ], data: {titulo: 'Reseteo de contraseña.'}},
 
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
 
@@ -86,6 +87,7 @@ const pagesRoutes: Routes = [
     {path: 'revision', component: RevisionComponent, data: {titulo: 'Revision'}},
     {path: 'revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
     {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+    {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
 
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},

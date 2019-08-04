@@ -2,7 +2,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                Contenedor<input #input (keyup)="buscarManiobra( input.value )" type="text" class="form-control" placeholder="Buscar maniobra...">
+                Contenedor<input #input (keyup)="buscarManiobra( input.value )" type="text" class="form-control"
+                    placeholder="Buscar maniobra...">
             </div>
         </div>
     </div>
@@ -22,19 +23,67 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Contenedores en transito( <small>{{totalRegistros}}</small> )</h3>
                 <div class="form-group">
-                    <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" />
+                    <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" /><input type="checkbox" />
+                </div>
+                <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistros}}</small> )</h3>
+                <div class="form-group">
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <!--========Combombox Viajes del ultimo año=========-->
+                                <mat-form-field>
+                                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                                        <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                                            {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                                    (click)="cargarManiobras(viaje)">
+                                    <i class="fas fa-filter"></i>
+                                    Filtrar
+                                </button>
+                            </div>
+                            <div class="col-sm">
+                                <mat-checkbox #s (change)="cargarManiobrasSinFactura(s.checked)">Sin Factura
+                                </mat-checkbox>
+                            </div>
+                            <div class="col-sm">
+                                <mat-form-field>
+                                    <input [(ngModel)]="factura" matInput name="factura" type="text"
+                                        class="form-control" placeholder="Factura de Maniobra">
+                                </mat-form-field>
+                                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                                    (click)="asignarFactura()">
+                                    <i class="fa fa-save"></i>
+                                    Asignar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table id="contentToConvert" class="table table-sm table-hover table-responsive">
                         <thead>
                             <tr>
-                                <th>Viaje</th>
-                                <th>Buque</th>
-                                <th>Transportista</th>
+                                <th>
+                                    <mat-checkbox #c (change)="todo(c.checked)"></mat-checkbox>
+                                </th>
+                                <!-- <th>Id</th> -->
                                 <th>Contenedor</th>
                                 <th>Tipo</th>
+                                <th>Lavado</th>
+                                <th>Grado</th>
+                                <th>Fecha Ingreso</th>
+                                <th>Operador</th>
+                                <th>Placas</th>
+                                <th>Transportista</th>
+                                <th>Reparaciones</th>
+                                <th>Factura</th>
+                                <th>Viaje</th>
+                                <th>Buque</th>
                                 <th>Estado</th>
                                 <th>Cliente</th>
                                 <th>A.A.</th>
@@ -43,28 +92,44 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let maniobra of maniobras">
-                                <td>{{maniobra.viaje.viaje}}</td>
-                                <td>{{maniobra.viaje.buque.nombre}}</td>
-                                <td>{{maniobra.transportista?.razonSocial}}</td>
+                                <td>
+                                    <mat-checkbox [checked]=checked name="{{maniobra._id}}" #c2
+                                        (change)="getManiobrasSeleccionadas(maniobra._id, c2.checked)"></mat-checkbox>
+                                </td>
+                                <!-- <td>{{maniobra._id}}</td> -->
                                 <td>{{maniobra.contenedor}}</td>
                                 <td>{{maniobra.tipo}}</td>
+                                <td>{{maniobra.lavado}}</td>
+                                <td>{{maniobra.grado}}</td>
+                                <td>{{maniobra.fLlegada | date:'dd/MM/yyyy'}} </td>
+                                <td>{{maniobra.operador?.nombre}} </td>
+                                <td>{{maniobra.camion?.placa}} </td>
+                                <td>{{maniobra.transportista?.razonSocial}}</td>
+                                <td>
+                                    <p *ngFor="let rep of maniobra.reparaciones">
+                                        {{rep.reparacion}}
+                                    </p>
+                                </td>
+                                <td>{{maniobra.facturaManiobra}} </td>
+                                <td>{{maniobra.viaje.viaje}}</td>
+                                <td>{{maniobra.viaje.buque.nombre}}</td>
                                 <td>{{maniobra.estado}}</td>
                                 <td>{{maniobra.cliente?.razonSocial}}</td>
                                 <td>{{maniobra.agencia?.razonSocial}}</td>
                                 <td>
                                     <button [routerLink]="['/llegada_entrada', maniobra._id ]" class="btn btn-primary">
-                                    <i class="fa fa-edit"></i>
+                                        <i class="fa fa-edit"></i>
                                     </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <button (click)="cambiarDesde(-100)" class="btn btn-secondary">
+                    <!-- <button (click)="cambiarDesde(-100)" class="btn btn-secondary">
                         <i class="fas fa-angle-left"></i> Anteriores
                     </button>
                     <button (click)="cambiarDesde(100)" class="btn btn-secondary">
                         Siguientes <i class="fas fa-angle-right"></i>
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
