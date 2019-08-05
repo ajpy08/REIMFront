@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 // MODULES
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ManiobrasComponent } from './maniobras/maniobras.component';
+
 import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
 import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
 import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
@@ -18,6 +19,7 @@ import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_t
 import { DisponiblesComponent } from './maniobras/disponibles.component';
 import { XCargarComponent } from './maniobras/xcargar_cargar/xcargar.component';
 import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_contenedor.component';
+import { VaciosComponent } from './maniobras/vacios.component';
 
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
@@ -107,6 +109,7 @@ import {
         DisponiblesComponent,
         XCargarComponent,
         CargaContenedorComponent,
+        VaciosComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,

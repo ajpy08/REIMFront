@@ -18,6 +18,7 @@ export class Maniobra {
         public img?: string,
         public imgl?: string,
         public imgr?: string,
+        public facturaManiobra?: string,
         public usuario?: string,
         public _id?: string,
         public fechaCreado?: Date,

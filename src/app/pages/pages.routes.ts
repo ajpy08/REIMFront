@@ -18,6 +18,9 @@ import { DisponiblesComponent } from './maniobras/disponibles.component';
 import { XCargarComponent } from './maniobras/xcargar_cargar/xcargar.component';
 import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_contenedor.component';
 
+import { VaciosComponent } from './maniobras/vacios.component';
+
+
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
@@ -89,7 +92,7 @@ const pagesRoutes: Routes = [
     {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
 
     {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,
-    canActivate: [ AdminGuard ], data: {titulo: 'Reseto de contraseña.'}},
+    canActivate: [ AdminGuard ], data: {titulo: 'Reseteo de contraseña.'}},
 
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
 
@@ -104,9 +107,7 @@ const pagesRoutes: Routes = [
     {path: 'disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
     {path: 'xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
     {path: 'carga_contenedor/:id', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
-
-
-
+    {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},

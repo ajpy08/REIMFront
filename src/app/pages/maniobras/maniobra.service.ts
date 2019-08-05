@@ -63,8 +63,9 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
-  getManiobrasVacio(viaje?: string, estado?: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/vacio/?viaje=' + viaje + '/?estado=' + estado ;
+  getManiobrasGral(viaje?: string, estado?: string, cargaDescarga?: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + estado + '&' + cargaDescarga;
+    //console.log(url)
     return this.http.get( url );
   }
 
@@ -213,7 +214,8 @@ export class ManiobraService {
   }
 
   buscarManiobraFecha( fechaIncio: string, fechaFin: string ): Observable<any> {
-
+  console.log(fechaIncio)
+  console.log(fechaFin)
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
     return this.http.get( url )
@@ -255,5 +257,20 @@ export class ManiobraService {
 
   }
 
+  asignaFacturaManiobra( id: string, factura: string ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/asigna_factura';
+    url += '/' + id;
+    url += '&' + factura;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, id )
+    .pipe(map( (resp: any) => {
+      swal('Factura ' + factura + ' asignada a ' + resp.maniobra.contenedor, '', 'success');
+      return resp.viaje;
+    }),
+    catchError( err => {
+      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      return throwError(err);
+    }));
+  }
 
 }

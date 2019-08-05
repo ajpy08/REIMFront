@@ -1,8 +1,10 @@
+import { Buque } from "src/app/models/buques.models";
+
 export class Viaje {
 
     constructor(
         public viaje?: string,
-        public buque?: string,
+        public buque?: Buque,
         public fArribo?: string,
         public fVigenciaTemporal?: string,
         public contenedores?: Array<any>,
