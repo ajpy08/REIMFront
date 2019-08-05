@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { Maniobra } from './maniobra.models';
-import { ManiobraService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
-import * as jspdf from 'jspdf';
-import html2canvas from 'html2canvas';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Maniobra } from '../maniobra.models';
+import { ManiobraService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
+import * as jspdf from 'node_modules/jspdf';
+import html2canvas from 'node_modules/html2canvas';
+import {MomentDateAdapter} from 'node_modules/@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from 'node_modules/@angular/material/core';
 import {MatDatepicker} from '@angular/material/datepicker';
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
-import * as _moment from 'moment';
+import * as _moment from 'node_modules/moment';
 // tslint:disable-next-line:no-duplicate-imports
 // import * as Moment from 'moment';
 
@@ -34,8 +34,8 @@ export const MY_FORMATS = {
 
 declare var jQuery: any;
 @Component({
-  selector: 'app-lavado_reparacion',
-  templateUrl: './lavado_reparacion.component.html',
+  selector: 'app-transito',
+  templateUrl: './transito.component.html',
   styles: [],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
@@ -43,7 +43,7 @@ declare var jQuery: any;
   ],
 })
 
-export class LavadoReparacionComponent implements OnInit {
+export class TransitoComponent implements OnInit {
   date = new FormControl(moment());
   maniobras: any[] = [];
   data: any = {fechaCreado: ''};
@@ -59,7 +59,7 @@ export class LavadoReparacionComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getManiobrasLavadoReparacion()
+    this._maniobraService.getManiobrasTransito()
     .subscribe(maniobras => {
         if (maniobras.code !== 200) {
           this.totalRegistros = maniobras.total;

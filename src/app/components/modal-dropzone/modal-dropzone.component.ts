@@ -37,18 +37,18 @@ export class ModalDropzoneComponent implements OnInit {
   }
 
   subirImagen() {
-    this.clearForm();
-    this._subirArchivoService.subirArchivoMultiple(this.filesToUpload, this._modalDropzoneService.id)
-    .then(resp => {
-      console.log(resp);
-      this._modalDropzoneService.notification.emit(resp);
-      this.cerrarModal();
+    // this.clearForm();
+    // this._subirArchivoService.subirArchivoMultiple(this.filesToUpload, this._modalDropzoneService.id)
+    // .then(resp => {
+    //   console.log(resp);
+    //   this._modalDropzoneService.notification.emit(resp);
+    //   this.cerrarModal();
 
-    })
-    .catch(err => {
-      console.log('Error en la carga...');
+    // })
+    // .catch(err => {
+    //   console.log('Error en la carga...');
 
-    });
+    // });
 
   }
 

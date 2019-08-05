@@ -1,19 +1,19 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { Maniobra } from './maniobra.models';
-import { ManiobraService } from '../../services/service.index';
+import { Maniobra } from '../maniobra.models';
+import { ManiobraService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
-import { Transportista } from '../../models/transportista.models';
-import { TransportistaService } from '../../services/service.index';
-import { Agencia } from '../../models/agencia.models';
-import { AgenciaService } from '../../services/service.index';
-import { Operador } from '../../models/operador.models';
-import { OperadorService } from '../../services/service.index';
-import { Camion } from '../../models/camion.models';
-import { CamionService } from '../../services/service.index';
+import { Transportista } from '../../../models/transportista.models';
+import { TransportistaService } from '../../../services/service.index';
+import { Agencia } from '../../../models/agencia.models';
+import { AgenciaService } from '../../../services/service.index';
+import { Operador } from '../../../models/operador.models';
+import { OperadorService } from '../../../services/service.index';
+import { Camion } from '../../../models/camion.models';
+import { CamionService } from '../../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { DatePipe } from '@angular/common';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -131,9 +131,16 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
-      this.regForm.controls['fLlegada'].setValue(maniob.manibra.fLlegada);
-      this.regForm.controls['hLlegada'].setValue(maniob.manibra.hLlegada);
-      this.regForm.controls['hEntrada'].setValue(maniob.manibra.hEntrada);
+      if (maniob.maniobra.fLlegada){
+        this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
+      }
+      if (maniob.maniobra.hLlegada){
+        this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
+      }
+      if (maniob.maniobra.hEntrada){
+        this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
+      }
+      
     });
   }
 

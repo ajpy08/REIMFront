@@ -64,8 +64,8 @@
                                 <div class="form-group has-success">
                                     <label class="control-label"><b>Tipo :</b></label>
                                     <mat-select formControlName="lavado" class="form-control" tabindex="1">
-                                        <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo">
-                                            {{tipo}}
+                                        <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                                            {{tipo.descripcion}}
                                         </mat-option>
                                     </mat-select>
                                 </div>
@@ -129,6 +129,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
+                                <div class="form-group has-success">
+                                    <label class="control-label"><b>Grado Contenedor :</b></label>
+                                    <mat-select formControlName="grado" class="form-control">
+                                        <mat-option *ngFor="let grado of grados" [value]="grado">
+                                            {{grado}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group row">
                                     <label class="control-label text-right col-md-5">Hora Salida:</label>
                                     <div class="col-md-7">
@@ -138,6 +148,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
 
                         <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">

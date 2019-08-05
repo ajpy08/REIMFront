@@ -4,7 +4,7 @@ import { SolicitudService } from '../../services/service.index';
 
 
 @Component({
-  selector: 'app-solicitudesAprobaciones',
+  selector: 'app-solicitudes-aprobaciones',
   templateUrl: './solicitudesAprobaciones.component.html',
   styles: []
 })
@@ -12,7 +12,6 @@ export class SolicitudesAprobacionesComponent implements OnInit {
   solicitudes: any[] = [];
   cargando = true;
   totalRegistros = 0;
-  desde = 0;
 
   constructor(public _solicitudesService: SolicitudService) { }
 
@@ -22,7 +21,7 @@ export class SolicitudesAprobacionesComponent implements OnInit {
 
   cargaSolicitudes() {
     this.cargando = true;
-    this._solicitudesService.getSolicitudes(this.desde)
+    this._solicitudesService.getSolicitudes()
     .subscribe(resp => {
       this.totalRegistros = resp.total;
       this.solicitudes = resp.solicitudes;
@@ -30,17 +29,17 @@ export class SolicitudesAprobacionesComponent implements OnInit {
     });
   }
 
-  cambiarDesde(valor: number) {
-    const desde = this.desde + valor;
-    if (desde >= this.totalRegistros) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargaSolicitudes();
-  }
+  // cambiarDesde(valor: number) {
+  //   const desde = this.desde + valor;
+  //   if (desde >= this.totalRegistros) {
+  //     return;
+  //   }
+  //   if (desde < 0) {
+  //     return;
+  //   }
+  //   this.desde += valor;
+  //   this.cargaSolicitudes();
+  // }
 
   buscarSolicitudes(termino: string) {
     // if (termino.length <= 0) {

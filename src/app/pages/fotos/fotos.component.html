@@ -1,6 +1,32 @@
 <mat-tab-group>
     <mat-tab label="Fotos Lavados">
-        <div class="card-columns">
+        <div class="container">
+            <div class="row">
+                <div *ngFor="let item of items">
+                    <div class="thumbnail">
+                        <a href="{{item.ruta}}" target="_blank">
+                            <img src="{{item.ruta}}" alt="Lights" style="width:100%">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div *ngFor="let item of items" class="carousel-item {{item.estado}}" >
+                        <img src="{{item.ruta}}" class="d-block w-100" alt="..." height="650px">
+                      </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                </div> -->
+        <!-- <div class="card-columns">
             <div class="card" *ngFor="let foto of maniobra.imgl">
                 <img class="card-img-top" [src]="foto.img | imagen:'fotos_lavado'" alt="Card image cap">
                 <div class="card-body">
@@ -10,10 +36,22 @@
                       </button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </mat-tab>
+
     <mat-tab label="Fotos Repararación">
-        <div class="card-columns">
+        <div class="container">
+            <div class="row">
+                <div *ngFor="let item of items">
+                    <div class="thumbnail">
+                        <a href="{{item.ruta}}" target="_blank">
+                            <img src="{{item.ruta}}" alt="Lights" style="width:100%">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="card-columns">
             <div class="card" *ngFor="let foto of maniobra.imgr">
                 <img class="card-img-top" [src]="foto.img | imagen:'fotos_reparacion'" alt="Card image cap">
                 <div class="card-body">
@@ -23,7 +61,7 @@
                       </button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </mat-tab>
 
     <mat-tab label="Carga">
@@ -38,7 +76,6 @@
             </div>
             <div class="col-md-8">
                 <h4>Cargar archivos</h4>
-                <!--========Combombox Transporte=========-->
                 <mat-form-field>
                     <mat-select [(value)]="selected" placeholder="Tipo de fotos" name="fotos">
                         <mat-option value="fotos_lavado">Lavado</mat-option>

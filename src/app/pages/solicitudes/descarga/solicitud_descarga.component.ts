@@ -1,32 +1,32 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Agencia } from '../../models/agencia.models';
+import { Agencia } from '../../../models/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
-import { Usuario } from '../../models/usuarios.model';
-import { UsuarioService } from '../../services/service.index';
-import { Naviera } from '../../models/navieras.models';
-import { NavieraService } from '../../services/service.index';
-import { Transportista } from '../../models/transportista.models';
-import { TransportistaService } from '../../services/service.index';
-import { Cliente } from '../../models/cliente.models';
-import { ClienteService } from '../../services/service.index';
-import { Buque } from '../../models/buques.models';
-import { BuqueService } from '../../services/service.index';
-import { Viaje } from '../viajes/viaje.models';
-import { ViajeService } from '../../services/service.index';
-import { Solicitud } from './solicitud.models';
-import { SolicitudService } from '../../services/service.index';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
-import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
+import { Usuario } from '../../../models/usuarios.model';
+import { UsuarioService } from '../../../services/service.index';
+import { Naviera } from '../../../models/navieras.models';
+import { NavieraService } from '../../../services/service.index';
+import { Transportista } from '../../../models/transportista.models';
+import { TransportistaService } from '../../../services/service.index';
+import { Cliente } from '../../../models/cliente.models';
+import { ClienteService } from '../../../services/service.index';
+import { Buque } from '../../../models/buques.models';
+import { BuqueService } from '../../../services/service.index';
+import { Viaje } from '../../viajes/viaje.models';
+import { ViajeService } from '../../../services/service.index';
+import { Solicitud } from '../solicitud.models';
+import { SolicitudService } from '../../../services/service.index';
+import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
+import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';
-import { AgenciaComponent } from '../agencias/agencia.component';
+import { AgenciaComponent } from '../../agencias/agencia.component';
 
 
 @Component({
-  selector: 'app-solicitude-descarga',
-  templateUrl: './solicitudDescarga.component.html',
-  styleUrls: ['solicitudDescarga.component.css']
+  selector: 'app-solicitud_descarga',
+  templateUrl: './solicitud_descarga.component.html',
+  styleUrls: ['./solicitud_descarga.component.css']
 })
 
 export class SolicitudDescargaComponent implements OnInit {
@@ -100,7 +100,8 @@ export class SolicitudDescargaComponent implements OnInit {
       correo: [''],
       correoFac: [''],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '') ]),
-      _id: ['']
+      _id: [''],
+      tipo: ['D']
     });
   }
 
@@ -166,6 +167,7 @@ export class SolicitudDescargaComponent implements OnInit {
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
+      this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);
       this.cargaClientes({value: solicitud.agencia});
       this.regForm.controls['naviera'].setValue(solicitud.naviera);

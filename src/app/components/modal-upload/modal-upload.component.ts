@@ -36,19 +36,19 @@ export class ModalUploadComponent implements OnInit {
   }
 
   subirImagen() {
-    this.clearForm();
-    this._subirArchivoService.subirArchivo(this.imagenSubir, this._modalUplodaService.tipo, this._modalUplodaService.id)
-    .then(resp => {
-      // console.log(resp);
-      this._modalUplodaService.notification.emit(resp);
-      this.cerrarModal();
+    // this.clearForm();
+    // this._subirArchivoService.subirArchivo(this.imagenSubir, this._modalUplodaService.tipo, this._modalUplodaService.id)
+    // .then(resp => {
+    //   // console.log(resp);
+    //   this._modalUplodaService.notification.emit(resp);
+    //   this.cerrarModal();
 
-    })
-    .catch(err => {
-      // console.log('Error en la carga...');
-      swal( err.error.mensaje, err.error.errores.message, 'error' );
-      return throwError(err);
-    });
+    // })
+    // .catch(err => {
+    //   // console.log('Error en la carga...');
+    //   swal( err.error.mensaje, err.error.errores.message, 'error' );
+    //   return throwError(err);
+    // });
 
   }
 

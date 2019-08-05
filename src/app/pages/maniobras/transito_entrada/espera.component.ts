@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { Maniobra } from './maniobra.models';
-import { ManiobraService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
+import { Maniobra } from '../maniobra.models';
+import { ManiobraService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';

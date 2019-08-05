@@ -10,11 +10,11 @@ import swal from 'sweetalert';
 
 
 @Component({
-  selector: 'app-solicitudAprobacion',
-  templateUrl: './solicitudAprobacion.component.html',
+  selector: 'app-solicitudd-aprobar',
+  templateUrl: './solicitudD_aprobar.component.html',
   styles: []
 })
-export class SolicitudAprobacionComponent implements OnInit {
+export class SolicitudDAprobarComponent implements OnInit {
   regForm: FormGroup;
   solicitud: Solicitud;
   usuario: Usuario;
@@ -90,7 +90,7 @@ export class SolicitudAprobacionComponent implements OnInit {
 
   apruebaSolicitud( ) {
     if ( this.regForm.valid ) {
-     this._SolicitudService.apruebaSolicitud(this.regForm.value).subscribe(res => {
+     this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value).subscribe(res => {
       this.regForm.markAsPristine();
       });
     }
