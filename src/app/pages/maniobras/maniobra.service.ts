@@ -44,7 +44,7 @@ export class ManiobraService {
     const url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
     return this.http.get( url );
   }
-  
+
   getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
     // if (contenedor===undefined)  contenedor="";
     // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
@@ -58,12 +58,15 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
+  getManiobrasxCargar(): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/xcargar/';
+    return this.http.get( url );
+  }
 
   getManiobrasVacio(viaje?: string, estado?: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/vacio/?viaje=' + viaje + '/?estado=' + estado ;
     return this.http.get( url );
   }
-  
 
   getManiobrasLavadoReparacion(desde: number = 0, contenedor?: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
@@ -101,6 +104,37 @@ export class ManiobraService {
     }));
   }
 
+  registraFinLavRep( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/registra_fin_lav_rep';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Maniobra actualizada', '', 'success');
+      return resp.viaje;
+    }),
+    catchError( err => {
+      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      return throwError(err);
+    }));
+  }
+
+  registraCargaContenedor( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/registra_carga';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Maniobra actualizada', '', 'success');
+      return resp.viaje;
+    }),
+    catchError( err => {
+      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      return throwError(err);
+    }));
+  }
+
+
   cargarManiobras(desde: number = 0): Observable<any> {
 
     // tslint:disable-next-line:prefer-const
@@ -114,7 +148,7 @@ export class ManiobraService {
     }));
   }
 
-  
+
 
   borrarManiobra( id: string ): Observable<any> {
 

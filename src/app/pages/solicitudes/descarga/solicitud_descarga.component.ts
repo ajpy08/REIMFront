@@ -100,7 +100,8 @@ export class SolicitudDescargaComponent implements OnInit {
       correo: [''],
       correoFac: [''],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '') ]),
-      _id: ['']
+      _id: [''],
+      tipo: ['D']
     });
   }
 
@@ -166,6 +167,7 @@ export class SolicitudDescargaComponent implements OnInit {
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
+      this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);
       this.cargaClientes({value: solicitud.agencia});
       this.regForm.controls['naviera'].setValue(solicitud.naviera);

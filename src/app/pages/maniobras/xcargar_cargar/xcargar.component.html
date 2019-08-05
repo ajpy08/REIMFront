@@ -22,7 +22,7 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">Contenedores en espera de entrada ( <small>{{totalRegistros}}</small> )</h3>
+        <h3 class="card-title">Maniobras en espera de Cargar( <small>{{totalRegistros}}</small> )</h3>
         <div class="form-group">
           <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" />
         </div>
@@ -30,11 +30,8 @@
           <table id="contentToConvert" class="table table-sm table-hover table-responsive">
             <thead>
               <tr>
-                <th>Carga / Descarga</th>
-                <th>Viaje</th>
-                <th>Buque</th>
                 <th>Transportista</th>
-                <th>Contenedor</th>
+                <th>Grado</th>
                 <th>Tipo</th>
                 <th>Estado</th>
                 <th>Cliente</th>
@@ -44,29 +41,20 @@
             </thead>
             <tbody>
               <tr *ngFor="let maniobra of maniobras">
-                <td>{{maniobra.cargaDescarga}}</td>
-                <td>{{maniobra.viaje?.viaje}}</td>
-                <td>{{maniobra.viaje?.buque.nombre}}</td>
                 <td>{{maniobra.transportista?.razonSocial}}</td>
-                <td>{{maniobra.contenedor}}</td>
+                <td>{{maniobra.grado}}</td>
                 <td>{{maniobra.tipo}}</td>
                 <td>{{maniobra.estado}}</td>
                 <td>{{maniobra.cliente?.razonSocial}}</td>
                 <td>{{maniobra.agencia?.razonSocial}}</td>
                 <td>
-                  <button [routerLink]="['/llegada_entrada', maniobra._id ]" class="btn btn-primary">
-                                  <i class="fa fa-edit"></i>
-                                  </button>
+                  <button [routerLink]="['/carga_contenedor', maniobra._id ]" class="btn btn-primary">
+                    <i class="fa fa-edit"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>
           </table>
-          <button (click)="cambiarDesde(-100)" class="btn btn-secondary">
-                      <i class="fas fa-angle-left"></i> Anteriores
-                  </button>
-          <button (click)="cambiarDesde(100)" class="btn btn-secondary">
-                      Siguientes <i class="fas fa-angle-right"></i>
-                  </button>
         </div>
       </div>
     </div>

@@ -176,7 +176,7 @@ export class RevisaComponent implements OnInit {
 
       if (maniob.maniobra.lavadoObservacion){
         this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
-      }else {
+      } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
       }
 
@@ -184,13 +184,13 @@ export class RevisaComponent implements OnInit {
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
         });
-      }else {
+      } else {
         this.regForm.controls['reparaciones'].setValue(undefined);
       }
 
       if (maniob.maniobra.reparacionesObservacion){
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
-      }else {
+      } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
 

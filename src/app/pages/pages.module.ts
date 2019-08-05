@@ -16,10 +16,15 @@ import { RevisaComponent } from './maniobras/revision_revisa/revisa.component';
 import { LavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/lavado_reparacion.component';
 import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/termina_lavado_reparacion.component';
 import { DisponiblesComponent } from './maniobras/disponibles.component';
+import { XCargarComponent } from './maniobras/xcargar_cargar/xcargar.component';
+import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_contenedor.component';
+
 import { ManiobraComponent } from './maniobras/maniobra.component';
 // import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ProfileComponent } from './profile/profile.component';
+
+// Catalogos Generales
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioComponent } from './usuarios/usuario.component';
 import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
@@ -41,17 +46,20 @@ import { ViajeComponent } from './viajes/viaje.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
 import { NavierasComponent } from './navieras/navieras.component';
 import { NavieraComponent } from './navieras/naviera.component';
+// solicitudes y aprobaciones
 import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
-
 import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
+import { SolicitudDAprobarComponent } from './solicitudes/solicitudD_aprobar.component';
+import { SolicitudCAprobarComponent } from './solicitudes/solicitudC_aprobar.component';
+
 import { FotosComponent } from './fotos/fotos.component';
 import { NgDropFilesDirective } from '.././directives/ng-drop-files.directive';
 import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
-import { SolicitudAprobacionComponent } from './solicitudes/solicitudAprobacion.component';
+
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
 import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
@@ -97,6 +105,8 @@ import {
         LavadoReparacionComponent,
         TerminaLavadoReparacionComponent,
         DisponiblesComponent,
+        XCargarComponent,
+        CargaContenedorComponent,
         ManiobraComponent,
         AccountSettingsComponent,
         ProfileComponent,
@@ -124,10 +134,11 @@ import {
         SolicitudDescargaComponent,
         SolicitudesCargaComponent,
         SolicitudCargaComponent,
+        SolicitudDAprobarComponent,
+        SolicitudCAprobarComponent,
         EmpresaComponent,
         MisclientesComponent,
         MiclienteComponent,
-        SolicitudAprobacionComponent,
         ContenedoresDisponiblesComponent,
         ContenedoresRLComponent,
         ReporteContenedoresRLComponent,

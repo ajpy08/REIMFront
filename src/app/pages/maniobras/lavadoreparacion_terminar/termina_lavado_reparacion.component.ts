@@ -37,9 +37,9 @@ export const MY_FORMATS = {
 
 export class TerminaLavadoReparacionComponent implements OnInit {
   regForm: FormGroup;
-  tiposLavado: Lavado[] = [new Lavado('B','Basico'),new Lavado('E','Especial')];
+  tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   tiposReparaciones: Reparacion[] = [];
-  grados: string[] = ['A','B','C'];
+  grados: string[] = ['A', 'B', 'C'];
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -68,7 +68,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       fLlegada: [{value: '', disabled: true}],
       hLlegada: [{value: '', disabled: true}],
       hEntrada: [{value: '', disabled: true}],
-      hSalida: [''],
+      hSalida: [{value: '', disabled: true}],
       lavado: [''],
       lavadoObservacion: [''],
       reparaciones: this.fb.array([ this.creaReparacion('', '', 0) ]),
@@ -157,7 +157,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     const rep = this.tiposReparaciones.find(x => x._id === item);
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
-  
+
 
   removeReparacion( index: number ) {
     this.reparaciones.removeAt(index);
@@ -183,16 +183,17 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
+      this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
 
-      if (maniob.maniobra.lavado){
+      if (maniob.maniobra.lavado) {
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
-      }else {
+      } else {
         this.regForm.controls['lavado'].setValue(undefined);
       }
 
       if (maniob.maniobra.lavadoObservacion){
         this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
-      }else {
+      } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
       }
 
@@ -200,19 +201,19 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
         });
-      }else {
+      } else {
         this.regForm.controls['reparaciones'].setValue(undefined);
       }
 
       if (maniob.maniobra.reparacionesObservacion){
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
-      }else {
+      } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
 
       if (maniob.maniobra.grado){
         this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
-      }else {
+      } else {
         this.regForm.controls['grado'].setValue(undefined);
       }
 
@@ -227,7 +228,7 @@ cargarTiposReparaciones() {
 
 guardaCambios() {
     if (this.regForm.valid) {
-      this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
+      this._maniobraService.registraFinLavRep(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
       });
     }
