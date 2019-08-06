@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Viaje } from './viaje.models';
@@ -16,8 +16,8 @@ const HttpUploadOptions = {
 
 @Injectable()
 export class ViajeService {
-  // tslint:disable-next-line:no-inferrable-types
-  totalViajes: number = 0;
+  
+  
   viaje: Viaje;
   messages: string[] = [];
   datos: any[] = [];
@@ -28,10 +28,28 @@ export class ViajeService {
     public _subirArchivoService: SubirArchivoService
   ) { }
 
-  getViajes(desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/viaje?desde=' + desde;
-    return this.http.get(url);
+// ==========================================
+// Obtener todas los viajes, de acuerdo a los filtros solicitados.
+// las fechas deben ir en formato DD-MM-YYYY
+// TODOS los parametros son opcionales (para traer todos lo registros no mandar los parametros)
+// ==========================================
+
+  getViajes(fIniArribo?: string, fFinArribo?: string, viaje?: string, buque?: string): Observable<any> {
+
+    let params = new HttpParams();
+    if (fIniArribo && fFinArribo) {
+      params = params.append('finiarribo', fIniArribo);
+      params = params.append('ffinarribo', fFinArribo);
+    }
+    if (viaje)  
+      params = params.append('viaje', viaje);
+    if (buque)  
+      params = params.append('buque', buque);
+    // console.log(params.toString());
+    const url = URL_SERVICIOS + '/viajes';
+    return this.http.get(url,{params: params });
   }
+
 
   getViajesA(anio: string): Observable<any> {
     const url = URL_SERVICIOS + '/viaje/anio/'+ anio;
@@ -48,7 +66,6 @@ export class ViajeService {
 
   guardarViaje(viaje: Viaje): Observable<any> {
     let url = URL_SERVICIOS + '/viaje';
-    console.log(viaje);
     if (viaje._id) { // actualizando
       url += '/' + viaje._id;
       url += '?token=' + this._usuarioService.token;
