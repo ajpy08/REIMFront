@@ -1,107 +1,107 @@
 <div class="row animated fadeIn">
-    <div class="col-md-10">
-        <div class="card card-body">
-            <h3 class="box-title m-b-0">Viaje: </h3>
-            <form [formGroup]="regForm" (ngSubmit)="guardarViaje()" novalidate>
-                <div class="row">
-                    <div class="col-sm-8 col-xs-8">
-                        <div class="my-container">
-                            <h3>Seleccione archivos</h3>
-                            <input (change)="onFileExcelSelected($event)" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+  <div class="col-md-10">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Viaje: </h3>
+      <form [formGroup]="regForm" (ngSubmit)="guardarViaje()" novalidate>
+        <div class="row">
+          <div class="col-sm-8 col-xs-8">
+            <div class="my-container">
+              <h3>Seleccione archivos</h3>
+              <input (change)="onFileExcelSelected($event)" type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
 
-                            <mat-form-field class="inputpersonalizado">
-                                <input matInput formControlName="viaje" type="text" class="form-control" placeholder="Ingrese el viaje">
-                            </mat-form-field>
-                            <mat-form-field class="inputpersonalizado">
-                                <mat-select formControlName="buque" placeholder="Seleccione un Buque">
-                                    <mat-option *ngFor="let buque of buques" [value]="buque._id">
-                                        {{ buque.nombre }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <mat-form-field class="inputpersonalizado">
-                                <input matInput formControlName="fArribo" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de arribo">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
+              <mat-form-field class="inputpersonalizado">
+                <input matInput formControlName="viaje" type="text" class="form-control" placeholder="Ingrese el viaje">
+              </mat-form-field>
+              <mat-form-field class="inputpersonalizado">
+                <mat-select formControlName="buque" placeholder="Seleccione un Buque">
+                  <mat-option *ngFor="let buque of buques" [value]="buque._id">
+                    {{ buque.nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="inputpersonalizado">
+                <input matInput formControlName="fArribo" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
 
-                            <mat-form-field class="inputpersonalizado">
-                                <input matInput formControlName="fVigenciaTemporal" [matDatepicker]="picker2" type="text" class="form-control" placeholder="Vigencia del temporal">
-                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                                <mat-datepicker #picker2></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 col-xs-4">
-                        <div class="card  text-center">
-                            <div class="card-header">Temporal de Viaje</div>
-                            <div class="card-body">
-                                <a *ngIf="pdfTemporal.value" [href]="pdfTemporal.value | imagen:'viaje'" target="_blank">
-                                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                                </a>
-                                <input (change)="onFilePDFSelected($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
-                                <br><br>
-                                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Cambiar Temporal</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+              <mat-form-field class="inputpersonalizado">
+                <input matInput formControlName="fVigenciaTemporal" [matDatepicker]="picker2" type="text" class="form-control" placeholder="Vigencia del temporal">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-4 col-xs-4">
+            <div class="card  text-center">
+              <div class="card-header">Temporal de Viaje</div>
+              <div class="card-body">
+                <a *ngIf="pdfTemporal.value" [href]="pdfTemporal.value | imagen:'viaje'" target="_blank">
+                  <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                </a>
+                <input (change)="onFilePDFSelected($event)" type="file" style="display:none" name="fileFormato" accept="pdf" #fileFormato>
+                <br><br>
+                <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFormato.click()"><i class="fa fa-file"></i> Cambiar Temporal</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
                         <i class="fa fa-save "></i>
                         Guardar
                     </button>
-                    <a routerLink="/viajes" class="btn btn-danger waves-effect waves-light">Cancelar</a>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12">
-                        <h3 class="box-title m-b-0">
-                            <P>
-                                <BR>CONTENEDORES
-                            </P>
-                        </h3>
-                        <div class="table-responsive">
-                            <table class="table table-hover table-responsive">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <button class="btn btn-success" (click)="addContenedor2(contenedor.value, tipo.value, estado.value, destinatario.value)" type="button">
+          <a routerLink="/viajes" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <h3 class="box-title m-b-0">
+              <P>
+                <BR>CONTENEDORES
+              </P>
+            </h3>
+            <div class="table-responsive">
+              <table class="table table-hover table-responsive">
+                <thead>
+                  <tr>
+                    <th>
+                      <button class="btn btn-success" (click)="addContenedor2(contenedor.value, tipo.value, estado.value, destinatario.value)" type="button">
                                                 Agregar
                                             </button>
-                                        </th>
-                                        <th><input #contenedor placeholder="Contenedor" size="11"></th>
-                                        <th><input #tipo placeholder="Tipo" size="6"></th>
-                                        <th><input #estado placeholder="Estado" size="6"></th>
-                                        <th><input #destinatario placeholder="destinatario"></th>
-                                    </tr>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Contenedor</th>
-                                        <th>Tipo</th>
-                                        <th>Estado</th>
-                                        <th>Cliente</th>
-                                    </tr>
-                                </thead>
-                                <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
-                                    <tr [formGroupName]="i">
-                                        <td>
-                                            {{i+1}}
-                                            <button (click)="quitarContenedor( i )" class="btn btn-danger" type="button">
+                    </th>
+                    <th><input #contenedor placeholder="Contenedor" size="11"></th>
+                    <th><input #tipo placeholder="Tipo" size="6"></th>
+                    <th><input #estado placeholder="Estado" size="6"></th>
+                    <th><input #destinatario placeholder="destinatario"></th>
+                  </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>Contenedor</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Cliente</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                  <tr [formGroupName]="i">
+                    <td>
+                      {{i+1}}
+                      <button (click)="quitarContenedor( i )" class="btn btn-danger" type="button">
                                                 <i class="fa fa-trash-o"></i>
                                             </button> {{item.get('estatus').value}}
-                                        </td>
-                                        <td><input formControlName="contenedor" placeholder="Contenedor" size="11"></td>
-                                        <td><input formControlName="tipo" placeholder="Tipo" size="6"></td>
-                                        <td><input formControlName="estado" placeholder="Estado" size="6"></td>
-                                        <td><input formControlName="destinatario" placeholder="Destinatario"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </form>
-
+                    </td>
+                    <td><input formControlName="contenedor" placeholder="Contenedor" size="11"></td>
+                    <td><input formControlName="tipo" placeholder="Tipo" size="6"></td>
+                    <td><input formControlName="estado" placeholder="Estado" size="6"></td>
+                    <td><input formControlName="destinatario" placeholder="Destinatario"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+      </form>
+
     </div>
+  </div>
 </div>

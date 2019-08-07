@@ -1,28 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
-import { Viaje } from './viaje.models';
 import { ViajeService } from '../../services/service.index';
 import { Buque } from '../../models/buques.models';
 import { BuqueService } from '../../services/service.index';
 import { Naviera } from '../../models/navieras.models';
 import { NavieraService } from '../../services/service.index';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';
 
 // datapiker
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { Cliente } from '../../models/cliente.models';
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
+import * as _moment from 'moment';
+const moment = _moment;
+
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    dateInput: ['l', 'L'],
   },
   display: {
-    dateInput: 'LL',
+    dateInput: 'L',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -32,11 +30,9 @@ export const MY_FORMATS = {
 @Component({
     selector: 'app-viaje',
     templateUrl: './viaje.component.html',
-    providers: [
-      {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-      {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-      {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
-    ],
+    providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
   })
 
   export class ViajeComponent implements OnInit {
@@ -54,15 +50,14 @@ export const MY_FORMATS = {
       public router: Router,
       public activatedRoute: ActivatedRoute,
       private fb: FormBuilder,
-      public _subirArchivoService: SubirArchivoService,
-      public _modalUploadService: ModalUploadService) {}
+      public _subirArchivoService: SubirArchivoService) {}
 
     ngOnInit() {
       this._buqueService.getBuques().subscribe( buques => this.buques = buques.buques );
       this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
-      if (id !== 'nuevo') {
+      if (id !== 'nuevo' && id !== '') {
         this.edicion = true;
         this.cargarViaje ( id );
       }
@@ -73,22 +68,22 @@ export const MY_FORMATS = {
       this.regForm = this.fb.group({
         viaje: ['', [Validators.required]],
         buque: ['', [Validators.required]],
-        fArribo: ['2019-07-18T05:00:00.000Z'],
-        fVigenciaTemporal: ['2019-07-18T05:00:00.000Z'],
-        noInterior: [''],
+        fArribo: [moment()],
+        fVigenciaTemporal: [moment().add(20, 'years')],
         pdfTemporal: [''],
         contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '') ]),
+        anio: [''],
         _id: ['']
       });
     }
 
-    creaContenedor(cont: string, tipo: string, estado: string, dest: string, estatus: string): FormGroup {
+    creaContenedor(cont: string, tipo: string, peso: string, dest: string, estatus: string): FormGroup {
       return this.fb.group({
         contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
-        tipo: [tipo],
-        estado: [estado],
-        destinatario: [dest],
-        estatus: [estatus] // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
+        tipo: [tipo, [Validators.required]],
+        peso: [peso, [Validators.required]],
+        destinatario: [dest, [Validators.required]],
+        estatus: [estatus, [Validators.required]] // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
       });
     }
 
@@ -110,24 +105,27 @@ export const MY_FORMATS = {
     get pdfTemporal() {
       return this.regForm.get('pdfTemporal');
     }
+    get anio() {
+      return this.regForm.get('anio');
+    }
     get contenedores() {
       return this.regForm.get('contenedores') as FormArray;
     }
 
-    addContenedor(cont: string, tipo: string, estado: string, destinatario: string, estatus: string): void {
-      this.contenedores.push(this.creaContenedor(cont, tipo, estado, destinatario, estatus));
+    addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string): void {
+      this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus));
     }
 
-    addContenedor2(cont: string, tipo: string, estado: string, destinatario: string): void {
+    addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
       if (this._id) {
-        this._viajeService.addContenedor(this._id.value, cont, tipo, estado, destinatario)
+        this._viajeService.addContenedor(this._id.value, cont, tipo, peso, destinatario)
         .subscribe(res => {
           if (res.ok) {
-            this.contenedores.push(this.creaContenedor(cont, tipo, estado, destinatario, 'NUEVO' ));
+            this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, 'NUEVO' ));
             swal('Contenedor Agregado con exito', '', 'success');
           }
         });
-      } else {this.contenedores.push(this.creaContenedor(cont, tipo, estado, destinatario, 'NUEVO' )); }
+      } else {this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, 'NUEVO' )); }
     }
 
     quitarContenedor(indice: number) {
@@ -150,7 +148,7 @@ export const MY_FORMATS = {
         this.regForm.controls['fVigenciaTemporal'].setValue(viaje.fVigenciaTemporal );
         this.regForm.controls['pdfTemporal'].setValue(viaje.pdfTemporal);
         viaje.contenedores.forEach(element => {
-          this.addContenedor(element.contenedor, element.tipo, element.estado, element.destinatario, element.estatus);
+          this.addContenedor(element.contenedor, element.tipo, element.peso, element.destinatario, element.estatus);
         });
       });
     }
@@ -193,7 +191,7 @@ export const MY_FORMATS = {
     this._viajeService.cargarExcel(this.fileExcel)
     .subscribe( excel => {
       excel.forEach(element => {
-        this.addContenedor(element.Contenedor, element.Tipo, element.Estado, element.Cliente, 'NUEVO');
+        this.addContenedor(element.Contenedor, element.Tipo, element.peso, element.Cliente, 'NUEVO');
       });
       this.regForm.controls['viaje'].setValue(excel[0].Viaje);
       const index = this.buques.find( dato => dato.nombre === excel[0].Buque);

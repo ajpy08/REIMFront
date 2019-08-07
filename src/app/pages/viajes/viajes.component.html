@@ -1,4 +1,4 @@
-<div class="row animated fadeIn">
+<!-- <div class="row animated fadeIn">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -6,7 +6,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="row animated fadeIn">
   <div class="col-sm-12">
@@ -14,9 +14,12 @@
       <div class="card-body">
         <form [formGroup]="regForm" (ngSubmit)="filtrarViajes()" novalidate>
           <div class="row">
-            <mat-form-field class="inputpersonalizado">
-              <input matInput formControlName="viaje" type="text" class="form-control" placeholder="Ingrese el viaje">
-            </mat-form-field>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <mat-label>Viaje</mat-label>
+                <input matInput formControlName="viaje" type="text" placeholder="Ingrese viaje">
+              </mat-form-field>
+            </div>
             <!-- <mat-form-field class="inputpersonalizado">
                     <mat-select formControlName="buque" placeholder="Seleccione un Buque">
                         <mat-option *ngFor="let buque of buques" [value]="buque._id">
@@ -24,25 +27,33 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field> -->
-            <mat-form-field class="inputpersonalizado">
-              <input matInput formControlName="fIniArribo" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha Inicial arribo">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field class="inputpersonalizado">
-              <input matInput formControlName="fFinArribo" [matDatepicker]="picker2" type="text" class="form-control" placeholder="Fecha Final Arribo">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="row">
-            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10 ">
-                <i class="fa fa-save "></i>
-                Filtrar
-            </button>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="fIniArribo" [matDatepicker]="picker" type="text" placeholder="Fecha Inicial arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="fFinArribo" [matDatepicker]="picker2" type="text" placeholder="Fecha Final Arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <button type="submit" class="btn btn-success waves-effect">
+                  <i class="fa fa-filter "></i>
+                  Filtrar
+               </button>
+              <!-- <button type="reset" class="btn btn-success waves-effect">
+                  <i class="fa fa-filter "></i>
+                  Limpiar
+               </button> -->
+            </div>
           </div>
         </form>
-        <p>Form value {{ regForm.value | json }} </p>
+        <!-- <p>Form value {{ regForm.value | json }} </p> -->
       </div>
     </div>
   </div>
@@ -81,16 +92,17 @@
                 <th>Fecha de Arribo</th>
                 <th>Temporal</th>
                 <th>Vigencia del temporal</th>
+                <th>Año</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let viaje of viajes">
                 <td>
                   <button [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary">
-                    <i class="fa fa-edit"> Editar</i>
+                    <i class="fa fa-edit"></i>
                   </button>
                   <button (click)="borrarViaje( viaje )" class="btn btn-danger">
-                    <i class="fa fa-trash-o"> Eliminar</i>
+                    <i class="fa fa-trash-o"></i>
                   </button>
                 </td>
                 <td>{{viaje.viaje}}</td>
@@ -102,6 +114,7 @@
                   </a>
                 </td>
                 <td>{{viaje.fVigenciaTemporal | date:"dd-MM-yyyy"}}</td>
+                <td>{{viaje.anio}}</td>
               </tr>
             </tbody>
           </table>

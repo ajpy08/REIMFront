@@ -16,11 +16,6 @@ const HttpUploadOptions = {
 
 @Injectable()
 export class ViajeService {
-  
-  
-  viaje: Viaje;
-  messages: string[] = [];
-  datos: any[] = [];
 
   constructor(
     public http: HttpClient,
@@ -41,19 +36,21 @@ export class ViajeService {
       params = params.append('finiarribo', fIniArribo);
       params = params.append('ffinarribo', fFinArribo);
     }
-    if (viaje)  
+    if (viaje)  {
       params = params.append('viaje', viaje);
-    if (buque)  
+    }
+    if (buque)  {
       params = params.append('buque', buque);
+    }
     // console.log(params.toString());
     const url = URL_SERVICIOS + '/viajes';
-    return this.http.get(url,{params: params });
+    return this.http.get(url, {params: params });
   }
 
 
   getViajesA(anio: string): Observable<any> {
     const url = URL_SERVICIOS + '/viaje/anio/'+ anio;
-    console.log(url)
+    console.log( url )
     return this.http.get(url);
   }
 
@@ -131,63 +128,13 @@ export class ViajeService {
   }
 
 
-  cargarViajeNumero(viaje: string): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/viaje/numero/' + viaje;
-    return this.http.get(url)
-      .pipe(map((resp: any) => resp.viaje));
-
-  }
-
-
-
-
-
-  buscarViaje(termino: string): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/busqueda/coleccion/viajes/' + termino;
-    return this.http.get(url)
-      .pipe(map((resp: any) => resp.viajes));
-
-  }
-
-  // actualizarContenedor(viaje: Viaje ): Observable<any> {
-
-  //   let url = URL_SERVICIOS + '/viaje/add/' + viaje._id;
-  //       url += '?token=' + this._usuarioService.token;
-
-  //       return this.http.put( url, viaje )
-  //                 .pipe(map( (resp: any) => {
-  //                   swal('Viaje Actualizado', viaje.viaje, 'success');
-  //                   return resp.viaje;
-
-  //                 }),
-  //                 catchError( err => {
-  //                   swal( err.error.mensaje, err.error.errors.message, 'error' );
-  //                   return throwError(err);
-  //                 }));
-
-  //     }
-
-
-
-
-
   cargarExcel(archivo: File): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-    let formData = new FormData();
-
+    const formData = new FormData();
     formData.append('xlsx', archivo, archivo.name);
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/exceltojson';
-    // url += '?token=' + this._usuarioService.token;
+    const url = URL_SERVICIOS + '/exceltojson';
     return this.http.put(url, formData)
       .pipe(map((resp: any) => {
         swal('Excel leido con exito', archivo.name, 'success');
-        // console.log(resp.excel);
         return resp.excel;
 
       }),
@@ -196,6 +143,5 @@ export class ViajeService {
           return throwError(err);
         }));
   }
-
 }
 

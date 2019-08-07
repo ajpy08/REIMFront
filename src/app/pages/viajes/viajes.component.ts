@@ -41,20 +41,20 @@ export class ViajesComponent implements OnInit {
   constructor(public _viajeService: ViajeService, private fb: FormBuilder,) { }
   ngOnInit() {
     this.createFormGroup();
-    //this.viaje.setValue(undefined);
+    this.viaje.setValue(undefined);
     this.buque.setValue(undefined);
     this.cargarViajes();
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      viaje: ['158'],
+      viaje: [''],
       buque: [''],
       fIniArribo: [moment().subtract(365, 'days')],
       fFinArribo: [moment()],
     });
   }
-  
+
   get viaje() {
     return this.regForm.get('viaje');
   }
@@ -70,21 +70,20 @@ export class ViajesComponent implements OnInit {
 
   cargarViajes() {
     this.cargando = true;
-    this._viajeService.getViajes(this.fIniArribo.value.format('DD-MM-YYYY'), this.fFinArribo.value.format('DD-MM-YYYY'), this.viaje.value, this.buque.value)
+    this._viajeService.getViajes(this.fIniArribo.value ? this.fIniArribo.value.format('DD-MM-YYYY') : '',
+    this.fFinArribo.value ? this.fFinArribo.value.format('DD-MM-YYYY') : '' ,
+    this.viaje.value,
+    this.buque.value)
     .subscribe(res => {
-      console.log(res);
-      if (res.ok==false)
-        console.log("Algo salio miu mal");
-      if (res.code !== 200){
+      if (res.ok) {
         this.totalRegistros = res.total;
-        this.viajes = res.viajes
+        this.viajes = res.viajes;
         this.cargando = false;
       }
     });
   }
 
-  filtrarViajes()
-  {
+  filtrarViajes() {
     this.cargarViajes();
   }
 
@@ -106,19 +105,6 @@ export class ViajesComponent implements OnInit {
       });
   }
 
-
-  buscarViaje(termino: string) {
-    // if (termino.length <= 0) {
-    //   this.cargarViajes();
-    //   return;
-    // }
-    // this.cargando = true;
-    // this._viajeService.buscarViaje(termino)
-    // .subscribe((viajes: Viaje[]) => {
-    //   this.viajes = viajes;
-    //   this.cargando = false;
-    //});
-  }
 
 
 }
