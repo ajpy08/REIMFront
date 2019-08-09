@@ -8,7 +8,7 @@ import { APP_ROUTES } from './app.routes';
 import { ServiceModule } from './services/service.module';
 
 // Material
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { PagesModules } from './pages/pages.module';
 
 // temporal
@@ -23,7 +23,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RefreshTokenInterceptor } from './services/service.index';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
 
 @NgModule({
   declarations: [
@@ -45,8 +44,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RefreshTokenInterceptor,
-      multi: true
-    }
+      multi: true,
+    }    
   ],
   bootstrap: [AppComponent]
 })
