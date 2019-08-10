@@ -7,9 +7,11 @@ import { BuqueService } from '../../services/service.index';
 import { Naviera } from '../../models/navieras.models';
 import { NavieraService } from '../../services/service.index';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
+import { ExcelService } from '../../services/excel/excel.service';
 import swal from 'sweetalert';
 
 // datapiker
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import * as _moment from 'moment';
@@ -50,11 +52,12 @@ export const MY_FORMATS = {
       public router: Router,
       public activatedRoute: ActivatedRoute,
       private fb: FormBuilder,
-      public _subirArchivoService: SubirArchivoService) {}
+      public _subirArchivoService: SubirArchivoService,
+      public _excelService: ExcelService) {}
 
     ngOnInit() {
       this._buqueService.getBuques().subscribe( buques => this.buques = buques.buques );
-      this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras );
+      this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras.navieras );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
       if (id !== 'nuevo' && id !== '') {
@@ -66,24 +69,25 @@ export const MY_FORMATS = {
 
     createFormGroup() {
       this.regForm = this.fb.group({
+        naviera: ['', [Validators.required]],
         viaje: ['', [Validators.required]],
         buque: ['', [Validators.required]],
-        fArribo: [moment()],
-        fVigenciaTemporal: [moment().add(20, 'years')],
+        fArribo: [moment().local().startOf('day')],
+        fVigenciaTemporal: [moment().local().startOf('day').add(10, 'years')],
         pdfTemporal: [''],
         contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '') ]),
-        anio: [''],
+        anio: [moment().local().year()],
         _id: ['']
       });
     }
 
     creaContenedor(cont: string, tipo: string, peso: string, dest: string, estatus: string): FormGroup {
       return this.fb.group({
-        contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
-        tipo: [tipo, [Validators.required]],
-        peso: [peso, [Validators.required]],
-        destinatario: [dest, [Validators.required]],
-        estatus: [estatus, [Validators.required]] // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
+        contenedor: [cont],
+        tipo: [tipo],
+        peso: [peso],
+        destinatario: [dest],
+        estatus: [estatus] // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
       });
     }
 
@@ -113,40 +117,52 @@ export const MY_FORMATS = {
     }
 
     addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string): void {
+      if (cont=='') {
+        swal('','El contenedor no pues estar vacio.','error');
+      }
       this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus));
     }
 
     addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
-      if (this._id) {
+      
+      if (this._id.value) {
         this._viajeService.addContenedor(this._id.value, cont, tipo, peso, destinatario)
         .subscribe(res => {
           if (res.ok) {
-            this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, 'NUEVO' ));
+            this.addContenedor(cont, tipo, peso, destinatario, 'APROBACION' );
             swal('Contenedor Agregado con exito', '', 'success');
           }
         });
-      } else {this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, 'NUEVO' )); }
+      } else {this.addContenedor(cont, tipo, peso, destinatario, '' ); }
     }
 
     quitarContenedor(indice: number) {
       // console.log( this.contenedores.controls[indice].get('contenedor').value);
-      this._viajeService.removerContenedor(this._id.value, this.contenedores.controls[indice].get('contenedor').value)
-      .subscribe(res => {
-        if (res.ok) {
-          this.contenedores.removeAt(indice);
-          swal('Contenedor Eliminado', '', 'success');
-        }
-      });
+      if (this._id.value) {
+        this._viajeService.removerContenedor(this._id.value, this.contenedores.controls[indice].get('contenedor').value)
+        .subscribe(res => {
+          if (res.ok) {
+            this.contenedores.removeAt(indice);
+            swal('Contenedor Eliminado', '', 'success');
+          }
+        });
+      } else {
+        this.contenedores.removeAt(indice);
+      }
+
+      
     }
 
     cargarViaje( id: string ) {
       this._viajeService.getViajeXID( id ).subscribe( viaje => {
         this.regForm.controls['_id'].setValue(viaje._id);
         this.regForm.controls['viaje'].setValue(viaje.viaje);
+        this.regForm.controls['naviera'].setValue(viaje.naviera);
         this.regForm.controls['buque'].setValue(viaje.buque);
         this.regForm.controls['fArribo'].setValue(viaje.fArribo);
         this.regForm.controls['fVigenciaTemporal'].setValue(viaje.fVigenciaTemporal );
         this.regForm.controls['pdfTemporal'].setValue(viaje.pdfTemporal);
+        this.regForm.controls['anio'].setValue(viaje.anio);
         viaje.contenedores.forEach(element => {
           this.addContenedor(element.contenedor, element.tipo, element.peso, element.destinatario, element.estatus);
         });
@@ -154,11 +170,12 @@ export const MY_FORMATS = {
     }
 
     guardarViaje( ) {
+      console.log(this.regForm.valid);
       if (this.regForm.valid) {
-      this._viajeService.guardarViaje(this.regForm.value).subscribe(res => {
+        this._viajeService.guardarViaje(this.regForm.value).subscribe(res => {
         this.fileTemporal = null;
         this.temporal = false;
-        if (this.regForm.get('_id').value === '') {
+        if (this.regForm.get('_id').value == '') {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
           this.router.navigate(['/viaje', this.regForm.get('_id').value]);
@@ -167,6 +184,16 @@ export const MY_FORMATS = {
         });
       }
     }
+
+    cargarBuques(event) {
+      
+      this._buqueService.getBuqueXNaviera( event.value )
+      .subscribe( buques => {
+        this.buques = buques.buques;
+        
+      });
+    }
+
 
     onFileExcelSelected(event) {
       this.fileExcel = <File> event.target.files[0];
@@ -187,19 +214,29 @@ export const MY_FORMATS = {
     });
   }
 
+  cambiaVigencia () {
+   if (this.fArribo.value) {
+    this.fVigenciaTemporal.setValue(this.fArribo.value.clone().add(10, 'years'));
+    this.anio.setValue(this.fArribo.value.year());
+   }
+      
+  }
   cargarExcel() {
-    this._viajeService.cargarExcel(this.fileExcel)
-    .subscribe( excel => {
-      excel.forEach(element => {
-        this.addContenedor(element.Contenedor, element.Tipo, element.peso, element.Cliente, 'NUEVO');
+    this.regForm.markAsDirty();
+    
+    this._excelService.excelToJSON(this.fileExcel)
+    .subscribe( res => {
+      res.forEach(element => {
+        this.addContenedor(element.Contenedor, element.Tipo, element.Peso, element.Cliente, 'NUEVO');
       });
-      this.regForm.controls['viaje'].setValue(excel[0].Viaje);
-      const index = this.buques.find( dato => dato.nombre === excel[0].Buque);
+      this.regForm.controls['viaje'].setValue(res[0].Viaje);
+      const index = this.buques.find( dato => dato.nombre === res[0].Buque);
       if (!index) {
         swal( 'El nombre del Buque', 'No fue encontrado en el catalogo', 'error' );
       } else {
         this.regForm.controls['buque'].setValue(index._id);
       }
+      
     });
   }
 }

@@ -40,6 +40,7 @@ export class ViajesComponent implements OnInit {
 
   constructor(public _viajeService: ViajeService, private fb: FormBuilder,) { }
   ngOnInit() {
+    
     this.createFormGroup();
     this.viaje.setValue(undefined);
     this.buque.setValue(undefined);
@@ -47,11 +48,12 @@ export class ViajesComponent implements OnInit {
   }
 
   createFormGroup() {
+    console.log();
     this.regForm = this.fb.group({
       viaje: [''],
       buque: [''],
-      fIniArribo: [moment().subtract(365, 'days')],
-      fFinArribo: [moment()],
+      fIniArribo: [moment().local().startOf('day').subtract(1, 'year')],
+      fFinArribo: [moment().local().startOf('day')],
     });
   }
 
@@ -70,10 +72,12 @@ export class ViajesComponent implements OnInit {
 
   cargarViajes() {
     this.cargando = true;
-    this._viajeService.getViajes(this.fIniArribo.value ? this.fIniArribo.value.format('DD-MM-YYYY') : '',
-    this.fFinArribo.value ? this.fFinArribo.value.format('DD-MM-YYYY') : '' ,
-    this.viaje.value,
-    this.buque.value)
+    this._viajeService.getViajes(
+      this.fIniArribo.value ? this.fIniArribo.value.utc().format('DD-MM-YYYY') : '',
+      this.fFinArribo.value ? this.fFinArribo.value.utc().format('DD-MM-YYYY') : '',
+      //fecha2 ? fecha2.local().endOf('day') : '' ,
+      this.viaje.value,
+      this.buque.value)
     .subscribe(res => {
       if (res.ok) {
         this.totalRegistros = res.total;
@@ -104,7 +108,5 @@ export class ViajesComponent implements OnInit {
         }
       });
   }
-
-
 
 }

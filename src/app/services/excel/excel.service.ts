@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 // import * as XLSX from 'xlsx';
+import { URL_SERVICIOS } from '../../config/config';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import swal from 'sweetalert';
+
+
+
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -8,9 +16,9 @@ const EXCEL_EXTENSION = '.xlsx';
 @Injectable()
 export class ExcelService {
 
-  constructor() { }
+  constructor(public http: HttpClient) { }
 
-  public exportAsExcelFile(json: any[], excelFileName: string): void {
+  exportAsExcelFile(json: any[], excelFileName: string): void {
 
     /*const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     console.log('worksheet', worksheet);
@@ -26,5 +34,15 @@ export class ExcelService {
     });
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);*/
   }
-
+  
+  excelToJSON(archivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('xlsx', archivo, archivo.name);
+    const url = URL_SERVICIOS + '/exceltojson';
+    return this.http.put(url, formData)
+      .pipe(map((resp: any) => {
+        swal('Excel leido con exito', archivo.name, 'success');
+        return resp.excel;
+      }));
+  }
 }

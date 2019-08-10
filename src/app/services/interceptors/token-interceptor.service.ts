@@ -60,11 +60,14 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             switch (error.status) {
               case 0:
                 swal('', 'Cheque su conexion a Internet e intente de nuevo', 'error');
-                this._usuarioService.logout();
-                location.reload(true);
+                // this._usuarioService.logout();
+                 location.reload(true);
                 break;
               case 404:
                 swal(error.statusText, 'Pagina no encontrada', 'error');
+                break;
+              case 400:
+                swal('Error del servicio.', error.error.errors.message, 'error');
                 break;
               case 500:
                 swal(error.statusText, error.message, 'error');

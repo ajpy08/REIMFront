@@ -3,11 +3,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Viaje } from './viaje.models';
-
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
-
 import swal from 'sweetalert';
 
 const HttpUploadOptions = {
@@ -19,8 +16,7 @@ export class ViajeService {
 
   constructor(
     public http: HttpClient,
-    public _usuarioService: UsuarioService,
-    public _subirArchivoService: SubirArchivoService
+    public _usuarioService: UsuarioService
   ) { }
 
 // ==========================================
@@ -30,7 +26,6 @@ export class ViajeService {
 // ==========================================
 
   getViajes(fIniArribo?: string, fFinArribo?: string, viaje?: string, buque?: string): Observable<any> {
-
     let params = new HttpParams();
     if (fIniArribo && fFinArribo) {
       params = params.append('finiarribo', fIniArribo);
@@ -47,101 +42,73 @@ export class ViajeService {
     return this.http.get(url, {params: params });
   }
 
-
   getViajesA(anio: string): Observable<any> {
-    const url = URL_SERVICIOS + '/viaje/anio/'+ anio;
+    const url = URL_SERVICIOS + '/viajes/anio/'+ anio;
     console.log( url )
     return this.http.get(url);
   }
 
-
   getViajeXID(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/viaje/' + id;
+    const url = URL_SERVICIOS + '/viajes/viaje/' + id;
     return this.http.get(url).pipe(map((resp: any) => resp.viaje));
   }
 
-
   guardarViaje(viaje: Viaje): Observable<any> {
-    let url = URL_SERVICIOS + '/viaje';
+    
     if (viaje._id) { // actualizando
-      url += '/' + viaje._id;
-      url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, viaje)
-        .pipe(map((resp: any) => {
-          swal('Viaje Actualizado', viaje.viaje, 'success');
-          return resp.viaje;
-        }),
-          catchError(err => {
-            swal(err.error.mensaje, err.error.errores.message, 'error');
-            return throwError(err);
-          }));
-
+      return this.actualizaViaje(viaje);
     } else {// creando
-      url += '?token=' + this._usuarioService.token;
-      return this.http.post(url, viaje)
-        .pipe(map((resp: any) => {
-          swal('Viaje Creado', 'viaje: ' + viaje.viaje, 'success')
-          return resp.viaje;
-        }),
-          catchError(err => {
-            swal(err.error.mensaje, err.error.errors.message, 'error');
-            return throwError(err);
-          }));
+      return this.altaViaje(viaje);
     }
   }
 
-  borrarViaje(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/viaje/' + id;
+  altaViaje(viaje: Viaje): Observable<any> {
+    let url = URL_SERVICIOS + '/viajes';
     url += '?token=' + this._usuarioService.token;
+    return this.http.post(url, viaje)
+      .pipe(map((resp: any) => {
+        swal('Viaje Creado', 'viaje: ' + viaje.viaje, 'success')
+        return resp.viaje;
+      }));
+  }
 
+  actualizaViaje (viaje: Viaje): Observable<any> {
+    let url = URL_SERVICIOS + '/viajes';
+    url += '/' + viaje._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, viaje)
+      .pipe(map((resp: any) => {
+        swal('Viaje Actualizado', viaje.viaje, 'success');
+        return resp.viaje;
+      }));
+  }
+
+  borrarViaje(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/viajes/viaje/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Viaje Borrado', 'Eliminado correctamente', 'success')));
-
   }
 
-  removerContenedor(id: string, contenedor: string): Observable<any> {
-    let url = URL_SERVICIOS + '/viaje/removecontenedor/' + id + '&' + contenedor;
-    url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, '')
-      .pipe(map((resp: any) => {
-        swal('Contenedor Eliminado', 'success');
-        return resp;
-      }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
-        }));
-  }
-
-  addContenedor(id: string, contenedor: string, tipo: string, estado: string, destinatario: string): Observable<any> {
-    let url = URL_SERVICIOS + '/viaje/addcontenedor/' + id + '&' + contenedor + '&' + tipo + '&' + estado + '&' + destinatario;
+  addContenedor(id: string, contenedor: string, tipo: string, peso: string, destinatario: string): Observable<any> {
+    let url = URL_SERVICIOS + '/viajes/viaje/addcontenedor/' + id + '&' + contenedor + '&' + tipo + '&' + peso + '&' + destinatario;
     url += '?token=' + this._usuarioService.token;
     return this.http.put(url, '')
       .pipe(map((resp: any) => {
         swal('Contenedor Agregado con exito', 'success');
         return resp;
-      }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
-        }));
+      }));
   }
 
-
-  cargarExcel(archivo: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('xlsx', archivo, archivo.name);
-    const url = URL_SERVICIOS + '/exceltojson';
-    return this.http.put(url, formData)
+  removerContenedor(id: string, contenedor: string): Observable<any> {
+    let url = URL_SERVICIOS + '/viajes/viaje/removecontenedor/' + id + '&' + contenedor;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, '')
       .pipe(map((resp: any) => {
-        swal('Excel leido con exito', archivo.name, 'success');
-        return resp.excel;
-
-      }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
-        }));
+        swal('Contenedor Eliminado', 'success');
+        return resp;
+      }));
   }
+
 }
 
