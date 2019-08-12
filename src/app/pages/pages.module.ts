@@ -79,6 +79,7 @@ import { PipesModule } from '../pipes/pipes.module';
 // PRUEBAS -------------------------------------------------------------------
 import { HttpClientModule } from '@angular/common/http';
 import { PaginatorEspañol } from './buques2/paginator-español';
+import {NgxPrintModule} from 'ngx-print';
 
 import {
     MatDatepickerModule,
@@ -98,6 +99,7 @@ import {
     MatSortModule,
     MatPaginatorIntl
 } from '@angular/material';
+import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 @NgModule({
     declarations: [
@@ -160,7 +162,8 @@ import {
         SolicitudesAprobacionesComponent,
         RegisterComponent,
         ReparacionesComponent,
-        ReparacionComponent
+        ReparacionComponent,
+        PapeletaComponent
     ],
     exports: [
         DashboardComponent
@@ -188,6 +191,7 @@ import {
         MatTableModule,
         MatSortModule,
         MatPaginatorModule,
+        NgxPrintModule,
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}],
 })
