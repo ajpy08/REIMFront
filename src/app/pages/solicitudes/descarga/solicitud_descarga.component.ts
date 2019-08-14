@@ -90,6 +90,7 @@ export class SolicitudDescargaComponent implements OnInit {
       agencia: ['', [Validators.required]],
       naviera: ['', [Validators.required]],
       viaje: ['', [Validators.required]],
+      blBooking: ['', [Validators.required]],
       buque: ['', [Validators.required]],
       transportista: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
@@ -133,6 +134,9 @@ export class SolicitudDescargaComponent implements OnInit {
   get viaje() {
     return this.regForm.get('viaje');
   }
+  get blBooking() {
+    return this.regForm.get('blBooking');
+  }
   get buque() {
     return this.regForm.get('buque');
   }
@@ -173,6 +177,7 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['naviera'].setValue(solicitud.naviera);
       this.cargarBuques({value : solicitud.naviera});
       this.regForm.controls['viaje'].setValue(solicitud.viaje);
+      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['buque'].setValue(solicitud.buque);
       this.regForm.controls['transportista'].setValue(solicitud.transportista);
       this.regForm.controls['credito'].setValue(solicitud.credito);
