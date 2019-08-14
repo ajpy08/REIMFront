@@ -209,7 +209,7 @@
                       </thead>
                       <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
                         <tr [formGroupName]="i">
-                          <th scope="row">{{i+1}}</th>
+                          <td scope="row">{{i+1}}</td>
                           <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
                           <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                           <td>{{this.contenedores.controls[i].get('estado').value}}</td>
