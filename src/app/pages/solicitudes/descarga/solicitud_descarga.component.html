@@ -11,7 +11,7 @@
             <h3 class="card-title">Datos generales</h3>
             <hr>
             <div class="row p-t-20">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group has-danger">
                   <label class="control-label"><b>Naviera</b></label>
                   <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text" placeholder="Seleccione una naviera">
@@ -21,7 +21,7 @@
                   </mat-select>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label class="control-label"><b>Buque: </b></label>
                   <mat-select formControlName="buque" type="text" placeholder="Seleccione un buque">
@@ -32,13 +32,23 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <div class="form-group">
                     <label class="control-label"><b>Viaje: </b></label>
                     <input matInput formControlName="viaje" type="text" placeholder="Viaje requerido">
                   </div>
                 </div>
               </div>
+              <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                        <mat-form-field>
+                            <input matInput formControlName="blBooking" name="blBooking" type="text" class="form-control"
+                                placeholder="BL/Booking es requerido">
+                        </mat-form-field>
+                    </div>
+                  </div>
+                </div>
             </div>
             <!--/row-->
             <div class="row p-t-20">
@@ -228,7 +238,7 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
-            <button type="button" class="btn btn-inverse">Regresar</button>
+            <button type="button" routerLink="/solicitudes_descarga" class="btn btn-inverse">Regresar</button>
           </div>
         </form>
         <p>Form value {{ regForm.value | json }} </p>

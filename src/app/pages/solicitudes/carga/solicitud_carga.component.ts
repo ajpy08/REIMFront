@@ -71,6 +71,7 @@ export class SolicitudCargaComponent implements OnInit {
       agencia: ['', [Validators.required]],
       transportista: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
+      blBooking: ['', [Validators.required]],
       credito: ['', [Validators.required]],
       observaciones: [''],
       rutaComprobante: [''],
@@ -110,6 +111,9 @@ export class SolicitudCargaComponent implements OnInit {
   get cliente() {
     return this.regForm.get('cliente');
   }
+  get blBooking() {
+    return this.regForm.get('blBooking');
+  }
   get observaciones() {
     return this.regForm.get('observaciones');
   }
@@ -139,6 +143,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(solicitud.transportista);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
+      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
