@@ -13,6 +13,7 @@ import {MatDatepicker} from '@angular/material/datepicker';
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
 import * as _moment from 'moment';
+import { Router } from '@angular/router';
 // tslint:disable-next-line:no-duplicate-imports
 // import * as Moment from 'moment';
 
@@ -57,7 +58,7 @@ export class ManiobrasComponent implements OnInit {
    totalRegistros: number = 0;
    // tslint:disable-next-line:no-inferrable-types
    desde: number = 0;
-   constructor(public _maniobraService: ManiobraService, public _excelService: ExcelService) { }
+   constructor(public _maniobraService: ManiobraService, public _excelService: ExcelService, private router: Router) { }
 
   ngOnInit() {
     this.cargarManiobras();

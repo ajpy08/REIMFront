@@ -1,0 +1,13 @@
+body,
+      div,
+      table,
+      thead,
+      tbody,
+      tfoot,
+      tr,
+      th,
+      td,
+      p {
+        font-family: "Calibri";
+		font-size: 10
+	  }
