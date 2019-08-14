@@ -64,6 +64,9 @@ export const MY_FORMATS = {
         this.edicion = true;
         this.cargarViaje ( id );
       }
+      else {
+        this.naviera.setValue('5c49e55b6b427b166466c9b3');// por default se pone a maritima maya..
+      }
       this.contenedores.removeAt(0);
     }
 
@@ -96,6 +99,9 @@ export const MY_FORMATS = {
     }
     get viaje() {
       return this.regForm.get('viaje');
+    }
+    get naviera() {
+      return this.regForm.get('naviera');
     }
     get buque() {
       return this.regForm.get('buque');
@@ -157,8 +163,8 @@ export const MY_FORMATS = {
       this._viajeService.getViajeXID( id ).subscribe( viaje => {
         this.regForm.controls['_id'].setValue(viaje._id);
         this.regForm.controls['viaje'].setValue(viaje.viaje);
-        this.regForm.controls['naviera'].setValue(viaje.naviera);
         this.regForm.controls['buque'].setValue(viaje.buque);
+        this.regForm.controls['naviera'].setValue(viaje.naviera);        
         this.regForm.controls['fArribo'].setValue(viaje.fArribo);
         this.regForm.controls['fVigenciaTemporal'].setValue(viaje.fVigenciaTemporal );
         this.regForm.controls['pdfTemporal'].setValue(viaje.pdfTemporal);
