@@ -79,6 +79,16 @@ export class SolicitudService {
       }));
     }
 
+    apruebaSolicitudDescargaContenedor(idSol: string, idCont: string) : Observable <any>{
+      let url = URL_SERVICIOS + '/solicitud/apruebadescarga/'+ idSol + '/contenedor/'+idCont;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url,idSol)
+      .pipe(map((resp: any) => {
+        swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+        return resp.solicitud;
+      }));
+    }
+
   apruebaSolicitudCarga(solicitud: Solicitud): Observable<any> {
     let url = URL_SERVICIOS + '/solicitud/apruebacarga';
     url += '/' + solicitud._id;

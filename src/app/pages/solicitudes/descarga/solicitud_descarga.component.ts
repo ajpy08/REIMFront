@@ -1,6 +1,8 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Maniobra } from '../../../pages/maniobras/maniobra.models';
+import { ManiobraService } from 'src/app/services/service.index';
 import { Agencia } from '../../../models/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
 import { Usuario } from '../../../models/usuarios.model';
@@ -15,7 +17,6 @@ import { Buque } from '../../../models/buques.models';
 import { BuqueService } from '../../../services/service.index';
 import { Viaje } from '../../viajes/viaje.models';
 import { ViajeService } from '../../../services/service.index';
-import { Solicitud } from '../solicitud.models';
 import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
@@ -44,7 +45,7 @@ export class SolicitudDescargaComponent implements OnInit {
   viajes: Viaje[] = [];
   transportistas: Transportista[] = [];
   clientes: Cliente[] = [];
-
+  contenedoresXViaje: Maniobra[] = [];
 
 
    facturarA: string[] = ['Agencia Aduanal', 'Otro'];
@@ -55,6 +56,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
   constructor(
+    public _maniobraService: ManiobraService,
     public _usuarioService: UsuarioService,
     public _agenciaService: AgenciaService,
     public _navieraService: NavieraService,
@@ -115,7 +117,9 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   addContenedor(cont: string, tipo: string, estado: string): void {
-    this.contenedores.push(this.creaContenedor(cont, tipo, estado));
+    console.log(this.contenedoresXViaje);
+    console.log(this.viajes);
+    //this.contenedores.push(this.creaContenedor(cont, tipo, estado));
   }
 
   removeContenedor( index: number ) {
@@ -198,6 +202,12 @@ export class SolicitudDescargaComponent implements OnInit {
     .subscribe( buques => this.buques = buques.buques);
   }
 
+  cargarViajes(event) {
+    this._viajeService.getViajes(null,null,null,event.value )
+    .subscribe( res => this.viajes = res.viajes);
+  }
+
+
   cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
     .subscribe( cliente => this.clientes = cliente.clientes);
@@ -217,6 +227,17 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
   }
+
+  cargarContenedores(event)
+  {
+    this._maniobraService.getManiobraXViajeVacios(event.value)
+    .subscribe( res => {
+      console.log(res);
+      this.contenedoresXViaje = res;
+
+    });
+  }
+
   guardarSolicitud( ) {
     if (this.regForm.valid) {
       this._SolicitudDService.guardarSolicitud(this.regForm.value).subscribe(res => {

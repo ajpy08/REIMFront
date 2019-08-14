@@ -24,44 +24,26 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="control-label"><b>Buque: </b></label>
-                  <mat-select formControlName="buque" type="text" placeholder="Seleccione un buque">
+                  <mat-select formControlName="buque" (selectionChange)="cargarViajes($event)" type="text" placeholder="Seleccione un buque">
                     <mat-option *ngFor="let buque of buques" [value]="buque._id">
                       {{buque.nombre}}
                     </mat-option>
                   </mat-select>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label class="control-label"><b>Viaje: </b></label>
-                    <input matInput formControlName="viaje" type="text" placeholder="Viaje requerido">
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                        <mat-form-field>
-                            <input matInput formControlName="blBooking" name="blBooking" type="text" class="form-control"
-                                placeholder="BL/Booking es requerido">
-                        </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-            </div>
-            <!--/row-->
-            <div class="row p-t-20">
               <div class="col-md-3">
-                <div class="form-group has-success">
-                  <label class="control-label"><b>Transportista</b></label>
-                  <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista">
-                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                      {{transportista.razonSocial}}
+                <div class="form-group">
+                  <label class="control-label"><b>Viaje: </b></label>
+                  <mat-select formControlName="viaje" (selectionChange)="cargarContenedores($event)" type="text" placeholder="Seleccione un viaje">
+                    <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                      {{viaje.viaje}}
                     </mat-option>
                   </mat-select>
                 </div>
               </div>
+            </div>
+            <!--/row-->
+            <div class="row p-t-20">
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="control-label"><b>Agente Aduanal</b></label>
@@ -174,6 +156,11 @@
                 <div class="form-group">
                   <label><b>Contenedor</b></label>
                   <input #contenedor type="text" class="form-control">
+                  <mat-select type="text" placeholder="Contenedores">
+                    <mat-option *ngFor="let cont of contenedoresXViaje" [value]="cont._id">
+                      {{cont.contenedor}}
+                    </mat-option>
+                  </mat-select>
                 </div>
               </div>
               <div class="col-md-3">

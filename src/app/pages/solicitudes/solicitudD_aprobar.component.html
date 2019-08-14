@@ -134,7 +134,7 @@
             <!--/span-->
           </div>
         </div>
-        <form class="form-horizontal" [formGroup]="regForm" (click)="apruebaSolicitud()">
+        <form class="form-horizontal" [formGroup]="regForm" (submit)="apruebaSolicitud()">
           <div class="row">
             <div class="col-md-12">
               <div class="form-group">
@@ -146,6 +146,7 @@
                       <th scope="col">Tamaño - Tipo</th>
                       <th scope="col">Estado contenedor</th>
                       <th scope="col">Maniobra Encontrada</th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
@@ -155,6 +156,10 @@
                       <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                       <td>{{this.contenedores.controls[i].get('estado').value}}</td>
                       <td>{{this.contenedores.controls[i].get('maniobra').value}}</td>
+                      <td>
+                        <button type="button" id="bot1" class="btn" (click)="validaSolicitud( i )" value="Validar"> <i class="fa fa-check"></i> Validar</button>
+                        <button type="button" class="btn btn-success" (click)="apruebaSolicitud( i )" value="Aprobar"> <i class="fa fa-check"></i> Aprobar</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -163,7 +168,6 @@
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-success" (click)="validaSolicitud()"> <i class="fa fa-check"></i> Validar</button>
             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Aprobar</button>
             <button type="button" class="btn btn-inverse">Cancelar</button>
           </div>
