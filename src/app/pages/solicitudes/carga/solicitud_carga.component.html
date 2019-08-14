@@ -48,6 +48,14 @@
                 </mat-select>
               </div>
             </div>
+            <div class="row p-t-20">
+                <div class="col-md">
+                    <mat-form-field>
+                        <input matInput formControlName="blBooking" name="blBooking" type="text" class="form-control"
+                            placeholder="BL/Booking es requerido">
+                    </mat-form-field>
+                </div>
+            </div>
             <h3 class="box-title m-t-40">Detalles de la descarga</h3>
             <hr>
             <div class="row">
@@ -179,7 +187,7 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
-            <button type="button" class="btn btn-inverse">Regresar</button>
+            <button type="button" routerLink="/solicitudes_carga" class="btn btn-inverse">Regresar</button>
           </div>
         </form>
         <p>Form value {{ regForm.value | json }} </p>
