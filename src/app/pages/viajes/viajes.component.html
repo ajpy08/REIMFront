@@ -1,81 +1,125 @@
+<!-- <div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <input #input (keyup)="buscarViaje( input.value )" type="text" class="form-control" placeholder="Buscar viaje...">
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <div class="row animated fadeIn">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-
-                <input #input (keyup)="buscarViaje( input.value )" type="text" class="form-control" placeholder="Buscar viaje...">
-
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="regForm" (ngSubmit)="filtrarViajes()" novalidate>
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field>
+                <mat-label>Viaje</mat-label>
+                <input matInput formControlName="viaje" type="text" placeholder="Ingrese viaje">
+              </mat-form-field>
             </div>
-        </div>
+            <!-- <mat-form-field class="inputpersonalizado">
+                    <mat-select formControlName="buque" placeholder="Seleccione un Buque">
+                        <mat-option *ngFor="let buque of buques" [value]="buque._id">
+                            {{ buque.nombre }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="fIniArribo" [matDatepicker]="picker" type="text" placeholder="Fecha Inicial arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput formControlName="fFinArribo" [matDatepicker]="picker2" type="text" placeholder="Fecha Final Arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <button type="submit" class="btn btn-success waves-effect">
+                  <i class="fa fa-filter "></i>
+                  Filtrar
+               </button>
+              <!-- <button type="reset" class="btn btn-success waves-effect">
+                  <i class="fa fa-filter "></i>
+                  Limpiar
+               </button> -->
+            </div>
+          </div>
+        </form>
+        <p>Form value {{ regForm.value | json }} </p>
+      </div>
     </div>
+  </div>
 </div>
+
 <div class="row animated fadeIn" *ngIf="cargando">
-    <div class="col-sm-12">
-        <div class="alert alert-warning text-center">
-            <strong>Cargando</strong>
-            <br>
-            <i class="fas fa-refresh fa-spin fa-2x"></i>
-            <br>
-            <span>Espere por favor</span>
-        </div>
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
     </div>
+  </div>
 </div>
+
 <div class="row animated fadeIn" *ngIf="!cargando">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-right">
-                    <button [routerLink]="['/viaje','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                        <i class="fa fa-plus"></i> 
-                        Añadir nuevo viaje
-                    </button>
-                </div>
-                <h3 class="card-title">Viajes registrados ( <small>{{totalRegistros}}</small> )</h3>
-                <div class="table-responsive">
-                    <table class="table table-hover table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Viaje</th>
-                                <th>Buque</th>
-                                <th>Fecha de Arribo</th>
-                                <th>Temporal</th>
-                                <th>Vigencia del temporal</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let viaje of viajes">
-                                <td>{{viaje.viaje}}</td>
-                                <td>{{viaje.buque.nombre}}</td>
-                                <td>{{viaje.fArribo}}</td>
-                                <td>
-                                    <a *ngIf="viaje.pdfTemporal" [href]="viaje.pdfTemporal | imagen:'viaje'" target="_blank">
-                                        <img src="\assets\images\icon\pdf_32x32.png">
-                                    </a>
-                                </td>
-                                <td>{{viaje.fVigenciaTemporal}}</td>
-                                <td>
-                                    <button [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"> Editar</i>
-                                    </button>
-                                    <button (click)="borrarViaje( viaje )" class="btn btn-danger">
-                                        <i class="fa fa-trash-o"> Eliminar</i>
-                                    </button>
-                                    <!-- <button [routerLink]="['/addcontainers', viaje._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"> Ver Contenedores</i>
-                                    </button> -->
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
-                <i class="fas fa-angle-left"></i> Anteriores
-              </button>
-                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
-                  Siguientes <i class="fas fa-angle-right"></i>
-            </button>
-            </div>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+          <button [routerLink]="['/viaje','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i> 
+            Nuevo Viaje
+          </button>
         </div>
+        <h3 class="card-title">Viajes registrados ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="table-responsive">
+          <table class="table table-hover table-responsive">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Viaje</th>
+                <th>Buque</th>
+                <th>Fecha de Arribo</th>
+                <th>Temporal</th>
+                <th>Vigencia del temporal</th>
+                <th>Año</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let viaje of viajes">
+                <td>
+                  <button [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button (click)="borrarViaje( viaje )" class="btn btn-danger">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </td>
+                <td>{{viaje.viaje}}</td>
+                <td>{{viaje.buque.nombre}}</td>
+                <td>{{viaje.fArribo | date:"dd-MM-yyyy"}}</td>
+                <td>
+                  <a *ngIf="viaje.pdfTemporal" [href]="viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                    <img src="\assets\images\icon\pdf_32x32.png">
+                  </a>
+                </td>
+                <td>{{viaje.fVigenciaTemporal | date:"dd-MM-yyyy"}}</td>
+                <td>{{viaje.anio}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
