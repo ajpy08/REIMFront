@@ -68,6 +68,8 @@ import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.compo
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
+import { Buques2Component } from './buques2/buques2.component';
+import { Buque2Component } from './buques2/buque2.component';
 import { ReparacionesComponent } from './reparaciones/reparaciones.component';
 import { ReparacionComponent } from './reparaciones/reparacion.component';
 
@@ -79,6 +81,7 @@ import { AdminGuard } from '../services/service.index';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
+import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 
 
@@ -97,6 +100,7 @@ const pagesRoutes: Routes = [
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
+    {path: 'papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
     {path: 'transito', component: TransitoComponent, data: {titulo: 'Transito'}},
     {path: 'llegada_entrada/:id', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
     {path: 'espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
@@ -234,6 +238,13 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Reparaciones' }
     },
     {path: 'reparacion/:id', component: ReparacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    {
+        path: 'buques2',
+        component: Buques2Component,
+        canActivate: [ AdminGuard ],
+        data: { titulo: 'Mantenimiento de Buques' }
+    },
+    {path: 'buque2/:id', component: Buque2Component,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     ];
     export const PAGES_ROUTES = RouterModule.forChild( pagesRoutes );

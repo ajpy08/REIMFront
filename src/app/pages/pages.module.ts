@@ -67,6 +67,8 @@ import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.compo
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
+import { Buques2Component } from './buques2/buques2.component';
+import { Buque2Component } from './buques2/buque2.component';
 import { ReparacionesComponent } from './reparaciones/reparaciones.component';
 import { ReparacionComponent } from './reparaciones/reparacion.component';
 import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
@@ -74,22 +76,30 @@ import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
 import { PipesModule } from '../pipes/pipes.module';
 // import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
-
+// PRUEBAS -------------------------------------------------------------------
+import { HttpClientModule } from '@angular/common/http';
+import { PaginatorEspañol } from './buques2/paginator-español';
+import {NgxPrintModule} from 'ngx-print';
 
 import {
     MatDatepickerModule,
     MatButtonModule,
     MatCardModule,
     MatNativeDateModule,
-    MatInputModule,
     MatSelectModule,
     MatSlideToggleModule,
     MatTabsModule,
     MatAutocompleteModule,
     MatCheckboxModule,
     MatRadioModule,
-    MatStepperModule
-  } from '@angular/material';
+    MatStepperModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorIntl
+} from '@angular/material';
+import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 @NgModule({
     declarations: [
@@ -147,10 +157,13 @@ import {
         ReporteContenedoresRLComponent,
         BuquesComponent,
         BuqueComponent,
+        Buques2Component,
+        Buque2Component,
         SolicitudesAprobacionesComponent,
         RegisterComponent,
         ReparacionesComponent,
-        ReparacionComponent
+        ReparacionComponent,
+        PapeletaComponent
     ],
     exports: [
         DashboardComponent
@@ -166,15 +179,21 @@ import {
         MatCardModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatInputModule,
         MatSelectModule,
         MatSlideToggleModule,
         MatTabsModule,
         MatAutocompleteModule,
         MatCheckboxModule,
         MatRadioModule,
-        MatStepperModule
-    ]
-    })
+        MatStepperModule,
+        HttpClientModule,
+        MatInputModule,
+        MatTableModule,
+        MatSortModule,
+        MatPaginatorModule,
+        NgxPrintModule,
+    ],
+    providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}],
+})
 
-export class PagesModules {}
+export class PagesModules { }
