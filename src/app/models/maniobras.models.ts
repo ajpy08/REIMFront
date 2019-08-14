@@ -1,6 +1,7 @@
 export class Maniobra {
 
     constructor(
+        public cargaDescarga?: string,
         public entrada?: string,
         public salida?: string,
         public inicio?: string,
@@ -8,6 +9,7 @@ export class Maniobra {
         public transporte?: string,
         public lavado?: string,
         public rep?: string,
+        public peso?: string,
         public grado?: string,
         public operador?: string,
         public camion?: string,

@@ -81,6 +81,7 @@ import { AdminGuard } from '../services/service.index';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
+import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 
 
@@ -99,6 +100,7 @@ const pagesRoutes: Routes = [
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
+    {path: 'papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
     {path: 'transito', component: TransitoComponent, data: {titulo: 'Transito'}},
     {path: 'llegada_entrada/:id', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
     {path: 'espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
