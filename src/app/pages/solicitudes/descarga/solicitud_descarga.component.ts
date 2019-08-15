@@ -102,24 +102,25 @@ export class SolicitudDescargaComponent implements OnInit {
       rutaComprobante: [''],
       correo: [''],
       correoFac: [''],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '') ]),
       _id: [''],
       tipo: ['D']
     });
   }
 
-  creaContenedor(cont: string, tipo: string, estado: string): FormGroup {
+  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, fAprobacion: string): FormGroup {
     return this.fb.group({
-      contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
+      contenedor: [cont],
       tipo: [tipo],
-      estado: [estado]
+      peso: [peso],
+      maniobra: [maniobra],
+      transportista: [transportista],
+      fAprobacion: [fAprobacion]
     });
   }
 
-  addContenedor(cont: string, tipo: string, estado: string): void {
-    console.log(this.contenedoresXViaje);
-    console.log(this.viajes);
-    //this.contenedores.push(this.creaContenedor(cont, tipo, estado));
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, fAprobacion: string): void {
+    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, fAprobacion));
   }
 
   removeContenedor( index: number ) {

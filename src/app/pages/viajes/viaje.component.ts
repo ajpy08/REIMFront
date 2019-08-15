@@ -130,7 +130,7 @@ export const MY_FORMATS = {
     }
 
     addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
-      
+
       if (this._id.value) {
         this._viajeService.addContenedor(this._id.value, cont, tipo, peso, destinatario)
         .subscribe(res => {
@@ -156,7 +156,7 @@ export const MY_FORMATS = {
         this.contenedores.removeAt(indice);
       }
 
-      
+
     }
 
     cargarViaje( id: string ) {
@@ -164,7 +164,7 @@ export const MY_FORMATS = {
         this.regForm.controls['_id'].setValue(viaje._id);
         this.regForm.controls['viaje'].setValue(viaje.viaje);
         this.regForm.controls['buque'].setValue(viaje.buque);
-        this.regForm.controls['naviera'].setValue(viaje.naviera);        
+        this.regForm.controls['naviera'].setValue(viaje.naviera);
         this.regForm.controls['fArribo'].setValue(viaje.fArribo);
         this.regForm.controls['fVigenciaTemporal'].setValue(viaje.fVigenciaTemporal );
         this.regForm.controls['pdfTemporal'].setValue(viaje.pdfTemporal);
@@ -192,11 +192,9 @@ export const MY_FORMATS = {
     }
 
     cargarBuques(event) {
-      
       this._buqueService.getBuqueXNaviera( event.value )
       .subscribe( buques => {
         this.buques = buques.buques;
-        
       });
     }
 
@@ -225,11 +223,10 @@ export const MY_FORMATS = {
     this.fVigenciaTemporal.setValue(this.fArribo.value.clone().add(10, 'years'));
     this.anio.setValue(this.fArribo.value.year());
    }
-      
+
   }
   cargarExcel() {
     this.regForm.markAsDirty();
-    
     this._excelService.excelToJSON(this.fileExcel)
     .subscribe( res => {
       res.forEach(element => {
@@ -242,7 +239,6 @@ export const MY_FORMATS = {
       } else {
         this.regForm.controls['buque'].setValue(index._id);
       }
-      
     });
   }
 }
