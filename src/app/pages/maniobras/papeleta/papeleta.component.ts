@@ -20,7 +20,6 @@ export class PapeletaComponent implements OnInit {
       maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
         this.maniobra = maniobra.maniobra;
         this.fechaAsignacion = this.maniobra.fAlta;
-        console.log(this.maniobra);
       });
       if (this.maniobra == undefined) {
         this.router.navigate(['/buques2' ]);
