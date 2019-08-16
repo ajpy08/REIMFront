@@ -25,7 +25,15 @@
         <td colspan=8>&nbsp;</td>
       </tr>
       <tr>
-        <td colspan=8>&nbsp;</td>
+        <td colspan=4 align="right" valign=bottom>
+          <font color="#000000">FOLIO </font>
+        </td>
+        <td colspan=2 rowspan=1 ng-app ng-controller="CreaFecha"
+          style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=bottom sdval="43688" sdnum="1033;1033;D/M/YYYY">
+          <font color="#000000">
+            JAVI</font>
+        </td>
       </tr>
       <tr>
         <td colspan=4 align="right" valign=bottom>
@@ -182,7 +190,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.viaje.buque.nombre}}</font>
+            {{maniobra.viaje?.buque?.nombre}}</font>
         </td>
         <td height="20" align="left" valign=bottom>
           <font color="#000000"><br></font>
@@ -194,7 +202,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.viaje.viaje}}</font>
+            {{maniobra.viaje?.viaje}}</font>
         </td>
         <td height="20" align="left" valign=bottom>
           <font color="#000000"><br></font>
@@ -226,7 +234,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.cliente.razonSocial}}</font>
+            {{maniobra.cliente?.razonSocial}}</font>
         </td>
       </tr>
       <tr>
@@ -264,7 +272,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           colspan=4 align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.agencia}}</font>
+            {{maniobra.agencia?.razonSocial}}</font>
         </td>
       </tr>
       <tr>
@@ -283,7 +291,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.transportista.razonSocial}}</font>
+            {{maniobra.transportista?.razonSocial}}</font>
         </td>
       </tr>
       <tr>
@@ -299,7 +307,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.operador.nombre}}</font>
+            {{maniobra.operador?.nombre}}</font>
         </td>
         <td colspan=2 height="20" align="left" valign=bottom>
           <font color="#000000"><br></font>
@@ -313,7 +321,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.camion.placa}}</font>
+            {{maniobra.camion?.placa}}</font>
         </td>
       </tr>
       <tr>
@@ -330,7 +338,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle sdval="3550900123" sdnum="1033;">
           <font color="#000000">
-            3550900123</font>
+            {{maniobra.camion?.operador?.licencia}}</font>
         </td>
         <td colspan=2 align="left" valign=middle>
           <font color="#000000"><br></font>
@@ -343,7 +351,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            {{maniobra.camion.noEconomico}}</font>
+            {{maniobra.camion?.noEconomico}}</font>
         </td>
       </tr>
       <tr>
@@ -364,6 +372,31 @@
           <font color="#000000"><b>ESTE DOCUMENTO ES VALIDO UNICAMENTE EN LA FECHA QUE SE INDICA EN LA PARTE
               SUPERIOR</b>
           </font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
         </td>
       </tr>
       <tr>

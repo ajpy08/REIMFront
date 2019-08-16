@@ -1,3 +1,9 @@
+import { Viaje } from "../viajes/viaje.models";
+import { Operador } from "src/app/models/operador.models";
+import { Cliente } from "src/app/models/cliente.models";
+import { Camion } from "src/app/models/camion.models";
+import { Agencia } from "src/app/models/agencia.models";
+
 export class Maniobra {
     constructor(
         public cargaDescarga?: string,
