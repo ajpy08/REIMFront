@@ -35,7 +35,7 @@ export class ReparacionComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       descripcion: ['', [Validators.required]],
-      costo: [''],
+      costo: ['', [Validators.required]],
       _id: ['']
     });
   }

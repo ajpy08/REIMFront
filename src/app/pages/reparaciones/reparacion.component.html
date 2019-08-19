@@ -8,14 +8,21 @@
             <div class="my-container">
               <mat-form-field>
                 <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
-                  placeholder="Descripcion de la reparación">
+                  placeholder="Descripcion de la reparación *">
+                  <mat-error *ngIf="descripcion.touched && descripcion.invalid">
+                    <sup>*</sup>Por Favor Ingrese la Descripcion
+                  </mat-error>
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="costo" name="costo" type="text" class="form-control"
-                  placeholder="Costo de la reparación">
+                  placeholder="Costo de la reparación *">
+                  <mat-error *ngIf="costo.touched && costo.invalid">
+                    <sup>*</sup>Por Favor Ingrese el Costo
+                  </mat-error>
               </mat-form-field>
             </div>
-            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
+            [disabled]="regForm.pristine || regForm.invalid ">
               <i class="fa fa-save"></i>
               Guardar
             </button>

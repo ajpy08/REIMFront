@@ -14,7 +14,7 @@
                                     <sup>*</sup>Por Favor Ingrese la Razon Social
                                 </mat-error>
                                 <mat-error *ngIf="razonSocial.errors?.minlength">
-                                    <sup>*</sup>El RFC debe contener al menos 5 caracteres<br>
+                                    <sup>*</sup>la Razon Social debe contener al menos 5 caracteres<br>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field>
@@ -88,8 +88,8 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <button *ngIf="regForm.valid" type="submit"
-                            class="btn btn-success waves-effect waves-light m-r-10"
+                        <button type="submit"
+                            class="btn btn-primary btn-success waves-effect waves-light m-r-10"
                             [disabled]="regForm.pristine || regForm.invalid">
                             <i class="fa fa-save"></i>
                             Guardar
