@@ -10,23 +10,28 @@
                             <mat-form-field>
                                 <mat-select placeholder="Seleccione una naviera" formControlName="naviera"
                                     name="naviera">
-                                    <mat-option *ngFor="let naviera of navieras"
-                                        [value]="naviera._id">
+                                    <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
                                         {{ naviera.razonSocial }}
-                                    </mat-option>
+                                    </mat-option>                                    
                                 </mat-select>
+                                <mat-error *ngIf="naviera.touched && naviera.invalid">
+                                    <sup>*</sup>Por Favor Ingrese una Naviera
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="nombre" name="nombre" type="text" class="form-control"
                                     placeholder="Nombre del buque">
+                                <mat-error *ngIf="nombre.touched && nombre.invalid">
+                                    <sup>*</sup>Por Favor Ingrese un Nombre de Buque
+                                </mat-error>
                             </mat-form-field>
                         </div>
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                        <button *ngIf="regForm.valid" type="submit" class="btn btn-success waves-effect waves-light m-r-10">
                             <i class="fa fa-save"></i>
                             Guardar
                         </button>
                         <a routerLink="/buques2" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
-                    </form>                    
+                    </form>
                 </div>
             </div>
         </div>
