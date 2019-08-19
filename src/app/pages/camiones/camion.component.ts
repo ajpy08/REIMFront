@@ -116,6 +116,10 @@ export class CamionComponent implements OnInit {
     return this.regForm.get('placa');
   }
 
+  get operador() {
+    return this.regForm.get('operador');
+  }
+
   get noEconomico() {
     return this.regForm.get('noEconomico');
   }
@@ -136,9 +140,9 @@ export class CamionComponent implements OnInit {
     this.regForm = this.fb.group({
       transportista: ['', [Validators.required]],
       operador: [''],
-      placa: ['', [Validators.required, Validators.minLength(7)]],
+      placa: ['', [Validators.required, Validators.minLength(6)]],
       noEconomico: ['', [Validators.required, Validators.minLength(2)]],
-      vigenciaSeguro: [''],
+      vigenciaSeguro: ['', [Validators.required]],
       pdfSeguro: [''],
       _id: ['']
     });
