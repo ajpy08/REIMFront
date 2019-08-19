@@ -56,21 +56,21 @@ export class ClienteComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
+      rfc: ['', [Validators.required, Validators.minLength(12)]],
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
       nombreComercial: [''],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
       colonia: [''],
       municipio: [''],
       ciudad: [''],
-      estado: [''],
-      cp: [''],
-      formatoR1: [''],
-      correo: [''],
-      correoFac: [''],
-      credito: [false],
+      estado: ['', [Validators.required]],
+      cp: ['', [Validators.required]],
+      formatoR1: ['', [Validators.required]],
+      correo: ['', Validators.email],
+      correoFac: ['', Validators.email],
+      credito: [false, [Validators.required]],
       img: [''],
       empresas: [''],
       _id: ['']

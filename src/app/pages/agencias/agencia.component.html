@@ -8,16 +8,23 @@
                         <div class="my-container">
                             <mat-form-field>
                                 <input matInput formControlName="razonSocial" type="text" class="form-control"
-                                    placeholder="Razón Social *" novalidate>
-                                <mat-error *ngIf="razonSocial.touched && razonSocial.invalid">
-                                    <sup>*</sup>Por Favor Ingrese una Razon Social <br><br>
+                                    placeholder="Razón Social *">
+                                <mat-error
+                                    *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
+                                    <sup>*</sup>Por Favor Ingrese la Razon Social
+                                </mat-error>
+                                <mat-error *ngIf="razonSocial.errors?.minlength">
+                                    <sup>*</sup>El RFC debe contener al menos 5 caracteres<br>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="rfc" type="text" class="form-control"
                                     placeholder="RFC *">
-                                <mat-error *ngIf="rfc.touched && rfc.invalid">
+                                <mat-error *ngIf="rfc.touched && rfc.invalid && !rfc.errors?.minlength">
                                     <sup>*</sup>Por Favor Ingrese un RFC <br><br>
+                                </mat-error>
+                                <mat-error *ngIf="rfc.errors?.minlength">
+                                    <sup>*</sup>El RFC debe contener al menos 12 caracteres<br>
                                 </mat-error>
                             </mat-form-field>
                             <mat-form-field>
