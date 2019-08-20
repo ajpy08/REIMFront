@@ -72,7 +72,7 @@ export class Buque2Component implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       naviera: ['', [Validators.required]],
-      nombre: [''],
+      nombre: ['', [Validators.required]],
       _id: ['']
     });
   }

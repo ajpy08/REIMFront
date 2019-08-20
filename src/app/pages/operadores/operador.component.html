@@ -9,36 +9,53 @@
                         <div class="my-container">
                             <!--========Combombox Operador=========-->
                             <mat-form-field>
-                                <mat-select formControlName="transportista" placeholder="Seleccione un Transportista"
+                                <mat-select formControlName="transportista" placeholder="Seleccione un Transportista *"
                                     name="transportista">
                                     <mat-option *ngFor="let transportista of transportistas"
                                         [value]="transportista._id">
                                         {{ transportista.razonSocial }}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="transportista.touched && transportista.invalid">
+                                    <sup>*</sup>Por favor seleccione un Transportista
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="nombre" name="nombre" type="text" class="form-control"
-                                    placeholder="Nombre del operador">
+                                    placeholder="Nombre del operador *">
+                                <mat-error *ngIf="nombre.touched && nombre.invalid">
+                                    <sup>*</sup>Por Favor Ingrese un Nombre
+                                </mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput formControlName="licencia" name="licencia" type="text"
-                                    class="form-control" placeholder="Número de Licencia">
+                                    class="form-control" placeholder="Número de Licencia *">
+                                    <mat-error *ngIf="licencia.touched && licencia.invalid && !licencia.errors?.minlength">
+                                        <sup>*</sup>Por Favor Ingrese la Licencia
+                                    </mat-error>
+                                    <mat-error *ngIf="licencia.errors['minlength']">
+                                        <sup>*</sup>La Licencia debe contener al menos 5 caracteres<br>
+                                    </mat-error>
                             </mat-form-field>
                             <!--========input vigencia licencia=========-->
                             <mat-form-field>
                                 <input matInput [matDatepicker]="picker" formControlName="vigenciaLicencia"
                                     name="vigenciaLicencia" type="text" class="form-control"
-                                    placeholder="Vigencia de Licencia">
+                                    placeholder="Vigencia de Licencia *">
                                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="vigenciaLicencia.touched && vigenciaLicencia.invalid">
+                                    <sup>*</sup>Por Favor Ingrese una Vigencia de Licencia
+                                </mat-error>
                             </mat-form-field>
-                            <mat-checkbox formControlName="activo" class="form-control" name="activo" placeholder="Activo">
+                            <mat-checkbox formControlName="activo" class="form-control" name="activo"
+                                placeholder="Activo">
                                 Activo
                             </mat-checkbox>
                         </div>
                         <br>
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+                        <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+                        [disabled]="regForm.pristine || regForm.invalid ">
                             <i class="fa fa-save"></i>
                             Guardar
                         </button>
