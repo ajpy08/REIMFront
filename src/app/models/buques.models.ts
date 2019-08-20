@@ -2,8 +2,8 @@ import { Naviera } from "./navieras.models";
 
 export class Buque {
     constructor(
-        public naviera?: Naviera,
         public nombre?: string,
+        public naviera?: Naviera,
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,
