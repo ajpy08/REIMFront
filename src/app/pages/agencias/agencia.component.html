@@ -13,7 +13,7 @@
                                     *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
                                     <sup>*</sup>Por Favor Ingrese la Razon Social
                                 </mat-error>
-                                <mat-error *ngIf="razonSocial.errors['minlength']">
+                                <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
                                     <sup>*</sup>la Razon Social debe contener al menos 5 caracteres<br>
                                 </mat-error>
                             </mat-form-field>
@@ -23,7 +23,7 @@
                                 <mat-error *ngIf="rfc.touched && rfc.invalid && !rfc.errors?.minlength">
                                     <sup>*</sup>Por Favor Ingrese un RFC <br><br>
                                 </mat-error>
-                                <mat-error *ngIf="rfc.errors['minlength']">
+                                <mat-error *ngIf="rfc.errors && rfc.errors['minlength']">
                                     <sup>*</sup>El RFC debe contener al menos 12 caracteres<br>
                                 </mat-error>
                             </mat-form-field>

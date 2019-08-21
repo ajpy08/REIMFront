@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Camion } from '../../models/camion.models';
 import { CamionService } from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 @Component({
   selector: 'app-camiones',
@@ -8,10 +9,16 @@ declare var swal: any;
   styles: []
 })
 export class CamionesComponent implements OnInit {
-  camiones : Camion[] = [];
+  camiones: Camion[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
   desde: number = 0;
+
+  displayedColumns = ['actions', 'transportista.razonSocial', 'noEconomico', 'placa', 'vigenciaSeguro', 'pdfSeguro'];
+  dataSource: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(public _camionService: CamionService) { }
 
@@ -19,27 +26,36 @@ export class CamionesComponent implements OnInit {
     this.cargarCamiones();
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.totalRegistros = this.dataSource.filteredData.length;
+  }
+
   cargarCamiones() {
     this.cargando = true;
     this._camionService.getCamiones(this.desde)
-    .subscribe(camiones => {
-      this.totalRegistros = camiones.total,
-      this.camiones = camiones.camiones
-      this.cargando = false;
-    });
-   }
-
-  cambiarDesde(valor: number) {
-    let desde = this.desde + valor;
-    if (desde >= this.totalRegistros) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargarCamiones();
+      .subscribe(camiones => {
+        this.dataSource = new MatTableDataSource(camiones.camiones);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = camiones.camiones.length;
+      });
+    this.cargando = false;
   }
+
+  // cambiarDesde(valor: number) {
+  //   let desde = this.desde + valor;
+  //   if (desde >= this.totalRegistros) {
+  //     return;
+  //   }
+  //   if (desde < 0) {
+  //     return;
+  //   }
+  //   this.desde += valor;
+  //   this.cargarCamiones();
+  // }
 
   buscarCamion(termino: string) {
     if (termino.length <= 0) {
@@ -48,13 +64,13 @@ export class CamionesComponent implements OnInit {
     }
     this.cargando = true;
     this._camionService.buscarCamion(termino)
-    .subscribe((camiones: Camion[]) => {
-      this.camiones = camiones;
-      this.cargando = false;
-    });
+      .subscribe((camiones: Camion[]) => {
+        this.camiones = camiones;
+        this.cargando = false;
+      });
   }
 
-  borrarCamion( camion: Camion ) {
+  borrarCamion(camion: Camion) {
     swal({
       title: '¿Esta seguro?',
       text: 'Esta apunto de borrar a ' + camion.noEconomico,
@@ -64,7 +80,7 @@ export class CamionesComponent implements OnInit {
     })
       .then(borrar => {
         if (borrar) {
-          this._camionService.borrarCamion( camion._id )
+          this._camionService.borrarCamion(camion._id)
             .subscribe(borrado => {
               this.cargarCamiones();
             });
