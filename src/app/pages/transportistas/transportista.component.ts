@@ -53,7 +53,7 @@ export class TransportistaComponent implements OnInit {
       formatoR1: ['', [Validators.required]],
       correo: ['', [Validators.email]],
       correoFac: ['', [Validators.email]],
-      credito: [false, Validators.email],
+      credito: [false, [Validators.required]],
       img: [''],
       caat: ['', [Validators.required]],
       _id: ['']

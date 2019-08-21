@@ -192,7 +192,7 @@ export class CamionComponent implements OnInit {
     //   file = this.fileImg;
     //   this.fileImgTemporal = true;
     // } else {
-    if (this.file != null && tipo == 'poliza') {
+    if (this.file != null && tipo == 'pdfSeguro') {
       file = this.file;
       this.fileTemporal = true;
     }

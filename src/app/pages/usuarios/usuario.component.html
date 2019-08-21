@@ -12,7 +12,7 @@
                             <mat-error *ngIf="nombre.touched && nombre.invalid && !nombre.errors?.minlength">
                                 <sup>*</sup>Por Favor Ingrese un Nombre de Usuario
                             </mat-error>
-                            <mat-error *ngIf="!nombre.errors?.minlength">
+                            <mat-error *ngIf="nombre.errors && nombre.errors['minlength']">
                                 <sup>*</sup>El nombre de usuario debe contener al menos 5 caracteres<br>
                             </mat-error>
                         </mat-form-field>

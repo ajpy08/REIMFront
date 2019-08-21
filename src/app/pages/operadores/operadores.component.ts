@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Operador } from '../../models/operador.models';
 import { OperadorService } from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 @Component({
   selector: 'app-operadores',
@@ -13,34 +14,49 @@ export class OperadoresComponent implements OnInit {
   totalRegistros: number = 0;
   desde: number = 0;
 
+  displayedColumns = ['actions', 'foto', 'transportista.razonSocial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
+  dataSource: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(public _operadorService: OperadorService) { }
 
   ngOnInit() {
     this.cargarOperadores();
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.totalRegistros = this.dataSource.filteredData.length;
+  }
+
   cargarOperadores() {
     this.cargando = true;
     this._operadorService.getOperadores(this.desde)
       .subscribe(operadores => {
-        this.totalRegistros = operadores.totalRegistros;
-        this.operadores = operadores.operadores;
-        this.cargando = false;
+        this.dataSource = new MatTableDataSource(operadores.operadores);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = operadores.operadores.length;
       });
+      this.cargando = false;
   }
 
-  cambiarDesde(valor: number) {
-    let desde = this.desde + valor;
-    //console.log(desde);
-    if (desde >= this._operadorService.totalOperadores) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargarOperadores();
-  }
+  // cambiarDesde(valor: number) {
+  //   let desde = this.desde + valor;
+  //   //console.log(desde);
+  //   if (desde >= this._operadorService.totalOperadores) {
+  //     return;
+  //   }
+  //   if (desde < 0) {
+  //     return;
+  //   }
+  //   this.desde += valor;
+  //   this.cargarOperadores();
+  // }
 
   buscarOperador(termino: string) {
     if (termino.length <= 0) {

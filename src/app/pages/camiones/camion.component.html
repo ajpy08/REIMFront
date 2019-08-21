@@ -38,7 +38,7 @@
                                     <mat-error *ngIf="placa.touched && placa.invalid && !placa.errors?.minlength">
                                         <sup>*</sup>Por Favor Ingrese la Placa
                                     </mat-error>
-                                    <mat-error *ngIf="placa.errors['minlength']">
+                                    <mat-error *ngIf="placa.errors && placa.errors['minlength']">
                                         <sup>*</sup>La Placa debe contener al menos 6 caracteres<br>
                                     </mat-error>
                             </mat-form-field>
@@ -49,7 +49,7 @@
                                     <mat-error *ngIf="noEconomico.touched && noEconomico.invalid && !noEconomico.errors?.minlength">
                                         <sup>*</sup>Por Favor Ingrese el No Economico
                                     </mat-error>
-                                    <mat-error *ngIf="noEconomico.errors['minlength']">
+                                    <mat-error *ngIf="noEconomico.errors && noEconomico.errors['minlength']">
                                         <sup>*</sup>El No Economico debe contener al menos 2 caracteres<br>
                                     </mat-error>
                             </mat-form-field>
@@ -94,7 +94,7 @@
                     #file>
                 <br><br>
                 <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'poliza'"><i class="fa fa-file"></i> Cambiar Poliza
+                    (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
                 </button>
             </div>
         </div>

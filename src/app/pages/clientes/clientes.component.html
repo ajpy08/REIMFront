@@ -1,4 +1,4 @@
-<div class="row animated fadeIn">
+<!-- <div class="row animated fadeIn">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -7,7 +7,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <div class="row animated fadeIn" *ngIf="cargando">
     <div class="col-sm-12">
         <div class="alert alert-warning text-center">
@@ -30,8 +30,127 @@
                         Añadir nuevo cliente
                     </button>
                 </div>
-                <h3 class="card-title">Clientes registrados ( <small>{{totalRegistros}}</small> )</h3>
-                <div class="table-responsive">
+                <h3 class="card-title">Clientes ( <small>{{totalRegistros}}</small> )</h3>
+                <div class="example-header mat-elevation-z8">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)"
+                            placeholder="Escriba algo para filtrar">
+                    </mat-form-field>
+                </div>
+                <br>
+                <div class="example-container mat-elevation-z8">
+                </div>
+                <div class="example-container mat-elevation-z8">
+                    <mat-table class="mat-table-big" #table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                            <mat-cell *matCellDef="let cliente">
+                                <button [routerLink]="['/cliente', cliente._id ]" class="btn btn-primary m-r-5">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button (click)="borrarCliente( cliente )" class="btn btn-danger m-r-5">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="razonSocial">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.razonSocial}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreComercial">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Comercial</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.nombreComercial}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="rfc">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="calle">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Calle</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.calle}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="noExterior">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>No. Ext.</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.noExterior}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="noInterior">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>No. Int.</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.noInterior}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="colonia">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Colonia</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.colonia}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="municipio">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Municipio</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.municipio}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ciudad">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Ciudad</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="estado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cp">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>CP</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.cp}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="formatoR1">
+                            <mat-header-cell *matHeaderCellDef>Formato R1</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <a *ngIf="row.formatoR1" [href]="row.formatoR1 | imagen:'cliente'" download="R1"
+                                    target="_blank">
+                                    <img src="\assets\images\icon\pdf_32x32.png">
+                                </a>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="correo">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Correo</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.correo}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="correoFac">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Correo Fact.</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.correoFac}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="credito">
+                            <mat-header-cell *matHeaderCellDef>Credito</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <i class="fa fa-check" aria-hidden="row.credito"></i>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="empresas">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-cell *ngFor="let empresa of row.empresas" class="m-r-5"> {{empresa.razonSocial}} </mat-cell>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="5" [showFirstLastButtons]>
+                    </mat-paginator>
+                </div>
+
+                <!-- <div class="table-responsive">
                     <table class="table table-hover table-responsive">
                         <thead>
                             <tr>
@@ -101,7 +220,7 @@
                 </button>
                 <button (click)="cambiarDesde(10)" class="btn btn-secondary">
                     Siguientes <i class="fas fa-angle-right"></i>
-                </button>
+                </button> -->
             </div>
         </div>
     </div>

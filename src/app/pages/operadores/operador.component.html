@@ -33,7 +33,7 @@
                                     <mat-error *ngIf="licencia.touched && licencia.invalid && !licencia.errors?.minlength">
                                         <sup>*</sup>Por Favor Ingrese la Licencia
                                     </mat-error>
-                                    <mat-error *ngIf="licencia.errors['minlength']">
+                                    <mat-error *ngIf="licencia.errors && licencia.errors['minlength']">
                                         <sup>*</sup>La Licencia debe contener al menos 5 caracteres<br>
                                     </mat-error>
                             </mat-form-field>
