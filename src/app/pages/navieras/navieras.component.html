@@ -30,7 +30,7 @@
                         Añadir nueva naviera
                     </button>
                 </div>
-                <h3 class="card-title">Navieras registradas ( <small>{{totalRegistros}}</small> )</h3>
+                <h3 class="card-title">Navieras ( <small>{{totalRegistros}}</small> )</h3>
                 <div class="example-header mat-elevation-z8">
                     <mat-form-field>
                         <input matInput (keyup)="applyFilter($event.target.value)"
@@ -45,10 +45,10 @@
                         <ng-container matColumnDef="actions">
                             <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                             <mat-cell *matCellDef="let naviera">
-                                <button [routerLink]="['/naviera', naviera._id ]" class="btn btn-primary">
+                                <button [routerLink]="['/naviera', naviera._id ]" class="btn btn-primary m-r-5">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button (click)="borrarRegistro(naviera)" class="btn btn-danger">
+                                <button (click)="borrarNaviera(naviera)" class="btn btn-danger m-r-5">
                                     <i class="fa fa-trash-o"></i>
                                 </button>
                             </mat-cell>
@@ -57,6 +57,11 @@
                         <ng-container matColumnDef="razonSocial">
                             <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
                             <mat-cell *matCellDef="let row"> {{row.razonSocial}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombreComercial">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Comercial</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.nombreComercial}} </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="rfc">
@@ -125,9 +130,12 @@
                         </ng-container>
 
                         <ng-container matColumnDef="credito">
-                            <mat-header-cell *matHeaderCellDef>Credito</mat-header-cell>
-                            <mat-cell *matCellDef="let row"> 
-                                <i class="fa fa-check" aria-hidden="row.credito"></i>
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Credito</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <i *ngIf="row.credito == true; else notShow" class="fa fa-check" aria-hidden="true"></i>
+                                <ng-template #notShow>
+                                    <i class="fas fa-times" aria-hidden="true"></i>
+                                </ng-template>
                             </mat-cell>
                         </ng-container>
 
@@ -171,7 +179,7 @@
                                     <button [routerLink]="['/naviera', naviera._id ]" class="btn btn-primary">
                                         <i class="fa fa-edit"></i>
                                     </button>
-                                    <button (click)="borrarRegistro(naviera)" class="btn btn-danger">
+                                    <button (click)="borrarNaviera(naviera)" class="btn btn-danger">
                                         <i class="fa fa-trash-o"></i>
                                     </button>
                                 </td>

@@ -56,8 +56,13 @@
   overflow: auto;
 } 
 
+.mat-table-medium {
+  width: 1200px;
+}
+
 .mat-table-big {
-  width: 2000px;
+  width: 3500px;
+  white-space: inherit;
 }
 
 .example-container {

@@ -58,7 +58,7 @@ export class NavierasComponent implements OnInit {
   //   this.cargarRegistros();
   // }
 
-  borrarRegistro( naviera: Naviera ) {
+  borrarNaviera( naviera: Naviera ) {
     swal({
       title: '¿Esta seguro?',
       text: 'Esta apunto de borrar a ' + naviera.razonSocial,
