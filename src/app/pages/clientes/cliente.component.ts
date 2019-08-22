@@ -41,9 +41,6 @@ export class ClienteComponent implements OnInit {
         this.usuarioLogueado.empresas = empresas;
       });
     }
-    else {
-      //this.usuarioLogueado.empresas = this.usuarioService.usuario.empresas;
-    }
 
     if (id !== 'nuevo') {
       this.edicion = true;
@@ -54,7 +51,7 @@ export class ClienteComponent implements OnInit {
       this.regForm.controls['noExterior'].setValue(undefined);
     }
   }
-
+  
   role(role: string) {
     var result = role.substr(0, role.indexOf('_'));
     return result;

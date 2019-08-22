@@ -67,7 +67,12 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
                 swal(error.statusText, 'Pagina no encontrada', 'error');
                 break;
               case 400:
-                swal('Error del servicio.', error.error.errors.message, 'error');
+                if(error.error.errors.message) {
+                  swal('Error del servicio.', error.error.errors.message, 'error');
+                } 
+                if (error.error.errors.errmsg) {
+                  swal('Error del servicio.', error.error.errors.errmsg, 'error');
+                }
                 break;
               case 500:
                 swal(error.statusText, error.message, 'error');
