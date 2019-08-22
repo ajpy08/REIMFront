@@ -50,14 +50,14 @@ export class AgenciaComponent implements OnInit {
       colonia: [''],
       municipio: [''],
       ciudad: [''],
-      estado: [''],
-      cp: [''],
-      formatoR1: [''],
-      correo: [''],
-      correoFac: [''],
-      credito: [false],
+      estado: ['', [Validators.required]],
+      cp: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      formatoR1: ['', [Validators.required]],
+      correo: ['', Validators.email],
+      correoFac: ['', Validators.email],
+      credito: [false, [Validators.required]],
       img: [''],
-      patente: [''],      
+      patente: ['', [Validators.required]],      
       _id: ['']
     });
   }

@@ -27,7 +27,6 @@ export class ManiobraService {
 
   getManiobraConIncludes( id: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobra/' + id + '/includes';
-    console.log(url)
     return this.http.get( url );
   }
 

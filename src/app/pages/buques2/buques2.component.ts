@@ -6,8 +6,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 declare var swal: any;
 @Component({
   selector: 'app-buques2',
-  templateUrl: './buques2.component.html',
-  styleUrls: ['./buques2.component.css']
+  templateUrl: './buques2.component.html'
 })
 
 export class Buques2Component implements OnInit {

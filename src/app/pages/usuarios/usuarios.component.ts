@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 declare var swal: any;
 @Component({
@@ -17,6 +18,12 @@ export class UsuariosComponent implements OnInit {
   // tslint:disable-next-line:no-inferrable-types
   cargando: boolean = true;
 
+  displayedColumns = ['actions', 'foto', 'email', 'nombre', 'role', 'empresas'];
+  dataSource: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   constructor(public _usuarioService: UsuarioService) {
      }
 
@@ -24,31 +31,38 @@ export class UsuariosComponent implements OnInit {
     this.cargarUsuarios();
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.totalRegistros = this.dataSource.filteredData.length;
+  }
 
   cargarUsuarios() {
     this.cargando = true;
     this._usuarioService.getUsuarios(this.desde)
-    .subscribe((resp: any) => {
-      //console.log(resp.usuarios);
-      this.totalRegistros = resp.total;
-      this.usuarios = resp.usuarios;
-      this.cargando = false;
+    .subscribe((usuarios: any) => {
+      this.dataSource = new MatTableDataSource(usuarios.usuarios);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = usuarios.usuarios.length;
     });
+    this.cargando = false;
   }
 
-  cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
-    let desde = this.desde + valor;
-    // console.log(desde);
-    if (desde >= this.totalRegistros) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargarUsuarios();
-  }
+  // cambiarDesde(valor: number) {
+  //   // tslint:disable-next-line:prefer-const
+  //   let desde = this.desde + valor;
+  //   // console.log(desde);
+  //   if (desde >= this.totalRegistros) {
+  //     return;
+  //   }
+  //   if (desde < 0) {
+  //     return;
+  //   }
+  //   this.desde += valor;
+  //   this.cargarUsuarios();
+  // }
 
   borrarUsuario(usuario: Usuario) {
     // console.log(usuario);

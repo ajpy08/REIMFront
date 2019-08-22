@@ -15,6 +15,9 @@
                                         {{ transportista.razonSocial }}
                                     </mat-option>
                                 </mat-select>
+                                <mat-error *ngIf="transportista.touched && transportista.invalid">
+                                    <sup>*</sup>Por favor seleccione un Transportista
+                                </mat-error>
                             </mat-form-field>                            
                             <!--========Combombox Operadores=========-->
                             <mat-form-field>
@@ -24,16 +27,31 @@
                                             {{ operador.nombre }}
                                         </mat-option>
                                     </mat-select>
+                                    <mat-error *ngIf="operador.touched && operador.invalid">
+                                        <sup>*</sup>Por Favor Ingrese un Operador
+                                    </mat-error>
                                 </mat-form-field>
                             <!--========input placas=========-->
                             <mat-form-field>
                                 <input matInput formControlName="placa" name="placa" type="text" class="form-control"
                                     placeholder="Ingrese las placas">
+                                    <mat-error *ngIf="placa.touched && placa.invalid && !placa.errors?.minlength">
+                                        <sup>*</sup>Por Favor Ingrese la Placa
+                                    </mat-error>
+                                    <mat-error *ngIf="placa.errors && placa.errors['minlength']">
+                                        <sup>*</sup>La Placa debe contener al menos 6 caracteres<br>
+                                    </mat-error>
                             </mat-form-field>
                             <!--========input numeroEconomico=========-->
                             <mat-form-field>
                                 <input matInput formControlName="noEconomico" name="noEconomico" type="text"
                                     class="form-control" placeholder="Ingrese el numero economico">
+                                    <mat-error *ngIf="noEconomico.touched && noEconomico.invalid && !noEconomico.errors?.minlength">
+                                        <sup>*</sup>Por Favor Ingrese el No Economico
+                                    </mat-error>
+                                    <mat-error *ngIf="noEconomico.errors && noEconomico.errors['minlength']">
+                                        <sup>*</sup>El No Economico debe contener al menos 2 caracteres<br>
+                                    </mat-error>
                             </mat-form-field>
                             <!--========datePiker vigencia del seguro=========-->
                             <mat-form-field>
@@ -44,7 +62,7 @@
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
                         </div>
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
+                        <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
                             [disabled]="regForm.pristine || regForm.invalid">
                             <i class="fa fa-save"></i>
                             Guardar
@@ -76,7 +94,7 @@
                     #file>
                 <br><br>
                 <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'poliza'"><i class="fa fa-file"></i> Cambiar Poliza
+                    (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
                 </button>
             </div>
         </div>

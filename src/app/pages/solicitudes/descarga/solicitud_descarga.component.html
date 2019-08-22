@@ -14,7 +14,8 @@
               <div class="col-md-4">
                 <div class="form-group has-danger">
                   <label class="control-label"><b>Naviera</b></label>
-                  <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text" placeholder="Seleccione una naviera">
+                  <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text"
+                    placeholder="Seleccione una naviera">
                     <mat-option *ngFor="let nav of navieras" [value]="nav._id">
                       {{nav.razonSocial}}
                     </mat-option>
@@ -41,13 +42,15 @@
                   </mat-select>
                 </div>
               </div>
+
             </div>
             <!--/row-->
             <div class="row p-t-20">
               <div class="col-md-3">
                 <div class="form-group">
                   <label class="control-label"><b>Agente Aduanal</b></label>
-                  <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
+                  <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)"
+                    placeholder="Seleccione un agente">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                       {{ag.razonSocial}}
                     </mat-option>
@@ -67,6 +70,7 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <label class="control-label"><b>Facturar a: </b></label>
+
                   <br>
                   <mat-radio-group class="example-radio-group" formControlName="facturarA" (change)="onChangeFacturarA($event)">
                     <mat-radio-button class="example-radio-button" *ngFor="let facturaA of listaFacturarA" [value]="facturaA">
@@ -80,6 +84,7 @@
             <hr>
             <div class="row">
               <div class="col-md-3">
+
                 <label><b>rfc</b></label>
                 <mat-form-field>
                   <input matInput type="text" formControlName="rfc">
@@ -90,6 +95,7 @@
                 <mat-form-field>
                   <input matInput type="text" formControlName="razonSocial">
                 </mat-form-field>
+
               </div>
             </div>
             <div class="row">
@@ -154,7 +160,8 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <label><b>Credito: </b></label>
-                  <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
+                  <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito"
+                    (change)="onChangeCredito($event)">
                     Credito
                   </mat-checkbox>
                 </div>
@@ -170,7 +177,8 @@
                     </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
                   </p>
                   <ng-template #notShow>
-                    <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
+                    <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'"
+                      target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                     </a>
                   </ng-template>
@@ -245,7 +253,9 @@
               </div>
               <div class="col-md-2">
                 <div class="form-group">
+
                   <button (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+
                 </div>
               </div>
             </div>

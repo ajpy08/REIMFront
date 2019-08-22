@@ -151,9 +151,6 @@ export class SolicitudDescargaComponent implements OnInit {
   get viaje() {
     return this.regForm.get('viaje');
   }
-  get blBooking() {
-    return this.regForm.get('blBooking');
-  }
   get buque() {
     return this.regForm.get('buque');
   }
@@ -236,7 +233,11 @@ export class SolicitudDescargaComponent implements OnInit {
       this.cargaClientes({value: solicitud.agencia});
       this.regForm.controls['naviera'].setValue(solicitud.naviera);
       this.cargarBuques({value : solicitud.naviera});
+
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
+
+      this.regForm.controls['viaje'].setValue(solicitud.viaje);
+
       this.regForm.controls['buque'].setValue(solicitud.buque);
       this.cargarViajes({value: solicitud.buque});
       this.regForm.controls['viaje'].setValue(solicitud.viaje);

@@ -7,8 +7,6 @@ import { URL_SERVICIOS } from '../../config/config';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import swal from 'sweetalert';
-
-
 import * as XLSX from 'xlsx';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';

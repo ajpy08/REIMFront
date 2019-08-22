@@ -32,7 +32,7 @@
                         <i class="fa fa-plus"></i>
                         Añadir nuevo buque
                     </button>
-                    <button [routerLink]="['/papeleta', '5d4ca9cb4cb35921dccd8a50']" type="button"
+                    <button [routerLink]="['/papeleta', '5d54fe6ace79d2210c62a008']" type="button"
                         class="btn btn-info waves-effect waves-light m-r-5">
                         <i class="fa fa-plus"></i>
                         Imprimir Papeleta
@@ -53,7 +53,7 @@
                         <ng-container matColumnDef="actions">
                             <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                             <mat-cell *matCellDef="let buque">
-                                <button [routerLink]="['/buque2', buque._id ]" class="btn btn-info m-r-5">
+                                <button [routerLink]="['/buque2', buque._id ]" class="btn btn-primary m-r-5">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <button (click)="borrarBuque( buque )" class="btn btn-danger m-r-5">
@@ -81,7 +81,7 @@
                         <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </mat-table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="5" [showFirstLastButtons]>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
                     </mat-paginator>                    
                 </div>                
             </div>

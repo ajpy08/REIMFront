@@ -33,44 +33,47 @@ export class ClienteComponent implements OnInit {
   ngOnInit() {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.usuarioLogueado = this.usuarioService.usuario;
+    
+    if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+      this._clienteService.getClientesRole().subscribe((empresas) => {
+        this.usuarioLogueado.empresas = empresas;
+      });
+    }
+
     if (id !== 'nuevo') {
       this.edicion = true;
       this.cargarCliente(id);
     }
     else {
-      this.usuarioLogueado = this.usuarioService.usuario;
-      if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
-        this._clienteService.getClientesRole().subscribe((empresas) => {
-          this.usuarioLogueado.empresas = empresas;
-        });
-      }
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
   }
-
-  role(role : string){
+  
+  role(role: string) {
     var result = role.substr(0, role.indexOf('_'));
     return result;
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
+      rfc: ['', [Validators.required, Validators.minLength(12)]],
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
       nombreComercial: [''],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
       colonia: [''],
       municipio: [''],
       ciudad: [''],
-      estado: [''],
-      cp: [''],
-      formatoR1: [''],
-      correo: [''],
-      correoFac: [''],
-      credito: [false],
+      estado: ['', [Validators.required]],
+      cp: ['', [Validators.required]],
+      formatoR1: ['', [Validators.required]],
+      correo: ['', Validators.email],
+      correoFac: ['', Validators.email],
+      credito: [false, [Validators.required]],
       img: [''],
       empresas: [''],
       _id: ['']
