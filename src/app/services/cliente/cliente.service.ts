@@ -28,6 +28,12 @@ export class ClienteService {
     return this.http.get(url);
   }
 
+  getClientesEmpresas(idsEmpresas: string): Observable<any> {
+
+    const url = URL_SERVICIOS + '/cliente/empresas/' + idsEmpresas;
+    return this.http.get(url);
+  }
+
   getClientes(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/cliente?desde=' + desde;
     return this.http.get(url);
@@ -68,12 +74,7 @@ export class ClienteService {
         .pipe(map((resp: any) => {
           swal('Cliente Creado', cliente.razonSocial, 'success');
           return resp.cliente;
-        }),
-          catchError(err => {
-            console.log(err);
-            swal(err.error.mensaje, err.error.errors.message, 'error');
-            return throwError(err);
-          }));
+        }));
     }
   }
 
