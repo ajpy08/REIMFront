@@ -35,6 +35,11 @@ export class ManiobraService {
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
   }
 
+  getManiobraXViajeVacios(viaje: string): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/xviaje/'+viaje+'/VACIOS';
+    return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
+  }
+
   getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
     return this.http.get( url );

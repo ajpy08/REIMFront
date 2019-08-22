@@ -40,20 +40,21 @@ export class SolicitudDAprobarComponent implements OnInit {
     this.regForm = this.fb.group({
       _id: [''],
       buque: [''],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '','') ])
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '','','') ])
     });
   }
 
-  creaContenedor(cont: string, tipo: string, estado: string, maniobra : string): FormGroup {
+  creaContenedor(cont: string, tipo: string, estado: string, maniobra : string, id:string): FormGroup {
     return this.fb.group({
       contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
       tipo: [tipo],
       estado: [estado],
-      maniobra: [maniobra, [Validators.required]]
+      maniobra: [maniobra, [Validators.required]],
+      _id: [id],
     });
   }
-  addContenedor(cont: string, tipo: string, estado: string, maniobra: string): void {
-    this.contenedores.push(this.creaContenedor(cont, tipo, estado, maniobra));
+  addContenedor(cont: string, tipo: string, estado: string, maniobra: string, id: string): void {
+    this.contenedores.push(this.creaContenedor(cont, tipo, estado, maniobra,id));
   }
   get _id() {
     return this.regForm.get('_id');
@@ -71,30 +72,40 @@ export class SolicitudDAprobarComponent implements OnInit {
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['buque'].setValue(solicitud.buque._id);
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.contenedor, element.tipo, element.estado,'');
+        this.addContenedor(element.contenedor, element.tipo, element.estado,element.maniobra,element._id);
       });
     });
   }
 
-  validaSolicitud() {
-      this.contenedores.controls.forEach( cont => {
-      this._ManiobraService.getManiobraXContenedorViajeBuque(cont.get('contenedor').value, this.solicitud.viaje, this.buque.value)
+  validaSolicitud( i: number) {
+      //this.contenedores.controls.forEach( cont => {
+      this._ManiobraService.getManiobraXContenedorViajeBuque(this.contenedores.controls[i].get('contenedor').value, this.solicitud.viaje, this.buque.value)
       .subscribe( maniobra => {
         if (maniobra.length > 0) {
-          console.log(maniobra[0]._id);
-         cont.get('maniobra').setValue(maniobra[0]._id);
+          this.contenedores.controls[i].get('maniobra').setValue(maniobra[0]._id);
         }
       });
-    });
+    //});
   }
 
-  apruebaSolicitud( ) {
-    if ( this.regForm.valid ) {
-     this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value).subscribe(res => {
-      this.regForm.markAsPristine();
-      });
-    }
+  apruebaSolicitud( i: number) {
+    console.log(i);
+    console.log(this.contenedores.controls[i].get('_id').value);
+    // // if ( this.regForm.valid ) {
+      this._SolicitudService.apruebaSolicitudDescargaContenedor(this._id.value, this.contenedores.controls[i].get('_id').value ).subscribe(res => {
+       this.regForm.markAsPristine();
+       });
+    // // }
   }
+
+
+  // apruebaSolicitud( ) {
+  //   if ( this.regForm.valid ) {
+  //    this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value).subscribe(res => {
+  //     this.regForm.markAsPristine();
+  //     });
+  //   }
+  // }
 
   // cambioEstado(SolicitudD: Solicitud) {
   //   this._SolicitudDService.cambioEstado(SolicitudD)

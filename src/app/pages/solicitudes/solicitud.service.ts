@@ -37,6 +37,7 @@ export class SolicitudService {
     }
 
     guardarSolicitud(solicitud: Solicitud): Observable<any> {
+      console.log(solicitud);
       let url = URL_SERVICIOS + '/solicitud';
       if (solicitud._id) { // Actualizando
         url += '/' + solicitud._id;
@@ -76,6 +77,16 @@ export class SolicitudService {
       catchError(err => {
         swal(err.error.mensaje, err.error.errors.message, 'error');
         return throwError(err);
+      }));
+    }
+
+    apruebaSolicitudDescargaContenedor(idSol: string, idCont: string) : Observable <any>{
+      let url = URL_SERVICIOS + '/solicitud/apruebadescarga/'+ idSol + '/contenedor/'+idCont;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url,idSol)
+      .pipe(map((resp: any) => {
+        swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+        return resp.solicitud;
       }));
     }
 
