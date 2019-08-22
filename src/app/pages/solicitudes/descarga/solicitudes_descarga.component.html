@@ -25,7 +25,6 @@
               <th>Fecha Solicitud</th>
               <th>Agencia</th>
               <th>Naviera</th>
-              <th>Transportista</th>
               <th>Cliente</th>
               <th>Viaje</th>
               <th>Buque</th>
@@ -40,14 +39,13 @@
               <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
               <td>{{sol.agencia.razonSocial}}</td>
               <td>{{sol.naviera.razonSocial}}</td>
-              <td>{{sol.transportista.razonSocial}}</td>
               <td>{{sol.cliente.razonSocial}}</td>
-              <td>{{sol.viaje}}</td>
+              <td>{{sol.viaje.viaje}}</td>
               <td>{{sol.buque.nombre}}</td>
               <td>{{sol.observaciones}}</td>
               <td>
                 <p *ngFor="let cont of sol.contenedores">
-                  Contenedor: {{cont.contenedor}} <br> Tipo: {{cont.tipo}}
+                  Contenedor: {{cont.maniobra.contenedor}} <br> Tipo: {{cont.maniobra.tipo}}
                 </p>
               </td>
               <td>{{sol.estatus}}</td>

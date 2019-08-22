@@ -37,6 +37,7 @@ export class SolicitudService {
     }
 
     guardarSolicitud(solicitud: Solicitud): Observable<any> {
+      console.log(solicitud);
       let url = URL_SERVICIOS + '/solicitud';
       if (solicitud._id) { // Actualizando
         url += '/' + solicitud._id;
