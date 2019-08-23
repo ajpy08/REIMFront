@@ -97,11 +97,11 @@ export class SolicitudDescargaComponent implements OnInit {
       credito: ['', [Validators.required]],
       observaciones: [''],
       rutaBL: [''],
-      rutaComprobante: ['',[ this.verificaPago('credito')]],
-      correo: ['',[Validators.required]],
+      rutaComprobante: ['', [this.verificaComprobante('credito')]],
+      correo: ['', [Validators.required]],
       maniobraTemp: [''],
       estadoTemp: ['VACIO'],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '','') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '') ]),
       facturarA: ['', [Validators.required]],
       rfc: [{value: '', disabled: true}],
       razonSocial: [{value: '', disabled: true}],
@@ -112,14 +112,15 @@ export class SolicitudDescargaComponent implements OnInit {
       municipio: [{value: '', disabled: true}],
       ciudad: [{value: '', disabled: true}],
       estado: [{value: '', disabled: true}],
-      correoFac: ['',[Validators.required]],
+      correoFac: ['', [Validators.required]],
       cp: [{value: '', disabled: true}],
       _id: [''],
       tipo: ['D']
     });
   }
 
-  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, estatus: string, transportista2: string): FormGroup {
+  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+    transportista: string, estatus: string, transportista2: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
@@ -131,26 +132,24 @@ export class SolicitudDescargaComponent implements OnInit {
     });
   }
 
-  verificaPago(controlKey: string) {
+
+  verificaComprobante(controlKey: string) {
     return (control: AbstractControl): { [s: string]: boolean } => {
       // control.parent es el FormGroup
       if ( this.regForm ) { // en las primeras llamadas control.parent es undefined
-        const checkValue =  this.regForm.controls[controlKey].value;
-        if (checkValue && control.value) {
+        const creditoValue =  this.regForm.controls[controlKey].value;
+        if (creditoValue === false && (control.value === undefined || control.value === '')) {
           return {
-            match: true
+            rutaComprobante: false
           };
         }
-        else{
-          return {match:false};
-        }
-
       }
       return null;
     };
   }
 
-  addContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, estatus: string,transportista2: string): void {
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+                transportista: string, estatus: string, transportista2: string): void {
     this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, estatus, transportista2));
   }
 
@@ -290,32 +289,31 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarViajes(event) {
-    this._viajeService.getViajes(null,null,null,event.value )
+    this._viajeService.getViajes(null, null, null, event.value )
     .subscribe( res => this.viajes = res.viajes);
   }
 
   cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
     .subscribe( cliente => this.clientes = cliente.clientes);
-    
-    const reg = this.agencias.find(x=> x._id==event.value);
-    if (reg) this.correo.setValue(reg.correo);
-  }
-  
 
-  cargarContenedores(event)
-  {
+    const reg = this.agencias.find(x => x._id == event.value);
+    if (reg) { this.correo.setValue(reg.correo); }
+  }
+
+
+  cargarContenedores(event) {
     this._maniobraService.getManiobraXViajeVacios( event.value )
     .subscribe( res => {
       this.contenedoresXViaje = res;
     });
   }
 
-  
+
 
   onChangeCredito( event ) {
     if (event.checked) {
-      this.rutaComprobante.setValue(undefined);
+      //this.rutaComprobante.setValue(undefined);
       this.rutaComprobante.disable({ onlySelf : true});
     } else {
       this.rutaComprobante.enable({ onlySelf : true});
@@ -327,13 +325,13 @@ export class SolicitudDescargaComponent implements OnInit {
     console.log(event);
 
     switch (event.value) {
-      case "Cliente":
-        if (!this.cliente || this.cliente.value == "") {
-          swal("Error", "No ha seleccionado el cliente","error");
+      case 'Cliente':
+        if (!this.cliente || this.cliente.value == '') {
+          swal('Error', 'No ha seleccionado el cliente','error');
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.clientes.find(x=> x._id==this.cliente.value);
+          const reg = this.clientes.find(x => x._id == this.cliente.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -354,13 +352,13 @@ export class SolicitudDescargaComponent implements OnInit {
           }
         }
         break;
-      case "Agencia Aduanal":
-          if (!this.agencia || this.agencia.value == "") {
-            swal("Error", "No ha seleccionado la agencia aduanal","error");
+      case 'Agencia Aduanal':
+          if (!this.agencia || this.agencia.value == '') {
+            swal('Error', 'No ha seleccionado la agencia aduanal','error');
             this.facturarA.setValue(null);
             return;
           } else {
-            const reg = this.agencias.find(x=> x._id==this.agencia.value);
+            const reg = this.agencias.find(x => x._id == this.agencia.value);
             this.rfc.setValue(reg.rfc);
             this.razonSocial.setValue(reg.razonSocial);
             this.calle.setValue(reg.calle);
@@ -380,7 +378,7 @@ export class SolicitudDescargaComponent implements OnInit {
               this.credito.setValue(false);
             }
           }
-        break;        
+        break;
     }
   }
 
@@ -401,6 +399,9 @@ export class SolicitudDescargaComponent implements OnInit {
   onFilePDFComprobanteSelected(event) {
     this.fileComprobante = <File> event.target.files[0];
     this.subirComprobante();
+  }
+  ver() {
+    console.log(this.regForm);
   }
 
   subirComprobante() {

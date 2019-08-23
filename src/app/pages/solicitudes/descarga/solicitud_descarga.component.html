@@ -161,6 +161,10 @@
                 <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
                   Credito
                 </mat-checkbox>
+                <button type="button" (click)="ver()" class="btn btn-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
+                <p>Form value {{ regForm.status| json }} </p>
               </div>
               <div class="col-md-4">
                 <div class="form-group" *ngIf="!credito.value">
@@ -177,8 +181,7 @@
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                     </a>
                   </ng-template>
-                  <mat-error *ngIf="rutaComprobante.touched && rutaComprobante.hasError['verificaPago']">Debe seleccionar el comprobante de pago en PDF.</mat-error>
-
+                  <mat-error *ngIf="!credito.errors">Debe seleccionar el comprobante de pago en PDF.</mat-error>
                 </div>
               </div>
             </div>
@@ -294,6 +297,7 @@
           </div>
         </form>
         <p>Form value {{ regForm.getRawValue() | json }} </p>
+
       </div>
     </div>
   </div>
