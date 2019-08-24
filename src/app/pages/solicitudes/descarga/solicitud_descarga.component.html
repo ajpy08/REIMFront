@@ -161,27 +161,28 @@
                 <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
                   Credito
                 </mat-checkbox>
-                <button type="button" (click)="ver()" class="btn btn-danger">
-                  <i class="fas fa-trash"></i>
-                </button>
-                <p>Form value {{ regForm.status| json }} </p>
+                <mat-error *ngIf="rutaComprobante.touched && rutaComprobante.invalid">
+                  Cargar archivo de Comprobante de Pago.
+                </mat-error>
               </div>
               <div class="col-md-4">
                 <div class="form-group" *ngIf="!credito.value">
-
                   <mat-label>Anexar Comprobante de pago</mat-label>
+                  <mat-form-field>
+                    <input matInput formControlName="rutaComprobante">
+                  </mat-form-field>
                   <input (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
                   <p *ngIf="temporalComprobante; else notShow" class="text-danger">
                     <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                    </a><br>
+                    <!-- ¡Archivo Temporal, debe guardar el registro del usuario para confirmar! -->
                   </p>
                   <ng-template #notShow>
                     <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                     </a>
                   </ng-template>
-                  <mat-error *ngIf="!credito.errors">Debe seleccionar el comprobante de pago en PDF.</mat-error>
                 </div>
               </div>
             </div>
@@ -297,7 +298,6 @@
           </div>
         </form>
         <p>Form value {{ regForm.getRawValue() | json }} </p>
-
       </div>
     </div>
   </div>

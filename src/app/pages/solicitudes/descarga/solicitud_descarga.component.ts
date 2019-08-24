@@ -97,7 +97,7 @@ export class SolicitudDescargaComponent implements OnInit {
       credito: ['', [Validators.required]],
       observaciones: [''],
       rutaBL: [''],
-      rutaComprobante: ['', [this.verificaComprobante('credito')]],
+      rutaComprobante: ['',[Validators.required]],
       correo: ['', [Validators.required]],
       maniobraTemp: [''],
       estadoTemp: ['VACIO'],
@@ -133,20 +133,36 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
 
-  verificaComprobante(controlKey: string) {
-    return (control: AbstractControl): { [s: string]: boolean } => {
-      // control.parent es el FormGroup
-      if ( this.regForm ) { // en las primeras llamadas control.parent es undefined
-        const creditoValue =  this.regForm.controls[controlKey].value;
-        if (creditoValue === false && (control.value === undefined || control.value === '')) {
-          return {
-            rutaComprobante: false
-          };
+  // verificaComprobante(controlKey: string) {
+  //   return (control: AbstractControl): { [s: string]: boolean } => {
+  //     // control.parent es el FormGroup
+  //     if ( this.regForm ) { // en las primeras llamadas control.parent es undefined
+  //       const creditoValue =  this.regForm.controls[controlKey].value;
+  //       if (creditoValue === false && (control.value === undefined || control.value === '')) {
+  //         return {
+  //           rutaComprobante: false
+  //         };
+  //       }
+  //     }
+  //     return null;
+  //   };
+  // }
+
+  verificaPago(controlNameCredito: string, controlNameRuta: string) {
+    return (formGroup: FormGroup) => {
+        const credito = formGroup.controls[controlNameCredito];
+        const rutaComprobante = formGroup.controls[controlNameRuta];
+        if (rutaComprobante.errors && !rutaComprobante.errors.errorComprobante) {
+            // return if another validator has already found an error on the matchingControl
+            return;
         }
-      }
-      return null;
-    };
-  }
+        if (credito.value === false ) {
+          rutaComprobante.setErrors({ errorComprobante: true });
+        } else {
+          rutaComprobante.setErrors(null);
+        }
+    }
+}
 
   addContenedor(cont: string, tipo: string, peso: string, maniobra: string,
                 transportista: string, estatus: string, transportista2: string): void {
@@ -313,9 +329,10 @@ export class SolicitudDescargaComponent implements OnInit {
 
   onChangeCredito( event ) {
     if (event.checked) {
-      //this.rutaComprobante.setValue(undefined);
+      if (this.rutaComprobante.value=='') { this.rutaComprobante.setValue('..') }
       this.rutaComprobante.disable({ onlySelf : true});
     } else {
+      if (this.rutaComprobante.value=='..') { this.rutaComprobante.setValue('')}
       this.rutaComprobante.enable({ onlySelf : true});
     }
   }
@@ -346,9 +363,11 @@ export class SolicitudDescargaComponent implements OnInit {
           if (reg.credito) {
             this.credito.enable({onlySelf : true});
             this.credito.setValue(true);
+            this.onChangeCredito({checked:true});
           } else {
             this.credito.disable({onlySelf : true});
             this.credito.setValue(false);
+            this.onChangeCredito({checked:false});
           }
         }
         break;
@@ -373,9 +392,11 @@ export class SolicitudDescargaComponent implements OnInit {
             if (reg.credito) {
               this.credito.enable({onlySelf : true});
               this.credito.setValue(true);
+              this.onChangeCredito({checked:true});
             } else {
               this.credito.disable({onlySelf : true});
               this.credito.setValue(false);
+              this.onChangeCredito({checked:false});
             }
           }
         break;
@@ -401,7 +422,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.subirComprobante();
   }
   ver() {
-    console.log(this.regForm);
+    console.log(this.rutaComprobante);
   }
 
   subirComprobante() {
