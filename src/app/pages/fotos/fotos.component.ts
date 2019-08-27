@@ -12,9 +12,6 @@ import { Maniobra } from '../maniobras/maniobra.models';
   styleUrls: ['./fotos.component.css']
 })
 
-
-
-
 export class FotosComponent implements OnInit {
   // maniobra: Maniobra;
   estaSobreElemento = false;
@@ -23,10 +20,13 @@ export class FotosComponent implements OnInit {
   maniobra: Maniobra = new Maniobra();
   foto: Maniobra = new Maniobra('');
   selected = 'fotos_lavado';
+  id: string;
 
-  items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},
-            {ruta: '../../../assets/images/2.jpg', estado: ''},
-            {ruta: '../../../assets/images/1.jpg', estado: ''}];
+  // items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},
+  //           {ruta: '../../../assets/images/2.jpg', estado: ''},
+  //           {ruta: '../../../assets/images/1.jpg', estado: ''}];
+  fotosLavado;
+  fotosReparacion;
 
   constructor(public _maniobraService: ManiobraService,
     public _subirArchivoService: SubirArchivoService,
@@ -36,25 +36,38 @@ export class FotosComponent implements OnInit {
     }
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.cargarManiobra( id );
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.cargarManiobra( this.id );
+    this.cargarFotos(this.id, "L");
+    this.cargarFotos(this.id, "R");
   }
 
   cargarManiobra( id: string) {
     this._maniobraService.getManiobra( id )
           .subscribe( maniobra => {
-            console.log(maniobra);
             this.maniobra = maniobra.maniobra;
           });
   }
 
-  cargarImagenes() {
+  cargarFotos(id: string, lavado_reparacion: string) {
+    if(lavado_reparacion === "L") {
+      this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
+        this.fotosLavado = fotos.fotos;
+      });
+    } else {
+      if(lavado_reparacion === "R") {
+        this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
+          this.fotosReparacion = fotos.fotos;
+        });
+      }
+    }
+  }
 
+  cargarImagenes() {
     this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
   }
 
   cargarImgenesSelect() {
-    console.log();
   }
 
   limpiarArchivos() {
