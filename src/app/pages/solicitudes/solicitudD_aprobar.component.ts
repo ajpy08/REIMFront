@@ -16,7 +16,6 @@ import swal from 'sweetalert';
 })
 export class SolicitudDAprobarComponent implements OnInit {
   regForm: FormGroup;
-  solicitud: Solicitud;
   usuario: Usuario;
 
   constructor( public _usuarioService: UsuarioService,
@@ -30,7 +29,6 @@ export class SolicitudDAprobarComponent implements OnInit {
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.solicitud = new Solicitud('', '', '', '', '', '', '', '', '', false, '', '', '', null, '', '', '', '', '', '', '', '', '');
     this.createFormGroup ();
     this.contenedores.removeAt(0);
     this.cargarSolicitud( id );
@@ -38,42 +36,157 @@ export class SolicitudDAprobarComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      _id: [''],
-      buque: [''],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '','','') ])
+      _id: [{value: '', disabled: true}],
+      tipo: [{value: '', disabled: true}],
+      agencia: [{value: '', disabled: false}],
+      naviera: [{value: '', disabled: false}],
+      buque: [{value: '', disabled: true}],
+      viaje: ['', [Validators.required]],
+      blBooking: [''],
+      cliente: ['', [Validators.required]],
+      credito: ['', [Validators.required]],
+      observaciones: [''],
+      rutaBL: [''],
+      rutaComprobante: ['',[Validators.required]],
+      correo: ['', [Validators.required]],
+      facturarA: ['', [Validators.required]],
+      rfc: [{value: '', disabled: true}],
+      razonSocial: [{value: '', disabled: true}],
+      calle: [{value: '', disabled: true}],
+      noExterior: [{value: '', disabled: true}],
+      noInterior: [{value: '', disabled: true}],
+      colonia: [{value: '', disabled: true}],
+      municipio: [{value: '', disabled: true}],
+      ciudad: [{value: '', disabled: true}],
+      estado: [{value: '', disabled: true}],
+      correoFac: ['', [Validators.required]],
+      cp: [{value: '', disabled: true}],
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '') ]),
     });
   }
 
-  creaContenedor(cont: string, tipo: string, estado: string, maniobra : string, id:string): FormGroup {
+  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+    transportista: string, estatus: string, transportista2: string): FormGroup {
     return this.fb.group({
-      contenedor: [cont, [Validators.required, Validators.maxLength(12)]],
+      contenedor: [cont],
       tipo: [tipo],
-      estado: [estado],
-      maniobra: [maniobra, [Validators.required]],
-      _id: [id],
+      peso: [peso],
+      maniobra: [maniobra],
+      transportista: [transportista],
+      transportista2: [transportista2],
+      estatus: [estatus],
     });
   }
-  addContenedor(cont: string, tipo: string, estado: string, maniobra: string, id: string): void {
-    this.contenedores.push(this.creaContenedor(cont, tipo, estado, maniobra,id));
+
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+                transportista: string, estatus: string, transportista2: string): void {
+    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, estatus, transportista2));
   }
+
+
   get _id() {
     return this.regForm.get('_id');
+  }
+  get tipo() {
+    return this.regForm.get('tipo');
+  }
+  get agencia() {
+    return this.regForm.get('agencia');
+  }
+  get naviera() {
+    return this.regForm.get('naviera');
+  }
+  get viaje() {
+    return this.regForm.get('viaje');
   }
   get buque() {
     return this.regForm.get('buque');
   }
+  get transportistaTemp() {
+    return this.regForm.get('transportistaTemp');
+  }
+  get cliente() {
+    return this.regForm.get('cliente');
+  }
+
+  get observaciones() {
+    return this.regForm.get('observaciones');
+  }
+  get credito() {
+    return this.regForm.get('credito');
+  }
+  get rutaBL() {
+    return this.regForm.get('rutaBL');
+  }
+  get rutaComprobante() {
+    return this.regForm.get('rutaComprobante');
+  }
+  get correo() {
+    return this.regForm.get('correo');
+  }
+
   get contenedores() {
     return this.regForm.get('contenedores') as FormArray;
   }
+  get maniobraTemp() {
+    return this.regForm.get('maniobraTemp');
+  }
+
+  get estadoTemp() {
+    return this.regForm.get('estadoTemp');
+  }
+
+  get facturarA() {
+    return this.regForm.get('facturarA');
+  }
+  get rfc() {
+    return this.regForm.get('rfc');
+  }
+  get razonSocial() {
+    return this.regForm.get('razonSocial');
+  }
+  get calle() {
+    return this.regForm.get('calle');
+  }
+  get noExterior() {
+    return this.regForm.get('noExterior');
+  }
+  get noInterior() {
+    return this.regForm.get('noInterior');
+  }
+  get colonia() {
+    return this.regForm.get('colonia');
+  }
+  get municipio() {
+    return this.regForm.get('municipio');
+  }
+  get ciudad() {
+    return this.regForm.get('ciudad');
+  }
+  get estado() {
+    return this.regForm.get('estado');
+  }
+  get cp() {
+    return this.regForm.get('cp');
+  }
+  get correoFac() {
+    return this.regForm.get('correoFac');
+  }
+
 
   cargarSolicitud( id: string ) {
     this._SolicitudService.getSolicitudIncludes( id ).subscribe( solicitud => {
-      this.solicitud = solicitud;
+      console.log(solicitud);
+      
       this.regForm.controls['_id'].setValue(solicitud._id);
-      this.regForm.controls['buque'].setValue(solicitud.buque._id);
-      solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.contenedor, element.tipo, element.estado,element.maniobra,element._id);
-      });
+      this.regForm.controls['tipo'].setValue(solicitud.tipo);
+      this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
+      this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
+      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
+      
+      this.regForm.controls['viaje'].setValue(solicitud.viaje.viaje);
+      this.regForm.controls['buque'].setValue(solicitud.buque.nombre);
+
     });
   }
 
