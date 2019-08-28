@@ -36,20 +36,20 @@ export class SolicitudDAprobarComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      _id: [{value: '', disabled: true}],
+      _id: [{value: '', disabled: false}],
       tipo: [{value: '', disabled: true}],
-      agencia: [{value: '', disabled: false}],
-      naviera: [{value: '', disabled: false}],
+      agencia: [{value: '', disabled: true}],
+      naviera: [{value: '', disabled: true}],
       buque: [{value: '', disabled: true}],
-      viaje: ['', [Validators.required]],
-      blBooking: [''],
-      cliente: ['', [Validators.required]],
-      credito: ['', [Validators.required]],
-      observaciones: [''],
-      rutaBL: [''],
-      rutaComprobante: ['',[Validators.required]],
-      correo: ['', [Validators.required]],
-      facturarA: ['', [Validators.required]],
+      viaje: [{value: '', disabled: true}],
+      blBooking: [{value: '', disabled: true}],
+      cliente: [{value: '', disabled: true}],
+      credito: [{value: '', disabled: true}],
+      observaciones: [{value: '', disabled: true}],
+      rutaBL: [{value: '', disabled: true}],
+      rutaComprobante: [{value: '', disabled: true}],
+      correo: [{value: '', disabled: true}],
+      facturarA: [{value: '', disabled: true}],
       rfc: [{value: '', disabled: true}],
       razonSocial: [{value: '', disabled: true}],
       calle: [{value: '', disabled: true}],
@@ -59,28 +59,31 @@ export class SolicitudDAprobarComponent implements OnInit {
       municipio: [{value: '', disabled: true}],
       ciudad: [{value: '', disabled: true}],
       estado: [{value: '', disabled: true}],
-      correoFac: ['', [Validators.required]],
+      correoFac: [{value: '', disabled: true}],
       cp: [{value: '', disabled: true}],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '', '') ]),
     });
   }
 
   creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
-    transportista: string, estatus: string, transportista2: string): FormGroup {
+    transportista: string, estatus: string, transportista2: string, folio: string, solicitud: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
       peso: [peso],
       maniobra: [maniobra],
+      folio: [folio],
+      solicitud: [solicitud],
       transportista: [transportista],
       transportista2: [transportista2],
       estatus: [estatus],
     });
   }
 
-  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,
-                transportista: string, estatus: string, transportista2: string): void {
-    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, estatus, transportista2));
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,transportista: string, 
+    estatus: string, transportista2: string, folio: string, solicitud: string): void {
+    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, 
+      estatus, transportista2, folio, solicitud));
   }
 
 
@@ -177,27 +180,50 @@ export class SolicitudDAprobarComponent implements OnInit {
   cargarSolicitud( id: string ) {
     this._SolicitudService.getSolicitudIncludes( id ).subscribe( solicitud => {
       console.log(solicitud);
-      
+
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
       this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      
       this.regForm.controls['viaje'].setValue(solicitud.viaje.viaje);
       this.regForm.controls['buque'].setValue(solicitud.buque.nombre);
+      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
+      this.regForm.controls['credito'].setValue(solicitud.credito);
+      this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);
+      this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
+      this.regForm.controls['rutaBL'].setValue(solicitud.rutaBL);
+      this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
+      this.regForm.controls['correo'].setValue(solicitud.correo);
+      this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
+      this.regForm.controls['rfc'].setValue(solicitud.rfc);
+      this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
+      this.regForm.controls['calle'].setValue(solicitud.calle);
+      this.regForm.controls['noExterior'].setValue(solicitud.noExterior);
+      this.regForm.controls['noInterior'].setValue(solicitud.noInterior);
+      this.regForm.controls['colonia'].setValue(solicitud.colonia);
+      this.regForm.controls['municipio'].setValue(solicitud.municipio);
+      this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
+      this.regForm.controls['estado'].setValue(solicitud.estado);
+      this.regForm.controls['cp'].setValue(solicitud.cp);
+      this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
+      solicitud.contenedores.forEach(element => {
+        this.addContenedor(element.maniobra.contenedor, element.maniobra.tipo, element.peso,
+                          element.maniobra._id, element.transportista._id, element.maniobra.estatus,
+                          element.transportista.razonSocial, element.maniobra.folio, element.maniobra.solicitud);
+      });
 
     });
   }
 
   validaSolicitud( i: number) {
       //this.contenedores.controls.forEach( cont => {
-      this._ManiobraService.getManiobraXContenedorViajeBuque(this.contenedores.controls[i].get('contenedor').value, this.solicitud.viaje, this.buque.value)
-      .subscribe( maniobra => {
-        if (maniobra.length > 0) {
-          this.contenedores.controls[i].get('maniobra').setValue(maniobra[0]._id);
-        }
-      });
+      // this._ManiobraService.getManiobraXContenedorViajeBuque(this.contenedores.controls[i].get('contenedor').value, this.solicitud.viaje, this.buque.value)
+      // .subscribe( maniobra => {
+      //   if (maniobra.length > 0) {
+      //     this.contenedores.controls[i].get('maniobra').setValue(maniobra[0]._id);
+      //   }
+      // });
     //});
   }
 

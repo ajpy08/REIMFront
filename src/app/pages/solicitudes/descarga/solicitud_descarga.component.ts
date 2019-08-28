@@ -329,10 +329,10 @@ export class SolicitudDescargaComponent implements OnInit {
 
   onChangeCredito( event ) {
     if (event.checked) {
-      if (this.rutaComprobante.value=='') { this.rutaComprobante.setValue('..') }
+      if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
       this.rutaComprobante.disable({ onlySelf : true});
     } else {
-      if (this.rutaComprobante.value=='..') { this.rutaComprobante.setValue('')}
+      if (this.rutaComprobante.value === '..') { this.rutaComprobante.setValue(''); }
       this.rutaComprobante.enable({ onlySelf : true});
     }
   }
@@ -343,7 +343,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
     switch (event.value) {
       case 'Cliente':
-        if (!this.cliente || this.cliente.value == '') {
+        if (!this.cliente || this.cliente.value === '') {
           swal('Error', 'No ha seleccionado el cliente','error');
           this.facturarA.setValue(null);
           return;
@@ -363,16 +363,16 @@ export class SolicitudDescargaComponent implements OnInit {
           if (reg.credito) {
             this.credito.enable({onlySelf : true});
             this.credito.setValue(true);
-            this.onChangeCredito({checked:true});
+            this.onChangeCredito({checked: true});
           } else {
             this.credito.disable({onlySelf : true});
             this.credito.setValue(false);
-            this.onChangeCredito({checked:false});
+            this.onChangeCredito({checked: false});
           }
         }
         break;
       case 'Agencia Aduanal':
-          if (!this.agencia || this.agencia.value == '') {
+          if (!this.agencia || this.agencia.value === '') {
             swal('Error', 'No ha seleccionado la agencia aduanal','error');
             this.facturarA.setValue(null);
             return;
@@ -392,11 +392,11 @@ export class SolicitudDescargaComponent implements OnInit {
             if (reg.credito) {
               this.credito.enable({onlySelf : true});
               this.credito.setValue(true);
-              this.onChangeCredito({checked:true});
+              this.onChangeCredito({checked: true});
             } else {
               this.credito.disable({onlySelf : true});
               this.credito.setValue(false);
-              this.onChangeCredito({checked:false});
+              this.onChangeCredito({checked: false});
             }
           }
         break;
@@ -436,37 +436,34 @@ export class SolicitudDescargaComponent implements OnInit {
 
   agregarContenedor()
   {
-    if (this.maniobraTemp.value=='' || this.maniobraTemp.value==undefined  )
-    {
-      swal('Faltan datos','No ha seleccionado contenedor','error')
-      return
+    if (this.maniobraTemp.value === '' || this.maniobraTemp.value === undefined  ) {
+      swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
+      return;
     }
-    if (this.transportistaTemp.value=='' || this.transportistaTemp.value==undefined  )
-    {
-      swal('Faltan datos','No ha seleccionado transportista','error')
-      return
+    if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined  ) {
+      swal('Faltan datos', 'No ha seleccionado transportista', 'error');
+      return;
     }
-    if (this.estadoTemp.value=='' || this.estadoTemp.value==undefined)
-    {
-      swal('Faltan datos','No ha seleccionado estado','error')
-      return
+    if (this.estadoTemp.value==='' || this.estadoTemp.value === undefined) {
+      swal('Faltan datos', 'No ha seleccionado estado', 'error');
+      return;
     }
     let encontrado = false;
     this.contenedores.controls.forEach(m => {
-      if(m.get("contenedor").value==this.maniobraTemp.value.contenedor){
+      if ( m.get('contenedor').value === this.maniobraTemp.value.contenedor ) {
         encontrado = true;
       }
     });
 
     if (encontrado)
     {
-      swal('Contenedor Duplicado','El contenedor que intenta agregar ya se encuentra en la lista.','error')
-      return
+      swal('Contenedor Duplicado', 'El contenedor que intenta agregar ya se encuentra en la lista.', 'error');
+      return;
     }
       this.addContenedor(this.maniobraTemp.value.contenedor, this.maniobraTemp.value.tipo, this.estadoTemp.value,
-                        this.maniobraTemp.value._id,this.transportistaTemp.value._id,this.maniobraTemp.value.estatus,this.transportistaTemp.value.razonSocial);
+        this.maniobraTemp.value._id, this.transportistaTemp.value._id, this.maniobraTemp.value.estatus,
+        this.transportistaTemp.value.razonSocial);
       this.maniobraTemp.setValue(null);
-    
   }
 
 
@@ -475,7 +472,6 @@ export class SolicitudDescargaComponent implements OnInit {
       this.transportistaTemp.setValue(null);
       this.estadoTemp.setValue(null);
       this.maniobraTemp.setValue(null);
-      
       this._SolicitudDService.guardarSolicitud(this.regForm.getRawValue()).subscribe(res => {
         this.fileBL = null;
         this.fileComprobante = null;
