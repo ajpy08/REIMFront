@@ -168,6 +168,7 @@
                       <th scope="col">Estado</th>
                       <th scope="col">Transportista</th>
                       <th scope="col">Folio Maniobra</th>
+                      <th scope="col">Validada</th>
                       <th scope="col"></th>
                     </tr>
                   </thead>
@@ -179,9 +180,9 @@
                       <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                       <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
                       <td>{{this.contenedores.controls[i].get('folio').value}}</td>
+                      <td><img *ngIf="contenedores.controls[i].get('solicitud').value" src="../../../assets/images/check_32x32.png"></td>
                       <td>
-                        <button type="button" id="bot1" class="btn" (click)="validaSolicitud( i )" value="Validar"> <i class="fa fa-check"></i> Validar</button>
-                        <button type="button" class="btn btn-success" (click)="apruebaSolicitud( i )" value="Aprobar"> <i class="fa fa-check"></i> Aprobar</button>
+                        <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button>
                       </td>
                     </tr>
                   </tbody>
@@ -191,8 +192,9 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Aprobar</button>
-            <button type="button" class="btn btn-inverse">Cancelar</button>
+            <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success" (click)="validaSolicitudes()"> <i class="fa fa-check"></i> Validar</button>
+            <button *ngIf="estatus.value==='NA'" type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="!solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>
+            <button type="button" class="btn btn-inverse" routerLink="/solicitudes_aprobaciones">Regresar</button>
           </div>
 
         </div>

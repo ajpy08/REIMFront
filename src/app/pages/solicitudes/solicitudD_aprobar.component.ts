@@ -7,6 +7,7 @@ import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
+import { catchError } from 'rxjs/operators';
 
 
 @Component({
@@ -17,6 +18,7 @@ import swal from 'sweetalert';
 export class SolicitudDAprobarComponent implements OnInit {
   regForm: FormGroup;
   usuario: Usuario;
+  solicitudCorrecta: boolean = false;
 
   constructor( public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
@@ -37,12 +39,15 @@ export class SolicitudDAprobarComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [{value: '', disabled: false}],
-      tipo: [{value: '', disabled: true}],
+      estatus: [{value: '', disabled: false}],
+      tipo: [{value: '', disabled: false}],
+      idagencia: [{value: '', disabled: false}],
       agencia: [{value: '', disabled: true}],
       naviera: [{value: '', disabled: true}],
       buque: [{value: '', disabled: true}],
       viaje: [{value: '', disabled: true}],
       blBooking: [{value: '', disabled: true}],
+      idcliente: [{value: '', disabled: false}],
       cliente: [{value: '', disabled: true}],
       credito: [{value: '', disabled: true}],
       observaciones: [{value: '', disabled: true}],
@@ -93,6 +98,12 @@ export class SolicitudDAprobarComponent implements OnInit {
   get tipo() {
     return this.regForm.get('tipo');
   }
+  get estatus() {
+    return this.regForm.get('estatus');
+  }
+  get idagencia() {
+    return this.regForm.get('idagencia');
+  }
   get agencia() {
     return this.regForm.get('agencia');
   }
@@ -107,6 +118,10 @@ export class SolicitudDAprobarComponent implements OnInit {
   }
   get transportistaTemp() {
     return this.regForm.get('transportistaTemp');
+  }
+
+  get idcliente() {
+    return this.regForm.get('idcliente');
   }
   get cliente() {
     return this.regForm.get('cliente');
@@ -183,6 +198,8 @@ export class SolicitudDAprobarComponent implements OnInit {
 
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
+      this.regForm.controls['estatus'].setValue(solicitud.estatus);
+      this.regForm.controls['idagencia'].setValue(solicitud.agencia._id);
       this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
       this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
@@ -191,6 +208,7 @@ export class SolicitudDAprobarComponent implements OnInit {
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);
+      this.regForm.controls['idcliente'].setValue(solicitud.cliente._id);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaBL'].setValue(solicitud.rutaBL);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
@@ -216,25 +234,39 @@ export class SolicitudDAprobarComponent implements OnInit {
     });
   }
 
-  validaSolicitud( i: number) {
-      //this.contenedores.controls.forEach( cont => {
-      // this._ManiobraService.getManiobraXContenedorViajeBuque(this.contenedores.controls[i].get('contenedor').value, this.solicitud.viaje, this.buque.value)
-      // .subscribe( maniobra => {
-      //   if (maniobra.length > 0) {
-      //     this.contenedores.controls[i].get('maniobra').setValue(maniobra[0]._id);
-      //   }
-      // });
-    //});
+  validaSolicitud( cont ) {
+    if (cont.get('solicitud').value=== this._id.value) {
+      this.solicitudCorrecta = this.solicitudCorrecta && true;
+      return;
+    }
+    
+      let maniobraactualizar = {_id: '', solicitud: '', agencia: '', transportista: '', cliente: ''}
+      maniobraactualizar._id = cont.get('maniobra').value
+      maniobraactualizar.solicitud = this._id.value;
+      maniobraactualizar.transportista = cont.get('transportista').value
+      maniobraactualizar.agencia = this.idagencia.value;
+      maniobraactualizar.cliente = this.idcliente.value;
+      this._ManiobraService.asignaSolicitud(maniobraactualizar)
+      .subscribe(maniobra => {
+        cont.get('solicitud').setValue(maniobra.solicitud);
+        this.solicitudCorrecta = this.solicitudCorrecta && true;
+      },error => {
+        this.solicitudCorrecta = false;
+      });
   }
 
-  apruebaSolicitud( i: number) {
-    console.log(i);
-    console.log(this.contenedores.controls[i].get('_id').value);
-    // // if ( this.regForm.valid ) {
-      this._SolicitudService.apruebaSolicitudDescargaContenedor(this._id.value, this.contenedores.controls[i].get('_id').value ).subscribe(res => {
-       this.regForm.markAsPristine();
-       });
-    // // }
+  validaSolicitudes() {
+    this.solicitudCorrecta = true;
+    this.contenedores.controls.forEach( cont => {
+      this.validaSolicitud(cont)
+    });
+  }
+
+  apruebaSolicitud() {
+    if (this.solicitudCorrecta) {
+      this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value)
+      .subscribe(resp => {});
+    }
   }
 
 

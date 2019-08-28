@@ -35,8 +35,8 @@ export class ManiobraService {
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
   }
 
-  getManiobraXViajeVacios(viaje: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/xviaje/'+viaje+'/VACIOS';
+  getManiobrasXViajeImportacion(viaje: string): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/xviaje/'+viaje+'/importacion';
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
@@ -77,6 +77,17 @@ export class ManiobraService {
   getManiobrasLavadoReparacion(desde: number = 0, contenedor?: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
     return this.http.get( url );
+  }
+
+  asignaSolicitud( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/asigna_solicitud';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Maniobra actualizada', '', 'success');
+      return resp.maniobra;
+    }));
   }
 
 

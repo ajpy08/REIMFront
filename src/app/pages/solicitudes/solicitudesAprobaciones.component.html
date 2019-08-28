@@ -43,14 +43,20 @@
               <tr *ngFor="let sol of solicitudes">
                 <td>
                   <button *ngIf="sol.estatus==='NA' && sol.tipo==='D'" [routerLink]="['/solicitudD_aprobar', sol._id ]" class="btn btn-primary">
-                      <i class="fa fa-edit"> Aprobar Descarga</i>
-                    </button>
+                    <i class="fa fa-edit"> Aprobar Descarga</i>
+                   </button>
                   <button *ngIf="sol.estatus==='NA' && sol.tipo==='C'" [routerLink]="['/solicitudC_aprobar', sol._id ]" class="btn btn-primary">
-                      <i class="fa fa-edit"> Aprobar Carga</i>
-                    </button>
+                    <i class="fa fa-edit"> Aprobar Carga</i>
+                   </button>
+                  <button *ngIf="sol.estatus!=='NA' && sol.tipo==='D'" [routerLink]="['/solicitudD_aprobar', sol._id ]" class="btn btn-primary">
+                    <i class="fa fa-edit"> Ver Datos</i>
+                   </button>
+                  <button *ngIf="sol.estatus!=='NA' && sol.tipo==='C'" [routerLink]="['/solicitudC_aprobar', sol._id ]" class="btn btn-primary">
+                    <i class="fa fa-edit"> Ver Datos</i>
+                   </button>
                   <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
-                      <i class="fa fa-trash-o"> Borrar</i>
-                    </button>
+                    <i class="fa fa-trash-o"> Borrar</i>
+                  </button>
                 </td>
                 <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
                 <td>{{sol.tipo}}</td>
@@ -58,7 +64,7 @@
                 <td>{{sol.naviera?.razonSocial}}</td>
                 <td>{{sol.cliente.razonSocial}}</td>
                 <td>{{sol.viaje.viaje}}</td>
-                <td>{{sol.buque?.buque}}</td>
+                <td>{{sol.buque?.nombre}}</td>
                 <td>{{sol.observaciones}}</td>
                 <td>{{sol.estatus}}</td>
               </tr>

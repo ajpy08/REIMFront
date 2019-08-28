@@ -319,7 +319,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
   cargarContenedores(event) {
-    this._maniobraService.getManiobraXViajeVacios( event.value )
+    this._maniobraService.getManiobrasXViajeImportacion( event.value )
     .subscribe( res => {
       this.contenedoresXViaje = res;
     });
