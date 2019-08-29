@@ -20,7 +20,7 @@ export class SolicitudesDescargaComponent implements OnInit {
 
   cargarSolicitudes() {
     this.cargando = true;
-    this._solicitudService.getSolicitudesDescarga()
+    this._solicitudService.getSolicitudes('D')
     .subscribe(res => {
       this.totalRegistros = res.total;
       this.solicitudes = res.solicitudes;

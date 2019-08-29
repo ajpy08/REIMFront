@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Solicitud } from './solicitud.models';
@@ -14,17 +14,35 @@ export class SolicitudService {
     public http: HttpClient,
     public _usuarioService: UsuarioService) { }
 
-    getSolicitudes(): Observable<any> {
-      return this.http.get(URL_SERVICIOS + '/solicitud');
+    // getSolicitudes(): Observable<any> {
+    //   return this.http.get(URL_SERVICIOS + '/solicitud');
+    // }
+
+    getSolicitudes( tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string): Observable<any> {
+      let params = new HttpParams();
+      if (fIniAlta && fFinAlta) {
+        params = params.append('finialta', fIniAlta);
+        params = params.append('ffinalta', fFinAlta);
+      }
+      if (tipo)  {
+        params = params.append('tipo', tipo);
+      }
+      if (estatus)  {
+        params = params.append('estatus', estatus);
+      }
+      // console.log(params.toString());
+      const url = URL_SERVICIOS + '/solicitud';
+      return this.http.get(url, {params: params });
     }
 
-    getSolicitudesCarga(): Observable<any> {
-      return this.http.get(URL_SERVICIOS + '/solicitud/cargas/');
-    }
 
-    getSolicitudesDescarga(): Observable<any> {
-      return this.http.get(URL_SERVICIOS + '/solicitud/descargas/');
-    }
+    // getSolicitudesCarga(): Observable<any> {
+    //   return this.http.get(URL_SERVICIOS + '/solicitud/cargas/');
+    // }
+
+    // getSolicitudesDescarga(): Observable<any> {
+    //   return this.http.get(URL_SERVICIOS + '/solicitud/descargas/');
+    // }
 
     cargarSolicitud(id: string): Observable<any> {
       return this.http.get(URL_SERVICIOS + '/solicitud/' + id)
@@ -152,11 +170,6 @@ export class SolicitudService {
 
   // }
 
-  buscarSolicitud(termino: string): Observable<any> {
-      // tslint:disable-next-line: prefer-const
-      let url = URL_SERVICIOS + '/busqueda/coleccion/solicitudD/' + termino;
-      return this.http.get(url)
-          .pipe(map((resp: any) => resp.solicitudes));
-  }
+
 
 }

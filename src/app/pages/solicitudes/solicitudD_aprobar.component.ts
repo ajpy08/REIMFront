@@ -18,7 +18,7 @@ import { catchError } from 'rxjs/operators';
 export class SolicitudDAprobarComponent implements OnInit {
   regForm: FormGroup;
   usuario: Usuario;
-  solicitudCorrecta: boolean = false;
+  solicitudCorrecta = false;
 
   constructor( public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
@@ -66,12 +66,12 @@ export class SolicitudDAprobarComponent implements OnInit {
       estado: [{value: '', disabled: true}],
       correoFac: [{value: '', disabled: true}],
       cp: [{value: '', disabled: true}],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '', '') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '', '', '') ]),
     });
   }
 
   creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
-    transportista: string, estatus: string, transportista2: string, folio: string, solicitud: string): FormGroup {
+    transportista: string, estatus: string, transportista2: string, folio: string, solicitud: string, patio: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
@@ -82,13 +82,14 @@ export class SolicitudDAprobarComponent implements OnInit {
       transportista: [transportista],
       transportista2: [transportista2],
       estatus: [estatus],
+      patio: [patio]
     });
   }
 
-  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,transportista: string, 
-    estatus: string, transportista2: string, folio: string, solicitud: string): void {
-    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, 
-      estatus, transportista2, folio, solicitud));
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string,
+    estatus: string, transportista2: string, folio: string, solicitud: string, patio: string): void {
+    this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista,
+      estatus, transportista2, folio, solicitud, patio));
   }
 
 
@@ -228,29 +229,30 @@ export class SolicitudDAprobarComponent implements OnInit {
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.maniobra.contenedor, element.maniobra.tipo, element.peso,
                           element.maniobra._id, element.transportista._id, element.maniobra.estatus,
-                          element.transportista.razonSocial, element.maniobra.folio, element.maniobra.solicitud);
+                          element.transportista.razonSocial, element.maniobra.folio, element.maniobra.solicitud, element.patio);
       });
 
     });
   }
 
   validaSolicitud( cont ) {
-    if (cont.get('solicitud').value=== this._id.value) {
+    if (cont.get('solicitud').value === this._id.value) {
       this.solicitudCorrecta = this.solicitudCorrecta && true;
       return;
     }
-    
-      let maniobraactualizar = {_id: '', solicitud: '', agencia: '', transportista: '', cliente: ''}
-      maniobraactualizar._id = cont.get('maniobra').value
+
+      const maniobraactualizar = {_id: '', solicitud: '', agencia: '', transportista: '', cliente: '', patio: '' };
+      maniobraactualizar._id = cont.get('maniobra').value;
       maniobraactualizar.solicitud = this._id.value;
-      maniobraactualizar.transportista = cont.get('transportista').value
+      maniobraactualizar.transportista = cont.get('transportista').value;
       maniobraactualizar.agencia = this.idagencia.value;
       maniobraactualizar.cliente = this.idcliente.value;
+      maniobraactualizar.patio = cont.get('patio').value;
       this._ManiobraService.asignaSolicitud(maniobraactualizar)
       .subscribe(maniobra => {
         cont.get('solicitud').setValue(maniobra.solicitud);
         this.solicitudCorrecta = this.solicitudCorrecta && true;
-      },error => {
+      }, error => {
         this.solicitudCorrecta = false;
       });
   }
@@ -258,7 +260,7 @@ export class SolicitudDAprobarComponent implements OnInit {
   validaSolicitudes() {
     this.solicitudCorrecta = true;
     this.contenedores.controls.forEach( cont => {
-      this.validaSolicitud(cont)
+      this.validaSolicitud( cont );
     });
   }
 

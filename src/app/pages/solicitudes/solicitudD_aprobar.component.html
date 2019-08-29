@@ -167,7 +167,8 @@
                       <th scope="col">Tipo</th>
                       <th scope="col">Estado</th>
                       <th scope="col">Transportista</th>
-                      <th scope="col">Folio Maniobra</th>
+                      <th scope="col">Patio</th>
+                      <th scope="col">Folio</th>
                       <th scope="col">Validada</th>
                       <th scope="col"></th>
                     </tr>
@@ -179,6 +180,7 @@
                       <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                       <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                       <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                      <td>{{this.contenedores.controls[i].get('patio').value}}</td>
                       <td>{{this.contenedores.controls[i].get('folio').value}}</td>
                       <td><img *ngIf="contenedores.controls[i].get('solicitud').value" src="../../../assets/images/check_32x32.png"></td>
                       <td>
