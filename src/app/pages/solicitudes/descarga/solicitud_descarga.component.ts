@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, AbstractControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Maniobra } from '../../../pages/maniobras/maniobra.models';
 import { ManiobraService } from 'src/app/services/service.index';
@@ -97,11 +97,11 @@ export class SolicitudDescargaComponent implements OnInit {
       credito: ['', [Validators.required]],
       observaciones: [''],
       rutaBL: [''],
-      rutaComprobante: [''],
-      correo: ['',[Validators.required]],
+      rutaComprobante: ['',[Validators.required]],
+      correo: ['', [Validators.required]],
       maniobraTemp: [''],
       estadoTemp: ['VACIO'],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '','') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '') ]),
       facturarA: ['', [Validators.required]],
       rfc: [{value: '', disabled: true}],
       razonSocial: [{value: '', disabled: true}],
@@ -112,14 +112,15 @@ export class SolicitudDescargaComponent implements OnInit {
       municipio: [{value: '', disabled: true}],
       ciudad: [{value: '', disabled: true}],
       estado: [{value: '', disabled: true}],
-      correoFac: ['',[Validators.required]],
+      correoFac: ['', [Validators.required]],
       cp: [{value: '', disabled: true}],
       _id: [''],
       tipo: ['D']
     });
   }
 
-  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, estatus: string, transportista2: string): FormGroup {
+  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+    transportista: string, estatus: string, transportista2: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
@@ -131,12 +132,46 @@ export class SolicitudDescargaComponent implements OnInit {
     });
   }
 
-  addContenedor(cont: string, tipo: string, peso: string, maniobra: string, transportista: string, estatus: string,transportista2: string): void {
+
+  // verificaComprobante(controlKey: string) {
+  //   return (control: AbstractControl): { [s: string]: boolean } => {
+  //     // control.parent es el FormGroup
+  //     if ( this.regForm ) { // en las primeras llamadas control.parent es undefined
+  //       const creditoValue =  this.regForm.controls[controlKey].value;
+  //       if (creditoValue === false && (control.value === undefined || control.value === '')) {
+  //         return {
+  //           rutaComprobante: false
+  //         };
+  //       }
+  //     }
+  //     return null;
+  //   };
+  // }
+
+  verificaPago(controlNameCredito: string, controlNameRuta: string) {
+    return (formGroup: FormGroup) => {
+        const credito = formGroup.controls[controlNameCredito];
+        const rutaComprobante = formGroup.controls[controlNameRuta];
+        if (rutaComprobante.errors && !rutaComprobante.errors.errorComprobante) {
+            // return if another validator has already found an error on the matchingControl
+            return;
+        }
+        if (credito.value === false ) {
+          rutaComprobante.setErrors({ errorComprobante: true });
+        } else {
+          rutaComprobante.setErrors(null);
+        }
+    }
+}
+
+  addContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+                transportista: string, estatus: string, transportista2: string): void {
     this.contenedores.push(this.creaContenedor(cont, tipo, peso, maniobra, transportista, estatus, transportista2));
   }
 
   removeContenedor( index: number ) {
     this.contenedores.removeAt(index);
+    this.regForm.markAsDirty();
   }
 
   get _id() {
@@ -233,16 +268,12 @@ export class SolicitudDescargaComponent implements OnInit {
       this.cargaClientes({value: solicitud.agencia});
       this.regForm.controls['naviera'].setValue(solicitud.naviera);
       this.cargarBuques({value : solicitud.naviera});
-
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-
       this.regForm.controls['viaje'].setValue(solicitud.viaje);
-
       this.regForm.controls['buque'].setValue(solicitud.buque);
       this.cargarViajes({value: solicitud.buque});
       this.regForm.controls['viaje'].setValue(solicitud.viaje);
       this.cargarContenedores({value: solicitud.viaje});
-      //this.regForm.controls['transportista'].setValue(solicitud.transportista);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
@@ -260,7 +291,6 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
       this.regForm.controls['estado'].setValue(solicitud.estado);
       this.regForm.controls['cp'].setValue(solicitud.cp);
-      
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.maniobra.contenedor, element.maniobra.tipo, element.peso, 
@@ -275,7 +305,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarViajes(event) {
-    this._viajeService.getViajes(null,null,null,event.value )
+    this._viajeService.getViajes(null, null, null, event.value )
     .subscribe( res => this.viajes = res.viajes);
   }
 
@@ -283,45 +313,26 @@ export class SolicitudDescargaComponent implements OnInit {
     this._clienteService.getClientesEmpresa(event.value)
     .subscribe( cliente => this.clientes = cliente.clientes);
 
-    const reg = this.agencias.find(x=> x._id==event.value);
-    this.correo.setValue(reg.correo);
+    const reg = this.agencias.find(x => x._id == event.value);
+    if (reg) { this.correo.setValue(reg.correo); }
   }
-  
 
-  cargarContenedores(event)
-  {
-    this._maniobraService.getManiobraXViajeVacios( event.value )
+
+  cargarContenedores(event) {
+    this._maniobraService.getManiobrasXViajeImportacion( event.value )
     .subscribe( res => {
       this.contenedoresXViaje = res;
     });
   }
 
-  guardarSolicitud( ) {
-    if (this.regForm.valid) {
-      this.transportistaTemp.setValue(null);
-      this.estadoTemp.setValue(null);
-      this.maniobraTemp.setValue(null);
-      
-      this._SolicitudDService.guardarSolicitud(this.regForm.value).subscribe(res => {
-        this.fileBL = null;
-        this.fileComprobante = null;
-        this.temporalComprobante = false;
-        this.temporalBL = false;
-        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value ===  undefined) {
-          this.regForm.get('_id').setValue(res._id);
-          this.edicion = true;
-          this.router.navigate(['/solicitud_descarga', this.regForm.get('_id').value]);
-        }
-        this.regForm.markAsPristine();
-      });
-    }
-  }
+
 
   onChangeCredito( event ) {
     if (event.checked) {
-      this.rutaComprobante.setValue(undefined);
+      if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
       this.rutaComprobante.disable({ onlySelf : true});
     } else {
+      if (this.rutaComprobante.value === '..') { this.rutaComprobante.setValue(''); }
       this.rutaComprobante.enable({ onlySelf : true});
     }
   }
@@ -331,13 +342,13 @@ export class SolicitudDescargaComponent implements OnInit {
     console.log(event);
 
     switch (event.value) {
-      case "Cliente":
-        if (!this.cliente || this.cliente.value == "") {
-          swal("Error", "No ha seleccionado el cliente","error");
+      case 'Cliente':
+        if (!this.cliente || this.cliente.value === '') {
+          swal('Error', 'No ha seleccionado el cliente','error');
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.clientes.find(x=> x._id==this.cliente.value);
+          const reg = this.clientes.find(x => x._id == this.cliente.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -352,19 +363,21 @@ export class SolicitudDescargaComponent implements OnInit {
           if (reg.credito) {
             this.credito.enable({onlySelf : true});
             this.credito.setValue(true);
+            this.onChangeCredito({checked: true});
           } else {
             this.credito.disable({onlySelf : true});
             this.credito.setValue(false);
+            this.onChangeCredito({checked: false});
           }
         }
         break;
-      case "Agencia Aduanal":
-          if (!this.agencia || this.agencia.value == "") {
-            swal("Error", "No ha seleccionado la agencia aduanal","error");
+      case 'Agencia Aduanal':
+          if (!this.agencia || this.agencia.value === '') {
+            swal('Error', 'No ha seleccionado la agencia aduanal','error');
             this.facturarA.setValue(null);
             return;
           } else {
-            const reg = this.agencias.find(x=> x._id==this.agencia.value);
+            const reg = this.agencias.find(x => x._id == this.agencia.value);
             this.rfc.setValue(reg.rfc);
             this.razonSocial.setValue(reg.razonSocial);
             this.calle.setValue(reg.calle);
@@ -379,12 +392,14 @@ export class SolicitudDescargaComponent implements OnInit {
             if (reg.credito) {
               this.credito.enable({onlySelf : true});
               this.credito.setValue(true);
+              this.onChangeCredito({checked: true});
             } else {
               this.credito.disable({onlySelf : true});
               this.credito.setValue(false);
+              this.onChangeCredito({checked: false});
             }
           }
-        break;        
+        break;
     }
   }
 
@@ -406,6 +421,9 @@ export class SolicitudDescargaComponent implements OnInit {
     this.fileComprobante = <File> event.target.files[0];
     this.subirComprobante();
   }
+  ver() {
+    console.log(this.rutaComprobante);
+  }
 
   subirComprobante() {
     this._subirArchivoService.subirArchivoTemporal(this.fileComprobante, '').subscribe(nombreArchivo => {
@@ -418,41 +436,56 @@ export class SolicitudDescargaComponent implements OnInit {
 
   agregarContenedor()
   {
-    if (this.maniobraTemp.value=='' || this.maniobraTemp.value==undefined  )
-    {
-      swal('Faltan datos','No ha seleccionado contenedor','error')
-      return
+    if (this.maniobraTemp.value === '' || this.maniobraTemp.value === undefined  ) {
+      swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
+      return;
     }
-    if (this.transportistaTemp.value=='' || this.transportistaTemp.value==undefined  )
-    {
-      swal('Faltan datos','No ha seleccionado transportista','error')
-      return
+    if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined  ) {
+      swal('Faltan datos', 'No ha seleccionado transportista', 'error');
+      return;
     }
-    if (this.estadoTemp.value=='' || this.estadoTemp.value==undefined)
-    {
-      swal('Faltan datos','No ha seleccionado estado','error')
-      return
+    if (this.estadoTemp.value==='' || this.estadoTemp.value === undefined) {
+      swal('Faltan datos', 'No ha seleccionado estado', 'error');
+      return;
     }
     let encontrado = false;
     this.contenedores.controls.forEach(m => {
-      if(m.get("contenedor").value==this.maniobraTemp.value.contenedor){
+      if ( m.get('contenedor').value === this.maniobraTemp.value.contenedor ) {
         encontrado = true;
       }
     });
 
     if (encontrado)
     {
-      swal('Contenedor Duplicado','El contenedor que intenta agregar ya se encuentra en la lista.','error')
-      return
+      swal('Contenedor Duplicado', 'El contenedor que intenta agregar ya se encuentra en la lista.', 'error');
+      return;
     }
       this.addContenedor(this.maniobraTemp.value.contenedor, this.maniobraTemp.value.tipo, this.estadoTemp.value,
-                        this.maniobraTemp.value._id,this.transportistaTemp.value._id,this.maniobraTemp.value.estatus,this.transportistaTemp.value.razonSocial);
+        this.maniobraTemp.value._id, this.transportistaTemp.value._id, this.maniobraTemp.value.estatus,
+        this.transportistaTemp.value.razonSocial);
       this.maniobraTemp.setValue(null);
-    
   }
 
 
-
+  guardarSolicitud( ) {
+    if (this.regForm.valid) {
+      this.transportistaTemp.setValue(null);
+      this.estadoTemp.setValue(null);
+      this.maniobraTemp.setValue(null);
+      this._SolicitudDService.guardarSolicitud(this.regForm.getRawValue()).subscribe(res => {
+        this.fileBL = null;
+        this.fileComprobante = null;
+        this.temporalComprobante = false;
+        this.temporalBL = false;
+        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value ===  undefined) {
+          this.regForm.get('_id').setValue(res._id);
+          this.edicion = true;
+          this.router.navigate(['/solicitud_descarga', this.regForm.get('_id').value]);
+        }
+        this.regForm.markAsPristine();
+      });
+    }
+  }
 //   addContenedor(contenedor: string) {
 //        // console.log(value);
 //     // // tslint:disable-next-line:prefer-const
@@ -493,3 +526,4 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
 }
+

@@ -3,6 +3,7 @@ import { Operador } from "src/app/models/operador.models";
 import { Cliente } from "src/app/models/cliente.models";
 import { Camion } from "src/app/models/camion.models";
 import { Agencia } from "src/app/models/agencia.models";
+import { Solicitud } from '../solicitudes/solicitud.models';
 
 export class Maniobra {
     constructor(
@@ -23,9 +24,10 @@ export class Maniobra {
         public hEntrada?: string,
         public hSalida?: string,
         public lavado?: string,
-        public lavadoObservaciob?: string,
+        public lavadoObservacion?: string,
         public reparaciones?: string,
         public reparacionesObservacion?: string,
+        public solicitud?: string,
         public cliente?: string,
         public usuarioAlta?: string,
         public fAlta?: Date,

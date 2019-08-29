@@ -29,17 +29,7 @@ export class SolicitudesAprobacionesComponent implements OnInit {
     });
   }
 
-  // cambiarDesde(valor: number) {
-  //   const desde = this.desde + valor;
-  //   if (desde >= this.totalRegistros) {
-  //     return;
-  //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargaSolicitudes();
-  // }
+  
 
   buscarSolicitudes(termino: string) {
     // if (termino.length <= 0) {
