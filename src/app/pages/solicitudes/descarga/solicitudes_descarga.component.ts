@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Solicitud } from '../solicitud.models';
-import { SolicitudService } from '../../../services/service.index';
+import { SolicitudService, UsuarioService } from '../../../services/service.index';
 
 @Component({
   selector: 'app-solicitudes-descarga',
@@ -11,20 +11,40 @@ export class SolicitudesDescargaComponent implements OnInit {
   solicitudes: any[] = [];
   cargando = true;
   totalRegistros  = 0;
+  usuarioLogueado : any;
 
-  constructor(public _solicitudService: SolicitudService) { }
+  constructor(public _solicitudService: SolicitudService, private _usuarioService: UsuarioService) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarSolicitudes();
+
   }
 
   cargarSolicitudes() {
     this.cargando = true;
-    this._solicitudService.getSolicitudes('D')
-    .subscribe(res => {
-      this.totalRegistros = res.total;
-      this.solicitudes = res.solicitudes;
-    });
+        
+
+    if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+      this._solicitudService.getSolicitudes('D')
+      .subscribe(res => {
+        this.totalRegistros = res.total;
+        this.solicitudes = res.solicitudes;
+      });
+    }
+    else {
+      let agencias ='';
+      this.usuarioLogueado.empresas.forEach(emp => {
+        agencias = agencias + emp._id + ',';
+      });
+      agencias = agencias.slice(0,-1);
+      this._solicitudService.getSolicitudes('D', null, null, null, agencias)
+      .subscribe(res => {
+        this.totalRegistros = res.total;
+        this.solicitudes = res.solicitudes;
+      });      
+
+    }
   }
 
 

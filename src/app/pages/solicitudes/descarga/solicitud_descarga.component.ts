@@ -21,8 +21,6 @@ import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';
-import { AgenciaComponent } from '../../agencias/agencia.component';
-import { Contenedor } from '../../../models/contenedores.models';
 
 
 @Component({
@@ -40,6 +38,7 @@ export class SolicitudDescargaComponent implements OnInit {
   temporalComprobante = false;
   edicion = false;
   aprobada = false;
+  usuarioLogueado : any;
 
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
@@ -52,7 +51,7 @@ export class SolicitudDescargaComponent implements OnInit {
    listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   //  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
    estadosContenedor: string[] = ['VACIO', 'LLENO'];
-   patios: string[] = ['PROGRESO', 'UMAN'];
+   patios: string[] = ['POLIGONO INDUSTRIAL', 'UMAN'];
    formasPago: string [] = ['', ''];
 
   constructor(
@@ -72,7 +71,15 @@ export class SolicitudDescargaComponent implements OnInit {
     public _modalUploadService: ModalUploadService) { }
 
     ngOnInit() {
-      this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
+      this.usuarioLogueado = this._usuarioService.usuario;
+      if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+        this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
+      }
+      else {
+        this.agencias = this.usuarioLogueado.empresas;
+      }
+      
+      
       this._navieraService.getNavieras().subscribe( navieras => { this.navieras = navieras.navieras; });
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
       this.createFormGroup();
@@ -103,7 +110,7 @@ export class SolicitudDescargaComponent implements OnInit {
       correo: ['', [Validators.required]],
       maniobraTemp: [''],
       estadoTemp: ['VACIO'],
-      patioTemp: ['PROGRESO'],
+      patioTemp: ['POLIGONO INDUSTRIAL'],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '') ]),
       facturarA: ['', [Validators.required]],
       rfc: [{value: '', disabled: true}],
@@ -243,6 +250,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
+      
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);

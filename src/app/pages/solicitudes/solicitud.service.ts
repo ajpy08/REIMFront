@@ -18,7 +18,10 @@ export class SolicitudService {
     //   return this.http.get(URL_SERVICIOS + '/solicitud');
     // }
 
-    getSolicitudes( tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string): Observable<any> {
+
+    //El campo agencias es un string de IDS separados por comas..
+    
+    getSolicitudes( tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string, agencias?: string): Observable<any> {
       let params = new HttpParams();
       if (fIniAlta && fFinAlta) {
         params = params.append('finialta', fIniAlta);
@@ -30,8 +33,11 @@ export class SolicitudService {
       if (estatus)  {
         params = params.append('estatus', estatus);
       }
+      if (agencias){
+        params = params.append('agencias', agencias);
+      }
       // console.log(params.toString());
-      const url = URL_SERVICIOS + '/solicitud';
+      const url = URL_SERVICIOS + '/solicitudes';
       return this.http.get(url, {params: params });
     }
 

@@ -1,0 +1,58 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Descarga de Contenedores ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="table-responsive">
+          <table id="contentToConvert" class="table table-sm table-hover table-responsive">
+            <thead>
+              <tr>
+                <th>Viaje</th>
+                <th>Buque</th>
+                <th>Transportista</th>
+                <th>Contenedor</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Cliente</th>
+                <th>A.A.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let maniobra of maniobras">
+                <td>{{maniobra.viaje?.viaje}}</td>
+                <td>{{maniobra.viaje?.buque.nombre}}</td>
+                <td>{{maniobra.transportista?.razonSocial}}</td>
+                <td>{{maniobra.contenedor}}</td>
+                <td>{{maniobra.tipo}}</td>
+                <td>{{maniobra.estado}}</td>
+                <td>{{maniobra.cliente?.razonSocial}}</td>
+                <td>{{maniobra.agencia?.razonSocial}}</td>
+                <td>
+                  <button [routerLink]="['/solicitud_transportista', maniobra._id ]" class="btn btn-primary">
+                    <i class="fa fa-edit"></i>
+                    </button>
+                  <button [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn">
+                      <i class="fa fa-refresh"></i>
+                    </button>
+
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
