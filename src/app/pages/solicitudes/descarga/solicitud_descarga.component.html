@@ -171,7 +171,7 @@
                   <mat-form-field>
                     <input matInput formControlName="rutaComprobante">
                   </mat-form-field>
-                  <input (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
+                  <input *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
                   <p *ngIf="temporalComprobante; else notShow" class="text-danger">
                     <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -203,7 +203,7 @@
               </div>
               <div class="col-md-4">
                 <mat-label>Anexar BL</mat-label>
-                <input (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf">
+                <input *ngIf="!aprobada" (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf">
                 <p *ngIf="temporalBL; else notShow" class="text-danger">
                   <a [href]="rutaBL.value | imagen:'solicitud'" target="_blank">
                     <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -252,7 +252,17 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <button (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+                <mat-form-field>
+                  <mat-label>Patio</mat-label>
+                  <mat-select formControlName="patioTemp">
+                    <mat-option *ngFor="let patio of patios" [value]="patio">
+                      {{patio}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
               </div>
             </div>
             <!--/span-->
@@ -267,6 +277,7 @@
                         <th scope="col">Tipo</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Transportista</th>
+                        <th scope="col">Patio</th>
                       </tr>
                     </thead>
                     <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
@@ -276,10 +287,14 @@
                         <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                         <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                         <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('patio').value}}</td>
                         <td>
-                          <button (click)="removeContenedor( i )" class="btn btn-danger">
+                          <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
                               <i class="fas fa-trash"></i>
-                            </button>
+                          </button>
+                          <button *ngIf="aprobada" [routerLink]="['/papeleta',  this.contenedores.controls[i].get('maniobra').value ]" class="btn btn-success">
+                            <i class="fas fa-print"></i>
+                          </button>
                         </td>
                       </tr>
                     </tbody>

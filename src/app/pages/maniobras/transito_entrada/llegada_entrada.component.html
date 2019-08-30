@@ -1,100 +1,101 @@
 <div class="row animated fadeIn">
-    <div class="col-md-6">
-        <div class="card card-body">
-            <div class="row">
-                <div class="col-sm-12 col-xs-12">
-                    <form [formGroup]="regForm" (ngSubmit)="guardaCambios()" novalidate>
-                        <div class="my-container">
-                            <mat-form-field>
-                                <input matInput formControlName="contenedor" type="text" placeholder="Contenedor">
-                            </mat-form-field>
-                        </div>
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>A.A</b></label>
-                            <mat-select formControlName="agencia" type="text" placeholder="Seleccione una agencia">
-                                <mat-option *ngFor="let agente of agencias" [value]="agente._id">
-                                    {{agente.razonSocial}}
-                                </mat-option>
-                            </mat-select>
-                        </div>
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>Transportista</b></label>
-                            <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
-                                <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                                    {{transportista.razonSocial}}
-                                </mat-option>
-                            </mat-select>
-                        </div>
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>Camion</b></label>
-                            <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
-                                <mat-option *ngFor="let camion of camiones" [value]="camion._id">
-                                    {{camion.placa + ' | ' + camion.noEconomico}}
-                                </mat-option>
-                            </mat-select>
-                        </div>
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>Operador</b></label>
-                            <mat-select formControlName="operador" type="text" placeholder="Seleccione un operador">
-                                <mat-option *ngFor="let operador of operadores" [value]="operador._id">
-                                    {{operador.nombre}}
-                                </mat-option>
-                            </mat-select>
-                        </div>
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>Fecha y Hora de llegada</b></label>
-                            <div>
-                                <mat-form-field class="inputpersonalizado">
-                                    <input matInput formControlName="fLlegada" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de llegada">
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-
-                                </mat-form-field>
-                                <br>
-                                <mat-form-field class="time">
-                                    <input matInput formControlName="hLlegada" type="time" placeholder="Hora Llegada">
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <div class="form-group has-success">
-                            <label class="control-label"><b>Hora de Entrada</b></label>
-                            <div>
-                                <mat-form-field class="time">
-                                    <input matInput formControlName="hEntrada" type="time" placeholder="Hora Entrada">
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-                            <i class="fa fa-save"></i>
-                            Guardar Cambios
-                        </button>
-                        <a routerLink="/transito" class="btn btn-danger waves-effect waves-light">Regresar</a>
-                    </form>
-                    <p>Form value {{ regForm.value | json }} </p>
-                </div>
+  <div class="col-md-6">
+    <div class="card card-body">
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardaCambios()" novalidate>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>Folio</mat-label>
+                <input matInput formControlName="folio" type="text">
+              </mat-form-field>
             </div>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>Contenedor</mat-label>
+                <input matInput formControlName="contenedor" type="text">
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>Agente Aduanal</mat-label>
+                <mat-select formControlName="agencia" type="text">
+                  <mat-option *ngFor="let agente of agencias" [value]="agente._id">
+                    {{agente.razonSocial}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>Transportista</mat-label>
+                <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
+                  <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                    {{transportista.razonSocial}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="transportista.invalid">
+                  <sup>*</sup>Debe seleccionar un transportista
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>Camion</mat-label>
+                <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
+                  <mat-option *ngFor="let camion of camiones" [value]="camion._id">
+                    {{camion.placa + ' | ' + camion.noEconomico}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="camion.invalid">
+                  <sup>*</sup>Debe seleccionar un camion
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <mat-form-field>
+                <mat-label>operador</mat-label>
+                <mat-select formControlName="operador" type="text" placeholder="Seleccione un operador">
+                  <mat-option *ngFor="let operador of operadores" [value]="operador._id">
+                    {{operador.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="operador.invalid">
+                  <sup>*</sup>Debe seleccionar un operador
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <label class="control-label"><b>Fecha y Hora de llegada</b></label>
+              <div>
+                <mat-form-field class="inputpersonalizado">
+                  <input matInput formControlName="fLlegada" [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de llegada">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="time">
+                  <input matInput formControlName="hLlegada" type="time" placeholder="Hora Llegada">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="form-group has-success">
+              <label class="control-label"><b>Hora de Entrada</b></label>
+              <div>
+                <mat-form-field class="time">
+                  <input matInput formControlName="hEntrada" type="time" placeholder="Hora Entrada" (focus)="ponHora()">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <a routerLink="/maniobras/transito" class="btn btn-danger waves-effect waves-light">Regresar</a>
+          </form>
+          <p>Form value {{ regForm.value | json }} </p>
         </div>
+      </div>
     </div>
-
-    <!-- <div class="my-container">
-                            <h3>Datos de la maniobra</h3>
-                            <h3>Contenedor: {{maniobra.contenedor}}</h3>
-                            <div class="col-md-3">
-                                
-                            </div>
-
-                            <div class="my-container2">
-                                <mat-form-field class="inputpersonalizado">
-                                    <input matInput [matDatepicker]="picker" type="text" class="form-control" placeholder="Fecha de llegada">
-                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </mat-form-field>
-                                <br>
-                                <mat-form-field class="time">
-                                    <input matInput type="time" placeholder="Hora Llegada">
-                                </mat-form-field>
-                            </div>
-
-                        </div> -->
+  </div>

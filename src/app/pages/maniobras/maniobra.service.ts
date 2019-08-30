@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpParams} from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
 import { Maniobra } from './maniobra.models';
@@ -30,38 +30,61 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
+  getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/' ;
+    let params = new HttpParams();
+    if (cargadescarga)  {
+      params = params.append('cargadescarga', cargadescarga);
+    }
+    if (estatus)  {
+      params = params.append('estatus', estatus);
+    }
+    if (transportista)  {
+      params = params.append('transportista', transportista);
+    }
+    if (contenedor)  {
+      params = params.append('contenedor', contenedor);
+    }
+    return this.http.get(url, {params: params });
+  }
+
   getManiobraXContenedorViajeBuque(contenedor: string, viaje: string, buque: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/buscaxcontenedorviaje?contenedor=' + contenedor + '&viaje=' + viaje + '&buque=' + buque;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
   }
 
   getManiobrasXViajeImportacion(viaje: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/xviaje/'+viaje+'/importacion';
+    const url = URL_SERVICIOS + '/maniobras/xviaje/' + viaje + '/importacion';
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
-  getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
-    return this.http.get( url );
-  }
+  // getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
 
   getContenedoresDisponibles( ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
     return this.http.get( url );
   }
 
-  getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
-    // if (contenedor===undefined)  contenedor="";
-    // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-    const url = URL_SERVICIOS + '/maniobras/espera/?desde=' + desde ;
-    return this.http.get( url );
-  }
+  // getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   // if (contenedor===undefined)  contenedor="";
+  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+  //   const url = URL_SERVICIOS + '/maniobras/espera/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
+
   getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
     // if (contenedor===undefined)  contenedor="";
     // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
     const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
     return this.http.get( url );
   }
+
+
+
+
 
   getManiobrasxCargar(): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/xcargar/';
@@ -90,6 +113,27 @@ export class ManiobraService {
     }));
   }
 
+  asignaCamionOperador( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/asigna_camion_operador';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Camion y Chofer actualizados.', '', 'success');
+      return resp.viaje;
+    }));
+  }
+
+  reasignaTransportista( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/reasigna_transportista';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+    .pipe(map( (resp: any) => {
+      swal('Transportista Reasignado', '', 'success');
+      return resp.viaje;
+    }));
+  }
 
   registraLlegadaEntrada( maniobra: Maniobra ): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/registra_llegada';
@@ -97,12 +141,8 @@ export class ManiobraService {
     url += '?token=' + this._usuarioService.token;
     return this.http.put( url, maniobra )
     .pipe(map( (resp: any) => {
-      swal('Maniobra actualizada', '', 'success');
-      return resp.viaje;
-    }),
-    catchError( err => {
-      swal( err.error.mensaje, err.error.errores.message, 'error' );
-      return throwError(err);
+      swal('La llegada de la maniobra ha sido registrada', '', 'success');
+      return resp.maniobra;
     }));
   }
 

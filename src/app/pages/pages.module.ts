@@ -48,6 +48,8 @@ import { ViajeComponent } from './viajes/viaje.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
 import { NavierasComponent } from './navieras/navieras.component';
 import { NavieraComponent } from './navieras/naviera.component';
+
+
 // solicitudes y aprobaciones
 import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
@@ -55,6 +57,11 @@ import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
 import { SolicitudDAprobarComponent } from './solicitudes/solicitudD_aprobar.component';
 import { SolicitudCAprobarComponent } from './solicitudes/solicitudC_aprobar.component';
+import { SolicitudesTransportistaComponent } from './solicitudes/transportista/solicitudes_transportista.component';
+import { SolicitudTransportistaComponent } from './solicitudes/transportista/solicitud_transportista.component';
+import { SolicitudReasignaTransportistaComponent } from './solicitudes/transportista/solicitud_reasigna_transportista.component';
+
+import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
 
 import { FotosComponent } from './fotos/fotos.component';
 import { NgDropFilesDirective } from '.././directives/ng-drop-files.directive';
@@ -71,7 +78,7 @@ import { Buques2Component } from './buques2/buques2.component';
 import { Buque2Component } from './buques2/buque2.component';
 import { ReparacionesComponent } from './reparaciones/reparaciones.component';
 import { ReparacionComponent } from './reparaciones/reparacion.component';
-import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
+
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
 import { PipesModule } from '../pipes/pipes.module';
@@ -151,6 +158,9 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
         SolicitudCargaComponent,
         SolicitudDAprobarComponent,
         SolicitudCAprobarComponent,
+        SolicitudesTransportistaComponent,
+        SolicitudTransportistaComponent,
+        SolicitudReasignaTransportistaComponent,
         EmpresaComponent,
         MisclientesComponent,
         MiclienteComponent,
