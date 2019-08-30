@@ -3,7 +3,7 @@ import { FileItem } from '../../models/file-item.models';
 import { ManiobraService } from '../maniobras/maniobra.service';
 import { SubirArchivoService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Maniobra } from '../maniobras/maniobra.models';
+import { Maniobra } from '../../models/maniobra.models';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryLayout, NgxGalleryImageSize, NgxGalleryOrder } from 'ngx-gallery';
 import { FotosPipe } from 'src/app/pipes/fotos.pipe';
 import { MatTabGroup, MatTabChangeEvent } from '@angular/material';

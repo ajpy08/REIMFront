@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { Maniobra } from '../../maniobras/maniobra.models';
+import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Transportista } from '../../../models/transportista.models';
@@ -50,7 +50,7 @@ export class SolicitudTransportistaComponent implements OnInit {
       tipo: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
-      transportista: [{value: '', disabled: true}],
+      transportista: [{value: '', disabled: false}],
       camion: ['', [Validators.required]],
       operador: ['' , [Validators.required]],
     });

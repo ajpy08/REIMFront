@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { Maniobra } from '../../models/maniobras.models';
+import { Maniobra } from '../../models/maniobra.models';
 import { ManiobraService } from '../../services/service.index';
 import { ExcelService } from '../../services/service.index';
 import * as jspdf from 'jspdf';
