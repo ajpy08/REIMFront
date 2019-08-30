@@ -11,10 +11,12 @@ declare var jQuery: any;
 
 export class SolicitudesTransportistaComponent implements OnInit {
   maniobras: any[] = [];
+  maniobrasCarga: any[] = [];
   data: any = {fechaCreado: ''};
   cargando = true;
   totalRegistros = 0;
-  usuarioLogueado : any;
+  totalRegistrosCargas = 0;
+  usuarioLogueado: any;
   constructor(public _maniobraService: ManiobraService, public _usuarioService: UsuarioService,) { }
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
@@ -25,24 +27,18 @@ export class SolicitudesTransportistaComponent implements OnInit {
   cargarManiobras() {
     this.cargando = true;
     console.log(this.usuarioLogueado.empresas[0]._id);
-    if (this.usuarioLogueado.role==='TRANSPORTISTA_ROLE'){
+    if (this.usuarioLogueado.role === 'TRANSPORTISTA_ROLE') {
       this._maniobraService.getManiobras('D', 'TRANSITO', this.usuarioLogueado.empresas[0]._id)
       .subscribe(maniobras => {
-        if (maniobras.code !== 200) {
-          this.totalRegistros = maniobras.total;
-          this.maniobras = maniobras.maniobras;
-          this.cargando = false;
-        }
-      },
-      error => {
-          console.log(<any>error);
-      }
-    );
+        this.totalRegistros = maniobras.total;
+        this.maniobras = maniobras.maniobras;
+      });
+      this._maniobraService.getManiobras('c', 'TRANSITO', this.usuarioLogueado.empresas[0]._id)
+      .subscribe(maniobras => {
+        this.totalRegistrosCargas = maniobras.total;
+        this.maniobrasCarga = maniobras.maniobras;
+      });
+      this.cargando = false;
     }
   }
-
-
 }
-
-
-

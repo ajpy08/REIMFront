@@ -104,10 +104,13 @@ const pagesRoutes: Routes = [
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
-    {path: 'papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
-    {path: 'transito', component: TransitoComponent, data: {titulo: 'Transito'}},
-    {path: 'llegada_entrada/:id', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
-    {path: 'espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
+    {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
+
+    {path: 'maniobras/transito', component: TransitoComponent, data: {titulo: 'Transito'}},
+    {path: 'maniobras/llegada_entrada/:id', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
+    {path: 'maniobras/espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
+
+
     {path: 'revision', component: RevisionComponent, data: {titulo: 'Revision'}},
     {path: 'revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
     {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
@@ -142,7 +145,7 @@ const pagesRoutes: Routes = [
     {path: 'solicitudC_aprobar/:id', component: SolicitudCAprobarComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Aprobar Carga'}},
 
-    //SOLICITUDES TRANSPORTISTA
+    // SOLICITUDES TRANSPORTISTA
 
     {path: 'solicitudes_transportista', component: SolicitudesTransportistaComponent,
     canActivate: [AdminGuard], data: { titulo: 'Solicitudes Transportista'}},

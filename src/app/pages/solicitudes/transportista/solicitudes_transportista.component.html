@@ -9,50 +9,105 @@
     </div>
   </div>
 </div>
-<div class="row animated fadeIn" *ngIf="!cargando">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <h3 class="card-title">Descarga de Contenedores ( <small>{{totalRegistros}}</small> )</h3>
-        <div class="table-responsive">
-          <table id="contentToConvert" class="table table-sm table-hover table-responsive">
-            <thead>
-              <tr>
-                <th>Viaje</th>
-                <th>Buque</th>
-                <th>Transportista</th>
-                <th>Contenedor</th>
-                <th>Tipo</th>
-                <th>Estado</th>
-                <th>Cliente</th>
-                <th>A.A.</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let maniobra of maniobras">
-                <td>{{maniobra.viaje?.viaje}}</td>
-                <td>{{maniobra.viaje?.buque.nombre}}</td>
-                <td>{{maniobra.transportista?.razonSocial}}</td>
-                <td>{{maniobra.contenedor}}</td>
-                <td>{{maniobra.tipo}}</td>
-                <td>{{maniobra.estado}}</td>
-                <td>{{maniobra.cliente?.razonSocial}}</td>
-                <td>{{maniobra.agencia?.razonSocial}}</td>
-                <td>
-                  <button [routerLink]="['/solicitud_transportista', maniobra._id ]" class="btn btn-primary">
-                    <i class="fa fa-edit"></i>
-                    </button>
-                  <button [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn">
-                      <i class="fa fa-refresh"></i>
-                    </button>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
+<mat-tab-group>
+  <mat-tab label="Descargas">
+    <div class="row animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Descargas Pendientes ( <small>{{totalRegistros}}</small> )</h3>
+            <div class="table-responsive">
+              <table id="contentToConvert" class="table table-sm table-hover table-responsive">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Folio</th>
+                    <th>Contenedor</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Cliente</th>
+                    <th>A.A.</th>
+                    <th>Operador</th>
+                    <th>Camion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let maniobra of maniobras">
+                    <td>
+                      <button [routerLink]="['/solicitudes/papeleta', maniobra._id ]" class="btn btn-info">
+                          <i class="fa fa-print"></i>
+                        </button>
+                      <button [routerLink]="['/solicitud_transportista', maniobra._id ]" class="btn btn-primary">
+                                <i class="fa fa-edit"></i>
+                                </button>
+                      <button [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn btn-danger">
+                                  <i class="fa fa-refresh"></i>
+                                </button>
+                    </td>
+                    <td>{{maniobra.folio}}</td>
+                    <td>{{maniobra.contenedor}}</td>
+                    <td>{{maniobra.tipo}}</td>
+                    <td>{{maniobra.peso}}</td>
+                    <td>{{maniobra.cliente?.razonSocial}}</td>
+                    <td>{{maniobra.agencia?.razonSocial}}</td>
+                    <td>{{maniobra.operador?.nombre}}</td>
+                    <td>{{maniobra.camion?.noEconomico}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </mat-tab>
+  <mat-tab label="Cargas">
+    <div class="row animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Cargas Pendientes ( <small>{{totalRegistrosCargas}}</small> )</h3>
+            <div class="table-responsive">
+              <table id="contentToConvert" class="table table-sm table-hover table-responsive">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Folio</th>
+                    <th>Contenedor</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Cliente</th>
+                    <th>A.A.</th>
+                    <th>Operador</th>
+                    <th>Camion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let maniobra of maniobrasCarga">
+                    <td>
+                      <button [routerLink]="['/solicitud_transportista', maniobra._id ]" class="btn btn-primary">
+                                  <i class="fa fa-edit"></i>
+                                  </button>
+                      <button [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn">
+                                    <i class="fa fa-refresh"></i>
+                                  </button>
+                    </td>
+                    <td>{{maniobra.folio}}</td>
+                    <td>{{maniobra.contenedor}}</td>
+                    <td>{{maniobra.tipo}}</td>
+                    <td>{{maniobra.peso}}</td>
+                    <td>{{maniobra.cliente?.razonSocial}}</td>
+                    <td>{{maniobra.agencia?.razonSocial}}</td>
+                    <td>{{maniobra.operador?.nombre}}</td>
+                    <td>{{maniobra.camion?.noEconomico}}</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

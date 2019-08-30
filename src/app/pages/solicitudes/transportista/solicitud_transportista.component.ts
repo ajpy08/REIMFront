@@ -51,8 +51,8 @@ export class SolicitudTransportistaComponent implements OnInit {
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
       transportista: [{value: '', disabled: true}],
-      camion: [''],
-      operador: [''],
+      camion: ['', [Validators.required]],
+      operador: ['' , [Validators.required]],
     });
   }
 
@@ -94,7 +94,7 @@ export class SolicitudTransportistaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
-      
+
     });
   }
 
