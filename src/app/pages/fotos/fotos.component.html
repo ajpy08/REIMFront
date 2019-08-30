@@ -1,79 +1,49 @@
-<mat-tab-group>
-    <mat-tab label="Fotos Lavados">
+<mat-tab-group (selectedTabChange)="onLinkClick($event)" mat-stretch-tabs>
+    <mat-tab label="lavado">
+        <ng-template mat-tab-label>
+            <div *ngIf="galleryImagesL;else imagesL">
+                    <i class="fas fa-camera-retro"> Lavados ({{galleryImagesL.length}})</i>
+            </div>
+            <ng-template #imagesL>
+                <i class="fas fa-camera-retro"> Lavados (0)</i>
+            </ng-template>            
+        </ng-template>
         <div class="container">
             <div class="row">
-                <div *ngFor="let fotoL of fotosLavado">
-                    <div class="thumbnail">
-                        <a href="{{fotoL.source}}" target="_blank">
-                                <img [src]="fotoL.name | fotos:[id,'L']" style="width:30%">
-                        </a>
-                    </div>
-                </div>
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL"></ngx-gallery>
             </div>
         </div>
-        <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                      <div *ngFor="let item of items" class="carousel-item {{item.estado}}" >
-                        <img src="{{item.ruta}}" class="d-block w-100" alt="..." height="650px">
-                      </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </a>
-                </div> -->
-        <!-- <div class="card-columns">
-            <div class="card" *ngFor="let foto of maniobra.imgl">
-                <img class="card-img-top" [src]="foto.img | imagen:'fotos_lavado'" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{foto._id}}</h5>
-                    <button (click)="borrarFotoLavado( maniobra._id, foto.img )" class="btn btn-danger">
-                        <i class="fa fa-trash-o"> Eliminar</i>
-                      </button>
-                </div>
-            </div>
-        </div> -->
     </mat-tab>
 
-    <mat-tab label="Fotos Repararación">
+    <mat-tab label="reparaciones">
+        <ng-template mat-tab-label>
+                <div *ngIf="galleryImagesR;else imagesR">
+                        <i class="fas fa-camera-retro"> Reparaciones ({{galleryImagesR.length}})</i>
+                </div>
+                <ng-template #imagesR>
+                    <i class="fas fa-camera-retro"> Reparaciones (0)</i>
+                </ng-template>    
+        </ng-template>
         <div class="container">
             <div class="row">
-                <div *ngFor="let fotoR of fotosReparacion">
-                    <div class="thumbnail">
-                        <!-- <a href="{{fotoR.source}}" target="_blank"> -->
-                                <img [src]="fotoR.name | fotos:[id,'R']" style="width:30%">
-                        <!-- </a> -->
-                    </div>
-                </div>
+                <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR"></ngx-gallery>
             </div>
         </div>
-        <!-- <div class="card-columns">
-            <div class="card" *ngFor="let foto of maniobra.imgr">
-                <img class="card-img-top" [src]="foto.img | imagen:'fotos_reparacion'" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{foto.img}}</h5>
-                    <button (click)="borrarFotoReparado( maniobra._id, foto.img )" class="btn btn-danger">
-                        <i class="fa fa-trash-o"> Eliminar</i>
-                      </button>
-                </div>
-            </div>
-        </div> -->
     </mat-tab>
 
-    <mat-tab label="Carga">
+    <mat-tab label="carga">
+        <ng-template mat-tab-label>
+            <i class="fas fa-cloud-upload-alt"> Carga</i>
+        </ng-template>
         <div class="row">
             <div class="col-md-4">
                 <h3>Seleccione archivos</h3>
-                <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event"
+                <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
                     [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
-                    <h4>Deje caer aqui los archivos</h4>
+                    <h4>Suelta los archivos aquí</h4>
                     <img src="assets/images/drop-images.png">
                 </div>
-                <input class="hidden" (change)="seleccionImagen($event.target.files[0])" type="file" multiple />
+                <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
             </div>
             <div class="col-md-8">
                 <h4>Cargar archivos</h4>
@@ -89,6 +59,7 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>Nombre archivo</th>
+                            <th>Cargado</th>
                             <th>Tamaño</th>
                             <th>Progreso</th>
                         </tr>
@@ -96,7 +67,8 @@
                     <tbody>
                         <tr *ngFor="let archivo of archivos">
                             <th>{{archivo.nombreArchivo}}</th>
-                            <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+                            <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+                            <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>                        
                             <th>
                                 <div class="progress">
                                     <div class="progress-bar" role="progressbar"

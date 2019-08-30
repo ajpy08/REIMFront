@@ -40,6 +40,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   tiposReparaciones: Reparacion[] = [];
   grados: string[] = ['A', 'B', 'C'];
+  id: string;
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -48,10 +49,10 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     private fb: FormBuilder, private datePipe: DatePipe) { }
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarTiposReparaciones();
     this.createFormGroup();
-    this.cargarManiobra( id );
+    this.cargarManiobra( this.id );
     this.reparaciones.removeAt(0);
 
   }
@@ -166,7 +167,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   cargarManiobra( id: string) {
 
     this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
-      console.log(maniob);
+      //console.log(maniob);
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.razonSocial);
