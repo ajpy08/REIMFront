@@ -55,14 +55,14 @@
                                 <td>{{maniobra.cliente?.razonSocial}}</td>
                                 <td>{{maniobra.agencia?.razonSocial}}</td>
                                 <td>{{maniobra.lavado}}
-                                    <button [routerLink]="['/fotos', maniobra._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"></i>
+                                    <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
+                                        <i class="fas fa-camera-retro"></i>
                                         Fotos 
                                     </button>
                                 </td>
                                 <td>
-                                    <button [routerLink]="['/fotos', maniobra._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"></i>
+                                    <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
+                                        <i class="fas fa-camera-retro"></i>
                                         Fotos
                                     </button>
                                     <p *ngFor="let rep of maniobra.reparaciones">

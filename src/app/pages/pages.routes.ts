@@ -113,7 +113,7 @@ const pagesRoutes: Routes = [
     {path: 'carga_contenedor/:id', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
-    {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
+    {path: 'fotos/:id&:opcion', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},
     {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
