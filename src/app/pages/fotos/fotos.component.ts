@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FileItem } from '../../models/file-item.models';
 import { ManiobraService } from '../maniobras/maniobra.service';
 import { SubirArchivoService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Maniobra } from '../maniobras/maniobra.models';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryLayout, NgxGalleryImageSize, NgxGalleryOrder } from 'ngx-gallery';
+import { FotosPipe } from 'src/app/pipes/fotos.pipe';
+import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
 
 
 @Component({
@@ -13,58 +16,171 @@ import { Maniobra } from '../maniobras/maniobra.models';
 })
 
 export class FotosComponent implements OnInit {
+
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   // maniobra: Maniobra;
   estaSobreElemento = false;
   archivos: FileItem[] = [];
-  imagenSubir:  FileItem[] = [];
+  imagenSubir: FileItem[] = [];
   maniobra: Maniobra = new Maniobra();
   foto: Maniobra = new Maniobra('');
   selected = 'fotos_lavado';
   id: string;
 
-  // items = [{ruta: '../../../assets/images/1.jpg', estado: 'active'},
-  //           {ruta: '../../../assets/images/2.jpg', estado: ''},
-  //           {ruta: '../../../assets/images/1.jpg', estado: ''}];
-  fotosLavado;
-  fotosReparacion;
+  fotosLavado: any;
+  fotosReparacion: any;
+
+  galleryOptions: NgxGalleryOptions[];
+  galleryImagesL: NgxGalleryImage[];
+  galleryImagesR: NgxGalleryImage[];
+  yaCargo: boolean = false;
 
   constructor(public _maniobraService: ManiobraService,
     public _subirArchivoService: SubirArchivoService,
     public router: Router,
-    public activatedRoute: ActivatedRoute) {
-      activatedRoute.params.subscribe();
-    }
+    public activatedRoute: ActivatedRoute,
+    private fotosPipe: FotosPipe) {
+    activatedRoute.params.subscribe();
+  }
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.cargarManiobra( this.id );
+    this.selected = this.activatedRoute.snapshot.paramMap.get('opcion');
+
+    this.cargarManiobra(this.id);
     this.cargarFotos(this.id, "L");
     this.cargarFotos(this.id, "R");
+    this.escojeTab(this.selected);
+
+    this.galleryOptions = [
+      {
+        width: '600px',
+        height: '600px',
+        thumbnailsColumns: 4,
+        thumbnailsRows: 4,
+        thumbnailsOrder: NgxGalleryOrder.Row,
+        //thumbnailsRemainingCount: true,
+        //thumbnailSize: NgxGalleryImageSize.Contain,
+        imageSize: NgxGalleryImageSize.Contain,
+        //previewFullscreen: true,
+        //previewForceFullscreen: true,
+        previewCloseOnEsc: true,
+        previewZoom: true,
+        previewRotate: true,
+        previewKeyboardNavigation: true,
+        //imageAutoPlay: true,
+        //imageAutoPlayInterval: 5000,
+        imageAnimation: NgxGalleryAnimation.Slide
+      },
+      // max-width 800
+      {
+        breakpoint: 800,
+        width: '100%',
+        height: '600px',
+        imagePercent: 80,
+        thumbnailsPercent: 20,
+        thumbnailsMargin: 20,
+        thumbnailMargin: 20
+      },
+      // max-width 400
+      {
+        breakpoint: 400,
+        preview: false
+      }
+    ];
   }
 
-  cargarManiobra( id: string) {
-    this._maniobraService.getManiobra( id )
-          .subscribe( maniobra => {
-            this.maniobra = maniobra.maniobra;
-          });
+  cargarManiobra(id: string) {
+    this._maniobraService.getManiobra(id)
+      .subscribe(maniobra => {
+        this.maniobra = maniobra.maniobra;
+      });
   }
 
   cargarFotos(id: string, lavado_reparacion: string) {
-    if(lavado_reparacion === "L") {
+    if (lavado_reparacion === "L") {
+      const images = [];
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
         this.fotosLavado = fotos.fotos;
+        this.fotosLavado.forEach(foto => {
+          let data = this.fotosPipe.transform(foto.name, [id, 'L']);
+          const image = {
+            small: data,
+            medium: data,
+            big: data
+          };
+          images.push(image);
+        });
+        this.galleryImagesL = images;
+
+        // console.log(images)
+        // console.log(this.galleryImagesL)
       });
     } else {
-      if(lavado_reparacion === "R") {
+      if (lavado_reparacion === "R") {
+        const images = [];
         this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
           this.fotosReparacion = fotos.fotos;
+          this.fotosReparacion.forEach(foto => {
+            let data = this.fotosPipe.transform(foto.name, [id, 'R']);
+            const image = {
+              small: data,
+              medium: data,
+              big: data
+            };
+            images.push(image);
+          });
+          this.galleryImagesR = images;
+
+          // console.log(images)
+          // console.log(this.galleryImagesR)
         });
       }
     }
   }
 
+  escojeTab(opcion){
+    //console.log(opcion)
+    if(opcion === 'fotos_lavado') {
+      this.tabGroup.selectedIndex = 0;
+    } else {
+      if(opcion === 'fotos_reparacion') {
+        this.tabGroup.selectedIndex = 1;
+      } else {
+        this.tabGroup.selectedIndex = 2;
+      }
+    }
+  }
+
   cargarImagenes() {
-    this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
+    const promesa = this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
+
+    promesa.then((value: boolean) => {
+      if (value) {
+        this.yaCargo = value;
+        //console.log("yaCargo de fotos.component: " +  this.yaCargo)
+        this.actualizaFotosDespuesdeCargar(value);
+      }
+    })
+  }
+
+  actualizaFotosDespuesdeCargar(ok) {
+    if (ok) {
+      if (this.selected === 'fotos_lavado') {
+        this.cargarFotos(this.id, "L");
+      } else {
+        if (this.selected === 'fotos_reparacion') {
+          this.cargarFotos(this.id, "R");
+        }
+      }
+    }
+  }
+
+  onLinkClick(event: MatTabChangeEvent) {
+    if (event.tab.textLabel !== 'carga' && this.archivos.length > 0) {
+      this.limpiarArchivos();
+    }
   }
 
   cargarImgenesSelect() {
@@ -72,32 +188,64 @@ export class FotosComponent implements OnInit {
 
   limpiarArchivos() {
     this.archivos = [];
+    this.yaCargo = false;
   }
 
-  borrarFotoLavado( id: string, foto: string ) {
-    console.log(id);
-    console.log(foto);
+  borrarFotoLavado(id: string, foto: string) {
     this._maniobraService.removerFotosLavados(id, foto)
-    .subscribe(maniobra => {
-          this.maniobra._id = this.maniobra._id;
-          this.cargarManiobra(this.maniobra._id);
-    });
+      .subscribe(maniobra => {
+        this.maniobra._id = this.maniobra._id;
+        this.cargarManiobra(this.maniobra._id);
+      });
 
   }
 
-  borrarFotoReparado( id: string, foto: string ) {
-    console.log(id);
-    console.log(foto);
+  borrarFotoReparado(id: string, foto: string) {
     this._maniobraService.removerFotosReparados(id, foto)
-    .subscribe(maniobra => {
-          this.maniobra._id = this.maniobra._id;
-          this.cargarManiobra(this.maniobra._id);
-    });
+      .subscribe(maniobra => {
+        this.maniobra._id = this.maniobra._id;
+        this.cargarManiobra(this.maniobra._id);
+      });
 
   }
 
-  seleccionImagen(archivo: FileItem[] = []) {
-    console.log(archivo);
+  seleccionImagen(archivosLista: File[]) {
+    if (this.yaCargo) {
+      this.limpiarArchivos();
+    }
+
+    for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
+      const archivoTemporal = archivosLista[propiedad];
+
+      if (this._archivoPuedeSerCargado(archivoTemporal)) {
+        const nuevoArchivo = new FileItem(archivoTemporal);
+        this.archivos.push(nuevoArchivo);
+      }
+    }
   }
+
+  // validaciones
+  private _archivoPuedeSerCargado(archivo: File): boolean {
+    if (!this._archivoYaFueronDroppeados(archivo.name) && this._esImagen(archivo.type)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private _esImagen(tipoArchivo: string): boolean {
+    return (tipoArchivo === '' || tipoArchivo === undefined) ? false : tipoArchivo.startsWith('image');
+  }
+
+  private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {    
+    for (const archivo of this.archivos) {
+      if (archivo.nombreArchivo === nombreArchivo) {
+        console.log('El archivo' + nombreArchivo + ' ya esta agregado');
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }

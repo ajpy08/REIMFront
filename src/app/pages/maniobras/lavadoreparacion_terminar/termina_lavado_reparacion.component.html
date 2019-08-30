@@ -78,7 +78,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group has-success">
-                                <button type="button" class="btn waves-effect waves-light m-r-10" [routerLink]="['/fotos', this._id.value ]">
+                                <button type="button" class="btn waves-effect waves-light m-r-10" [routerLink]="['/fotos', 'params', {id: this.id, opcion: 'fotos_lavado'}]">
                                     Ver Fotos
                                 </button>
                             </div>
@@ -121,7 +121,7 @@
                           </div>
                           <div class="col-md-3">
                                 <div class="form-group has-success">
-                                    <button type="button" class="btn waves-effect waves-light m-r-10" [routerLink]="['/fotos', this._id.value ]">
+                                    <button type="button" class="btn waves-effect waves-light m-r-10" [routerLink]="['/fotos', 'params', {id: this.id, opcion: 'fotos_reparacion'}]">
                                         Ver Fotos
                                     </button>
                                 </div>

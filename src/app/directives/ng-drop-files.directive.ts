@@ -7,31 +7,32 @@ import { Directive, EventEmitter, ElementRef, HostListener, Input, Output } from
 export class NgDropFilesDirective {
   @Input() archivos: FileItem[] = [];
   @Output() mouseSobre: EventEmitter<boolean> = new EventEmitter();
+  @Input() yaCargo: boolean;
 
   constructor() { }
 
   @HostListener('dragover', ['$event'])
-  public onDrapEnter( event: any) {
-  this.mouseSobre.emit(true);
-  this._prevenirDetener(event);
+  public onDrapEnter(event: any) {
+    this.mouseSobre.emit(true);
+    this._prevenirDetener(event);
   }
 
   @HostListener('dragleave', ['$event'])
-  public onDrapLeave( event: any) {
-  this.mouseSobre.emit(false);
+  public onDrapLeave(event: any) {
+    this.mouseSobre.emit(false);
   }
 
   @HostListener('drop', ['$event'])
-  public onDrop( event: any) {
+  public onDrop(event: any) {
 
-  const transferencia = this._getTransferencia(event);
-   if (!transferencia) {
-     return;
-   }
+    const transferencia = this._getTransferencia(event);
+    if (!transferencia) {
+      return;
+    }
 
-   this._extraerArchivos(transferencia.files);
-   this._prevenirDetener(event);
-   this.mouseSobre.emit(false);
+    this._extraerArchivos(transferencia.files);
+    this._prevenirDetener(event);
+    this.mouseSobre.emit(false);
 
 
   }
@@ -42,44 +43,51 @@ export class NgDropFilesDirective {
 
   private _extraerArchivos(archivosLista: FileList) {
     console.log(archivosLista);
+    //console.log("yaCargo de ng-drop-files: " + this.yaCargo)
+    if (this.yaCargo) {
+      while (this.archivos.length > 0) {
+        this.archivos.pop();
+      }
+    }
+
     // tslint:disable-next-line:forin
     for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
-         const archivoTemporal = archivosLista[propiedad];
+      const archivoTemporal = archivosLista[propiedad];
 
-         if (this._archivoPuedeSerCargado(archivoTemporal)) {
-           const nuevoArchivo = new FileItem(archivoTemporal);
-           this.archivos.push(nuevoArchivo);
-         }
+      if (this._archivoPuedeSerCargado(archivoTemporal)) {
+        const nuevoArchivo = new FileItem(archivoTemporal);
+        this.archivos.push(nuevoArchivo);
+      }
     }
-    console.log(this.archivos);
+    //console.log(this.archivos);
   }
 
-// validaciones
-private _archivoPuedeSerCargado (archivo: File): boolean {
-  if (!this._archivoYaFueronDroppeados(archivo.name) && this._esImagen(archivo.type)) {
-    return true;
-  } else {
+  // validaciones
+  private _archivoPuedeSerCargado(archivo: File): boolean {
+    if (!this._archivoYaFueronDroppeados(archivo.name) && this._esImagen(archivo.type)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private _prevenirDetener(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {
+    for (const archivo of this.archivos) {
+      if (archivo.nombreArchivo === nombreArchivo) {
+        console.log('El archivo' + nombreArchivo + ' ya esta agregado');
+        return true;
+      }
+    }
     return false;
   }
-}
 
-private _prevenirDetener (event) {
-  event.preventDefault();
-  event.stopPropagation();
-}
-
-private _archivoYaFueronDroppeados (nombreArchivo: string): boolean {
-  for (const archivo of this.archivos) {
-    if (archivo.nombreArchivo === nombreArchivo) {
-      console.log('El archivo' + nombreArchivo + ' ya esta agregado');
-      return true;
-    }
+  private _esImagen(tipoArchivo: string): boolean {
+    return (tipoArchivo === '' || tipoArchivo === undefined) ? false : tipoArchivo.startsWith('image');
   }
-  return false;
-}
-
-private _esImagen (tipoArchivo: string): boolean {
-  return (tipoArchivo === '' || tipoArchivo === undefined) ? false : tipoArchivo.startsWith('image');
-}
 
 }

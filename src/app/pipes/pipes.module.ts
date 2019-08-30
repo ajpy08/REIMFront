@@ -12,6 +12,9 @@ import { FotosPipe } from './fotos.pipe';
   exports: [
     ImagenPipe,
     FotosPipe
+  ],
+  providers: [
+    FotosPipe
   ]
 })
 export class PipesModule { }

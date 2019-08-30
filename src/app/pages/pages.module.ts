@@ -79,7 +79,8 @@ import { PipesModule } from '../pipes/pipes.module';
 // PRUEBAS -------------------------------------------------------------------
 import { HttpClientModule } from '@angular/common/http';
 import { PaginatorEspañol } from './buques2/paginator-español';
-import {NgxPrintModule} from 'ngx-print';
+import { NgxPrintModule } from 'ngx-print';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 import {
     MatDatepickerModule,
@@ -97,7 +98,8 @@ import {
     MatPaginatorModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorIntl
+    MatPaginatorIntl,
+    MatIconModule
 } from '@angular/material';
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
@@ -191,9 +193,11 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
         MatTableModule,
         MatSortModule,
         MatPaginatorModule,
+        MatIconModule,
         NgxPrintModule,
+        NgxGalleryModule
     ],
-    providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol}],
+    providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
 })
 
 export class PagesModules { }
