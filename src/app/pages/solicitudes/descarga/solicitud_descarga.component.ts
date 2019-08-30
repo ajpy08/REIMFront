@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, AbstractControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Maniobra } from '../../../pages/maniobras/maniobra.models';
+import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from 'src/app/services/service.index';
 import { Agencia } from '../../../models/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
