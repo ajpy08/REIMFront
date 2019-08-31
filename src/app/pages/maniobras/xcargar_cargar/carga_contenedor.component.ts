@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { Maniobra } from '../maniobra.models';
+import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Transportista } from '../../../models/transportista.models';

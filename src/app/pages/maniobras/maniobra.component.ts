@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Maniobra } from '../../models/maniobras.models';
+import { Maniobra } from '../../models/maniobra.models';
 import { ManiobraService } from '../../services/service.index';
 import { NgForm, FormControl } from '@angular/forms';
 import { Operador } from '../../models/operador.models';

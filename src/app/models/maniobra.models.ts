@@ -1,15 +1,10 @@
-import { Viaje } from "../viajes/viaje.models";
-import { Operador } from "src/app/models/operador.models";
-import { Cliente } from "src/app/models/cliente.models";
-import { Camion } from "src/app/models/camion.models";
-import { Agencia } from "src/app/models/agencia.models";
-import { Solicitud } from '../solicitudes/solicitud.models';
-
 export class Maniobra {
     constructor(
         public cargaDescarga?: string,
+        public folio?: string,
         public viaje?: string,
         public agencia?: string,
+        public cliente?: string,
         public transportista?: string,
         public camion?: string,
         public operador?: string,
@@ -17,22 +12,32 @@ export class Maniobra {
         public tipo?: string,
         public grado?: string,
         public peso?: string,
-        public estado?: string,
+        public destinatario?: string,
         public estatus?: string,
         public fLlegada?: string,
         public hLlegada?: string,
         public hEntrada?: string,
+        public facturarA?: string,
+        public correoFac?: string,
+        public correoOp?: string,
+        public solicitud?: string,
         public hSalida?: string,
         public lavado?: string,
         public lavadoObservacion?: string,
         public reparaciones?: string,
         public reparacionesObservacion?: string,
-        public solicitud?: string,
-        public cliente?: string,
+        public fTerminacionLavado?: string,
+        public hTerminacionLavado?: string,
+        public fTerminacionReparacion?: string,
+        public hTerminacionReparacion?: string,
+        public maniobraAsociada?: Maniobra,
+        public facturaManiobra?: string,
+        public fAsignacionPapeleta?: string,
+        public fExpiracionPapeleta?: string,
         public usuarioAlta?: string,
         public fAlta?: Date,
         public usuarioMod?: string,
         public fMod?: Date,
-        public _id?: string,
+        public _id?: string
     ) {}
 }

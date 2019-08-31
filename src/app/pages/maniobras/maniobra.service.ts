@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient , HttpParams} from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../services/usuario/usuario.service';
-import { Maniobra } from './maniobra.models';
+import { Maniobra } from '../../models/maniobra.models';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
@@ -336,4 +336,10 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
+  asignaFecha( maniobra: Maniobra ): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/actualiza_fecha_asignacion';
+    url += '/' + maniobra._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put( url, maniobra )
+  }
 }
