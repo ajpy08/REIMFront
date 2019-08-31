@@ -1,38 +1,15 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
 import { Reparacion } from '../../../models/reparacion.models';
 import { ReparacionService } from '../../../services/reparacion/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
-import * as _moment from 'moment';
-import { Cliente } from '../../../models/cliente.models';
-const moment = _moment;
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: ['l', 'L'],
-  },
-  display: {
-    dateInput: 'L',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-revisa',
   templateUrl: './revisa.component.html',
-  providers: [DatePipe,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-    {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
-  ],
+  providers: [],
 })
 
 export class RevisaComponent implements OnInit {
@@ -45,7 +22,7 @@ export class RevisaComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
-    private fb: FormBuilder, private datePipe: DatePipe) { }
+    private fb: FormBuilder) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -142,20 +119,17 @@ export class RevisaComponent implements OnInit {
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
   
-
   removeReparacion( index: number ) {
     this.reparaciones.removeAt(index);
   }
 
   cargarManiobra( id: string) {
-
     this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
       console.log(maniob);
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.razonSocial);
       }
-
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       if (maniob.maniobra.cliente) {
@@ -167,19 +141,16 @@ export class RevisaComponent implements OnInit {
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
-
       if (maniob.maniobra.lavado){
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
       }else {
         this.regForm.controls['lavado'].setValue(undefined);
       }
-
       if (maniob.maniobra.lavadoObservacion){
         this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
       } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
       }
-
       if (maniob.maniobra.reparaciones){
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
@@ -187,7 +158,6 @@ export class RevisaComponent implements OnInit {
       } else {
         this.regForm.controls['reparaciones'].setValue(undefined);
       }
-
       if (maniob.maniobra.reparacionesObservacion){
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
       } else {

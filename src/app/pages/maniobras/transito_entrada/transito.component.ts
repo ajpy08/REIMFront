@@ -18,7 +18,7 @@ export class TransitoComponent implements OnInit {
   }
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getManiobras(null, 'TRANSITO')
+    this._maniobraService.getManiobras(null, 'REVISION')
     .subscribe(maniobras => {
           this.totalRegistros = maniobras.total;
           this.maniobras = maniobras.maniobras;
