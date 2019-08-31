@@ -75,12 +75,12 @@ export class ManiobraService {
   //   return this.http.get( url );
   // }
 
-  getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
-    // if (contenedor===undefined)  contenedor="";
-    // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-    const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
-    return this.http.get( url );
-  }
+  // getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   // if (contenedor===undefined)  contenedor="";
+  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+  //   const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
 
 
 
