@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camion } from '../../models/camion.models';
-import { CamionService, SubirArchivoService, OperadorService } from '../../services/service.index';
+import { CamionService, SubirArchivoService, OperadorService, UsuarioService } from '../../services/service.index';
 import { Transportista } from '../../models/transportista.models';
 import { TransportistaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +12,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Operador } from 'src/app/models/operador.models';
+import { Usuario } from 'src/app/models/usuarios.model';
+import { ROLES } from "../../config/config";
 // tslint:disable-next-line:no-duplicate-imports
 // import {default as _rollupMoment} from 'moment';
 // See the Moment.js docs for the meaning of these formats:
@@ -51,6 +53,8 @@ export class CamionComponent implements OnInit {
   file: File = null;
   fileTemporal = false;
   edicion = false;
+  usuarioLogueado = new Usuario;
+  bloquearControl: boolean = false;
 
   constructor(public _camionService: CamionService,
     public _transportistaService: TransportistaService,
@@ -59,23 +63,35 @@ export class CamionComponent implements OnInit {
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
-    private serviceOperadores: OperadorService) { }
+    private serviceOperadores: OperadorService,
+    private usuarioService: UsuarioService) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.createFormGroup();
-    this._transportistaService.getTransportistas()
-      .subscribe((transportistas) => {
-        this.transportistas = transportistas.transportistas;
-      });    
+
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this._transportistaService.getTransportistas()
+        .subscribe((transportistas) => {
+          this.transportistas = transportistas.transportistas;
+        });
+    } else {
+      if(this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this.transportistas = this.usuarioLogueado.empresas;
+      }
+    }
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.edicion = true;
-      this.cargarCamion(id);     
+      this.cargarCamion(id);
     }
     else {
       for (var control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
+      }
+      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
       }
     }
   }
@@ -104,8 +120,8 @@ export class CamionComponent implements OnInit {
               this.regForm.controls[propiedad].setValue(res[propiedad]);
             }
           }
-        }        
-      });     
+        }
+      });
   }
 
   get transportista() {
@@ -138,7 +154,7 @@ export class CamionComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      transportista: ['', [Validators.required]],
+      transportista: [''],
       operador: [''],
       placa: ['', [Validators.required, Validators.minLength(6)]],
       noEconomico: ['', [Validators.required, Validators.minLength(2)]],

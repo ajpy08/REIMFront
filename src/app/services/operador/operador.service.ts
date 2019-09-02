@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Operador } from '../../models/operador.models';
@@ -16,9 +16,13 @@ export class OperadorService {
     public _usuarioService: UsuarioService
   ) { }
 
-  getOperadores(desde: number = 0): Observable<any> {
-    let url = URL_SERVICIOS + '/operador?desde=' + desde;
-    return this.http.get(url)
+  getOperadores(transportista? : string): Observable<any> {
+    let url = URL_SERVICIOS + '/operador/operadores/';
+    let params = new HttpParams();
+    if (transportista)  {
+      params = params.append('transportista', transportista);
+    }
+    return this.http.get(url, {params: params });
   }
 
   getOperador(id: string): Observable<any> {

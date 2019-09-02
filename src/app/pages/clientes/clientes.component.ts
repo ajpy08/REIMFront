@@ -49,8 +49,8 @@ export class ClientesComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = clientes.clientes.length;
-          console.log(clientes.clientes)
-          console.log(this.dataSource)
+          // console.log(clientes.clientes)
+          // console.log(this.dataSource)
         });
     } else {
       var idsEmpresa = "";
@@ -60,14 +60,14 @@ export class ClientesComponent implements OnInit {
         })
   
         idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length-1); ;
-        console.log(idsEmpresa)
+        //console.log(idsEmpresa)
         this._clienteService.getClientesEmpresas(idsEmpresa).subscribe((clientes) => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = clientes.clientes.length;
-          console.log(clientes.clientes)
-          console.log(this.dataSource)
+          // console.log(clientes.clientes)
+          // console.log(this.dataSource)
         });
       }      
     }
