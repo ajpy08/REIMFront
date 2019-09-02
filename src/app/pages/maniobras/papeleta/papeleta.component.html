@@ -1,13 +1,15 @@
-<p>Form value {{ regForm.value | json }} </p>
-<p>Form value {{ regForm.status | json }} </p>
+<!-- <p>Form value {{ regForm.value | json }} </p>
+<p>Form value {{ regForm.status | json }} </p> -->
 <button class="btn btn-info m-r-5" [disabled]="regForm.invalid" printSectionId="print-section"
   [printStyle]="{table : { 'font-family': 'Arial', 'font-size': '12'}}" ngxPrint>
-  <i class="fa fa-print"></i>Imprimir</button> 
-  <button (click)="asignaFecha()" type="button" class="btn btn-info waves-effect waves-light m-r-5">
-      <i class="fa fa-calendar-plus-o"></i>
-      Asignar Fecha
-  </button> <br><br> <h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos.</h3><br><br>
-  <button (click)="prueba()">Prueba</button><br><br>
+  <i class="fa fa-print"></i>Imprimir</button>
+<button (click)="asignaFecha()" type="button" class="btn btn-info waves-effect waves-light m-r-5">
+  <i class="fa fa-calendar-plus-o"></i>
+  Asignar Fecha
+</button> 
+<font color="ff0000" *ngIf="!this.fExpiracionPapeleta.valid">  <--- La fecha de Expiración esta vencida...(ASIGNA FECHA VALIDA) </font> <br><br>
+<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos.</h3><br><br>
+<!-- <button (click)="prueba()">Prueba</button><br><br> -->
 <div id="print-section">
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
   <html>
@@ -18,480 +20,477 @@
   </head>
 
   <body>
-      <table align="left" cellspacing="0" border="0" width=100%>
-        <!-- <table class="table table-hover table-responsive"> -->
+    <table align="left" cellspacing="0" border="0" width=100%>
+      <!-- <table class="table table-hover table-responsive"> -->
 
-        <tr>
-          <td colspan=2 rowspan=6><img src="../../../../assets/images/logo_reim_container_park.jpg" width=244 height=88>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8>&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan=8>&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan=4 align="right" valign=bottom>
-            <font color="#000000">FOLIO </font>
-          </td>
-            <td colspan=2 rowspan=1 ng-app ng-controller="CreaFecha"
-              style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-              align="center" valign=bottom sdval="43688" sdnum="1033;1033;D/M/YYYY">
-              <font color="#000000">
-                {{this.folio.value}} </font>
-            </td>
-        </tr>
-        <tr>
-          <td colspan=4 align="right" valign=bottom>            
-            <font color="#000000">FECHA DE ASIGNACION </font>
-          </td>
-          <td colspan=2 rowspan=1 ng-app ng-controller="CreaFecha"
-            style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=bottom sdval="43688" sdnum="1033;1033;D/M/YYYY">
-            <font color="#000000" *ngIf="this.fAsignacionPapeleta.value">
-              {{ this.fAsignacionPapeleta.value | date:'dd-MM-yyyy'}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=4 align="right" valign=bottom>
-            <font color="#000000">FECHA DE EXPIRACION </font>
-          </td>
-          <td colspan=2 rowspan=1
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=bottom sdval="43691" sdnum="1033;1033;D/M/YYYY">
-            <font color="#000000" *ngIf="this.fExpiracionPapeleta.value">
-              {{this.fExpiracionPapeleta.value | date: 'dd-MM-yyyy'}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
+      <tr>
+        <td colspan=2 rowspan=6><img src="../../../../assets/images/logo_reim_container_park.jpg" width=244 height=88>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8>&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan=8>&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan=4 align="right" valign=bottom>
+          <font color="#000000">FOLIO </font>
+        </td>
+        <td colspan=2 rowspan=1 ng-app ng-controller="CreaFecha"
+          style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=bottom sdval="43688" sdnum="1033;1033;D/M/YYYY">
+          <font color="#000000">
+            {{this.folio.value}} </font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=4 align="right" valign=bottom>
+          <font color="#000000">FECHA DE ASIGNACION </font>
+        </td>
+        <td colspan=2 rowspan=1 ng-app ng-controller="CreaFecha"
+          style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=bottom sdval="43688" sdnum="1033;1033;D/M/YYYY">
+          <font color="#000000" *ngIf="this.fAsignacionPapeleta.value">
+            {{ this.fAsignacionPapeleta.value | date:'dd-MM-yyyy'}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=4 align="right" valign=bottom>
+          <font color="#000000">FECHA DE EXPIRACION </font>
+        </td>
+        <td colspan=2 rowspan=1
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=bottom sdval="43691" sdnum="1033;1033;D/M/YYYY">
+          <font color="#000000" *ngIf="this.fExpiracionPapeleta.value">
+            {{this.fExpiracionPapeleta.value | date: 'dd-MM-yyyy'}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000">
+            TIPO DE MOVIMIENTO</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <span *ngIf="this.cargaDescarga.value && this.cargaDescarga.value == 'D'">
             <font color="#000000">
-              TIPO DE MOVIMIENTO</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <span *ngIf="this.cargaDescarga.value && this.cargaDescarga.value == 'D'">
-              <font color="#000000">
-                DESCARGA</font>
-            </span>
-            <span *ngIf="this.cargaDescarga.value && this.cargaDescarga.value == 'C'">
-              <font color="#000000">
-                CARGA</font>
-            </span>
-          </td>
-          <td align="center" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td align="center" valign=middle>
+              DESCARGA</font>
+          </span>
+          <span *ngIf="this.cargaDescarga.value && this.cargaDescarga.value == 'C'">
             <font color="#000000">
-              ESTATUS </font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.peso.value}}</font>
-          </td>
-          <td align="center" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td align="center" valign=middle>
-            <font color="#000000">
-              GRADO </font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.grado.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000">
-              TIPO DE CONTENEDOR</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.tipo.value}}</font>
-          </td>
-          <td align="center" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td height="20" align="center" valign=bottom>
-            <font color="#000000">
-              DESCRIPCION</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              PENDIENTE</font>
-          </td>
-          <td align="center" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td align="center" valign=bottom>
-            <font color="#000000">
-              CODIGO ISO </font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              PENDIENTE</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td colspan=2 style="border-right: 1px solid #000000" height="20" align="center" valign=middle>
-            <font color="#000000">
-              No. CONTENEDOR</font>
-          </td>
-          <td colspan=2
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.contenedor.value}}</font>
-          </td>
-          <td colspan=3 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="center" valign=middle>
-            <font color="#000000">BUQUE</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.buque?.value}}</font>
-          </td>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td align="center" valign=middle>
-            <font color="#000000">VIAJE</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.viaje?.value}}</font>
-          </td>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td style="border-right: 1px solid #000000" align="center" valign=middle>
-            <font color="#000000">
-              BL/ BOOKING </font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.BL.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td height="20" align="center" valign=middle>
-            <font color="#000000">CLIENTE</font>
-          </td>
-          <td colspan=4
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.cliente.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td height="20" align="center" valign=middle>
-            <font color="#000000">DESTINO</font>
-          </td>
-          <td colspan=4
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              PENDIENTE</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td height="20" align="center" valign=middle>
-            <font color="#000000">AGENTE ADUANAL</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            colspan=4 align="center" valign=middle>
-            <font color="#000000">
-              {{this.agencia?.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td height="20" align="center" valign=middle>
-            <font color="#000000">TRANSPORTISTA</font>
-          </td>
-          <td colspan=4
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.transportista?.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 height="20" align="center" valign=middle>
-            <font color="#000000">OPERADOR</font>
-          </td>
-          <td colspan=2
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.operador?.value}}</font>
-          </td>
-          <td colspan=2 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td style="border-right: 1px solid #000000" align="center" valign=middle>
-            <font color="#000000">
-              PLACAS
-            </font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.placa.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 height="20" align="center" valign=middle>
-            <font color="#000000">
-              LICENCIA</font>
-          </td>
-          <td colspan=2
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle sdval="3550900123" sdnum="1033;">
-            <font color="#000000">
-              {{this.licencia.value}}</font>
-          </td>
-          <td colspan=2 align="left" valign=middle>
-            <font color="#000000"><br></font>
-          </td>
-          <td style="border-right: 1px solid #000000" align="center" valign=bottom>
-            <font color="#000000">
-              NO. ECONOMICO</font>
-          </td>
-          <td
-            style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
-            align="center" valign=middle>
-            <font color="#000000">
-              {{this.noEconomico.value}}</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000">LA PRESENTE TRANSPORTISTA SE COMPROMETE A REVISAR EL CONTENEDOR DURANTE SU CARGADURA
-              EN
-              LA TERMINAL REIM CONTAINER PARK Y DE NO HACER RECLAMACION POSTERIOR ALGUNA. ACEPTAMOS QUE EL CONTENEDOR SE
-              RECIBE EN BUENAS CONDICIONES, POR LO QUE SE ACEPTA QUE UNA VEZ SALIDO EL CONTENEDOR DE LA TERMINAL EL
-              UNICO
-              RESPONSABLE ES LA TRANSPORTISTA.</font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 height="20" align="left" valign=bottom>
-            <font color="#000000"><b>ESTE DOCUMENTO ES VALIDO UNICAMENTE EN LA FECHA QUE SE INDICA EN LA PARTE
-                SUPERIOR</b>
-            </font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=8 align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 align="center" valign=bottom>
-            <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0
-                vspace=9>
-            </font>
-          </td>
-          <td align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td colspan=2 align="center" valign=bottom>
-            <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0
-                vspace=9>
-            </font>
-          </td>
-          <td align="left" valign=bottom>
-            <font color="#000000"><br></font>
-          </td>
-          <td colspan=2 align="center" valign=bottom>
-            <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0
-                vspace=9>
-            </font>
-          </td>
-        </tr>
-        <tr>
-          <td colspan=2 align="center" valign=top>
-            <font color="#000000">SELLO Y FIRMA DE TRANSPORTISTA </font>
-          </td>
-          <td></td>
-          <td colspan=2 align="center" valign=top>
-            <font color="#000000">SELLO Y FIRMA DE REIM CONTAINER PARK
-            </font>
-          </td>
-          <td></td>
-          <td colspan=2 align="center" valign=top>
-            <font color="#000000">SELLO DE NAVIERA
-            </font>
-          </td>
-        </tr>
-      </table>
+              CARGA</font>
+          </span>
+        </td>
+        <td align="center" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td align="center" valign=middle>
+          <font color="#000000">
+            ESTATUS </font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.peso.value}}</font>
+        </td>
+        <td align="center" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td align="center" valign=middle>
+          <font color="#000000">
+            GRADO </font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.grado.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000">
+            TIPO DE CONTENEDOR</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.tipo.value}}</font>
+        </td>
+        <td align="center" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td height="20" align="center" valign=bottom>
+          <font color="#000000">
+            DESCRIPCION</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            PENDIENTE</font>
+        </td>
+        <td align="center" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td align="center" valign=bottom>
+          <font color="#000000">
+            CODIGO ISO </font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            PENDIENTE</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td colspan=2 style="border-right: 1px solid #000000" height="20" align="center" valign=middle>
+          <font color="#000000">
+            No. CONTENEDOR</font>
+        </td>
+        <td colspan=2
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.contenedor.value}}</font>
+        </td>
+        <td colspan=3 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="center" valign=middle>
+          <font color="#000000">BUQUE</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.buque?.value}}</font>
+        </td>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td align="center" valign=middle>
+          <font color="#000000">VIAJE</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.viaje?.value}}</font>
+        </td>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td style="border-right: 1px solid #000000" align="center" valign=middle>
+          <font color="#000000">
+            BL/ BOOKING </font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.BL.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td height="20" align="center" valign=middle>
+          <font color="#000000">CLIENTE</font>
+        </td>
+        <td colspan=4
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.cliente.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td height="20" align="center" valign=middle>
+          <font color="#000000">DESTINO</font>
+        </td>
+        <td colspan=4
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            PENDIENTE</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td height="20" align="center" valign=middle>
+          <font color="#000000">AGENTE ADUANAL</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          colspan=4 align="center" valign=middle>
+          <font color="#000000">
+            {{this.agencia?.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td height="20" align="center" valign=middle>
+          <font color="#000000">TRANSPORTISTA</font>
+        </td>
+        <td colspan=4
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.transportista?.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2 height="20" align="center" valign=middle>
+          <font color="#000000">OPERADOR</font>
+        </td>
+        <td colspan=2
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.operador?.value}}</font>
+        </td>
+        <td colspan=2 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td style="border-right: 1px solid #000000" align="center" valign=middle>
+          <font color="#000000">
+            PLACAS
+          </font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.placa.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2 height="20" align="center" valign=middle>
+          <font color="#000000">
+            LICENCIA</font>
+        </td>
+        <td colspan=2
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle sdval="3550900123" sdnum="1033;">
+          <font color="#000000">
+            {{this.licencia.value}}</font>
+        </td>
+        <td colspan=2 align="left" valign=middle>
+          <font color="#000000"><br></font>
+        </td>
+        <td style="border-right: 1px solid #000000" align="center" valign=bottom>
+          <font color="#000000">
+            NO. ECONOMICO</font>
+        </td>
+        <td
+          style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
+          align="center" valign=middle>
+          <font color="#000000">
+            {{this.noEconomico.value}}</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000">LA PRESENTE TRANSPORTISTA SE COMPROMETE A REVISAR EL CONTENEDOR DURANTE SU CARGADURA
+            EN
+            LA TERMINAL REIM CONTAINER PARK Y DE NO HACER RECLAMACION POSTERIOR ALGUNA. ACEPTAMOS QUE EL CONTENEDOR SE
+            RECIBE EN BUENAS CONDICIONES, POR LO QUE SE ACEPTA QUE UNA VEZ SALIDO EL CONTENEDOR DE LA TERMINAL EL
+            UNICO
+            RESPONSABLE ES LA TRANSPORTISTA.</font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 height="20" align="left" valign=bottom>
+          <font color="#000000"><b>ESTE DOCUMENTO ES VALIDO UNICAMENTE EN LA FECHA QUE SE INDICA EN LA PARTE
+              SUPERIOR</b>
+          </font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=8 align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2 align="center" valign=bottom>
+          <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0 vspace=9>
+          </font>
+        </td>
+        <td align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td colspan=2 align="center" valign=bottom>
+          <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0 vspace=9>
+          </font>
+        </td>
+        <td align="left" valign=bottom>
+          <font color="#000000"><br></font>
+        </td>
+        <td colspan=2 align="center" valign=bottom>
+          <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0 vspace=9>
+          </font>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=2 align="center" valign=top>
+          <font color="#000000">SELLO Y FIRMA DE TRANSPORTISTA </font>
+        </td>
+        <td></td>
+        <td colspan=2 align="center" valign=top>
+          <font color="#000000">SELLO Y FIRMA DE REIM CONTAINER PARK
+          </font>
+        </td>
+        <td></td>
+        <td colspan=2 align="center" valign=top>
+          <font color="#000000">SELLO DE NAVIERA
+          </font>
+        </td>
+      </tr>
+    </table>
   </body>
 
   </html>
