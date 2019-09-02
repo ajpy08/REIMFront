@@ -5,8 +5,8 @@ export const ETAPAS_MANIOBRA = {APROBACION: 'APROBACION', APROBADO:'APROBADO',
                                 REVISION: 'REVISION', LAVADO_REPARACION: 'LAVADO_REPARACION',
                                 DISPONIBLE: 'DISPONIBLE', XCARGAR:'XCARGAR',
                                 CARGADO: 'CARGADO'};
-export const PATIOS = {POLIGONO:'POLIGONO INDUSTRIAL', UMAN: 'UMAN'};
-export const ESTADOS_CONTENEDOR = {VACIO:'VACIO', 
-                                  VACIO_IMPORT: 'VACIO_IMPORT', 
-                                  LLENO_IMPORT: 'LLENO_IMPORT', 
-                                  LLENO_EXPORT:'LLENO_EXPORT'}
+export const PATIOS = {POLIGONO: 'POLIGONO INDUSTRIAL', UMAN: 'UMAN'};
+export const ESTADOS_CONTENEDOR = {VACIO: 'VACIO',
+                                  VACIO_IMPORT: 'VACIO_IMPORT',
+                                  LLENO_IMPORT: 'LLENO_IMPORT',
+                                  LLENO_EXPORT: 'LLENO_EXPORT' }

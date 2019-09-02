@@ -8,9 +8,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angu
 import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
 import * as _moment from 'moment';
-import { Cliente } from '../../../models/cliente.models';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -52,10 +50,10 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarTiposReparaciones();
     this.createFormGroup();
-    this.cargarManiobra( this.id );
     this.reparaciones.removeAt(0);
-
+    this.cargarManiobra( this.id );
   }
+
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
@@ -74,10 +72,13 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       lavadoObservacion: [''],
       reparaciones: this.fb.array([ this.creaReparacion('', '', 0) ]),
       reparacionesObservacion: [''],
-      fTerminacionLavado: [''],
-      hTerminacionLavado: [''],
-      fTerminacionReparacion: [''],
-      hTerminacionReparacion: [''],
+      fIniLavado: [''],
+      hIniLavado: [''],
+      hFinLavado: [''],
+      fIniReparacion: [''],
+      hIniReparacion: [''],
+      fFinReparacion: [''],
+      hFinReparacion: [''],
       grado: ['']
     });
   }
@@ -124,17 +125,26 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   get lavadoOperacion() {
     return this.regForm.get('lavadoOperacion');
   }
-  get fTerminacionLavado() {
-    return this.regForm.get('fTerminacionLavado');
+  get fIniLavado() {
+    return this.regForm.get('fIniLavado');
   }
-  get hTerminacionLavado() {
-    return this.regForm.get('hTerminacionLavado');
+  get hIniLavado() {
+    return this.regForm.get('hIniLavado');
   }
-  get fTerminacionReparacion() {
-    return this.regForm.get('fTerminacionReparacion');
+  get hFinLavado() {
+    return this.regForm.get('hFinLavado');
   }
-  get hTerminacionReparacion() {
-    return this.regForm.get('hTerminacionReparacion');
+  get fIniReparacion() {
+    return this.regForm.get('fIniReparacion');
+  }
+  get hIniReparacion() {
+    return this.regForm.get('hIniReparacion');
+  }
+  get fFinReparacion() {
+    return this.regForm.get('fFinReparacion');
+  }
+  get hFinReparacion() {
+    return this.regForm.get('hFinReparacion');
   }
   get grado() {
     return this.regForm.get('grado');
@@ -159,20 +169,16 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
 
-
   removeReparacion( index: number ) {
     this.reparaciones.removeAt(index);
   }
 
   cargarManiobra( id: string) {
-
     this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
-      //console.log(maniob);
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.razonSocial);
       }
-
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       if (maniob.maniobra.cliente) {
@@ -192,13 +198,29 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         this.regForm.controls['lavado'].setValue(undefined);
       }
 
-      if (maniob.maniobra.lavadoObservacion){
+      if (maniob.maniobra.lavadoObservacion) {
         this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
       } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
       }
+      if (maniob.maniobra.fIniLavado) {
+        this.regForm.controls['fIniLavado'].setValue(maniob.maniobra.fIniLavado);
+      } else {
+        this.regForm.controls['fIniLavado'].setValue(undefined);
+      }
+      if (maniob.maniobra.hIniLavado) {
+        this.regForm.controls['hIniLavado'].setValue(maniob.maniobra.hIniLavado);
+      } else {
+        this.regForm.controls['hIniLavado'].setValue(undefined);
+      }
+      if (maniob.maniobra.hFinLavado) {
+        this.regForm.controls['hFinLavado'].setValue(maniob.maniobra.hFinLavado);
+      } else {
+        this.regForm.controls['hFinLavado'].setValue(undefined);
+      }
 
-      if (maniob.maniobra.reparaciones){
+
+      if (maniob.maniobra.reparaciones) {
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
         });
@@ -206,13 +228,34 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         this.regForm.controls['reparaciones'].setValue(undefined);
       }
 
-      if (maniob.maniobra.reparacionesObservacion){
+      if (maniob.maniobra.reparacionesObservacion) {
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
       } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
 
-      if (maniob.maniobra.grado){
+      if (maniob.maniobra.fIniReparacion) {
+        this.regForm.controls['fIniReparacion'].setValue(maniob.maniobra.fIniReparacion);
+      } else {
+        this.regForm.controls['fIniReparacion'].setValue(undefined);
+      }
+      if (maniob.maniobra.hIniReparacion) {
+        this.regForm.controls['hIniReparacion'].setValue(maniob.maniobra.hIniReparacion);
+      } else {
+        this.regForm.controls['hIniReparacion'].setValue(undefined);
+      }
+      if (maniob.maniobra.fFinReparacion) {
+        this.regForm.controls['fFinReparacion'].setValue(maniob.maniobra.fFinReparacion);
+      } else {
+        this.regForm.controls['fFinReparacion'].setValue(undefined);
+      }
+      if (maniob.maniobra.hFinReparacion) {
+        this.regForm.controls['hFinReparacion'].setValue(maniob.maniobra.hFinReparacion);
+      } else {
+        this.regForm.controls['hFinReparacion'].setValue(undefined);
+      }
+
+      if (maniob.maniobra.grado) {
         this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       } else {
         this.regForm.controls['grado'].setValue(undefined);
@@ -221,10 +264,35 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     });
   }
 
-cargarTiposReparaciones() {
+
+  cargarTiposReparaciones() {
     this._reparacionService.getReparaciones().subscribe((reparaciones) => {
         this.tiposReparaciones = reparaciones.reparaciones;
     });
+  }
+
+
+  ponHoraIniLavado( ) {
+    if (this.hIniLavado.value === undefined || this.hIniLavado.value === '' ) {
+      this.hIniLavado.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+
+  }
+  ponHoraFinLavado( ) {
+    if (this.hFinLavado.value === undefined || this.hFinLavado.value === '') {
+      this.hFinLavado.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+  }
+  ponHoraIniReparacion( ) {
+    if (this.hIniReparacion.value === undefined || this.hIniReparacion.value === '') {
+      this.hIniReparacion.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+
+  }
+  ponHoraFinReparacion( ) {
+    if (this.hFinReparacion.value === undefined || this.hFinReparacion.value === '') {
+      this.hFinReparacion.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
   }
 
 guardaCambios() {

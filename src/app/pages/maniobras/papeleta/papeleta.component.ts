@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../maniobra.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import moment = require('moment');
+// import moment = require('moment');
 
 @Component({
   selector: 'app-papeleta',
@@ -59,21 +59,21 @@ export class PapeletaComponent implements OnInit {
     });
   }
 
-  validaFechaExpiracion(controlKey: string) {
-    return (control: AbstractControl): { [s: string]: boolean } => {
-      // control.parent es el FormGroup
-      if (this.regForm) { // en las primeras llamadas control.parent es undefined      
-        console.log(control.value)  
-        console.log(moment.now) 
-        if (control.value < moment.now) {
-          return {
-            fechaInvalida: true
-          };
-        }
-      }
-      return null;
-    };
-  }
+  // validaFechaExpiracion(controlKey: string) {
+  //   return (control: AbstractControl): { [s: string]: boolean } => {
+  //     // control.parent es el FormGroup
+  //     if (this.regForm) { // en las primeras llamadas control.parent es undefined      
+  //       console.log(control.value)  
+  //       console.log(moment.now) 
+  //       if (control.value < moment.now) {
+  //         return {
+  //           fechaInvalida: true
+  //         };
+  //       }
+  //     }
+  //     return null;
+  //   };
+  // }
 
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
