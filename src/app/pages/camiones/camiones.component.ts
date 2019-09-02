@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Camion } from '../../models/camion.models';
-import { CamionService } from '../../services/service.index';
+import { CamionService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Usuario } from 'src/app/models/usuarios.model';
+import { ROLES } from 'src/app/config/config';
 declare var swal: any;
 @Component({
   selector: 'app-camiones',
@@ -9,6 +11,7 @@ declare var swal: any;
   styles: []
 })
 export class CamionesComponent implements OnInit {
+  usuarioLogueado: Usuario;
   camiones: Camion[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
@@ -20,9 +23,11 @@ export class CamionesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _camionService: CamionService) { }
+  constructor(public _camionService: CamionService,
+    private usuarioService: UsuarioService) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarCamiones();
   }
 
@@ -35,14 +40,29 @@ export class CamionesComponent implements OnInit {
 
   cargarCamiones() {
     this.cargando = true;
-    this._camionService.getCamiones(this.desde)
-      .subscribe(camiones => {
-        this.dataSource = new MatTableDataSource(camiones.camiones);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = camiones.camiones.length;
-      });
-    this.cargando = false;
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this._camionService.getCamiones()
+        .subscribe(camiones => {
+          this.dataSource = new MatTableDataSource(camiones.camiones);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = camiones.camiones.length;
+
+          this.cargando = false;
+        });
+    } else {
+      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this._camionService.getCamiones(this.usuarioLogueado.empresas[0]._id)
+          .subscribe(camiones => {
+            this.dataSource = new MatTableDataSource(camiones.camiones);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.totalRegistros = camiones.camiones.length;
+            
+            this.cargando = false;
+          });
+      }
+    }
   }
 
   // cambiarDesde(valor: number) {
