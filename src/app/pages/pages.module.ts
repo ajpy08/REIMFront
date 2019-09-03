@@ -51,9 +51,10 @@ import { NavieraComponent } from './navieras/naviera.component';
 
 
 // solicitudes y aprobaciones
-import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
+import { SolicitudesComponent } from './solicitudes/solicitudes.component';
+//import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
-import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
+//import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
 import { SolicitudDAprobarComponent } from './solicitudes/solicitudD_aprobar.component';
 import { SolicitudCAprobarComponent } from './solicitudes/solicitudC_aprobar.component';
@@ -152,9 +153,10 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
         AddcontainersComponent,
         NavierasComponent,
         NavieraComponent,
-        SolicitudesDescargaComponent,
+        SolicitudesComponent,
+        //SolicitudesDescargaComponent,
         SolicitudDescargaComponent,
-        SolicitudesCargaComponent,
+        //SolicitudesCargaComponent,
         SolicitudCargaComponent,
         SolicitudDAprobarComponent,
         SolicitudCAprobarComponent,

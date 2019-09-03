@@ -20,6 +20,7 @@ import { ViajeService } from '../../../services/service.index';
 import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI } from '../../../config/config';
 import swal from 'sweetalert';
 
 
@@ -39,6 +40,8 @@ export class SolicitudDescargaComponent implements OnInit {
   edicion = false;
   aprobada = false;
   usuarioLogueado : any;
+  navieraMELFI = true;
+  
 
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
@@ -48,10 +51,13 @@ export class SolicitudDescargaComponent implements OnInit {
   clientes: Cliente[] = [];
   contenedoresXViaje: Maniobra[] = [];
 
+
    listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   //  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
-   estadosContenedor: string[] = ['VACIO', 'LLENO'];
-   patios: string[] = ['POLIGONO INDUSTRIAL', 'UMAN'];
+   estadosContenedor = ESTADOS_CONTENEDOR_ARRAY;
+
+   patios = PATIOS_ARRAY;
+
    formasPago: string [] = ['', ''];
 
   constructor(
@@ -78,13 +84,10 @@ export class SolicitudDescargaComponent implements OnInit {
       else {
         this.agencias = this.usuarioLogueado.empresas;
       }
-      
-      
       this._navieraService.getNavieras().subscribe( navieras => { this.navieras = navieras.navieras; });
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
-
       if (id !== 'nuevo') {
         this.edicion = true;
         this.cargarSolicitud ( id );
@@ -98,9 +101,11 @@ export class SolicitudDescargaComponent implements OnInit {
     this.regForm = this.fb.group({
       agencia: ['', [Validators.required]],
       naviera: ['', [Validators.required]],
-      viaje: ['', [Validators.required]],
+      viaje: [''],
+      noViaje: [''],
       blBooking: [''],
-      buque: ['', [Validators.required]],
+      buque: [''],
+      nombreBuque: [''],
       transportistaTemp: [''],
       cliente: ['', [Validators.required]],
       credito: ['', [Validators.required]],
@@ -108,10 +113,6 @@ export class SolicitudDescargaComponent implements OnInit {
       rutaBL: [''],
       rutaComprobante: ['', [Validators.required]],
       correo: ['', [Validators.required]],
-      maniobraTemp: [''],
-      estadoTemp: ['VACIO'],
-      patioTemp: ['POLIGONO INDUSTRIAL'],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '') ]),
       facturarA: ['', [Validators.required]],
       rfc: [{value: '', disabled: true}],
       razonSocial: [{value: '', disabled: true}],
@@ -124,13 +125,19 @@ export class SolicitudDescargaComponent implements OnInit {
       estado: [{value: '', disabled: true}],
       correoFac: ['', [Validators.required]],
       cp: [{value: '', disabled: true}],
+      maniobraTemp: [''],
+      contenedorTemp:[''],
+      tipoTemp:[''],
+      estadoTemp: [ESTADOS_CONTENEDOR.VACIO_IMPORT],
+      patioTemp: [PATIOS.POLIGONO],
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '') ]),
       _id: [''],
       tipo: ['D'],
       estatus: ['']
     });
   }
 
-  creaContenedor(cont: string, tipo: string, peso: string, maniobra: string,
+  creaContenedor(cont: string, tipo: string, peso: string, maniobra,
     transportista: string, estatus: string, transportista2: string, patio: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
@@ -171,8 +178,14 @@ export class SolicitudDescargaComponent implements OnInit {
   get viaje() {
     return this.regForm.get('viaje');
   }
+  get noViaje() {
+    return this.regForm.get('noViaje');
+  }
   get buque() {
     return this.regForm.get('buque');
+  }
+  get nombreBuque() {
+    return this.regForm.get('nombreBuque');
   }
   get transportistaTemp() {
     return this.regForm.get('transportistaTemp');
@@ -202,6 +215,13 @@ export class SolicitudDescargaComponent implements OnInit {
   }
   get maniobraTemp() {
     return this.regForm.get('maniobraTemp');
+  }
+
+  get contenedorTemp() {
+    return this.regForm.get('contenedorTemp');
+  }
+  get tipoTemp() {
+    return this.regForm.get('tipoTemp');
   }
 
   get estadoTemp() {
@@ -283,10 +303,9 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.maniobra.contenedor, element.maniobra.tipo, element.peso,
-                          element.maniobra._id, element.transportista._id, element.maniobra.estatus,
-                          element.transportista.razonSocial, element.patio);
-
+          this.addContenedor(element.contenedor, element.tipo, element.peso,
+            element.maniobra, element.transportista._id, '',
+            element.transportista.razonSocial, element.patio);
       });
       if (solicitud.estatus === 'APROBADA') {
         this.regForm.disable({onlySelf : true});
@@ -297,13 +316,25 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarBuques(event) {
-    this._buqueService.getBuqueXNaviera( event.value )
-    .subscribe( buques => this.buques = buques.buques);
+    
+    if (event.value===ID_MELFI) {
+      this._buqueService.getBuqueXNaviera( event.value )
+      .subscribe( buques => this.buques = buques.buques);
+      this.navieraMELFI = true;
+      this.nombreBuque.setValue(undefined);
+      this.noViaje.setValue(undefined);
+    } else {
+      this.navieraMELFI = false;
+      this.buque.setValue(undefined);
+      this.viaje.setValue(undefined);
+    }
   }
 
   cargarViajes(event) {
-    this._viajeService.getViajes(null, null, null, event.value )
-    .subscribe( res => this.viajes = res.viajes);
+    if (event.value!== undefined && event.value!== '') {
+      this._viajeService.getViajes(null, null, null, event.value )
+      .subscribe( res => this.viajes = res.viajes);
+    }
   }
 
   cargaClientes(event) {
@@ -316,10 +347,12 @@ export class SolicitudDescargaComponent implements OnInit {
 
 
   cargarContenedores(event) {
-    this._maniobraService.getManiobrasXViajeImportacion( event.value )
-    .subscribe( res => {
-      this.contenedoresXViaje = res;
-    });
+    if (event.value !== undefined && event.value !== '') {
+      this._maniobraService.getManiobrasXViajeImportacion( event.value )
+      .subscribe( res => {
+        this.contenedoresXViaje = res;
+      });
+    }
   }
 
 
@@ -429,10 +462,15 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   agregarContenedor() {
-    if (this.maniobraTemp.value === '' || this.maniobraTemp.value === undefined  ) {
+    if (!this.navieraMELFI && (this.contenedorTemp.value === '' || this.contenedorTemp.value === undefined  )) {
       swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
       return;
     }
+    if (this.navieraMELFI && (this.maniobraTemp.value === '' || this.maniobraTemp.value === undefined) ) {
+      swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
+      return;
+    }
+
     if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined  ) {
       swal('Faltan datos', 'No ha seleccionado transportista', 'error');
       return;
@@ -446,22 +484,45 @@ export class SolicitudDescargaComponent implements OnInit {
       return;
     }
     let encontrado = false;
-    this.contenedores.controls.forEach(m => {
-      if ( m.get('contenedor').value === this.maniobraTemp.value.contenedor ) {
-        encontrado = true;
-      }
-    });
+    if (this.navieraMELFI) {
+      this.contenedores.controls.forEach(m => {
+        if ( m.get('contenedor').value === this.maniobraTemp.value.contenedor ) {
+          encontrado = true;
+        }
+      });
+    } else { 
+      this.contenedores.controls.forEach(m => {
+        if ( m.get('contenedor').value === this.contenedorTemp ) {
+          encontrado = true;
+        }
+      });
+    }
+    
 
     if (encontrado) {
       swal('Contenedor Duplicado', 'El contenedor que intenta agregar ya se encuentra en la lista.', 'error');
       return;
     }
+    if (this.navieraMELFI) {
       this.addContenedor(this.maniobraTemp.value.contenedor, this.maniobraTemp.value.tipo, this.estadoTemp.value,
         this.maniobraTemp.value._id, this.transportistaTemp.value._id, this.maniobraTemp.value.estatus,
         this.transportistaTemp.value.razonSocial, this.patioTemp.value);
       this.maniobraTemp.setValue(null);
+    } else {
+      this.addContenedor(this.contenedorTemp.value, this.tipoTemp.value, this.estadoTemp.value,
+        undefined, this.transportistaTemp.value._id, '',
+        this.transportistaTemp.value.razonSocial, this.patioTemp.value);
+      this.contenedorTemp.setValue('');
+      this.tipoTemp.setValue('');
+    }
+
+      
   }
 
+  cambiaManiobra (event){
+    //this.contenedorTemp.setValue(event.value.contenedor);
+    this.tipoTemp.setValue(event.value.tipo);
+  }
 
   guardarSolicitud( ) {
     if (this.regForm.valid) {
@@ -482,44 +543,6 @@ export class SolicitudDescargaComponent implements OnInit {
       });
     }
   }
-//   addContenedor(contenedor: string) {
-//        // console.log(value);
-//     // // tslint:disable-next-line:prefer-const
-//     // // tslint:disable-next-line:triple-equals
-//     // let index = this.contenedores.find( dato => dato.Contenedor == contenedor);
-
-//     // // tslint:disable-next-line:triple-equals
-//     // if (contenedor == '') {
-//     //   swal( 'Error esta vacio', 'No fue posible insertar', 'error' );
-//     //   // console.log('Error esta vacio');
-//     //   return;
-//     //  }
-//     //  if (index != null) {
-//     //   swal( 'Error Contenedor Duplicado', 'No fue posible insertar: ' + index.Contenedor, 'error' );
-//     //   // console.log('Contenedor duplicado ' + index.contenedor);
-//     //  } else {
-//     //   // tslint:disable-next-line:max-line-length
-//     //   this.contenedores.push({Contenedor: contenedor, Tipo: this.selectedTipo, Estado: this.selectedEstado});
-//     // }
-
-// }
-
-  remover(element: any) {
-    // console.log(element);
-    //  let index = this.contenedores.find( dato => dato.Contenedor == element);
-    //   // tslint:disable-next-line: prefer-const
-    //  let index2 = this.contenedores.indexOf(index);
-    //    console.log(index2);
-    //    if (index2 >= -1) {
-    //   this.contenedores.splice(index2, 1);
-    // }
-}
-
-
-
-
-
-
 
 }
 

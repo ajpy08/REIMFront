@@ -14,13 +14,7 @@ export class SolicitudService {
     public http: HttpClient,
     public _usuarioService: UsuarioService) { }
 
-    // getSolicitudes(): Observable<any> {
-    //   return this.http.get(URL_SERVICIOS + '/solicitud');
-    // }
-
-
-    //El campo agencias es un string de IDS separados por comas..
-    
+     //El campo agencias es un string de IDS separados por comas..
     getSolicitudes( tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string, agencias?: string): Observable<any> {
       let params = new HttpParams();
       if (fIniAlta && fFinAlta) {
@@ -41,28 +35,19 @@ export class SolicitudService {
       return this.http.get(url, {params: params });
     }
 
-
-    // getSolicitudesCarga(): Observable<any> {
-    //   return this.http.get(URL_SERVICIOS + '/solicitud/cargas/');
-    // }
-
-    // getSolicitudesDescarga(): Observable<any> {
-    //   return this.http.get(URL_SERVICIOS + '/solicitud/descargas/');
-    // }
-
     cargarSolicitud(id: string): Observable<any> {
-      return this.http.get(URL_SERVICIOS + '/solicitud/' + id)
+      return this.http.get(URL_SERVICIOS + '/solicitudes/solicitud/' + id)
       .pipe(map((resp: any) => resp.solicitud));
     }
 
     getSolicitudIncludes(id: string): Observable<any> {
-      return this.http.get(URL_SERVICIOS + '/solicitud/' + id + '/includes')
+      return this.http.get(URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes')
       .pipe(map((resp: any) => resp.solicitud));
     }
 
     guardarSolicitud(solicitud: Solicitud): Observable<any> {
       console.log(solicitud);
-      let url = URL_SERVICIOS + '/solicitud';
+      let url = URL_SERVICIOS + '/solicitudes/solicitud';
       if (solicitud._id) { // Actualizando
         url += '/' + solicitud._id;
         url += '?token=' + this._usuarioService.token;
@@ -70,10 +55,6 @@ export class SolicitudService {
         .pipe(map((resp: any) => {
           swal('Solicitud de descarga Actualizada', solicitud.agencia, 'success');
           return resp.solicitud;
-        }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
         }));
       } else { // Creando
         url += '?token=' + this._usuarioService.token;
@@ -81,14 +62,14 @@ export class SolicitudService {
         .pipe(map((resp: any) => {
           swal('Solicitud de descarga Creada', solicitud.agencia, 'success');
           return resp.solicitud;
-        }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
         }));
       }
     }
 
+
+
+
+    
     apruebaSolicitudDescarga(solicitud: Solicitud): Observable<any> {
       let url = URL_SERVICIOS + '/solicitud/apruebadescarga';
       url += '/' + solicitud._id;

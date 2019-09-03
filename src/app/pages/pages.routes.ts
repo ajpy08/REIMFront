@@ -50,9 +50,10 @@ import { NavieraComponent } from './navieras/naviera.component';
 
 
 // Solicitudes / Aprobaciones
-import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
+import { SolicitudesComponent } from './solicitudes/solicitudes.component';
+//import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
-import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
+//import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
 import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
 import { SolicitudDAprobarComponent } from './solicitudes/solicitudD_aprobar.component';
@@ -125,16 +126,20 @@ const pagesRoutes: Routes = [
     {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
-    // Solicitud Descarga
-    {path: 'solicitudes_descarga', component: SolicitudesDescargaComponent,
-    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de descarga' }},
-    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,
+    
+    {path: 'solicitudes', component: SolicitudesComponent,
+    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga/descarga' }},
+
+    // // Solicitud Descarga
+    // {path: 'solicitudes_descarga', component: SolicitudesDescargaComponent,
+    // canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de descarga' }},
+    {path: 'solicitudes/solicitud_descarga/:id', component: SolicitudDescargaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
     // Solicitud Carga
-    {path: 'solicitudes_carga', component: SolicitudesCargaComponent,
-    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga' }},
-    {path: 'solicitud_carga/:id', component: SolicitudCargaComponent,
+    // {path: 'solicitudes_carga', component: SolicitudesCargaComponent,
+    // canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga' }},
+    {path: 'solicitudes/solicitud_carga/:id', component: SolicitudCargaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos carga'}},
 
     // Aprobaciones
