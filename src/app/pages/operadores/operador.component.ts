@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OperadorService, SubirArchivoService } from '../../services/service.index';
+import { OperadorService, SubirArchivoService, UsuarioService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Operador } from 'src/app/models/operador.models';
@@ -12,6 +12,8 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import swal from 'sweetalert';
+import { ROLES } from 'src/app/config/config';
+import { Usuario } from 'src/app/models/usuarios.model';
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -50,6 +52,7 @@ export class OperadorComponent implements OnInit {
   edicion = false;
   transportistas: Transportista[] = [];
   operador: Operador = new Operador();
+  usuarioLogueado: Usuario;
 
   constructor(
     public _operadorService: OperadorService,
@@ -58,10 +61,12 @@ export class OperadorComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
-    public _modalUploadService: ModalUploadService
+    public _modalUploadService: ModalUploadService,
+    private usuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
@@ -72,10 +77,21 @@ export class OperadorComponent implements OnInit {
       for (var control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
+      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
+      }
     }
 
-    this._transportistaService.getTransportistas()
-      .subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this._transportistaService.getTransportistas()
+        .subscribe((transportistas) => {
+          this.transportistas = transportistas.transportistas;
+        });
+    } else {
+      if(this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this.transportistas = this.usuarioLogueado.empresas;
+      }
+    }
   }
 
   cargarOperador(id: string) {

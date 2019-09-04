@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../usuario/usuario.service';
 import { Camion } from '../../models/camion.models';
@@ -17,10 +17,14 @@ export class CamionService {
     public _usuarioService: UsuarioService
   ) { }
 
-  getCamiones(desde: number = 0): Observable<any> {
+  getCamiones(transportista?: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/camion?desde=' + desde;
-    return this.http.get(url);
+    let url = URL_SERVICIOS + '/camion/camiones/' ;
+    let params = new HttpParams();
+    if (transportista)  {
+      params = params.append('transportista', transportista);
+    }
+    return this.http.get(url, {params: params });
   }
   getCamionesXIdTransportista( id: string): Observable<any> {
     const url = URL_SERVICIOS + '/camion/transportista/' + id

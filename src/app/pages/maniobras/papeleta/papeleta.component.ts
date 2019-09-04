@@ -3,7 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../maniobra.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-// import moment = require('moment');
+
+import * as moment from 'moment';
+
+
 
 @Component({
   selector: 'app-papeleta',
@@ -37,8 +40,8 @@ export class PapeletaComponent implements OnInit {
       _id: [''],
       folio: ['', [Validators.required]],
       fAsignacionPapeleta: ['', [Validators.required]],
-      // fExpiracionPapeleta: ['', [Validators.required, this.validaFechaExpiracion]],
-      fExpiracionPapeleta: ['', [Validators.required]],
+      fExpiracionPapeleta: ['', [Validators.required, this.validaFechaExpiracion('fExpiracionPapeleta')]],
+      //fExpiracionPapeleta: ['', [Validators.required]],
       cargaDescarga: ['', [Validators.required]],
       peso: ['', [Validators.required]],
       grado: ['', [Validators.required]],
@@ -59,21 +62,24 @@ export class PapeletaComponent implements OnInit {
     });
   }
 
-  // validaFechaExpiracion(controlKey: string) {
-  //   return (control: AbstractControl): { [s: string]: boolean } => {
-  //     // control.parent es el FormGroup
-  //     if (this.regForm) { // en las primeras llamadas control.parent es undefined      
-  //       console.log(control.value)  
-  //       console.log(moment.now) 
-  //       if (control.value < moment.now) {
-  //         return {
-  //           fechaInvalida: true
-  //         };
-  //       }
-  //     }
-  //     return null;
-  //   };
-  // }
+
+  validaFechaExpiracion(controlKey: string) {
+    return (control: AbstractControl): { [s: string]: boolean } => {
+      // control.parent es el FormGroup
+      if (this.regForm) { // en las primeras llamadas control.parent es undefined     
+        if (control.value != undefined) {
+          var CurrentDate = moment().startOf('day').toISOString();
+          var fecha = moment(control.value).endOf('day').toISOString();
+          if (fecha <= CurrentDate) {            
+            return {
+              fechaInvalida: true              
+            };
+          }
+        }
+      }
+      return {};
+    };
+  }
 
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
@@ -115,10 +121,7 @@ export class PapeletaComponent implements OnInit {
   }
 
   asignaFecha() {
-    this.maniobraService.asignaFecha({ _id: this.maniobra._id }).subscribe(() => {
-      // this.maniobraService.getManiobraConIncludes(this.id).subscribe((maniobra) => {
-      //   this.maniobra = maniobra.maniobra;
-      // });
+    this.maniobraService.asignaFecha({ _id: this.id }).subscribe(() => {
       this.cargarManiobra(this.id);
     });
   }

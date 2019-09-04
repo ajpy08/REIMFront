@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Operador } from '../../models/operador.models';
-import { OperadorService } from '../../services/service.index';
+import { OperadorService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Usuario } from 'src/app/models/usuarios.model';
+import { ROLES } from 'src/app/config/config';
 declare var swal: any;
 @Component({
   selector: 'app-operadores',
@@ -13,6 +15,7 @@ export class OperadoresComponent implements OnInit {
   cargando: boolean = true;
   totalRegistros: number = 0;
   desde: number = 0;
+  usuarioLogueado: Usuario;
 
   displayedColumns = ['actions', 'foto', 'transportista.razonSocial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
   dataSource: any;
@@ -20,9 +23,10 @@ export class OperadoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _operadorService: OperadorService) { }
+  constructor(public _operadorService: OperadorService, private usuarioService: UsuarioService) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarOperadores();
   }
 
@@ -35,28 +39,28 @@ export class OperadoresComponent implements OnInit {
 
   cargarOperadores() {
     this.cargando = true;
-    this._operadorService.getOperadores(this.desde)
-      .subscribe(operadores => {
-        this.dataSource = new MatTableDataSource(operadores.operadores);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = operadores.operadores.length;
-      });
-      this.cargando = false;
-  }
 
-  // cambiarDesde(valor: number) {
-  //   let desde = this.desde + valor;
-  //   //console.log(desde);
-  //   if (desde >= this._operadorService.totalOperadores) {
-  //     return;
-  //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargarOperadores();
-  // }
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this._operadorService.getOperadores()
+        .subscribe(operadores => {
+          this.dataSource = new MatTableDataSource(operadores.operadores);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = operadores.operadores.length;
+        });
+    } else {
+      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+        this._operadorService.getOperadores(this.usuarioLogueado.empresas[0]._id)
+        .subscribe(operadores => {
+          this.dataSource = new MatTableDataSource(operadores.operadores);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = operadores.operadores.length;
+        });
+      }
+    }
+    this.cargando = false;
+  }
 
   buscarOperador(termino: string) {
     if (termino.length <= 0) {
