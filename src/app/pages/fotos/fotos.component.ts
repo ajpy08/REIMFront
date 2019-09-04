@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FileItem } from '../../models/file-item.models';
 import { ManiobraService } from '../maniobras/maniobra.service';
-import { SubirArchivoService } from '../../services/service.index';
+import { SubirArchivoService, UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Maniobra } from '../../models/maniobra.models';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryLayout, NgxGalleryImageSize, NgxGalleryOrder } from 'ngx-gallery';
 import { FotosPipe } from 'src/app/pipes/fotos.pipe';
-import { MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
+import { Usuario } from 'src/app/models/usuarios.model';
+import { ROLES } from 'src/app/config/config';
 
 
 @Component({
@@ -35,16 +37,27 @@ export class FotosComponent implements OnInit {
   galleryImagesL: NgxGalleryImage[];
   galleryImagesR: NgxGalleryImage[];
   yaCargo: boolean = false;
+  usuarioLogueado: Usuario;
+  okCargar: boolean = false;
+
 
   constructor(public _maniobraService: ManiobraService,
     public _subirArchivoService: SubirArchivoService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fotosPipe: FotosPipe) {
+    private fotosPipe: FotosPipe,
+    private usuarioService: UsuarioService) {
     activatedRoute.params.subscribe();
   }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIM_ROLE) {
+      this.okCargar = true;
+    } else {
+      this.okCargar = false;
+    }
+
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.selected = this.activatedRoute.snapshot.paramMap.get('opcion');
 
@@ -58,8 +71,8 @@ export class FotosComponent implements OnInit {
         width: '600px',
         height: '600px',
         thumbnailsColumns: 4,
-        thumbnailsRows: 4,
-        thumbnailsOrder: NgxGalleryOrder.Row,
+        thumbnailsRows: 2,
+        thumbnailsOrder: NgxGalleryOrder.Page,
         //thumbnailsRemainingCount: true,
         //thumbnailSize: NgxGalleryImageSize.Contain,
         imageSize: NgxGalleryImageSize.Contain,
@@ -71,21 +84,24 @@ export class FotosComponent implements OnInit {
         previewKeyboardNavigation: true,
         //imageAutoPlay: true,
         //imageAutoPlayInterval: 5000,
-        imageAnimation: NgxGalleryAnimation.Slide
+        imageAnimation: NgxGalleryAnimation.Slide,
+        //fullWidth: true
       },
       // max-width 800
       {
-        breakpoint: 800,
+        breakpoint: 600,
         width: '100%',
-        height: '600px',
+        height: '100px',
         imagePercent: 80,
         thumbnailsPercent: 20,
         thumbnailsMargin: 20,
-        thumbnailMargin: 20
+        thumbnailMargin: 20,
+        thumbnailSize: NgxGalleryImageSize.Cover,
+        thumbnailsMoveSize: 1
       },
       // max-width 400
       {
-        breakpoint: 400,
+        breakpoint: 600,
         preview: false
       }
     ];
@@ -95,7 +111,11 @@ export class FotosComponent implements OnInit {
     this._maniobraService.getManiobra(id)
       .subscribe(maniobra => {
         this.maniobra = maniobra.maniobra;
-      });
+      });      
+  }
+
+  maniobraPrint() {
+    console.log(this.maniobra)
   }
 
   cargarFotos(id: string, lavado_reparacion: string) {
@@ -140,12 +160,12 @@ export class FotosComponent implements OnInit {
     }
   }
 
-  escojeTab(opcion){
+  escojeTab(opcion) {
     //console.log(opcion)
-    if(opcion === 'fotos_lavado') {
+    if (opcion === 'fotos_lavado') {
       this.tabGroup.selectedIndex = 0;
     } else {
-      if(opcion === 'fotos_reparacion') {
+      if (opcion === 'fotos_reparacion') {
         this.tabGroup.selectedIndex = 1;
       } else {
         this.tabGroup.selectedIndex = 2;
@@ -237,7 +257,7 @@ export class FotosComponent implements OnInit {
     return (tipoArchivo === '' || tipoArchivo === undefined) ? false : tipoArchivo.startsWith('image');
   }
 
-  private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {    
+  private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {
     for (const archivo of this.archivos) {
       if (archivo.nombreArchivo === nombreArchivo) {
         console.log('El archivo' + nombreArchivo + ' ya esta agregado');

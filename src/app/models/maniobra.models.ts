@@ -1,3 +1,5 @@
+import { Reparacion } from "./reparacion.models";
+
 export class Maniobra {
     constructor(
         public cargaDescarga?: string,
@@ -24,7 +26,7 @@ export class Maniobra {
         public hSalida?: string,
         public lavado?: string,
         public lavadoObservacion?: string,
-        public reparaciones?: string,
+        public reparaciones?: Reparacion[],
         public reparacionesObservacion?: string,
         public fTerminacionLavado?: string,
         public hTerminacionLavado?: string,
