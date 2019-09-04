@@ -22,7 +22,7 @@ export class DisponiblesComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getContenedoresDisponibles()
+    this._maniobraService.getManiobras('D', 'DISPONIBLE')
     .subscribe(maniobras => {
         if (maniobras.code !== 200) {
           this.totalRegistros = maniobras.total;
