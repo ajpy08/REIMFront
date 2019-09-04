@@ -1,0 +1,124 @@
+<mat-tab-group>
+  <mat-tab label="Descargas">
+    <ng-template mat-tab-label>
+      Descargas ( <small>{{totalRegistros}}</small> )
+    </ng-template>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+              <button [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+                  <i class="fa fa-plus"></i> 
+                  Nueva Solicitud Descarga
+                </button>
+            </div>
+            <table class="table table-hover table-responsive">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Fecha Solicitud</th>
+                  <th>Agencia</th>
+                  <th>Naviera</th>
+                  <th>Cliente</th>
+                  <th>Viaje</th>
+                  <th>Buque</th>
+                  <th>observaciones</th>
+                  <th>Contenedores</th>
+                  <th>Estatus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sol of solicitudes">
+                  <td>
+                    <button *ngIf="sol.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_descarga', sol._id ]" class="btn btn-primary">
+                              <i class="fa fa-edit"> Editar</i>
+                            </button>
+                    <button *ngIf="sol.estatus==='APROBADA'" [routerLink]="['/solicitudes/solicitud_descarga', sol._id ]" class="btn btn-primary">
+                              <i class="fa fa-edit"> Ver Datos</i>
+                            </button>
+                    <button (click)="borrarSolicitud( sol )" class="btn btn-danger">
+                              <i class="fa fa-trash-o"> Borrar</i>
+                        </button>
+                  </td>
+                  <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
+                  <td>{{sol.agencia.razonSocial}}</td>
+                  <td>{{sol.naviera.razonSocial}}</td>
+                  <td>{{sol.cliente.razonSocial}}</td>
+                  <td>{{sol.viaje?.viaje}} {{sol.noViaje}}</td>
+                  <td>{{sol.buque?.nombre}} {{sol.nombreBuque}}</td>
+                  <td>{{sol.observaciones}}</td>
+                  <td>
+                    <p *ngFor="let cont of sol.contenedores">
+                      {{cont.contenedor}} <br> Tipo: {{cont.tipo}}
+                    </p>
+                  </td>
+                  <td>{{sol.estatus}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Cargas">
+    <ng-template mat-tab-label>
+      Cargas ( <small>{{totalRegistrosCargas}}</small> )
+    </ng-template>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+              <button [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+                  <i class="fa fa-plus"></i> 
+                  Nueva solicitud Carga
+                </button>
+            </div>
+            <table class="table table-hover table-responsive">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Fecha solicitud</th>
+                  <th>Agencia</th>
+                  <th>Cliente</th>
+                  <th>observaciones</th>
+                  <th>solicitado</th>
+                  <th>Estatus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sol of solicitudesCarga">
+                  <td>
+                    <button *ngIf="sol.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_carga', sol._id ]" class="btn btn-primary">
+                      <i class="fa fa-edit"> Editar</i>
+                    </button>
+                    <button *ngIf="sol.estatus==='APROBADA'" [routerLink]="['/solicitudes/solicitud_descarga', sol._id ]" class="btn btn-primary">
+                      <i class="fa fa-edit"> Ver Datos</i>
+                    </button>
+                    <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
+                       <i class="fa fa-trash-o"> Borrar</i>
+                    </button>
+                  </td>
+                  <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
+                  <td>{{sol.agencia.razonSocial}}</td>
+                  <td>{{sol.cliente.razonSocial}}</td>
+                  <td>{{sol.observaciones}}</td>
+                  <td>
+                    <p *ngFor="let cont of sol.contenedores">
+                      Tipo: {{cont.tipo}} <br> Grado: {{cont.grado}}
+                    </p>
+                  </td>
+                  <td>{{sol.estatus}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>

@@ -11,11 +11,13 @@
 </div>
 <mat-tab-group>
   <mat-tab label="Descargas">
+    <ng-template mat-tab-label>
+      Descargas ( <small>{{totalRegistros}}</small> )
+    </ng-template>
     <div class="row animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <h3 class="card-title">Solicitudes Descarga encontradas ( <small>{{totalRegistros}}</small> )</h3>
             <div class="table-responsive">
               <table class="table table-hover table-responsive">
                 <thead>
@@ -35,10 +37,10 @@
                 <tbody>
                   <tr *ngFor="let sol of solicitudes">
                     <td>
-                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='D'" [routerLink]="['/solicitudD_aprobar', sol._id ]" class="btn btn-primary">
+                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='D'" [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', sol._id ]" class="btn btn-primary">
                         <i class="fa fa-edit"> Aprobar Descarga</i>
                        </button>
-                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='D'" [routerLink]="['/solicitudD_aprobar', sol._id ]" class="btn btn-primary">
+                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='D'" [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', sol._id ]" class="btn btn-primary">
                         <i class="fa fa-edit"> Ver Datos</i>
                        </button>
                       <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
@@ -50,8 +52,8 @@
                     <td>{{sol.agencia.razonSocial}}</td>
                     <td>{{sol.naviera?.razonSocial}}</td>
                     <td>{{sol.cliente.razonSocial}}</td>
-                    <td>{{sol.viaje.viaje}}</td>
-                    <td>{{sol.buque?.nombre}}</td>
+                    <td>{{sol.viaje?.viaje}}{{sol.noViaje}}</td>
+                    <td>{{sol.buque?.nombre}}{{sol.nombreBuque}}</td>
                     <td>{{sol.observaciones}}</td>
                     <td>{{sol.estatus}}</td>
                   </tr>
@@ -64,11 +66,13 @@
     </div>
   </mat-tab>
   <mat-tab label="Cargas">
+    <ng-template mat-tab-label>
+      Descargas ( <small>{{totalRegistrosCargas}}</small> )
+    </ng-template>
     <div class="row animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <h3 class="card-title">Solicitudes Carga encontradas ( <small>{{totalRegistrosCargas}}</small> )</h3>
             <div class="table-responsive">
               <table class="table table-hover table-responsive">
                 <thead>
@@ -77,10 +81,7 @@
                     <th>Fecha Solicitud</th>
                     <th>Tipo</th>
                     <th>Agencia</th>
-                    <th>Naviera</th>
                     <th>Cliente</th>
-                    <th>Viaje</th>
-                    <th>Buque</th>
                     <th>observaciones</th>
                     <th>Estado</th>
                   </tr>
@@ -88,10 +89,10 @@
                 <tbody>
                   <tr *ngFor="let sol of solicitudesCarga">
                     <td>
-                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='C'" [routerLink]="['/solicitudC_aprobar', sol._id ]" class="btn btn-primary">
+                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='C'" [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', sol._id ]" class="btn btn-primary">
                         <i class="fa fa-edit"> Aprobar Carga</i>
                        </button>
-                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='C'" [routerLink]="['/solicitudC_aprobar', sol._id ]" class="btn btn-primary">
+                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='C'" [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', sol._id ]" class="btn btn-primary">
                         <i class="fa fa-edit"> Ver Datos</i>
                        </button>
                       <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
@@ -101,10 +102,7 @@
                     <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
                     <td>{{sol.tipo}}</td>
                     <td>{{sol.agencia.razonSocial}}</td>
-                    <td>{{sol.naviera?.razonSocial}}</td>
                     <td>{{sol.cliente.razonSocial}}</td>
-                    <td>{{sol.viaje.viaje}}</td>
-                    <td>{{sol.buque?.nombre}}</td>
                     <td>{{sol.observaciones}}</td>
                     <td>{{sol.estatus}}</td>
                   </tr>

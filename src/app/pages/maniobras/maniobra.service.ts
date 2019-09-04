@@ -58,33 +58,10 @@ export class ManiobraService {
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
-  // getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
-  //   const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
-  //   return this.http.get( url );
-  // }
-
   getContenedoresDisponibles( ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
     return this.http.get( url );
   }
-
-  // getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
-  //   // if (contenedor===undefined)  contenedor="";
-  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-  //   const url = URL_SERVICIOS + '/maniobras/espera/?desde=' + desde ;
-  //   return this.http.get( url );
-  // }
-
-  // getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
-  //   // if (contenedor===undefined)  contenedor="";
-  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
-  //   const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
-  //   return this.http.get( url );
-  // }
-
-
-
-
 
   getManiobrasxCargar(): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/xcargar/';
@@ -93,18 +70,10 @@ export class ManiobraService {
 
   getManiobrasGral(viaje?: string, estado?: string, cargaDescarga?: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + estado + '&' + cargaDescarga;
-    //console.log(url)
     return this.http.get( url );
   }
 
-  getManiobrasLavadoReparacion(naviera: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
-    let params = new HttpParams();
-    if (naviera)  {
-      params = params.append('naviera', naviera);
-    }
-    return this.http.get(url, {params: params });
-  }
+
 
   getManiobrasConLavadoReparacion(naviera: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/LR/';
@@ -113,6 +82,7 @@ export class ManiobraService {
       params = params.append('naviera', naviera);
     }
     return this.http.get(url, {params: params });
+
   }
 
   asignaSolicitud( maniobra: Maniobra ): Observable<any> {
@@ -133,7 +103,7 @@ export class ManiobraService {
     return this.http.put( url, maniobra )
     .pipe(map( (resp: any) => {
       swal('Camion y Chofer actualizados.', '', 'success');
-      return resp.viaje;
+      return resp.maniobra;
     }));
   }
 
@@ -144,7 +114,7 @@ export class ManiobraService {
     return this.http.put( url, maniobra )
     .pipe(map( (resp: any) => {
       swal('Transportista Reasignado', '', 'success');
-      return resp.viaje;
+      return resp.maniobra;
     }));
   }
 
@@ -166,11 +136,7 @@ export class ManiobraService {
     return this.http.put( url, maniobra )
     .pipe(map( (resp: any) => {
       swal('Maniobra actualizada', '', 'success');
-      return resp.viaje;
-    }),
-    catchError( err => {
-      swal( err.error.mensaje, err.error.errores.message, 'error' );
-      return throwError(err);
+      return resp.maniobra;
     }));
   }
 
@@ -180,12 +146,8 @@ export class ManiobraService {
     url += '?token=' + this._usuarioService.token;
     return this.http.put( url, maniobra )
     .pipe(map( (resp: any) => {
-      swal('Maniobra actualizada', '', 'success');
-      return resp.viaje;
-    }),
-    catchError( err => {
-      swal( err.error.mensaje, err.error.errores.message, 'error' );
-      return throwError(err);
+      swal('Datos actualizados con éxito', '', 'success');
+      return resp.maniobra;
     }));
   }
 
@@ -353,6 +315,30 @@ export class ManiobraService {
     let url = URL_SERVICIOS + '/maniobra/actualiza_fecha_asignacion';
     url += '/' + maniobra._id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.put( url, maniobra )
+    return this.http.put( url, maniobra );
   }
+
+    // getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
+
+  // getManiobrasEnEspera(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   // if (contenedor===undefined)  contenedor="";
+  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+  //   const url = URL_SERVICIOS + '/maniobras/espera/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
+
+  // getManiobrasRevision(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   // if (contenedor===undefined)  contenedor="";
+  //   // const url = URL_SERVICIOS + '/maniobra/transito?contenedor=' + contenedor;
+  //   const url = URL_SERVICIOS + '/maniobras/revision/?desde=' + desde ;
+  //   return this.http.get( url );
+  // }
+
+  // getManiobrasLavadoReparacion(desde: number = 0, contenedor?: string ): Observable<any> {
+  //   const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
+  //   return this.http.get( url );
+  // }
 }

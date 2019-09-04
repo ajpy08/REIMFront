@@ -5,24 +5,26 @@ import { Reparacion } from '../../../models/reparacion.models';
 import { ReparacionService } from '../../../services/reparacion/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-revisa',
   templateUrl: './revisa.component.html',
-  providers: [],
+  providers: [DatePipe],
 })
 
 export class RevisaComponent implements OnInit {
   regForm: FormGroup;
-  tiposLavado: Lavado[] = [new Lavado('B','Basico'),new Lavado('E','Especial')];
-  grados: string[] = ['A','B','C'];
+  tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
+  grados: string[] = ['A', 'B', 'C'];
   tiposReparaciones: Reparacion[] = [];
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private datePipe: DatePipe) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -118,7 +120,7 @@ export class RevisaComponent implements OnInit {
     const rep = this.tiposReparaciones.find(x => x._id === item);
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
-  
+
   removeReparacion( index: number ) {
     this.reparaciones.removeAt(index);
   }
@@ -143,10 +145,10 @@ export class RevisaComponent implements OnInit {
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
       if (maniob.maniobra.lavado){
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
-      }else {
+      } else {
         this.regForm.controls['lavado'].setValue(undefined);
       }
-      if (maniob.maniobra.lavadoObservacion){
+      if (maniob.maniobra.lavadoObservacion) {
         this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
       } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
@@ -173,6 +175,11 @@ cargarTiposReparaciones() {
     });
   }
 
+  ponHora() {
+    if (this.hSalida.value === '') {
+      this.hSalida.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+  }
 guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {

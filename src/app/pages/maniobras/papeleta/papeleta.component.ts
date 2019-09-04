@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../maniobra.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+
 import * as moment from 'moment';
+
 
 
 @Component({
@@ -59,6 +61,7 @@ export class PapeletaComponent implements OnInit {
       noEconomico: ['', [Validators.required]],
     });
   }
+
 
   validaFechaExpiracion(controlKey: string) {
     return (control: AbstractControl): { [s: string]: boolean } => {

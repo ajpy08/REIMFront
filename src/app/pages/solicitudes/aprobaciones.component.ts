@@ -3,12 +3,14 @@ import { Solicitud } from './solicitud.models';
 import { SolicitudService } from '../../services/service.index';
 
 
+declare var swal: any;
+
 @Component({
-  selector: 'app-solicitudes-aprobaciones',
-  templateUrl: './solicitudesAprobaciones.component.html',
+  selector: 'app-aprobaciones',
+  templateUrl: './aprobaciones.component.html',
   styles: []
 })
-export class SolicitudesAprobacionesComponent implements OnInit {
+export class AprobacionesComponent implements OnInit {
   solicitudes: any[] = [];
   solicitudesCarga: any[] = [];
   cargando = true;
@@ -38,12 +40,19 @@ export class SolicitudesAprobacionesComponent implements OnInit {
     });
   }
 
-
-  borrarSolicitud( praalta: Solicitud ) {
-
-    // this._prealtaService.borrarSolicitud( praalta._id )
-    //         .subscribe( () =>  this.cargarSolicitudes() );
-
+  borrarSolicitud( sol: Solicitud ) {
+    swal({title: '¿Esta seguro?', text: 'Esta apunto de borrar la solicitud.' , icon: 'warning', buttons: true, dangerMode: true, })
+      .then(borrar => {
+        if (borrar) {
+          this._solicitudesService.borrarSolicitud(sol._id)
+          .subscribe(borrado => {
+            this.cargaSolicitudes();
+          });
+        }
+      });
   }
+
+
+
 
 }
