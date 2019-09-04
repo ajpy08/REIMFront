@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManiobraService } from '../../../services/service.index';
+import {ETAPAS_MANIOBRA} from '../../../config/config';
 
-declare var jQuery: any;
 @Component({
   selector: 'app-espera',
   templateUrl: './espera.component.html',
@@ -18,12 +18,11 @@ export class EnEsperaComponent implements OnInit {
   }
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.getManiobras(null, 'ESPERA')
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
     .subscribe(maniobras => {
           this.totalRegistros = maniobras.total;
           this.maniobras = maniobras.maniobras;
           this.cargando = false;
-
       });
   }
 }

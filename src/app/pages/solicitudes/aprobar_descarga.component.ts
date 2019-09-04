@@ -11,11 +11,11 @@ import { catchError } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-solicitudd-aprobar',
-  templateUrl: './solicitudD_aprobar.component.html',
+  selector: 'app-aprobar-descarga',
+  templateUrl: './aprobar_descarga.component.html',
   styles: []
 })
-export class SolicitudDAprobarComponent implements OnInit {
+export class AprobarDescargaComponent implements OnInit {
   regForm: FormGroup;
   usuario: Usuario;
   solicitudCorrecta = false;
@@ -45,7 +45,9 @@ export class SolicitudDAprobarComponent implements OnInit {
       agencia: [{value: '', disabled: true}],
       naviera: [{value: '', disabled: true}],
       buque: [{value: '', disabled: true}],
+      nombreBuque: [{value: '', disabled: true}],
       viaje: [{value: '', disabled: true}],
+      noViaje: [{value: '', disabled: true}],
       blBooking: [{value: '', disabled: true}],
       idcliente: [{value: '', disabled: false}],
       cliente: [{value: '', disabled: true}],
@@ -114,8 +116,14 @@ export class SolicitudDAprobarComponent implements OnInit {
   get viaje() {
     return this.regForm.get('viaje');
   }
+  get noViaje() {
+    return this.regForm.get('noViaje');
+  }
   get buque() {
     return this.regForm.get('buque');
+  }
+  get nombreBuque() {
+    return this.regForm.get('nombreBuque');
   }
   get transportistaTemp() {
     return this.regForm.get('transportistaTemp');
@@ -204,8 +212,16 @@ export class SolicitudDAprobarComponent implements OnInit {
       this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
       this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      this.regForm.controls['viaje'].setValue(solicitud.viaje.viaje);
-      this.regForm.controls['buque'].setValue(solicitud.buque.nombre);
+      if (solicitud.viaje) {
+        this.regForm.controls['viaje'].setValue(solicitud.viaje.viaje);
+      }
+
+      this.regForm.controls['noViaje'].setValue(solicitud.noViaje);
+      if (solicitud.buque) {
+        this.regForm.controls['buque'].setValue(solicitud.buque.nombre);
+      }
+
+      this.regForm.controls['nombreBuque'].setValue(solicitud.nombreBuque);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);

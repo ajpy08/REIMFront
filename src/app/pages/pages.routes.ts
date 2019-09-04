@@ -50,13 +50,14 @@ import { NavieraComponent } from './navieras/naviera.component';
 
 
 // Solicitudes / Aprobaciones
-import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
+import { SolicitudesComponent } from './solicitudes/solicitudes.component';
+// import { SolicitudesDescargaComponent } from './solicitudes/descarga/solicitudes_descarga.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
-import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
+// import { SolicitudesCargaComponent } from './solicitudes/carga/solicitudes_carga.component';
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
-import { SolicitudesAprobacionesComponent } from './solicitudes/solicitudesAprobaciones.component';
-import { SolicitudDAprobarComponent } from './solicitudes/solicitudD_aprobar.component';
-import { SolicitudCAprobarComponent } from './solicitudes/solicitudC_aprobar.component';
+import { AprobacionesComponent } from './solicitudes/aprobaciones.component';
+import { AprobarDescargaComponent } from './solicitudes/aprobar_descarga.component';
+import { AprobarCargaComponent } from './solicitudes/aprobar_carga.component';
 import { SolicitudesTransportistaComponent } from './solicitudes/transportista/solicitudes_transportista.component';
 import { SolicitudTransportistaComponent } from './solicitudes/transportista/solicitud_transportista.component';
 import { SolicitudReasignaTransportistaComponent } from './solicitudes/transportista/solicitud_reasigna_transportista.component';
@@ -125,34 +126,34 @@ const pagesRoutes: Routes = [
     {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
-    // Solicitud Descarga
-    {path: 'solicitudes_descarga', component: SolicitudesDescargaComponent,
-    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de descarga' }},
-    {path: 'solicitud_descarga/:id', component: SolicitudDescargaComponent,
-    canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
-    // Solicitud Carga
-    {path: 'solicitudes_carga', component: SolicitudesCargaComponent,
-    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga' }},
-    {path: 'solicitud_carga/:id', component: SolicitudCargaComponent,
+    // Solicitudes
+    {path: 'solicitudes', component: SolicitudesComponent,
+    canActivate: [ AdminGuard ], data: { titulo: 'Solicitudes de carga/descarga' }},
+    // // Solicitud Descarga
+    {path: 'solicitudes/solicitud_descarga/:id', component: SolicitudDescargaComponent,
+    canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    // // Solicitud Carga
+    {path: 'solicitudes/solicitud_carga/:id', component: SolicitudCargaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos carga'}},
 
     // Aprobaciones
-    {path: 'solicitudes_aprobaciones', component: SolicitudesAprobacionesComponent,
+    {path: 'solicitudes/aprobaciones', component: AprobacionesComponent,
     canActivate: [AdminGuard], data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas'}},
-    {path: 'solicitudD_aprobar/:id', component: SolicitudDAprobarComponent,
+    {path: 'solicitudes/aprobaciones/aprobar_descarga/:id', component: AprobarDescargaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Aprobar Descarga'}},
-    {path: 'solicitudC_aprobar/:id', component: SolicitudCAprobarComponent,
+    {path: 'solicitudes/aprobaciones/aprobar_carga/:id', component: AprobarCargaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Aprobar Carga'}},
 
     // SOLICITUDES TRANSPORTISTA
-
     {path: 'solicitudes_transportista', component: SolicitudesTransportistaComponent,
     canActivate: [AdminGuard], data: { titulo: 'Solicitudes Transportista'}},
     {path: 'solicitud_transportista/:id', component: SolicitudTransportistaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Asignar Camion / Chofer'}},
     {path: 'solicitud_reasigna_transportista/:id', component: SolicitudReasignaTransportistaComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Reasigna Transportista'}},
+
+
 
     // Mantenimientos ADMIN ROLE
     {

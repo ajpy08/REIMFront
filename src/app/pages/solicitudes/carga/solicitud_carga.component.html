@@ -11,80 +11,134 @@
             <hr>
             <div class="row p-t-20">
               <div class="col-md-3">
-                <div class="form-group has-success">
-                  <label class="control-label"><b>Transportista</b></label>
-                  <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista">
-                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                      {{transportista.razonSocial}}
-                    </mat-option>
-                  </mat-select>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label class="control-label"><b>Agente Aduanal</b></label>
-                  <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
+                <mat-form-field>
+                  <mat-label>Agente Aduanal</mat-label>
+                  <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione una Agencia Aduanal">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                       {{ag.razonSocial}}
                     </mat-option>
                   </mat-select>
-                </div>
+                  <mat-error *ngIf="agencia.touched && agencia.hasError['required']">Debe seleccionar una Agencia Aduanal.</mat-error>
+                </mat-form-field>
               </div>
               <div class="col-md-3">
-                <div class="form-group">
-                  <label class="control-label"><b>Facturar a: </b></label>
-                  <mat-radio-group class="example-radio-group">
-                    <mat-radio-button class="example-radio-button" *ngFor="let facturaA of facturarA" [value]="facturaA">
-                      {{facturaA}}
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </div>
+                <mat-form-field>
+                  <mat-label>Cliente</mat-label>
+                  <mat-select formControlName="cliente" type="text" placeholder="Seleccione un cliente.">
+                    <mat-option *ngFor="let cli of clientes" [value]="cli._id">
+                      {{cli.razonSocial}}
+                    </mat-option>
+                    <mat-error *ngIf="cliente.touched && cliente.hasError['required']">Debe seleccionar un Cliente.</mat-error>
+                  </mat-select>
+                </mat-form-field>
               </div>
-              <div class="col-md-3">
-                <mat-select formControlName="cliente" type="text" placeholder="Seleccione un cliente" (selectionChange)="cargaCliente($event)">
-                  <mat-option *ngFor="let cli of clientes" [value]="cli._id">
-                    {{cli.razonSocial}}
-                  </mat-option>
-                </mat-select>
+              <div class="col-md-2">
+                <label class="control-label">Facturar a: </label>
+                <br>
+                <mat-radio-group class="example-radio-group" formControlName="facturarA" (change)="onChangeFacturarA($event)">
+                  <mat-radio-button class="example-radio-button" *ngFor="let facturaA of listaFacturarA" [value]="facturaA">
+                    {{facturaA}}
+                  </mat-radio-button>
+                </mat-radio-group>
               </div>
             </div>
-            <div class="row p-t-20">
-                <div class="col-md">
-                    <mat-form-field>
-                        <input matInput formControlName="blBooking" name="blBooking" type="text" class="form-control"
-                            placeholder="Booking es requerido">
-                    </mat-form-field>
-                </div>
-            </div>
-            <h3 class="box-title m-t-40">Detalles de la descarga</h3>
+
+            <h3 class="box-title m-t-40">Datos de Facturación</h3>
             <hr>
             <div class="row">
-              <div class="col-md-8 ">
-                <div class="form-group">
-                  <label><b>Observaciones</b></label>
-                  <textarea matInput formControlName="observaciones" rows="3" cols="40" class="form-control"></textarea>
-                </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>RFC</mat-label>
+                  <input matInput type="text" formControlName="rfc">
+                </mat-form-field>
+              </div>
+              <div class="col-md-8">
+                <mat-form-field>
+                  <mat-label>Razón Social</mat-label>
+                  <input matInput type="text" formControlName="razonSocial">
+                </mat-form-field>
               </div>
             </div>
-            <!--/row-->
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label><b>Credito: </b></label>
-                  <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
-                    Credito
-                  </mat-checkbox>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group" *ngIf="!credito.value">
-                  <label><b>Anexar comprobante</b></label>
+              <div class="col-md-3">
 
-                  <input (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf" class="form-control">
+                <mat-form-field>
+                  <mat-label>Calle</mat-label>
+                  <input matInput type="text" formControlName="calle">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>No. Exterior</mat-label>
+                  <input matInput type="text" formControlName="noExterior">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>No. Interior</mat-label>
+                  <input matInput type="text" formControlName="noInterior">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Colonia</mat-label>
+                  <input matInput type="text" formControlName="colonia">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Municipio</mat-label>
+                  <input matInput type="text" formControlName="municipio">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Ciudad</mat-label>
+                  <input matInput type="text" formControlName="ciudad">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Estado</mat-label>
+                  <input matInput type="text" formControlName="estado">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>C.P.</mat-label>
+                  <input matInput type="text" formControlName="cp">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Correo Facturación</mat-label>
+                  <textarea matInput formControlName="correoFac" rows="3" cols="40"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-md-2">
+                <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
+                  Credito
+                </mat-checkbox>
+                <mat-error *ngIf="rutaComprobante.touched && rutaComprobante.invalid">
+                  Cargar archivo de Comprobante de Pago.
+                </mat-error>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group" *ngIf="!credito.value">
+                  <mat-label>Anexar Comprobante de pago</mat-label>
+                  <mat-form-field>
+                    <input matInput formControlName="rutaComprobante">
+                  </mat-form-field>
+                  <input *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
                   <p *ngIf="temporalComprobante; else notShow" class="text-danger">
                     <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                    </a><br>
+                    <!-- ¡Archivo Temporal, debe guardar el registro del usuario para confirmar! -->
                   </p>
                   <ng-template #notShow>
                     <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
@@ -94,100 +148,131 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label><b>Correo Personal</b></label>
-                  <textarea matInput formControlName="correo" rows="3" cols="40" class="form-control"></textarea>
-                </div>
-              </div>
-              <!--/span-->
-              <div class="col-md-6">
-                <div class="form-group">
 
-                  <div class="form-group">
-                    <label><b>Correo Facturación</b></label>
-                    <textarea matInput formControlName="correoFac" rows="3" cols="40" class="form-control"></textarea>
-                  </div>
-                </div>
-              </div>
-              <!--/span-->
-            </div>
-            <h3 class="box-title m-t-40">Detalles del contenedor</h3>
+            <h3 class="box-title m-t-40">Detalles de la descarga</h3>
             <hr>
             <div class="row">
               <div class="col-md-3">
-                <div class="form-group">
-                  <label class="control-label"><b>Tamaño - Tipo</b></label>
-                  <mat-select #tipo class="form-control">
+                <mat-form-field>
+                  <mat-label>Correo </mat-label>
+                  <textarea matInput formControlName="correo" rows="3" cols="40"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 ">
+                <mat-form-field>
+                  <mat-label>Observaciones Descarga </mat-label>
+                  <textarea matInput formControlName="observaciones" rows="3" cols="40"></textarea>
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 ">
+                <mat-form-field>
+                  <mat-label>Booking </mat-label>
+                  <input matInput formControlName="blBooking">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <h3 class="box-title m-t-40">Detalles del contenedor</h3>
+            <hr>
+            <div class="row">
+              <div class="col-md-2">
+                <mat-form-field>
+                  <mat-label>Tamaño - Tipo</mat-label>
+                  <mat-select formControlName="tipoTemp">
                     <mat-option *ngFor="let tipo of tiposContenedor" [value]="tipo">
                       {{tipo}}
                     </mat-option>
                   </mat-select>
-                </div>
+                </mat-form-field>
+              </div>
+              <div class="col-md-1">
+                <mat-form-field>
+                  <mat-label>Grado</mat-label>
+                  <mat-select formControlName="gradoTemp">
+                    <mat-option *ngFor="let grado of grados" [value]="grado">
+                      {{grado}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
               <div class="col-md-2">
-                <div class="form-group">
-                  <label class="control-label"><b>Estado</b></label>
-                  <mat-select #estado class="form-control">
+                <mat-form-field>
+                  <mat-label>Estado</mat-label>
+                  <mat-select formControlName="estadoTemp">
                     <mat-option *ngFor="let estado of estadosContenedor" [value]="estado">
                       {{estado}}
                     </mat-option>
                   </mat-select>
-                </div>
+                </mat-form-field>
               </div>
-              <div class="col-md-2">
-                <div class="form-group">
-                  <label><b>Grado</b></label>
-                  <mat-select #grado class="form-control" tabindex="1">
-                    <mat-option *ngFor="let item of grados" [value]="item">
-                      {{item}}
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>Transportista</mat-label>
+                  <mat-select formControlName="transportistaTemp">
+                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista">
+                      {{transportista.razonSocial}}
                     </mat-option>
                   </mat-select>
-                </div>
+                </mat-form-field>
               </div>
               <div class="col-md-2">
-                <div class="form-group">
-                  <label class="control-label"><b>Añadir</b></label>
-                  <button (click)="addContenedor(tipo.value, estado.value, grado.value)" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
-                </div>
+                <mat-form-field>
+                  <mat-label>Patio</mat-label>
+                  <mat-select formControlName="patioTemp">
+                    <mat-option *ngFor="let patio of patios" [value]="patio">
+                      {{patio}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
+              <div class="col-md-2">
+                <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+              </div>
+            </div>
 
-              <!--/span-->
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <table matNativeControl class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th scope="col">#</th>
-                          <th scope="col">Tamaño - Tipo</th>
-                          <th scope="col">Estado </th>
-                          <th scope="col">Grado</th>
-                        </tr>
-                      </thead>
-                      <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
-                        <tr [formGroupName]="i">
-                          <th scope="row">{{i+1}}</th>
-                          <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
-                          <td>{{this.contenedores.controls[i].get('estado').value}}</td>
-                          <td>{{this.contenedores.controls[i].get('grado').value}}</td>
-                          <td>
-                            <button (click)="removeContenedor( i )" class="btn btn-danger">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <table matNativeControl class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tamaño - Tipo</th>
+                        <th scope="col">Estado </th>
+                        <th scope="col">Grado</th>
+                        <th scope="col">Transportista</th>
+                        <th scope="col">Patio</th>
+                      </tr>
+                    </thead>
+                    <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                      <tr [formGroupName]="i">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('peso').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('grado').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                        <td>
+                          <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                          <!-- <button *ngIf="aprobada" [routerLink]="['/papeleta',  this.contenedores.controls[i].get('maniobra').value ]" class="btn btn-success">
+                            <i class="fas fa-print"></i>
+                          </button>                           -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button>
-            <button type="button" routerLink="/solicitudes_carga" class="btn btn-inverse">Regresar</button>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save "></i>
+              Guardar
+            </button>
+            <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button>
           </div>
         </form>
         <p>Form value {{ regForm.value | json }} </p>

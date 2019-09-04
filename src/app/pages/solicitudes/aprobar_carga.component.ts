@@ -10,11 +10,11 @@ import swal from 'sweetalert';
 
 
 @Component({
-  selector: 'app-solicitudc-aprobar',
-  templateUrl: './solicitudC_aprobar.component.html',
+  selector: 'app-aprobar-carga',
+  templateUrl: './aprobar_carga.component.html',
   styles: []
 })
-export class SolicitudCAprobarComponent implements OnInit {
+export class AprobarCargaComponent implements OnInit {
   regForm: FormGroup;
   solicitud: Solicitud;
   usuario: Usuario;
