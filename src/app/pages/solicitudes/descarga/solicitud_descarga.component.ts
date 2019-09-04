@@ -39,9 +39,9 @@ export class SolicitudDescargaComponent implements OnInit {
   temporalComprobante = false;
   edicion = false;
   aprobada = false;
-  usuarioLogueado : any;
+  usuarioLogueado: any;
   navieraMELFI = true;
-  
+
 
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
@@ -126,8 +126,8 @@ export class SolicitudDescargaComponent implements OnInit {
       correoFac: ['', [Validators.required]],
       cp: [{value: '', disabled: true}],
       maniobraTemp: [''],
-      contenedorTemp:[''],
-      tipoTemp:[''],
+      contenedorTemp: [''],
+      tipoTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO_IMPORT],
       patioTemp: [PATIOS.POLIGONO],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '', '' , '', '', '', '') ]),
@@ -270,7 +270,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
   cargarSolicitud( id: string ) {
     this._SolicitudDService.cargarSolicitud( id ).subscribe( solicitud => {
-      
+
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);
@@ -316,8 +316,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarBuques(event) {
-    
-    if (event.value===ID_MELFI) {
+    if (event.value === ID_MELFI) {
       this._buqueService.getBuqueXNaviera( event.value )
       .subscribe( buques => this.buques = buques.buques);
       this.navieraMELFI = true;
@@ -331,7 +330,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarViajes(event) {
-    if (event.value!== undefined && event.value!== '') {
+    if (event.value !== undefined && event.value !== '') {
       this._viajeService.getViajes(null, null, null, event.value )
       .subscribe( res => this.viajes = res.viajes);
     }
@@ -516,11 +515,10 @@ export class SolicitudDescargaComponent implements OnInit {
       this.tipoTemp.setValue('');
     }
 
-      
   }
 
   cambiaManiobra (event){
-    //this.contenedorTemp.setValue(event.value.contenedor);
+    // this.contenedorTemp.setValue(event.value.contenedor);
     this.tipoTemp.setValue(event.value.tipo);
   }
 
@@ -537,7 +535,7 @@ export class SolicitudDescargaComponent implements OnInit {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value ===  undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
-          this.router.navigate(['/solicitud_descarga', this.regForm.get('_id').value]);
+          this.router.navigate(['/solicitudes/solicitud_descarga', this.regForm.get('_id').value]);
         }
         this.regForm.markAsPristine();
       });

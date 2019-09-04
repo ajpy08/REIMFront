@@ -24,13 +24,13 @@ import swal from 'sweetalert';
 
 export class SolicitudCargaComponent implements OnInit {
   regForm: FormGroup;
-  
+
   fileComprobante: File = null;
   temporalComprobante = false;
   edicion = false;
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
-  
+
   clientes: Cliente[] = [];
   tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
@@ -73,7 +73,7 @@ export class SolicitudCargaComponent implements OnInit {
       blBooking: ['', [Validators.required]],
       credito: ['', [Validators.required]],
       observaciones: [''],
-      rutaComprobante: [''],
+      rutaComprobante: ['', [Validators.required]],
       correo: [''],
       facturarA: ['', [Validators.required]],
       rfc: [{value: '', disabled: true}],
@@ -88,11 +88,11 @@ export class SolicitudCargaComponent implements OnInit {
       correoFac: ['', [Validators.required]],
       cp: [{value: '', disabled: true}],
       maniobraTemp: [''],
-      contenedorTemp:[''],
-      tipoTemp:[''],
+      contenedorTemp: [''],
+      tipoTemp: [''],
       gradoTemp: [''],
       transportistaTemp: [''],
-      estadoTemp: [ESTADOS_CONTENEDOR.VACIO_IMPORT],
+      estadoTemp: [ESTADOS_CONTENEDOR.VACIO],
       patioTemp: [PATIOS.POLIGONO],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '', '', '', '') ]),
       _id: [''],
@@ -117,7 +117,8 @@ export class SolicitudCargaComponent implements OnInit {
 
   addContenedor(tipo: string, peso: string, grado: string, maniobra: string,
     transportista: string, transportista2: string, patio: string, estatus: string): void {
-    this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra,transportista, transportista2, patio, estatus));
+      console.log('asadsadasd');
+    this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra, transportista, transportista2, patio, estatus));
   }
 
   removeContenedor( index: number ) {
@@ -221,14 +222,25 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);
       this.cargaClientes({value: solicitud.agencia});
-      this.regForm.controls['transportista'].setValue(solicitud.transportista);
+      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
-      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
-      this.regForm.controls['correoFac'].setValue(solicitud.correoFacturacion);
+      this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
+      this.regForm.controls['rfc'].setValue(solicitud.rfc);
+      this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
+      this.regForm.controls['calle'].setValue(solicitud.calle);
+      this.regForm.controls['noExterior'].setValue(solicitud.noExterior);
+      this.regForm.controls['noInterior'].setValue(solicitud.noInterior);
+      this.regForm.controls['colonia'].setValue(solicitud.colonia);
+      this.regForm.controls['municipio'].setValue(solicitud.municipio);
+      this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
+      this.regForm.controls['estado'].setValue(solicitud.estado);
+      this.regForm.controls['cp'].setValue(solicitud.cp);
+      this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
+      this.regForm.controls['estatus'].setValue(solicitud.estatus);
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.estado, element.grado,
                             element.maniobra, element.transportista, 
@@ -274,8 +286,12 @@ export class SolicitudCargaComponent implements OnInit {
     //   swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
     //   return;
     // }
+    if (this.tipoTemp.value === '' || this.tipoTemp.value === undefined) {
+      swal('Faltan datos', 'No ha seleccionado el tipo de contenedor.', 'error');
+      return;
+    }
     if (this.estadoTemp.value === '' || this.estadoTemp.value === undefined) {
-      swal('Faltan datos', 'No ha seleccionado patio destino', 'error');
+      swal('Faltan datos', 'No ha seleccionado el estado del contenedor', 'error');
       return;
     }
     if (this.gradoTemp.value === '' || this.gradoTemp.value === undefined) {
@@ -291,11 +307,12 @@ export class SolicitudCargaComponent implements OnInit {
       return;
     }
       this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value ,
-        undefined, this.transportistaTemp.value._id, '',
-        this.transportistaTemp.value.razonSocial, this.patioTemp.value);
+        undefined, this.transportistaTemp.value._id, 
+        this.transportistaTemp.value.razonSocial, this.patioTemp.value, '');
       this.contenedorTemp.setValue('');
       this.tipoTemp.setValue('');
   }
+
   onChangeCredito( event ) {
     if (event.checked) {
       if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
@@ -305,13 +322,13 @@ export class SolicitudCargaComponent implements OnInit {
       this.rutaComprobante.enable({ onlySelf : true});
     }
   }
-  
+
   onChangeFacturarA( event) {
     console.log(event);
     switch (event.value) {
       case 'Cliente':
         if (!this.cliente || this.cliente.value === '') {
-          swal('Error', 'No ha seleccionado el cliente','error');
+          swal('Error', 'No ha seleccionado el cliente', 'error');
           this.facturarA.setValue(null);
           return;
         } else {
@@ -340,7 +357,7 @@ export class SolicitudCargaComponent implements OnInit {
         break;
       case 'Agencia Aduanal':
           if (!this.agencia || this.agencia.value === '') {
-            swal('Error', 'No ha seleccionado la agencia aduanal','error');
+            swal('Error', 'No ha seleccionado la agencia aduanal', 'error');
             this.facturarA.setValue(null);
             return;
           } else {
@@ -385,16 +402,20 @@ export class SolicitudCargaComponent implements OnInit {
   }
   guardarSolicitud( ) {
     if (this.regForm.valid) {
-      this._SolicitudService.guardarSolicitud(this.regForm.value).subscribe(res => {
+      this.transportistaTemp.setValue(null);
+      this.estadoTemp.setValue(null);
+      this.maniobraTemp.setValue(null);
+      this._SolicitudService.guardarSolicitud(this.regForm.getRawValue()).subscribe(res => {
         this.fileComprobante = null;
         this.temporalComprobante = false;
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value ===  undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
-          this.router.navigate(['/solicitud_carga', this.regForm.get('_id').value]);
+          this.router.navigate(['/solicitudes/solicitud_carga', this.regForm.get('_id').value]);
         }
         this.regForm.markAsPristine();
       });
     }
   }
+
 }

@@ -14,7 +14,7 @@ export class SolicitudService {
     public http: HttpClient,
     public _usuarioService: UsuarioService) { }
 
-     //El campo agencias es un string de IDS separados por comas..
+     // El campo agencias es un string de IDS separados por comas..
     getSolicitudes( tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string, agencias?: string): Observable<any> {
       let params = new HttpParams();
       if (fIniAlta && fFinAlta) {
@@ -66,10 +66,15 @@ export class SolicitudService {
       }
     }
 
+    borrarSolicitud(id: string): Observable<any> {
+      let url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.delete(url)
+          .pipe(map(resp => swal('Borrado Solicitudes', 'Eliminado Correctamente', 'success')));
+  }
 
 
 
-    
     apruebaSolicitudDescarga(solicitud: Solicitud): Observable<any> {
       let url = URL_SERVICIOS + '/solicitud/apruebadescarga';
       url += '/' + solicitud._id;
@@ -86,7 +91,7 @@ export class SolicitudService {
     }
 
     apruebaSolicitudDescargaContenedor(idSol: string, idCont: string) : Observable <any>{
-      let url = URL_SERVICIOS + '/solicitud/apruebadescarga/'+ idSol + '/contenedor/'+idCont;
+      let url = URL_SERVICIOS + '/solicitud/apruebadescarga/' + idSol + '/contenedor/'+idCont;
       url += '?token=' + this._usuarioService.token;
       return this.http.put(url,idSol)
       .pipe(map((resp: any) => {
@@ -132,14 +137,7 @@ export class SolicitudService {
 
 
 
-  borrarSolicitud(id: string): Observable<any> {
 
-      let url = URL_SERVICIOS + '/solicitudD/' + id;
-      url += '?token=' + this._usuarioService.token;
-
-      return this.http.delete(url)
-          .pipe(map(resp => swal('Prealta Borrado', 'Eliminado Correctamente', 'success')));
-  }
 
   // cambioEstado(solicitud: Solicitud): Observable<any> {
 
