@@ -109,6 +109,8 @@ import {
     MatIconModule
 } from '@angular/material';
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
+import { InventarioComponent } from './inventario/inventario.component';
+import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
 
 @NgModule({
     declarations: [
@@ -175,7 +177,9 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
         RegisterComponent,
         ReparacionesComponent,
         ReparacionComponent,
-        PapeletaComponent
+        PapeletaComponent,
+        InventarioComponent,
+        ContenedoresLRComponent
     ],
     exports: [
         DashboardComponent

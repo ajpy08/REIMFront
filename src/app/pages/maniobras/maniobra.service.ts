@@ -97,9 +97,22 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
-  getManiobrasLavadoReparacion(desde: number = 0, contenedor?: string ): Observable<any> {
+  getManiobrasLavadoReparacion(naviera: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/lavado_reparacion/';
-    return this.http.get( url );
+    let params = new HttpParams();
+    if (naviera)  {
+      params = params.append('naviera', naviera);
+    }
+    return this.http.get(url, {params: params });
+  }
+
+  getManiobrasConLavadoReparacion(naviera: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/LR/';
+    let params = new HttpParams();
+    if (naviera)  {
+      params = params.append('naviera', naviera);
+    }
+    return this.http.get(url, {params: params });
   }
 
   asignaSolicitud( maniobra: Maniobra ): Observable<any> {

@@ -86,6 +86,8 @@ import { ManiobraComponent } from './maniobras/maniobra.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { AddcontainersComponent } from './addcontainers/addcontainers.component';
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
+import { InventarioComponent } from './inventario/inventario.component';
+import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
 
 
 
@@ -212,6 +214,18 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Navieras' }
     },
     {path: 'naviera/:id', component: NavieraComponent, canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
+    {
+        path: 'inventario',
+        component: InventarioComponent,
+        canActivate: [ AdminGuard ],
+        data: { titulo: 'Inventario de Contenedores Disponibles' }
+    },
+    {
+        path: 'contenedoresLR',
+        component: ContenedoresLRComponent,
+        canActivate: [ AdminGuard ],
+        data: { titulo: 'Contenedores con Lavado / Reparacion (Naviera)' }
+    },
     {
         path: 'contenedoresDisponibles',
         component: ContenedoresDisponiblesComponent,
