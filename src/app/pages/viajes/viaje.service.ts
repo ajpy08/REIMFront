@@ -37,14 +37,14 @@ export class ViajeService {
     if (buque)  {
       params = params.append('buque', buque);
     }
-    // console.log(params.toString());
+    //console.log(params.toString());
     const url = URL_SERVICIOS + '/viajes';
     return this.http.get(url, {params: params });
   }
 
   getViajesA(anio: string): Observable<any> {
     const url = URL_SERVICIOS + '/viajes/anio/'+ anio;
-    console.log( url )
+    //console.log( url )
     return this.http.get(url);
   }
 
