@@ -19,3 +19,7 @@
 .table {
     margin-top: green
 }
+
+ngx-gallery /deep/ .ngx-gallery-arrow {
+    color: black
+}

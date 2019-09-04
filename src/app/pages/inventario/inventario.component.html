@@ -1,0 +1,114 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+    <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+            <strong>Cargando</strong>
+            <br>
+            <i class="fas fa-refresh fa-spin fa-2x"></i>
+            <br>
+            <span>Espere por favor</span>
+        </div>
+    </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-right">
+                    <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+                        <i class="fas fa-file-excel"></i> Exportar Excel
+                    </button>
+                    <button [routerLink]="['/buque2','nuevo']" type="button"
+                        class="btn btn-info waves-effect waves-light m-r-5">
+                        <i class="fa fa-plus"></i>
+                        Añadir nuevo buque
+                    </button> -->
+                </div>
+                <h3 class="card-title">Dispobibles: ( <small>{{totalRegistros}}</small> )</h3>
+                <div class="example-header mat-elevation-z8">
+                    <mat-form-field>
+                        <input matInput (keyup)="applyFilter($event.target.value)"
+                            placeholder="Escriba algo para filtrar">
+                    </mat-form-field>
+                </div>
+                <br>
+                <div class="example-container mat-elevation-z8">
+                </div>
+                <div class="example-container mat-elevation-z8">
+                    <mat-table #table [dataSource]="dataSource" matSort>
+                        <!-- <ng-container matColumnDef="actions">
+                            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                            <mat-cell *matCellDef="let buque">
+                                <button [routerLink]="['/buque2', buque._id ]" class="btn btn-primary m-r-5">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button (click)="borrarBuque( buque )" class="btn btn-danger m-r-5">
+                                    <i class="fa fa-trash-o"></i>
+                                </button> 
+                            </mat-cell>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="EntradaPatio">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                        </ng-container>
+
+
+                        <ng-container matColumnDef="Viaje">
+                            <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Buque">
+                            <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="VigenciaTemporal">
+                            <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Temporal">
+                            <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> 
+                                <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                                    <img src="\assets\images\icon\pdf_32x32.png">
+                                  </a>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Contenedor">
+                            <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Tipo">
+                            <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Estado">
+                            <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Grado">
+                            <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="fAlta">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>FAlta</mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy'}} </mat-cell>
+                        </ng-container> -->
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+                    </mat-paginator>                    
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>

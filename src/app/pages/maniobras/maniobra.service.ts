@@ -73,6 +73,18 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
+
+
+  getManiobrasConLavadoReparacion(naviera: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/LR/';
+    let params = new HttpParams();
+    if (naviera)  {
+      params = params.append('naviera', naviera);
+    }
+    return this.http.get(url, {params: params });
+
+  }
+
   asignaSolicitud( maniobra: Maniobra ): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/asigna_solicitud';
     url += '/' + maniobra._id;
