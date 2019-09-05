@@ -32,7 +32,7 @@ export class BuqueService {
     let url = URL_SERVICIOS + '/buque/naviera/' + id;
     return this.http.get(url);
   }
-  
+
   borrarBuque(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/buque/' + id;
     url += '?token=' + this._usuarioService.token;

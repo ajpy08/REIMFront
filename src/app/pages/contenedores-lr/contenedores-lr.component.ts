@@ -36,7 +36,7 @@ export class ContenedoresLRComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id, 
+    this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id,
       this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
       .subscribe(maniobras => {
         //console.log(maniobras.maniobras)
