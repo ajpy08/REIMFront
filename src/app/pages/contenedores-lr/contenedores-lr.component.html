@@ -85,11 +85,14 @@
             <ng-container matColumnDef="FotosLavado">
               <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_lavado'}]"
-                  class="btn btn-primary">
+                <!-- <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
                   <i class="fas fa-camera-retro"></i>
                   Fotos
-                </button>
+                </button> -->
+                <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+                <i class="fas fa-camera-retro"></i>
+                Fotos
+              </button>
               </mat-cell>
             </ng-container>
 
@@ -101,8 +104,7 @@
             <ng-container matColumnDef="FotosReparacion">
               <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_reparacion'}]"
-                  class="btn btn-primary">
+                <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
                   <i class="fas fa-camera-retro"></i>
                   Fotos
                 </button>

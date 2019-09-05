@@ -81,10 +81,14 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
+                <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
                   <i class="fas fa-camera-retro"></i>
                   Fotos Lavado
-                </button>
+                </button> -->
+                <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+                  <i class="fas fa-camera-retro"></i>
+                  Fotos Lavado
+              </button>
               </div>
             </div>
 
@@ -105,11 +109,14 @@
               </div>
               <div class="col-md-4">
                 <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
-                <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
+                <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
                       Fotos Reparación
-                    </button>
-
+                    </button> -->
+                <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos Reparacion 
+                  </button>
               </div>
             </div>
             <div class="row">

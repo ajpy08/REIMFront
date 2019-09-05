@@ -40,20 +40,29 @@
                                 <td>{{maniobra.transportista?.razonSocial}}</td> -->
                 <td>{{maniobra.contenedor}}</td>
                 <td>{{maniobra.tipo}}</td>
-                <td>{{maniobra.estado}}</td>
+                <td>{{maniobra.peso}}</td>
                 <td>{{maniobra.cliente?.razonSocial}}</td>
                 <td>{{maniobra.agencia?.razonSocial}}</td>
                 <td>{{maniobra.lavado}}
-                  <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
+                  <!-- <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
                                         <i class="fas fa-camera-retro"></i>
                                         Fotos 
-                                    </button>
+                                    </button> -->
+                  <button [routerLink]="['/fotos',  maniobra._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos 
+                  </button>
+
                 </td>
                 <td>
-                  <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
+                  <!-- <button [routerLink]="['/fotos', 'params', {id: maniobra._id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
                                         <i class="fas fa-camera-retro"></i>
                                         Fotos
-                                    </button>
+                                    </button> -->
+                  <button [routerLink]="['/fotos',  maniobra._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                                      <i class="fas fa-camera-retro"></i>
+                                      Fotos 
+                                  </button>
                   <p *ngFor="let rep of maniobra.reparaciones">
                     {{rep.reparacion}}
                   </p>

@@ -45,6 +45,20 @@ export class SolicitudService {
       .pipe(map((resp: any) => resp.solicitud));
     }
 
+    guardaViajeBuque(solicitud: Solicitud) {
+      console.log(solicitud);
+      let url = URL_SERVICIOS;
+      if (solicitud._id) {
+        url += '/solicitudes/solicitud/' + solicitud._id + '/guarda_buque_viaje';
+        url += '?token=' + this._usuarioService.token;
+        return this.http.put(url, solicitud)
+        .pipe(map((resp: any) => {
+        swal('Datos Asignados con éxito', 'Datos Asignados con éxito', 'success');
+        return resp.solicitud;
+      }));
+      }
+    }
+
     guardarSolicitud(solicitud: Solicitud): Observable<any> {
       console.log(solicitud);
       let url = URL_SERVICIOS + '/solicitudes/solicitud';
@@ -83,10 +97,6 @@ export class SolicitudService {
       .pipe(map((resp: any) => {
         swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
         return resp.solicitud;
-      }),
-      catchError(err => {
-        swal(err.error.mensaje, err.error.errors.message, 'error');
-        return throwError(err);
       }));
     }
 

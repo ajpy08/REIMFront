@@ -78,10 +78,9 @@ export class SolicitudDescargaComponent implements OnInit {
 
     ngOnInit() {
       this.usuarioLogueado = this._usuarioService.usuario;
-      if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+      if (this.usuarioLogueado.role === 'ADMIN_ROLE') {
         this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
-      }
-      else {
+      } else {
         this.agencias = this.usuarioLogueado.empresas;
       }
       this._navieraService.getNavieras().subscribe( navieras => { this.navieras = navieras.navieras; });
@@ -278,10 +277,11 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.controls['naviera'].setValue(solicitud.naviera);
       this.cargarBuques({value : solicitud.naviera});
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      this.regForm.controls['viaje'].setValue(solicitud.viaje);
       this.regForm.controls['buque'].setValue(solicitud.buque);
+      this.regForm.controls['nombreBuque'].setValue(solicitud.nombreBuque);
       this.cargarViajes({value: solicitud.buque});
       this.regForm.controls['viaje'].setValue(solicitud.viaje);
+      this.regForm.controls['noViaje'].setValue(solicitud.noViaje);
       this.cargarContenedores({value: solicitud.viaje});
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
@@ -370,7 +370,7 @@ export class SolicitudDescargaComponent implements OnInit {
     switch (event.value) {
       case 'Cliente':
         if (!this.cliente || this.cliente.value === '') {
-          swal('Error', 'No ha seleccionado el cliente','error');
+          swal('Error', 'No ha seleccionado el cliente', 'error');
           this.facturarA.setValue(null);
           return;
         } else {
@@ -489,15 +489,13 @@ export class SolicitudDescargaComponent implements OnInit {
           encontrado = true;
         }
       });
-    } else { 
+    } else {
       this.contenedores.controls.forEach(m => {
         if ( m.get('contenedor').value === this.contenedorTemp ) {
           encontrado = true;
         }
       });
     }
-    
-
     if (encontrado) {
       swal('Contenedor Duplicado', 'El contenedor que intenta agregar ya se encuentra en la lista.', 'error');
       return;

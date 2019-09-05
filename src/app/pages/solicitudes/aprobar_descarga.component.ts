@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Solicitud } from './solicitud.models';
-import { SolicitudService } from '../../services/service.index';
+import { SolicitudService, BuqueService, ViajeService } from '../../services/service.index';
 import { ManiobraService } from '../maniobras/maniobra.service';
+import { Buque } from '../../models/buques.models';
+import { Viaje } from '../viajes/viaje.models';
 import { Usuario } from '../../models/usuarios.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,11 +19,17 @@ import { catchError } from 'rxjs/operators';
 export class AprobarDescargaComponent implements OnInit {
   regForm: FormGroup;
   usuario: Usuario;
+  viajeEncontrado = false;
+  buqueEncontrado = false;
   solicitudCorrecta = false;
+  buques: Buque[] = [];
+  viajes: Viaje[] = [];
 
   constructor( public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
     private _ManiobraService: ManiobraService,
+    private _BuqueService: BuqueService,
+    private _viajeService: ViajeService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
     private fb: FormBuilder ) {
@@ -44,9 +51,9 @@ export class AprobarDescargaComponent implements OnInit {
       idagencia: [{value: '', disabled: false}],
       agencia: [{value: '', disabled: true}],
       naviera: [{value: '', disabled: true}],
-      buque: [{value: '', disabled: true}],
+      buque: [{value: '', disabled: false}],
       nombreBuque: [{value: '', disabled: true}],
-      viaje: [{value: '', disabled: true}],
+      viaje: [{value: '', disabled: false}],
       noViaje: [{value: '', disabled: true}],
       blBooking: [{value: '', disabled: true}],
       idcliente: [{value: '', disabled: false}],
@@ -200,7 +207,6 @@ export class AprobarDescargaComponent implements OnInit {
     return this.regForm.get('correoFac');
   }
 
-
   cargarSolicitud( id: string ) {
     this._SolicitudService.getSolicitudIncludes( id ).subscribe( solicitud => {
       console.log(solicitud);
@@ -212,16 +218,29 @@ export class AprobarDescargaComponent implements OnInit {
       this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
       this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      if (solicitud.viaje) {
-        this.regForm.controls['viaje'].setValue(solicitud.viaje.viaje);
-      }
-
-      this.regForm.controls['noViaje'].setValue(solicitud.noViaje);
       if (solicitud.buque) {
-        this.regForm.controls['buque'].setValue(solicitud.buque.nombre);
+        this._BuqueService.getBuqueXNaviera( solicitud.naviera._id)
+        .subscribe( buques => {
+          this.buques = buques.buques;
+          this.regForm.controls['buque'].setValue(solicitud.buque._id);
+          this.buque.disable({onlySelf : true});
+          this.cargarViajes({value: solicitud.buque._id, viaje: solicitud.viaje ? solicitud.viaje._id : ''});
+        });
+      } else {
+        this._BuqueService.getBuqueXNaviera( solicitud.naviera._id)
+        .subscribe( buques => {
+          this.buques = buques.buques;
+          const buq = this.buques.find(x => x.nombre === solicitud.nombreBuque);
+          if (buq) {
+            this.buque.setValue(buq._id);
+            this.buqueEncontrado = true;
+            this.cargarViajes({value: buq._id});
+          }
+        });
       }
-
       this.regForm.controls['nombreBuque'].setValue(solicitud.nombreBuque);
+      this.regForm.controls['noViaje'].setValue(solicitud.noViaje);
+
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);
@@ -243,15 +262,44 @@ export class AprobarDescargaComponent implements OnInit {
       this.regForm.controls['cp'].setValue(solicitud.cp);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.maniobra.contenedor, element.maniobra.tipo, element.peso,
-                          element.maniobra._id, element.transportista._id, element.maniobra.estatus,
-                          element.transportista.razonSocial, element.maniobra.folio, element.maniobra.solicitud, element.patio);
+        this.addContenedor(element.contenedor, element.tipo, element.peso,
+                          element.maniobra ? element.maniobra._id : '', element.transportista._id,
+                          element.maniobra ? element.maniobra.estatus : '', element.transportista.razonSocial,
+                          element.maniobra ? element.maniobra.folio : '' ,
+                          element.maniobra ? element.maniobra.solicitud : '' , element.patio);
       });
 
     });
   }
 
+  cargarViajes(event) {
+    if (event.value !== undefined && event.value !== '') {
+      this._viajeService.getViajes(null, null, null, event.value )
+      .subscribe( res => {
+        this.viajes = res.viajes;
+        if (event.viaje !== undefined && event.viaje !== '') {
+          this.viaje.setValue( event.viaje );
+          this.viaje.disable({onlySelf : true});
+
+        } else {
+          const via = this.viajes.find(x => x.viaje === this.noViaje.value);
+          if (via) {
+            this.viaje.setValue(via._id);
+            this.viajeEncontrado = true;
+          }
+        }
+
+      });
+    }
+  }
+
+  guardaViajeBuque() {
+      this._SolicitudService.guardaViajeBuque({ _id: this._id.value, buque: this.buque.value, viaje: this.viaje.value}).subscribe(res => {
+        this.router.navigate(['/solicitudes/aprobaciones/aprobar_descarga/', this.regForm.get('_id').value]);
+      });
+  }
   validaSolicitud( cont ) {
+    console.log('aqui');
     if (cont.get('solicitud').value === this._id.value) {
       this.solicitudCorrecta = this.solicitudCorrecta && true;
       return;
@@ -273,6 +321,21 @@ export class AprobarDescargaComponent implements OnInit {
       });
   }
 
+  altaContenedor( cont ) {
+    if (!cont.get('solicitud').value) {
+      this._viajeService.addContenedor(this.viaje.value,
+                                      cont.get('contenedor').value,
+                                      cont.get('tipo').value,
+                                      cont.get('peso').value, '')
+      .subscribe(maniobra => {
+        console.log(maniobra);
+        cont.get('maniobra').setValue(maniobra.maniobra._id);
+        cont.get('folio').setValue(maniobra.maniobra.folio);
+      });
+    }
+  }
+
+
   validaSolicitudes() {
     this.solicitudCorrecta = true;
     this.contenedores.controls.forEach( cont => {
@@ -286,6 +349,8 @@ export class AprobarDescargaComponent implements OnInit {
       .subscribe(resp => {});
     }
   }
+
+
 
 
   // apruebaSolicitud( ) {

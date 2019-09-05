@@ -37,14 +37,14 @@ export class ViajeService {
     if (buque)  {
       params = params.append('buque', buque);
     }
-    //console.log(params.toString());
+    // console.log(params.toString());
     const url = URL_SERVICIOS + '/viajes';
     return this.http.get(url, {params: params });
   }
 
   getViajesA(anio: string): Observable<any> {
-    const url = URL_SERVICIOS + '/viajes/anio/'+ anio;
-    //console.log( url )
+    const url = URL_SERVICIOS + '/viajes/anio/' + anio;
+    // console.log( url )
     return this.http.get(url);
   }
 
@@ -54,7 +54,6 @@ export class ViajeService {
   }
 
   guardarViaje(viaje: Viaje): Observable<any> {
-    
     if (viaje._id) { // actualizando
       return this.actualizaViaje(viaje);
     } else {// creando
@@ -91,8 +90,9 @@ export class ViajeService {
   }
 
   addContenedor(id: string, contenedor: string, tipo: string, peso: string, destinatario: string): Observable<any> {
-    let url = URL_SERVICIOS + '/viajes/viaje/addcontenedor/' + id + '&' + contenedor + '&' + tipo + '&' + peso + '&' + destinatario;
+    let url = URL_SERVICIOS + '/viajes/viaje/' + id + '/addcontenedor';
     url += '?token=' + this._usuarioService.token;
+    url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario;
     return this.http.put(url, '')
       .pipe(map((resp: any) => {
         swal('Contenedor Agregado con exito', 'success');

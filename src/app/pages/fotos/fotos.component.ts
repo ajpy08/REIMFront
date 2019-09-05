@@ -47,7 +47,7 @@ export class FotosComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fotosPipe: FotosPipe,
     private usuarioService: UsuarioService) {
-    activatedRoute.params.subscribe();
+
   }
 
   ngOnInit() {
@@ -59,8 +59,10 @@ export class FotosComponent implements OnInit {
     }
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.selected = this.activatedRoute.snapshot.paramMap.get('opcion');
-
+    // this.selected = this.activatedRoute.snapshot.params.get('opcion');
+    this.selected = this.activatedRoute.snapshot.queryParams['opcion'];
+    console.log(this.id);
+    console.log(this.selected);
     this.cargarManiobra(this.id);
     this.cargarFotos(this.id, "L");
     this.cargarFotos(this.id, "R");

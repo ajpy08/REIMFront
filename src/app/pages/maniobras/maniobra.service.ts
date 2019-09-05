@@ -94,7 +94,6 @@ export class ManiobraService {
     if (fechaLlegadaFin)  {
       params = params.append('fechaLlegadaFin', fechaLlegadaFin);
     }
-    
     return this.http.get(url, {params: params });
   }
 

@@ -20,14 +20,39 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Buque</mat-label>
-                  <input matInput formControlName="buque" type="text">
+                  <mat-select formControlName="buque" type="text" (selectionChange)="cargarViajes($event)">
+                    <mat-option *ngFor="let buque of buques" [value]="buque._id">
+                      {{buque.nombre}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Buque A.A.</mat-label>
+                  <input matInput formControlName="nombreBuque" type="text">
+                </mat-form-field>
+                <div *ngIf="buque.enabled && !buqueEncontrado">El buque no ha sido encontrado en nuestros registros</div>
+                <div *ngIf="buque.enabled">
+                  <button type="button" class="btn btn-primary" (click)="guardaViajeBuque()">Asignar Buque</button>
+                </div>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Viaje</mat-label>
-                  <input matInput formControlName="viaje" type="text">
+                  <mat-select formControlName="viaje" type="text">
+                    <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                      {{viaje.viaje}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
+                <mat-form-field>
+                  <mat-label>No. Viaje (A.A.)</mat-label>
+                  <input matInput formControlName="noViaje" type="text">
+                </mat-form-field>
+                <div *ngIf="viaje.enabled && !viajeEncontrado">El viaje no ha sido encontrado en nuestros registros</div>
+
+                <div *ngIf="viaje.enabled">
+                  <button type="button" class="btn btn-primary" (click)="guardaViajeBuque()">Asignar Viaje</button>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -168,6 +193,7 @@
                       <th scope="col">Estado</th>
                       <th scope="col">Transportista</th>
                       <th scope="col">Patio</th>
+                      <th scope="col">Encontrado</th>
                       <th scope="col">Folio</th>
                       <th scope="col">Validada</th>
                       <th scope="col"></th>
@@ -181,6 +207,14 @@
                       <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                       <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
                       <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                      <td>
+                        <img *ngIf="contenedores.controls[i].get('maniobra').value" src="../../../assets/images/check_32x32.png">
+                        <img *ngIf="!contenedores.controls[i].get('maniobra').value" src="../../../assets/images/cancel_32x32.png">
+                        <button type="button" *ngIf="!contenedores.controls[i].get('maniobra').value" class="btn btn-primary btn-success" (click)="altaContenedor( this.contenedores.controls[i] )"> 
+                          <i class="fa fa-check"></i> 
+                          Alta Contenedor
+                        </button>
+                      </td>
                       <td>{{this.contenedores.controls[i].get('folio').value}}</td>
                       <td><img *ngIf="contenedores.controls[i].get('solicitud').value" src="../../../assets/images/check_32x32.png"></td>
                       <td>
