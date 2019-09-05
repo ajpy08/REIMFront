@@ -16,6 +16,10 @@ export class ContenedoresLRComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
   usuarioLogueado: Usuario;
+  buque: string;
+  viaje: string;
+  fechaLlegadaInicio: string;
+  fechaLlegadaFin: string
 
   displayedColumns = ['Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
   dataSource: any;
@@ -32,9 +36,10 @@ export class ContenedoresLRComponent implements OnInit {
 
   cargarManiobras() {
     this.cargando = true;
-    this.maniobraService.getManiobrasLavadoReparacion(this.usuarioLogueado.empresas[0]._id)
+    this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id, 
+      this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
       .subscribe(maniobras => {
-        console.log(maniobras.maniobras)
+        //console.log(maniobras.maniobras)
         this.dataSource = new MatTableDataSource(maniobras.maniobras);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

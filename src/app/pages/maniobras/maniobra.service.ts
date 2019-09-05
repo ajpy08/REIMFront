@@ -68,21 +68,34 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
-  getManiobrasGral(viaje?: string, estado?: string, cargaDescarga?: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + estado + '&' + cargaDescarga;
+  getManiobrasGral(viaje?: string, peso?: string, cargaDescarga?: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + peso + '&' + cargaDescarga;
+    //console.log(url)
     return this.http.get( url );
   }
 
 
 
-  getManiobrasConLavadoReparacion(naviera: string ): Observable<any> {
+  getManiobrasConLavadoReparacion(naviera: string, buque: string, viaje: string, fechaLlegadaInicio: string, fechaLlegadaFin: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/LR/';
     let params = new HttpParams();
     if (naviera)  {
       params = params.append('naviera', naviera);
     }
+    if (buque)  {
+      params = params.append('buque', buque);
+    }
+    if (viaje)  {
+      params = params.append('viaje', viaje);
+    }
+    if (fechaLlegadaInicio)  {
+      params = params.append('fechaLlegadaInicio', fechaLlegadaInicio);
+    }
+    if (fechaLlegadaFin)  {
+      params = params.append('fechaLlegadaFin', fechaLlegadaFin);
+    }
+    
     return this.http.get(url, {params: params });
-
   }
 
   asignaSolicitud( maniobra: Maniobra ): Observable<any> {
@@ -168,14 +181,12 @@ export class ManiobraService {
 
 
   cargarManiobras(desde: number = 0): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
     return this.http.get( url )
     .pipe(map( (resp: any) => {
 
       this.totalManiobras = resp.total;
-      console.log(resp.maniobras);
+      //console.log(resp.maniobras);
     return resp.maniobras;
     }));
   }
@@ -186,16 +197,13 @@ export class ManiobraService {
 
     let url = URL_SERVICIOS + '/maniobra/' + id;
     url += '?token=' + this._usuarioService.token;
-
     return this.http.delete( url )
                 .pipe(map( resp => swal('Maniobra Borrado', 'Eliminado correctamente', 'success') ));
 
   }
 
   guardarManiobra( maniobra: Maniobra ): Observable<any> {
-
     let url = URL_SERVICIOS + '/maniobra';
-
     if ( maniobra._id ) {
       // actualizando
       url += '/' + maniobra._id;
@@ -227,8 +235,6 @@ export class ManiobraService {
 
   }
   buscarManiobra( termino: string ): Observable<any> {
-
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/busqueda/coleccion/maniobras/' + termino;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.maniobras ));
@@ -247,7 +253,6 @@ export class ManiobraService {
   buscarManiobraFecha( fechaIncio: string, fechaFin: string ): Observable<any> {
   console.log(fechaIncio)
   console.log(fechaFin)
-    // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.maniobras ));
