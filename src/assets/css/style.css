@@ -829,7 +829,8 @@ Labels
 
 .label-reim {
     background-color: #ffb22b;
-    color: #313388;
+    /* color: #313388; */
+    color: #002C77;
     font-weight: 900;
 }
 
