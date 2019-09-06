@@ -2,12 +2,17 @@ import {RouterModule, Routes} from '@angular/router';
 // import { PagesComponent } from './pages.component';
 
 
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { ProfileComponent } from './profile/profile.component';
 
 // Catalogos Generales
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioComponent } from './usuarios/usuario.component';
 import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 
+import { ReparacionesComponent } from './reparaciones/reparaciones.component';
+import { ReparacionComponent } from './reparaciones/reparacion.component';
 
 
 
@@ -32,10 +37,7 @@ import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_conte
 import { VaciosComponent } from './maniobras/vacios.component';
 
 
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
-import { ProfileComponent } from './profile/profile.component';
 
 
 import { OperadoresComponent } from './operadores/operadores.component';
@@ -83,8 +85,7 @@ import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
 import { Buques2Component } from './buques2/buques2.component';
 import { Buque2Component } from './buques2/buque2.component';
-import { ReparacionesComponent } from './reparaciones/reparaciones.component';
-import { ReparacionComponent } from './reparaciones/reparacion.component';
+
 
 
 // Guards
@@ -107,6 +108,9 @@ const pagesRoutes: Routes = [
         component: DashboardComponent,
         data: { titulo: 'Dashboard' }
     },
+    {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},
+
+    {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
 
     // CATALOGOS GENERALES
     {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
@@ -114,7 +118,17 @@ const pagesRoutes: Routes = [
     {path: 'usuarios/usuario/:id/resetPass', component: UsuarioResetPassComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Reseteo de contraseña.'}},
 
+    {path: 'reparaciones', component: ReparacionesComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Reparaciones' }},
+    {path: 'reparaciones/reparacion/:id', component: ReparacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
+
+    
+    {
+        path: 'buques2',
+        component: Buques2Component,
+        canActivate: [ AdminGuard ],
+        data: { titulo: 'Mantenimiento de Buques' }
+    },
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
@@ -134,8 +148,6 @@ const pagesRoutes: Routes = [
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
-    {path: 'account-settings', component: AccountSettingsComponent, data: {titulo: 'Configuración de la cuenta'}},
-    {path: 'profile', component: ProfileComponent, data: {titulo: 'Mi perfil'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
 
 
@@ -270,19 +282,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Buques' }
     },
     {path: 'buque/:id', component: BuqueComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
-    {
-        path: 'reparaciones',
-        component: ReparacionesComponent,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Mantenimiento de Reparaciones' }
-    },
-    {path: 'reparacion/:id', component: ReparacionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
-    {
-        path: 'buques2',
-        component: Buques2Component,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Mantenimiento de Buques' }
-    },
+    
     {path: 'buque2/:id', component: Buque2Component,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     ];

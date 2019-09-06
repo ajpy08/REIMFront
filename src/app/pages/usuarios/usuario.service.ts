@@ -130,20 +130,13 @@ export class UsuarioService {
                 .pipe(map( (resp: any) => resp.usuario ));
   }
 
+  getUsuarioConIncludes( id: string ): Observable<any> {
+    const url = URL_SERVICIOS + '/usuarios/usuario/' + id + '/includes';
+    return this.http.get( url )
+                .pipe(map( (resp: any) => resp.usuario ));
+  }
+
   subirFotoTemporal(archivo: File ): Observable<any> {
-    // tslint:disable-next-line:prefer-const
-
-    //   // if (!archivo) {
-  //   //   this.fotoTemporal = null;
-  //   //   return;
-  //   // }
-  //   if (archivo.type.indexOf('image') < 0 && archivo.type.indexOf('pdf') < 0) {
-  //    swal('Solo Archivos De Imagen', 'El archivo seleccionado no tiene formato Imagen', 'error');
-  //    this.fotoTemporal = null;
-  //    return;
-  //  }
-  //      this.fotoTemporal = archivo;
-
     const formData = new FormData();
     formData.append('file', archivo, archivo.name);
     let url = URL_SERVICIOS + '/uploadFileTemp';
@@ -151,10 +144,6 @@ export class UsuarioService {
          .pipe(map( (resp: any) => {
            swal('Archivo Cargado', resp.nombreArchivo, 'success');
            return resp.nombreArchivo;
-         }),
-         catchError( err => {
-           swal( err.error.mensaje, err.error.errors.message, 'error' );
-           return throwError(err);
          }));
    }
 
@@ -167,23 +156,18 @@ export class UsuarioService {
   }
 
   altaUsuario( usuario: Usuario ): Observable<any> {
-    let url = URL_SERVICIOS + '/usuarios';
+    let url = URL_SERVICIOS + '/usuarios/usuario';
     url += '?token=' + this.token;
     return this.http.post( url, usuario )
             .pipe(map( (resp: any) => {
               swal('Usuario creado', usuario.email, 'success' );
               return resp.usuario;
-            }),
-            catchError( err => {
-              console.log(err);
-              swal( err.error.mensaje, err.error.errors.message, 'error' );
-              return throwError(err);
             }));
    }
 
 
 actualizarUsuario(usuario: Usuario) {
-  let url = URL_SERVICIOS + '/usuarios/' + usuario._id;
+  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id;
   url += '?token=' + this.token;
   return this.http.put( url, usuario )
             .pipe(map( (resp: any) => {
@@ -192,14 +176,24 @@ actualizarUsuario(usuario: Usuario) {
                       this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
-                    //swal('Usuario actualizado', usuario.img, 'success' );
                     return true;
-                  }),
-                  catchError( err => {
-                    swal( err.error.mensaje, err.error.errors.message, 'error' );
-                    return throwError(err);
                   }));
 
+}
+
+actualizaPerfil(usuario: Usuario)
+{
+  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id+'/perfil';
+  url += '?token=' + this.token;
+  return this.http.put( url, usuario )
+            .pipe(map( (resp: any) => {
+                    if ( usuario._id === this.usuario._id ) {
+                      let usuarioDB: Usuario = resp.usuario;
+                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                    }
+                    swal('Usuario actualizado', usuario.nombre, 'success' );
+                    return true;
+                  }));
 }
 
 resetPass( usuario: Usuario ): Observable<any> {
@@ -213,10 +207,6 @@ resetPass( usuario: Usuario ): Observable<any> {
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
                     return true;
-                  }),
-                  catchError( err => {
-                    swal( err.error.mensaje, err.error.errors.message, 'error' );
-                    return throwError(err);
                   }));
 }
 
@@ -225,10 +215,17 @@ habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean) : Observable<any> {
   url += '?token=' + this.token;
   return this.http.put( url, {activo: act} )
             .pipe(map( (resp: any) => {
-                    swal('Usuario actualizado', usuario.nombre, 'success' );
+              if ( usuario._id === this.usuario._id ) {
+                let usuarioDB: Usuario = resp.usuario;
+                this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+              }
+                    swal('Cambio de estado del usuario realizado con éxito', usuario.nombre, 'success' );
                     return true;
                   }));
 }
+
+
+
 cambiarImagen( archivo: File, id: string ) {
 
     // this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )

@@ -7,13 +7,21 @@ import { CommonModule } from '@angular/common';
 
 // MODULES
 import { DashboardComponent } from './dashboard/dashboard.component';
+// import { PagesComponent } from './pages.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { ProfileComponent } from './profile/profile.component';
 
 // Catalogos Generales
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { UsuarioComponent } from './usuarios/usuario.component';
 import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 
+import { ReparacionesComponent } from './reparaciones/reparaciones.component';
+import { ReparacionComponent } from './reparaciones/reparacion.component';
 
+
+
+////////////////////////////////////////
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
 import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
@@ -28,9 +36,7 @@ import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_conte
 import { VaciosComponent } from './maniobras/vacios.component';
 
 import { ManiobraComponent } from './maniobras/maniobra.component';
-// import { PagesComponent } from './pages.component';
-import { AccountSettingsComponent } from './account-settings/account-settings.component';
-import { ProfileComponent } from './profile/profile.component';
+
 
 
 import { OperadoresComponent } from './operadores/operadores.component';
@@ -78,8 +84,7 @@ import { BuquesComponent } from './buques/buques.component';
 import { BuqueComponent } from './buques/buque.component';
 import { Buques2Component } from './buques2/buques2.component';
 import { Buque2Component } from './buques2/buque2.component';
-import { ReparacionesComponent } from './reparaciones/reparaciones.component';
-import { ReparacionComponent } from './reparaciones/reparacion.component';
+
 
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
@@ -118,9 +123,13 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
     declarations: [
         // PagesComponent,
         DashboardComponent,
+        AccountSettingsComponent,
+        ProfileComponent,        
         UsuariosComponent,
         UsuarioComponent,
         UsuarioResetPassComponent,
+        ReparacionesComponent,
+        ReparacionComponent,
         ManiobrasComponent,
         TransitoComponent,
         LlegadaEntradaComponent,
@@ -134,8 +143,6 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         CargaContenedorComponent,
         VaciosComponent,
         ManiobraComponent,
-        AccountSettingsComponent,
-        ProfileComponent,
         OperadoresComponent,
         OperadorComponent,
         CamionesComponent,
@@ -176,8 +183,6 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         Buques2Component,
         Buque2Component,
         RegisterComponent,
-        ReparacionesComponent,
-        ReparacionComponent,
         PapeletaComponent,
         InventarioComponent,
         ContenedoresLRComponent

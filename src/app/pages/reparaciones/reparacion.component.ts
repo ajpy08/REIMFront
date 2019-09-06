@@ -12,7 +12,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ReparacionComponent implements OnInit {
   reparacion: Reparacion;
   regForm: FormGroup;
-  edicion = false;
 
   constructor(private reparacionService: ReparacionService,
     public router: Router,
@@ -23,13 +22,19 @@ export class ReparacionComponent implements OnInit {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.edicion = true;
       this.cargarReparacion(id);
     } else {
       for (var control in this.regForm.controls){
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
+
+    // listen to input descripcion
+    this.regForm.get('descripcion').valueChanges.subscribe(val => {
+      this.regForm.get('descripcion').setValue(val.toUpperCase(), {
+        emitEvent: false});
+    });
+
   }
 
   createFormGroup() {
@@ -40,51 +45,36 @@ export class ReparacionComponent implements OnInit {
     });
   }
 
+  
+  get descripcion() {
+    return this.regForm.get('descripcion');
+  }
+  get costo() {
+    return this.regForm.get('costo');
+  }
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
   cargarReparacion(id: string) {
     this.reparacionService.getReparacion(id)
       .subscribe(res => {
-        this.reparacion = res;
-        //console.log( this.buque );
-        for (var propiedad in this.reparacion) {
-          //console.log(propiedad);
-          for (var control in this.regForm.controls) {
-            //console.log(control);
-            //if( propiedad == control.toString() && res[propiedad] != null && res[propiedad] != undefined) {
-            if (propiedad == control.toString()) {
-              //console.log(propiedad + ': ' + res[propiedad]);
-              this.regForm.controls[propiedad].setValue(res[propiedad]);
-            }
-          }
-        }
+        this.descripcion.setValue(res.descripcion);
+        this.costo.setValue(res.costo);
+        this._id.setValue(res._id);
       });
   }
 
   guardarReparacion() {
     if (this.regForm.valid) {
-      //console.log(this.regForm.value);
       this.reparacionService.guardarReparacion(this.regForm.value)
         .subscribe(res => {
-          // this.fileImg = null;
-          // this.fileImgTemporal = false;
-          // this.file = null;
-          // this.fileTemporal = false;
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/reparacion', this.regForm.get('_id').value]);
-            this.edicion = true;
+            this.router.navigate(['/reparaciones/reparacion', this.regForm.get('_id').value]);
           }
           this.regForm.markAsPristine();
         });
     }
   }
-
-
-  get descripcion() {
-    return this.regForm.get('descripcion');
-  }
-
-  get costo() {
-    return this.regForm.get('costo');
-  }
-
 }

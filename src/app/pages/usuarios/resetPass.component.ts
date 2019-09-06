@@ -74,7 +74,7 @@ export class UsuarioResetPassComponent implements OnInit {
 
   
 cargarUsuario( id: string ){
-  this._usuarioService.getUsuarioxID(id).subscribe(usuario => {
+  this._usuarioService.getUsuario(id).subscribe(usuario => {
     this.regForm.controls["nombre"].setValue(usuario.nombre);
     this.regForm.controls["email"].setValue(usuario.email);
     this.regForm.controls["role"].setValue(usuario.role);

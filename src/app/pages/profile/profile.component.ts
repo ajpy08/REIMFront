@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Cliente } from '../../models/cliente.models';
 import swal from 'sweetalert';
 
 @Component({
@@ -9,48 +11,81 @@ import swal from 'sweetalert';
   styles: []
 })
 export class ProfileComponent implements OnInit {
-  usuario: Usuario;
-  imagenSubir: File;
-  imagenTemp: any;
-  profile: Usuario = new Usuario('');
+  
+  regForm: FormGroup;
+  fileFoto: File = null;
+  fotoTemporal = false;
+  listaEmpresas: Cliente[] = [];
 
-  constructor(public _usuarioService: UsuarioService) {
-    this.usuario = this._usuarioService.usuario;
+  constructor(public _usuarioService: UsuarioService,private fb: FormBuilder) {
+    
   }
 
   ngOnInit() {
+    this.createFormGroup();
+    this.cargarUsuario (this._usuarioService.usuario._id)
+    
   }
 
-  guardar(usuario: Usuario) {
-    this.usuario.nombre = usuario.nombre;
-    this.usuario.email = usuario.email;
-
-    this._usuarioService.actualizarUsuario(this.usuario)
-    .subscribe();
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      email: ['', [Validators.required, Validators.email]],
+      img: [''],
+      _id: ['']
+    });
   }
 
-  seleccionImagen(archivo: File) {
-    if (!archivo) {
-      this.imagenSubir = null;
-      return;
+  get nombre() {
+    return this.regForm.get('nombre');
+  }
+  get email() {
+    return this.regForm.get('email');
+  }
+  get img() {
+    return this.regForm.get('img');
+  }
+
+
+
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
+  cargarUsuario( id: string ) {
+    this._usuarioService.getUsuarioConIncludes( id ).subscribe(usuario => {
+      this.nombre.setValue(usuario.nombre);
+      this.email.setValue(usuario.email);
+      this.img.setValue(usuario.img);
+      this.listaEmpresas = usuario.empresas;
+      this._id.setValue(usuario._id);
+    });
+  }
+
+  onFileSelected(event) {
+    this.fileFoto = <File> event.target.files[0];
+    this.subirFoto();
+  }
+  
+  subirFoto() {
+    this._usuarioService.subirFotoTemporal(this.fileFoto)
+    .subscribe( nombreArchivo => {
+      this.regForm.get('img').setValue(nombreArchivo);
+      this.regForm.get('img').markAsDirty();
+      this.fotoTemporal = true;
+      this.guardarUsuario();
+    });
+  }
+  
+  guardarUsuario() {
+    if (this.regForm.valid) {
+      this._usuarioService.actualizaPerfil( this.regForm.value )
+      .subscribe( usuario => {
+        this.fileFoto = null;
+        this.fotoTemporal = false;
+        this.regForm.markAsPristine();
+      });
     }
-    if (archivo.type.indexOf('image') < 0) {
-      swal('Solo imagenes', 'El archivo seleccionado no es una imagen', 'error');
-      this.imagenSubir = null;
-      return;
-
-    }
-       this.imagenSubir = archivo;
-       // tslint:disable-next-line:prefer-const
-       let reader = new FileReader();
-       // tslint:disable-next-line:prefer-const
-       let urlImagenTemp = reader.readAsDataURL(archivo);
-       reader.onloadend = () => this.imagenTemp = reader.result;
-  }
-
-
-  cambiarImagen() {
-    this._usuarioService.cambiarImagen(this.imagenSubir, this.usuario._id);
   }
 
   verClientes(usuario: Usuario) {

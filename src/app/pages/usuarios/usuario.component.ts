@@ -4,6 +4,7 @@ import { UsuarioService } from './usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { ROLES_ARRAY } from '../../config/config';
 
 @Component({
   selector: 'app-usuario',
@@ -15,7 +16,8 @@ export class UsuarioComponent implements OnInit {
   listaEmpresas: Cliente[] = [];
   fileFoto: File = null;
   fotoTemporal = false;
-  edicion = false;
+  roles = ROLES_ARRAY;
+
   constructor(
     public _usuarioService: UsuarioService,
     public _clienteService: ClienteService,
@@ -27,7 +29,6 @@ export class UsuarioComponent implements OnInit {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.edicion = true;
       this.cargarUsuario( id );
     }
   }
@@ -41,6 +42,7 @@ export class UsuarioComponent implements OnInit {
       role: ['', [Validators.required]],
       empresas: [''],
       activo: [''],
+      observaciones: [''],
       img: [''],
       _id: ['']
     });
@@ -76,8 +78,8 @@ export class UsuarioComponent implements OnInit {
   get img() {
     return this.regForm.get('img');
   }
-  get rol() {
-    return this.regForm.get('rol');
+  get role() {
+    return this.regForm.get('role');
   }
   get empresas() {
     return this.regForm.get('empresas');
@@ -86,35 +88,41 @@ export class UsuarioComponent implements OnInit {
   get activo() {
     return this.regForm.get('activo');
   }
+  get observaciones() {
+    return this.regForm.get('observaciones');
+  }
+
   get _id() {
     return this.regForm.get('_id');
   }
 
 
   cargarUsuario( id: string ) {
-
     this._usuarioService.getUsuario( id ).subscribe(usuario => {
-
       this._clienteService.getClientesRole( usuario.role ).subscribe( empresas => this.listaEmpresas = empresas );
       this.nombre.setValue(usuario.nombre);
       this.email.setValue(usuario.email);
-      // this.regForm.controls['password'].setValue(usuario.password);
-      // this.regForm.controls['passwordConfirm'].setValue(usuario.password);
-      this.rol.setValue(usuario.role);
-      this.rol.disable();
+      this.password.disable();
+      this.passwordConfirm.disable();
+      this.role.setValue(usuario.role);
+      this.role.disable();
       this.empresas.setValue(usuario.empresas);
+      this.observaciones.setValue(usuario.observaciones);
       this.img.setValue(usuario.img);
       this._id.setValue(usuario._id);
     });
   }
+  
   cambioRole( role: string ) {
     this._clienteService.getClientesRole(role)
     .subscribe( empresas => this.listaEmpresas = empresas );
   }
+  
   onFileSelected(event) {
     this.fileFoto = <File> event.target.files[0];
     this.subirFoto();
   }
+  
   subirFoto() {
     this._usuarioService.subirFotoTemporal(this.fileFoto)
     .subscribe( nombreArchivo => {
@@ -124,6 +132,7 @@ export class UsuarioComponent implements OnInit {
       this.guardarUsuario();
     });
   }
+  
   guardarUsuario() {
     if (this.regForm.valid) {
       this._usuarioService.guardarUsuario( this.regForm.value )
@@ -132,8 +141,10 @@ export class UsuarioComponent implements OnInit {
         this.fotoTemporal = false;
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(usuario._id);
+          this.password.disable();
+          this.passwordConfirm.disable();
+          this.role.disable();
           this.router.navigate(['/usuarios/usuario', this.regForm.get('_id').value ]);
-          this.edicion = true;
         }
         this.regForm.markAsPristine();
       });
