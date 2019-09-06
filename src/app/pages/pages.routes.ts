@@ -1,5 +1,16 @@
 import {RouterModule, Routes} from '@angular/router';
 // import { PagesComponent } from './pages.component';
+
+
+
+// Catalogos Generales
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioComponent } from './usuarios/usuario.component';
+import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
+
+
+
+
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 
 import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
@@ -26,10 +37,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 
 import { ProfileComponent } from './profile/profile.component';
 
-// Catalogos Generales
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { UsuarioComponent } from './usuarios/usuario.component';
-import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
+
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
@@ -99,12 +107,14 @@ const pagesRoutes: Routes = [
         component: DashboardComponent,
         data: { titulo: 'Dashboard' }
     },
-    {path: 'usuarios/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
 
-    {path: 'usuarios/resetPass/:id', component: UsuarioResetPassComponent,
+    // CATALOGOS GENERALES
+    {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
+    {path: 'usuarios/usuario/:id', component: UsuarioComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Usuarios.'}},
+    {path: 'usuarios/usuario/:id/resetPass', component: UsuarioResetPassComponent,
     canActivate: [ AdminGuard ], data: {titulo: 'Reseteo de contraseña.'}},
 
-    {path: 'usuarios', component: UsuariosComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Usuarios' }},
+
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},

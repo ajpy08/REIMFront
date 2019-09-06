@@ -34,12 +34,12 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let usuario">
-                <button [routerLink]="['/usuarios', usuario._id ]" class="btn btn-primary m-r-5">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                <button [routerLink]="['/usuarios/resetPass', usuario._id ]" class="btn btn-rounded m-r-5">
-                                    <i class="fa fa-unlock-alt"></i>
-                                </button>
+                <button [routerLink]="['/usuarios/usuario', usuario._id ]" class="btn btn-primary m-r-5">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button [routerLink]="['/usuarios/usuario', usuario._id ,'resetPass']" class="btn btn-rounded m-r-5">
+                  <i class="fa fa-unlock-alt"></i>
+                </button>
               </mat-cell>
             </ng-container>
 
@@ -53,8 +53,8 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
               <!-- <mat-cell *matCellDef="let row"> {{row.activo}} </mat-cell> -->
 
-              <mat-cell *matCellDef="let usuario">
-                <mat-slide-toggle [checked]="usuario.activo" (change)="habilitaDeshabilitaUsuario(usuario, $event)"></mat-slide-toggle>
+              <mat-cell *matCellDef="let row">
+                <mat-slide-toggle [checked]="row.activo" (change)="habilitaDeshabilitaUsuario(row, $event)"></mat-slide-toggle>
               </mat-cell>
 
 

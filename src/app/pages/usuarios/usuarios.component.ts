@@ -11,10 +11,10 @@ declare var swal: any;
   styles: []
 })
 export class UsuariosComponent implements OnInit {
-  
+
   usuarios: Usuario[] = [];
-  totalRegistros: number = 0;
-  cargando: boolean = true;
+  totalRegistros = 0;
+  cargando = true;
   roles = ROLES_ARRAY;
 
   displayedColumns = ['actions', 'foto', 'email', 'activo', 'nombre', 'role', 'empresas'];
@@ -46,12 +46,10 @@ export class UsuariosComponent implements OnInit {
     this.cargando = false;
   }
 
-
   habilitaDeshabilitaUsuario(usuario, event) {
-    console.log(event);
     if (usuario._id === this._usuarioService.usuario._id) {
-    swal('Error!', 'No se puede habilitar / deshabilitar a si mismo' , 'error');
-    return;
+      swal('Error!', 'No se puede habilitar / deshabilitar a si mismo' , 'error');
+      return;
     }
     swal({
       title: '¿Esta seguro?',
@@ -66,13 +64,9 @@ export class UsuariosComponent implements OnInit {
           .subscribe(borrado => {
             this.cargarUsuarios();
           });
+        } else {
+          event.source.checked = !event.checked;
         }
-        else {
-          console.log('asasd');
-          event.checked = false;
-        }
-
       });
-      
   }
 }

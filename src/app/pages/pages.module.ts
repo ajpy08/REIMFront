@@ -7,8 +7,14 @@ import { CommonModule } from '@angular/common';
 
 // MODULES
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ManiobrasComponent } from './maniobras/maniobras.component';
 
+// Catalogos Generales
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { UsuarioComponent } from './usuarios/usuario.component';
+import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
+
+
+import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
 import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
 import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
@@ -26,10 +32,7 @@ import { ManiobraComponent } from './maniobras/maniobra.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { ProfileComponent } from './profile/profile.component';
 
-// Catalogos Generales
-import { UsuariosComponent } from './usuarios/usuarios.component';
-import { UsuarioComponent } from './usuarios/usuario.component';
-import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
+
 import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';

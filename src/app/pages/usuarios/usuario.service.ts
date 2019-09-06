@@ -95,8 +95,6 @@ export class UsuarioService {
     } else {
       localStorage.removeItem('email');
     }
-
-    
     let url = URL_SERVICIOS + '/login';
     return this.http.post( url, usuario )
     .pipe(
@@ -116,18 +114,17 @@ export class UsuarioService {
 
   // OBTIENE EL CATALOGO DE USUARIOS
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios
-  
+
   getUsuarios(): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios';
     return this.http.get(url);
-    
   }
 
 
   // OBTIENE UN USUARIO DADO SU ID
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
   // id = Identificador unico de usuario
-  getUsuarioxID( id: string ): Observable<any> {
+  getUsuario( id: string ): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios/usuario/' + id;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.usuario ));
@@ -146,7 +143,7 @@ export class UsuarioService {
   //    return;
   //  }
   //      this.fotoTemporal = archivo;
-  
+
     const formData = new FormData();
     formData.append('file', archivo, archivo.name);
     let url = URL_SERVICIOS + '/uploadFileTemp';
@@ -162,13 +159,12 @@ export class UsuarioService {
    }
 
   guardarUsuario( usuario: Usuario ): Observable<any> {
-    if ( usuario._id ) // actualizando
+    if ( usuario._id ) {// actualizando
       return this.actualizarUsuario(usuario);
-    else // creando
+    } else {// creando
       return (this.altaUsuario(usuario));
+    }
   }
-
-
 
   altaUsuario( usuario: Usuario ): Observable<any> {
     let url = URL_SERVICIOS + '/usuarios';
@@ -186,8 +182,7 @@ export class UsuarioService {
    }
 
 
-actualizarUsuario(usuario: Usuario)
-{
+actualizarUsuario(usuario: Usuario) {
   let url = URL_SERVICIOS + '/usuarios/' + usuario._id;
   url += '?token=' + this.token;
   return this.http.put( url, usuario )
@@ -256,23 +251,5 @@ cambiarImagen( archivo: File, id: string ) {
     return this.http.get(url);
 
   }
-  buscarUsuarios( termino: string ): Observable<any> {
 
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/busqueda/coleccion/usuarios/' + termino;
-    return this.http.get( url )
-    .pipe( map( (resp: any) => resp.usuarios ));
-
-  }
-  borrarUsuario( id: string ): Observable<any> {
-  let url = URL_SERVICIOS + '/usuarios/' + id;
-  url += '?token=' + this.token;
-  return this.http.delete( url )
-  .pipe(
-        map( resp => {
-          swal('Usuario borrado', 'El usuario a sido eliminado correctamente', 'success');
-          return true;
-        }));
-
-  }
 }
