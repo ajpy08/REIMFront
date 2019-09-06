@@ -13,7 +13,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 import swal from 'sweetalert';
 import { ROLES } from 'src/app/config/config';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/

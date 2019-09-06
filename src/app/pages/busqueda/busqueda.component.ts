@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import { Usuario } from '../../models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { Operador } from '../../models/operador.models';
 import { Camion } from '../../models/camion.models';
 import { Cliente } from '../../models/cliente.models';

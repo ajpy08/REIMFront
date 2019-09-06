@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@ang
 import { Solicitud } from './solicitud.models';
 import { SolicitudService } from '../../services/service.index';
 import { ManiobraService } from '../maniobras/maniobra.service';
-import { Usuario } from '../../models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';

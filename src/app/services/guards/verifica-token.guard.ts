@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 // import { Router } from '@angular/router';
 import { CanActivateChild } from '@angular/router/src/interfaces';
 

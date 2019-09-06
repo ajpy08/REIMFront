@@ -4,7 +4,7 @@ import { SolicitudService, BuqueService, ViajeService } from '../../services/ser
 import { ManiobraService } from '../maniobras/maniobra.service';
 import { Buque } from '../../models/buques.models';
 import { Viaje } from '../viajes/viaje.models';
-import { Usuario } from '../../models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';

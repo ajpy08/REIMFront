@@ -1,10 +1,10 @@
 import {throwError as observableThrowError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Usuario } from '../../models/usuarios.model';
+import { Usuario } from './usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
-import { SubirArchivoService } from '../subirArchivo/subir-archivo.service';
+import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
@@ -96,7 +96,7 @@ export class UsuarioService {
       localStorage.removeItem('email');
     }
 
-    // tslint:disable-next-line:prefer-const
+    
     let url = URL_SERVICIOS + '/login';
     return this.http.post( url, usuario )
     .pipe(
@@ -115,18 +115,20 @@ export class UsuarioService {
 
 
   // OBTIENE EL CATALOGO DE USUARIOS
-  // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios?desde=Y
-  // desde = offset para el paginado de datos.
-  getUsuarios(desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/usuarios?desde=' + desde;
+  // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios
+  
+  getUsuarios(): Observable<any> {
+    const url = URL_SERVICIOS + '/usuarios';
     return this.http.get(url);
+    
   }
+
 
   // OBTIENE UN USUARIO DADO SU ID
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
   // id = Identificador unico de usuario
   getUsuarioxID( id: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/usuarios/' + id;
+    const url = URL_SERVICIOS + '/usuarios/usuario/' + id;
     return this.http.get( url )
                 .pipe(map( (resp: any) => resp.usuario ));
   }
@@ -222,7 +224,17 @@ resetPass( usuario: Usuario ): Observable<any> {
                     return throwError(err);
                   }));
 }
-  cambiarImagen( archivo: File, id: string ) {
+
+habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean) : Observable<any> {
+  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/habilita_deshabilita';
+  url += '?token=' + this.token;
+  return this.http.put( url, {activo: act} )
+            .pipe(map( (resp: any) => {
+                    swal('Usuario actualizado', usuario.nombre, 'success' );
+                    return true;
+                  }));
+}
+cambiarImagen( archivo: File, id: string ) {
 
     // this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )
     //       .then( (resp: any) => {

@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgenciaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 
 @Component({
   selector: 'app-cliente',

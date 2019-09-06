@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@ang
 import { Router, ActivatedRoute } from '@angular/router';
 import { Agencia } from '../../../models/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
-import { Usuario } from '../../../models/usuarios.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { UsuarioService } from '../../../services/service.index';
 import { Transportista } from '../../../models/transportista.models';
 import { TransportistaService } from '../../../services/service.index';

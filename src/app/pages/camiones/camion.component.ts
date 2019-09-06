@@ -12,7 +12,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Operador } from 'src/app/models/operador.models';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from "../../config/config";
 // tslint:disable-next-line:no-duplicate-imports
 // import {default as _rollupMoment} from 'moment';

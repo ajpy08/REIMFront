@@ -1,163 +1,100 @@
-<!-- <div class="row animated fadeIn">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <input #input (keyup)="buscarUsuarios(input.value)" type="text" class="form-control" placeholder="Buscar usuarios...">
-            </div>
-        </div>
-    </div>
-</div> -->
 <div class="row animated fadeIn" *ngIf="cargando">
-    <div class="col-sm-12">
-        <div class="alert alert-warning text-center">
-            <strong>Cargando</strong>
-            <br>
-            <i class="fas fa-refresh fa-spin fa-2x"></i>
-            <br>
-            <span>Espere por favor</span>
-        </div>
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
     </div>
+  </div>
 </div>
 
 <div class="row animated fadeIn" *ngIf="!cargando">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-right">
-                    <button [routerLink]="['/usuarios','nuevo']" type="button"
-                        class="btn waves-effect waves-light btn-rounded btn-primary">
-                        <i class="fa fa-plus"></i>
-                        Añadir nuevo Usuario
-                    </button>
-                </div>
-                <h3 class="card-title">Usuarios (<small>{{totalRegistros}}</small>)</h3>
-                <div class="example-header mat-elevation-z8">
-                    <mat-form-field>
-                        <input matInput (keyup)="applyFilter($event.target.value)"
-                            placeholder="Escriba algo para filtrar">
-                    </mat-form-field>
-                </div>
-                <br>
-                <div class="example-container mat-elevation-z8">
-                </div>
-                <div class="example-container mat-elevation-z8">
-                    <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
-                        <ng-container matColumnDef="actions">
-                            <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                            <mat-cell *matCellDef="let usuario">
-                                <button [routerLink]="['/usuarios', usuario._id ]" class="btn btn-primary m-r-5">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+          <button [routerLink]="['/usuarios/usuario','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i>
+            Añadir nuevo Usuario
+          </button>
+        </div>
+        <h3 class="card-title">Usuarios (<small>{{totalRegistros}}</small>)</h3>
+        <div class="example-header mat-elevation-z8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+          </mat-form-field>
+        </div>
+        <br>
+        <div class="example-container mat-elevation-z8">
+        </div>
+        <div class="example-container mat-elevation-z8">
+          <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let usuario">
+                <button [routerLink]="['/usuarios', usuario._id ]" class="btn btn-primary m-r-5">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button (click)="borrarUsuario(usuario)" class="btn btn-danger m-r-5">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                                <button [routerLink]="['/usuarios/resetPass', usuario._id ]"
-                                    class="btn btn-rounded m-r-5">
+                <button [routerLink]="['/usuarios/resetPass', usuario._id ]" class="btn btn-rounded m-r-5">
                                     <i class="fa fa-unlock-alt"></i>
                                 </button>
-                            </mat-cell>
-                        </ng-container>
+              </mat-cell>
+            </ng-container>
 
-                        <ng-container matColumnDef="foto">
-                            <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
-                            <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen"
-                                    class="img-50 img-circle pointer">
-                            </mat-cell>
-                        </ng-container>
+            <ng-container matColumnDef="foto">
+              <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
+              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen" class="img-50 img-circle pointer">
+              </mat-cell>
+            </ng-container>
 
-                        <ng-container matColumnDef="email">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
-                        </ng-container>
+            <ng-container matColumnDef="activo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
+              <!-- <mat-cell *matCellDef="let row"> {{row.activo}} </mat-cell> -->
 
-                        <ng-container matColumnDef="nombre">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-                            <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
-                        </ng-container>
+              <mat-cell *matCellDef="let usuario">
+                <mat-slide-toggle [checked]="usuario.activo" (change)="habilitaDeshabilitaUsuario(usuario, $event)"></mat-slide-toggle>
+              </mat-cell>
 
-                        <ng-container matColumnDef="role">
-                            <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
-                            <mat-cell *matCellDef="let row">
-                                <mat-select disabled [(ngModel)]="row.role" name="role" class="form-control">
-                                    <mat-option value="ADMIN_ROLE">ADMINISTRADOR</mat-option>
-                                    <mat-option value="REIMADMIN_ROLE">ADMIN REIM</mat-option>
-                                    <mat-option value="REIM_ROLE">REIM USER</mat-option>
-                                    <mat-option value="NAVIERA_ROLE">NAVIERA</mat-option>
-                                    <mat-option value="TRANSPORTISTA_ROLE">TRANSPORTISTA</mat-option>
-                                    <mat-option value="AA_ROLE">AGENCIA ADUANAL</mat-option>
-                                    <mat-option value="CLIENT_ROLE">CLIENTE</mat-option>
-                                </mat-select>
-                            </mat-cell>
-                        </ng-container>
 
-                        <ng-container matColumnDef="empresas">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
-                            <mat-cell *matCellDef="let row">
-                                <mat-cell *ngFor="let empresa of row.empresas" class="m-r-5"> {{empresa.razonSocial}}
-                                </mat-cell>
-                            </mat-cell>
-                        </ng-container>
+            </ng-container>
 
-                        <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                    </mat-table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-                    </mat-paginator>
-                </div>
+            <ng-container matColumnDef="email">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+            </ng-container>
 
-                <!-- <div class="table-responsive">
-                    <table class="table table-hover table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Correo</th>
-                                <th>Nombre</th>
-                                <th>Role</th>
-                                <th>Empresas</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let usuario of usuarios">
-                                <td class=".w70"><img [src]="usuario.img | imagen" class="img-50 img-circle pointer"></td>
-                                <td>{{usuario.email}}</td>
-                                <td>{{usuario.nombre}}</td>
-                                <td>
-                                    <select disabled [(ngModel)]="usuario.role" name="role" class="form-control">
-                                  <option value="ADMIN_ROLE">ADMINISTRADOR</option>
-                                  <option value="REIMADMIN_ROLE">ADMIN REIM</option>
-                                  <option value="REIM_ROLE">REIM USER</option>
-                                  <option value="NAVIERA_ROLE">NAVIERA</option>
-                                  <option value="TRANSPORTISTA_ROLE">TRANSPORTISTA</option>
-                                  <option value="AA_ROLE">AGENCIA ADUANAL</option>
-                                  <option value="CLIENT_ROLE">CLIENTE</option>
-                                </select>
-                                </td>
-                                <td>
-                                    <p  *ngFor="let empresa of usuario.empresas">{{empresa.razonSocial}}</p>
-                                </td>
-                                <td>
-                                    <button [routerLink]="['/usuarios', usuario._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button (click)="borrarUsuario(usuario)" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button [routerLink]="['/usuarios/resetPass', usuario._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
-                  <i class="fas fa-angle-left"></i> Anteriores
-                </button>
-                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
-                    Siguientes <i class="fas fa-angle-right"></i>
-              </button> -->
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+            </ng-container>
 
-            </div>
+            <ng-container matColumnDef="role">
+              <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-select disabled [(ngModel)]="row.role" name="role" class="form-control">
+                  <mat-option *ngFor="let role of roles" [value]="role._id">
+                    {{role.descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="empresas">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-cell *ngFor="let empresa of row.empresas" class="m-r-5"> {{empresa.razonSocial}}
+                </mat-cell>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+          </mat-paginator>
         </div>
+      </div>
     </div>
+  </div>
 </div>

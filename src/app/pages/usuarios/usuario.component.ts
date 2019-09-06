@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute  } from '@angular/router';
-import { Usuario } from '../../models/usuarios.model';
-import { UsuarioService } from '../../services/usuario/usuario.service';
+import { Usuario } from './usuario.model';
+import { UsuarioService } from './usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';

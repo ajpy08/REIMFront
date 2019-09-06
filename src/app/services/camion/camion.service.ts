@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import { Camion } from '../../models/camion.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';

@@ -5,7 +5,7 @@ import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from 'src/app/services/service.index';
 import { Agencia } from '../../../models/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
-import { Usuario } from '../../../models/usuarios.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { UsuarioService } from '../../../services/service.index';
 import { Naviera } from '../../../models/navieras.models';
 import { NavieraService } from '../../../services/service.index';

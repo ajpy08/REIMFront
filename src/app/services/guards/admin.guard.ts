@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {

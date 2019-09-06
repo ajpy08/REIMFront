@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Camion } from '../../models/camion.models';
 import { CamionService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 declare var swal: any;
 @Component({

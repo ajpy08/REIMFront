@@ -1,4 +1,4 @@
-import { Cliente } from "./cliente.models";
+import { Cliente } from "../../models/cliente.models";
 
 export class Usuario {
     constructor(

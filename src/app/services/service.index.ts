@@ -1,4 +1,7 @@
-export { UsuarioService } from './usuario/usuario.service';
+export { UsuarioService } from '../pages/usuarios/usuario.service';
+
+
+
 export { NavieraService } from './naviera/naviera.service';
 export { SolicitudService } from '../pages/solicitudes/solicitud.service';
 export { BuqueService } from './buque/buque.service';

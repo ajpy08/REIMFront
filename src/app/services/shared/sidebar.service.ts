@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 @Injectable()
 export class SidebarService {
   menu: any[] = [];
