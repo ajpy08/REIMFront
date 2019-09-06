@@ -46,7 +46,10 @@ Login register and recover password Page
 .login-box {
     width: 400px;
     margin: 0 auto;
-    background: #313388;
+    background: #002C77
+    /* background: #313388; */
+    /* 021a36 */
+    /* 00102a */
 }
 
 .login-box .footer {
