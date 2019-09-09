@@ -2,19 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Maniobra } from '../../models/maniobra.models';
 import { ManiobraService } from '../../services/service.index';
 import { NgForm, FormControl } from '@angular/forms';
-import { Operador } from '../../models/operador.models';
+import { Operador } from '../operadores/operador.models';
 import { OperadorService } from '../../services/service.index';
-import { Camion } from '../../models/camion.models';
+import { Camion } from '../camiones/camion.models';
 import { CamionService } from '../../services/service.index';
 import { Viaje } from '../viajes/viaje.models';
 import { ViajeService } from '../../services/service.index';
-import { Contenedor } from '../../models/contenedores.models';
-import { ContenedorService } from '../../services/service.index';
+
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/service.index';
-import { Agencia } from '../../models/agencia.models';
+import { Agencia } from '../agencias/agencia.models';
 import { AgenciaService } from '../../services/service.index';
-import { Transportista } from '../../models/transportista.models';
+import { Transportista } from '../transportistas/transportista.models';
 import { TransportistaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalDropzoneService } from '../../components/modal-dropzone/modal-dropzone.service';
@@ -34,8 +33,7 @@ export class ManiobraComponent implements OnInit {
   operador: Operador = new Operador();
   camiones: Camion[] = [];
   camion: Camion = new Camion();
-  contenedores: Contenedor[] = [];
-  contenedor: Contenedor = new Contenedor('');
+  
   clientes: Cliente[] = [];
   cliente: Cliente = new Cliente('');
   agencias: Agencia[] = [];
@@ -53,7 +51,6 @@ export class ManiobraComponent implements OnInit {
     public _viajeService: ViajeService,
     public _operadorService: OperadorService,
     public _camionService: CamionService,
-    public _contenedorService: ContenedorService,
     public _clienteService: ClienteService,
     public _agenciaService: AgenciaService,
     public _transportistaService: TransportistaService,
@@ -179,12 +176,7 @@ export class ManiobraComponent implements OnInit {
 
   }
 
-  cambioContenedor( id: string ) {
-
-    this._contenedorService.cargarContenedor( id )
-          .subscribe( contenedor => this.contenedor = contenedor );
-
-  }
+  
 
   cambioCliente( id: string ) {
 
@@ -202,7 +194,7 @@ export class ManiobraComponent implements OnInit {
 
   cambioTransportista( id: string ) {
 
-    this._transportistaService.getTransportistaXID( id )
+    this._transportistaService.getTransportista( id )
           .subscribe( transportista => this.transportista = transportista );
 
   }

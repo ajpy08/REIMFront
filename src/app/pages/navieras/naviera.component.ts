@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Naviera } from '../../models/navieras.models';
-import { NavieraService } from 'src/app/services/service.index';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
+import { NavieraService, SubirArchivoService } from 'src/app/services/service.index';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-naviera',
@@ -117,7 +116,7 @@ export class NavieraComponent implements OnInit {
   }
 
   cargarNaviera(id: string) {
-    this._navieraService.getNavieraXID(id).subscribe(naviera => {
+    this._navieraService.getNaviera(id).subscribe(naviera => {
       this.regForm.controls['razonSocial'].setValue(naviera.razonSocial);
       this.regForm.controls['rfc'].setValue(naviera.rfc);
       this.regForm.controls['calle'].setValue(naviera.calle);
@@ -151,7 +150,7 @@ export class NavieraComponent implements OnInit {
           //console.log(res);
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/naviera', this.regForm.get('_id').value]);
+            this.router.navigate(['/navieras/naviera', this.regForm.get('_id').value]);
             this.edicion = true;
           }
           this.regForm.markAsPristine();

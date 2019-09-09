@@ -1,13 +1,3 @@
-<!-- <div class="row animated fadeIn">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <input #input (keyup)="buscarOperador( input.value )" type="text" class="form-control"
-                    placeholder="Buscar operador...">
-            </div>
-        </div>
-    </div>
-</div> -->
 <div class="row animated fadeIn" *ngIf="cargando">
   <div class="col-sm-12">
     <div class="alert alert-warning text-center">
@@ -24,7 +14,7 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button [routerLink]="['/operador','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+          <button [routerLink]="['/operadores/operador','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
                         <i class="fa fa-plus"></i>
                         Añadir nuevo operador
                     </button>
@@ -43,7 +33,7 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let operador">
-                <button [routerLink]="['/operador', operador._id ]" class="btn btn-primary m-r-5">
+                <button [routerLink]="['/operadores/operador', operador._id ]" class="btn btn-primary m-r-5">
                                     <i class="fa fa-edit"></i>
                                 </button>
 
@@ -82,7 +72,7 @@
             <ng-container matColumnDef="activo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-slide-toggle [checked]="row.activo"></mat-slide-toggle>
+                <mat-slide-toggle [checked]="row.activo" (change)="habilitaDeshabilitaOperador(row, $event)"></mat-slide-toggle>
               </mat-cell>
             </ng-container>
 
@@ -92,53 +82,6 @@
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
           </mat-paginator>
         </div>
-
-        <!-- <div class="table-responsive">
-                    <table class="table table-hover table-responsive">
-                        <thead>
-                            <tr>
-                                <th width="110px"></th>
-                                <th>Foto</th>
-                                <th>Transportista</th>
-                                <th>Nombre del Chofer</th>
-                                <th>Vigencia de Licencia</th>
-                                <th>Licencia</th>
-                                <th>Activo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let operador of operadores">
-                                <td>
-                                    <button [routerLink]="['/operador', operador._id ]" class="btn btn-primary">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-
-                                    <button (click)="borrarOperador( operador )" class="btn btn-danger">
-                                        <i class="fa fa-trash-o"></i>
-                                    </button>
-                                </td>
-                                <td class=".w70"><img [src]="operador.foto | imagen:'operador'"
-                                        class="img-50 img-circle pointer"></td>
-                                <td>{{operador.transportista.razonSocial}}</td>
-                                <td>{{operador.nombre}}</td>
-                                <td>{{operador.vigenciaLicencia}}</td>
-                                <td>{{operador.licencia}}</td>
-                                <td align="center" *ngIf="operador.activo; else notShow">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                </td>
-                                <ng-template #notShow>
-                                    <td></td>
-                                </ng-template>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button (click)="cambiarDesde(-10)" class="btn btn-secondary">
-                    <i class="fas fa-angle-left"></i> Anteriores
-                </button>
-                <button (click)="cambiarDesde(10)" class="btn btn-secondary">
-                    Siguientes <i class="fas fa-angle-right"></i>
-                </button> -->
       </div>
     </div>
   </div>

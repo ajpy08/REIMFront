@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Transportista } from '../../models/transportista.models';
+import { Transportista } from './transportista.models';
 import { TransportistaService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
@@ -15,7 +15,7 @@ export class TransportistasComponent implements OnInit {
   transportistas: Transportista[] = [];
   cargando = true;
   totalRegistros = 0;
-  desde = 0;
+
 
   displayedColumns = ['actions', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
     'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
@@ -38,7 +38,7 @@ export class TransportistasComponent implements OnInit {
 
   cargarTransportistas() {
     this.cargando = true;
-    this._transportistaService.getTransportistas(this.desde)
+    this._transportistaService.getTransportistas()
       .subscribe(transportistas => {
         this.dataSource = new MatTableDataSource(transportistas.transportistas);
         this.dataSource.sort = this.sort;
@@ -48,17 +48,7 @@ export class TransportistasComponent implements OnInit {
     this.cargando = false;
   }
 
-  // cambiarDesde(valor: number) {
-  //   const desde = this.desde + valor;
-  //   if (desde >= this.totalRegistros) {
-  //     return;
-  //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargarTransportistas();
-  // }
+  
 
   borrarTransportista(transportista: Transportista) {
     swal({
@@ -75,20 +65,6 @@ export class TransportistasComponent implements OnInit {
               this.cargarTransportistas();
             });
         }
-      });
-  }
-
-  buscarTransportista(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarTransportistas();
-      return;
-    }
-    this.cargando = true;
-    this._transportistaService.buscarTransportista(termino)
-      .subscribe((transportistas: Transportista[]) => {
-        this.transportistas = transportistas;
-        this.cargando = false;
-
       });
   }
 

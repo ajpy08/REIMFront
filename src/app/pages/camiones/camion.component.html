@@ -1,102 +1,91 @@
 <div class="row animated fadeIn">
-    <div class="col-md-6">
-        <div class="card card-body">
-            <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3><br>
-            <div class="row">
-                <div class="col-sm-12 col-xs-12">
-                    <form [formGroup]="regForm" (ngSubmit)="guardarCamion()" novalidate>
-                        <div class="my-container">
-                            <!--========Combombox Transportistas=========-->
-                            <mat-form-field>
-                                <mat-select placeholder="Seleccione un transportista" formControlName="transportista"
-                                    name="transportista" (selectionChange)="cambioTransportista( $event.value )">
-                                    <mat-option *ngFor="let transportista of transportistas"
-                                        [value]="transportista._id">
-                                        {{ transportista.razonSocial }}
-                                    </mat-option>
-                                </mat-select>
-                                <mat-error *ngIf="transportista.touched && transportista.invalid">
-                                    <sup>*</sup>Por favor seleccione un Transportista
-                                </mat-error>
-                            </mat-form-field>                            
-                            <!--========Combombox Operadores=========-->
-                            <mat-form-field>
-                                    <mat-select placeholder="Seleccione un operador" formControlName="operador"
-                                        name="operadores">
-                                        <mat-option *ngFor="let operador of operadores" [value]="operador._id">
-                                            {{ operador.nombre }}
-                                        </mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="operador.touched && operador.invalid">
-                                        <sup>*</sup>Por Favor Ingrese un Operador
-                                    </mat-error>
-                                </mat-form-field>
-                            <!--========input placas=========-->
-                            <mat-form-field>
-                                <input matInput formControlName="placa" name="placa" type="text" class="form-control"
-                                    placeholder="Ingrese las placas">
-                                    <mat-error *ngIf="placa.touched && placa.invalid && !placa.errors?.minlength">
-                                        <sup>*</sup>Por Favor Ingrese la Placa
-                                    </mat-error>
-                                    <mat-error *ngIf="placa.errors && placa.errors['minlength']">
-                                        <sup>*</sup>La Placa debe contener al menos 6 caracteres<br>
-                                    </mat-error>
-                            </mat-form-field>
-                            <!--========input numeroEconomico=========-->
-                            <mat-form-field>
-                                <input matInput formControlName="noEconomico" name="noEconomico" type="text"
-                                    class="form-control" placeholder="Ingrese el numero economico">
-                                    <mat-error *ngIf="noEconomico.touched && noEconomico.invalid && !noEconomico.errors?.minlength">
-                                        <sup>*</sup>Por Favor Ingrese el No Economico
-                                    </mat-error>
-                                    <mat-error *ngIf="noEconomico.errors && noEconomico.errors['minlength']">
-                                        <sup>*</sup>El No Economico debe contener al menos 2 caracteres<br>
-                                    </mat-error>
-                            </mat-form-field>
-                            <!--========datePiker vigencia del seguro=========-->
-                            <mat-form-field>
-                                <input matInput [matDatepicker]="picker" formControlName="vigenciaSeguro"
-                                    name="vigenciaSeguro" type="text" class="form-control"
-                                    placeholder="Vigencia del seguro">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                            </mat-form-field>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-                            [disabled]="regForm.pristine || regForm.invalid">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarCamion()" novalidate>
+            <div class="my-container">
+              <!--========Combombox Transportistas=========-->
+              <mat-form-field>
+                <mat-select placeholder="Seleccione un transportista" formControlName="transportista" name="transportista" (selectionChange)="cambioTransportista( $event.value )">
+                  <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                    {{ transportista.razonSocial }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="transportista.touched && transportista.invalid">
+                  <sup>*</sup>Por favor seleccione un Transportista
+                </mat-error>
+              </mat-form-field>
+              <!--========Combombox Operadores=========-->
+              <mat-form-field>
+                <mat-select placeholder="Seleccione un operador" formControlName="operador" name="operadores">
+                  <mat-option [value]="">-</mat-option>
+                  <mat-option *ngFor="let operador of operadores" [value]="operador._id">
+                    {{ operador.nombre }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="operador.touched && operador.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Operador
+                </mat-error>
+              </mat-form-field>
+              <!--========input placas=========-->
+              <mat-form-field>
+                <input matInput formControlName="placa" name="placa" type="text" class="form-control" placeholder="Ingrese las placas">
+                <mat-error *ngIf="placa.touched && placa.invalid && !placa.errors?.minlength">
+                  <sup>*</sup>Por Favor Ingrese la Placa
+                </mat-error>
+                <mat-error *ngIf="placa.errors && placa.errors['minlength']">
+                  <sup>*</sup>La Placa debe contener al menos 6 caracteres<br>
+                </mat-error>
+              </mat-form-field>
+              <!--========input numeroEconomico=========-->
+              <mat-form-field>
+                <input matInput formControlName="noEconomico" name="noEconomico" type="text" class="form-control" placeholder="Ingrese el numero economico">
+                <mat-error *ngIf="noEconomico.touched && noEconomico.invalid && !noEconomico.errors?.minlength">
+                  <sup>*</sup>Por Favor Ingrese el No Economico
+                </mat-error>
+                <mat-error *ngIf="noEconomico.errors && noEconomico.errors['minlength']">
+                  <sup>*</sup>El No Economico debe contener al menos 2 caracteres<br>
+                </mat-error>
+              </mat-form-field>
+              <!--========datePiker vigencia del seguro=========-->
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker" formControlName="vigenciaSeguro" name="vigenciaSeguro" type="text" class="form-control" placeholder="Vigencia del seguro">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
                             <i class="fa fa-save"></i>
                             Guardar
                         </button>
-                        <a routerLink="/camiones" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
-                    </form>
-                    <!-- <p>Form value {{ transportistas | json }} </p> -->
-                </div>
-            </div>
+            <a routerLink="/camiones" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
+          </form>
+          <!-- <p>Form value {{ transportistas | json }} </p> -->
         </div>
+      </div>
     </div>
-    <div class="col-md-3">
-        <div class="card  text-center">
-            <div class="card-header">Poliza de Seguro</div>
-            <div class="card-body">
-                <p *ngIf="fileTemporal; else notShow" class="text-danger">
-                    <a [href]="pdfSeguro.value | imagen:'temp'" target="_blank">
-                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a><br>
-                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
-                </p>
-                <ng-template #notShow>
-                    <a *ngIf="pdfSeguro.value" [href]="pdfSeguro.value | imagen:'camion'" target="_blank">
-                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a>
-                </ng-template>
-                <!-- ///////////////////////////////////////////////////////////////////// -->
-                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf"
-                    #file>
-                <br><br>
-                <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
+  </div>
+  <div class="col-md-3">
+    <div class="card  text-center">
+      <div class="card-header">Poliza de Seguro</div>
+      <div class="card-body">
+        <p *ngIf="fileTemporal; else notShow" class="text-danger">
+          <a [href]="pdfSeguro.value | imagen:'temp'" target="_blank">
+            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+          </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+        </p>
+        <ng-template #notShow>
+          <a *ngIf="pdfSeguro.value" [href]="pdfSeguro.value | imagen:'camion'" target="_blank">
+            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+          </a>
+        </ng-template>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
+        <br><br>
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
                 </button>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 </div>

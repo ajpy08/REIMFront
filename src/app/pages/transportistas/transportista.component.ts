@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Transportista } from '../../models/transportista.models';
-import { TransportistaService } from '../../services/service.index';
+import { TransportistaService, SubirArchivoService} from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 
 @Component({
   selector: 'app-transportista',
@@ -116,7 +114,7 @@ export class TransportistaComponent implements OnInit {
   }
 
   cargarTransportista(id: string) {
-    this._transportistaService.getTransportistaXID(id).subscribe(res => {
+    this._transportistaService.getTransportista(id).subscribe(res => {
       //console.log(res);
       this.regForm.controls['razonSocial'].setValue(res.razonSocial);
       this.regForm.controls['rfc'].setValue(res.rfc);
@@ -151,7 +149,7 @@ export class TransportistaComponent implements OnInit {
           //console.log(res);
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/transportista', this.regForm.get('_id').value]);
+            this.router.navigate(['/transportistas/transportista', this.regForm.get('_id').value]);
             this.edicion = true;
           }
           this.regForm.markAsPristine();

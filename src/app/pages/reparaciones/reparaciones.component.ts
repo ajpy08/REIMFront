@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Reparacion } from 'src/app/models/reparacion.models';
-import { ReparacionService } from 'src/app/services/reparacion/reparacion.service';
+import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
+import { ReparacionService } from 'src/app/pages/reparaciones/reparacion.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 

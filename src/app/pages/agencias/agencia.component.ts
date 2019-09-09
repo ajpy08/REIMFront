@@ -18,6 +18,7 @@ export class AgenciaComponent implements OnInit {
   file: File = null;
   fileTemporal = false;
   edicion = false;
+  
   constructor(public _agenciaService: AgenciaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -154,7 +155,7 @@ export class AgenciaComponent implements OnInit {
           // console.log (res);
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/agencia', this.regForm.get('_id').value]);
+            this.router.navigate(['/agencias/agencia', this.regForm.get('_id').value]);
             this.edicion = true;
           }
           this.regForm.markAsPristine();

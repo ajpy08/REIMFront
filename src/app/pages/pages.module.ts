@@ -19,7 +19,25 @@ import { UsuarioResetPassComponent } from './usuarios/resetPass.component';
 import { ReparacionesComponent } from './reparaciones/reparaciones.component';
 import { ReparacionComponent } from './reparaciones/reparacion.component';
 
+import { NavierasComponent } from './navieras/navieras.component';
+import { NavieraComponent } from './navieras/naviera.component';
 
+import { AgenciasComponent } from './agencias/agencias.component';
+import { AgenciaComponent } from './agencias/agencia.component';
+
+import { TransportistasComponent } from './transportistas/transportistas.component';
+import { TransportistaComponent } from './transportistas/transportista.component';
+
+import { BuquesComponent } from './buques/buques.component';
+import { BuqueComponent } from './buques/buque.component';
+
+
+
+import { OperadoresComponent } from './operadores/operadores.component';
+import { OperadorComponent } from './operadores/operador.component';
+
+import { CamionesComponent } from './camiones/camiones.component';
+import { CamionComponent } from './camiones/camion.component';
 
 ////////////////////////////////////////
 import { ManiobrasComponent } from './maniobras/maniobras.component';
@@ -39,24 +57,15 @@ import { ManiobraComponent } from './maniobras/maniobra.component';
 
 
 
-import { OperadoresComponent } from './operadores/operadores.component';
-import { OperadorComponent } from './operadores/operador.component';
-import { CamionesComponent } from './camiones/camiones.component';
-import { CamionComponent } from './camiones/camion.component';
-import { ContenedoresComponent } from './contenedores/contenedores.component';
-import { ContenedorComponent } from './contenedores/contenedor.component';
+
 import { ClientesComponent } from './clientes/clientes.component';
 import { ClienteComponent } from './clientes/cliente.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
-import { AgenciasComponent } from './agencias/agencias.component';
-import { AgenciaComponent } from './agencias/agencia.component';
-import { TransportistasComponent } from './transportistas/transportistas.component';
-import { TransportistaComponent } from './transportistas/transportista.component';
+
 import { ViajesComponent } from './viajes/viajes.component';
 import { ViajeComponent } from './viajes/viaje.component';
-import { AddcontainersComponent } from './addcontainers/addcontainers.component';
-import { NavierasComponent } from './navieras/navieras.component';
-import { NavieraComponent } from './navieras/naviera.component';
+
+
 
 
 // solicitudes y aprobaciones
@@ -78,12 +87,7 @@ import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
 
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
-import { ContenedoresRLComponent } from './contenedores-rl/contenedores-rl.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
-import { BuquesComponent } from './buques/buques.component';
-import { BuqueComponent } from './buques/buque.component';
-import { Buques2Component } from './buques2/buques2.component';
-import { Buque2Component } from './buques2/buque2.component';
 
 
 import { RegisterComponent } from './register/register.component';
@@ -92,7 +96,7 @@ import { PipesModule } from '../pipes/pipes.module';
 // import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 // PRUEBAS -------------------------------------------------------------------
 import { HttpClientModule } from '@angular/common/http';
-import { PaginatorEspañol } from './buques2/paginator-español';
+import { PaginatorEspañol } from './buques/paginator-español';
 import { NgxPrintModule } from 'ngx-print';
 import { NgxGalleryModule } from 'ngx-gallery';
 
@@ -130,6 +134,18 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         UsuarioResetPassComponent,
         ReparacionesComponent,
         ReparacionComponent,
+        NavierasComponent,
+        NavieraComponent,
+        AgenciasComponent,
+        AgenciaComponent,
+        TransportistasComponent,
+        TransportistaComponent,
+        BuquesComponent,
+        BuqueComponent,
+        OperadoresComponent,
+        OperadorComponent,
+        CamionesComponent,
+        CamionComponent,
         ManiobrasComponent,
         TransitoComponent,
         LlegadaEntradaComponent,
@@ -143,26 +159,13 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         CargaContenedorComponent,
         VaciosComponent,
         ManiobraComponent,
-        OperadoresComponent,
-        OperadorComponent,
-        CamionesComponent,
-        CamionComponent,
-        ContenedoresComponent,
-        ContenedorComponent,
         ClientesComponent,
         ClienteComponent,
-        AgenciasComponent,
-        AgenciaComponent,
-        TransportistasComponent,
-        TransportistaComponent,
         ViajesComponent,
         ViajeComponent,
         BusquedaComponent,
         FotosComponent,
         NgDropFilesDirective,
-        AddcontainersComponent,
-        NavierasComponent,
-        NavieraComponent,
         SolicitudesComponent,
         SolicitudDescargaComponent,
         SolicitudCargaComponent,
@@ -176,12 +179,7 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         MisclientesComponent,
         MiclienteComponent,
         ContenedoresDisponiblesComponent,
-        ContenedoresRLComponent,
         ReporteContenedoresRLComponent,
-        BuquesComponent,
-        BuqueComponent,
-        Buques2Component,
-        Buque2Component,
         RegisterComponent,
         PapeletaComponent,
         InventarioComponent,

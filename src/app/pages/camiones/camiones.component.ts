@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Camion } from '../../models/camion.models';
+import { Camion } from './camion.models';
 import { CamionService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
@@ -15,7 +15,6 @@ export class CamionesComponent implements OnInit {
   camiones: Camion[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
-  desde: number = 0;
 
   displayedColumns = ['actions', 'transportista.razonSocial', 'noEconomico', 'placa', 'vigenciaSeguro', 'pdfSeguro'];
   dataSource: any;
@@ -63,31 +62,6 @@ export class CamionesComponent implements OnInit {
           });
       }
     }
-  }
-
-  // cambiarDesde(valor: number) {
-  //   let desde = this.desde + valor;
-  //   if (desde >= this.totalRegistros) {
-  //     return;
-  //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargarCamiones();
-  // }
-
-  buscarCamion(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarCamiones();
-      return;
-    }
-    this.cargando = true;
-    this._camionService.buscarCamion(termino)
-      .subscribe((camiones: Camion[]) => {
-        this.camiones = camiones;
-        this.cargando = false;
-      });
   }
 
   borrarCamion(camion: Camion) {

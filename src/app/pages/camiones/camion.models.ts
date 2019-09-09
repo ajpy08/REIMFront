@@ -1,5 +1,5 @@
-import { Transportista } from "./transportista.models";
-import { Operador } from "./operador.models";
+import { Transportista } from "../transportistas/transportista.models";
+import { Operador } from "../operadores/operador.models";
 
 export class Camion {
     constructor(

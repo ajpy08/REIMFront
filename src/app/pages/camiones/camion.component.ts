@@ -1,46 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { Camion } from '../../models/camion.models';
+import { Camion } from './camion.models';
 import { CamionService, SubirArchivoService, OperadorService, UsuarioService } from '../../services/service.index';
-import { Transportista } from '../../models/transportista.models';
+import { Transportista } from '../transportistas/transportista.models';
 import { TransportistaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 
-// datapiker
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import * as _moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Operador } from 'src/app/models/operador.models';
+import { Operador } from '../operadores/operador.models';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from "../../config/config";
-// tslint:disable-next-line:no-duplicate-imports
-// import {default as _rollupMoment} from 'moment';
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
+
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+
+
+import * as _moment from 'moment';
+const moment = _moment;
+
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'LL',
+    dateInput: ['l', 'L'],
   },
   display: {
-    dateInput: 'LL',
+    dateInput: 'L',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
 @Component({
   selector: 'app-camion',
   templateUrl: './camion.component.html',
   styles: [],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
-  ],
+  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+              {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+              {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 
 export class CamionComponent implements OnInit {
@@ -52,7 +48,6 @@ export class CamionComponent implements OnInit {
   fileImgTemporal = false;
   file: File = null;
   fileTemporal = false;
-  edicion = false;
   usuarioLogueado = new Usuario;
   bloquearControl: boolean = false;
 
@@ -83,7 +78,6 @@ export class CamionComponent implements OnInit {
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.edicion = true;
       this.cargarCamion(id);
     }
     else {
@@ -97,7 +91,7 @@ export class CamionComponent implements OnInit {
   }
 
   cambioTransportista(transportista: string) {
-    this.serviceOperadores.getOperadoresTransportista(transportista, true).subscribe((operadores) => {
+    this.serviceOperadores.getOperadores(transportista, true).subscribe((operadores) => {
       this.operadores = operadores.operadores;
     });
   }
@@ -107,16 +101,12 @@ export class CamionComponent implements OnInit {
       .subscribe(res => {
         this.camion = res;
         //console.log(this.camion)
-        this.serviceOperadores.getOperadoresTransportista(this.camion.transportista.toString(), true).subscribe((operadores) => {
+        this.serviceOperadores.getOperadores(this.camion.transportista.toString(), true).subscribe((operadores) => {
           this.operadores = operadores.operadores;
         });
         for (var propiedad in this.camion) {
-          //console.log(propiedad);
           for (var control in this.regForm.controls) {
-            //console.log(control);
-            //if( propiedad == control.toString() && res[propiedad] != null && res[propiedad] != undefined) {
             if (propiedad == control.toString()) {
-              //console.log(propiedad + ': ' + res[propiedad]);
               this.regForm.controls[propiedad].setValue(res[propiedad]);
             }
           }
@@ -166,17 +156,13 @@ export class CamionComponent implements OnInit {
 
   guardarCamion() {
     if (this.regForm.valid) {
-      //console.log(this.regForm.value);
       this._camionService.guardarCamion(this.regForm.value)
         .subscribe(res => {
-          // this.fileImg = null;
-          // this.fileImgTemporal = false;
           this.file = null;
           this.fileTemporal = false;
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/camion', this.regForm.get('_id').value]);
-            this.edicion = true;
+            this.router.navigate(['/camiones/camion', this.regForm.get('_id').value]);
           }
           this.regForm.markAsPristine();
         });
@@ -184,14 +170,7 @@ export class CamionComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    // if (this.tipoFile == 'img') {
-    //   //console.log('Fue Foto');
-    // if (event.target.files[0] != undefined) {
-    //   this.fileImg = <File>event.target.files[0];
-    //   this.subirArchivo(this.tipoFile);
-    // } else {
     if (this.tipoFile == 'pdfSeguro') {
-      //console.log('Fue pdfSeguro');
       if (event.target.files[0] != undefined) {
         this.file = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
@@ -199,20 +178,14 @@ export class CamionComponent implements OnInit {
     } else {
       console.log('No conozco el tipo de archivo para subir')
     }
-    //}
   }
 
   subirArchivo(tipo: string) {
     let file: File;
-    // if (this.fileImg != null && tipo == 'foto') {
-    //   file = this.fileImg;
-    //   this.fileImgTemporal = true;
-    // } else {
     if (this.file != null && tipo == 'pdfSeguro') {
       file = this.file;
       this.fileTemporal = true;
     }
-    // }
     this._subirArchivoService.subirArchivoTemporal(file, '')
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);

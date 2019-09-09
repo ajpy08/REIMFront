@@ -1,151 +1,127 @@
 <div class="row animated fadeIn">
-    <div class="col-md-6">
-        <div class="card card-body">
-            <h3 class="box-title m-b-0">Agencia: {{ razonSocial.value }}</h3><br>
-            <div class="row">
-                <div class="col-sm-12 col-xs-12">
-                    <form [formGroup]="regForm" (ngSubmit)="guardarAgencia()" novalidate>
-                        <div class="my-container">
-                            <mat-form-field>
-                                <input matInput formControlName="razonSocial" type="text" class="form-control"
-                                    placeholder="Razón Social *">
-                                <mat-error
-                                    *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
-                                    <sup>*</sup>Por Favor Ingrese la Razon Social
-                                </mat-error>
-                                <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
-                                    <sup>*</sup>la Razon Social debe contener al menos 5 caracteres<br>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="rfc" type="text" class="form-control"
-                                    placeholder="RFC *">
-                                <mat-error *ngIf="rfc.touched && rfc.invalid && !rfc.errors?.minlength">
-                                    <sup>*</sup>Por Favor Ingrese un RFC <br><br>
-                                </mat-error>
-                                <mat-error *ngIf="rfc.errors && rfc.errors['minlength']">
-                                    <sup>*</sup>El RFC debe contener al menos 12 caracteres<br>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="nombreComercial" type="text" class="form-control"
-                                    placeholder="Nombre Comercial">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="calle" type="text" class="form-control"
-                                    placeholder="Dirección">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="noExterior" type="text" class="form-control"
-                                    placeholder="Numero Exterior">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="noInterior" type="text" class="form-control"
-                                    placeholder="Numero Interior">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="colonia" type="text" class="form-control"
-                                    placeholder="Colonia">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="municipio" type="text" class="form-control"
-                                    placeholder="Municipio/Delegacion">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="ciudad" type="text" class="form-control"
-                                    placeholder="Ciudad">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="estado" type="text" class="form-control"
-                                    placeholder="Estado *">
-                                <mat-error *ngIf="estado.touched && estado.invalid">
-                                    <sup>*</sup>Por Favor Ingrese un Estado <br><br>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="cp" type="text" class="form-control"
-                                    placeholder="Codigo Postal *">
-                                <mat-error *ngIf="cp.touched && cp.invalid">
-                                    <sup>*</sup>Por Favor Ingrese un CP <br><br>
-                                </mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="correo" type="text" class="form-control"
-                                    placeholder="Correo Personal">
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput formControlName="correoFac" type="text" class="form-control"
-                                    placeholder="Correo De facturación">
-                            </mat-form-field>
-                            <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
-                                Credito
-                            </mat-checkbox>
-                            <mat-form-field>
-                                <input matInput formControlName="patente" type="text " class="form-control "
-                                    placeholder="Patente *">
-                                <mat-error *ngIf="patente.touched && patente.invalid">
-                                    <sup>*</sup>Por Favor Ingrese un numero de Patente <br><br>
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <button type="submit"
-                            class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-                            [disabled]="regForm.pristine || regForm.invalid">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Agencia: {{ razonSocial.value }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarAgencia()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="razonSocial" type="text" class="form-control" placeholder="Razón Social *">
+                <mat-error *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
+                  <sup>*</sup>Por Favor Ingrese la Razon Social
+                </mat-error>
+                <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
+                  <sup>*</sup>la Razon Social debe contener al menos 5 caracteres<br>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="rfc" type="text" class="form-control" placeholder="RFC *">
+                <mat-error *ngIf="rfc.touched && rfc.invalid && !rfc.errors?.minlength">
+                  <sup>*</sup>Por Favor Ingrese un RFC <br><br>
+                </mat-error>
+                <mat-error *ngIf="rfc.errors && rfc.errors['minlength']">
+                  <sup>*</sup>El RFC debe contener al menos 12 caracteres<br>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="nombreComercial" type="text" class="form-control" placeholder="Nombre Comercial">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="calle" type="text" class="form-control" placeholder="Dirección">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="noExterior" type="text" class="form-control" placeholder="Numero Exterior">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="noInterior" type="text" class="form-control" placeholder="Numero Interior">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="colonia" type="text" class="form-control" placeholder="Colonia">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="municipio" type="text" class="form-control" placeholder="Municipio/Delegacion">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="ciudad" type="text" class="form-control" placeholder="Ciudad">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="estado" type="text" class="form-control" placeholder="Estado *">
+                <mat-error *ngIf="estado.touched && estado.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Estado <br><br>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="cp" type="text" class="form-control" placeholder="Codigo Postal *">
+                <mat-error *ngIf="cp.touched && cp.invalid">
+                  <sup>*</sup>Por Favor Ingrese un CP <br><br>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Personal">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
+              </mat-form-field>
+              <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
+                Credito
+              </mat-checkbox>
+              <mat-form-field>
+                <input matInput formControlName="patente" type="text " class="form-control " placeholder="Patente *">
+                <mat-error *ngIf="patente.touched && patente.invalid">
+                  <sup>*</sup>Por Favor Ingrese un numero de Patente <br><br>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
                             <i class="fa fa-save"></i>
                             Guardar
                         </button>
-                        <a routerLink="/agencias" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
-                    </form>
-                    <!-- <p>Form value {{ regForm.value | json }} </p>
+            <a routerLink="/agencias" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
+          </form>
+          <!-- <p>Form value {{ regForm.value | json }} </p>
                     <p> Form status {{ regForm.status | json}} </p>
                     <p> Form status2 {{ regForm.pristine | json}} </p> -->
-                </div>
-            </div>
         </div>
+      </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-header">Logo</div>
-            <div class="card-body">
-                <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
-                    <img (click)="file.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
-                    ¡Archivo Temporal, debe guardar el registro del usuario
-                    para confirmar!
-                </p>
-                <ng-template #notShow>
-                    <img (click)="file.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
-                </ng-template>
-                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo
-                    accept="image/*" #file>
-                <br>
-                <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'img'"><i class="fa fa-file"></i> Cambiar foto</button>
-            </div>
-        </div>
-        <div class="card  text-center">
-            <div class="card-header">Formato R1</div>
-            <div class="card-body">
-                <p *ngIf="fileTemporal; else notShow2" class="text-danger">
-                    <a [href]="formatoR1.value | imagen:'temp'" target="_blank">
-                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a><br>
-                    ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
-                </p>
-                <ng-template #notShow2>
-                    <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'" target="_blank">
-                        <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
-                    </a>
-                </ng-template>
-                <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf"
-                    #file>
-                <br>
-                <button class="btn btn-info waves-effect waves-light" type="button"
-                    (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
+  </div>
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-header">Logo</div>
+      <div class="card-body">
+        <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
+          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+        </p>
+        <ng-template #notShow>
+          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
+        </ng-template>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*" #file>
+        <br>
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'img'"><i class="fa fa-file"></i> Cambiar foto</button>
+      </div>
+    </div>
+    <div class="card  text-center">
+      <div class="card-header">Formato R1</div>
+      <div class="card-body">
+        <p *ngIf="fileTemporal; else notShow2" class="text-danger">
+          <a [href]="formatoR1.value | imagen:'temp'" target="_blank">
+            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+          </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+        </p>
+        <ng-template #notShow2>
+          <a *ngIf="formatoR1.value" [href]="formatoR1.value | imagen:'cliente'" target="_blank">
+            <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+          </a>
+        </ng-template>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
+        <br>
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
                     R1</button>
-                <mat-error *ngIf="formatoR1.invalid">
-                    <br><sup>*</sup>El Formato R1 es obligatorio
-                </mat-error>
-            </div>
-        </div>
+        <mat-error *ngIf="formatoR1.invalid">
+          <br><sup>*</sup>El Formato R1 es obligatorio
+        </mat-error>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Naviera } from "./navieras.models";
+import { Naviera } from "../navieras/navieras.models";
 
 export class Buque {
     constructor(

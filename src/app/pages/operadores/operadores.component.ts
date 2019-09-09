@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Operador } from '../../models/operador.models';
+import { Operador } from './operador.models';
 import { OperadorService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
@@ -14,7 +14,6 @@ export class OperadoresComponent implements OnInit {
   operadores: Operador[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
-  desde: number = 0;
   usuarioLogueado: Usuario;
 
   displayedColumns = ['actions', 'foto', 'transportista.razonSocial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
@@ -62,18 +61,26 @@ export class OperadoresComponent implements OnInit {
     this.cargando = false;
   }
 
-  buscarOperador(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarOperadores();
-      return;
-    }
-    this.cargando = true;
-    this._operadorService.buscarOperador(termino)
-      .subscribe((operadores: Operador[]) => {
-        this.operadores = operadores;
-        this.cargando = false;
+  habilitaDeshabilitaOperador(operador, event) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de deshabilitar a ' + operador.nombre,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      })
+      .then(borrar => {
+        if (borrar) {
+          this._operadorService.habilitaDeshabilitaOperador(operador, event.checked)
+          .subscribe(borrado => {
+            this.cargarOperadores();
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
       });
   }
+
 
   borrarOperador(operador: Operador) {
     swal({

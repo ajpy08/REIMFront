@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Reparacion } from 'src/app/models/reparacion.models';
+import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ReparacionService } from 'src/app/services/reparacion/reparacion.service';
+import { ReparacionService } from 'src/app/pages/reparaciones/reparacion.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

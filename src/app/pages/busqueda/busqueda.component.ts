@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { Usuario } from '../usuarios/usuario.model';
-import { Operador } from '../../models/operador.models';
-import { Camion } from '../../models/camion.models';
+import { Operador } from '../operadores/operador.models';
+import { Camion } from '../camiones/camion.models';
 import { Cliente } from '../../models/cliente.models';
-import { Contenedor } from '../../models/contenedores.models';
-import { Agencia } from '../../models/agencia.models';
-import { Transportista } from '../../models/transportista.models';
+
+import { Agencia } from '../agencias/agencia.models';
+import { Transportista } from '../transportistas/transportista.models';
 
 @Component({
   selector: 'app-busqueda',
@@ -20,7 +20,6 @@ export class BusquedaComponent implements OnInit {
   usuarios: Usuario[] = [];
   operadores: Operador[] = [];
   camiones: Camion[] = [];
-  contenedores: Contenedor[] = [];
   clientes: Cliente[] = [];
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
@@ -54,7 +53,6 @@ export class BusquedaComponent implements OnInit {
           console.log( resp );
           this.operadores = resp.operadores;
           this.camiones = resp.camiones;
-          this.contenedores = resp.contenedores;
           this.clientes = resp.clientes;
           this.agencias = resp.agencias;
           this.transportistas = resp.transportistas;

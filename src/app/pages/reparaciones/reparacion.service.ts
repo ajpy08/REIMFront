@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
-import { UsuarioService } from '../../pages/usuarios/usuario.service';
-import { Reparacion } from 'src/app/models/reparacion.models';
+import { UsuarioService } from '../usuarios/usuario.service';
+import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import swal from 'sweetalert';

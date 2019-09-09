@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
-import { Transportista } from '../../../models/transportista.models';
+import { Transportista } from '../../transportistas/transportista.models';
 import { TransportistaService } from '../../../services/service.index';
-import { Agencia } from '../../../models/agencia.models';
+import { Agencia } from '../../agencias/agencia.models';
 import { AgenciaService } from '../../../services/service.index';
-import { Operador } from '../../../models/operador.models';
+import { Operador } from '../../operadores/operador.models';
 import { OperadorService } from '../../../services/service.index';
-import { Camion } from '../../../models/camion.models';
+import { Camion } from '../../camiones/camion.models';
 import { CamionService } from '../../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -155,13 +155,13 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   cargaOperadores( id: string) {
-    this._operadorService.getOperadoresTransportista( id, true )
+    this._operadorService.getOperadores( id, true )
     .subscribe( resp => this.operadores = resp.operadores);
     this.cargaCamiones(id);
   }
 
-  cargaCamiones( id: string ) {
-    this._camionService.getCamionesXIdTransportista( id )
+  cargaCamiones( idTransportista: string ) {
+    this._camionService.getCamiones( idTransportista )
     .subscribe(resp => this.camiones = resp.camiones);
   }
 
