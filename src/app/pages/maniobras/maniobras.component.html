@@ -147,7 +147,7 @@
 
                 <ng-container matColumnDef="buque">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.buque?.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque?.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="transportista">

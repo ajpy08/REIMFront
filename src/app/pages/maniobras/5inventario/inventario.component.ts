@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { ManiobraService } from '../maniobras/maniobra.service';
+import { ManiobraService } from '../maniobra.service';
 
 @Component({
   selector: 'app-inventario',
