@@ -36,22 +36,13 @@ import { CamionComponent } from './camiones/camion.component';
 ////////////////////////////////////////////////////////////
 
 import { ManiobrasComponent } from './maniobras/maniobras.component';
+import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
+import { RevisarComponent } from './maniobras/2revisar/revisar.component';
+import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
+import { DisponiblesComponent } from './maniobras/5inventario/disponibles.component';
+import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
+import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
 
-import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
-import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
-
-import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
-
-import { RevisionComponent } from './maniobras/revision_revisa/revision.component';
-import { RevisaComponent } from './maniobras/revision_revisa/revisa.component';
-
-import { LavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/lavado_reparacion.component';
-import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/termina_lavado_reparacion.component';
-
-import { DisponiblesComponent } from './maniobras/disponibles.component';
-
-import { XCargarComponent } from './maniobras/xcargar_cargar/xcargar.component';
-import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_contenedor.component';
 
 import { VaciosComponent } from './maniobras/vacios.component';
 
@@ -137,23 +128,19 @@ const pagesRoutes: Routes = [
     
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
+    {path: 'maniobras/:id/llegada_entrada', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
+    {path: 'maniobras/:id/revisar', component: RevisarComponent, data: {titulo: 'Revisa'}},
+    {path: 'maniobras/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+    {path: 'maniobras/disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
+    {path: 'maniobras/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
+    {path: 'maniobras/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
 
 
     
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
 
-    {path: 'maniobras/transito', component: TransitoComponent, data: {titulo: 'Transito'}},
-    {path: 'maniobras/llegada_entrada/:id', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
-    {path: 'maniobras/espera', component: EnEsperaComponent, data: {titulo: 'Espera'}},
 
 
-    {path: 'revision', component: RevisionComponent, data: {titulo: 'Revision'}},
-    {path: 'maniobras/revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
-    {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'maniobras/termina_lavado_reparacion/:id', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
-    {path: 'xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
-    {path: 'carga_contenedor/:id', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},

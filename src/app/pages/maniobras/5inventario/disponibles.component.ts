@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ManiobraService } from '../../services/service.index';
+import { ManiobraService } from '../../../services/service.index';
 
 
 @Component({
