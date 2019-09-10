@@ -61,8 +61,8 @@ export class FotosComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     // this.selected = this.activatedRoute.snapshot.params.get('opcion');
     this.selected = this.activatedRoute.snapshot.queryParams['opcion'];
-    console.log(this.id);
-    console.log(this.selected);
+    // console.log(this.id);
+    // console.log(this.selected);
     this.cargarManiobra(this.id);
     this.cargarFotos(this.id, "L");
     this.cargarFotos(this.id, "R");
@@ -114,10 +114,6 @@ export class FotosComponent implements OnInit {
       .subscribe(maniobra => {
         this.maniobra = maniobra.maniobra;
       });      
-  }
-
-  maniobraPrint() {
-    console.log(this.maniobra)
   }
 
   cargarFotos(id: string, lavado_reparacion: string) {

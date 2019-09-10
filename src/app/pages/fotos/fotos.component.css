@@ -21,5 +21,6 @@
 }
 
 ngx-gallery /deep/ .ngx-gallery-arrow {
-    color: black
+    color: rgb(255, 238, 0);
+    font-size: 40px;
 }
