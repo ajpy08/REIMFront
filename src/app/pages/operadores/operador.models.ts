@@ -1,4 +1,4 @@
-import { Transportista } from "./transportista.models";
+import { Transportista } from "../transportistas/transportista.models";
 
 export class Operador {
     constructor(

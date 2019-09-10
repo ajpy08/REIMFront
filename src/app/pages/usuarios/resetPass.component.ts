@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute  } from '@angular/router';
-import { Usuario } from '../../models/usuarios.model';
-import { UsuarioService } from '../../services/usuario/usuario.service';
-import { NgForm } from '@angular/forms';
-import { FormGroup, FormControl, FormBuilder,  Validators,AbstractControl } from '@angular/forms';
+import { UsuarioService } from './usuario.service';
+import { FormGroup, FormBuilder,  Validators,AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-resetPass',
@@ -76,7 +74,7 @@ export class UsuarioResetPassComponent implements OnInit {
 
   
 cargarUsuario( id: string ){
-  this._usuarioService.getUsuarioxID(id).subscribe(usuario => {
+  this._usuarioService.getUsuario(id).subscribe(usuario => {
     this.regForm.controls["nombre"].setValue(usuario.nombre);
     this.regForm.controls["email"].setValue(usuario.email);
     this.regForm.controls["role"].setValue(usuario.role);

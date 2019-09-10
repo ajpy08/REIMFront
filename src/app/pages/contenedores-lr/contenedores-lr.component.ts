@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService } from '../maniobras/maniobra.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
 
 @Component({

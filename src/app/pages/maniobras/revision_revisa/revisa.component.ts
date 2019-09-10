@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
-import { Reparacion } from '../../../models/reparacion.models';
-import { ReparacionService } from '../../../services/reparacion/reparacion.service';
+import { Reparacion } from '../../reparaciones/reparacion.models';
+import { ReparacionService } from '../../reparaciones/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';

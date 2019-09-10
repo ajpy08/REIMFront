@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Agencia } from '../../models/agencia.models';
-import { AgenciaService } from '../../services/agencia/agencia.service';
+import { Agencia } from '../agencias/agencia.models';
+import { AgenciaService } from '../agencias/agencia.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService } from '../../services/service.index';
 import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Usuario } from '../../models/usuarios.model';
+
 
 @Component({
   selector: 'app-empresa',

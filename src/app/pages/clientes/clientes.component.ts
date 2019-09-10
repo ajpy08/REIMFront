@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { Observable } from 'rxjs';
 import { stringify } from '@angular/core/src/render3/util';
 declare var swal: any;

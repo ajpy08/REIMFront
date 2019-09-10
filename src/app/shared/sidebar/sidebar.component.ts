@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService, UsuarioService } from '../../services/service.index';
-import { Usuario } from '../../models/usuarios.model';
+import { Usuario } from '../../pages/usuarios/usuario.model';
 
 
 @Component({

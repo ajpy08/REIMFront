@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Naviera } from '../../models/navieras.models';
+import { Naviera } from './navieras.models';
 import { NavieraService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
@@ -11,7 +11,6 @@ export class NavierasComponent implements OnInit {
 
   navieras: Naviera[] = [];
   cargando = true;
-  desde = 0;
   totalRegistros = 0;
 
   displayedColumns = ['actions', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio', 
@@ -36,7 +35,7 @@ export class NavierasComponent implements OnInit {
 
   cargarNavieras() {
     this.cargando = true;
-    this._navieraService.getNavieras(this.desde)
+    this._navieraService.getNavieras()
     .subscribe(navieras => {
       this.dataSource = new MatTableDataSource(navieras.navieras);
         this.dataSource.sort = this.sort;
@@ -46,17 +45,6 @@ export class NavierasComponent implements OnInit {
     this.cargando = false;
   }
 
-  // cambiarDesde(valor: number) {
-  //   const desde = this.desde + valor;
-  //   if (desde >= this.totalRegistros) {
-  //     return;
-  //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargarRegistros();
-  // }
 
   borrarNaviera( naviera: Naviera ) {
     swal({
@@ -75,18 +63,4 @@ export class NavierasComponent implements OnInit {
         }
       });
   }
-
-  buscarNaviera(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarNavieras();
-      return;
-    }
-    this.cargando = true;
-    this._navieraService.buscarNaviera(termino)
-    .subscribe((navieras: Naviera[]) => {
-      this.navieras = navieras;
-      this.cargando = false;
-    });
-  }
-
 }

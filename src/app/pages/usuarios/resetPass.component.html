@@ -1,41 +1,43 @@
 <div class="row animated fadeIn">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Cambio de Contraseña</h4>
-                    <form [formGroup]="regForm"  (ngSubmit)="resetPass()" novalidate>
-                        <div class="my-container">
-                            <h3 class="card-title">{{nombre.value}}</h3>
-                            <h3 class="card-title">{{email.value}}</h3>
-                            <mat-form-field>
-                                <input  matInput formControlName="password" type="password" class="form-control" placeholder="Password" >
-                                <mat-error *ngIf="password.touched && password.invalid && !nombre.errors?.minlength">
-                                        <sup>*</sup>Por Favor Ingrese una contraseña
-                                    </mat-error>
-                            </mat-form-field>
-                            <mat-form-field>
-                                <input matInput  formControlName="passwordConfirm"  type="password" class="form-control" placeholder="Confirmar Password" required compare="password">
-                                <mat-error *ngIf="passwordConfirm.errors">
-                                        <sup>*</sup>La confirmación de la contraseña no coincide...<br><br>
-                                </mat-error>
-                            </mat-form-field>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" 
-                        [disabled]="regForm.pristine || regForm.invalid" >
-                            <i class="fa fa-save"></i>
-                            Guardar
-                        </button>
-                        <a routerLink="/usuarios" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-                <div class="card card-body">
-                    <h4 class="box-title m-b-0">Fotografía</h4>
-                    <p  class="text-danger">
-                        <img [src]="img.value | imagen" class="w150 img-circle pointer">
-                    </p>
-                </div>
-        </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Cambio de Contraseña</h4>
+        <form [formGroup]="regForm" (ngSubmit)="resetPass()" novalidate>
+          <div class="my-container">
+            <h3 class="card-title">{{nombre.value}}</h3>
+            <h3 class="card-title">{{email.value}}</h3>
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="password" type="password" placeholder="Nuevo Password">
+              <mat-error *ngIf="password.touched && password.invalid && !nombre.errors?.minlength">
+                <sup>*</sup>Por Favor Ingrese una contraseña
+              </mat-error>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <input matInput formControlName="passwordConfirm" type="password" placeholder="Confirmar Password">
+              <mat-error *ngIf=" passwordConfirm.errors ">
+                <sup>*</sup>La confirmación de la contraseña no coincide...<br><br>
+              </mat-error>
+            </mat-form-field>
+            <br>
+          </div>
+          <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+                <i class="fa fa-save "></i>
+                Guardar
+            </button>
+          <a routerLink="/usuarios" class="btn btn-danger waves-effect waves-light">Regresar Catálogo</a>
+        </form>
+      </div>
     </div>
+  </div>
+  <div class="col-md-3 ">
+    <div class="card card-body ">
+      <h4 class="box-title m-b-0 ">Fotografía</h4>
+      <p class="text-danger ">
+        <img [src]="img.value | imagen " class="w150 img-circle pointer ">
+      </p>
+    </div>
+  </div>
+</div>

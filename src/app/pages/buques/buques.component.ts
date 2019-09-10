@@ -1,58 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { Buque } from '../../models/buques.models';
-import { BuqueService } from '../../services/service.index';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Buque } from './buques.models';
+import { BuqueService, ExcelService } from '../../services/service.index';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+
 declare var swal: any;
 @Component({
   selector: 'app-buques',
-  templateUrl: './buques.component.html',
-  styles: []
+  templateUrl: './buques.component.html'
 })
+
 export class BuquesComponent implements OnInit {
-  buques: Buque[] = [];
+  buquesExcel = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
-  desde: number = 0;
+  
 
-  constructor(public _buqueService: BuqueService) { }
+  displayedColumns = ['actions', 'nombre', 'razonSocial', 'fAlta'];
+  dataSource: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private _buqueService: BuqueService, private _excelService: ExcelService) {
+  }
 
   ngOnInit() {
     this.cargarBuques();
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.totalRegistros = this.dataSource.filteredData.length;
+  }
+
   cargarBuques() {
     this.cargando = true;
-    this._buqueService.getBuques(this.desde)
+    this._buqueService.getBuques()
       .subscribe(buques => {
-        this.totalRegistros = buques.total,
-          this.buques = buques.buques
-        this.cargando = false;
-      });    
-  }
-
-  cambiarDesde(valor: number) {
-    let desde = this.desde + valor;
-    if (desde >= this.totalRegistros) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargarBuques();
-
-  }
-
-  buscarBuque(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarBuques();
-      return;
-    }
-    this.cargando = true;
-    this._buqueService.buscarBuque(termino)
-      .subscribe((buques: Buque[]) => {
-        this.buques = buques;
-        this.cargando = false;
+        this.dataSource = new MatTableDataSource(buques.buques);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = buques.buques.length;
       });
+    this.cargando = false;
   }
 
   borrarBuque(buque: Buque) {
@@ -69,5 +61,27 @@ export class BuquesComponent implements OnInit {
             .subscribe(() => this.cargarBuques());
         }
       });
+  }
+
+  CreaDatosExcel(datos) {
+    datos.forEach(b => {
+      var buque = {
+        //Id: b._id,
+        Buque: b.nombre,
+        Naviera: b.naviera.razonSocial,
+        UsuarioAlta: b.usuarioAlta.nombre,
+        FAlta: b.fAlta.substring(0, 10)
+      };
+      this.buquesExcel.push(buque);
+    });
+  }
+
+  exportAsXLSX(): void {
+    this.CreaDatosExcel(this.dataSource.filteredData);
+    if (this.buquesExcel) {
+      this._excelService.exportAsExcelFile(this.buquesExcel, 'Buques');
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 }

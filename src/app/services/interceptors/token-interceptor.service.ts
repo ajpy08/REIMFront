@@ -1,4 +1,4 @@
-import { UsuarioService } from '../usuario/usuario.service';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import { Injectable } from '@angular/core';
 import {
   HttpEvent,

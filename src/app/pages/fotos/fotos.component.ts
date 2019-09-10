@@ -7,7 +7,7 @@ import { Maniobra } from '../../models/maniobra.models';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryLayout, NgxGalleryImageSize, NgxGalleryOrder } from 'ngx-gallery';
 import { FotosPipe } from 'src/app/pipes/fotos.pipe';
 import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
-import { Usuario } from 'src/app/models/usuarios.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 
 

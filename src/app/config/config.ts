@@ -23,7 +23,6 @@ export const GRADOS_CONTENEDOR = {A:'A', B:'B', C:'C'};
 export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C'];
 
 
-
 export const ROLES = {
     ADMIN_ROLE: 'ADMIN_ROLE',
     REIMADMIN_ROLE: 'REIMADMIN_ROLE',
@@ -34,3 +33,11 @@ export const ROLES = {
     CLIENT_ROLE: 'CLIENT_ROLE'
 }
 
+export const ROLES_ARRAY = [ {_id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR'} , 
+{_id: 'REIMADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK'},
+{_id: 'REIM_ROLE', descripcion: 'USUARIO COINTAINER PARK'},
+{_id: 'NAVIERA_ROLE', descripcion: 'NAVIERA'},
+{_id: 'TRANSPORTISTA_ROLE', descripcion: 'TRANSPORTISTA'},
+{_id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL'},
+{_id: 'CLIENT_ROLE', descripcion: 'CLIENTE'}
+]

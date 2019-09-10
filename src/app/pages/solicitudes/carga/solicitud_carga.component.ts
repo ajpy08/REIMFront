@@ -1,11 +1,11 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Agencia } from '../../../models/agencia.models';
+import { Agencia } from '../../agencias/agencia.models';
 import { AgenciaService } from 'src/app/services/service.index';
-import { Usuario } from '../../../models/usuarios.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { UsuarioService } from '../../../services/service.index';
-import { Transportista } from '../../../models/transportista.models';
+import { Transportista } from '../../transportistas/transportista.models';
 import { TransportistaService } from '../../../services/service.index';
 import { Cliente } from '../../../models/cliente.models';
 import { ClienteService } from '../../../services/service.index';

@@ -1,4 +1,4 @@
-import { Buque } from "src/app/models/buques.models";
+import { Buque } from "src/app/pages/buques/buques.models";
 
 export class Viaje {
     constructor(

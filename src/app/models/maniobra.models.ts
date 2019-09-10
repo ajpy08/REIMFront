@@ -1,4 +1,4 @@
-import { Reparacion } from "./reparacion.models";
+import { Reparacion } from "../pages/reparaciones/reparacion.models";
 
 export class Maniobra {
     constructor(

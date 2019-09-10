@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { Usuario } from '../models/usuarios.model';
-import { UsuarioService } from '../services/usuario/usuario.service';
+import { Usuario } from '../pages/usuarios/usuario.model';
+import { UsuarioService } from '../pages/usuarios/usuario.service';
 
 
 declare function init_plugins();

@@ -1,152 +1,116 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import { Maniobra } from '../../models/maniobra.models';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
-import * as jspdf from 'jspdf';
-import html2canvas from 'html2canvas';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MatDatepicker} from '@angular/material/datepicker';
-// Depending on whether rollup is used, moment needs to be imported differently.
-// Since Moment.js doesn't have a default export, we normally need to import using the `* as`
-// syntax. However, rollup creates a synthetic default module and we thus need to import it using
-// the `default as` syntax.
-import * as _moment from 'moment';
-import { Router } from '@angular/router';
-// tslint:disable-next-line:no-duplicate-imports
-// import * as Moment from 'moment';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import {ETAPAS_MANIOBRA} from '../../config/config';
 
-const moment = _moment;
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'YYYY-MM-DD',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY MMM DD',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY MMMM DD',
-  },
-};
-
-declare var jQuery: any;
 @Component({
-  selector: 'app-maniobras',
+  selector: 'app-manibras',
   templateUrl: './maniobras.component.html',
-  styles: [],
-  providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ],
+  styles: ['./maniobras.component.css'],
+  providers: [],
 })
 export class ManiobrasComponent implements OnInit {
-  date = new FormControl(moment());
-   // tslint:disable-next-line:typedef-whitespace
-   maniobras: Maniobra[] = [];
-   data: any = {fechaCreado: ''};
-   // tslint:disable-next-line:no-inferrable-types
-   cargando: boolean = true;
-   // tslint:disable-next-line:no-inferrable-types
-   totalRegistros: number = 0;
-   // tslint:disable-next-line:no-inferrable-types
-   desde: number = 0;
-   constructor(public _maniobraService: ManiobraService, public _excelService: ExcelService, private router: Router) { }
 
+  cargando = true;
+  totalTransito = 0;
+  totalEspera = 0;
+  totalRevision = 0;
+  totalLavadoReparacion = 0;
+
+
+  displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+  'peso', 'cliente', 'agencia'];
+
+  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+  'peso', 'cliente', 'agencia'];
+
+  displayedColumnsRevision = ['actions', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+  'peso', 'cliente', 'agencia'];
+
+  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
+
+  dtTransito: any;
+  dtEspera: any;
+  dtRevision: any;
+  dtLavadoReparacion: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+
+  constructor(public _maniobraService: ManiobraService) { }
   ngOnInit() {
     this.cargarManiobras();
   }
-  public exportpdf() {
-    // tslint:disable-next-line:no-var-keyword
-    // tslint:disable-next-line:prefer-const
-    let data = document.getElementById('contentToConvert');
-    html2canvas(data).then(canvas => {
-      // Few necessary setting options
-      // tslint:disable-next-line:prefer-const
-      let imgWidth = 208;
-        // tslint:disable-next-line:prefer-const
-      let pageHeight = 295;
-        // tslint:disable-next-line:prefer-const
-      let imgHeight = canvas.height * imgWidth / canvas.width;
-        // tslint:disable-next-line:prefer-const
-      let heightLeft = imgHeight;
 
-      const contentDataURL = canvas.toDataURL('image/png');
-        // tslint:disable-next-line:prefer-const
-      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
-        // tslint:disable-next-line:prefer-const
-      let position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      pdf.save('MYPdf.pdf'); // Generated PDF
-    });
+  applyFilterTransito(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtTransito.filter = filterValue;
+    this.totalTransito = this.dtTransito.filteredData.length;
   }
 
-  exportAsXLSX(): void {
-    // console.log(this.data);
-    this._excelService.exportAsExcelFile(this.maniobras, 'maniobras');
+  applyFilterEspera(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtEspera.filter = filterValue;
+    this.totalEspera = this.dtEspera.filteredData.length;
+  }
+
+  applyFilterRevision(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtRevision.filter = filterValue;
+    this.totalRevision = this.dtRevision.filteredData.length;
+  }
+
+  applyFilterLavadoRevision(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtLavadoReparacion.filter = filterValue;
+    this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
   }
 
   cargarManiobras() {
     this.cargando = true;
-    this._maniobraService.cargarManiobras(this.desde)
-    .subscribe(maniobras =>
-      // this.totalRegistros = resp.total;
-      this.maniobras = maniobras
-    );
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO)
+    .subscribe(maniobras => {
+      this.dtTransito = new MatTableDataSource(maniobras.maniobras);
+      this.dtTransito.sort = this.sort;
+      this.dtTransito.paginator = this.paginator;
+      this.totalTransito = maniobras.total;
+    });
+    this.cargando = false;
+
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
+    .subscribe(maniobras => {
+      this.dtEspera = new MatTableDataSource(maniobras.maniobras);
+      this.dtEspera.sort = this.sort;
+      this.dtEspera.paginator = this.paginator;
+      this.totalEspera = maniobras.total;
+    });
+
+    this.cargando = false;
+
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
+      .subscribe(maniobras => {
+        this.dtRevision = new MatTableDataSource(maniobras.maniobras);
+        this.dtRevision.sort = this.sort;
+        this.dtRevision.paginator = this.paginator;
+        this.totalRevision = maniobras.total;
+      });
+      this.cargando = false;
+
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
+      .subscribe(maniobras => {
+        this.dtLavadoReparacion = new MatTableDataSource(maniobras.maniobras);
+        this.dtLavadoReparacion.sort = this.sort;
+        this.dtLavadoReparacion.paginator = this.paginator;
+        this.totalLavadoReparacion = maniobras.total;
+      });
+      this.cargando = false;
+  }
 }
-
-  cambiarDesde(valor: number) {
-    // tslint:disable-next-line:prefer-const
-    let desde = this.desde + valor;
-    console.log(desde);
-    if (desde >= this._maniobraService.totalManiobras) {
-      return;
-    }
-    if (desde < 0) {
-      return;
-    }
-    this.desde += valor;
-    this.cargarManiobras();
-
-  }
-
-  buscarManiobra(termino: string) {
-    if (termino.length <= 0) {
-      this.cargarManiobras();
-      return;
-    }
-    this.cargando = true;
-    this._maniobraService.buscarManiobra(termino)
-    .subscribe( maniobras =>  this.maniobras = maniobras );
-  }
-
-  borrarManiobra( maniobras: Maniobra ) {
-
-    this._maniobraService.borrarManiobra( maniobras._id )
-            .subscribe( () =>  this.cargarManiobras() );
-
-  }
-
-  buscarManiobraFecha(fechaInicio: string, fechaFin: string) {
-    console.log(fechaInicio);
-    console.log(fechaFin);
-    if (fechaInicio.length <= 0 || fechaFin.length <= 0) {
-      this.cargarManiobras();
-      return;
-    }
-    this.cargando = true;
-    this._maniobraService.buscarManiobraFecha(fechaInicio, fechaFin)
-    .subscribe( maniobras =>  this.maniobras = maniobras );
-  }
-
-  }
 
 
 

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Buque } from '../../models/buques.models';
+import { Buque } from './buques.models';
 import { BuqueService, NavieraService } from '../../services/service.index';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Naviera } from 'src/app/models/navieras.models';
+import { Naviera } from 'src/app/pages/navieras/navieras.models';
 
 @Component({
   selector: 'app-buque',
@@ -14,7 +14,7 @@ export class BuqueComponent implements OnInit {
   buque: Buque = new Buque();
   navieras: Naviera[] = [];
   regForm: FormGroup;
-  edicion = false;
+  
 
   constructor(public _buqueService: BuqueService,
     public _navieraService: NavieraService,
@@ -32,7 +32,7 @@ export class BuqueComponent implements OnInit {
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.edicion = true;
+      
       this.cargarBuque(id);
     }
     else {
@@ -46,14 +46,9 @@ export class BuqueComponent implements OnInit {
     this._buqueService.getBuque(id)
       .subscribe(res => {
         this.buque = res;
-        //console.log( this.buque );
         for (var propiedad in this.buque) {
-          //console.log(propiedad);
           for (var control in this.regForm.controls) {
-            //console.log(control);
-            //if( propiedad == control.toString() && res[propiedad] != null && res[propiedad] != undefined) {
             if (propiedad == control.toString()) {
-              //console.log(propiedad + ': ' + res[propiedad]);
               this.regForm.controls[propiedad].setValue(res[propiedad]);
             }
           }
@@ -72,24 +67,18 @@ export class BuqueComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       naviera: ['', [Validators.required]],
-      nombre: [''],
+      nombre: ['', [Validators.required]],
       _id: ['']
     });
   }
 
   guardarBuque() {
     if (this.regForm.valid) {
-      //console.log(this.regForm.value);
       this._buqueService.guardarBuque(this.regForm.value)
         .subscribe(res => {
-          // this.fileImg = null;
-          // this.fileImgTemporal = false;
-          // this.file = null;
-          // this.fileTemporal = false;
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/buque', this.regForm.get('_id').value]);
-            this.edicion = true;
+            this.router.navigate(['/buques/buque', this.regForm.get('_id').value]);
           }
           this.regForm.markAsPristine();
         });
