@@ -10,6 +10,7 @@
   </div>
 </div>
 
+<!-- ///////////////////////////////////////T R A N S I T O ///////////////////////////////////////////////////////////// -->
 
 <mat-tab-group>
   <mat-tab label="Transito">
@@ -32,7 +33,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/llegada_entrada', row._id ]" class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -101,6 +102,9 @@
     </div>
   </mat-tab>
 
+
+  <!-- /////////////////////////////////////// E S P E R A ///////////////////////////////////////////////////////////// -->
+
   <mat-tab label="Espera">
     <ng-template mat-tab-label>
       Espera ( <small>{{totalEspera}}</small> )
@@ -120,7 +124,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/llegada_entrada', row._id ]" class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -188,6 +192,7 @@
     </div>
   </mat-tab>
 
+  <!-- /////////////////////////////////////// R E V I S I O N ///////////////////////////////////////////////////////////// -->
 
   <mat-tab label="Revision">
     <ng-template mat-tab-label>
@@ -208,7 +213,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/revisa', row._id ]" class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras', row._id, 'revisar' ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -271,7 +276,7 @@
     </div>
   </mat-tab>
 
-
+  <!-- /////////////////////////////////////// L A V A D O   /     R E P A R A C I O N ///////////////////////////////////////////////////////////// -->
 
   <mat-tab label="LavadoReparacion">
     <ng-template mat-tab-label>
@@ -292,7 +297,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/termina_lavado_reparacion', row._id ]" class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -354,6 +359,77 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavadoReparacion" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavadoReparacion;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+
+  <!-- /////////////////////////////////////// X   C A R G A R ///////////////////////////////////////////////////////////// -->
+
+  <mat-tab label="XCArgar">
+    <ng-template mat-tab-label>
+      Contenedores X Cargar ( <small>{{totalXCargar}}</small> )
+    </ng-template>
+    <div class="row animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterXCargar($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" [dataSource]="dtXCargar" matSort>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+
+                    <button [routerLink]="['/maniobras', row._id, 'carga_contenedor']" class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="transportista">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transporte.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
               <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>

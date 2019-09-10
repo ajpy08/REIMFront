@@ -16,6 +16,7 @@ export class ManiobrasComponent implements OnInit {
   totalEspera = 0;
   totalRevision = 0;
   totalLavadoReparacion = 0;
+  totalXCargar = 0;
 
 
   displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
@@ -29,10 +30,13 @@ export class ManiobrasComponent implements OnInit {
 
   displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
 
+  displayedColumnsXCargar = ['actions', 'transportista', 'grado', 'tipo', 'peso', 'cliente', 'agencia'];
+
   dtTransito: any;
   dtEspera: any;
   dtRevision: any;
   dtLavadoReparacion: any;
+  dtXCargar: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -69,6 +73,13 @@ export class ManiobrasComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dtLavadoReparacion.filter = filterValue;
     this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
+  }
+
+  applyFilterXCargar(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtXCargar.filter = filterValue;
+    this.totalXCargar = this.dtXCargar.filteredData.length;
   }
 
   cargarManiobras() {
@@ -109,6 +120,14 @@ export class ManiobrasComponent implements OnInit {
         this.totalLavadoReparacion = maniobras.total;
       });
       this.cargando = false;
+    this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
+    .subscribe(maniobras => {
+      this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
+      this.dtXCargar.sort = this.sort;
+      this.dtXCargar.paginator = this.paginator;
+      this.totalXCargar = maniobras.total;
+    });
+    this.cargando = false;      
   }
 }
 

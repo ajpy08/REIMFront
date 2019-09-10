@@ -1,6 +1,6 @@
 import { throwError as observableThrowError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Usuario } from './usuario.model';
+import { Usuario } from '../usuarios/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';

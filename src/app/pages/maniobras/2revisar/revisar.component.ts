@@ -8,12 +8,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-revisa',
-  templateUrl: './revisa.component.html',
-  providers: [DatePipe],
+  selector: 'app-revisar',
+  templateUrl: './revisar.component.html',
+  providers: [DatePipe]
 })
 
-export class RevisaComponent implements OnInit {
+export class RevisarComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   grados: string[] = ['A', 'B', 'C'];

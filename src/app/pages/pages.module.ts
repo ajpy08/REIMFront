@@ -40,31 +40,27 @@ import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
 
 ////////////////////////////////////////
+
+
+/////////////////////  M A N I O B R A S  ////////////////////////////////////
 import { ManiobrasComponent } from './maniobras/maniobras.component';
-import { TransitoComponent } from './maniobras/transito_entrada/transito.component';
-import { LlegadaEntradaComponent } from './maniobras/transito_entrada/llegada_entrada.component';
-import { EnEsperaComponent } from './maniobras/transito_entrada/espera.component';
-import { RevisionComponent } from './maniobras/revision_revisa/revision.component';
-import { RevisaComponent } from './maniobras/revision_revisa/revisa.component';
-import { LavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/lavado_reparacion.component';
-import { TerminaLavadoReparacionComponent } from './maniobras/lavadoreparacion_terminar/termina_lavado_reparacion.component';
-import { DisponiblesComponent } from './maniobras/disponibles.component';
-import { XCargarComponent } from './maniobras/xcargar_cargar/xcargar.component';
-import { CargaContenedorComponent } from './maniobras/xcargar_cargar/carga_contenedor.component';
+import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
+import { RevisarComponent } from './maniobras/2revisar/revisar.component';
+import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
+import { DisponiblesComponent } from './maniobras/5inventario/disponibles.component';
+import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
+import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
+
+
+
+
 import { VaciosComponent } from './maniobras/vacios.component';
-
 import { ManiobraComponent } from './maniobras/maniobra.component';
-
-
-
-
 import { ClientesComponent } from './clientes/clientes.component';
 import { ClienteComponent } from './clientes/cliente.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
-
 import { ViajesComponent } from './viajes/viajes.component';
 import { ViajeComponent } from './viajes/viaje.component';
-
 
 
 
@@ -147,12 +143,8 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         CamionesComponent,
         CamionComponent,
         ManiobrasComponent,
-        TransitoComponent,
         LlegadaEntradaComponent,
-        EnEsperaComponent,
-        RevisionComponent,
-        RevisaComponent,
-        LavadoReparacionComponent,
+        RevisarComponent,
         TerminaLavadoReparacionComponent,
         DisponiblesComponent,
         XCargarComponent,
