@@ -128,7 +128,7 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         // PagesComponent,
         DashboardComponent,
         AccountSettingsComponent,
-        ProfileComponent,        
+        ProfileComponent,
         UsuariosComponent,
         UsuarioComponent,
         UsuarioResetPassComponent,

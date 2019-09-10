@@ -10,8 +10,8 @@ declare var swal: any;
 })
 export class AgenciasComponent implements OnInit {
   agencias: Agencia[] = [];
-  cargando: boolean = true;
-  totalRegistros: number = 0;
+  cargando = true;
+  totalRegistros = 0;
 
   displayedColumns = ['actions', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio', 
   'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'patente'];
@@ -19,7 +19,7 @@ export class AgenciasComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   constructor(public _agenciaService: AgenciaService) { }
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class AgenciasComponent implements OnInit {
     this.dataSource.filter = filterValue;
     this.totalRegistros = this.dataSource.filteredData.length;
   }
-  
+
   cargarAgencias() {
     this.cargando = true;
     this._agenciaService.getAgencias()

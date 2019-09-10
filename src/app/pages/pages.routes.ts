@@ -137,6 +137,9 @@ const pagesRoutes: Routes = [
     
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
+
+
+    
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
 
     {path: 'maniobras/transito', component: TransitoComponent, data: {titulo: 'Transito'}},
@@ -145,9 +148,9 @@ const pagesRoutes: Routes = [
 
 
     {path: 'revision', component: RevisionComponent, data: {titulo: 'Revision'}},
-    {path: 'revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
+    {path: 'maniobras/revisa/:id', component: RevisaComponent, data: {titulo: 'Revisa'}},
     {path: 'lavado_reparacion', component: LavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'termina_lavado_reparacion/:id', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+    {path: 'maniobras/termina_lavado_reparacion/:id', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
     {path: 'disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
     {path: 'xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
     {path: 'carga_contenedor/:id', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
