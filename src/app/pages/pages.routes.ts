@@ -39,10 +39,9 @@ import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
 import { RevisarComponent } from './maniobras/2revisar/revisar.component';
 import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
-import { DisponiblesComponent } from './maniobras/5inventario/disponibles.component';
 import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
 import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
-
+import { InventarioComponent } from './maniobras/5inventario/inventario.component';
 
 import { VaciosComponent } from './maniobras/vacios.component';
 
@@ -83,7 +82,7 @@ import { AdminGuard } from '../services/service.index';
 import { ManiobraComponent } from './maniobras/maniobra.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
-import { InventarioComponent } from './inventario/inventario.component';
+
 import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
 
 
@@ -131,11 +130,11 @@ const pagesRoutes: Routes = [
     {path: 'maniobras/:id/llegada_entrada', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
     {path: 'maniobras/:id/revisar', component: RevisarComponent, data: {titulo: 'Revisa'}},
     {path: 'maniobras/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'maniobras/disponibles', component: DisponiblesComponent, data: {titulo: 'Disponibles'}},
     {path: 'maniobras/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
     {path: 'maniobras/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
 
-
+    {path: 'inventario', component: InventarioComponent, canActivate: [ AdminGuard ], data: { titulo: 'Inventario de Contenedores Disponibles' }},
+    
     
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
 
@@ -193,7 +192,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Clientes' }
     },
     {path: 'cliente/:id', component: ClienteComponent, canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de clientes'}},
-    {path: 'inventario', component: InventarioComponent, canActivate: [ AdminGuard ], data: { titulo: 'Inventario de Contenedores Disponibles' }},
+    
     
 
     {

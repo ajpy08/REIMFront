@@ -47,10 +47,9 @@ import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
 import { RevisarComponent } from './maniobras/2revisar/revisar.component';
 import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
-import { DisponiblesComponent } from './maniobras/5inventario/disponibles.component';
 import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
 import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
-
+import { InventarioComponent } from './maniobras/5inventario/inventario.component';
 
 
 
@@ -85,6 +84,10 @@ import { MiclienteComponent } from './misclientes/micliente.component';
 import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 
+import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
+
+import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
+
 
 import { RegisterComponent } from './register/register.component';
 // Pipes Modulos
@@ -115,9 +118,7 @@ import {
     MatPaginatorIntl,
     MatIconModule
 } from '@angular/material';
-import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
-import { InventarioComponent } from './inventario/inventario.component';
-import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
+
 
 @NgModule({
     declarations: [
@@ -146,9 +147,9 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         LlegadaEntradaComponent,
         RevisarComponent,
         TerminaLavadoReparacionComponent,
-        DisponiblesComponent,
         XCargarComponent,
         CargaContenedorComponent,
+        InventarioComponent,        
         VaciosComponent,
         ManiobraComponent,
         ClientesComponent,
@@ -174,7 +175,7 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
         ReporteContenedoresRLComponent,
         RegisterComponent,
         PapeletaComponent,
-        InventarioComponent,
+        
         ContenedoresLRComponent
     ],
     exports: [
