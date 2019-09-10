@@ -177,17 +177,6 @@ export class VaciosComponent implements OnInit {
   exportAsXLSX(): void {
     this._excelService.exportAsExcelFile(this.maniobras, 'maniobras');
   }
-
-  buscarManiobra(termino: string) {
-    // if (termino.length <= 0) {
-    //   this.cargarManiobras();
-    //   return;
-    // }
-    // this.cargando = true;
-    // this._maniobraService.getManiobrasTransito(termino)
-    // .subscribe( maniobras =>  this.maniobras = maniobras.maniobras );
-  }
-
 }
 
 
