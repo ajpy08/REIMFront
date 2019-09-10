@@ -8,7 +8,6 @@
                 <i class="fas fa-camera-retro"> Lavados (0)</i>
             </ng-template>
         </ng-template>
-        <button (click)="maniobraPrint()">Ver Maniobra</button>
         <div class="container">
             <div class="modal-body row">
                 <div class="col-md-6 text-center" *ngIf="maniobra.lavado">
@@ -26,7 +25,7 @@
             <div class="row">
                 <div class="col-md text-center"></div>
                 <div class="col-md text-center">
-                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL"></ngx-gallery>
+                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" *ngIf="galleryImagesL"></ngx-gallery>
                 </div>
                 <div class="col-md text-center"></div>
             </div>
@@ -66,7 +65,7 @@
             <div class="row">
                 <div class="col-md text-center"></div>
                 <div class="col-md text-center">
-                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR"></ngx-gallery>
+                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR" *ngIf="galleryImagesR"></ngx-gallery>
                 </div>
                 <div class="col-md text-center"></div>
             </div>
