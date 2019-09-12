@@ -18,6 +18,8 @@ import * as _moment from 'moment';
 // import * as Moment from 'moment';
 import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
+import { MatPaginator, MatSort, MatTableDataSource, MatCheckbox } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 
 const moment = _moment;
 
@@ -48,51 +50,75 @@ declare var jQuery: any;
 
 export class VaciosComponent implements OnInit {
   date = new FormControl(moment());
-  maniobras: any[] = [];
-  maniobrasSeleccionadas: string[] = [];
+  //maniobras: any[] = [];
+  //maniobrasSeleccionadas: string[] = [];
   maniobrasSinFactura: any[] = [];
   data: any = { fechaCreado: '' };
   cargando = true;
   totalRegistros = 0;
-  desde = 0;
-  checked = false;
+
+  displayedColumns = ['select', 'contenedor', 'tipo', 'lavado', 'grado', 'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'factura', 'viaje', 'buque', 'peso', 'cliente', 'agencia'];
+  dataSource: any;
+  selection = new SelectionModel<Maniobra>(true, []);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  checked = true;
   factura: string;
   fechaFiltroViaje: Date;
   viajes: Viaje[] = [];
   viaje: string = undefined;
 
-  constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService, 
+  constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
     public _excelService: ExcelService) { }
 
   ngOnInit() {
-    this.fechaFiltroViaje = new Date();
-    this.fechaFiltroViaje.setHours(0, 0, 0);
-    //console.log('La fecha es: ' + this.fechaFiltroViaje.toString());
-    this.cargarViajes(this.fechaFiltroViaje.toString());
+    this.cargarViajes(new Date().toString());
     this.cargarManiobras(this.viaje);
+    // if(this.checked) {
+    //   console.log("Entre a sin factura:" + this.checked)
+    //   this.cargarManiobrasSinFactura(this.checked);
+    // }
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+    this.totalRegistros = this.dataSource.filteredData.length;
   }
 
   cargarManiobras(viaje?: string) {
     this.cargando = true;
-    this._maniobraService.getManiobrasGral(viaje, "VACIO", "D")
-      .subscribe(maniobras => {
-        this.totalRegistros = maniobras.total;
-        this.maniobras = maniobras.vacios;
-        this.cargando = false;
-      });
+      this._maniobraService.getManiobrasGral(viaje, "VACIO", "D")
+        .subscribe(maniobras => {
+          this.dataSource = new MatTableDataSource(maniobras.vacios);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = maniobras.total;
+
+          // if(this.checked) {
+          //   console.log("Entre a sin factura:" + this.checked)
+          //   this.cargarManiobrasSinFactura(this.checked);
+          // }
+        });
+    this.cargando = false;
   }
 
-  cargarManiobrasSinFactura(sinFactura: boolean){    
+  cargarManiobrasSinFactura(sinFactura: boolean) {
     this.maniobrasSinFactura;
-    if(sinFactura){
-      this.maniobras.forEach(m => {
-        if(!m.facturaManiobra){
+    if (sinFactura) {
+      console.log("Entre a sin factura otra vez:" + sinFactura)
+      this.dataSource.data.forEach(m => {
+        if (!m.facturaManiobra) {
           this.maniobrasSinFactura.push(m);
         }
       });
-      this.maniobras = this.maniobrasSinFactura;
-      this.totalRegistros = this.maniobras.length;
+      this.dataSource = new MatTableDataSource(this.maniobrasSinFactura);
+      this.totalRegistros = this.dataSource.length;
     } else {
+      console.log("Entre a cargar todas otra vez:" + sinFactura)
       this.cargarManiobras(this.viaje);
     }
   }
@@ -106,24 +132,21 @@ export class VaciosComponent implements OnInit {
       });
   }
 
-  todo(c: boolean) {
-    this.maniobrasSeleccionadas = [];
-    this.checked = c;
-    this.maniobras.forEach(value => { this.getManiobrasSeleccionadas(value._id, c) })
-
-    // console.log(c)
-    // console.log(this.maniobrasSeleccionadas)
-  }
+  // todo(c: boolean) {
+  //   this.maniobrasSeleccionadas = [];
+  //   this.checked = c;
+  //   this.dataSource.forEach(value => { this.getManiobrasSeleccionadas(value._id, c) })
+  // }
 
   asignarFactura() {
-    if (this.maniobrasSeleccionadas) {
+    if (this.selection) {
       if (this.factura) {
-        this.maniobrasSeleccionadas.forEach(maniobra => {
-          //console.log(maniobra)
-          this._maniobraService.asignaFacturaManiobra(maniobra, this.factura).subscribe((maniobra) => { });
+        this.selection.selected.forEach(maniobra => {
+          this._maniobraService.asignaFacturaManiobra(maniobra._id, this.factura).subscribe((maniobra2) => {
+            maniobra.facturaManiobra = this.factura;
+          });
         });
         this.factura = "";
-        //this.cargarManiobras(this.viaje);
       } else {
         swal('No puedes asignar una factura vacía', '', 'error');
       }
@@ -132,31 +155,16 @@ export class VaciosComponent implements OnInit {
     }
   }
 
-  getManiobrasSeleccionadas(id: string, checked: boolean) {
-    if (checked) {
-      this.maniobrasSeleccionadas.push(id);
-    } else {
-      var i = this.maniobrasSeleccionadas.indexOf(id);
+  // getManiobrasSeleccionadas(id: string, checked: boolean) {
+  //   if (checked) {
+  //     this.maniobrasSeleccionadas.push(id);
+  //   } else {
+  //     var i = this.maniobrasSeleccionadas.indexOf(id);
 
-      if (i !== -1) {
-        this.maniobrasSeleccionadas.splice(i, 1);
-      }
-    }
-    // console.log(checked)
-    // console.log(this.maniobrasSeleccionadas)
-  }
-
-
-  // cambiarDesde(valor: number) {
-  //   const desde = this.desde + valor;
-  //   if (desde >= this.totalRegistros) {
-  //     return;
+  //     if (i !== -1) {
+  //       this.maniobrasSeleccionadas.splice(i, 1);
+  //     }
   //   }
-  //   if (desde < 0) {
-  //     return;
-  //   }
-  //   this.desde += valor;
-  //   this.cargarManiobras();
   // }
 
   public exportpdf() {
@@ -175,7 +183,21 @@ export class VaciosComponent implements OnInit {
   }
 
   exportAsXLSX(): void {
-    this._excelService.exportAsExcelFile(this.maniobras, 'maniobras');
+    this._excelService.exportAsExcelFile(this.dataSource, 'maniobras');
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected == numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 }
 
