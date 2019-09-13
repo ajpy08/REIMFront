@@ -20,6 +20,7 @@ import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatCheckbox } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { resolve } from 'dns';
 
 const moment = _moment;
 
@@ -69,17 +70,35 @@ export class VaciosComponent implements OnInit {
   fechaFiltroViaje: Date;
   viajes: Viaje[] = [];
   viaje: string = undefined;
+  javi: any;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
     public _excelService: ExcelService) { }
 
   ngOnInit() {
     this.cargarViajes(new Date().toString());
-    this.cargarManiobras(this.viaje);
-    // if(this.checked) {
-    //   console.log("Entre a sin factura:" + this.checked)
-    //   this.cargarManiobrasSinFactura(this.checked);
-    // }
+
+    this.consultaManiobras().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checked) {
+        this.cargarManiobrasSinFactura(this.checked);
+      }
+    });
+  }
+
+  consultaManiobras() {
+    return new Promise((resolve, reject) => {
+      this._maniobraService.getManiobrasGral(this.viaje, "VACIO", "D")
+        .subscribe(maniobras => {
+          this.dataSource = new MatTableDataSource(maniobras.vacios);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = maniobras.total;
+          resolve({ ok: true, mensaje: 'Termine' })
+        },
+        error => {
+          reject('Failed Javi');
+        });       
+    });
   }
 
   applyFilter(filterValue: string) {
@@ -89,37 +108,27 @@ export class VaciosComponent implements OnInit {
     this.totalRegistros = this.dataSource.filteredData.length;
   }
 
-  cargarManiobras(viaje?: string) {
-    this.cargando = true;
-      this._maniobraService.getManiobrasGral(viaje, "VACIO", "D")
-        .subscribe(maniobras => {
-          this.dataSource = new MatTableDataSource(maniobras.vacios);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-          this.totalRegistros = maniobras.total;
-
-          // if(this.checked) {
-          //   console.log("Entre a sin factura:" + this.checked)
-          //   this.cargarManiobrasSinFactura(this.checked);
-          // }
-        });
-    this.cargando = false;
-  }
-
   cargarManiobrasSinFactura(sinFactura: boolean) {
-    this.maniobrasSinFactura;
+    this.maniobrasSinFactura = [];
+    this.checked = sinFactura;
     if (sinFactura) {
-      console.log("Entre a sin factura otra vez:" + sinFactura)
       this.dataSource.data.forEach(m => {
         if (!m.facturaManiobra) {
           this.maniobrasSinFactura.push(m);
         }
       });
       this.dataSource = new MatTableDataSource(this.maniobrasSinFactura);
-      this.totalRegistros = this.dataSource.length;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = this.dataSource.data.length;
     } else {
-      console.log("Entre a cargar todas otra vez:" + sinFactura)
-      this.cargarManiobras(this.viaje);
+      this.consultaManiobras().then((value: { ok: Boolean, mensaje: String }) => {
+        if (value.ok && this.checked) {
+          this.cargarManiobrasSinFactura(this.checked);
+        }
+      }).catch((error) => {
+        console.log(error.mensaje)
+      });
     }
   }
 
@@ -131,12 +140,6 @@ export class VaciosComponent implements OnInit {
         this.cargando = false;
       });
   }
-
-  // todo(c: boolean) {
-  //   this.maniobrasSeleccionadas = [];
-  //   this.checked = c;
-  //   this.dataSource.forEach(value => { this.getManiobrasSeleccionadas(value._id, c) })
-  // }
 
   asignarFactura() {
     if (this.selection) {
@@ -154,18 +157,6 @@ export class VaciosComponent implements OnInit {
       swal('Debes seleccionar por lo menos un elemento para asignar una factura', '', 'error');
     }
   }
-
-  // getManiobrasSeleccionadas(id: string, checked: boolean) {
-  //   if (checked) {
-  //     this.maniobrasSeleccionadas.push(id);
-  //   } else {
-  //     var i = this.maniobrasSeleccionadas.indexOf(id);
-
-  //     if (i !== -1) {
-  //       this.maniobrasSeleccionadas.splice(i, 1);
-  //     }
-  //   }
-  // }
 
   public exportpdf() {
     const data = document.getElementById('contentToConvert');
