@@ -26,7 +26,7 @@ export class ManiobrasComponent implements OnInit {
   'peso', 'cliente', 'agencia'];
 
   displayedColumnsRevision = ['actions', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-  'peso', 'cliente', 'agencia'];
+  'peso', 'cliente', 'agencia', 'grado'];
 
   displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
 

@@ -264,6 +264,11 @@
                   <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
