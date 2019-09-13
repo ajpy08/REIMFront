@@ -30,7 +30,8 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
-  getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string ): Observable<any> {
+  getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string, viaje?: string, 
+    peso?: string, lavado?: boolean, reparacion?: boolean ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/' ;
     let params = new HttpParams();
     if (cargadescarga)  {
@@ -45,6 +46,24 @@ export class ManiobraService {
     if (contenedor)  {
       params = params.append('contenedor', contenedor);
     }
+
+    if (viaje)  {
+      params = params.append('viaje', viaje);
+    }
+
+    if (peso)  {
+      params = params.append('peso', peso);
+    }
+
+    if (lavado)  {
+      params = params.append('lavado', 'true');
+    }
+
+    if (reparacion)  {
+      params = params.append('reparacion', 'true');
+    }
+
+
     return this.http.get(url, {params: params });
   }
 
@@ -68,13 +87,11 @@ export class ManiobraService {
     return this.http.get( url );
   }
 
-  getManiobrasGral(viaje?: string, peso?: string, cargaDescarga?: string ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + peso + '&' + cargaDescarga;
-    //console.log(url)
-    return this.http.get( url );
-  }
-
-
+  // getManiobrasGral(viaje?: string, peso?: string, cargaDescarga?: string ): Observable<any> {
+  //   const url = URL_SERVICIOS + '/maniobras/' + viaje + '&' + peso + '&' + cargaDescarga;
+  //   //console.log(url)
+  //   return this.http.get( url );
+  // }
 
   getManiobrasConLavadoReparacion(naviera: string, buque: string, viaje: string, fechaLlegadaInicio: string, fechaLlegadaFin: string ): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/LR/';
@@ -303,7 +320,7 @@ export class ManiobraService {
       return resp.viaje;
     }),
     catchError( err => {
-      swal( err.error.mensaje, err.error.errores.message, 'error' );
+      //swal( err.error.mensaje, err.error.errores.message, 'error' );
       return throwError(err);
     }));
   }

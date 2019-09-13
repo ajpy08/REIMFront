@@ -12,14 +12,14 @@
 <mat-tab-group mat-stretch-tabs>
   <mat-tab label="Vacios">
     <ng-template mat-tab-label>
-      Vacios ( <small>{{totalRegistros}}</small> )
+      Vacios ( <small>{{totalRegistrosVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+            <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
               <i class="fas fa-file-excel"></i> Exportar Excel
             </button> <br><br>
             <div class="container">
@@ -27,35 +27,37 @@
                 <div class="col-sm">
                   <mat-form-field>
                     <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="cargarManiobras(viaje)">
+                    (click)="consultaManiobrasVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checked" #sinFact (change)="cargarManiobrasSinFactura(sinFact.checked)">Sin Factura
+                  <mat-checkbox [checked]="checkedVacios" #sinFact
+                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
                   <mat-form-field>
-                    <input [(ngModel)]="factura" matInput name="factura" type="text" class="form-control"
-                      placeholder="Factura de Maniobra">
+                    <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
+                      placeholder="Factura de Maniobra de Vacio">
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFactura()">
+                    (click)="asignarFacturaVacios()">
                     <i class="fa fa-save"></i>
                     Asignar
                   </button>
                 </div>
               </div>
             </div>
-            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistros}}</small> )</h3>
+            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistrosVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -63,18 +65,19 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    <mat-checkbox (change)="$event ? masterToggleVacios() : null"
+                      [checked]="selectionVacios.hasValue() && isAllSelectedVacios()"
+                      [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionVacios.toggle(row) : null"
+                      [checked]="selectionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -156,7 +159,9 @@
 
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+                  </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
@@ -172,14 +177,14 @@
   </mat-tab>
   <mat-tab label="Lavado Vacios">
     <ng-template mat-tab-label>
-      Lavado Vacios ( <small>{{totalRegistros}}</small> )
+      Lavado Vacios ( <small>{{totalRegistrosLavadoVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+            <button value="Exportar a excel" (click)="exportAsXLSXLavadoVacios()" class="btn btn-success m-r-5">
               <i class="fas fa-file-excel"></i> Exportar Excel
             </button> <br><br>
             <div class="container">
@@ -187,35 +192,37 @@
                 <div class="col-sm">
                   <mat-form-field>
                     <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="cargarManiobras(viaje)">
+                    (click)="consultaManiobrasLavadoVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="true" #s (change)="cargarManiobrasSinFactura(s.checked)">Sin Factura
+                  <mat-checkbox [checked]="checkedLavadoVacios" #s
+                    (change)="cargarManiobrasSinFacturaLavadoVacios(s.checked)">Sin Factura
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
                   <mat-form-field>
-                    <input [(ngModel)]="factura" matInput name="factura" type="text" class="form-control"
-                      placeholder="Factura de Maniobra">
+                    <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
+                      class="form-control" placeholder="Factura de Lavado de Vacio">
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFactura()">
+                    (click)="asignarFacturaLavadoVacios()">
                     <i class="fa fa-save"></i>
                     Asignar
                   </button>
                 </div>
               </div>
             </div>
-            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistros}}</small> )</h3>
+            <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -223,18 +230,19 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavadoVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null"
+                      [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()"
+                      [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionLavadoVacios.toggle(row) : null"
+                      [checked]="selectionLavadoVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -332,14 +340,14 @@
   </mat-tab>
   <mat-tab label="Reparación Vacios">
     <ng-template mat-tab-label>
-      Reparación Vacios ( <small>{{totalRegistros}}</small> )
+      Reparación Vacios ( <small>{{totalRegistrosReparacionVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+            <button value="Exportar a excel" (click)="exportAsXLSXReparacionVacios()" class="btn btn-success m-r-5">
               <i class="fas fa-file-excel"></i> Exportar Excel
             </button> <br><br>
             <div class="container">
@@ -347,35 +355,38 @@
                 <div class="col-sm">
                   <mat-form-field>
                     <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="cargarManiobras(viaje)">
+                    (click)="consultaManiobrasReparacionVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="true" #s (change)="cargarManiobrasSinFactura(s.checked)">Sin Factura
+                  <mat-checkbox [checked]="checkedReparacionVacios" #s
+                    (change)="cargarManiobrasSinFacturaReparacionVacios(s.checked)">Sin Factura
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
                   <mat-form-field>
-                    <input [(ngModel)]="factura" matInput name="factura" type="text" class="form-control"
-                      placeholder="Factura de Maniobra">
+                    <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
+                      class="form-control" placeholder="Factura de Reparacion Vacio">
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFactura()">
+                    (click)="asignarFacturaReparacionVacios()">
                     <i class="fa fa-save"></i>
                     Asignar
                   </button>
                 </div>
               </div>
             </div>
-            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistros}}</small> )</h3>
+            <h3 class="card-title">Maniobras de Reparacion Vacios( <small>{{totalRegistrosReparacionVacios}}</small> )
+            </h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -383,18 +394,19 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceReparacionVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
-                      [checked]="selection.hasValue() && isAllSelected()"
-                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null"
+                      [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()"
+                      [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                      [checked]="selection.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionReparacionVacios.toggle(row) : null"
+                      [checked]="selectionReparacionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -476,7 +488,9 @@
 
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+                  </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
