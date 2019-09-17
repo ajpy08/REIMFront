@@ -1,12 +1,3 @@
-<div class="row animated fadeIn">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        Contenedor<input #input (keyup)="buscarManiobra( input.value )" type="text" class="form-control" placeholder="Buscar maniobra...">
-      </div>
-    </div>
-  </div>
-</div>
 <div class="row animated fadeIn" *ngIf="cargando">
   <div class="col-sm-12">
     <div class="alert alert-warning text-center">
@@ -18,111 +9,508 @@
     </div>
   </div>
 </div>
-<div class="row animated fadeIn" *ngIf="!cargando">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="form-group">
-          <input type="button" value="Exportar a excel" (click)="exportAsXLSX()" /><input type="checkbox" />
-        </div>
-        <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistros}}</small> )</h3>
-        <div class="form-group">
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab label="Vacios">
+    <ng-template mat-tab-label>
+      Vacios ( <small>{{totalRegistrosVacios}}</small> )
+    </ng-template>
 
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <!--========Combombox Viajes del ultimo año=========-->
-                <mat-form-field>
-                  <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
-                    <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
-                      {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
-                    </mat-option>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
+              <i class="fas fa-file-excel"></i> Exportar Excel
+            </button> <br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
+                      <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                        {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="consultaManiobrasVacios()">
+                    <i class="fas fa-filter"></i>
+                    Filtrar
+                  </button>
+                </div>
+                <div class="col-sm">
+                  <mat-checkbox [checked]="checkedVacios" #sinFact
+                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
+                  </mat-checkbox><br><br>
+
+                  <p>
+                    <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
+                  </p>
+                  <mat-select [(ngModel)]="CD" placeholder="Selecciona CARGA-DESCARGA" name="CD" [disabled]="!filtrarCD.value">
+                    <mat-option>--- NINGUNO ---</mat-option>
+                    <mat-option value="C">CARGA</mat-option>
+                    <mat-option value="D">DESCARGA</mat-option>
                   </mat-select>
-                </mat-form-field>
-                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="cargarManiobras(viaje)">
-                                    <i class="fas fa-filter"></i>
-                                    Filtrar
-                                </button>
+                </div>
+                <div class="col-sm">
+                  <mat-form-field>
+                    <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
+                      placeholder="Factura de Maniobra de Vacio">
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="asignarFacturaVacios()">
+                    <i class="fa fa-save"></i>
+                    Asignar
+                  </button>
+                </div>
               </div>
-              <div class="col-sm">
-                <mat-checkbox #s (change)="cargarManiobrasSinFactura(s.checked)">Sin Factura
-                </mat-checkbox>
-              </div>
-              <div class="col-sm">
-                <mat-form-field>
-                  <input [(ngModel)]="factura" matInput name="factura" type="text" class="form-control" placeholder="Factura de Maniobra">
-                </mat-form-field>
-                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="asignarFactura()">
-                                    <i class="fa fa-save"></i>
-                                    Asignar
-                                </button>
-              </div>
+            </div>
+            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistrosVacios}}</small> )</h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceVacios" matSort>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggleVacios() : null"
+                      [checked]="selectionVacios.hasValue() && isAllSelectedVacios()"
+                      [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionVacios.toggle(row) : null"
+                      [checked]="selectionVacios.isSelected(row)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaingreso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="operador">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Operador</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="placa">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Placas</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.camion?.placa}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="transportista">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="factura">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="buque">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>A.A.</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
             </div>
           </div>
         </div>
-        <div class="table-responsive">
-          <table id="contentToConvert" class="table table-sm table-hover table-responsive">
-            <thead>
-              <tr>
-                <th>
-                  <mat-checkbox #c (change)="todo(c.checked)"></mat-checkbox>
-                </th>
-                <!-- <th>Id</th> -->
-                <th>Contenedor</th>
-                <th>Tipo</th>
-                <th>Lavado</th>
-                <th>Grado</th>
-                <th>Fecha Ingreso</th>
-                <th>Operador</th>
-                <th>Placas</th>
-                <th>Transportista</th>
-                <th>Reparaciones</th>
-                <th>Factura</th>
-                <th>Viaje</th>
-                <th>Buque</th>
-                <th>Estado</th>
-                <th>Cliente</th>
-                <th>A.A.</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let maniobra of maniobras">
-                <td>
-                  <mat-checkbox [checked]=checked name="{{maniobra._id}}" #c2 (change)="getManiobrasSeleccionadas(maniobra._id, c2.checked)"></mat-checkbox>
-                </td>
-                <!-- <td>{{maniobra._id}}</td> -->
-                <td>{{maniobra.contenedor}}</td>
-                <td>{{maniobra.tipo}}</td>
-                <td>{{maniobra.lavado}}</td>
-                <td>{{maniobra.grado}}</td>
-                <td>{{maniobra.fLlegada | date:'dd/MM/yyyy'}} </td>
-                <td>{{maniobra.operador?.nombre}} </td>
-                <td>{{maniobra.camion?.placa}} </td>
-                <td>{{maniobra.transportista?.razonSocial}}</td>
-                <td>
-                  <p *ngFor="let rep of maniobra.reparaciones">
-                    {{rep.reparacion}}
-                  </p>
-                </td>
-                <td>{{maniobra.facturaManiobra}} </td>
-                <td>{{maniobra.viaje.viaje}}</td>
-                <td>{{maniobra.viaje.buque.nombre}}</td>
-                <td>{{maniobra.peso}}</td>
-                <td>{{maniobra.cliente?.razonSocial}}</td>
-                <td>{{maniobra.agencia?.razonSocial}}</td>
-                <td>{{maniobra.estatus}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <!-- <button (click)="cambiarDesde(-100)" class="btn btn-secondary">
-                        <i class="fas fa-angle-left"></i> Anteriores
-                    </button>
-                    <button (click)="cambiarDesde(100)" class="btn btn-secondary">
-                        Siguientes <i class="fas fa-angle-right"></i>
-                    </button> -->
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Lavado Vacios">
+    <ng-template mat-tab-label>
+      Lavado Vacios ( <small>{{totalRegistrosLavadoVacios}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <button value="Exportar a excel" (click)="exportAsXLSXLavadoVacios()" class="btn btn-success m-r-5">
+              <i class="fas fa-file-excel"></i> Exportar Excel
+            </button> <br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
+                      <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                        {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="consultaManiobrasLavadoVacios()">
+                    <i class="fas fa-filter"></i>
+                    Filtrar
+                  </button>
+                </div>
+                <div class="col-sm">
+                  <mat-checkbox [checked]="checkedLavadoVacios" #s
+                    (change)="cargarManiobrasSinFacturaLavadoVacios(s.checked)">Sin Factura
+                  </mat-checkbox>
+                </div>
+                <div class="col-sm">
+                  <mat-form-field>
+                    <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
+                      class="form-control" placeholder="Factura de Lavado de Vacio">
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="asignarFacturaLavadoVacios()">
+                    <i class="fa fa-save"></i>
+                    Asignar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavadoVacios" matSort>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null"
+                      [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()"
+                      [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionLavadoVacios.toggle(row) : null"
+                      [checked]="selectionLavadoVacios.isSelected(row)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaingreso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="operador">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Operador</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="placa">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Placas</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.camion?.placa}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="transportista">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="factura">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="buque">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>A.A.</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </mat-tab>
+  <mat-tab label="Reparación Vacios">
+    <ng-template mat-tab-label>
+      Reparación Vacios ( <small>{{totalRegistrosReparacionVacios}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <button value="Exportar a excel" (click)="exportAsXLSXReparacionVacios()" class="btn btn-success m-r-5">
+              <i class="fas fa-file-excel"></i> Exportar Excel
+            </button> <br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
+                      <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
+                        {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="consultaManiobrasReparacionVacios()">
+                    <i class="fas fa-filter"></i>
+                    Filtrar
+                  </button>
+                </div>
+                <div class="col-sm">
+                  <mat-checkbox [checked]="checkedReparacionVacios" #s
+                    (change)="cargarManiobrasSinFacturaReparacionVacios(s.checked)">Sin Factura
+                  </mat-checkbox>
+                </div>
+                <div class="col-sm">
+                  <mat-form-field>
+                    <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
+                      class="form-control" placeholder="Factura de Reparacion Vacio">
+                  </mat-form-field>
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="asignarFacturaReparacionVacios()">
+                    <i class="fa fa-save"></i>
+                    Asignar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <h3 class="card-title">Maniobras de Reparacion Vacios( <small>{{totalRegistrosReparacionVacios}}</small> )
+            </h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceReparacionVacios" matSort>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null"
+                      [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()"
+                      [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selectionReparacionVacios.toggle(row) : null"
+                      [checked]="selectionReparacionVacios.isSelected(row)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaingreso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="operador">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Operador</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="placa">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Placas</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.camion?.placa}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="transportista">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="factura">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="buque">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>A.A.</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -57,12 +57,14 @@
 } 
 
 .mat-table-medium {
-  width: 1200px;
+  width: 1350px;
+  justify-content:center!important;
 }
 
 .mat-table-big {
   width: 3500px;
   white-space: inherit;
+  justify-content:center!important;
 }
 
 .example-container {
