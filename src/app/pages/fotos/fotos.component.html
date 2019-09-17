@@ -1,46 +1,48 @@
+<button [routerLink]="['../']"> back</button>
 <mat-tab-group (selectedTabChange)="onLinkClick($event)" mat-stretch-tabs>
-    <mat-tab label="lavado">
-        <ng-template mat-tab-label>
-            <div *ngIf="galleryImagesL;else imagesL">
-                <i class="fas fa-camera-retro"> Lavados ({{galleryImagesL.length}})</i>
-            </div>
-            <ng-template #imagesL>
-                <i class="fas fa-camera-retro"> Lavados (0)</i>
-            </ng-template>
-        </ng-template>
-        <div class="container">
-            <div class="modal-body row">
-                <div class="col-md-6 text-center" *ngIf="maniobra.lavado">
-                    <h3>Tipo Lavado : "{{maniobra.lavado}}"</h3>
-                </div>
-                <div class="col-md-6 text-center" *ngIf="maniobra.lavadoObservacion">
-                    <h3>Observaciones</h3>
-                    <div>
-                        <p>{{maniobra.lavadoObservacion}}</p>
-                    </div>
-                </div>
-            </div>
+  <mat-tab label="lavado">
+    <ng-template mat-tab-label>
+      <div *ngIf="galleryImagesL;else imagesL">
+        <i class="fas fa-camera-retro"> Lavados ({{galleryImagesL.length}})</i>
+      </div>
+      <ng-template #imagesL>
+        <i class="fas fa-camera-retro"> Lavados (0)</i>
+      </ng-template>
+    </ng-template>
+    <div class="container">
+      <div class="modal-body row">
+        <div class="col-md-6 text-center" *ngIf="maniobra.lavado">
+          <h3>Tipo Lavado : "{{maniobra.lavado}}"</h3>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md text-center"></div>
-                <div class="col-md text-center">
-                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" *ngIf="galleryImagesL"></ngx-gallery>
-                </div>
-                <div class="col-md text-center"></div>
-            </div>
+        <div class="col-md-6 text-center" *ngIf="maniobra.lavadoObservacion">
+          <h3>Observaciones</h3>
+          <div>
+            <p>{{maniobra.lavadoObservacion}}</p>
+          </div>
         </div>
-    </mat-tab>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md text-center"></div>
+        <div class="col-md text-center">
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" *ngIf="galleryImagesL"></ngx-gallery>
+        </div>
+        <div class="col-md text-center"></div>
+      </div>
+    </div>
+  </mat-tab>
 
-    <mat-tab label="reparaciones">
-        <ng-template mat-tab-label>
-            <div *ngIf="galleryImagesR;else imagesR">
-                <i class="fas fa-camera-retro"> Reparaciones ({{galleryImagesR.length}})</i>
-            </div>
-            <ng-template #imagesR>
-                <i class="fas fa-camera-retro"> Reparaciones (0)</i>
-            </ng-template>
-        </ng-template>
+  <mat-tab label="reparaciones">
+    <ng-template mat-tab-label>
+      <div *ngIf="galleryImagesR;else imagesR">
+        <i class="fas fa-camera-retro"> Reparaciones ({{galleryImagesR.length}})</i>
+      </div>
+      <ng-template #imagesR>
+        <i class="fas fa-camera-retro"> Reparaciones (0)</i>
+      </ng-template>
+    </ng-template>
+
 
         <div class="container">
             <div class="modal-body row">
@@ -59,67 +61,74 @@
                     </div>
                 </div>
             </div>
+          </ol>
         </div>
+        <div class="col-md-6 text-center" *ngIf="maniobra.reparacionesObservacion">
+          <h3>Observaciones</h3>
+          <div>
+            <p>{{maniobra.reparacionesObservacion}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div class="container" style="align-content: center">
-            <div class="row">
-                <div class="col-md text-center"></div>
-                <div class="col-md text-center">
-                    <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR" *ngIf="galleryImagesR"></ngx-gallery>
-                </div>
-                <div class="col-md text-center"></div>
-            </div>
+    <div class="container" style="align-content: center">
+      <div class="row">
+        <div class="col-md text-center"></div>
+        <div class="col-md text-center">
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR" *ngIf="galleryImagesR"></ngx-gallery>
         </div>
-    </mat-tab>
+        <div class="col-md text-center"></div>
+      </div>
+    </div>
+  </mat-tab>
 
-    <mat-tab label="carga" *ngIf="okCargar">
-        <ng-template mat-tab-label>
-            <i class="fas fa-cloud-upload-alt"> Carga</i>
-        </ng-template>
-        <div class="row">
-            <div class="col-md-4">
-                <h3>Seleccione archivos</h3>
-                <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
-                    [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
-                    <h4>Suelta los archivos aquí</h4>
-                    <img src="assets/images/drop-images.png">
-                </div>
-                <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
-            </div>
-            <div class="col-md-8">
-                <h4>Cargar archivos</h4>
-                <mat-form-field>
-                    <mat-select [(value)]="selected" placeholder="Tipo de fotos" name="fotos">
-                        <mat-option value="fotos_lavado">Lavado</mat-option>
-                        <mat-option value="fotos_reparacion">Reparación</mat-option>
-                    </mat-select>
-                </mat-form-field>
-                <button (click)="cargarImagenes()" class="btn btn-success">Cargar fotos</button>
-                <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Nombre archivo</th>
-                            <th>Cargado</th>
-                            <th>Tamaño</th>
-                            <th>Progreso</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let archivo of archivos">
-                            <th>{{archivo.nombreArchivo}}</th>
-                            <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
-                            <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
-                            <th>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar"
-                                        [ngStyle]="{'width': archivo.progreso + '%'}"></div>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+  <mat-tab label="carga" *ngIf="okCargar">
+    <ng-template mat-tab-label>
+      <i class="fas fa-cloud-upload-alt"> Carga</i>
+    </ng-template>
+    <div class="row">
+      <div class="col-md-4">
+        <h3>Seleccione archivos</h3>
+        <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+          <h4>Suelta los archivos aquí</h4>
+          <img src="assets/images/drop-images.png">
         </div>
-    </mat-tab>
+        <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+      </div>
+      <div class="col-md-8">
+        <h4>Cargar archivos</h4>
+        <mat-form-field>
+          <mat-select [(value)]="selected" placeholder="Tipo de fotos" name="fotos">
+            <mat-option value="fotos_lavado">Lavado</mat-option>
+            <mat-option value="fotos_reparacion">Reparación</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button (click)="cargarImagenes()" class="btn btn-success">Cargar fotos</button>
+        <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Nombre archivo</th>
+              <th>Cargado</th>
+              <th>Tamaño</th>
+              <th>Progreso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let archivo of archivos">
+              <th>{{archivo.nombreArchivo}}</th>
+              <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+              <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+              <th>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                </div>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </mat-tab>
 </mat-tab-group>

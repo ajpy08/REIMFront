@@ -48,6 +48,8 @@ export class RevisarComponent implements OnInit {
       hLlegada: [{value: '', disabled: true}],
       hEntrada: [{value: '', disabled: true}],
       hSalida: [''],
+      hDescarga: [''],
+      descargaAutorizada: [''],
       grado: [''],
       lavado: [''],
       lavadoObservacion: [''],
@@ -91,6 +93,12 @@ export class RevisarComponent implements OnInit {
   }
   get hSalida() {
     return this.regForm.get('hSalida');
+  }
+  get descargaAutorizada() {
+    return this.regForm.get('descargaAutorizada');
+  }
+  get hDescarga() {
+    return this.regForm.get('hDescarga');
   }
   get grado() {
     return this.regForm.get('grado');
@@ -143,6 +151,7 @@ export class RevisarComponent implements OnInit {
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
+
       if (maniob.maniobra.lavado){
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
       } else {
@@ -165,6 +174,11 @@ export class RevisarComponent implements OnInit {
       } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
+    
+      this.regForm.controls['descargaAutorizada'].setValue(maniob.maniobra.descargaAutorizada);
+      if (this.descargaAutorizada.value===false) {
+        this.hDescarga.disable();
+      }
 
     });
   }
@@ -176,8 +190,8 @@ cargarTiposReparaciones() {
   }
 
   ponHora() {
-    if (this.hSalida.value === '') {
-      this.hSalida.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    if (this.hDescarga.value === '') {
+      this.hDescarga.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
   }
 guardaCambios() {

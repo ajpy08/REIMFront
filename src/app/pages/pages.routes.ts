@@ -71,7 +71,7 @@ import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
 
-import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
+
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 
 
@@ -200,12 +200,6 @@ const pagesRoutes: Routes = [
         component: ContenedoresLRComponent,
         canActivate: [ AdminGuard ],
         data: { titulo: 'Contenedores con Lavado / Reparacion (Naviera)' }
-    },
-    {
-        path: 'contenedoresDisponibles',
-        component: ContenedoresDisponiblesComponent,
-        canActivate: [ AdminGuard ],
-        data: { titulo: 'Contenedores disponibles' }
     },
     {
         path: 'reportesRL',

@@ -81,7 +81,7 @@ import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
 
-import { ContenedoresDisponiblesComponent } from './contenedores-disponibles/contenedores-disponibles.component';
+
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
@@ -171,7 +171,6 @@ import {
         EmpresaComponent,
         MisclientesComponent,
         MiclienteComponent,
-        ContenedoresDisponiblesComponent,
         ReporteContenedoresRLComponent,
         RegisterComponent,
         PapeletaComponent,

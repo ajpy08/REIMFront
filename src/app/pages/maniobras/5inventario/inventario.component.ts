@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ManiobraService } from '../maniobra.service';
+import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from '../../../config/config';
 
 @Component({
   selector: 'app-inventario',
@@ -35,7 +36,7 @@ export class InventarioComponent implements OnInit {
   cargarInventario() {
     this.cargando = true;
 
-    this.maniobraService.getContenedoresDisponibles()
+    this.maniobraService.getManiobras('D',ETAPAS_MANIOBRA.DISPONIBLE)
       .subscribe(maniobras => {
         this.dataSource = new MatTableDataSource(maniobras.maniobras);
         this.dataSource.sort = this.sort;
