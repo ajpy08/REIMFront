@@ -118,6 +118,7 @@ import {
     MatPaginatorIntl,
     MatIconModule
 } from '@angular/material';
+import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 
 
 @NgModule({
@@ -175,7 +176,9 @@ import {
         RegisterComponent,
         PapeletaComponent,
         
-        ContenedoresLRComponent
+        ContenedoresLRComponent,
+        
+        DetalleManiobraComponent
     ],
     exports: [
         DashboardComponent
