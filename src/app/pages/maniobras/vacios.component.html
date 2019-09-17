@@ -42,7 +42,16 @@
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedVacios" #sinFact
                     (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
-                  </mat-checkbox>
+                  </mat-checkbox><br><br>
+
+                  <p>
+                    <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
+                  </p>
+                  <mat-select [(ngModel)]="CD" placeholder="Selecciona CARGA-DESCARGA" name="CD" [disabled]="!filtrarCD.value">
+                    <mat-option>--- NINGUNO ---</mat-option>
+                    <mat-option value="C">CARGA</mat-option>
+                    <mat-option value="D">DESCARGA</mat-option>
+                  </mat-select>
                 </div>
                 <div class="col-sm">
                   <mat-form-field>

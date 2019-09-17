@@ -81,6 +81,8 @@ export class VaciosComponent implements OnInit {
   fechaFiltroViaje: Date;
   viajes: Viaje[] = [];
   viaje: string = undefined;
+  CD: string = undefined;
+  filtrarCD = new FormControl(false);
   javi: any;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
@@ -110,7 +112,13 @@ export class VaciosComponent implements OnInit {
 
   consultaManiobrasVacios() {
     return new Promise((resolve, reject) => {
-      this._maniobraService.getManiobras('D', null, null, null, this.viaje, "VACIO", false, false)
+      let cargaDescarga = "D";
+
+      if(this.filtrarCD.value) {
+        cargaDescarga = this.CD;
+      }
+
+      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, false)
         .subscribe(maniobras => {
           this.dataSourceVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceVacios.sort = this.sort;
@@ -126,7 +134,13 @@ export class VaciosComponent implements OnInit {
 
   consultaManiobrasLavadoVacios() {
     return new Promise((resolve, reject) => {
-      this._maniobraService.getManiobras('D', null, null, null, this.viaje, "VACIO", true, false)
+      let cargaDescarga = "D";
+
+      if(this.filtrarCD.value) {
+        cargaDescarga = this.CD;
+      }
+
+      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", true, false)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceLavadoVacios.sort = this.sort;
@@ -142,7 +156,13 @@ export class VaciosComponent implements OnInit {
 
   consultaManiobrasReparacionVacios() {
     return new Promise((resolve, reject) => {
-      this._maniobraService.getManiobras('D', null, null, null, this.viaje, "VACIO", false, true)
+      let cargaDescarga = "D";
+
+      if(this.filtrarCD.value) {
+        cargaDescarga = this.CD;
+      }     
+
+      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.sort;
