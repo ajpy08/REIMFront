@@ -19,9 +19,23 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
-              <i class="fas fa-file-excel"></i> Exportar Excel
-            </button> <br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm">
+                  <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                  </button>
+                </div>
+                <div class="col-sm">
+                  <mat-checkbox [checked]="checkedVacios" #sinFact
+                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
+                  </mat-checkbox>
+                </div>
+                <div class="col-sm">
+                </div>
+              </div>
+            </div>
+            <br><br>
             <div class="container">
               <div class="row">
                 <div class="col-sm">
@@ -40,14 +54,10 @@
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedVacios" #sinFact
-                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
-                  </mat-checkbox><br><br>
-
                   <p>
                     <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
                   </p>
-                  <mat-select [(ngModel)]="CD" placeholder="Selecciona CARGA-DESCARGA" name="CD" [disabled]="!filtrarCD.value">
+                  <mat-select [(ngModel)]="CD" placeholder="Selecciona..." name="CD" [disabled]="!filtrarCD.value">
                     <mat-option>--- NINGUNO ---</mat-option>
                     <mat-option value="C">CARGA</mat-option>
                     <mat-option value="D">DESCARGA</mat-option>
