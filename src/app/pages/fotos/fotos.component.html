@@ -44,22 +44,13 @@
     </ng-template>
 
 
-        <div class="container">
-            <div class="modal-body row">
-                <div class="col-md-6 text-center" *ngIf="maniobra.reparaciones && maniobra.reparaciones.length > 0">
-                    <h3>Reparaciones</h3>
-                    <ol>
-                        <div *ngFor="let reparacion of maniobra.reparaciones">
-                            <li>{{reparacion.descripcion}}</li>
-                        </div>
-                    </ol>
-                </div>
-                <div class="col-md-6 text-center" *ngIf="maniobra.reparacionesObservacion">
-                    <h3>Observaciones</h3>
-                    <div>
-                        <p>{{maniobra.reparacionesObservacion}}</p>
-                    </div>
-                </div>
+    <div class="container">
+      <div class="modal-body row">
+        <div class="col-md-6 text-center" *ngIf="maniobra.reparaciones && maniobra.reparaciones.length > 0">
+          <h3>Reparaciones</h3>
+          <ol>
+            <div *ngFor="let reparacion of maniobra.reparaciones">
+              <li>{{reparacion.descripcion}}</li>
             </div>
           </ol>
         </div>
