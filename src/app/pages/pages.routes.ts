@@ -84,6 +84,7 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
+import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 
 
 
@@ -132,6 +133,7 @@ const pagesRoutes: Routes = [
     {path: 'maniobras/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
     {path: 'maniobras/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
     {path: 'maniobras/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
+    {path: 'maniobras/:id/detalle', component: DetalleManiobraComponent, data: {titulo: 'Detalle Maniobra'}},
 
     {path: 'inventario', component: InventarioComponent, canActivate: [ AdminGuard ], data: { titulo: 'Inventario de Contenedores Disponibles' }},
     
