@@ -56,7 +56,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       //     return event;
       // }),
       catchError((error: HttpErrorResponse) => {
-        //console.log(error);
+        console.log(error);
         switch (error.status) {
           case 0:
             swal('', 'Cheque su conexion a Internet e intente de nuevo', 'error');
