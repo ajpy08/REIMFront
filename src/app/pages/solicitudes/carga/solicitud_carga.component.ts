@@ -26,9 +26,7 @@ export class SolicitudCargaComponent implements OnInit {
   edicion = false;
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
-
   clientes: Cliente[] = [];
-  // tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
   tiposContenedor: any[] = [];
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   grados = GRADOS_CONTENEDOR_ARRAY;
@@ -239,6 +237,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['cp'].setValue(solicitud.cp);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
+      this.onChangeCredito( {checked: this.credito} );
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.estado, element.grado,
                             element.maniobra, element.transportista, 
@@ -276,12 +275,6 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   agregarContenedor() {
-
-    this.agencia.updateValueAndValidity();
-
-
-
-    console.log(this.regForm);
     if (this.tipoTemp.value === '' || this.tipoTemp.value === undefined) {
       swal('Faltan datos', 'No ha seleccionado el tipo de contenedor.', 'error');
       return;
@@ -310,6 +303,7 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   onChangeCredito( event ) {
+    
     if (event.checked) {
       if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
       this.rutaComprobante.disable({ onlySelf : true});
