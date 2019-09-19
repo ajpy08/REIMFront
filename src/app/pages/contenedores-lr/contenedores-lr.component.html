@@ -48,7 +48,7 @@
 
             <ng-container matColumnDef="Naviera">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.viaje?.naviera}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.razonSocial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="Contenedor">
@@ -68,7 +68,7 @@
             </ng-container>
 
             <ng-container matColumnDef="Cliente">
-              <mat-header-cell *matHeaderCellDef>Vigencia Cliente</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
             </ng-container>
 
