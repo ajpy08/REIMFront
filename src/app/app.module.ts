@@ -45,7 +45,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
       provide: HTTP_INTERCEPTORS,
       useClass: RefreshTokenInterceptor,
       multi: true,
-    }    
+    }
   ],
   bootstrap: [AppComponent]
 })

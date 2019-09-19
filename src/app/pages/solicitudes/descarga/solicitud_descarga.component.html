@@ -307,9 +307,10 @@
                           <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
                               <i class="fas fa-trash"></i>
                           </button>
-                          <button *ngIf="aprobada" [routerLink]="['/papeleta',  this.contenedores.controls[i].get('maniobra').value ]" class="btn btn-success">
+                          <!-- <button *ngIf="aprobada" [routerLink]="['/solicitudes/papeleta',  this.contenedores.controls[i].get('maniobra').value._id ]" class="btn btn-success">
+                                                                    
                             <i class="fas fa-print"></i>
-                          </button>
+                          </button> -->
                         </td>
                       </tr>
                     </tbody>

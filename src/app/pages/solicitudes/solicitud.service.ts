@@ -46,7 +46,6 @@ export class SolicitudService {
     }
 
     guardaViajeBuque(solicitud: Solicitud) {
-      console.log(solicitud);
       let url = URL_SERVICIOS;
       if (solicitud._id) {
         url += '/solicitudes/solicitud/' + solicitud._id + '/guarda_buque_viaje';
@@ -60,21 +59,20 @@ export class SolicitudService {
     }
 
     guardarSolicitud(solicitud: Solicitud): Observable<any> {
-      console.log(solicitud);
       let url = URL_SERVICIOS + '/solicitudes/solicitud';
       if (solicitud._id) { // Actualizando
         url += '/' + solicitud._id;
         url += '?token=' + this._usuarioService.token;
         return this.http.put(url, solicitud)
         .pipe(map((resp: any) => {
-          swal('Solicitud de descarga Actualizada', solicitud.agencia, 'success');
+          swal('Solicitud Actualizada', solicitud.agencia, 'success');
           return resp.solicitud;
         }));
       } else { // Creando
         url += '?token=' + this._usuarioService.token;
         return this.http.post(url, solicitud)
         .pipe(map((resp: any) => {
-          swal('Solicitud de descarga Creada', solicitud.agencia, 'success');
+          swal('Solicitud Creada', solicitud.agencia, 'success');
           return resp.solicitud;
         }));
       }

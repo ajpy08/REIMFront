@@ -12,34 +12,35 @@
             <div class="row p-t-20">
               <div class="col-md-3">
                 <mat-form-field>
-                  <mat-label>Agente Aduanal</mat-label>
+                  <mat-label>*Agente Aduanal</mat-label>
                   <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione una Agencia Aduanal">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                       {{ag.razonSocial}}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="agencia.touched && agencia.hasError['required']">Debe seleccionar una Agencia Aduanal.</mat-error>
                 </mat-form-field>
+                <mat-error *ngIf="agencia.hasError('required')">Debe seleccionar una Agencia Aduanal.</mat-error>
               </div>
               <div class="col-md-3">
                 <mat-form-field>
-                  <mat-label>Cliente</mat-label>
+                  <mat-label>*Cliente</mat-label>
                   <mat-select formControlName="cliente" type="text" placeholder="Seleccione un cliente.">
                     <mat-option *ngFor="let cli of clientes" [value]="cli._id">
                       {{cli.razonSocial}}
                     </mat-option>
-                    <mat-error *ngIf="cliente.touched && cliente.hasError['required']">Debe seleccionar un Cliente.</mat-error>
                   </mat-select>
                 </mat-form-field>
+                <mat-error *ngIf="cliente.hasError('required')">Debe seleccionar un Cliente.</mat-error>
               </div>
               <div class="col-md-2">
-                <label class="control-label">Facturar a: </label>
+                <label class="control-label">*Facturar a: </label>
                 <br>
                 <mat-radio-group class="example-radio-group" formControlName="facturarA" (change)="onChangeFacturarA($event)">
                   <mat-radio-button class="example-radio-button" *ngFor="let facturaA of listaFacturarA" [value]="facturaA">
                     {{facturaA}}
                   </mat-radio-button>
                 </mat-radio-group>
+                <mat-error *ngIf="facturarA.hasError('required')">Debe seleccionar a quien facturar.</mat-error>
               </div>
             </div>
 
@@ -115,7 +116,7 @@
             <div class="row">
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Correo Facturación</mat-label>
+                  <mat-label>*Correo Facturación</mat-label>
                   <textarea matInput formControlName="correoFac" rows="3" cols="40"></textarea>
                 </mat-form-field>
               </div>
@@ -123,7 +124,7 @@
                 <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
                   Credito
                 </mat-checkbox>
-                <mat-error *ngIf="rutaComprobante.touched && rutaComprobante.invalid">
+                <mat-error *ngIf="rutaComprobante.invalid">
                   Cargar archivo de Comprobante de Pago.
                 </mat-error>
               </div>
@@ -166,9 +167,10 @@
               </div>
               <div class="col-md-3 ">
                 <mat-form-field>
-                  <mat-label>Booking </mat-label>
+                  <mat-label>* Booking </mat-label>
                   <input matInput formControlName="blBooking">
                 </mat-form-field>
+                <mat-error *ngIf="blBooking.hasError('required')">El Booking es Necesario.</mat-error>
               </div>
             </div>
 
@@ -179,8 +181,8 @@
                 <mat-form-field>
                   <mat-label>Tamaño - Tipo</mat-label>
                   <mat-select formControlName="tipoTemp">
-                    <mat-option *ngFor="let tipo of tiposContenedor" [value]="tipo">
-                      {{tipo}}
+                    <mat-option *ngFor="let tipo of tiposContenedor" [value]="tipo.tipo">
+                      {{tipo.tipo}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
