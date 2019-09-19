@@ -20,7 +20,6 @@ import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatCheckbox } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { resolve } from 'dns';
 
 const moment = _moment;
 
