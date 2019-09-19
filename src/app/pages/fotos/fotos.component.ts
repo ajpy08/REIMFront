@@ -9,7 +9,7 @@ import { FotosPipe } from 'src/app/pipes/fotos.pipe';
 import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
-
+import {Location} from '@angular/common'; 
 
 @Component({
   selector: 'app-fotos',
@@ -46,7 +46,8 @@ export class FotosComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fotosPipe: FotosPipe,
-    private usuarioService: UsuarioService) {
+    private usuarioService: UsuarioService,
+    private location: Location) {
 
   }
 
@@ -265,5 +266,8 @@ export class FotosComponent implements OnInit {
     return false;
   }
 
+  atras(){
+    this.location.back();
+  }
 
 }

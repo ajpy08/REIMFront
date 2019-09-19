@@ -20,7 +20,6 @@ import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatCheckbox } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { resolve } from 'dns';
 
 const moment = _moment;
 
@@ -61,7 +60,7 @@ export class VaciosComponent implements OnInit {
   totalRegistrosLavadoVacios = 0;
   totalRegistrosReparacionVacios = 0;
 
-  displayedColumns = ['select', 'contenedor', 'tipo', 'lavado', 'grado', 'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'factura', 'viaje', 'buque', 'peso', 'cliente', 'agencia', 'estatus'];
+  displayedColumns = ['select', 'actions', 'contenedor', 'tipo', 'lavado', 'grado', 'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'factura', 'viaje', 'buque', 'peso', 'cliente', 'agencia', 'estatus'];
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
   dataSourceReparacionVacios: any;

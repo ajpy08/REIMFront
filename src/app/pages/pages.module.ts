@@ -116,7 +116,8 @@ import {
     MatTableModule,
     MatSortModule,
     MatPaginatorIntl,
-    MatIconModule
+    MatIconModule,
+    MatExpansionModule,
 } from '@angular/material';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 
@@ -174,10 +175,8 @@ import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.co
         MiclienteComponent,
         ReporteContenedoresRLComponent,
         RegisterComponent,
-        PapeletaComponent,
-        
-        ContenedoresLRComponent,
-        
+        PapeletaComponent,        
+        ContenedoresLRComponent,        
         DetalleManiobraComponent
     ],
     exports: [
@@ -207,6 +206,7 @@ import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.co
         MatSortModule,
         MatPaginatorModule,
         MatIconModule,
+        MatExpansionModule,
         NgxPrintModule,
         NgxGalleryModule
     ],

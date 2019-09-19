@@ -1,3 +1,360 @@
-<p>
-  detalle-maniobra works!
-</p>
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+<div class="card-body mat-elevation-z8" *ngIf="!cargando">
+  <mat-accordion [multi]="true">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Maniobra
+        </mat-panel-title>
+        <mat-panel-description>
+          {{contenedor.value}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form [formGroup]="regForm" novalidate>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Folio</mat-label>
+            <input matInput formControlName="folio" type="text">
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Carga-Descarga</mat-label>
+            <input matInput formControlName="cargaDescarga" type="text">
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Patio</mat-label>
+            <input matInput formControlName="patio" type="text">
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Estatus</mat-label>
+            <input matInput formControlName="estatus" type="text">
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Contenedor</mat-label>
+            <input matInput formControlName="contenedor" type="text">
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Agente Aduanal</mat-label>
+            <mat-select formControlName="agencia" type="text">
+              <mat-option *ngFor="let agente of agencias" [value]="agente._id">
+                {{agente.razonSocial}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Transportista</mat-label>
+            <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista"
+              (selectionChange)="cargaOperadores($event.value)">
+              <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                {{transportista.razonSocial}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="transportista.invalid">
+              <sup>*</sup>Debe seleccionar un transportista
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>Camion</mat-label>
+            <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
+              <mat-option *ngFor="let camion of camiones" [value]="camion._id">
+                {{camion.placa + ' | ' + camion.noEconomico}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="camion.invalid">
+              <sup>*</sup>Debe seleccionar un camion
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group has-success">
+          <mat-form-field>
+            <mat-label>operador</mat-label>
+            <mat-select formControlName="operador" type="text" placeholder="Seleccione un operador">
+              <mat-option *ngFor="let operador of operadores" [value]="operador._id">
+                {{operador.nombre}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="operador.invalid">
+              <sup>*</sup>Debe seleccionar un operador
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Llegada
+        </mat-panel-title>
+        <mat-panel-description>
+          {{espera}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form [formGroup]="regForm" novalidate>
+        <div class="form-group has-success">
+          <label class="control-label"><b>Fecha y Hora de llegada</b></label>
+          <div>
+            <mat-form-field class="inputpersonalizado">
+              <input matInput formControlName="fLlegada" [matDatepicker]="pickerfLlegada" type="text"
+                class="form-control" placeholder="Fecha de llegada">
+              <mat-datepicker-toggle matSuffix [for]="pickerfLlegada"></mat-datepicker-toggle>
+              <mat-datepicker #pickerfLlegada></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field class="time">
+              <input matInput formControlName="hLlegada" type="time" placeholder="Hora Llegada">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-group has-success">
+          <label class="control-label"><b>Hora de Entrada</b></label>
+          <div>
+            <mat-form-field class="time">
+              <input matInput formControlName="hEntrada" type="time" placeholder="Hora Entrada" (focus)="ponHora()">
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Revisión
+        </mat-panel-title>
+        <mat-panel-description>
+          <p *ngIf="lavado.value">Con Lavado </p> <p *ngIf="reparaciones.length > 0">- {{reparaciones.length}} Reparaciones</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="regForm" novalidate>
+        <h4 class="box-title">Lavado</h4>
+        <hr class="m-t-0 m-b-40">
+        <div class="row">
+          <div class="col-md">
+            <mat-form-field>
+              <mat-label>Tipo Lavado</mat-label>
+              <mat-select formControlName="lavado" tabindex="1">
+                <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                  {{tipo.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <mat-form-field>
+              <mat-label>Observaciones</mat-label>
+              <label class="control-label"><b>Observaciones :</b></label>
+              <textarea matInput formControlName="lavadoObservacion" rows="3" cols="40"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
+              class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Lavado
+            </button>
+          </div>
+        </div>
+        <br>
+        <h4 class="box-title">Reparaciones</h4>
+        <hr class="m-t-0 m-b-40">
+        <div class="row">
+          <div class="col-md">
+            <!-- <mat-form-field>
+              <mat-select #tipoReparacion tabindex="1">
+                <mat-option *ngFor="let tipo of tiposReparaciones" [value]="tipo._id">
+                  {{tipo.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md">
+            <div class="form-group">
+              <table matNativeControl class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Reparacion</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="reparaciones" *ngFor="let item of reparaciones.controls; let i = index;">
+                  <tr [formGroupName]="i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{reparaciones.controls[i].get('reparacion').value}}</td>
+                    <td>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md">
+            <mat-form-field>
+              <mat-label>Observaciones Reparación</mat-label>
+              <textarea matInput formControlName="reparacionesObservacion" rows="3" cols="40"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
+              class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Reparacion
+            </button>
+          </div>
+        </div><br><br>
+        <h3 class="box-title">Grado y Salida</h3>
+        <hr class="m-t-0 m-b-40">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Grado Contenedor</mat-label>
+              <mat-select formControlName="grado">
+                <mat-option *ngFor="let grado of grados" [value]="grado">
+                  {{grado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label>Hora Descarga</mat-label>
+              <input matInput formControlName="hDescarga" type="time" (focus)="ponHora()">
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Lavado / Reparación
+        </mat-panel-title>
+        <mat-panel-description>
+           <p *ngIf="fIniLavado.value">Fin Lavado {{fIniLavado.value}} {{hFinLavado.value}}</p>
+           <p *ngIf="fIniReparacion.value">Fin Reparacion {{fIniReparacion.value}} {{hFinReparacion.value}}</p>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <form [formGroup]="regForm" novalidate>
+        <div class="card-body">
+          <div class="col-md">
+            <label class="control-label"><b>Fecha y Hora de Finalizacion Lavado</b></label>
+            <mat-form-field class="inputpersonalizado">
+              <mat-label>Fecha Lavado</mat-label>
+              <input matInput formControlName="fIniLavado" [matDatepicker]="pickerfIniLavado" type="text"
+                placeholder="Fecha de Lavado">
+              <mat-datepicker-toggle matSuffix [for]="pickerfIniLavado"></mat-datepicker-toggle>
+              <mat-datepicker #pickerfIniLavado></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <mat-label>Hora Inicio Lavado</mat-label>
+              <input matInput formControlName="hIniLavado" type="time" placeholder="Hora Inicio Lavado"
+                (focus)="ponHoraIniLavado()">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Hora Finalización Lavado</mat-label>
+              <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado"
+                (focus)="ponHoraFinLavado()">
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
+              class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Lavado
+            </button>
+          </div>
+          <div class="col-md">
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="col-md">
+            <label class="control-label"><b>Fecha y Hora de Reparaciones</b></label>
+            <mat-form-field class="inputpersonalizado">
+              <mat-label>Fecha Inicio Reparaciones</mat-label>
+              <input matInput formControlName="fIniReparacion" [matDatepicker]="pickerfIniReparacion" type="text"
+                placeholder="Fecha Inicio Reparaciones">
+              <mat-datepicker-toggle matSuffix [for]="pickerfIniReparacion"></mat-datepicker-toggle>
+              <mat-datepicker #pickerfIniReparacion></mat-datepicker>
+            </mat-form-field>
+            <br>
+            <mat-form-field>
+              <mat-label>Hora Inicio Reparaciones</mat-label>
+              <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación"
+                (focus)="ponHoraIniReparacion()">
+            </mat-form-field>
+            <mat-form-field class="inputpersonalizado">
+              <mat-label>Fecha Fin Reparaciones</mat-label>
+              <input matInput formControlName="fFinReparacion" [matDatepicker]="pickerfFinReparacion" type="text"
+                placeholder="Fecha Fin Reparaciones">
+              <mat-datepicker-toggle matSuffix [for]="pickerfFinReparacion"></mat-datepicker-toggle>
+              <mat-datepicker #pickerfFinReparacion></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Hora Finalización Reparaciones</mat-label>
+              <input matInput formControlName="hFinReparacion" type="time" placeholder="Hora Finalización Reparación"
+                (focus)="ponHoraFinReparacion()">
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <button type="button" [routerLink]="['/fotos', _id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
+              class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Reparacion
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <br>
+  <a routerLink="/vacios" class="btn btn-danger waves-effect waves-light">Regresar</a>
+  <!-- <div class="col-12">
+    <div class="card">
+      <div class="card-body mat-elevation-z8">
+        <h3 class="card-title">Detalle de Maniobra</h3>
+        Angel
+
+      </div><br>
+      <div class="card-body mat-elevation-z8">
+        <h3 class="card-title">Detalle de Maniobra</h3>
+        Javier
+
+      </div><br>
+      <div class="card-body mat-elevation-z8">
+        <h3 class="card-title">Detalle de Maniobra</h3>
+        Puc
+
+      </div><br>
+      <div class="card-body mat-elevation-z8">
+        <h3 class="card-title">Detalle de Maniobra</h3>
+        Yama
+      </div><br>
+    </div>
+  </div> -->
+</div>
