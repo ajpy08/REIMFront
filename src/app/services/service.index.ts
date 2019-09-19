@@ -15,6 +15,7 @@ export { ClienteService } from './cliente/cliente.service';
 export { CamionService } from '../pages/camiones/camion.service';
 export { ManiobraService } from '../pages/maniobras/maniobra.service';
 export { ViajeService } from '../pages/viajes/viaje.service';
+export { TipoContenedorService } from './tipoContenedor/tipoContenedor.service';
 
 export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';

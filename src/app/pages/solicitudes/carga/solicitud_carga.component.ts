@@ -1,20 +1,16 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, FormArray, FormGroupDirective, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Agencia } from '../../agencias/agencia.models';
-import { AgenciaService } from 'src/app/services/service.index';
 import { Usuario } from '../../usuarios/usuario.model';
-import { UsuarioService } from '../../../services/service.index';
 import { Transportista } from '../../transportistas/transportista.models';
-import { TransportistaService } from '../../../services/service.index';
 import { Cliente } from '../../../models/cliente.models';
-import { ClienteService } from '../../../services/service.index';
-import { SolicitudService } from '../../../services/service.index';
-import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
+import { AgenciaService, UsuarioService, TransportistaService, ClienteService, SolicitudService, TipoContenedorService } from '../../../services/service.index';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-
 import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
 import swal from 'sweetalert';
+
+
 
 @Component({
   selector: 'app-solicitud-carga',
@@ -32,28 +28,31 @@ export class SolicitudCargaComponent implements OnInit {
   transportistas: Transportista[] = [];
 
   clientes: Cliente[] = [];
-  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
+  // tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
+  tiposContenedor: any[] = [];
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   grados = GRADOS_CONTENEDOR_ARRAY;
-  estadosContenedor = ESTADOS_CONTENEDOR_ARRAY;
+  estadosContenedor = [ ESTADOS_CONTENEDOR.VACIO, ESTADOS_CONTENEDOR.LLENO_EXPORT ];
   patios = PATIOS_ARRAY;
   aprobada = false;
 
+
   constructor(
-    public _usuarioService: UsuarioService,
-    public _agenciaService: AgenciaService,
-    public _transportistaService: TransportistaService,
-    public _clienteService: ClienteService,
-    public _SolicitudService: SolicitudService,
-    public activatedRoute: ActivatedRoute,
-    public router: Router,
+    private _tipoContenedorService: TipoContenedorService,
+    private _agenciaService: AgenciaService,
+    private _usuarioService: UsuarioService,
+    private _transportistaService: TransportistaService,
+    private _clienteService: ClienteService,
+    private _SolicitudService: SolicitudService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
-    public _subirArchivoService: SubirArchivoService,
-    public _modalUploadService: ModalUploadService) { }
+    private _subirArchivoService: SubirArchivoService) { }
 
     ngOnInit() {
       this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
       this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
+      this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
 
@@ -94,7 +93,7 @@ export class SolicitudCargaComponent implements OnInit {
       transportistaTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO],
       patioTemp: [PATIOS.POLIGONO],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '', '', '', '') ]),
+      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '', '', '', '') ], {validators: Validators.required}),
       _id: [''],
       tipo: ['C'],
       estatus: ['']
@@ -117,7 +116,6 @@ export class SolicitudCargaComponent implements OnInit {
 
   addContenedor(tipo: string, peso: string, grado: string, maniobra: string,
     transportista: string, transportista2: string, patio: string, estatus: string): void {
-      console.log('asadsadasd');
     this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra, transportista, transportista2, patio, estatus));
   }
 
@@ -278,14 +276,12 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   agregarContenedor() {
-    // if (!this.navieraMELFI && (this.contenedorTemp.value === '' || this.contenedorTemp.value === undefined  )) {
-    //   swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
-    //   return;
-    // }
-    // if (this.navieraMELFI && (this.maniobraTemp.value === '' || this.maniobraTemp.value === undefined) ) {
-    //   swal('Faltan datos', 'No ha seleccionado contenedor', 'error');
-    //   return;
-    // }
+
+    this.agencia.updateValueAndValidity();
+
+
+
+    console.log(this.regForm);
     if (this.tipoTemp.value === '' || this.tipoTemp.value === undefined) {
       swal('Faltan datos', 'No ha seleccionado el tipo de contenedor.', 'error');
       return;
@@ -324,7 +320,6 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   onChangeFacturarA( event) {
-    console.log(event);
     switch (event.value) {
       case 'Cliente':
         if (!this.cliente || this.cliente.value === '') {
@@ -400,6 +395,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.guardarSolicitud();
     });
   }
+
   guardarSolicitud( ) {
     if (this.regForm.valid) {
       this.transportistaTemp.setValue(null);

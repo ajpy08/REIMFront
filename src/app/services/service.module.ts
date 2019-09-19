@@ -25,7 +25,8 @@ import {
     LoginGuard,
     AdminGuard,
     VerificaTokenGuard,
-    RefreshTokenInterceptor
+    RefreshTokenInterceptor,
+    TipoContenedorService
    } from './service.index';
 
 
@@ -57,7 +58,8 @@ import {
       LoginGuard,
       AdminGuard,
       VerificaTokenGuard,
-      RefreshTokenInterceptor
+      RefreshTokenInterceptor,
+      TipoContenedorService
     ],
     declarations: []
   })
