@@ -3,6 +3,7 @@ import { ManiobraService } from '../maniobras/maniobra.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
+import { ROLES } from 'src/app/config/config';
 
 @Component({
   selector: 'app-contenedores-lr',
@@ -35,17 +36,33 @@ export class ContenedoresLRComponent implements OnInit {
   }
 
   cargarManiobras() {
-    this.cargando = true;
-    this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id,
-      this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
-      .subscribe(maniobras => {
-        //console.log(maniobras.maniobras)
-        this.dataSource = new MatTableDataSource(maniobras.maniobras);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = maniobras.maniobras.length;
-      });
-    this.cargando = false;
+    if (this.usuarioLogueado.empresas.length > 0) {
+      this.cargando = true;
+      this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id,
+        this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
+        .subscribe(maniobras => {
+          // console.log(maniobras.maniobras)
+          this.dataSource = new MatTableDataSource(maniobras.maniobras);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = maniobras.maniobras.length;
+        });
+      this.cargando = false;
+    } else {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+        this.cargando = true;
+        this.maniobraService.getManiobrasConLavadoReparacion(null,
+          this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
+          .subscribe(maniobras => {
+            // console.log(maniobras.maniobras)
+            this.dataSource = new MatTableDataSource(maniobras.maniobras);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.totalRegistros = maniobras.maniobras.length;
+          });
+        this.cargando = false;
+      }
+    }
   }
 
   applyFilter(filterValue: string) {

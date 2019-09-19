@@ -101,6 +101,15 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
@@ -263,6 +272,15 @@
                       (change)="$event ? selectionLavadoVacios.toggle(row) : null"
                       [checked]="selectionLavadoVacios.isSelected(row)">
                     </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                      <i class="far fa-eye"></i>
+                    </button>
                   </mat-cell>
                 </ng-container>
 
@@ -429,6 +447,16 @@
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                      <i class="far fa-eye"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
 
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>

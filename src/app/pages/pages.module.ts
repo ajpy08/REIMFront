@@ -116,8 +116,10 @@ import {
     MatTableModule,
     MatSortModule,
     MatPaginatorIntl,
-    MatIconModule
+    MatIconModule,
+    MatExpansionModule,
 } from '@angular/material';
+import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 
 
 @NgModule({
@@ -173,9 +175,9 @@ import {
         MiclienteComponent,
         ReporteContenedoresRLComponent,
         RegisterComponent,
-        PapeletaComponent,
-        
-        ContenedoresLRComponent
+        PapeletaComponent,        
+        ContenedoresLRComponent,        
+        DetalleManiobraComponent
     ],
     exports: [
         DashboardComponent
@@ -204,6 +206,7 @@ import {
         MatSortModule,
         MatPaginatorModule,
         MatIconModule,
+        MatExpansionModule,
         NgxPrintModule,
         NgxGalleryModule
     ],
