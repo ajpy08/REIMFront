@@ -1,8 +1,8 @@
 <form class="form-horizontal" [formGroup]="regForm" (submit)="apruebaSolicitud()">
 
-  <mat-accordion [multi]=true>
+  <mat-accordion [multi]="true">
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Datos Generales
@@ -12,19 +12,25 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <mat-form-field>
-        <mat-label>Agencia</mat-label>
-        <input matInput formControlName="agencia" type="text">
-      </mat-form-field>
+      <div class="row">
+        <div class="col-md-5">
+          <mat-form-field>
+            <mat-label>Agencia</mat-label>
+            <input matInput formControlName="agencia" type="text">
+          </mat-form-field>
+        </div>
+        <div class="col-md-5">
+          <mat-form-field>
+            <mat-label>Agencia</mat-label>
+            <input matInput formControlName="cliente" type="text">
+          </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Agencia</mat-label>
-        <input matInput formControlName="cliente" type="text">
-      </mat-form-field>
+        </div>
+      </div>
     </mat-expansion-panel>
 
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Datos Facturación
@@ -121,7 +127,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Detalles de la Carga
@@ -156,12 +162,14 @@
           <table matNativeControl class="table table-striped ">
             <thead>
               <tr>
-                <th scope="col ">#</th>
-                <th scope="col ">Tamaño - Tipo</th>
-                <th scope="col ">Grado</th>
-                <th scope="col ">Estado contenedor</th>
-                <th scope="col ">Transportista</th>
-                <th scope="col ">Patio</th>
+                <th scope="col">#</th>
+                <th scope="col">Tamaño - Tipo</th>
+                <th scope="col">Grado</th>
+                <th scope="col">Estado contenedor</th>
+                <th scope="col">Transportista</th>
+                <th scope="col">Patio</th>
+                <th scope="col">Folio</th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i=index;">
@@ -173,6 +181,11 @@
                 <td>{{this.contenedores.controls[i].get('estado').value}}</td>
                 <td>{{this.contenedores.controls[i].get('transportista').value}}</td>
                 <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                <td>{{this.contenedores.controls[i].get('maniobra').value?.folio}}</td>
+                <td>
+                  <img *ngIf="contenedores.controls[i].get('maniobra').value" src="../../../assets/images/check_32x32.png">
+                  <img *ngIf="!contenedores.controls[i].get('maniobra').value" src="../../../assets/images/cancel_32x32.png">
+                </td>
               </tr>
             </tbody>
           </table>
@@ -180,9 +193,10 @@
       </div>
 
       <div>
-        <button type="button " class="btn btn-success " (click)="validaSolicitud() "> <i class="fa fa-check "></i> Validar</button>
-        <button type="submit " class="btn btn-success "> <i class="fa fa-check "></i> Aprobar</button>
-        <button type="button " class="btn btn-inverse " routerLink="/solicitudes/aprobaciones ">Regresar</button>
+        <h3>Estatus Solicitud {{estatus.value}}</h3>
+        <!-- <button type="button " class="btn btn-success " (click)="validaSolicitud() "> <i class="fa fa-check "></i> Validar</button> -->
+        <button *ngIf="estatus.value==='NA'" type="submit" class="btn btn-success "> <i class="fa fa-check "></i> Aprobar</button>
+        <button type="button " class="btn btn-inverse " routerLink="/solicitudes/aprobaciones">Regresar</button>
       </div>
 
       <p>Form value {{ regForm.value | json }} </p>

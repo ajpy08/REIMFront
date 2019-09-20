@@ -4,11 +4,46 @@
       <div class="row">
         <div class="col-sm-12 col-xs-12">
           <form [formGroup]="regForm" (ngSubmit)="guardaCambios()" novalidate>
-            <div class="form-group has-success">
-              <mat-label>Contenedor</mat-label>
-              <mat-form-field>
-                <input matInput formControlName="contenedor" type="text">
-              </mat-form-field>
+            <div class="row">
+              <div class="col-md-4">
+                <mat-label>Folio</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="folio" type="text">
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-label>Carga / Descarga</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="cargaDescarga" type="text">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <mat-label>Contenedor</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="contenedor" type="text">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-label>Tipo</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="tipo" type="text">
+                </mat-form-field>
+              </div>
+              <div class="col-md-2" *ngIf="this.cargaDescarga.value==='C'">
+                <mat-label>Grado</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="grado" type="text">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3">
+                <mat-label>Estado</mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="peso" type="text">
+                </mat-form-field>
+              </div>
             </div>
             <div class="form-group has-success">
               <mat-label>Agencia Aduanal</mat-label>

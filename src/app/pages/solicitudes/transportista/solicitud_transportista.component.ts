@@ -11,6 +11,8 @@ import { OperadorService } from '../../../services/service.index';
 import { Camion } from '../../camiones/camion.models';
 import { CamionService } from '../../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
+import {Location} from '@angular/common'; 
+import { RegisterComponent } from '../../register/register.component';
 
 @Component({
   selector: 'app-solicitud_transportista',
@@ -33,7 +35,8 @@ export class SolicitudTransportistaComponent implements OnInit {
     public _camionService: CamionService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private location: Location) { }
 
   ngOnInit() {
     this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
@@ -53,6 +56,10 @@ export class SolicitudTransportistaComponent implements OnInit {
       transportista: [{value: '', disabled: false}],
       camion: ['', [Validators.required]],
       operador: ['' , [Validators.required]],
+      folio: [{value: '', disabled: true}],
+      peso: [{value: '', disabled: true}],
+      grado: [{value: '', disabled: true}],
+      cargaDescarga: [{value: '', disabled: true}]
     });
   }
 
@@ -81,6 +88,20 @@ export class SolicitudTransportistaComponent implements OnInit {
     return this.regForm.get('operador');
   }
 
+  get folio() {
+    return this.regForm.get('folio');
+  }
+  get peso() {
+    return this.regForm.get('peso');
+  }
+  get grado() {
+    return this.regForm.get('grado');
+  }
+  get cargaDescarga() {
+    return this.regForm.get('cargaDescarga');
+  }
+
+
   cargarManiobra( id: string) {
     this._maniobraService.getManiobra( id ).subscribe( maniob => {
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
@@ -94,6 +115,12 @@ export class SolicitudTransportistaComponent implements OnInit {
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
+      this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
+      this.regForm.controls['peso'].setValue(maniob.maniobra.peso);
+      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      this.regForm.controls['cargaDescarga'].setValue(maniob.maniobra.cargaDescarga);
+
+
 
     });
   }
@@ -107,6 +134,12 @@ export class SolicitudTransportistaComponent implements OnInit {
   cargaCamiones( idTransportista: string ) {
     this._camionService.getCamiones( idTransportista )
     .subscribe(resp => this.camiones = resp.camiones);
+  }
+
+  regresa()
+  {
+this.location.back();
+
   }
 
   guardaCambios() {

@@ -205,29 +205,19 @@ export class AprobarCargaComponent implements OnInit {
       this.regForm.controls['estado'].setValue(solicitud.estado);
       this.regForm.controls['cp'].setValue(solicitud.cp);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
+      while (this.contenedores.length !== 0) {
+        this.contenedores.removeAt(0)
+      }
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.contenedor , element.tipo, element.peso, element.grado, element.transportista.razonSocial,element.patio, element.maniobra);
       });
     });
   }
 
-   validaSolicitud() {
-  //     this.contenedores.controls.forEach( cont => {
-  //     this._ManiobraService.getManiobraXContenedorViajeBuque(cont.get('contenedor').value, this.solicitud.viaje, this.buque.value)
-  //     .subscribe( maniobra => {
-  //       if (maniobra.length > 0) {
-  //         console.log(maniobra[0]._id);
-  //        cont.get('maniobra').setValue(maniobra[0]._id);
-  //       }
-  //     });
-  //   });
-
-  }
-
   apruebaSolicitud( ) {
 //    if ( this.regForm.valid ) {
      this._SolicitudService.apruebaSolicitudCarga(this.regForm.value).subscribe(res => {
-      this.regForm.markAsPristine();
+      this.cargarSolicitud(this._id.value);
       });
     }
 //  }
