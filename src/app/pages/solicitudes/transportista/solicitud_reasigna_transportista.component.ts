@@ -43,6 +43,10 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
       tipo: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
+      folio: [{value: '', disabled: true}],
+      peso: [{value: '', disabled: true}],
+      grado: [{value: '', disabled: true}],
+      cargaDescarga: [{value: '', disabled: true}],
       transportista: [{value: '', disabled: false}],
     });
   }
@@ -59,9 +63,19 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
   get cliente() {
     return this.regForm.get('cliente');
   }
-  get agencia() {
-    return this.regForm.get('agencia');
+  get folio() {
+    return this.regForm.get('folio');
   }
+  get peso() {
+    return this.regForm.get('peso');
+  }
+  get grado() {
+    return this.regForm.get('grado');
+  }
+  get cargaDescarga() {
+    return this.regForm.get('cargaDescarga');
+  }
+
   get transportista() {
     return this.regForm.get('transportista');
   }
@@ -73,6 +87,10 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
+      this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
+      this.regForm.controls['peso'].setValue(maniob.maniobra.peso);
+      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      this.regForm.controls['cargaDescarga'].setValue(maniob.maniobra.cargaDescarga);
       this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       
     });

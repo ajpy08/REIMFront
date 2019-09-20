@@ -239,7 +239,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
       this.onChangeCredito( {checked: this.credito} );
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.tipo, element.estado, element.grado,
+        this.addContenedor(element.tipo, element.peso, element.grado,
                             element.maniobra, element.transportista, 
                             element.transportista.razonSocial, element.patio, '');
       });

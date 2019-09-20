@@ -75,11 +75,11 @@
                 </ng-container>
                 <ng-container matColumnDef="operador">
                   <mat-header-cell *matHeaderCellDef>Operador</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.operador.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="camion">
                   <mat-header-cell *matHeaderCellDef>Camion</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.camion.noEconomico}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.camion?.noEconomico}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedDescargasColumns" class="encabezado"></mat-header-row>
@@ -149,11 +149,11 @@
                 </ng-container>
                 <ng-container matColumnDef="operador">
                   <mat-header-cell *matHeaderCellDef>Operador</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.operador.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="camion">
                   <mat-header-cell *matHeaderCellDef>Camion</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.camion.noEconomico}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.camion?.noEconomico}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedCargasColumns" class="encabezado"></mat-header-row>

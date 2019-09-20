@@ -109,8 +109,8 @@ export class SolicitudService {
     }
 
   apruebaSolicitudCarga(solicitud: Solicitud): Observable<any> {
-    let url = URL_SERVICIOS + '/solicitud/apruebacarga';
-    url += '/' + solicitud._id;
+    let url = URL_SERVICIOS + '/solicitudes/solicitud';
+    url += '/' + solicitud._id + '/apruebacarga';
     url += '?token=' + this._usuarioService.token;
     return this.http.put(url, solicitud)
     .pipe(map((resp: any) => {
