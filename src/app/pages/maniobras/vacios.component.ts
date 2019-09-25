@@ -117,6 +117,7 @@ export class VaciosComponent implements OnInit {
       if (value.ok && this.checkedVacios) {
         this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
         if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+          console.log(this.dataSourceVacios.data)
           this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
         }
       }
@@ -212,10 +213,11 @@ export class VaciosComponent implements OnInit {
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
 
-  cargarManiobrasSinFacturaVacios(sinFactura: boolean) {
+  cargarManiobrasSinFacturaVacios(sinFactura: boolean) {    
     this.maniobrasSinFacturaVacios = [];
     this.checkedVacios = sinFactura;
     if (sinFactura) {
+      //console.log("Filtro sin factura")
       this.dataSourceVacios.data.forEach(m => {
         if (!m.facturaManiobra) {
           this.maniobrasSinFacturaVacios.push(m);
@@ -224,15 +226,34 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios = new MatTableDataSource(this.maniobrasSinFacturaVacios);
       this.dataSourceVacios.sort = this.sort;
       this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
+      this.totalRegistrosVacios = this.dataSourceVacios.data.length;   
+      if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+        //console.log("Filtro Descargados (dentro de filtro sin factura)")
+        this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+      } else {
+        //console.log("No Filtro Descargados por que Descargados : " + this.checkedHDescargaVacios + " y el datasource tiene " + this.dataSourceVacios.data.length)
+      }
     } else {
-      this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedVacios) {
-          this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
+      //console.log("Filtro todos con y sin factura")
+      if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+        //console.log("Filtro Descargados")
+        this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+      } else {
+        //console.log("Recargo todo")
+        this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
+          if (value.ok && this.checkedVacios) {
+            //console.log("Sin factura despues de recargar")
+            this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
+          } else {
+            if (value.ok && this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+              //console.log("Descargados despues de recargar")
+              this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+            }
+          }
+        }).catch((error) => {
+          console.log(error.mensaje)
+        });
+      }      
     }
   }
 
@@ -249,14 +270,26 @@ export class VaciosComponent implements OnInit {
       this.dataSourceLavadoVacios.sort = this.sort;
       this.dataSourceLavadoVacios.paginator = this.paginator;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
+      if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+        this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+      }
     } else {
-      this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedLavadoVacios) {
-          this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
+      if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+        //console.log("Filtro Descargados")
+        this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+      } else {
+        this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
+          if (value.ok && this.checkedLavadoVacios) {
+            this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
+          } else {
+            if (value.ok && this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+              this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+            }
+          }
+        }).catch((error) => {
+          console.log(error.mensaje)
+        });
+      }      
     }
   }
 
@@ -273,14 +306,26 @@ export class VaciosComponent implements OnInit {
       this.dataSourceReparacionVacios.sort = this.sort;
       this.dataSourceReparacionVacios.paginator = this.paginator;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
+      if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+        this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+      }
     } else {
-      this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedReparacionVacios) {
-          this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
+      if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+        //console.log("Filtro Descargados")
+        this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+      } else {
+        this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
+          if (value.ok && this.checkedReparacionVacios) {
+            this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
+          } else {
+            if (value.ok && this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+              this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+            }
+          }
+        }).catch((error) => {
+          console.log(error.mensaje)
+        });
+      }      
     }
   }
 
