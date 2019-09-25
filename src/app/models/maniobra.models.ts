@@ -24,6 +24,8 @@ export class Maniobra {
         public correoOp?: string,
         public solicitud?: string,
         public hSalida?: string,
+        public descargaAutorizada?: boolean,
+        public hDescarga?: string,
         public lavado?: string,
         public lavadoObservacion?: string,
         public reparaciones?: Reparacion[],
