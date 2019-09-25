@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Maniobra } from '../../models/maniobra.models';
-import { ManiobraService, ViajeService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
+import { Maniobra } from '../../../models/maniobra.models';
+import { ManiobraService, ViajeService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -16,15 +16,15 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 // import * as Moment from 'moment';
 import swal from 'sweetalert';
-import { Viaje } from '../viajes/viaje.models';
+
+import { Viaje } from '../../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
+import { AsignarFacturaComponent } from '../asignar-factura/asignar-factura.component';
+
 
 const moment = _moment;
 
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
   parse: {
     dateInput: 'YYYY-MM-DD',
@@ -38,16 +38,15 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-vacios',
-  templateUrl: './vacios.component.html',
-  styles: [],
+  selector: 'app-facturacion-maniobras',
+  templateUrl: './facturacion-maniobras.component.html',
+  styleUrls: ['./facturacion-maniobras.component.css'],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-
-export class VaciosComponent implements OnInit {
+export class FacturacionManiobrasComponent implements OnInit {
   date = new FormControl(moment());
   //maniobras: any[] = [];
   //maniobrasSeleccionadas: string[] = [];
@@ -97,8 +96,6 @@ export class VaciosComponent implements OnInit {
   viajeReparacion: string = undefined;
   CD: string = undefined;
   //filtrarCD = new FormControl(false);
-  animal: string;
-  name: string;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
     public _excelService: ExcelService, public matDialog: MatDialog) { }
@@ -136,11 +133,13 @@ export class VaciosComponent implements OnInit {
 
   consultaManiobrasVacios() {
     return new Promise((resolve, reject) => {
-      let cargaDescarga = "D";
+      
+      // let cargaDescarga = "D";
+
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
       // }
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, false)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, false)
         .subscribe(maniobras => {
           this.dataSourceVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceVacios.sort = this.sort;
@@ -156,13 +155,13 @@ export class VaciosComponent implements OnInit {
 
   consultaManiobrasLavadoVacios() {
     return new Promise((resolve, reject) => {
-      let cargaDescarga = "D";
+      //let cargaDescarga = "D";
 
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", true, false)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", true, false)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceLavadoVacios.sort = this.sort;
@@ -184,7 +183,7 @@ export class VaciosComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }     
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.sort;
@@ -205,7 +204,7 @@ export class VaciosComponent implements OnInit {
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
 
-  cargarManiobrasSinFacturaVacios(sinFactura: boolean) {
+  cargarManiobrasSinFacturaVacios(sinFactura: boolean) {    
     this.maniobrasSinFacturaVacios = [];
     this.checkedVacios = sinFactura;
     if (sinFactura) {
@@ -218,7 +217,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios = new MatTableDataSource(this.maniobrasSinFacturaVacios);
       this.dataSourceVacios.sort = this.sort;
       this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
+      this.totalRegistrosVacios = this.dataSourceVacios.data.length;   
       if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
         //console.log("Filtro Descargados (dentro de filtro sin factura)")
         this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
@@ -245,7 +244,7 @@ export class VaciosComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 
@@ -281,7 +280,7 @@ export class VaciosComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 
@@ -317,7 +316,7 @@ export class VaciosComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 

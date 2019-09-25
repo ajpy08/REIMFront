@@ -122,6 +122,7 @@ import {
 } from '@angular/material';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-factura.component';
+import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 
 
 @NgModule({
@@ -180,7 +181,7 @@ import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-fac
         PapeletaComponent,        
         ContenedoresLRComponent,        
         DetalleManiobraComponent, 
-        AsignarFacturaComponent
+        AsignarFacturaComponent, FacturacionManiobrasComponent
     ],
     exports: [
         DashboardComponent

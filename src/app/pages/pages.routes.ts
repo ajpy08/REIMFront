@@ -85,6 +85,7 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
+import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 
 
 
@@ -140,9 +141,8 @@ const pagesRoutes: Routes = [
     
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
 
-
-
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
+    {path: 'facturacion-maniobras', component: FacturacionManiobrasComponent, data: {titulo: 'Facturación de Maniobras'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },

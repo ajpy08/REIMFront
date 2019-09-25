@@ -19,6 +19,7 @@ import {
 export class AsignarFacturaComponent implements OnInit {
 
   facturaVacios: string;
+  ok : boolean = false;
   // facturaLavadoVacios: string;
   // facturaReparacionVacios: string;
   selectionVacios = new SelectionModel<Maniobra>(true, []);
@@ -30,8 +31,8 @@ export class AsignarFacturaComponent implements OnInit {
     this.selectionVacios = this.maniobrasSeleccionadas;
   }
 
-  close() {
-    this.dialogRef.close();
+  close(result: string) {
+    this.dialogRef.close(result);
   }
 
   asignarFacturaVacios() {
@@ -42,8 +43,8 @@ export class AsignarFacturaComponent implements OnInit {
             maniobra.facturaManiobra = this.facturaVacios;
           });
         });
-        this.facturaVacios = "";
-        this.close();
+        //this.facturaVacios = "";
+        this.close(this.facturaVacios);
       } else {
         swal('No puedes asignar una factura vacía', '', 'error');
       }

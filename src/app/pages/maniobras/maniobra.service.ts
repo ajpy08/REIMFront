@@ -63,6 +63,32 @@ export class ManiobraService {
       params = params.append('reparacion', 'true');
     }
 
+    return this.http.get(url, {params: params });
+  }
+
+  //Excepto Vacios
+  getOtrasManiobras(cargadescarga?: string, viaje?: string, peso?: string, lavado?: boolean, reparacion?: boolean ): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/facturacion-maniobras' ;
+    let params = new HttpParams();
+    if (cargadescarga)  {
+      params = params.append('cargadescarga', cargadescarga);
+    }    
+
+    if (viaje)  {
+      params = params.append('viaje', viaje);
+    }
+
+    if (peso)  {
+      params = params.append('peso', peso);
+    }
+
+    if (lavado)  {
+      params = params.append('lavado', 'true');
+    }
+
+    if (reparacion)  {
+      params = params.append('reparacion', 'true');
+    }
 
     return this.http.get(url, {params: params });
   }
