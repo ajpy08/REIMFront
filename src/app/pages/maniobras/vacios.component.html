@@ -12,30 +12,13 @@
 <mat-tab-group mat-stretch-tabs>
   <mat-tab label="Vacios">
     <ng-template mat-tab-label>
-      Vacios ( <small>{{totalRegistrosVacios}}</small> )
+      Vacios Descarga ( <small>{{totalRegistrosVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-sm">
-                  <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
-                    <i class="fas fa-file-excel"></i> Exportar Excel
-                  </button>
-                </div>
-                <div class="col-sm">
-                  <mat-checkbox [checked]="checkedVacios" #sinFact
-                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Sin Factura
-                  </mat-checkbox>
-                </div>
-                <div class="col-sm">
-                </div>
-              </div>
-            </div>
-            <br><br>
             <div class="container">
               <div class="row">
                 <div class="col-sm">
@@ -54,29 +37,26 @@
                   </button>
                 </div>
                 <div class="col-sm">
-                  <p>
+                  <mat-checkbox [checked]="checkedVacios" #sinFact
+                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Por Facturar
+                  </mat-checkbox><br><br>
+                  <mat-checkbox [checked]="checkedHDescargaVacios" #hDescargaVacios
+                    (change)="cargarManiobrasDescargadosVacios(hDescargaVacios.checked)">Solo Descargados
+                  </mat-checkbox>
+                  <!-- <p>
                     <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
                   </p>
                   <mat-select [(ngModel)]="CD" placeholder="Selecciona..." name="CD" [disabled]="!filtrarCD.value">
                     <mat-option>--- NINGUNO ---</mat-option>
                     <mat-option value="C">CARGA</mat-option>
                     <mat-option value="D">DESCARGA</mat-option>
-                  </mat-select>
+                  </mat-select> -->
                 </div>
                 <div class="col-sm">
-                  <mat-form-field>
-                    <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
-                      placeholder="Factura de Maniobra de Vacio">
-                  </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFacturaVacios()">
-                    <i class="fa fa-save"></i>
-                    Asignar
-                  </button>
                 </div>
               </div>
-            </div>
-            <h3 class="card-title">Maniobras de Vacios( <small>{{totalRegistrosVacios}}</small> )</h3>
+            </div> <br><br>
+            <h3 class="card-title">Maniobras de Vacios Descarga( <small>{{totalRegistrosVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -84,7 +64,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceVacios" matSort>
+              <mat-table class="mat-table-big" #table [dataSource]="dataSourceVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
@@ -192,11 +172,38 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="hDescarga">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
               <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
+            </div><br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <!-- <mat-form-field>
+                    <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
+                      placeholder="Factura de Maniobra de Vacio">
+                  </mat-form-field> -->
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10"
+                    (click)="openDialogVacios()">
+                    <i class="fa fa-save"></i>
+                    Asignar Factura
+                  </button>
+                  <button value="Exportar a excel" (click)="exportAsXLSXVacios()" class="btn btn-success m-r-5">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                  </button>
+                </div>
+                <div class="col-sm">                  
+                </div>
+                <div class="col-sm">
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -205,21 +212,18 @@
   </mat-tab>
   <mat-tab label="Lavado Vacios">
     <ng-template mat-tab-label>
-      Lavado Vacios ( <small>{{totalRegistrosLavadoVacios}}</small> )
+      Lavado Vacios Descarga ( <small>{{totalRegistrosLavadoVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSXLavadoVacios()" class="btn btn-success m-r-5">
-              <i class="fas fa-file-excel"></i> Exportar Excel
-            </button> <br><br>
             <div class="container">
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -234,22 +238,16 @@
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedLavadoVacios" #s
-                    (change)="cargarManiobrasSinFacturaLavadoVacios(s.checked)">Sin Factura
+                    (change)="cargarManiobrasSinFacturaLavadoVacios(s.checked)">Por Facturar
+                  </mat-checkbox><br><br>
+                  <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL
+                    (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
-                  <mat-form-field>
-                    <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
-                      class="form-control" placeholder="Factura de Lavado de Vacio">
-                  </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFacturaLavadoVacios()">
-                    <i class="fa fa-save"></i>
-                    Asignar
-                  </button>
                 </div>
               </div>
-            </div>
+            </div><br><br>
             <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
@@ -258,7 +256,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavadoVacios" matSort>
+              <mat-table class="mat-table-big" #table [dataSource]="dataSourceLavadoVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
@@ -279,7 +277,7 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
-                      <i class="far fa-eye"></i>
+                      <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -364,11 +362,38 @@
                   <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="hDescarga">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
               <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
+            </div><br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <!-- <mat-form-field>
+                    <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
+                      class="form-control" placeholder="Factura de Lavado de Vacio">
+                  </mat-form-field> -->
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="openDialogVaciosLavado()">
+                    <i class="fa fa-save"></i>
+                    Asignar Factura
+                  </button>
+                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosLavado()" class="btn btn-success m-r-5">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                  </button>
+                </div>
+                <div class="col-sm">                  
+                </div>
+                <div class="col-sm">
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -377,21 +402,18 @@
   </mat-tab>
   <mat-tab label="Reparación Vacios">
     <ng-template mat-tab-label>
-      Reparación Vacios ( <small>{{totalRegistrosReparacionVacios}}</small> )
+      Reparación Vacios Descarga ( <small>{{totalRegistrosReparacionVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <button value="Exportar a excel" (click)="exportAsXLSXReparacionVacios()" class="btn btn-success m-r-5">
-              <i class="fas fa-file-excel"></i> Exportar Excel
-            </button> <br><br>
             <div class="container">
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -406,22 +428,16 @@
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedReparacionVacios" #s
-                    (change)="cargarManiobrasSinFacturaReparacionVacios(s.checked)">Sin Factura
+                    (change)="cargarManiobrasSinFacturaReparacionVacios(s.checked)">Por Facturar
+                  </mat-checkbox><br><br>
+                  <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR
+                    (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
-                  <mat-form-field>
-                    <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
-                      class="form-control" placeholder="Factura de Reparacion Vacio">
-                  </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="asignarFacturaReparacionVacios()">
-                    <i class="fa fa-save"></i>
-                    Asignar
-                  </button>
                 </div>
               </div>
-            </div>
+            </div><br><br>
             <h3 class="card-title">Maniobras de Reparacion Vacios( <small>{{totalRegistrosReparacionVacios}}</small> )
             </h3>
             <div class="example-header mat-elevation-z8">
@@ -431,7 +447,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceReparacionVacios" matSort>
+              <mat-table class="mat-table-big" #table [dataSource]="dataSourceReparacionVacios" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
@@ -452,7 +468,7 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
-                      <i class="far fa-eye"></i>
+                      <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -540,11 +556,39 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="hDescarga">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
               <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
+            </div><br><br>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-12">
+                  <!-- <mat-form-field>
+                    <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
+                      class="form-control" placeholder="Factura de Reparacion de Vacio">
+                  </mat-form-field> -->
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                    (click)="openDialogVaciosReparacion()">
+                    <i class="fa fa-save"></i>
+                    Asignar Factura
+                  </button>
+                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosReparacion()"
+                    class="btn btn-success m-r-5">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                  </button>
+                </div>
+                <div class="col-sm">                  
+                </div>
+                <div class="col-sm">
+                </div>
+              </div>
             </div>
           </div>
         </div>

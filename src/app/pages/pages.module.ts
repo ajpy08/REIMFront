@@ -118,8 +118,10 @@ import {
     MatPaginatorIntl,
     MatIconModule,
     MatExpansionModule,
+    MatDialogModule
 } from '@angular/material';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
+import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-factura.component';
 
 
 @NgModule({
@@ -177,7 +179,8 @@ import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.co
         RegisterComponent,
         PapeletaComponent,        
         ContenedoresLRComponent,        
-        DetalleManiobraComponent
+        DetalleManiobraComponent, 
+        AsignarFacturaComponent
     ],
     exports: [
         DashboardComponent
@@ -207,10 +210,12 @@ import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.co
         MatPaginatorModule,
         MatIconModule,
         MatExpansionModule,
+        MatDialogModule,
         NgxPrintModule,
         NgxGalleryModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
+    entryComponents: [AsignarFacturaComponent]
 })
 
 export class PagesModules { }
