@@ -39,6 +39,7 @@ export class RevisarComponent implements OnInit {
       _id: [''],
       contenedor: [{value: '', disabled: true}],
       tipo: [{value: '', disabled: true}],
+      peso: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
       transportista: [{value: '', disabled: true}],
@@ -67,6 +68,9 @@ export class RevisarComponent implements OnInit {
   get tipo() {
     return this.regForm.get('tipo');
   }
+  get peso() {
+    return this.regForm.get('peso');
+  }  
   get cliente() {
     return this.regForm.get('cliente');
   }
@@ -142,6 +146,7 @@ export class RevisarComponent implements OnInit {
       }
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
+      this.regForm.controls['peso'].setValue(maniob.maniobra.peso);
       if (maniob.maniobra.cliente) {
         this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente.razonSocial);
       }
