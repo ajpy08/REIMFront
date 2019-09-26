@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Maniobra } from '../../models/maniobra.models';
-import { ManiobraService, ViajeService } from '../../services/service.index';
-import { ExcelService } from '../../services/service.index';
+import { Maniobra } from '../../../models/maniobra.models';
+import { ManiobraService, ViajeService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -16,15 +16,15 @@ import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 // import * as Moment from 'moment';
 import swal from 'sweetalert';
-import { Viaje } from '../viajes/viaje.models';
+
+import { Viaje } from '../../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
+import { AsignarFacturaComponent } from '../asignar-factura/asignar-factura.component';
+
 
 const moment = _moment;
 
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
   parse: {
     dateInput: 'YYYY-MM-DD',
@@ -38,16 +38,15 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-vacios',
-  templateUrl: './vacios.component.html',
-  styles: [],
+  selector: 'app-facturacion-maniobras',
+  templateUrl: './facturacion-maniobras.component.html',
+  styleUrls: ['./facturacion-maniobras.component.css'],
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-
-export class VaciosComponent implements OnInit {
+export class FacturacionManiobrasComponent implements OnInit {
   date = new FormControl(moment());
   //maniobras: any[] = [];
   //maniobrasSeleccionadas: string[] = [];
@@ -97,8 +96,6 @@ export class VaciosComponent implements OnInit {
   viajeReparacion: string = undefined;
   CD: string = undefined;
   //filtrarCD = new FormControl(false);
-  animal: string;
-  name: string;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
     public _excelService: ExcelService, public matDialog: MatDialog) { }
@@ -106,7 +103,7 @@ export class VaciosComponent implements OnInit {
   ngOnInit() {
     this.cargarViajes(new Date().toString());
 
-    this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
+    this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedVacios) {
         this.filtraManiobrasDescargaVacios(this.checkedVacios);
         if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
@@ -115,7 +112,7 @@ export class VaciosComponent implements OnInit {
       }
     });
 
-    this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
+    this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedLavadoVacios) {
         this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
@@ -124,7 +121,7 @@ export class VaciosComponent implements OnInit {
       }
     });
 
-    this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
+    this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedReparacionVacios) {
         this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
@@ -134,13 +131,15 @@ export class VaciosComponent implements OnInit {
     });
   }
 
-  consultaManiobrasDescargaVacios() {
+  consultaManiobrasVacios() {
     return new Promise((resolve, reject) => {
-      let cargaDescarga = "D";
+      
+      // let cargaDescarga = "D";
+
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
       // }
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, false)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, false)
         .subscribe(maniobras => {
           this.dataSourceVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceVacios.sort = this.sort;
@@ -154,15 +153,15 @@ export class VaciosComponent implements OnInit {
     });
   }
 
-  consultaManiobrasDescargaVaciosLavado() {
+  consultaManiobrasLavadoVacios() {
     return new Promise((resolve, reject) => {
-      let cargaDescarga = "D";
+      //let cargaDescarga = "D";
 
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", true, false)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", true, false)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceLavadoVacios.sort = this.sort;
@@ -176,7 +175,7 @@ export class VaciosComponent implements OnInit {
     });
   }
 
-  consultaManiobrasDescargaVaciosReparacion() {
+  consultaManiobrasReparacionVacios() {
     return new Promise((resolve, reject) => {
       let cargaDescarga = "D";
 
@@ -184,7 +183,7 @@ export class VaciosComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }     
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.sort;
@@ -205,7 +204,7 @@ export class VaciosComponent implements OnInit {
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
 
-  filtraManiobrasDescargaVacios(sinFactura: boolean) {
+  filtraManiobrasDescargaVacios(sinFactura: boolean) {    
     this.maniobrasSinFacturaVacios = [];
     this.checkedVacios = sinFactura;
     if (sinFactura) {
@@ -218,7 +217,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios = new MatTableDataSource(this.maniobrasSinFacturaVacios);
       this.dataSourceVacios.sort = this.sort;
       this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
+      this.totalRegistrosVacios = this.dataSourceVacios.data.length;   
       if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
         //console.log("Filtro Descargados (dentro de filtro sin factura)")
         this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
@@ -232,20 +231,20 @@ export class VaciosComponent implements OnInit {
         this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
       } else {
         //console.log("Recargo todo")
-        this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
+        this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
           // if (value.ok && this.checkedVacios) {
           //   //console.log("Sin factura despues de recargar")
           //   this.filtraManiobrasDescargaVacios(this.checkedVacios);
           // } else {
-          if (value.ok && this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-            //console.log("Descargados despues de recargar")
-            this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-          }
+            if (value.ok && this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+              //console.log("Descargados despues de recargar")
+              this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+            }
           // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 
@@ -270,18 +269,18 @@ export class VaciosComponent implements OnInit {
         //console.log("Filtro Descargados")
         this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
       } else {
-        this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
+        this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
           // if (value.ok && this.checkedLavadoVacios) {
-          //   this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+          //   this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
           // } else {
-          if (value.ok && this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-          }
+            if (value.ok && this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+              this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+            }
           // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 
@@ -306,18 +305,18 @@ export class VaciosComponent implements OnInit {
         //console.log("Filtro Descargados")
         this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
       } else {
-        this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
+        this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
           // if (value.ok && this.checkedReparacionVacios) {
-          //   this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+          //   this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
           // } else {
-          if (value.ok && this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-          }
+            if (value.ok && this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+              this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+            }
           // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }
+      }      
     }
   }
 
@@ -335,7 +334,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios.paginator = this.paginator;
       this.totalRegistrosVacios = this.dataSourceVacios.data.length;
     } else {
-      this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
+      this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedVacios) {
           this.filtraManiobrasDescargaVacios(this.checkedVacios);
         }
@@ -359,7 +358,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceLavadoVacios.paginator = this.paginator;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
     } else {
-      this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
+      this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedLavadoVacios) {
           this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         }
@@ -383,7 +382,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceReparacionVacios.paginator = this.paginator;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
     } else {
-      this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
+      this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedReparacionVacios) {
           this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         }
@@ -549,13 +548,13 @@ export class VaciosComponent implements OnInit {
     let dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // if (this.checkedVacios) {
-        this.filtraManiobrasDescargaVacios(this.checkedVacios);
-        // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-        //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-        // }
-        // }
+      if (result) {      
+          // if (this.checkedVacios) {
+            this.filtraManiobrasDescargaVacios(this.checkedVacios);
+            // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+            //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+            // }
+          // }
       }
     });
   }
@@ -569,10 +568,10 @@ export class VaciosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedLavadoVacios) {
-        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-        // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-        //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-        // }
+          this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+          // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+          //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+          // }
         // }
       }
     });
@@ -587,10 +586,10 @@ export class VaciosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedReparacionVacios) {
-        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-        // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-        //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-        // }
+          this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+          // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+          //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+          // }
         // }
       }
     });
