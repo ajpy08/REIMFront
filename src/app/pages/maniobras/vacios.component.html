@@ -31,14 +31,14 @@
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasVacios()">
+                    (click)="consultaManiobrasDescargaVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedVacios" #sinFact
-                    (change)="cargarManiobrasSinFacturaVacios(sinFact.checked)">Por Facturar
+                    (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
                   </mat-checkbox><br><br>
                   <mat-checkbox [checked]="checkedHDescargaVacios" #hDescargaVacios
                     (change)="cargarManiobrasDescargadosVacios(hDescargaVacios.checked)">Solo Descargados
@@ -116,32 +116,32 @@
                 </ng-container>
 
                 <ng-container matColumnDef="operador">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Operador</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Operador</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="placa">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Placas</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Placas</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.camion?.placa}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="transportista">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Transportista</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="factura">
+                <ng-container matColumnDef="facturaManiobra">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="viaje">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
                 </ng-container>
 
@@ -151,12 +151,12 @@
                 </ng-container>
 
                 <ng-container matColumnDef="cliente">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>A.A.</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
                 </ng-container>
 
@@ -236,14 +236,14 @@
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasLavadoVacios()">
+                    (click)="consultaManiobrasDescargaVaciosLavado()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedLavadoVacios" #s
-                    (change)="cargarManiobrasSinFacturaLavadoVacios(s.checked)">Por Facturar
+                    (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
                   </mat-checkbox><br><br>
                   <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL
                     (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
@@ -327,7 +327,7 @@
                   <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="factura">
+                <ng-container matColumnDef="facturaManiobra">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
                 </ng-container>
@@ -368,9 +368,9 @@
                 </ng-container>
 
                 <ng-container matColumnDef="cargaDescarga">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
-                  </ng-container>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="hDescarga">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
@@ -431,14 +431,14 @@
                     </mat-select>
                   </mat-form-field>
                   <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasReparacionVacios()">
+                    (click)="consultaManiobrasDescargaVaciosReparacion()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedReparacionVacios" #s
-                    (change)="cargarManiobrasSinFacturaReparacionVacios(s.checked)">Por Facturar
+                    (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
                   </mat-checkbox><br><br>
                   <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR
                     (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
@@ -524,7 +524,7 @@
                   <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="factura">
+                <ng-container matColumnDef="facturaManiobra">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
                 </ng-container>
@@ -567,9 +567,9 @@
                 </ng-container>
 
                 <ng-container matColumnDef="cargaDescarga">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
-                  </ng-container>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="hDescarga">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>

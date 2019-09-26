@@ -68,7 +68,7 @@ export class FacturacionManiobrasComponent implements OnInit {
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
-    'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'factura', 'viaje',
+    'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
     'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
@@ -105,7 +105,7 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedVacios) {
-        this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
+        this.filtraManiobrasDescargaVacios(this.checkedVacios);
         if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
           this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
         }
@@ -114,7 +114,7 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedLavadoVacios) {
-        this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
+        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
           this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
         }
@@ -123,7 +123,7 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
       if (value.ok && this.checkedReparacionVacios) {
-        this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
+        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
           this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
         }
@@ -204,7 +204,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
 
-  cargarManiobrasSinFacturaVacios(sinFactura: boolean) {    
+  filtraManiobrasDescargaVacios(sinFactura: boolean) {    
     this.maniobrasSinFacturaVacios = [];
     this.checkedVacios = sinFactura;
     if (sinFactura) {
@@ -232,15 +232,15 @@ export class FacturacionManiobrasComponent implements OnInit {
       } else {
         //console.log("Recargo todo")
         this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
-          if (value.ok && this.checkedVacios) {
-            //console.log("Sin factura despues de recargar")
-            this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
-          } else {
+          // if (value.ok && this.checkedVacios) {
+          //   //console.log("Sin factura despues de recargar")
+          //   this.filtraManiobrasDescargaVacios(this.checkedVacios);
+          // } else {
             if (value.ok && this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
               //console.log("Descargados despues de recargar")
               this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
             }
-          }
+          // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
@@ -248,7 +248,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     }
   }
 
-  cargarManiobrasSinFacturaLavadoVacios(sinFactura: boolean) {
+  filtraManiobrasDescargaVaciosLavado(sinFactura: boolean) {
     this.maniobrasSinFacturaLavadoVacios = [];
     this.checkedLavadoVacios = sinFactura;
     if (sinFactura) {
@@ -270,13 +270,13 @@ export class FacturacionManiobrasComponent implements OnInit {
         this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
       } else {
         this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
-          if (value.ok && this.checkedLavadoVacios) {
-            this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
-          } else {
+          // if (value.ok && this.checkedLavadoVacios) {
+          //   this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
+          // } else {
             if (value.ok && this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
               this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
             }
-          }
+          // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
@@ -284,7 +284,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     }
   }
 
-  cargarManiobrasSinFacturaReparacionVacios(sinFactura: boolean) {
+  filtraManiobrasDescargaVaciosReparacion(sinFactura: boolean) {
     this.maniobrasSinFacturaReparacionVacios = [];
     this.checkedReparacionVacios = sinFactura;
     if (sinFactura) {
@@ -306,13 +306,13 @@ export class FacturacionManiobrasComponent implements OnInit {
         this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
       } else {
         this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
-          if (value.ok && this.checkedReparacionVacios) {
-            this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
-          } else {
+          // if (value.ok && this.checkedReparacionVacios) {
+          //   this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
+          // } else {
             if (value.ok && this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
               this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
             }
-          }
+          // }
         }).catch((error) => {
           console.log(error.mensaje)
         });
@@ -336,7 +336,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     } else {
       this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedVacios) {
-          this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
+          this.filtraManiobrasDescargaVacios(this.checkedVacios);
         }
       }).catch((error) => {
         console.log(error.mensaje)
@@ -360,7 +360,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     } else {
       this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedLavadoVacios) {
-          this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
+          this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         }
       }).catch((error) => {
         console.log(error.mensaje)
@@ -384,7 +384,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     } else {
       this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
         if (value.ok && this.checkedReparacionVacios) {
-          this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
+          this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         }
       }).catch((error) => {
         console.log(error.mensaje)
@@ -549,12 +549,12 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {      
-          if (this.checkedVacios) {
-            this.cargarManiobrasSinFacturaVacios(this.checkedVacios);
-            if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-              this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-            }
-          }
+          // if (this.checkedVacios) {
+            this.filtraManiobrasDescargaVacios(this.checkedVacios);
+            // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+            //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+            // }
+          // }
       }
     });
   }
@@ -567,12 +567,12 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (this.checkedLavadoVacios) {
-          this.cargarManiobrasSinFacturaLavadoVacios(this.checkedLavadoVacios);
-          if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-          }
-        }
+        // if (this.checkedLavadoVacios) {
+          this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+          // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+          //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+          // }
+        // }
       }
     });
   }
@@ -585,12 +585,12 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        if (this.checkedReparacionVacios) {
-          this.cargarManiobrasSinFacturaReparacionVacios(this.checkedReparacionVacios);
-          if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-          }
-        }
+        // if (this.checkedReparacionVacios) {
+          this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+          // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+          //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+          // }
+        // }
       }
     });
   }
