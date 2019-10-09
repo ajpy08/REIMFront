@@ -124,7 +124,7 @@ a.link:focus {
     border-radius: 4px;
 }
 
-html body .mdi:before,
+html body .fas:before,
 html body .mdi-set {
     line-height: initial;
 }
