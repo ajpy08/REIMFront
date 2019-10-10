@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../usuarios/usuario.model';
-import { UsuarioService } from '../../services/service.index';
+import { UsuarioService, SubirArchivoService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Cliente } from '../../models/cliente.models';
 import swal from 'sweetalert';
@@ -17,7 +17,7 @@ export class ProfileComponent implements OnInit {
   fotoTemporal = false;
   listaEmpresas: Cliente[] = [];
 
-  constructor(public _usuarioService: UsuarioService,private fb: FormBuilder) {
+  constructor(public _usuarioService: UsuarioService,private _subirArchivoService: SubirArchivoService,private fb: FormBuilder) {
     
   }
 
@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit {
   }
   
   subirFoto() {
-    this._usuarioService.subirFotoTemporal(this.fileFoto)
+    this._subirArchivoService.subirArchivoBucketTemporal(this.fileFoto)
     .subscribe( nombreArchivo => {
       this.regForm.get('img').setValue(nombreArchivo);
       this.regForm.get('img').markAsDirty();

@@ -128,17 +128,6 @@ export class UsuarioService {
                 .pipe(map( (resp: any) => resp.usuario ));
   }
 
-  subirFotoTemporal(archivo: File ): Observable<any> {
-    const formData = new FormData();
-    formData.append('file', archivo, archivo.name);
-    let url = URL_SERVICIOS + '/uploadFileTemp';
-         return this.http.put( url, formData )
-         .pipe(map( (resp: any) => {
-           swal('Archivo Cargado', resp.nombreArchivo, 'success');
-           return resp.nombreArchivo;
-         }));
-   }
-
   guardarUsuario( usuario: Usuario ): Observable<any> {
     if ( usuario._id ) {// actualizando
       return this.actualizarUsuario(usuario);
@@ -216,22 +205,6 @@ habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean) : Observable<any> {
                   }));
 }
 
-
-
-cambiarImagen( archivo: File, id: string ) {
-
-    // this._subirArchivoService.subirArchivo( archivo, 'usuarios', id )
-    //       .then( (resp: any) => {
-
-    //         this.usuario.img = resp.usuario.img;
-    //         swal( 'Imagen Actualizada', this.usuario.nombre, 'success' );
-    //         this.guardarStorage( id, this.token, this.usuario, this.menu );
-
-    //       })
-    //       .catch( resp => {
-    //         console.log( resp );
-    //       }) ;
-  }
 
   cargarUsuarioEmpresa(id: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
