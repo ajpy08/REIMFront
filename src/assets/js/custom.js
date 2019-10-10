@@ -146,7 +146,7 @@ function init_plugins() {
         // Toggle fullscreen
         $('a[data-action="expand"]').on('click', function(e) {
             e.preventDefault();
-            $(this).closest('.card').find('[data-action="expand"] i').toggleClass('mdi-arrow-expand mdi-arrow-compress');
+            $(this).closest('.card').find('[data-action="expand"] i').toggleClass('fas fa-expand fas fa-compress-arrows-alt');
             $(this).closest('.card').toggleClass('card-fullscreen');
         });
 
