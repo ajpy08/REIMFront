@@ -44,7 +44,7 @@ Login register and recover password Page
 }
 
 .login-box {
-    width: 400px;
+    width: 360px;
     margin: 0 auto;
     background: #002C77
     /* background: #313388; */
@@ -79,6 +79,6 @@ Login register and recover password Page
 }
 
 .card-body img {
-    width: 300px;
+    width: 290px;
     height: auto;
 }
