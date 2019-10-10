@@ -11,7 +11,7 @@ export class ImagenPipe implements PipeTransform {
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/img';
     if (!img) {
-      return url + '/usuarios/xxx';
+      return url + '/usuarios/no-img.jpg';
     }
     if (img.indexOf('https') >= 0) {
       return img;
@@ -40,13 +40,13 @@ export class ImagenPipe implements PipeTransform {
         break;
       case 'solicitud':
         url += '/solicitudes/' + img;
-        break;  
+        break;
       case 'temp':
         url += '/temp/' + img;
         break;
       default:
       console.log('tipo de imagen no existe');
-      url += '/usuarios/xxx';
+      url += '/usuarios/no-img.jpg';
     }
     return url;
   }

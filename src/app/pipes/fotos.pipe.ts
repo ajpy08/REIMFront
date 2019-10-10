@@ -10,7 +10,7 @@ export class FotosPipe implements PipeTransform {
     // console.log(params)
     let url = URL_SERVICIOS + '/img/' + params[0];
     if (!img) {
-      return url + '/xxx';
+      return url + '/no-img.jpg';
     }
     if (img.indexOf('https') >= 0) {
       return img;
@@ -26,7 +26,7 @@ export class FotosPipe implements PipeTransform {
         break;
       default:
         console.log('tipo de imagen no existe');
-        url += '/xxx';
+        url += '/no-img.jpg';
     }
     // console.log(url)
     return url;
