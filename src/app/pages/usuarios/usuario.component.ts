@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute  } from '@angular/router';
 import { UsuarioService } from './usuario.service';
 import { Cliente } from '../../models/cliente.models';
-import { ClienteService } from '../../services/cliente/cliente.service';
+import { ClienteService, SubirArchivoService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ROLES_ARRAY } from '../../config/config';
 
@@ -19,10 +19,11 @@ export class UsuarioComponent implements OnInit {
   roles = ROLES_ARRAY;
 
   constructor(
-    public _usuarioService: UsuarioService,
-    public _clienteService: ClienteService,
-    public router: Router,
-    public activatedRoute: ActivatedRoute,
+    private _usuarioService: UsuarioService,
+    private _clienteService: ClienteService,
+    private _subirArchivoService: SubirArchivoService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -124,7 +125,7 @@ export class UsuarioComponent implements OnInit {
   }
   
   subirFoto() {
-    this._usuarioService.subirFotoTemporal(this.fileFoto)
+    this._subirArchivoService.subirArchivoBucketTemporal(this.fileFoto)
     .subscribe( nombreArchivo => {
       this.regForm.get('img').setValue(nombreArchivo);
       this.regForm.get('img').markAsDirty();
