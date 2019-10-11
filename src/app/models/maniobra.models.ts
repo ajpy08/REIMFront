@@ -30,6 +30,8 @@ export class Maniobra {
         public lavadoObservacion?: string,
         public reparaciones?: Reparacion[],
         public reparacionesObservacion?: string,
+        public mostrarFotosRNaviera?: boolean,
+        public mostrarFotosRAA?: boolean,
         public fTerminacionLavado?: string,
         public hTerminacionLavado?: string,
         public fTerminacionReparacion?: string,

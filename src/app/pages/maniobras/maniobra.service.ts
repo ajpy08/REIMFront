@@ -365,6 +365,27 @@ export class ManiobraService {
     return this.http.put( url, maniobra );
   }
 
+  habilitaDeshabilitaMostrarFotosReparacion(maniobra: Maniobra, mostrarFotosReparacion: boolean, tipo: string) : Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/' + maniobra._id + '/habilita_deshabilita_mostrarFotosReparacion';
+    url += '?token=' + this._usuarioService.token;
+
+    if (tipo === 'Naviera') {
+      return this.http.put( url, {mostrarFotosRNaviera: mostrarFotosReparacion, tipo: tipo} )
+              .pipe(map( (resp: any) => {
+                      swal('Cambio mostrar a Fotos de Maniobra' + tipo + ' con éxito', resp.maniobra.contenedor, 'success' );
+                      return true;
+                    }));
+    } else if (tipo === 'AA') {
+      return this.http.put( url, {mostrarFotosRAA: mostrarFotosReparacion, tipo: tipo} )
+              .pipe(map( (resp: any) => {
+                      swal('Cambio mostrar a Fotos de Maniobra' + tipo + ' con éxito', resp.maniobra.contenedor, 'success' );
+                      return true;
+                    }));
+    } else {
+      
+    }    
+  }
+
     // getManiobrasTransito(desde: number = 0, contenedor?: string ): Observable<any> {
   //   const url = URL_SERVICIOS + '/maniobras/transito/?desde=' + desde ;
   //   return this.http.get( url );
