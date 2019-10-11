@@ -123,7 +123,7 @@ export class FotosComponent implements OnInit {
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
         this.fotosLavado = fotos.fotos;
         this.fotosLavado.forEach(foto => {
-          let data = this.fotosPipe.transform(foto.name, [id, 'L']);
+          let data = this.fotosPipe.transform(foto.Key, [id, 'L']);
           const image = {
             small: data,
             medium: data,
@@ -142,7 +142,7 @@ export class FotosComponent implements OnInit {
         this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
           this.fotosReparacion = fotos.fotos;
           this.fotosReparacion.forEach(foto => {
-            let data = this.fotosPipe.transform(foto.name, [id, 'R']);
+            let data = this.fotosPipe.transform(foto.Key, [id, 'R']);
             const image = {
               small: data,
               medium: data,
@@ -173,8 +173,8 @@ export class FotosComponent implements OnInit {
   }
 
   cargarImagenes() {
-    const promesa = this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
-
+    
+    const promesa = this._subirArchivoService.cargarFotosLavadoReparacion(this.archivos, this.selected, this.maniobra._id);
     promesa.then((value: boolean) => {
       if (value) {
         this.yaCargo = value;
