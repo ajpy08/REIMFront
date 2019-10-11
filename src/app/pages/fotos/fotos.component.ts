@@ -114,7 +114,7 @@ export class FotosComponent implements OnInit {
     this._maniobraService.getManiobra(id)
       .subscribe(maniobra => {
         this.maniobra = maniobra.maniobra;
-      });      
+      });
   }
 
   cargarFotos(id: string, lavado_reparacion: string) {
@@ -123,7 +123,7 @@ export class FotosComponent implements OnInit {
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
         this.fotosLavado = fotos.fotos;
         this.fotosLavado.forEach(foto => {
-          let data = this.fotosPipe.transform(foto.Key, [id, 'L']);
+          let data = this.fotosPipe.transform(foto.Key);
           const image = {
             small: data,
             medium: data,
@@ -142,7 +142,7 @@ export class FotosComponent implements OnInit {
         this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
           this.fotosReparacion = fotos.fotos;
           this.fotosReparacion.forEach(foto => {
-            let data = this.fotosPipe.transform(foto.Key, [id, 'R']);
+            let data = this.fotosPipe.transform(foto.Key);
             const image = {
               small: data,
               medium: data,
