@@ -23,6 +23,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RefreshTokenInterceptor } from './services/service.index';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     ReactiveFormsModule,
     ServiceModule,
     SharedModule,
+    Ng2ImgMaxModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
