@@ -10,7 +10,12 @@
   </div>
 </div>
 <div class="card-body mat-elevation-z8" *ngIf="!cargando">
-  <mat-accordion [multi]="true">
+  <div class="row pull-right p-b-5">
+    <button class="btn btn-mdb-color waves-effect waves-light" (click)="openAllFirst()">
+      <i class="fas fa-arrows-alt-v"></i>
+    </button>
+  </div>
+  <mat-accordion [multi]="true" #firstAccordion="matAccordion">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -141,20 +146,20 @@
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Revisión
+          Lavado / Reparación
         </mat-panel-title>
         <mat-panel-description>
-          <p *ngIf="lavado.value">Con Lavado </p> <p *ngIf="reparaciones.length > 0">- {{reparaciones.length}} Reparaciones</p>
+          <p *ngIf="lavado.value">Con Lavado —</p>
+          <p *ngIf="reparaciones.length > 0">— Reparaciones ({{reparaciones.length}}) </p>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
       <form [formGroup]="regForm" novalidate>
-        <h4 class="box-title">Lavado</h4>
-        <hr class="m-t-0 m-b-40">
+        <h4 class="box-title"><b>Lavado</b></h4>
         <div class="row">
           <div class="col-md">
             <mat-form-field>
-              <mat-label>Tipo Lavado</mat-label>
+              <label class="control-label"><b>Tipo Lavado :</b></label>
               <mat-select formControlName="lavado" tabindex="1">
                 <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
                   {{tipo.descripcion}}
@@ -164,103 +169,10 @@
           </div>
           <div class="col-md">
             <mat-form-field>
-              <mat-label>Observaciones</mat-label>
               <label class="control-label"><b>Observaciones :</b></label>
               <textarea matInput formControlName="lavadoObservacion" rows="3" cols="40"></textarea>
             </mat-form-field>
           </div>
-          <div class="col-md">
-            <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
-              class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Lavado
-            </button>
-          </div>
-        </div>
-        <br>
-        <h4 class="box-title">Reparaciones</h4>
-        <hr class="m-t-0 m-b-40">
-        <div class="row">
-          <div class="col-md">
-            <!-- <mat-form-field>
-              <mat-select #tipoReparacion tabindex="1">
-                <mat-option *ngFor="let tipo of tiposReparaciones" [value]="tipo._id">
-                  {{tipo.descripcion}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field> -->
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md">
-            <div class="form-group">
-              <table matNativeControl class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Reparacion</th>
-                  </tr>
-                </thead>
-                <tbody formArrayName="reparaciones" *ngFor="let item of reparaciones.controls; let i = index;">
-                  <tr [formGroupName]="i">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{reparaciones.controls[i].get('reparacion').value}}</td>
-                    <td>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="col-md">
-            <mat-form-field>
-              <mat-label>Observaciones Reparación</mat-label>
-              <textarea matInput formControlName="reparacionesObservacion" rows="3" cols="40"></textarea>
-            </mat-form-field>
-          </div>
-          <div class="col-md">
-            <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
-              class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Reparacion
-            </button>
-          </div>
-        </div><br><br>
-        <h3 class="box-title">Grado y Salida</h3>
-        <hr class="m-t-0 m-b-40">
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field>
-              <mat-label>Grado Contenedor</mat-label>
-              <mat-select formControlName="grado">
-                <mat-option *ngFor="let grado of grados" [value]="grado">
-                  {{grado}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="col-md-6">
-            <mat-form-field>
-              <mat-label>Hora Descarga</mat-label>
-              <input matInput formControlName="hDescarga" type="time" (focus)="ponHora()">
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Lavado / Reparación
-        </mat-panel-title>
-        <mat-panel-description>
-           <p *ngIf="fIniLavado.value">Fin Lavado {{fIniLavado.value}} {{hFinLavado.value}}</p>
-           <p *ngIf="fIniReparacion.value">Fin Reparacion {{fIniReparacion.value}} {{hFinReparacion.value}}</p>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-
-      <form [formGroup]="regForm" novalidate>
-        <div class="card-body">
           <div class="col-md">
             <label class="control-label"><b>Fecha y Hora de Finalizacion Lavado</b></label>
             <mat-form-field class="inputpersonalizado">
@@ -283,20 +195,144 @@
             </mat-form-field>
           </div>
           <div class="col-md">
-            <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
-              class="btn btn-primary">
+            <button *ngIf="lavado.value" type="button" [routerLink]="['/fotos',  _id.value]"
+              [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Lavado
             </button>
           </div>
+        </div>
+        <br>
+        <h4 class="box-title"><b>Cotizaciones de Lavado de Terceros</b></h4><br>
+        <div class="row">
           <div class="col-md">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
+              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+              <h5>Suelta los archivos aquí</h5>
+              <img src="assets/images/drop-images.png">
+            </div>
+            <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+          </div>
+          <div class="col-md">
+            <button (click)="cargarImagenes()" class="btn btn-success">Cargar Cotización</button>
+            <button (click)="limpiarArchivos()" class="btn btn-danger m-l-5">Limpiar</button>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Nombre archivo</th>
+                  <th>Cargado</th>
+                  <th>Tamaño</th>
+                  <th>Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let archivo of archivos">
+                  <th>{{archivo.nombreArchivo}}</th>
+                  <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+                  <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+                  <th>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                    </div>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br><br>
+        <h4 class="box-title"><b>Cotizaciones de Lavado de REIM Container Park</b></h4><br>
+        <div class="row">
+          <div class="col-md">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
+              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+              <h5>Suelta los archivos aquí</h5>
+              <img src="assets/images/drop-images.png">
+            </div>
+            <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+          </div>
+          <div class="col-md">
+            <button (click)="cargarImagenes()" class="btn btn-success">Cargar Cotización</button>
+            <button (click)="limpiarArchivos()" class="btn btn-danger m-l-5">Limpiar</button>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Nombre archivo</th>
+                  <th>Cargado</th>
+                  <th>Tamaño</th>
+                  <th>Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let archivo of archivos">
+                  <th>{{archivo.nombreArchivo}}</th>
+                  <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+                  <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+                  <th>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                    </div>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br><br>
+        <h4 class="box-title"><b>Reparaciones</b></h4>
+        <div class="row">
+          <div class="col-md">
+            <!-- <mat-form-field>
+              <mat-select #tipoReparacion tabindex="1">
+                <mat-option *ngFor="let tipo of tiposReparaciones" [value]="tipo._id">
+                  {{tipo.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field> -->
           </div>
         </div>
-        <div class="card-body">
+        <div class="row">
           <div class="col-md">
-            <label class="control-label"><b>Fecha y Hora de Reparaciones</b></label>
+            <div class="form-group">
+              <table matNativeControl class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col"><b>#</b></th>
+                    <th scope="col"><b>Reparación</b></th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="reparaciones" *ngFor="let item of reparaciones.controls; let i = index;">
+                  <tr [formGroupName]="i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{reparaciones.controls[i].get('reparacion').value}}</td>
+                    <td>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md">
+            <mat-form-field>
+              <label class="control-label"><b>Observaciones Reparacioón:</b></label>
+              <textarea matInput formControlName="reparacionesObservacion" rows="3" cols="40"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md">
+            <button *ngIf="reparaciones.controls" type="button" [routerLink]="['/fotos',_id.value]"
+              [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Reparacion
+            </button><br>
+            <mat-label><b>Permitir Ver Fotos Naviera</b></mat-label>
+            <mat-slide-toggle formControlName="mostrarFotosRNaviera" color="primary" class="m-l-5" (change)="habilitaMostrarFotosReparacion(maniobra, $event, 'Naviera')" [checked]="true"></mat-slide-toggle><br>
+            <mat-label><b>Permitir Ver Fotos AA</b></mat-label>
+            <mat-slide-toggle formControlName="mostrarFotosRAA" color="primary" class="m-l-5" (change)="habilitaMostrarFotosReparacion(maniobra, $event, 'AA')" [checked]="true"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md">
+            <h4 class="control-label"><b>Fecha y Hora de Reparaciones</b></h4>
             <mat-form-field class="inputpersonalizado">
-              <mat-label>Fecha Inicio Reparaciones</mat-label>
+              <mat-label><b>Fecha Inicio Reparaciones</b></mat-label>
               <input matInput formControlName="fIniReparacion" [matDatepicker]="pickerfIniReparacion" type="text"
                 placeholder="Fecha Inicio Reparaciones">
               <mat-datepicker-toggle matSuffix [for]="pickerfIniReparacion"></mat-datepicker-toggle>
@@ -304,36 +340,124 @@
             </mat-form-field>
             <br>
             <mat-form-field>
-              <mat-label>Hora Inicio Reparaciones</mat-label>
+              <mat-label><b>Hora Inicio Reparaciones</b></mat-label>
               <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación"
                 (focus)="ponHoraIniReparacion()">
             </mat-form-field>
             <mat-form-field class="inputpersonalizado">
-              <mat-label>Fecha Fin Reparaciones</mat-label>
+              <mat-label><b>Fecha Fin Reparaciones</b></mat-label>
               <input matInput formControlName="fFinReparacion" [matDatepicker]="pickerfFinReparacion" type="text"
                 placeholder="Fecha Fin Reparaciones">
               <mat-datepicker-toggle matSuffix [for]="pickerfFinReparacion"></mat-datepicker-toggle>
               <mat-datepicker #pickerfFinReparacion></mat-datepicker>
             </mat-form-field>
             <mat-form-field>
-              <mat-label>Hora Finalización Reparaciones</mat-label>
+              <mat-label><b>Hora Finalización Reparaciones</b></mat-label>
               <input matInput formControlName="hFinReparacion" type="time" placeholder="Hora Finalización Reparación"
                 (focus)="ponHoraFinReparacion()">
             </mat-form-field>
           </div>
+        </div><br><br>
+        <h4 class="box-title"><b>Grado y Salida</b></h4>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label><b>Grado Contenedor</b></mat-label>
+              <mat-select formControlName="grado">
+                <mat-option *ngFor="let grado of grados" [value]="grado">
+                  {{grado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field>
+              <mat-label><b>Hora Descarga</b></mat-label>
+              <input matInput formControlName="hDescarga" type="time" (focus)="ponHora()">
+            </mat-form-field>
+          </div>
+        </div><br><br>
+        <h4 class="box-title"><b>Cotizaciones de Reparación de Terceros</b></h4><br>
+        <div class="row">
           <div class="col-md">
-            <button type="button" [routerLink]="['/fotos', _id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
-              class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Reparacion
-            </button>
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
+              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+              <h5>Suelta los archivos aquí</h5>
+              <img src="assets/images/drop-images.png">
+            </div>
+            <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+          </div>
+          <div class="col-md">
+            <button (click)="cargarImagenes()" class="btn btn-success">Cargar Cotización</button>
+            <button (click)="limpiarArchivos()" class="btn btn-danger m-l-5">Limpiar</button>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Nombre archivo</th>
+                  <th>Cargado</th>
+                  <th>Tamaño</th>
+                  <th>Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let archivo of archivos">
+                  <th>{{archivo.nombreArchivo}}</th>
+                  <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+                  <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+                  <th>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                    </div>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><br><br>
+        <h4 class="box-title"><b>Cotizaciones de Reparación de REIM Container Park</b></h4><br>
+        <div class="row">
+          <div class="col-md">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
+              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+              <h5>Suelta los archivos aquí</h5>
+              <img src="assets/images/drop-images.png">
+            </div>
+            <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+          </div>
+          <div class="col-md">
+            <button (click)="cargarImagenes()" class="btn btn-success">Cargar Cotización</button>
+            <button (click)="limpiarArchivos()" class="btn btn-danger m-l-5">Limpiar</button>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Nombre archivo</th>
+                  <th>Cargado</th>
+                  <th>Tamaño</th>
+                  <th>Progreso</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let archivo of archivos">
+                  <th>{{archivo.nombreArchivo}}</th>
+                  <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+                  <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+                  <th>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                    </div>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+
       </form>
     </mat-expansion-panel>
   </mat-accordion>
   <br>
   <a routerLink="/vacios" class="btn btn-danger waves-effect waves-light">Regresar</a>
+
   <!-- <div class="col-12">
     <div class="card">
       <div class="card-body mat-elevation-z8">
