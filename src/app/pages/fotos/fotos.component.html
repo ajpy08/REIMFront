@@ -79,7 +79,7 @@
     <div class="row">
       <div class="col-md-4">
         <h3>Seleccione archivos</h3>
-        <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+        <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" (comprimiendoImagen)="comprimiendo = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
           <h4>Suelta los archivos aquí</h4>
           <img src="assets/images/drop-images.png">
         </div>
@@ -87,6 +87,7 @@
       </div>
       <div class="col-md-8">
         <h4>Cargar archivos</h4>
+
         <mat-form-field>
           <mat-select [(value)]="selected" placeholder="Tipo de fotos" name="fotos">
             <mat-option value="fotos_lavado">Lavado</mat-option>
@@ -95,6 +96,19 @@
         </mat-form-field>
         <button (click)="cargarImagenes()" class="btn btn-success">Cargar fotos</button>
         <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
+
+        <div class="row animated fadeIn" *ngIf="comprimiendo">
+          <div class="col-sm-12">
+            <div class="alert alert-warning text-center">
+              <strong>Comprimiendo Imagenes</strong>
+              <br>
+              <i class="fas fa-refresh fa-spin fa-2x"></i>
+              <br>
+              <span>Espere por favor</span>
+            </div>
+          </div>
+        </div>
+
         <table class="table">
           <thead class="thead-dark">
             <tr>

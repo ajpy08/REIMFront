@@ -1,5 +1,6 @@
 import { FileItem } from '../models/file-item.models';
 import { Directive, EventEmitter, ElementRef, HostListener, Input, Output } from '@angular/core';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Directive({
   selector: '[appNgDropFiles]'
@@ -7,9 +8,10 @@ import { Directive, EventEmitter, ElementRef, HostListener, Input, Output } from
 export class NgDropFilesDirective {
   @Input() archivos: FileItem[] = [];
   @Output() mouseSobre: EventEmitter<boolean> = new EventEmitter();
+  @Output() comprimiendoImagen : EventEmitter<boolean> = new EventEmitter();
   @Input() yaCargo: boolean;
-
-  constructor() { }
+  
+  constructor(private ng2ImgMax: Ng2ImgMaxService,) { }
 
   @HostListener('dragover', ['$event'])
   public onDrapEnter(event: any) {
@@ -55,8 +57,21 @@ export class NgDropFilesDirective {
       const archivoTemporal = archivosLista[propiedad];
 
       if (this._archivoPuedeSerCargado(archivoTemporal)) {
-        const nuevoArchivo = new FileItem(archivoTemporal);
-        this.archivos.push(nuevoArchivo);
+        this.comprimiendoImagen.emit(true);
+        this.ng2ImgMax.resizeImage(archivoTemporal, 800, 600).subscribe(
+          result => {
+            const nuevoArchivo = new FileItem(new File([result], result.name));
+            this.archivos.push(nuevoArchivo);
+            this.comprimiendoImagen.emit(false);
+          },
+          error => {
+            console.log('😢 Oh no!', error);
+            this.comprimiendoImagen.emit(false);
+          }
+        );
+
+        // const nuevoArchivo = new FileItem(archivoTemporal);
+        // this.archivos.push(nuevoArchivo);
       }
     }
     //console.log(this.archivos);
@@ -79,10 +94,13 @@ export class NgDropFilesDirective {
   private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {
     for (const archivo of this.archivos) {
       if (archivo.nombreArchivo === nombreArchivo) {
-        console.log('El archivo' + nombreArchivo + ' ya esta agregado');
+        console.log('El archivo ' + nombreArchivo + ' ya esta agregado');
         return true;
       }
     }
+
+
+
     return false;
   }
 

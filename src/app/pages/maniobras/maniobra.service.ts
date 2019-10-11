@@ -352,9 +352,7 @@ export class ManiobraService {
   }
 
   getFotos( id: string, lavado_reparacion: string ): Observable<any> {
-    let url = URL_SERVICIOS + '/img/';
-    url += id;
-    url += '&' + lavado_reparacion;
+    const url = URL_SERVICIOS + '/documentos/maniobra/' + id + '/listaImagenes/' + lavado_reparacion + '/';
     return this.http.get( url );
   }
 

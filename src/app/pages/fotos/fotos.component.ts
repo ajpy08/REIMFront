@@ -10,6 +10,7 @@ import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import {Location} from '@angular/common'; 
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-fotos',
@@ -30,6 +31,12 @@ export class FotosComponent implements OnInit {
   selected = 'fotos_lavado';
   id: string;
 
+  comprimiendo = false;
+
+
+  uploadedImage: Blob;
+
+
   fotosLavado: any;
   fotosReparacion: any;
 
@@ -47,6 +54,7 @@ export class FotosComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fotosPipe: FotosPipe,
     private usuarioService: UsuarioService,
+    private ng2ImgMax: Ng2ImgMaxService,
     private location: Location) {
 
   }
@@ -114,16 +122,19 @@ export class FotosComponent implements OnInit {
     this._maniobraService.getManiobra(id)
       .subscribe(maniobra => {
         this.maniobra = maniobra.maniobra;
-      });      
+      });
   }
 
   cargarFotos(id: string, lavado_reparacion: string) {
+
+    
     if (lavado_reparacion === "L") {
       const images = [];
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
         this.fotosLavado = fotos.fotos;
+        
         this.fotosLavado.forEach(foto => {
-          let data = this.fotosPipe.transform(foto.name, [id, 'L']);
+          let data = this.fotosPipe.transform(foto.Key);
           const image = {
             small: data,
             medium: data,
@@ -142,7 +153,7 @@ export class FotosComponent implements OnInit {
         this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
           this.fotosReparacion = fotos.fotos;
           this.fotosReparacion.forEach(foto => {
-            let data = this.fotosPipe.transform(foto.name, [id, 'R']);
+            let data = this.fotosPipe.transform(foto.Key);
             const image = {
               small: data,
               medium: data,
@@ -173,12 +184,12 @@ export class FotosComponent implements OnInit {
   }
 
   cargarImagenes() {
-    const promesa = this._subirArchivoService.cargarImagenesMongo(this.archivos, this.selected, this.maniobra._id);
-
+    
+    const promesa = this._subirArchivoService.cargarFotosLavadoReparacion(this.archivos, this.selected, this.maniobra._id);
     promesa.then((value: boolean) => {
       if (value) {
         this.yaCargo = value;
-        //console.log("yaCargo de fotos.component: " +  this.yaCargo)
+        console.log("yaCargo de fotos.component: " +  this.yaCargo)
         this.actualizaFotosDespuesdeCargar(value);
       }
     })
@@ -235,10 +246,21 @@ export class FotosComponent implements OnInit {
 
     for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
       const archivoTemporal = archivosLista[propiedad];
-
       if (this._archivoPuedeSerCargado(archivoTemporal)) {
-        const nuevoArchivo = new FileItem(archivoTemporal);
-        this.archivos.push(nuevoArchivo);
+        this.comprimiendo = true;
+        this.ng2ImgMax.resizeImage(archivoTemporal, 800, 600).subscribe(
+          result => {
+            const nuevoArchivo = new FileItem(new File([result], result.name));
+            this.archivos.push(nuevoArchivo);
+            this.comprimiendo = false;
+          },
+          error => {
+            this.comprimiendo = false;
+            console.log('😢 Oh no!', error);
+          }
+        );
+
+        
       }
     }
   }
@@ -259,7 +281,7 @@ export class FotosComponent implements OnInit {
   private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {
     for (const archivo of this.archivos) {
       if (archivo.nombreArchivo === nombreArchivo) {
-        console.log('El archivo' + nombreArchivo + ' ya esta agregado');
+        console.log('El archivo ' + nombreArchivo + ' ya esta agregado');
         return true;
       }
     }

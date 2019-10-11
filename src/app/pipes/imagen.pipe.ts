@@ -7,11 +7,9 @@ import { URL_SERVICIOS } from '../config/config';
 export class ImagenPipe implements PipeTransform {
 
   transform(img: string, tipo: string = 'usuario'): any {
-
-    // tslint:disable-next-line:prefer-const
-    let url = URL_SERVICIOS + '/img';
+    let url = URL_SERVICIOS + '/documentos/documentoxtipo';
     if (!img) {
-      return url + '/usuarios/no-img.jpg';
+      return url + '/usuarios/xxx';
     }
     if (img.indexOf('https') >= 0) {
       return img;
@@ -26,12 +24,6 @@ export class ImagenPipe implements PipeTransform {
       case 'operador':
       url += '/operadores/' + img;
       break;
-      case 'fotos_lavado':
-      url += '/fotos_lavado/' + img;
-      break;
-      case 'fotos_reparacion':
-      url += '/fotos_reparacion/' + img;
-      break;
       case 'camion':
       url += '/camiones/' + img;
       break;
@@ -45,8 +37,7 @@ export class ImagenPipe implements PipeTransform {
         url += '/temp/' + img;
         break;
       default:
-      console.log('tipo de imagen no existe');
-      url += '/usuarios/no-img.jpg';
+        url += '/usuarios/xxx';
     }
     return url;
   }
