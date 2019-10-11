@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -17,6 +17,7 @@ import { Reparacion } from '../reparaciones/reparacion.models';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
+import { MatAccordion } from '@angular/material';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -31,6 +32,8 @@ export const MY_FORMATS = {
   },
 };
 
+declare var swal: any;
+
 @Component({
   selector: 'app-detalle-maniobra',
   templateUrl: './detalle-maniobra.component.html',
@@ -42,6 +45,8 @@ export const MY_FORMATS = {
   ],
 })
 export class DetalleManiobraComponent implements OnInit {
+
+  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
 
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
@@ -97,6 +102,8 @@ export class DetalleManiobraComponent implements OnInit {
       lavadoObservacion: [{ value: '', disabled: true }], //*
       reparaciones: this.fb.array([this.creaReparacion('', '', 0)]), //*
       reparacionesObservacion: [{ value: '', disabled: true }], //*
+      mostrarFotosRNaviera: [{ value: '', disabled: false }],
+      mostrarFotosRAA: [{ value: '', disabled: false }],
       fIniLavado: [{ value: '', disabled: true }], //*
       hIniLavado: [{ value: '', disabled: true }], //*
       hFinLavado: [{ value: '', disabled: true }], //*
@@ -112,6 +119,8 @@ export class DetalleManiobraComponent implements OnInit {
   cargarManiobra(id: string) {
     this.cargando = true;
     this.maniobraService.getManiobra(id).subscribe(maniob => {
+      this.maniobra = maniob.maniobra;
+      console.log(this.maniobra)
       this._hLlegada = moment(maniob.maniobra.hLlegada, 'HH:mm');
       this._hEntrada = moment(maniob.maniobra.hEntrada, 'HH:mm');
       this.espera = moment.duration(this._hEntrada - this._hLlegada).humanize()
@@ -162,6 +171,9 @@ export class DetalleManiobraComponent implements OnInit {
       } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
+
+      this.regForm.controls['mostrarFotosRNaviera'].setValue(maniob.maniobra.mostrarFotosRNaviera);
+      this.regForm.controls['mostrarFotosRAA'].setValue(maniob.maniobra.mostrarFotosRAA);
     });
     this.cargando = false;
   }
@@ -214,6 +226,30 @@ export class DetalleManiobraComponent implements OnInit {
     }
   }
 
+  openAllFirst() {
+    this.firstAccordion.openAll();
+  }
+
+  habilitaMostrarFotosReparacion(maniobra, event, tipo) {
+    // swal({
+    //   title: '¿Esta seguro?',
+    //   text: 'Esta apunto de deshabilitar a ' + operador.nombre,
+    //   icon: 'warning',
+    //   buttons: true,
+    //   dangerMode: true,
+    //   })
+    //   .then(borrar => {
+    //     if (borrar) {
+    this.maniobraService.habilitaDeshabilitaMostrarFotosReparacion(maniobra, event.checked, tipo)
+      .subscribe(actualizado => {
+        console.log(actualizado)
+      });
+    // } else {
+    //   event.source.checked = !event.checked;
+    // }
+    // });
+  }
+
   get _id() {
     return this.regForm.get('_id');
   }
@@ -264,6 +300,10 @@ export class DetalleManiobraComponent implements OnInit {
     return this.regForm.get('reparacionesObservacion');
   }
 
+  get mostrarFotosReparacion() {
+    return this.regForm.get('mostrarFotosReparacion');
+  }
+
   get fIniLavado() {
     return this.regForm.get('fIniLavado');
   }
@@ -285,5 +325,4 @@ export class DetalleManiobraComponent implements OnInit {
   get hFinReparacion() {
     return this.regForm.get('hFinReparacion');
   }
-
 }
