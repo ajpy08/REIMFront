@@ -120,7 +120,7 @@ export class DetalleManiobraComponent implements OnInit {
     this.cargando = true;
     this.maniobraService.getManiobra(id).subscribe(maniob => {
       this.maniobra = maniob.maniobra;
-      console.log(this.maniobra)
+      // console.log(this.maniobra)
       this._hLlegada = moment(maniob.maniobra.hLlegada, 'HH:mm');
       this._hEntrada = moment(maniob.maniobra.hEntrada, 'HH:mm');
       this.espera = moment.duration(this._hEntrada - this._hLlegada).humanize()
@@ -242,7 +242,7 @@ export class DetalleManiobraComponent implements OnInit {
     //     if (borrar) {
     this.maniobraService.habilitaDeshabilitaMostrarFotosReparacion(maniobra, event.checked, tipo)
       .subscribe(actualizado => {
-        console.log(actualizado)
+        // console.log(actualizado)
       });
     // } else {
     //   event.source.checked = !event.checked;
