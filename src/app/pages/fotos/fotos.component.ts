@@ -9,7 +9,7 @@ import { FotosPipe } from 'src/app/pipes/fotos.pipe';
 import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
@@ -75,7 +75,7 @@ export class FotosComponent implements OnInit {
     this.cargarManiobra(this.id);
     this.cargarFotos(this.id, 'L');
     this.cargarFotos(this.id, 'R');
-    this.escojeTab(this.selected);
+    this.SeleccionaTab(this.selected);
 
     this.galleryOptions = [
       {
@@ -125,9 +125,11 @@ export class FotosComponent implements OnInit {
       });
   }
 
+  MuestraManiobra(){
+    console.log(this.maniobra)
+  }
+
   cargarFotos(id: string, lavado_reparacion: string) {
-
-
     if (lavado_reparacion === 'L') {
       const images = [];
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
@@ -169,7 +171,7 @@ export class FotosComponent implements OnInit {
     }
   }
 
-  escojeTab(opcion) {
+  SeleccionaTab(opcion) {
     //  console.log(opcion)
     if (opcion === 'fotos_lavado') {
       this.tabGroup.selectedIndex = 0;
@@ -187,7 +189,7 @@ export class FotosComponent implements OnInit {
     promesa.then((value: boolean) => {
       if (value) {
         this.yaCargo = value;
-        console.log('yaCargo de fotos.component: ' +  this.yaCargo);
+        console.log('yaCargo de fotos.component: ' + this.yaCargo);
         this.actualizaFotosDespuesdeCargar(value);
       }
     });
@@ -287,4 +289,17 @@ export class FotosComponent implements OnInit {
     this.location.back();
   }
 
+  mostrarReparaciones(maniobra: Maniobra) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIM_ROLE) {
+      return true;
+    } else {
+      if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && maniobra.mostrarFotosRNaviera) {
+        return true;
+      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE && maniobra.mostrarFotosRAA) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
 }
