@@ -13,13 +13,13 @@ export class NavierasComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
 
-  displayedColumns = ['actions', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio', 
+  displayedColumns = ['actions', 'img', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
   'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   constructor(public _navieraService: NavieraService) { }
 
   ngOnInit() {

@@ -435,7 +435,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   subirBL() {
-    this._subirArchivoService.subirArchivoTemporal(this.fileBL, '').subscribe(nombreArchivo => {
+    this._subirArchivoService.subirArchivoBucketTemporal(this.fileBL).subscribe(nombreArchivo => {
       this.regForm.get('rutaBL').setValue(nombreArchivo);
       this.regForm.get('rutaBL').markAsDirty();
       this.temporalBL = true;
@@ -452,7 +452,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   subirComprobante() {
-    this._subirArchivoService.subirArchivoTemporal(this.fileComprobante, '').subscribe(nombreArchivo => {
+    this._subirArchivoService.subirArchivoBucketTemporal(this.fileComprobante).subscribe(nombreArchivo => {
       this.regForm.get('rutaComprobante').setValue(nombreArchivo);
       this.regForm.get('rutaComprobante').markAsDirty();
       this.temporalComprobante = true;

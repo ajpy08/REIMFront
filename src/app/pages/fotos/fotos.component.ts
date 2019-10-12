@@ -9,7 +9,7 @@ import { FotosPipe } from 'src/app/pipes/fotos.pipe';
 import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
-import {Location} from '@angular/common'; 
+import {Location} from '@angular/common';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
@@ -43,9 +43,9 @@ export class FotosComponent implements OnInit {
   galleryOptions: NgxGalleryOptions[];
   galleryImagesL: NgxGalleryImage[];
   galleryImagesR: NgxGalleryImage[];
-  yaCargo: boolean = false;
+  yaCargo = false;
   usuarioLogueado: Usuario;
-  okCargar: boolean = false;
+  okCargar = false;
 
 
   constructor(public _maniobraService: ManiobraService,
@@ -61,7 +61,7 @@ export class FotosComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIM_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIM_ROLE) {
       this.okCargar = true;
     } else {
       this.okCargar = false;
@@ -73,8 +73,8 @@ export class FotosComponent implements OnInit {
     // console.log(this.id);
     // console.log(this.selected);
     this.cargarManiobra(this.id);
-    this.cargarFotos(this.id, "L");
-    this.cargarFotos(this.id, "R");
+    this.cargarFotos(this.id, 'L');
+    this.cargarFotos(this.id, 'R');
     this.escojeTab(this.selected);
 
     this.galleryOptions = [
@@ -84,19 +84,19 @@ export class FotosComponent implements OnInit {
         thumbnailsColumns: 4,
         thumbnailsRows: 2,
         thumbnailsOrder: NgxGalleryOrder.Page,
-        //thumbnailsRemainingCount: true,
-        //thumbnailSize: NgxGalleryImageSize.Contain,
+        //  thumbnailsRemainingCount: true,
+        //  thumbnailSize: NgxGalleryImageSize.Contain,
         imageSize: NgxGalleryImageSize.Contain,
-        //previewFullscreen: true,
-        //previewForceFullscreen: true,
+        //  previewFullscreen: true,
+        //  previewForceFullscreen: true,
         previewCloseOnEsc: true,
         previewZoom: true,
         previewRotate: true,
         previewKeyboardNavigation: true,
-        //imageAutoPlay: true,
-        //imageAutoPlayInterval: 5000,
+        //  imageAutoPlay: true,
+        //  imageAutoPlayInterval: 5000,
         imageAnimation: NgxGalleryAnimation.Slide,
-        //fullWidth: true
+        //  fullWidth: true
       },
       // max-width 800
       {
@@ -127,14 +127,13 @@ export class FotosComponent implements OnInit {
 
   cargarFotos(id: string, lavado_reparacion: string) {
 
-    
-    if (lavado_reparacion === "L") {
+
+    if (lavado_reparacion === 'L') {
       const images = [];
       this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
         this.fotosLavado = fotos.fotos;
-        
         this.fotosLavado.forEach(foto => {
-          let data = this.fotosPipe.transform(foto.Key);
+          const data = this.fotosPipe.transform(foto.Key);
           const image = {
             small: data,
             medium: data,
@@ -148,12 +147,12 @@ export class FotosComponent implements OnInit {
         // console.log(this.galleryImagesL)
       });
     } else {
-      if (lavado_reparacion === "R") {
+      if (lavado_reparacion === 'R') {
         const images = [];
         this._maniobraService.getFotos(id, lavado_reparacion).subscribe((fotos) => {
           this.fotosReparacion = fotos.fotos;
           this.fotosReparacion.forEach(foto => {
-            let data = this.fotosPipe.transform(foto.Key);
+            const data = this.fotosPipe.transform(foto.Key);
             const image = {
               small: data,
               medium: data,
@@ -171,7 +170,7 @@ export class FotosComponent implements OnInit {
   }
 
   escojeTab(opcion) {
-    //console.log(opcion)
+    //  console.log(opcion)
     if (opcion === 'fotos_lavado') {
       this.tabGroup.selectedIndex = 0;
     } else {
@@ -184,24 +183,23 @@ export class FotosComponent implements OnInit {
   }
 
   cargarImagenes() {
-    
     const promesa = this._subirArchivoService.cargarFotosLavadoReparacion(this.archivos, this.selected, this.maniobra._id);
     promesa.then((value: boolean) => {
       if (value) {
         this.yaCargo = value;
-        console.log("yaCargo de fotos.component: " +  this.yaCargo)
+        console.log('yaCargo de fotos.component: ' +  this.yaCargo);
         this.actualizaFotosDespuesdeCargar(value);
       }
-    })
+    });
   }
 
   actualizaFotosDespuesdeCargar(ok) {
     if (ok) {
       if (this.selected === 'fotos_lavado') {
-        this.cargarFotos(this.id, "L");
+        this.cargarFotos(this.id, 'L');
       } else {
         if (this.selected === 'fotos_reparacion') {
-          this.cargarFotos(this.id, "R");
+          this.cargarFotos(this.id, 'R');
         }
       }
     }
@@ -243,7 +241,6 @@ export class FotosComponent implements OnInit {
     if (this.yaCargo) {
       this.limpiarArchivos();
     }
-
     for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
       const archivoTemporal = archivosLista[propiedad];
       if (this._archivoPuedeSerCargado(archivoTemporal)) {
@@ -259,8 +256,6 @@ export class FotosComponent implements OnInit {
             console.log('😢 Oh no!', error);
           }
         );
-
-        
       }
     }
   }
@@ -288,7 +283,7 @@ export class FotosComponent implements OnInit {
     return false;
   }
 
-  atras(){
+  atras() {
     this.location.back();
   }
 
