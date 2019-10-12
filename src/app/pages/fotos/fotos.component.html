@@ -32,7 +32,7 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="reparaciones">
+  <mat-tab *ngIf="mostrarReparaciones(maniobra)" label="reparaciones">
     <ng-template mat-tab-label>
       <div *ngIf="galleryImagesR;else imagesR">
         <i class="fas fa-camera-retro"> Reparaciones ({{galleryImagesR.length}})</i>
@@ -44,10 +44,10 @@
     <div class="container">
       <div class="modal-body row">
         <div class="col-md-6 text-center" *ngIf="maniobra.reparaciones && maniobra.reparaciones.length > 0">
-          <h3>Reparaciones</h3>
+          <h3>Reparaciones</h3>          
           <ol>
             <div *ngFor="let reparacion of maniobra.reparaciones">
-              <li>{{reparacion.descripcion}}</li>
+              <li>{{reparacion.reparacion}}</li>
             </div>
           </ol>
         </div>

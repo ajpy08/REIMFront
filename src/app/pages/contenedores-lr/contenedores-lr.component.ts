@@ -4,6 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
+import { Maniobra } from 'src/app/models/maniobra.models';
 
 @Component({
   selector: 'app-contenedores-lr',
@@ -33,6 +34,12 @@ export class ContenedoresLRComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarManiobras();
+
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this.displayedColumns = ['actions', 'Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
+    } else {
+      this.displayedColumns = ['Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
+    }
   }
 
   cargarManiobras() {
@@ -72,5 +79,13 @@ export class ContenedoresLRComponent implements OnInit {
     this.totalRegistros = this.dataSource.filteredData.length;
   }
 
-
+  mostrarFotosReparaciones(maniobra: Maniobra) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && maniobra.mostrarFotosRNaviera)) {
+      return true;
+    } else if (this.usuarioLogueado.role === ROLES.AA_ROLE && maniobra.mostrarFotosRAA) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
