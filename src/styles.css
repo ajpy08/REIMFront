@@ -1,116 +1,117 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 .my-container {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .my-container>* {
-  width: 100%;
+    width: 100%;
 }
 
 #themecolors a {
-  cursor: pointer
+    cursor: pointer
 }
 
 .pointer {
-  cursor: pointer
+    cursor: pointer
 }
 
 .w150 {
-  width: 150px
+    width: 150px
 }
 
 .w70 {
-  width: 70px
+    width: 70px
 }
 
 .img-50 {
-  width: 50px
+    width: 50px
 }
 
 .oculto {
-  display: none;
+    display: none;
 }
 
 .fondo-negro {
-  background-color: rgba(0, 0, 0, 0.4);
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
 }
 
 .btn.btn-primary[disabled] {
-  background-color: #999999;
-  border-color: #999999;
+    background-color: #999999;
+    border-color: #999999;
 }
-
 
 
 /* TABLE MATERIAL */
 
 .mat-table {
-  overflow: auto;
-} 
+    overflow: auto;
+}
 
 .mat-table-medium {
-  width: 1350px;
-  justify-content:center!important;
+    width: 1350px;
+    justify-content: center!important;
 }
 
 .mat-table-big {
-  width: 3500px;
-  white-space: inherit;
-  justify-content:center!important;
+    width: 2000px;
+    white-space: inherit;
+    justify-content: center!important;
 }
 
 .example-container {
-  display: flex;
-  flex-direction: column;
-  min-width: 300px;
-  overflow: auto;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    overflow: auto;
+    max-width: 2000px;
 }
 
 .example-header {
-  min-height: 64px;
-  padding: 8px 24px 0;
+    min-height: 64px;
+    padding: 8px 24px 0;
 }
 
-.mat-table mat-cell{
-  display:flex !important;
-  justify-content:center!important;
+.mat-table mat-cell {
+    display: inline-flex;
+    justify-content: center!important;
 }
 
 .mat-table mat-header-cell {
-  display:flex;
-  justify-content:center;
-  font-style: inherit;
-  font-size: 15px;
-  color: white;
+    display: flex;
+    justify-content: center;
+    font-style: inherit;
+    font-size: 15px;
+    color: white;
 }
 
 .mat-form-field {
-  font-size: 14px;
-  width: 100%;
+    font-size: 14px;
+    width: 100%;
 }
 
-.mat-row:nth-child(even){
-  background-color:rgb(210, 210, 235)
+.mat-row:nth-child(even) {
+    background-color: rgb(210, 210, 235)
 }
 
-.mat-row:nth-child(odd){
-  background-color:rgb(245, 248, 255)
+.mat-row:nth-child(odd) {
+    background-color: rgb(245, 248, 255)
 }
 
-.encabezado{
-    background-color: rgb(49,51,136);
+.encabezado {
+    background-color: rgb(49, 51, 136);
 }
 
 .input {
-background-color: aqua;
+    background-color: aqua;
 }
+
 
 /* FIN TABLE MATERIAL */

@@ -212,7 +212,7 @@ export class ClienteComponent implements OnInit {
         //console.log('FileTemporal ' + this.fileTemporal)
       }
     }
-    this._subirArchivoService.subirArchivoTemporal(file, '')
+    this._subirArchivoService.subirArchivoBucketTemporal(file)
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
         this.regForm.get(tipo).markAsDirty();

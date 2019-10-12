@@ -16,9 +16,9 @@
       <div class="card-body">
         <div class="text-right">
           <button [routerLink]="['/navieras/naviera','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                        <i class="fa fa-plus"></i>
-                        Añadir nueva naviera
-                    </button>
+              <i class="fa fa-plus"></i>
+              Añadir nueva naviera
+          </button>
         </div>
         <h3 class="card-title">Navieras ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
@@ -27,20 +27,29 @@
           </mat-form-field>
         </div>
         <br>
-        <div class="example-container mat-elevation-z8">
-        </div>
+
         <div class="example-container mat-elevation-z8">
           <mat-table class="mat-table-big" #table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="actions">
+            <ng-container matColumnDef="actions" sticky>
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let naviera">
                 <button [routerLink]="['/navieras/naviera', naviera._id ]" class="btn btn-primary m-r-5">
-                                    <i class="fa fa-edit"></i>
-                                </button>
+                    <i class="fa fa-edit"></i>
+                </button>
                 <button (click)="borrarNaviera(naviera)" class="btn btn-danger m-r-5">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
+                    <i class="fa fa-trash-o"></i>
+                </button>
               </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="img">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'" class="img-50 img-circle pointer"> </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="rfc">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="razonSocial">
@@ -51,11 +60,6 @@
             <ng-container matColumnDef="nombreComercial">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Comercial</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.nombreComercial}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="rfc">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="calle">

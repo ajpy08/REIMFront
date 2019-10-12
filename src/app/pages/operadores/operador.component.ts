@@ -194,7 +194,7 @@ export class OperadorComponent implements OnInit {
         this.fileLicenciaTemporal = true;  
       }
     }    
-    this._subirArchivoService.subirArchivoTemporal(file, '')
+    this._subirArchivoService.subirArchivoBucketTemporal(file)
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
         this.regForm.get(tipo).markAsDirty();

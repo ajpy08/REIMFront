@@ -30,8 +30,7 @@ export class NavieraComponent implements OnInit {
     if (id !== 'nuevo') {
       this.edicion = true;
       this.cargarNaviera(id);
-    }
-    else {
+    } else {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
@@ -140,14 +139,12 @@ export class NavieraComponent implements OnInit {
 
   guardarNaviera() {
     if (this.regForm.valid) {
-      //console.log(this.regForm.value);
       this._navieraService.guardarNaviera(this.regForm.value)
         .subscribe(res => {
           this.fileImg = null;
           this.fileImgTemporal = false;
           this.file = null;
           this.fileTemporal = false;
-          //console.log(res);
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.router.navigate(['/navieras/naviera', this.regForm.get('_id').value]);
@@ -159,39 +156,35 @@ export class NavieraComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    if (this.tipoFile == 'img') {
-      //console.log('Fue Foto');
-      if(event.target.files[0] != undefined) {
+    if ( this.tipoFile === 'img' ) {
+      if ( event.target.files[0] !== undefined) {
         this.fileImg = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
-      if (this.tipoFile == 'formatoR1') {
-        //console.log('Fue R1');
-        if(event.target.files[0] != undefined) {
+      if ( this.tipoFile === 'formatoR1' ) {
+        if ( event.target.files[0] !== undefined ) {
           this.file = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
       } else {
-        console.log('No conozco el tipo de archivo para subir')
+        console.log('No conozco el tipo de archivo para subir');
       }
     }
   }
 
   subirArchivo(tipo: string) {
     let file: File;
-    if (this.fileImg != null && tipo == 'img') {
+    if (this.fileImg != null && tipo === 'img') {
       file = this.fileImg;
-      this.fileImgTemporal = true;  
-      //console.log('FileImgTemporal ' + this.fileImgTemporal)  
+      this.fileImgTemporal = true;
     } else {
-      if (this.file != null && tipo == 'formatoR1') {
+      if (this.file != null && tipo === 'formatoR1') {
         file = this.file;
         this.fileTemporal = true;
-        //console.log('FileTemporal ' + this.fileTemporal)
       }
     }
-    this._subirArchivoService.subirArchivoTemporal(file, '')
+    this._subirArchivoService.subirArchivoBucketTemporal(file)
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
         this.regForm.get(tipo).markAsDirty();

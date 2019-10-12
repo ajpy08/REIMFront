@@ -209,7 +209,7 @@ export const MY_FORMATS = {
     }
 
    subirFormato() {
-     this._subirArchivoService.subirArchivoTemporal(this.fileTemporal, '')
+     this._subirArchivoService.subirArchivoBucketTemporal(this.fileTemporal)
      .subscribe(nombreArchivo => {
       this.regForm.get('pdfTemporal').setValue(nombreArchivo);
       this.regForm.get('pdfTemporal').markAsDirty();

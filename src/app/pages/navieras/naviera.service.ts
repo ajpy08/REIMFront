@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import { Naviera } from './navieras.models';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError} from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { map} from 'rxjs/operators';
 import swal from 'sweetalert';
 
 @Injectable()
 export class NavieraService {
 
-  totalNavieras: number = 0;
+  totalNavieras = 0;
 
   constructor(
     public http: HttpClient,
@@ -28,7 +28,6 @@ export class NavieraService {
     .pipe(map( (resp: any) => resp.naviera ));
   }
 
-   
   guardarNaviera( naviera: Naviera ): Observable<any> {
     let url = URL_SERVICIOS + '/navieras/naviera';
     if ( naviera._id ) {// actualizando
@@ -50,10 +49,8 @@ export class NavieraService {
   }
 
   borrarNaviera( id: string ): Observable<any> {
-
     let url = URL_SERVICIOS + '/navieras/naviera/' + id;
     url += '?token=' + this._usuarioService.token;
-
     return this.http.delete( url )
                 .pipe(map( resp => swal('Naviera Borrado', 'Eliminado correctamente', 'success') ));
 
