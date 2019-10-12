@@ -125,10 +125,6 @@ export class FotosComponent implements OnInit {
       });
   }
 
-  MuestraManiobra(){
-    console.log(this.maniobra)
-  }
-
   cargarFotos(id: string, lavado_reparacion: string) {
     if (lavado_reparacion === 'L') {
       const images = [];

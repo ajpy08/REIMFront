@@ -44,11 +44,10 @@
     <div class="container">
       <div class="modal-body row">
         <div class="col-md-6 text-center" *ngIf="maniobra.reparaciones && maniobra.reparaciones.length > 0">
-          <h3>Reparaciones</h3>
-          <button (click)="MuestraManiobra">Javi</button>
+          <h3>Reparaciones</h3>          
           <ol>
             <div *ngFor="let reparacion of maniobra.reparaciones">
-              <li>{{reparacion.descripcion}}</li>
+              <li>{{reparacion.reparacion}}</li>
             </div>
           </ol>
         </div>
