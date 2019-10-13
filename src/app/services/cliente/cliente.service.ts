@@ -18,42 +18,42 @@ export class ClienteService {
   ) { }
 
   getClientesRole(role?: string): Observable<any> {
-    let url = URL_SERVICIOS + '/cliente/role/' + role;
+    let url = URL_SERVICIOS + '/clientes/role/' + role;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.clientes));
   }
 
   getClientesEmpresa(id: string, desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/cliente/empresa/' + id + '?desde' + desde;
+    const url = URL_SERVICIOS + '/clientes/empresa/' + id + '?desde' + desde;
     return this.http.get(url);
   }
 
   getClientesEmpresas(idsEmpresas: string): Observable<any> {
 
-    const url = URL_SERVICIOS + '/cliente/empresas/' + idsEmpresas;
+    const url = URL_SERVICIOS + '/clientes/empresas/' + idsEmpresas;
     return this.http.get(url);
   }
 
   getClientes(desde: number = 0): Observable<any> {
-    let url = URL_SERVICIOS + '/cliente?desde=' + desde;
+    let url = URL_SERVICIOS + '/clientes?desde=' + desde;
     return this.http.get(url);
   }
 
   getCliente(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/cliente/' + id;
+    let url = URL_SERVICIOS + '/clientes/' + id;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.cliente));
   }
 
   borrarCliente(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/cliente/' + id;
+    let url = URL_SERVICIOS + '/clientes/' + id;
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Cliente Borrado', 'Eliminado correctamente', 'success')));
   }
 
   guardarCliente(cliente: Cliente): Observable<any> {
-    let url = URL_SERVICIOS + '/cliente';
+    let url = URL_SERVICIOS + '/clientes';
     if (cliente._id) {
       // actualizando
       url += '/' + cliente._id;
@@ -78,9 +78,5 @@ export class ClienteService {
     }
   }
 
-  buscarCliente(termino: string): Observable<any> {
-    let url = URL_SERVICIOS + '/busqueda/coleccion/clientes/' + termino;
-    return this.http.get(url)
-      .pipe(map((resp: any) => resp.clientes));
-  }
+
 }

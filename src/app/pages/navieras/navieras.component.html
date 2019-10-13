@@ -28,121 +28,122 @@
         </div>
         <br>
 
-        <div class="example-container mat-elevation-z8">
-          <mat-table class="mat-table-big" #table [dataSource]="dataSource" matSort>
+        <div class="catalogo-container mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" class="catalogo-table catalogo-table-big" matSort>
             <ng-container matColumnDef="actions" sticky>
-              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-              <mat-cell *matCellDef="let naviera">
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
+              <td mat-cell *matCellDef="let naviera">
                 <button [routerLink]="['/navieras/naviera', naviera._id ]" class="btn btn-primary m-r-5">
                     <i class="fa fa-edit"></i>
                 </button>
                 <button (click)="borrarNaviera(naviera)" class="btn btn-danger m-r-5">
                     <i class="fa fa-trash-o"></i>
                 </button>
-              </mat-cell>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="img">
-              <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'" class="img-50 img-circle pointer"> </mat-cell>
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'" class="img-50 img-circle pointer"> </td>
             </ng-container>
 
             <ng-container matColumnDef="rfc">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>RFC</th>
+              <td mat-cell *matCellDef="let row"> {{row.rfc}} </td>
             </ng-container>
 
             <ng-container matColumnDef="razonSocial">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.razonSocial}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</th>
+              <td mat-cell *matCellDef="let row"> {{row.razonSocial}} </td>
             </ng-container>
 
             <ng-container matColumnDef="nombreComercial">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Comercial</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.nombreComercial}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef>Nombre Comercial</th>
+              <td mat-cell *matCellDef="let row"> {{row.nombreComercial}} </td>
             </ng-container>
 
             <ng-container matColumnDef="calle">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Calle</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.calle}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Calle</th>
+              <td mat-cell *matCellDef="let row"> {{row.calle}} </td>
             </ng-container>
 
             <ng-container matColumnDef="noExterior">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>No. Ext.</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.noExterior}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>No. Ext.</th>
+              <td mat-cell *matCellDef="let row"> {{row.noExterior}} </td>
             </ng-container>
 
             <ng-container matColumnDef="noInterior">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>No. Int.</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.noInterior}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>No. Int.</th>
+              <td mat-cell *matCellDef="let row"> {{row.noInterior}} </td>
             </ng-container>
 
             <ng-container matColumnDef="colonia">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Colonia</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.colonia}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Colonia</th>
+              <td mat-cell *matCellDef="let row"> {{row.colonia}} </td>
             </ng-container>
 
             <ng-container matColumnDef="municipio">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Municipio</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.municipio}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Municipio</th>
+              <td mat-cell *matCellDef="let row"> {{row.municipio}} </td>
             </ng-container>
 
             <ng-container matColumnDef="ciudad">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Ciudad</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Ciudad</th>
+              <td mat-cell *matCellDef="let row"> {{row.ciudad}} </td>
             </ng-container>
 
             <ng-container matColumnDef="estado">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+              <td mat-cell *matCellDef="let row"> {{row.estado}} </td>
             </ng-container>
 
             <ng-container matColumnDef="cp">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>CP</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.cp}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>CP</th>
+              <td mat-cell *matCellDef="let row"> {{row.cp}} </td>
             </ng-container>
 
             <ng-container matColumnDef="formatoR1">
-              <mat-header-cell *matHeaderCellDef>Formato R1</mat-header-cell>
-              <mat-cell *matCellDef="let row">
+              <th mat-header-cell *matHeaderCellDef>Formato R1</th>
+              <td mat-cell *matCellDef="let row">
                 <a *ngIf="row.formatoR1" [href]="row.formatoR1 | imagen:'cliente'" download="R1" target="_blank">
                   <img src="\assets\images\icon\pdf_32x32.png">
                 </a>
-              </mat-cell>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="correo">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Correo</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.correo}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Correo</th>
+              <td mat-cell *matCellDef="let row"> {{row.correo}} </td>
             </ng-container>
 
             <ng-container matColumnDef="correoFac">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Correo Fact.</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.correoFac}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Correo Fact.</th>
+              <td mat-cell *matCellDef="let row"> {{row.correoFac}} </td>
             </ng-container>
 
             <ng-container matColumnDef="credito">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Credito</mat-header-cell>
-              <mat-cell *matCellDef="let row">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Credito</th>
+              <td mat-cell *matCellDef="let row">
                 <i *ngIf="row.credito == true; else notShow" class="fa fa-check" aria-hidden="true"></i>
                 <ng-template #notShow>
                   <i class="fas fa-times" aria-hidden="true"></i>
                 </ng-template>
-              </mat-cell>
+              </td>
             </ng-container>
 
             <ng-container matColumnDef="caat">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>CAAT</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.caat}} </mat-cell>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>CAAT</th>
+              <td mat-cell *matCellDef="let row"> {{row.caat}} </td>
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-          </mat-paginator>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
         </div>
+
       </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+      </mat-paginator>
     </div>
   </div>
 </div>

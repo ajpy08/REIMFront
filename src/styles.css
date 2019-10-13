@@ -115,3 +115,45 @@
 
 
 /* FIN TABLE MATERIAL */
+
+.catalogo-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    overflow: auto;
+}
+
+.catalogo-table {
+    width: 100%;
+    white-space: inherit;
+    justify-content: center!important;
+}
+
+.catalogo-table-small {
+    width: 800px;
+    white-space: inherit;
+    justify-content: center!important;
+}
+
+.catalogo-table-medium {
+    width: 1500px;
+    white-space: inherit;
+    justify-content: center!important;
+}
+
+.catalogo-table-big {
+    width: 2500px;
+    white-space: inherit;
+    justify-content: center!important;
+}
+
+.catalogo-table th {
+    justify-content: center;
+    font-style: inherit;
+    font-size: 15px;
+    color: white;
+}
+
+.catalogo-table td {
+    font-size: 14px;
+}

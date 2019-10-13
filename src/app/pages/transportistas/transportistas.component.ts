@@ -17,7 +17,7 @@ export class TransportistasComponent implements OnInit {
   totalRegistros = 0;
 
 
-  displayedColumns = ['actions', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
+  displayedColumns = ['actions', 'img', 'rfc', 'razonSocial', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
     'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
   dataSource: any;
 

@@ -10,19 +10,6 @@ import { HttpClient , HttpEventType} from '@angular/common/http';
 export class SubirArchivoService {
   constructor(public http: HttpClient) { }
 
-  // subirArchivoTemporal(archivo: File, tipo: string ): Observable<any> {
-  //     if (!archivo) {
-  //     return;
-  //   }
-  //   const formData = new FormData();
-  //   formData.append('file', archivo, archivo.name);
-  //   const url = URL_SERVICIOS + '/uploadFileTemp';
-  //   return this.http.put( url, formData )
-  //   .pipe(map( (resp: any) => {
-  //     swal('Archivo Cargado', resp.nombreArchivo, 'success');
-  //     return resp.nombreArchivo;
-  //   }));
-  // }
 
   subirArchivoBucketTemporal(archivo: File): Observable<any> {
     if (!archivo) {
