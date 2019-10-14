@@ -41,6 +41,15 @@
                                 </button>
               </mat-cell>
             </ng-container>
+            <ng-container matColumnDef="img">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'" class="img-50 img-circle pointer"> </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="rfc">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
+            </ng-container>
 
             <ng-container matColumnDef="razonSocial">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
@@ -52,10 +61,7 @@
               <mat-cell *matCellDef="let row"> {{row.nombreComercial}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="rfc">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>RFC</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.rfc}} </mat-cell>
-            </ng-container>
+
 
             <ng-container matColumnDef="calle">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Calle</mat-header-cell>

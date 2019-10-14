@@ -13,8 +13,11 @@ export class NavierasComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
 
-  displayedColumns = ['actions', 'img', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
+  displayedColumns = ['actions', 'img', 'rfc', 'razonSocial', 'calle', 'noExterior', 'colonia', 'municipio',
   'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
+
+  // displayedColumns = ['actions', 'img', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
+  // 'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

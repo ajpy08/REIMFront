@@ -30,18 +30,15 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasDescargaVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedVacios" #sinFact
-                    (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
+                  <mat-checkbox [checked]="checkedVacios" #sinFact (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
                   </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescargaVacios" #hDescargaVacios
-                    (change)="cargarManiobrasDescargadosVacios(hDescargaVacios.checked)">Solo Descargados
+                  <mat-checkbox [checked]="checkedHDescargaVacios" #hDescargaVacios (change)="cargarManiobrasDescargadosVacios(hDescargaVacios.checked)">Solo Descargados
                   </mat-checkbox>
                   <!-- <p>
                     <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
@@ -68,15 +65,11 @@
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleVacios() : null"
-                      [checked]="selectionVacios.hasValue() && isAllSelectedVacios()"
-                      [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleVacios() : null" [checked]="selectionVacios.hasValue() && isAllSelectedVacios()" [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionVacios.toggle(row) : null"
-                      [checked]="selectionVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionVacios.toggle(row) : null" [checked]="selectionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -84,7 +77,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -195,8 +188,7 @@
                     <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
                       placeholder="Factura de Maniobra de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10"
-                    (click)="openDialogVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10" (click)="openDialogVacios()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
@@ -235,18 +227,15 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasDescargaVaciosLavado()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosLavado()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedLavadoVacios" #s
-                    (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
+                  <mat-checkbox [checked]="checkedLavadoVacios" #s (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
                   </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL
-                    (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
+                  <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
@@ -265,15 +254,11 @@
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null"
-                      [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()"
-                      [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null" [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()" [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionLavadoVacios.toggle(row) : null"
-                      [checked]="selectionLavadoVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionLavadoVacios.toggle(row) : null" [checked]="selectionLavadoVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -281,7 +266,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -390,8 +375,7 @@
                     <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
                       class="form-control" placeholder="Factura de Lavado de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="openDialogVaciosLavado()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="openDialogVaciosLavado()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
@@ -430,18 +414,15 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="consultaManiobrasDescargaVaciosReparacion()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosReparacion()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedReparacionVacios" #s
-                    (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
+                  <mat-checkbox [checked]="checkedReparacionVacios" #s (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
                   </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR
-                    (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
+                  <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
@@ -461,15 +442,11 @@
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null"
-                      [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()"
-                      [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null" [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()" [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionReparacionVacios.toggle(row) : null"
-                      [checked]="selectionReparacionVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionReparacionVacios.toggle(row) : null" [checked]="selectionReparacionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -477,7 +454,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -589,13 +566,11 @@
                     <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
                       class="form-control" placeholder="Factura de Reparacion de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="openDialogVaciosReparacion()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="openDialogVaciosReparacion()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
-                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosReparacion()"
-                    class="btn btn-success m-r-5">
+                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosReparacion()" class="btn btn-success m-r-5">
                     <i class="fas fa-file-excel"></i> Exportar Excel
                   </button>
                 </div>

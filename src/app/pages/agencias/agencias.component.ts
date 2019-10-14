@@ -13,7 +13,7 @@ export class AgenciasComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
 
-  displayedColumns = ['actions', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio', 
+  displayedColumns = ['actions', 'img', 'rfc', 'razonSocial', 'nombreComercial', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio', 
   'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'patente'];
   dataSource: any;
 

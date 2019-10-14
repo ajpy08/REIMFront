@@ -64,18 +64,17 @@ export class OperadorComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.cargarOperador(id);
-    }
-    else {
-      for (var control in this.regForm.controls) {
+    } else {
+      for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
       this.activo.setValue(true);
-      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+      if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
         this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
       }
     }
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE) {
       this._transportistaService.getTransportistas()
         .subscribe((transportistas) => {
           this.transportistas = transportistas.transportistas;
@@ -158,7 +157,6 @@ export class OperadorComponent implements OnInit {
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.router.navigate(['/operadores/operador', this.regForm.get('_id').value]);
-            
           }
           this.regForm.markAsPristine();
         });
@@ -166,34 +164,34 @@ export class OperadorComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    if (this.tipoFile == 'foto') {
-      if (event.target.files[0] != undefined) {
+    if (this.tipoFile === 'foto') {
+      if (event.target.files[0] !== undefined) {
         this.fileFoto = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
-      if (this.tipoFile == 'fotoLicencia') {
-        if (event.target.files[0] != undefined) {
+      if (this.tipoFile === 'fotoLicencia') {
+        if (event.target.files[0] !== undefined) {
           this.fileLicencia = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
       } else {
-        console.log('No conozco el tipo de archivo para subir')
+        console.log('No conozco el tipo de archivo para subir');
       }
     }
   }
 
   subirArchivo(tipo: string) {
     let file: File;
-    if (this.fileFoto != null && tipo == 'foto') {
+    if (this.fileFoto != null && tipo === 'foto') {
       file = this.fileFoto;
-      this.fileFotoTemporal = true;  
+      this.fileFotoTemporal = true;
     } else {
-      if (this.fileLicencia != null && tipo == 'fotoLicencia') {
+      if (this.fileLicencia != null && tipo === 'fotoLicencia') {
         file = this.fileLicencia;
-        this.fileLicenciaTemporal = true;  
+        this.fileLicenciaTemporal = true;
       }
-    }    
+    }
     this._subirArchivoService.subirArchivoBucketTemporal(file)
       .subscribe(nombreArchivo => {
         this.regForm.get(tipo).setValue(nombreArchivo);
