@@ -58,7 +58,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Personal">
+                <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Operativo">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
@@ -118,9 +118,9 @@
         <br>
         <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
                     R1</button>
-        <mat-error *ngIf="formatoR1.invalid">
+        <!-- <mat-error *ngIf="formatoR1.invalid">
           <br><sup>*</sup>El Formato R1 es obligatorio
-        </mat-error>
+        </mat-error> -->
       </div>
     </div>
   </div>

@@ -47,7 +47,6 @@ import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
 import { RevisarComponent } from './maniobras/2revisar/revisar.component';
 import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
-import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
 import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
 import { InventarioComponent } from './maniobras/5inventario/inventario.component';
 
@@ -152,7 +151,6 @@ import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras
         LlegadaEntradaComponent,
         RevisarComponent,
         TerminaLavadoReparacionComponent,
-        XCargarComponent,
         CargaContenedorComponent,
         InventarioComponent,        
         VaciosComponent,

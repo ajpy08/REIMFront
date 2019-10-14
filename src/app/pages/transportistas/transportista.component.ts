@@ -47,7 +47,7 @@ export class TransportistaComponent implements OnInit {
       ciudad: [''],
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
-      formatoR1: ['', [Validators.required]],
+      formatoR1: [''],
       correo: ['', [Validators.email]],
       correoFac: ['', [Validators.email]],
       credito: [false, [Validators.required]],
