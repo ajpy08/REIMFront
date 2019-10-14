@@ -1,4 +1,4 @@
-<button class="btn btn-success" (click)="atras()"> back</button>
+<button class="btn btn-success" (click)="atras()"> Regresar</button>
 <mat-tab-group (selectedTabChange)="onLinkClick($event)" mat-stretch-tabs>
   <mat-tab label="lavado">
     <ng-template mat-tab-label>
@@ -24,9 +24,19 @@
     </div>
     <div class="container">
       <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <button *ngIf="galleryImagesL && galleryImagesL.length >0" class="btn btn-danger" (click)="eliminaFoto(rutaFotoActual, 'L')">
+                <i class="fas fa-trash"></i> Eliminar Foto
+            </button>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
         <div class="col-md text-center"></div>
         <div class="col-md text-center">
-          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" *ngIf="galleryImagesL"></ngx-gallery>
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" (change)="onChange($event)"
+          *ngIf="galleryImagesL && galleryImagesL.length >0"></ngx-gallery>
         </div>
         <div class="col-md text-center"></div>
       </div>
@@ -44,7 +54,7 @@
     <div class="container">
       <div class="modal-body row">
         <div class="col-md-6 text-center" *ngIf="maniobra.reparaciones && maniobra.reparaciones.length > 0">
-          <h3>Reparaciones</h3>          
+          <h3>Reparaciones</h3>
           <ol>
             <div *ngFor="let reparacion of maniobra.reparaciones">
               <li>{{reparacion.reparacion}}</li>
@@ -62,9 +72,19 @@
 
     <div class="container" style="align-content: center">
       <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+            <button *ngIf="galleryImagesR && galleryImagesR.length >0" class="btn btn-danger" (click)="eliminaFoto(rutaFotoActual, 'R')">
+                <i class="fas fa-trash"></i> Eliminar Foto
+            </button>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
         <div class="col-md text-center"></div>
         <div class="col-md text-center">
-          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR" *ngIf="galleryImagesR"></ngx-gallery>
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImagesR" (change)="onChange($event)"
+          *ngIf="galleryImagesR && galleryImagesR.length >0"></ngx-gallery>
         </div>
         <div class="col-md text-center"></div>
       </div>
@@ -78,7 +98,9 @@
     <div class="row">
       <div class="col-md-4">
         <h3>Seleccione archivos</h3>
-        <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" (comprimiendoImagen)="comprimiendo = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+        <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event"
+          (comprimiendoImagen)="comprimiendo = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}"
+          class="well drop-zone">
           <h4>Suelta los archivos aquí</h4>
           <img src="assets/images/drop-images.png">
         </div>

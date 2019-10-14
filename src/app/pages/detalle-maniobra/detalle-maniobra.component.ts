@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ManiobraService } from '../maniobras/maniobra.service';
@@ -11,13 +11,15 @@ import { CamionService } from '../camiones/camion.service';
 import { Transportista } from '../transportistas/transportista.models';
 import { Agencia } from '../agencias/agencia.models';
 import { AgenciaService } from '../agencias/agencia.service';
-import { TransportistaService } from 'src/app/services/service.index';
+import { TransportistaService, UsuarioService } from 'src/app/services/service.index';
 import { Lavado } from 'src/app/models/lavado.models';
 import { Reparacion } from '../reparaciones/reparacion.models';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import { MatAccordion } from '@angular/material';
+import { ROLES } from 'src/app/config/config';
+import { Location } from '@angular/common';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -64,9 +66,16 @@ export class DetalleManiobraComponent implements OnInit {
 
   constructor(private maniobraService: ManiobraService, public operadorService: OperadorService,
     private agenciaService: AgenciaService, private transportistaService: TransportistaService,
-    private camionService: CamionService, private activatedRoute: ActivatedRoute, private fb: FormBuilder, private datePipe: DatePipe) { }
+    private camionService: CamionService, private usuarioService: UsuarioService, private location: Location,
+    private activatedRoute: ActivatedRoute, private fb: FormBuilder, private datePipe: DatePipe, private router:Router) { }
 
   ngOnInit() {
+    if (this.usuarioService.usuario.role != ROLES.ADMIN_ROLE) {
+      if(this.usuarioService.usuario.role != ROLES.REIMADMIN_ROLE) {
+        this.router.navigate(['/']);
+      }
+    } 
+
     this.agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
     this.transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -248,6 +257,10 @@ export class DetalleManiobraComponent implements OnInit {
     //   event.source.checked = !event.checked;
     // }
     // });
+  }
+
+  atras() {
+    this.location.back();
   }
 
   get _id() {

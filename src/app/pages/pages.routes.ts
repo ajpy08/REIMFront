@@ -132,7 +132,7 @@ const pagesRoutes: Routes = [
     {path: 'maniobras/maniobra/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
     {path: 'maniobras/maniobra/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
     {path: 'maniobras/maniobra/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
-    {path: 'maniobras/maniobra/:id/detalle', component: DetalleManiobraComponent, data: {titulo: 'Detalle Maniobra'}},
+    {path: 'maniobras/maniobra/:id/detalle', component: DetalleManiobraComponent, canActivate: [ AdminGuard ], data: {titulo: 'Detalle Maniobra'}},
 
     {path: 'inventario', component: InventarioComponent, canActivate: [ AdminGuard ], data: { titulo: 'Inventario de Contenedores Disponibles' }},
 
