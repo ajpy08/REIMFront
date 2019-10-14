@@ -109,36 +109,34 @@ const pagesRoutes: Routes = [
 
     {path: 'agencias', component: AgenciasComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Agencias' }},
     {path: 'agencias/agencia/:id', component: AgenciaComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de agencia'}},
-    
-    {path: 'transportistas', component: TransportistasComponent, canActivate: [ AdminGuard ],data: { titulo: 'Mantenimiento de transportistas' }},
-    {path: 'transportistas/transportista/:id', component: TransportistaComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de transportista'}},
-    
+
+    {path: 'transportistas', component: TransportistasComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de transportistas' }},
+    {path: 'transportistas/transportista/:id', component: TransportistaComponent,  canActivate: [ AdminGuard ],
+    data: {titulo: 'Actualizacion de transportista'}},
+
     {path: 'buques', component: BuquesComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Buques' }},
     {path: 'buques/buque/:id', component: BuqueComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
-    
+
     {path: 'operadores', component: OperadoresComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Operadores' }},
     {path: 'operadores/operador/:id', component: OperadorComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
     {path: 'camiones', component: CamionesComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de camiones' }},
     {path: 'camiones/camion/:id', component: CamionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de camiones'}},
-    
 
 
     //////////////////////////////////////////////
-    
-    
 
     {path: 'maniobras', component: ManiobrasComponent, data: {titulo: 'Maniobras'}},
-    {path: 'maniobras/:id/llegada_entrada', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
-    {path: 'maniobras/:id/revisar', component: RevisarComponent, data: {titulo: 'Revisa'}},
-    {path: 'maniobras/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'maniobras/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
-    {path: 'maniobras/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
-    {path: 'maniobras/:id/detalle', component: DetalleManiobraComponent, data: {titulo: 'Detalle Maniobra'}},
+    {path: 'maniobras/maniobra/:id/llegada_entrada', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
+    {path: 'maniobras/maniobra/:id/revisar', component: RevisarComponent, data: {titulo: 'Revisa'}},
+    {path: 'maniobras/maniobra/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
+    {path: 'maniobras/maniobra/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
+    {path: 'maniobras/maniobra/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
+    {path: 'maniobras/maniobra/:id/detalle', component: DetalleManiobraComponent, data: {titulo: 'Detalle Maniobra'}},
 
     {path: 'inventario', component: InventarioComponent, canActivate: [ AdminGuard ], data: { titulo: 'Inventario de Contenedores Disponibles' }},
-    
-    
+
+
     {path: 'solicitudes/papeleta/:id', component: PapeletaComponent, data: {titulo: 'Papeleta'}},
 
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
@@ -177,10 +175,9 @@ const pagesRoutes: Routes = [
 
 
     // Mantenimientos ADMIN ROLE
-    
-    
+
     {path: 'viaje/:id', component: ViajeComponent, data: {titulo: 'Actualizacion de viajes'}},
-    
+
     {
         path: 'viajes',
         component: ViajesComponent,
@@ -194,8 +191,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Mantenimiento de Clientes' }
     },
     {path: 'cliente/:id', component: ClienteComponent, canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de clientes'}},
-    
-    
+
 
     {
         path: 'contenedoresLR',
@@ -218,6 +214,6 @@ const pagesRoutes: Routes = [
     },
     {path: 'misclientes/:id', component: MisclientesComponent, canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de datos'}},
 
-    {path: '', redirectTo: '/dashboard', pathMatch: 'full'},];
-    
+    {path: '', redirectTo: '/dashboard', pathMatch: 'full'}];
+
     export const PAGES_ROUTES = RouterModule.forChild( pagesRoutes );

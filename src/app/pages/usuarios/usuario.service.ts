@@ -191,7 +191,7 @@ resetPass( usuario: Usuario ): Observable<any> {
                   }));
 }
 
-habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean) : Observable<any> {
+habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean): Observable<any> {
   let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/habilita_deshabilita';
   url += '?token=' + this.token;
   return this.http.put( url, {activo: act} )

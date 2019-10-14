@@ -63,6 +63,10 @@
           <h4>Hora Entrada:</h4>
           <p class="form-control-static"> {{hEntrada.value}} </p>
         </div>
+        <div class="col-md-2">
+          <h4>estatus:</h4>
+          <p class="form-control-static"> {{estatus.value}} </p>
+        </div>
       </div>
     </mat-expansion-panel>
 
@@ -181,8 +185,26 @@
 
       <h3 class="box-title">Grado y Salida</h3>
       <hr class="m-t-0 m-b-40">
+      <div *ngIf="descargaAutorizada.value" class="alert alert-success">
+        Descarga Autorizada!
+      </div>
+      <div *ngIf="!descargaAutorizada.value" class="alert alert-danger">
+        Descarga NO Autorizada!
+      </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-2">
+          <mat-form-field>
+            <mat-label>Hora Descarga</mat-label>
+            <input matInput formControlName="hDescarga" type="time" (focus)="ponHoraDescarga()">
+          </mat-form-field>
+        </div>
+        <div class="col-md-2">
+          <mat-form-field>
+            <mat-label>Hora Salida</mat-label>
+            <input matInput formControlName="hSalida" type="time" (focus)="ponHoraSalida()">
+          </mat-form-field>
+        </div>
+        <div class="col-md-2">
           <mat-form-field>
             <mat-label>Grado Contenedor</mat-label>
             <mat-select formControlName="grado">
@@ -192,17 +214,14 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-label>Hora Descarga</mat-label>
-            <input matInput formControlName="hDescarga" type="time" (focus)="ponHora()">
-          </mat-form-field>
-        </div>
       </div>
 
     </mat-expansion-panel>
 
   </mat-accordion>
+  <div *ngIf="mensajeError" class="alert alert-danger">
+    {{mensajeError}}
+  </div>
   <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
   <i class="fa fa-save"></i>
   Guardar Cambios

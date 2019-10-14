@@ -14,6 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { DatePipe } from '@angular/common';
+import {ETAPAS_MANIOBRA} from '../../../config/config';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -47,8 +48,8 @@ export class CargaContenedorComponent implements OnInit {
   camiones: Camion[] = [];
   contenedores: Maniobra[] = [];
   regForm: FormGroup;
-
   maniobra: Maniobra;
+  mensajeExito = '';
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -61,7 +62,7 @@ export class CargaContenedorComponent implements OnInit {
     private fb: FormBuilder, private datePipe: DatePipe) { }
 
   ngOnInit() {
-    this._maniobraService.getContenedoresDisponibles().subscribe( resp => this.contenedores = resp.maniobras );
+    this._maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE).subscribe( resp => this.contenedores = resp.maniobras );
     this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
     this._transportistaService.getTransportistas().subscribe( resp => this.transportistas = resp.transportistas );
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -77,6 +78,7 @@ export class CargaContenedorComponent implements OnInit {
       tipo: [''],
       grado: [''],
       maniobraAsociada: [''],
+      folio: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
       transportista: [{value: '', disabled: true}],
@@ -102,6 +104,9 @@ export class CargaContenedorComponent implements OnInit {
   }
   get maniobraAsociada() {
     return this.regForm.get('maniobraAsociada');
+  }
+  get folio() {
+    return this.regForm.get('folio');
   }
   get cliente() {
     return this.regForm.get('cliente');
@@ -135,7 +140,10 @@ export class CargaContenedorComponent implements OnInit {
       this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia);
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
+      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
+      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       if ( maniob.maniobra.transportista ) {
         this.cargaOperadores(maniob.maniobra.transportista);
       }
@@ -166,7 +174,6 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   cargaContenedor( maniobraDisponible ) {
-    console.log(maniobraDisponible);
     this.contenedor.setValue( maniobraDisponible.contenedor );
     this.tipo.setValue( maniobraDisponible.tipo );
     this.grado.setValue ( maniobraDisponible.grado);
@@ -177,6 +184,10 @@ export class CargaContenedorComponent implements OnInit {
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
+        if (res.estatus === ETAPAS_MANIOBRA.CARGADO) {
+          this.mensajeExito = 'CONTENEDOR ASIGANDO CON EXITO';
+          this.regForm.disable();
+        }
         });
       }
   }

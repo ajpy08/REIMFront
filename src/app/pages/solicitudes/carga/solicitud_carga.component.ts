@@ -30,7 +30,7 @@ export class SolicitudCargaComponent implements OnInit {
   tiposContenedor: any[] = [];
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   grados = GRADOS_CONTENEDOR_ARRAY;
-  estadosContenedor = [ ESTADOS_CONTENEDOR.VACIO, ESTADOS_CONTENEDOR.LLENO_EXPORT ];
+  estadosContenedor = [ ESTADOS_CONTENEDOR.VACIO_EXPORT];
   patios = PATIOS_ARRAY;
   aprobada = false;
 
@@ -89,7 +89,7 @@ export class SolicitudCargaComponent implements OnInit {
       tipoTemp: [''],
       gradoTemp: [''],
       transportistaTemp: [''],
-      estadoTemp: [ESTADOS_CONTENEDOR.VACIO],
+      estadoTemp: [ESTADOS_CONTENEDOR.VACIO_EXPORT],
       patioTemp: [PATIOS.POLIGONO],
       contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '', '', '', '') ], {validators: Validators.required}),
       _id: [''],

@@ -6,6 +6,7 @@ import { ReparacionService } from '../../reparaciones/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import {ETAPAS_MANIOBRA} from '../../../config/config';
 
 @Component({
   selector: 'app-revisar',
@@ -18,6 +19,7 @@ export class RevisarComponent implements OnInit {
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   grados: string[] = ['A', 'B', 'C'];
   tiposReparaciones: Reparacion[] = [];
+  mensajeError = '';
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -48,9 +50,10 @@ export class RevisarComponent implements OnInit {
       fLlegada: [{value: '', disabled: true}],
       hLlegada: [{value: '', disabled: true}],
       hEntrada: [{value: '', disabled: true}],
+      estatus: [{value: '', disabled: true}],
       hSalida: [''],
       hDescarga: [''],
-      descargaAutorizada: [''],
+      descargaAutorizada: [{value: '', disabled: true}],
       grado: [''],
       lavado: [''],
       lavadoObservacion: [''],
@@ -70,7 +73,7 @@ export class RevisarComponent implements OnInit {
   }
   get peso() {
     return this.regForm.get('peso');
-  }  
+  }
   get cliente() {
     return this.regForm.get('cliente');
   }
@@ -95,14 +98,17 @@ export class RevisarComponent implements OnInit {
   get hEntrada() {
     return this.regForm.get('hEntrada');
   }
-  get hSalida() {
-    return this.regForm.get('hSalida');
+  get estatus() {
+    return this.regForm.get('estatus');
   }
   get descargaAutorizada() {
     return this.regForm.get('descargaAutorizada');
   }
   get hDescarga() {
     return this.regForm.get('hDescarga');
+  }
+  get hSalida() {
+    return this.regForm.get('hSalida');
   }
   get grado() {
     return this.regForm.get('grado');
@@ -139,7 +145,6 @@ export class RevisarComponent implements OnInit {
 
   cargarManiobra( id: string) {
     this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
-      console.log(maniob);
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.razonSocial);
@@ -156,8 +161,9 @@ export class RevisarComponent implements OnInit {
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
+      this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
 
-      if (maniob.maniobra.lavado){
+      if (maniob.maniobra.lavado) {
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
       } else {
         this.regForm.controls['lavado'].setValue(undefined);
@@ -167,22 +173,25 @@ export class RevisarComponent implements OnInit {
       } else {
         this.regForm.controls['lavadoObservacion'].setValue(undefined);
       }
-      if (maniob.maniobra.reparaciones){
+      if (maniob.maniobra.reparaciones) {
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
         });
       } else {
         this.regForm.controls['reparaciones'].setValue(undefined);
       }
-      if (maniob.maniobra.reparacionesObservacion){
+      if (maniob.maniobra.reparacionesObservacion) {
         this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
       } else {
         this.regForm.controls['reparacionesObservacion'].setValue(undefined);
       }
-    
+      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
+      this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
       this.regForm.controls['descargaAutorizada'].setValue(maniob.maniobra.descargaAutorizada);
-      if (this.descargaAutorizada.value===false) {
+      if (this.descargaAutorizada.value === false) {
         this.hDescarga.disable();
+        this.hSalida.disable();
       }
 
     });
@@ -194,16 +203,28 @@ cargarTiposReparaciones() {
     });
   }
 
-  ponHora() {
-    if (this.hDescarga.value === '') {
+  ponHoraDescarga() {
+    if (this.hDescarga.value === undefined || this.hDescarga.value === '') {
       this.hDescarga.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
   }
+  ponHoraSalida() {
+    if (this.hSalida.value === undefined || this.hSalida.value === '') {
+      this.hSalida.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+  }
+
 guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
-      });
+        if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
+          this.router.navigate([ '/maniobras' ]);
+        }
+        this.estatus.setValue(res.estatus);
+      }, error => {
+        this.mensajeError = error.error.mensaje;
+    });
     }
   }
 }

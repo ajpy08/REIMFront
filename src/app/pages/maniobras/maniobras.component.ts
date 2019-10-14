@@ -3,6 +3,8 @@ import { ManiobraService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import {ETAPAS_MANIOBRA} from '../../config/config';
 
+declare var swal: any;
+
 @Component({
   selector: 'app-manibras',
   templateUrl: './maniobras.component.html',
@@ -25,12 +27,12 @@ export class ManiobrasComponent implements OnInit {
   displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
   'peso', 'cliente', 'agencia'];
 
-  displayedColumnsRevision = ['actions', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+  displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
   'peso', 'cliente', 'agencia', 'grado'];
 
   displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
 
-  displayedColumnsXCargar = ['actions', 'transportista', 'grado', 'tipo', 'peso', 'cliente', 'agencia'];
+  displayedColumnsXCargar = ['actions', 'folio', 'transportista', 'grado', 'tipo', 'peso', 'cliente', 'agencia'];
 
   dtTransito: any;
   dtEspera: any;
@@ -91,7 +93,7 @@ export class ManiobrasComponent implements OnInit {
       this.dtTransito.paginator = this.paginator;
       this.totalTransito = maniobras.total;
     });
-    this.cargando = false;
+
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
     .subscribe(maniobras => {
@@ -101,8 +103,6 @@ export class ManiobrasComponent implements OnInit {
       this.totalEspera = maniobras.total;
     });
 
-    this.cargando = false;
-
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
       .subscribe(maniobras => {
         this.dtRevision = new MatTableDataSource(maniobras.maniobras);
@@ -110,7 +110,6 @@ export class ManiobrasComponent implements OnInit {
         this.dtRevision.paginator = this.paginator;
         this.totalRevision = maniobras.total;
       });
-      this.cargando = false;
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
       .subscribe(maniobras => {
@@ -119,16 +118,44 @@ export class ManiobrasComponent implements OnInit {
         this.dtLavadoReparacion.paginator = this.paginator;
         this.totalLavadoReparacion = maniobras.total;
       });
-      this.cargando = false;
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
     .subscribe(maniobras => {
       this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
       this.dtXCargar.sort = this.sort;
       this.dtXCargar.paginator = this.paginator;
       this.totalXCargar = maniobras.total;
+      this.cargando = false;
     });
-    this.cargando = false;      
+
   }
+
+  habilitaDeshabilitaPermisoDescargaManiobra(maniobra, event) {
+
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de cambiar el permiso de Descarga del contenedor ' + maniobra.contenedor,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+      })
+      .then(resp => {
+        if (resp) {
+          this._maniobraService.habilitaDeshabilitaDescargaAutorizada(maniobra, event.checked)
+          .subscribe(borrado => {
+            this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
+            .subscribe(maniobras => {
+              this.dtRevision = new MatTableDataSource(maniobras.maniobras);
+              this.dtRevision.sort = this.sort;
+              this.dtRevision.paginator = this.paginator;
+              this.totalRevision = maniobras.total;
+            });
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+  }
+
 }
 
 
