@@ -11,6 +11,7 @@ import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { Location } from '@angular/common';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+declare var swal: any;
 
 @Component({
   selector: 'app-fotos',
@@ -28,14 +29,13 @@ export class FotosComponent implements OnInit {
   imagenSubir: FileItem[] = [];
   maniobra: Maniobra = new Maniobra();
   foto: Maniobra = new Maniobra('');
+  rutaFotoActual: string;
   selected = 'fotos_lavado';
   id: string;
 
   comprimiendo = false;
 
-
   uploadedImage: Blob;
-
 
   fotosLavado: any;
   fotosReparacion: any;
@@ -56,7 +56,6 @@ export class FotosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private ng2ImgMax: Ng2ImgMaxService,
     private location: Location) {
-
   }
 
   ngOnInit() {
@@ -118,6 +117,10 @@ export class FotosComponent implements OnInit {
     ];
   }
 
+  onChange(data: any): void {
+    this.rutaFotoActual = data.image.medium;
+  }
+
   cargarManiobra(id: string) {
     this._maniobraService.getManiobra(id)
       .subscribe(maniobra => {
@@ -167,8 +170,42 @@ export class FotosComponent implements OnInit {
     }
   }
 
+  eliminaFoto(key: string, LR: string) {
+    if (key == undefined && this.galleryImagesL.length > 0 && LR == 'L') {
+      key = this.galleryImagesL[0].medium as string;
+    } else if (key == undefined && this.galleryImagesR.length > 0 && LR == 'R') {
+      key = this.galleryImagesR[0].medium as string;
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+    var ruta = key.substring(key.lastIndexOf("maniobras"), key.length);
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a la foto seleccionada \n ' + key.substring(key.lastIndexOf('/') + 1, key.length),
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+      .then(borrar => {
+        if (borrar) {
+          
+          const promesa = this._maniobraService.eliminaFoto(ruta);          
+          promesa.then((value: boolean) => {
+            if (value) {
+              this.rutaFotoActual = undefined;
+              if (LR === 'L') {
+                this.cargarFotos(this.id, 'L');
+              } else if (LR === 'R') {
+                this.cargarFotos(this.id, 'R');
+              }
+            }
+          });
+        }
+      });
+
+  }
+
   SeleccionaTab(opcion) {
-    //  console.log(opcion)
     if (opcion === 'fotos_lavado') {
       this.tabGroup.selectedIndex = 0;
     } else {
@@ -185,7 +222,6 @@ export class FotosComponent implements OnInit {
     promesa.then((value: boolean) => {
       if (value) {
         this.yaCargo = value;
-        console.log('yaCargo de fotos.component: ' + this.yaCargo);
         this.actualizaFotosDespuesdeCargar(value);
       }
     });

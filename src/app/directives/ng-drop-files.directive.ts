@@ -44,7 +44,7 @@ export class NgDropFilesDirective {
   }
 
   private _extraerArchivos(archivosLista: FileList) {
-    console.log(archivosLista);
+    //console.log(archivosLista);
     //console.log("yaCargo de ng-drop-files: " + this.yaCargo)
     if (this.yaCargo) {
       while (this.archivos.length > 0) {
