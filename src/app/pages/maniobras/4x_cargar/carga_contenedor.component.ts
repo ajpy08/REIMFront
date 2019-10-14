@@ -50,6 +50,7 @@ export class CargaContenedorComponent implements OnInit {
   regForm: FormGroup;
   maniobra: Maniobra;
   mensajeExito = '';
+  mensajeError = '';
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -78,6 +79,9 @@ export class CargaContenedorComponent implements OnInit {
       tipo: [''],
       grado: [''],
       maniobraAsociada: [''],
+      hSalida: [''],
+      hDescarga: [''],
+      estatus: [{value: '', disabled: true}],
       folio: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
@@ -104,6 +108,9 @@ export class CargaContenedorComponent implements OnInit {
   }
   get maniobraAsociada() {
     return this.regForm.get('maniobraAsociada');
+  }
+  get estatus() {
+    return this.regForm.get('estatus');
   }
   get folio() {
     return this.regForm.get('folio');
@@ -132,18 +139,27 @@ export class CargaContenedorComponent implements OnInit {
   get hEntrada() {
     return this.regForm.get('hEntrada');
   }
+  get hDescarga() {
+    return this.regForm.get('hDescarga');
+  }
+  get hSalida() {
+    return this.regForm.get('hSalida');
+  }
 
   cargarManiobra( id: string) {
     this._maniobraService.getManiobra( id ).subscribe( maniob => {
       this.maniobra = maniob.maniobra;
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia);
+      this.regForm.controls['maniobraAsociada'].setValue(maniob.maniobra.maniobraAsociada);
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
-      this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
+      this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
+      this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
+      this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
       if ( maniob.maniobra.transportista ) {
         this.cargaOperadores(maniob.maniobra.transportista);
       }
@@ -180,15 +196,31 @@ export class CargaContenedorComponent implements OnInit {
     this.maniobraAsociada.setValue ( maniobraDisponible._id);
   }
 
+  ponHoraDescarga() {
+    if (this.hDescarga.value === undefined || this.hDescarga.value === '') {
+      this.hDescarga.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+  }
+  ponHoraSalida() {
+    if (this.hSalida.value === undefined || this.hSalida.value === '') {
+      this.hSalida.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    }
+  }
+
+
   guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
-        if (res.estatus === ETAPAS_MANIOBRA.CARGADO) {
-          this.mensajeExito = 'CONTENEDOR ASIGANDO CON EXITO';
-          this.regForm.disable();
+        this.mensajeExito = 'CONTENEDOR ASIGANDO CON EXITO';
+        this.mensajeError = '';
+        if (res.estatus !== ETAPAS_MANIOBRA.XCARGAR) {
+          this.router.navigate([ '/maniobras' ]);
         }
-        });
+        }, error => {
+          this.mensajeExito = '';
+          this.mensajeError = error.error.mensaje;
+      });
       }
   }
 }

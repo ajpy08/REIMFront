@@ -55,6 +55,15 @@
                 <mat-form-field class="time">
                   <input matInput formControlName="hLlegada" type="time" placeholder="Hora Llegada">
                 </mat-form-field>
+                <br>
+              </div>
+            </div>
+            <div class="form-group has-success">
+              <label class="control-label"><b>ESTATUS</b></label>
+              <div>
+                <mat-form-field>
+                  <input matInput formControlName="estatus">
+                </mat-form-field>
               </div>
             </div>
 
@@ -66,20 +75,45 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="form-group has-success">
 
-              <div class="alert alert-primary">
-                SOLICITADO, TAMAÑO: {{tipo.value}} - GRADO : {{grado.value}}
+            <div class="alert alert-success" *ngIf="maniobraAsociada.value">
+              <label class="control-label"><b>CONTENEDOR ASIGNADO</b></label><br> CONTENEDOR : {{contenedor.value}} <br> TIPO : {{tipo.value}} <br> GRADO : {{grado.value}}
+            </div>
+
+            <div class="form-group has-success">
+              <label class="control-label"><b>Hora de Carga y Salida Camión</b></label>
+              <div class="col-md-2">
+                <mat-form-field>
+                  <mat-label>Hora Carga</mat-label>
+                  <input matInput formControlName="hDescarga" type="time" (focus)="ponHoraDescarga()">
+                </mat-form-field>
               </div>
+              <div class="col-md-2">
+                <mat-form-field>
+                  <mat-label>Hora Salida</mat-label>
+                  <input matInput formControlName="hSalida" type="time" (focus)="ponHoraSalida()">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-group has-success">
               <label class="control-label"><b>ASIGNA CONTENEDOR</b></label>
               <mat-select type="text" placeholder="Seleccione un Contenedor" (selectionChange)="cargaContenedor($event.value) ">
                 <mat-option *ngFor=" let cont of contenedores " [value]="cont ">
                   {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}
                 </mat-option>
               </mat-select>
+              <div class="alert alert-primary">
+                <label class="control-label"><b>CONTENEDOR SOLICITADO</b></label>
+                <BR> TIPO: {{tipo.value}} <br> GRADO : {{grado.value}}
+              </div>
             </div>
+
             <div *ngIf="mensajeExito" class="alert alert-success">
               {{mensajeExito}}
+            </div>
+            <div *ngIf="mensajeError" class="alert alert-danger">
+              {{mensajeError}}
             </div>
             <button type="submit " class="btn btn-success waves-effect waves-light m-r-10 ">
                             <i class="fa fa-save "></i>

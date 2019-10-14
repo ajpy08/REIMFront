@@ -39,7 +39,7 @@ import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
 import { RevisarComponent } from './maniobras/2revisar/revisar.component';
 import { TerminaLavadoReparacionComponent } from './maniobras/3terminar_lavado_reparacion/termina_lavado_reparacion.component';
-import { XCargarComponent } from './maniobras/4x_cargar/xcargar.component';
+
 import { CargaContenedorComponent } from './maniobras/4x_cargar/carga_contenedor.component';
 import { InventarioComponent } from './maniobras/5inventario/inventario.component';
 
@@ -130,7 +130,7 @@ const pagesRoutes: Routes = [
     {path: 'maniobras/maniobra/:id/llegada_entrada', component: LlegadaEntradaComponent, data: {titulo: 'Llegada'}},
     {path: 'maniobras/maniobra/:id/revisar', component: RevisarComponent, data: {titulo: 'Revisa'}},
     {path: 'maniobras/maniobra/:id/termina_lavado_reparacion', component: TerminaLavadoReparacionComponent, data: {titulo: 'Lavado / Revision'}},
-    {path: 'maniobras/maniobra/xcargar', component: XCargarComponent, data: {titulo: 'Maniobras X Cargar'}},
+    
     {path: 'maniobras/maniobra/:id/carga_contenedor', component: CargaContenedorComponent, data: {titulo: 'Cargar Maniobra'}},
     {path: 'maniobras/maniobra/:id/detalle', component: DetalleManiobraComponent, canActivate: [ AdminGuard ], data: {titulo: 'Detalle Maniobra'}},
 
