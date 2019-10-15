@@ -23,7 +23,7 @@ export class ContenedoresLRComponent implements OnInit {
   fechaLlegadaInicio: string;
   fechaLlegadaFin: string
 
-  displayedColumns = ['Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
+  displayedColumns = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,9 +36,9 @@ export class ContenedoresLRComponent implements OnInit {
     this.cargarManiobras();
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
-      this.displayedColumns = ['actions', 'Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
+      this.displayedColumns = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     } else {
-      this.displayedColumns = ['Naviera', 'Contenedor', 'Tipo', 'Estado', 'Cliente', 'A.A.', 'Lavado', 'FotosLavado', 'Reparaciones', 'FotosReparacion', 'Grado'];
+      this.displayedColumns = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     }
   }
 
