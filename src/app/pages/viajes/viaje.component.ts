@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
-import { ViajeService } from '../../services/service.index';
 import { Buque } from '../buques/buques.models';
-import { BuqueService } from '../../services/service.index';
 import { Naviera } from '../navieras/navieras.models';
-import { NavieraService } from '../../services/service.index';
+import { ViajeService, BuqueService, NavieraService, TipoContenedorService } from '../../services/service.index';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { ExcelService } from '../../services/excel/excel.service';
 import swal from 'sweetalert';
@@ -45,27 +43,31 @@ export const MY_FORMATS = {
   edicion = false;
   buques: Buque[] = [];
   navieras: Naviera[] = [];
+  tiposContenedor: any[] = [];
+  erroresCarga: string[] = [];
 
-    constructor(public _viajeService: ViajeService,
-      public _buqueService: BuqueService,
-      public _navieraService: NavieraService,
-      public router: Router,
-      public activatedRoute: ActivatedRoute,
+    constructor(
+      private _viajeService: ViajeService,
+      private _tipoContenedorService: TipoContenedorService,
+      private _buqueService: BuqueService,
+      private _navieraService: NavieraService,
+      private router: Router,
+      private activatedRoute: ActivatedRoute,
       private fb: FormBuilder,
-      public _subirArchivoService: SubirArchivoService,
-      public _excelService: ExcelService) {}
+      private _subirArchivoService: SubirArchivoService,
+      private _excelService: ExcelService) {}
 
     ngOnInit() {
       this._buqueService.getBuques().subscribe( buques => this.buques = buques.buques );
       this._navieraService.getNavieras().subscribe( navieras => this.navieras = navieras.navieras );
+      this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
       this.createFormGroup();
       const id = this.activatedRoute.snapshot.paramMap.get('id');
       if (id !== 'nuevo' && id !== '') {
         this.edicion = true;
         this.cargarViaje ( id );
-      }
-      else {
-        this.naviera.setValue('5c49e55b6b427b166466c9b3');// por default se pone a maritima maya..
+      } else {
+        this.naviera.setValue('5c49e55b6b427b166466c9b3'); // por default se pone a maritima maya..
       }
       this.contenedores.removeAt(0);
     }
@@ -123,8 +125,8 @@ export const MY_FORMATS = {
     }
 
     addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string): void {
-      if (cont=='') {
-        swal('','El contenedor no pues estar vacio.','error');
+      if (cont === '') {
+        swal('', 'El contenedor no pues estar vacio.', 'error');
       }
       this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus));
     }
@@ -181,7 +183,7 @@ export const MY_FORMATS = {
         this._viajeService.guardarViaje(this.regForm.value).subscribe(res => {
         this.fileTemporal = null;
         this.temporal = false;
-        if (this.regForm.get('_id').value == '') {
+        if (this.regForm.get('_id').value === '') {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
           this.router.navigate(['/viaje', this.regForm.get('_id').value]);
@@ -200,6 +202,7 @@ export const MY_FORMATS = {
 
 
     onFileExcelSelected(event) {
+
       this.fileExcel = <File> event.target.files[0];
       this.cargarExcel();
     }
@@ -227,10 +230,20 @@ export const MY_FORMATS = {
   }
   cargarExcel() {
     this.regForm.markAsDirty();
+    while (this.contenedores.length !== 0) {
+      this.contenedores.removeAt(0);
+    }
+    this.erroresCarga = [];
     this._excelService.excelToJSON(this.fileExcel)
     .subscribe( res => {
       res.forEach(element => {
-        this.addContenedor(element.Contenedor, element.Tipo, element.Peso, element.Cliente, 'NUEVO');
+        const indexTipo = this.tiposContenedor.find( dato => dato.tipo === element.Tipo.replace('\'', ''));
+        if (!indexTipo) {
+          // tslint:disable-next-line:max-line-length
+          this.erroresCarga.push(`Contenedor: ${element.Contenedor} no agregado, tipo ( ${element.Tipo.replace('\'', '')} ) no encontrado`);
+        } else {
+          this.addContenedor(element.Contenedor, element.Tipo.replace('\'', ''), element.Peso, element.Cliente, 'NUEVO');
+        }
       });
       this.regForm.controls['viaje'].setValue(res[0].Viaje);
       const index = this.buques.find( dato => dato.nombre === res[0].Buque);
