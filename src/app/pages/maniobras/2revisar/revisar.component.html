@@ -219,8 +219,8 @@
     </mat-expansion-panel>
 
   </mat-accordion>
-  <div *ngIf="mensajeError" class="alert alert-danger">
-    {{mensajeError}}
+  <div *ngFor="let err of mensajesError" class="alert alert-danger">
+    {{err}}
   </div>
   <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
   <i class="fa fa-save"></i>

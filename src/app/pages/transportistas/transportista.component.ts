@@ -157,7 +157,7 @@ export class TransportistaComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    if (this.tipoFile == 'img') {
+    if (this.tipoFile === 'img') {
       // console.log('Fue Foto');
       if(event.target.files[0] != undefined) {
         this.fileImg = <File>event.target.files[0];
