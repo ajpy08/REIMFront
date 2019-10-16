@@ -112,9 +112,22 @@ export class SolicitudTransportistaComponent implements OnInit {
       if ( maniob.maniobra.transportista ) {
         this.cargaOperadores(maniob.maniobra.transportista);
       }
-      this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
-      this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
-      this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
+      
+      // this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
+      // this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
+      // this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
+
+      
+      if (maniob.maniobra.transportista) {
+        this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
+      }
+      if (maniob.maniobra.camion) {
+        this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
+      }
+      if (maniob.maniobra.operador) {
+        this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
+      }
+      
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
       this.regForm.controls['peso'].setValue(maniob.maniobra.peso);
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);

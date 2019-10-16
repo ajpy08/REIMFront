@@ -8,7 +8,6 @@ declare var swal: any;
 @Component({
   selector: 'app-manibras',
   templateUrl: './maniobras.component.html',
-  styles: ['./maniobras.component.css'],
   providers: [],
 })
 export class ManiobrasComponent implements OnInit {
@@ -41,7 +40,12 @@ export class ManiobrasComponent implements OnInit {
   dtXCargar: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('sortEspera') sortEspera: MatSort;
+  @ViewChild('sortRevision') sortRevision: MatSort;
+  @ViewChild('sortLR') sortLR: MatSort;
+  @ViewChild('sortXCargar') sortXCargar: MatSort;
 
 
   constructor(public _maniobraService: ManiobraService) { }
@@ -98,7 +102,7 @@ export class ManiobrasComponent implements OnInit {
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
     .subscribe(maniobras => {
       this.dtEspera = new MatTableDataSource(maniobras.maniobras);
-      this.dtEspera.sort = this.sort;
+      this.dtEspera.sort = this.sortEspera;
       this.dtEspera.paginator = this.paginator;
       this.totalEspera = maniobras.total;
     });
@@ -106,7 +110,7 @@ export class ManiobrasComponent implements OnInit {
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
       .subscribe(maniobras => {
         this.dtRevision = new MatTableDataSource(maniobras.maniobras);
-        this.dtRevision.sort = this.sort;
+        this.dtRevision.sort = this.sortRevision;
         this.dtRevision.paginator = this.paginator;
         this.totalRevision = maniobras.total;
       });
@@ -114,14 +118,14 @@ export class ManiobrasComponent implements OnInit {
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
       .subscribe(maniobras => {
         this.dtLavadoReparacion = new MatTableDataSource(maniobras.maniobras);
-        this.dtLavadoReparacion.sort = this.sort;
+        this.dtLavadoReparacion.sort = this.sortLR;
         this.dtLavadoReparacion.paginator = this.paginator;
         this.totalLavadoReparacion = maniobras.total;
       });
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
     .subscribe(maniobras => {
       this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
-      this.dtXCargar.sort = this.sort;
+      this.dtXCargar.sort = this.sortXCargar;
       this.dtXCargar.paginator = this.paginator;
       this.totalXCargar = maniobras.total;
       this.cargando = false;
