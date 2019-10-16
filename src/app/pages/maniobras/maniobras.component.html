@@ -187,7 +187,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsEspera" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsEspera;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -281,7 +281,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -374,7 +374,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavadoReparacion" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavadoReparacion;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -449,7 +449,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>

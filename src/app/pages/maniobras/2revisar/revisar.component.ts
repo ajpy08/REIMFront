@@ -197,10 +197,10 @@ export class RevisarComponent implements OnInit {
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
       this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
       this.regForm.controls['descargaAutorizada'].setValue(maniob.maniobra.descargaAutorizada);
-      if (this.descargaAutorizada.value === false) {
-        this.hDescarga.disable();
-        this.hSalida.disable();
-      }
+      // if (this.descargaAutorizada.value === false) {
+      //   this.hDescarga.disable();
+      //   this.hSalida.disable();
+      // }
 
     });
   }
