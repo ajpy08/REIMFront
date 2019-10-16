@@ -319,106 +319,89 @@
                 <i class="fas fa-toolbox"> Lavado - Reparacion ( 0 )</i>
             </ng-template>
         </ng-template>
+        <br>
         <div class="animated fadeIn" *ngIf="!cargando">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Contenedores con Lavado Reparación : (
+                        <div class="text-right">
+                            <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+                                                      <i class="fas fa-file-excel"></i> Exportar Excel
+                                                  </button>
+                                                  <button [routerLink]="['/buque2','nuevo']" type="button"
+                                                      class="btn btn-info waves-effect waves-light m-r-5">
+                                                      <i class="fa fa-plus"></i>
+                                                      Añadir nuevo buque
+                                                  </button> -->
+                        </div>
+                        <h3 class="card-title">Contenedores en Lavado Reparación : (
                             <small>{{totalRegistrosLR}}</small> )</h3>
-                        <!-- <div class="example-header mat-elevation-z8">
-                            <mat-form-field>
-                                <input matInput (keyup)="applyFilter($event.target.value)"
-                                    placeholder="Escriba algo para filtrar">
-                            </mat-form-field>
-                        </div> -->
-                        <br>
+         
                         <div class="example-container mat-elevation-z8">
-                            <mat-table class="mat-table-medium" #tableLR [dataSource]="dataSourceLR" matSort>
+                            <mat-table class="mat-table-medium" #MatSort2="matSort" [dataSource]="dataSourceLR" matSort>
 
-                                    <ng-container matColumnDef="actions">
-                                            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
-                                            <mat-cell *matCellDef="let row">
-                                              <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
-                                                <i class="fa fa-eye" aria-hidden="true"></i>
-                                              </button>
-                                            </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="naviera">
-                                            <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.razonSocial}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="contenedor">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                                          </ng-container>
-                              
-                              
-                                          <ng-container matColumnDef="tipo">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="estado">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="cliente">
-                                            <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="aa">
-                                            <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}}</mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="lavado">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="fotoslavado">
-                                            <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
-                                            <mat-cell *matCellDef="let row">
-                                              <!-- <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
-                                                <i class="fas fa-camera-retro"></i>
-                                                Fotos
-                                              </button> -->
-                                              <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
-                                              <i class="fas fa-camera-retro"></i>
-                                              Fotos
-                                            </button>
-                                            </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="reparaciones">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="fotosreparacion">
-                                            <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
-                                            <mat-cell *matCellDef="let row">
-                                              <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
-                                                <i class="fas fa-camera-retro"></i>
-                                                Fotos
-                                              </button>
-                                            </mat-cell>
-                                          </ng-container>
-                              
-                                          <ng-container matColumnDef="grado">
-                                            <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                            <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                                          </ng-container>
+                                <ng-container matColumnDef="actions">
+                                    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        <button
+                                            [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
+                                            class="btn btn-primary m-r-5">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="contenedor">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>contenedor</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="tipo">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>tipo</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="peso">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>peso</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="cliente">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="agencia">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="lavado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.lavado}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="reparaciones">
+                                    <mat-header-cell *matHeaderCellDef>Reparaciones</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                        <br>
+                                        <p *ngFor="let rep of row.reparaciones">
+                                            {{rep.reparacion}}
+                                        </p><br><br>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="grado">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                                </ng-container>
 
                                 <mat-header-row *matHeaderRowDef="displayedColumnsLR" class="encabezado">
                                 </mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
                             </mat-table>
-                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
+                            <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
                                 [showFirstLastButtons]>
                             </mat-paginator>
                         </div>
