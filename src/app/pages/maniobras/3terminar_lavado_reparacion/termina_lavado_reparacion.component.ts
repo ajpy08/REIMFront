@@ -184,9 +184,15 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       if (maniob.maniobra.cliente) {
         this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente.razonSocial);
       }
-      this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista.razonSocial);
-      this.regForm.controls['camion'].setValue(maniob.maniobra.camion.placa);
-      this.regForm.controls['operador'].setValue(maniob.maniobra.operador.nombre);
+      if (maniob.maniobra.transportista) {
+        this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista.razonSocial);
+      }
+      if (maniob.maniobra.camion) {
+        this.regForm.controls['camion'].setValue(maniob.maniobra.camion.placa);
+      }
+      if (maniob.maniobra.operador) {
+        this.regForm.controls['operador'].setValue(maniob.maniobra.operador.nombre);
+      }
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
