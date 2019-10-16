@@ -44,43 +44,43 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Naviera">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
+            <ng-container matColumnDef="naviera">
+              <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.razonSocial}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Contenedor">
+            <ng-container matColumnDef="contenedor">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
             </ng-container>
 
 
-            <ng-container matColumnDef="Tipo">
-              <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+            <ng-container matColumnDef="tipo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Estado">
-              <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+            <ng-container matColumnDef="estado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Cliente">
+            <ng-container matColumnDef="cliente">
               <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="A.A.">
+            <ng-container matColumnDef="aa">
               <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}}</mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Lavado">
-              <mat-header-cell *matHeaderCellDef>Lavado</mat-header-cell>
+            <ng-container matColumnDef="lavado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="FotosLavado">
+            <ng-container matColumnDef="fotoslavado">
               <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <!-- <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
@@ -94,12 +94,12 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Reparaciones">
-              <mat-header-cell *matHeaderCellDef>Reparaciones</mat-header-cell>
+            <ng-container matColumnDef="reparaciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="FotosReparacion">
+            <ng-container matColumnDef="fotosreparacion">
               <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
@@ -109,8 +109,8 @@
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="Grado">
-              <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+            <ng-container matColumnDef="grado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
             </ng-container>
 

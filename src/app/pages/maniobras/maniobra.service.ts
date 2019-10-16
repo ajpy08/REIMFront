@@ -31,7 +31,7 @@ export class ManiobraService {
   }
 
   getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string, viaje?: string,
-    peso?: string, lavado?: boolean, reparacion?: boolean): Observable<any> {
+    peso?: string, lavado?: boolean, reparacion?: boolean, naviera?: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/';
     let params = new HttpParams();
     if (cargadescarga) {
@@ -55,6 +55,43 @@ export class ManiobraService {
       params = params.append('peso', peso);
     }
 
+    if (lavado) {
+      params = params.append('lavado', 'true');
+    }
+
+    if (reparacion) {
+      params = params.append('reparacion', 'true');
+    }
+
+    if (naviera) {
+      params = params.append('naviera', naviera);
+    }
+
+    return this.http.get(url, { params: params });
+  }
+
+  getManiobrasNaviera(estatus?: string, naviera?: string, transportista?: string, contenedor?: string, viaje?: string,
+    peso?: string, lavado?: boolean, reparacion?: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/inventarioLR/';
+    let params = new HttpParams();
+    if (naviera) {
+      params = params.append('naviera', naviera);
+    }
+    if (estatus) {
+      params = params.append('estatus', estatus);
+    }
+    if (transportista) {
+      params = params.append('transportista', transportista);
+    }
+    if (contenedor) {
+      params = params.append('contenedor', contenedor);
+    }
+    if (viaje) {
+      params = params.append('viaje', viaje);
+    }
+    if (peso) {
+      params = params.append('peso', peso);
+    }
     if (lavado) {
       params = params.append('lavado', 'true');
     }
