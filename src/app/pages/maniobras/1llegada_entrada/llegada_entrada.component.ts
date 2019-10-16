@@ -1,22 +1,19 @@
 import { Component, OnInit} from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService } from '../../../services/service.index';
+import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Transportista } from '../../transportistas/transportista.models';
-import { TransportistaService } from '../../../services/service.index';
 import { Agencia } from '../../agencias/agencia.models';
-import { AgenciaService } from '../../../services/service.index';
 import { Operador } from '../../operadores/operador.models';
-import { OperadorService } from '../../../services/service.index';
 import { Camion } from '../../camiones/camion.models';
-import { CamionService } from '../../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { DatePipe } from '@angular/common';
-
+import {ETAPAS_MANIOBRA} from '../../../config/config';
 import * as _moment from 'moment';
 const moment = _moment;
+import { Location } from '@angular/common';
 
 export const MY_FORMATS = {
   parse: {
@@ -47,16 +44,20 @@ export class LlegadaEntradaComponent implements OnInit {
   camiones: Camion[] = [];
   regForm: FormGroup;
   maniobra: Maniobra;
+  mensajeError='';
+  mensajeExito='';
 
   constructor(
-    public _maniobraService: ManiobraService,
-    public _transportistaService: TransportistaService,
-    public _agenciaService: AgenciaService,
-    public _operadorService: OperadorService,
-    public _camionService: CamionService,
-    public router: Router,
-    public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder, private datePipe: DatePipe) { }
+    private _maniobraService: ManiobraService,
+    private _transportistaService: TransportistaService,
+    private _agenciaService: AgenciaService,
+    private _operadorService: OperadorService,
+    private _camionService: CamionService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder, 
+    private datePipe: DatePipe,
+    private location: Location) { }
 
   ngOnInit() {
     this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
@@ -74,10 +75,11 @@ export class LlegadaEntradaComponent implements OnInit {
       tipo: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
-      transportista: ['', [Validators.required]],
-      camion: ['', [Validators.required]],
-      operador: ['', [Validators.required]],
-      fLlegada: [moment(), [Validators.required]],
+      estatus: [{value: '', disabled: true}],
+      transportista: [''],
+      camion: [''],
+      operador: [''],
+      fLlegada: [moment()],
       hLlegada: [this.datePipe.transform(new Date(), 'HH:mm'), [Validators.required]],
       hEntrada: [''],
     });
@@ -100,6 +102,9 @@ export class LlegadaEntradaComponent implements OnInit {
   }
   get agencia() {
     return this.regForm.get('agencia');
+  }
+  get estatus() {
+    return this.regForm.get('estatus');
   }
   get transportista() {
     return this.regForm.get('transportista');
@@ -128,6 +133,7 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
+      this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
       if ( maniob.maniobra.transportista ) {
         this.cargaOperadores(maniob.maniobra.transportista);
       }
@@ -165,10 +171,19 @@ export class LlegadaEntradaComponent implements OnInit {
 
   guardaCambios() {
     if (this.regForm.valid) {
+      this.mensajeError = '';
+      this.mensajeExito = '';
       this._maniobraService.registraLlegadaEntrada(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
-        // this.router.navigate(LASTPAGE)
+        this.mensajeExito = 'Cambios Realizados con éxito.'
+        this.estatus.setValue(res.estatus);
+          if (res.estatus === ETAPAS_MANIOBRA.REVISION){
+            this.location.back();
+          }
+        },error => {
+          this.mensajeError =  error.error.mensaje;
         });
+        
       }
   }
 }

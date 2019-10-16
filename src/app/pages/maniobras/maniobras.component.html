@@ -124,7 +124,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dtEspera" matSort>
+              <mat-table class="mat-table-medium" [dataSource]="dtEspera" #sortEspera="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
@@ -213,7 +213,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dtRevision" matSort>
+              <mat-table class="mat-table-medium" [dataSource]="dtRevision" #sortRevision="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
@@ -307,7 +307,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dtLavadoReparacion" matSort>
+              <mat-table class="mat-table-medium" [dataSource]="dtLavadoReparacion" #sortLR="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
@@ -401,7 +401,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dtXCargar" matSort>
+              <mat-table class="mat-table-medium" [dataSource]="dtXCargar" #sortXCargar="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
