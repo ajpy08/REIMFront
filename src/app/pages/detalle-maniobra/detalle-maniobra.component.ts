@@ -269,7 +269,7 @@ export class DetalleManiobraComponent implements OnInit {
     // });
   }
 
-  atras() {
+  back() {
     this.location.back();
   }
 

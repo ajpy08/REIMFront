@@ -14,10 +14,11 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button [routerLink]="['/agencias/agencia','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                        <i class="fa fa-plus"></i>
-                        Añadir nueva agencia
-                    </button>
+          <button [routerLink]="['/agencias/agencia','nuevo']" type="button"
+            class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i>
+            Añadir nueva agencia
+          </button>
         </div>
         <h3 class="card-title">Agencias ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
@@ -34,17 +35,18 @@
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let agencia">
                 <button [routerLink]="['/agencias/agencia', agencia._id ]" class="btn btn-primary m-r-5">
-                                    <i class="fa fa-edit"></i>
-                                </button>
+                  <i class="fa fa-edit"></i>
+                </button>
                 <button (click)="borrarAgencia(agencia)" class="btn btn-danger m-r-5">
-                                    <i class="fa fa-trash-o"></i>
-                                </button>
+                  <i class="fa fa-trash-o"></i>
+                </button>
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="img">
               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'" class="img-50 img-circle pointer"> </mat-cell>
+              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'"
+                  class="img-50 img-circle pointer"> </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="rfc">

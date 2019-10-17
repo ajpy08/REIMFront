@@ -5,6 +5,7 @@ import { AgenciaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import { Usuario } from '../usuarios/usuario.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-cliente',
@@ -28,7 +29,8 @@ export class ClienteComponent implements OnInit {
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
-    private usuarioService: UsuarioService) { }
+    private usuarioService: UsuarioService,
+    private location: Location) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -218,5 +220,9 @@ export class ClienteComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarCliente();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

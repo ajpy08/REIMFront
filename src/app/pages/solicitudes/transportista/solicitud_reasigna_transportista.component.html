@@ -65,7 +65,8 @@
                 <i class="fa fa-save"></i>
                 Guardar Cambios
               </button>
-            <a routerLink="/solicitudes_transportista" class="btn btn-danger waves-effect waves-light">Regresar</a>
+              <button class="btn btn-danger" (click)="back()"> Regresar</button>
+            <!-- <a routerLink="/solicitudes_transportista" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
           </form>
           <p>Form value {{ regForm.value | json }} </p>
         </div>

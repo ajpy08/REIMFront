@@ -5,8 +5,8 @@ import { Transportista } from '../../transportistas/transportista.models';
 import { TransportistaService } from '../../../services/service.index';
 import { Agencia } from '../../agencias/agencia.models';
 import { AgenciaService } from '../../../services/service.index';
-
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -26,7 +26,8 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
     public _agenciaService: AgenciaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private location: Location) { }
 
   ngOnInit() {
     this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
@@ -96,12 +97,15 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
     });
   }
 
-
   guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.reasignaTransportista(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         });
       }
+  }
+
+  back() {
+    this.location.back();
   }
 }

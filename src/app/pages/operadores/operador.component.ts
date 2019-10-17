@@ -11,6 +11,7 @@ import { Usuario } from '../usuarios/usuario.model';
 
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Location } from '@angular/common';
 
 
 import * as _moment from 'moment';
@@ -55,7 +56,8 @@ export class OperadorComponent implements OnInit {
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -198,5 +200,9 @@ export class OperadorComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarOperador();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

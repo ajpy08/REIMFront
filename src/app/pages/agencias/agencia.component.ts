@@ -3,6 +3,7 @@ import { AgenciaService, SubirArchivoService } from '../../services/service.inde
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-agencia',
@@ -24,7 +25,8 @@ export class AgenciaComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
-    public _modalUploadService: ModalUploadService) {
+    public _modalUploadService: ModalUploadService,
+    private location: Location) {
   }
 
   ngOnInit() {
@@ -193,5 +195,9 @@ export class AgenciaComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarAgencia();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

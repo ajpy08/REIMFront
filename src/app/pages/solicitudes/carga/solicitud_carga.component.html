@@ -274,7 +274,8 @@
               <i class="fa fa-save "></i>
               Guardar
             </button>
-            <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button>
+            <button class="btn btn-danger" (click)="back()"> Regresar</button>
+            <!-- <button type="button" class="btn btn-inverse">Regresar</button> -->
           </div>
         </form>
         <p>Form value {{ regForm.value | json }} </p>
