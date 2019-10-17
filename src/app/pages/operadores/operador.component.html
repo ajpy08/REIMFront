@@ -9,7 +9,8 @@
             <div class="my-container">
               <!--========Combombox Operador=========-->
               <mat-form-field>
-                <mat-select formControlName="transportista" placeholder="Seleccione un Transportista *" name="transportista">
+                <mat-select formControlName="transportista" placeholder="Seleccione un Transportista *"
+                  name="transportista">
                   <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
                     {{ transportista.razonSocial }}
                   </mat-option>
@@ -19,13 +20,15 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="nombre" name="nombre" type="text" class="form-control" placeholder="Nombre del operador *">
+                <input matInput formControlName="nombre" name="nombre" type="text" class="form-control"
+                  placeholder="Nombre del operador *">
                 <mat-error *ngIf="nombre.touched && nombre.invalid">
                   <sup>*</sup>Por Favor Ingrese un Nombre
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="licencia" name="licencia" type="text" class="form-control" placeholder="Número de Licencia *">
+                <input matInput formControlName="licencia" name="licencia" type="text" class="form-control"
+                  placeholder="Número de Licencia *">
                 <mat-error *ngIf="licencia.touched && licencia.invalid && !licencia.errors?.minlength">
                   <sup>*</sup>Por Favor Ingrese la Licencia
                 </mat-error>
@@ -35,7 +38,8 @@
               </mat-form-field>
               <!--========input vigencia licencia=========-->
               <mat-form-field>
-                <input matInput [matDatepicker]="picker" formControlName="vigenciaLicencia" name="vigenciaLicencia" type="text" class="form-control" placeholder="Vigencia de Licencia *">
+                <input matInput [matDatepicker]="picker" formControlName="vigenciaLicencia" name="vigenciaLicencia"
+                  type="text" class="form-control" placeholder="Vigencia de Licencia *">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-error *ngIf="vigenciaLicencia.touched && vigenciaLicencia.invalid">
@@ -47,12 +51,13 @@
               </mat-checkbox>
             </div>
             <br>
-            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid ">
-                            <i class="fa fa-save"></i>
-                            Guardar
-                        </button>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
             <a routerLink="/operadores" class="btn btn-danger waves-effect waves-light">Regresar
-                            Catálogo</a>
+              Catálogo</a>
           </form>
           <!-- <p>Form value {{ regForm.value | json }} </p>
                     <p> Form status {{ regForm.status | json}} </p>
@@ -67,30 +72,41 @@
         <div class="card-header">Fotografía</div>
         <div class="card-body">
           <p *ngIf="fileFotoTemporal; else notShow" class="text-danger">
-            <img (click)="file.click(); tipoFile = 'foto'" [src]="foto.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+            <img (click)="file.click(); tipoFile = 'foto'" [src]="foto.value | imagen:'temp'"
+              class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
           </p>
           <ng-template #notShow>
-            <img (click)="file.click(); tipoFile = 'foto'" [src]="foto.value | imagen:'operador'" class="w150 img-circle pointer">
+            <img (click)="file.click(); tipoFile = 'foto'" [src]="foto.value | imagen:'operador'"
+              class="w150 img-circle pointer">
           </ng-template>
-          <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*" #file>
+          <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*"
+            #file>
           <br><br>
-          <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'foto'"><i class="fa fa-file"></i> Cambiar foto</button>
+          <button class="btn btn-info waves-effect waves-light" type="button"
+            (click)="file.click(); tipoFile = 'foto'"><i class="fa fa-file"></i> Cambiar foto</button>
         </div>
       </div>
       <div class="card text-center">
-        <div class="card-header">Licencia</div>
-        <div class="card-body">
-          <p *ngIf="fileLicenciaTemporal; else notShow2" class="text-danger">
-            <img (click)="file2.click()" [src]="fotoLicencia.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
-          </p>
-          <ng-template #notShow2>
-            <img (click)="file.click()" [src]="fotoLicencia.value | imagen:'operador'" class="w150 img-circle pointer">
-          </ng-template>
-          <input (change)="onFileSelected($event)" type="file" style="display:none" name="file2" #tipo accept="image/*" #file2>
-          <br><br>
-          <button class="btn btn-info waves-effect waves-light" type="button" (click)="file2.click(); tipoFile = 'fotoLicencia'"><i class="fa fa-file"></i> Cambiar Licencia
-                    </button>
-        </div>
+          <div class="card-header">Licencia</div>
+          <div class="card-body">
+            <p *ngIf="fileLicenciaTemporal; else notShow2" class="text-danger">
+              <a [href]="fotoLicencia.value | imagen:'temp'" target="_blank">
+                <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+              </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+            </p>
+            <ng-template #notShow2>
+              <a *ngIf="fotoLicencia.value" [href]="fotoLicencia.value | imagen:'operador'" target="_blank">
+                <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+              </a>
+            </ng-template>
+            <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
+            <br>
+            <button class="btn btn-info waves-effect waves-light" type="button"
+              (click)="file.click(); tipoFile = 'fotoLicencia'"><i class="fa fa-file"></i> Cambiar Licencia PDF</button>
+            <mat-error *ngIf="fotoLicencia.invalid">
+              <br><sup>*</sup>La licencia es obligatoria
+            </mat-error>
+          </div>
       </div>
     </div>
   </div>
