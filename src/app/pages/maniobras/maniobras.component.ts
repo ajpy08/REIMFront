@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ManiobraService } from '../../services/service.index';
+import { ManiobraService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import {ETAPAS_MANIOBRA} from '../../config/config';
+import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
+import { Usuario } from '../usuarios/usuario.model';
 
 declare var swal: any;
 
@@ -21,13 +22,13 @@ export class ManiobrasComponent implements OnInit {
 
 
   displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-  'peso', 'cliente', 'agencia'];
+    'peso', 'cliente', 'agencia'];
 
   displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-  'peso', 'cliente', 'agencia'];
+    'peso', 'cliente', 'agencia'];
 
   displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-  'peso', 'cliente', 'agencia', 'grado'];
+    'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
 
   displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
 
@@ -39,15 +40,17 @@ export class ManiobrasComponent implements OnInit {
   dtLavadoReparacion: any;
   dtXCargar: any;
 
+  usuarioLogueado: Usuario;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  
-  @ViewChild('pagEspera', {read: MatPaginator}) pagEspera: MatPaginator;
-  @ViewChild('pagRevision', {read: MatPaginator}) pagRevision: MatPaginator;
-  @ViewChild('pagLR', {read: MatPaginator}) pagLR: MatPaginator;
-  @ViewChild('pagXCargar', {read: MatPaginator}) pagXCargar: MatPaginator;
-  
-  
-  
+
+  @ViewChild('pagEspera', { read: MatPaginator }) pagEspera: MatPaginator;
+  @ViewChild('pagRevision', { read: MatPaginator }) pagRevision: MatPaginator;
+  @ViewChild('pagLR', { read: MatPaginator }) pagLR: MatPaginator;
+  @ViewChild('pagXCargar', { read: MatPaginator }) pagXCargar: MatPaginator;
+
+
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('sortEspera') sortEspera: MatSort;
   @ViewChild('sortRevision') sortRevision: MatSort;
@@ -55,8 +58,19 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('sortXCargar') sortXCargar: MatSort;
 
 
-  constructor(public _maniobraService: ManiobraService) { }
+  constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService) { }
+
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
+
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+        'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
+    } else {
+      this.displayedColumnsRevision = ['actions', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
+        'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
+    }
+
     this.cargarManiobras();
   }
 
@@ -98,23 +112,21 @@ export class ManiobrasComponent implements OnInit {
   cargarManiobras() {
     this.cargando = true;
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO)
-    .subscribe(maniobras => {
-      this.dtTransito = new MatTableDataSource(maniobras.maniobras);
-      this.dtTransito.sort = this.sort;
-      this.dtTransito.paginator = this.paginator;
-      this.totalTransito = maniobras.total;
-      console.log(maniobras.maniobras);
-    });
+      .subscribe(maniobras => {
+        this.dtTransito = new MatTableDataSource(maniobras.maniobras);
+        this.dtTransito.sort = this.sort;
+        this.dtTransito.paginator = this.paginator;
+        this.totalTransito = maniobras.total;
+      });
 
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
-    .subscribe(maniobras => {
-      this.dtEspera = new MatTableDataSource(maniobras.maniobras);
-      this.dtEspera.sort = this.sortEspera;
-      this.dtEspera.paginator = this.pagEspera;
-      this.totalEspera = maniobras.total;
-      
-    });
+      .subscribe(maniobras => {
+        this.dtEspera = new MatTableDataSource(maniobras.maniobras);
+        this.dtEspera.sort = this.sortEspera;
+        this.dtEspera.paginator = this.pagEspera;
+        this.totalEspera = maniobras.total;
+      });
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
       .subscribe(maniobras => {
@@ -132,13 +144,13 @@ export class ManiobrasComponent implements OnInit {
         this.totalLavadoReparacion = maniobras.total;
       });
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
-    .subscribe(maniobras => {
-      this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
-      this.dtXCargar.sort = this.sortXCargar;
-      this.dtXCargar.paginator = this.pagXCargar;
-      this.totalXCargar = maniobras.total;
-      this.cargando = false;
-    });
+      .subscribe(maniobras => {
+        this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
+        this.dtXCargar.sort = this.sortXCargar;
+        this.dtXCargar.paginator = this.pagXCargar;
+        this.totalXCargar = maniobras.total;
+        this.cargando = false;
+      });
 
   }
 
@@ -150,19 +162,19 @@ export class ManiobrasComponent implements OnInit {
       icon: 'warning',
       buttons: true,
       dangerMode: true,
-      })
+    })
       .then(resp => {
         if (resp) {
           this._maniobraService.habilitaDeshabilitaDescargaAutorizada(maniobra, event.checked)
-          .subscribe(borrado => {
-            this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
-            .subscribe(maniobras => {
-              this.dtRevision = new MatTableDataSource(maniobras.maniobras);
-              this.dtRevision.sort = this.sort;
-              this.dtRevision.paginator = this.paginator;
-              this.totalRevision = maniobras.total;
+            .subscribe(borrado => {
+              this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
+                .subscribe(maniobras => {
+                  this.dtRevision = new MatTableDataSource(maniobras.maniobras);
+                  this.dtRevision.sort = this.sort;
+                  this.dtRevision.paginator = this.paginator;
+                  this.totalRevision = maniobras.total;
+                });
             });
-          });
         } else {
           event.source.checked = !event.checked;
         }
