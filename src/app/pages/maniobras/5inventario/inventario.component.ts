@@ -19,7 +19,7 @@ export class InventarioComponent implements OnInit {
   totalRegistros: number = 0;
   totalRegistrosLR: number = 0;
   displayedColumns = ['fLlegada', 'viaje', 'nombre', 'fVigenciaTemporal', 'pdfTemporal', 'contenedor', 'tipo', 'peso', 'grado'];
-  displayedColumnsLR = ['contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
+  displayedColumnsLR = ['fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
   dataSource: any;
   dataSourceLR: any;
   c40: any;
@@ -38,9 +38,9 @@ export class InventarioComponent implements OnInit {
     this.cargarInventario();
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
-      this.displayedColumnsLR = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
+      this.displayedColumnsLR = ['actions', 'fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
     } else {
-      this.displayedColumnsLR = ['contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
+      this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
     }
   }
 
@@ -106,9 +106,10 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
+      
       this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE)
         .subscribe(maniobras => {
-
+          console.log(maniobras.maniobras);
           this.c20 = maniobras.maniobras.filter(m => m.tipo.includes('20'));
 
           const grouped20 = this.c20.reduce((curr, m) => {

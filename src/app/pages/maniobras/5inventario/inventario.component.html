@@ -1,224 +1,220 @@
 <div class="row animated fadeIn" *ngIf="cargando">
-    <div class="col-sm-12">
-        <div class="alert alert-warning text-center">
-            <strong>Cargando</strong>
-            <br>
-            <i class="fas fa-refresh fa-spin fa-2x"></i>
-            <br>
-            <span>Espere por favor</span>
-        </div>
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
     </div>
+  </div>
 </div>
 
 <mat-tab-group mat-stretch-tabs>
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <div *ngIf="dataSource;else todos">
-                <i class="fas fa-asterisk"> Todos ( {{dataSource.data.length}} )</i>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div *ngIf="dataSource;else todos">
+        <i class="fas fa-asterisk"> Todos ( {{dataSource.data.length}} )</i>
+      </div>
+      <ng-template #todos>
+        <i class="fas fa-cube"> Todos ( 0 )</i>
+      </ng-template>
+    </ng-template>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
             </div>
-            <ng-template #todos>
-                <i class="fas fa-cube"> Todos ( 0 )</i>
-            </ng-template>
-        </ng-template>
-        <div class="animated fadeIn" *ngIf="!cargando">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="text-right">
-                        </div>
-                        <h3 class="card-title">Disponibles: ( <small>{{totalRegistros}}</small> )</h3>
-                        <div class="example-header mat-elevation-z8">
-                            <mat-form-field>
-                                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)"
-                                    placeholder="Escriba algo para filtrar">
-                            </mat-form-field>
-                        </div>
-                        <br>
-                        <div class="example-container mat-elevation-z8">
-                            <mat-table class="mat-table" [dataSource]="dataSource" matSort>
-
-                                <ng-container matColumnDef="fLlegada">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="viaje">
-                                    <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="nombre">
-                                    <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="fVigenciaTemporal">
-                                    <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}}
-                                    </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="pdfTemporal">
-                                    <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
-                                            target="_blank">
-                                            <img src="\assets\images\icon\pdf_32x32.png">
-                                        </a>
-                                    </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="contenedor">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="tipo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="peso">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="grado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                                </ng-container>
-
-                                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                            </mat-table>
-                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                                [showFirstLastButtons]>
-                            </mat-paginator>
-                        </div>
-                    </div>
-                </div>
+            <h3 class="card-title">Disponibles: ( <small>{{totalRegistros}}</small> )</h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
             </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table" [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="fLlegada">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fVigenciaTemporal">
+                  <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pdfTemporal">
+                  <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                      <img src="\assets\images\icon\pdf_32x32.png">
+                    </a>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[50, 100, 200]" [pageSize]="200" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
         </div>
-    </mat-tab>
+      </div>
+    </div>
+  </mat-tab>
 
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <div *ngIf="c20;else sincont20">
-                <i class="fas fa-cube"> 20' ( {{c20.length}} )</i>
-            </div>
-            <ng-template #sincont20>
-                <i class="fas fa-cube"> Contenedores 20' ( 0 )</i>
-            </ng-template>
-        </ng-template>
-        <div class="animated fadeIn" *ngIf="!cargando">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- <div class="text-right">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div *ngIf="c20;else sincont20">
+        <i class="fas fa-cube"> 20' ( {{c20.length}} )</i>
+      </div>
+      <ng-template #sincont20>
+        <i class="fas fa-cube"> Contenedores 20' ( 0 )</i>
+      </ng-template>
+    </ng-template>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <!-- <div class="text-right">
             </div> -->
-                        <!-- <h3 class="card-title">Disponibles: ( <small>{{totalRegistros20}}</small> )</h3> -->
-                        <!-- <div class="example-header mat-elevation-z8">
+            <!-- <h3 class="card-title">Disponibles: ( <small>{{totalRegistros20}}</small> )</h3> -->
+            <!-- <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value, dataSource20, totalRegistros20)"
                   placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div> -->
-                        <div *ngFor="let g of groupedDisponibles20"><br>
-                            <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
-                            </h3>
-                            <div class="example-container mat-elevation-z8">
-                                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+            <div *ngFor="let g of groupedDisponibles20"><br>
+              <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
+              </h3>
+              <div class="example-container mat-elevation-z8">
+                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
 
-                                    <ng-container matColumnDef="fLlegada">
-                                        <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
-                                        </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
-                                    </ng-container>
+                  <ng-container matColumnDef="fLlegada">
+                    <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="viaje">
-                                        <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
-                                    </ng-container>
+                  <ng-container matColumnDef="viaje">
+                    <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="nombre">
-                                        <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="fVigenciaTemporal">
-                                        <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                                        <mat-cell *matCellDef="let row">
-                                            {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="fVigenciaTemporal">
+                    <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="pdfTemporal">
-                                        <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
-                                        <mat-cell *matCellDef="let row">
-                                            <a *ngIf="row.viaje.pdfTemporal"
-                                                [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
-                                                <img src="\assets\images\icon\pdf_32x32.png">
-                                            </a>
-                                        </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="pdfTemporal">
+                    <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                        <img src="\assets\images\icon\pdf_32x32.png">
+                      </a>
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="contenedor">
-                                        <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="contenedor">
+                    <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="tipo">
-                                        <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="peso">
-                                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="peso">
+                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="grado">
-                                        <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="grado">
+                    <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
-                                    </mat-header-row>
-                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                                    <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
-                                </mat-table>
-                                <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+                  <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                  </mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                </mat-table>
+                <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
                     </mat-paginator> -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </mat-tab>
+      </div>
+    </div>
+  </mat-tab>
 
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <div *ngIf="c40;else sincont40">
-                <i class="fas fa-cube"> 40' ( {{c40.length}} )</i>
-            </div>
-            <ng-template #sincont40>
-                <i class="fas fa-cube"> Contenedores 40' ( 0 )</i>
-            </ng-template>
-        </ng-template>
-        <div class="animated fadeIn" *ngIf="!cargando">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <!-- <div class="text-right">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div *ngIf="c40;else sincont40">
+        <i class="fas fa-cube"> 40' ( {{c40.length}} )</i>
+      </div>
+      <ng-template #sincont40>
+        <i class="fas fa-cube"> Contenedores 40' ( 0 )</i>
+      </ng-template>
+    </ng-template>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <!-- <div class="text-right">
             </div>
             <h3 class="card-title">Disponibles: ( <small>{{totalRegistros40}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
@@ -228,104 +224,102 @@
               </mat-form-field>
             </div> -->
 
-                        <div *ngFor="let g of groupedDisponibles40"><br>
-                            <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
-                            </h3>
-                            <div class="example-container mat-elevation-z8">
-                                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+            <div *ngFor="let g of groupedDisponibles40"><br>
+              <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
+              </h3>
+              <div class="example-container mat-elevation-z8">
+                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
 
-                                    <ng-container matColumnDef="fLlegada">
-                                        <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
-                                        </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
-                                    </ng-container>
+                  <ng-container matColumnDef="fLlegada">
+                    <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="viaje">
-                                        <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
-                                    </ng-container>
+                  <ng-container matColumnDef="viaje">
+                    <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="nombre">
-                                        <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="fVigenciaTemporal">
-                                        <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                                        <mat-cell *matCellDef="let row">
-                                            {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="fVigenciaTemporal">
+                    <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="pdfTemporal">
-                                        <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
-                                        <mat-cell *matCellDef="let row">
-                                            <a *ngIf="row.viaje.pdfTemporal"
-                                                [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
-                                                <img src="\assets\images\icon\pdf_32x32.png">
-                                            </a>
-                                        </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="pdfTemporal">
+                    <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                        <img src="\assets\images\icon\pdf_32x32.png">
+                      </a>
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="contenedor">
-                                        <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="contenedor">
+                    <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="tipo">
-                                        <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="peso">
-                                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="peso">
+                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <ng-container matColumnDef="grado">
-                                        <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
-                                        <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                                    </ng-container>
+                  <ng-container matColumnDef="grado">
+                    <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                  </ng-container>
 
-                                    <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
-                                    </mat-header-row>
-                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                                    <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
-                                </mat-table>
-                                <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                                    [showFirstLastButtons]>
-                                </mat-paginator>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                  </mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                  <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                </mat-table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+                </mat-paginator>
+              </div>
             </div>
+          </div>
         </div>
-    </mat-tab>
-    <mat-tab>
-        <ng-template mat-tab-label>
-            <div *ngIf="totalRegistrosLR > 0;else sincontLR">
-                <i class="fas fa-tint"> Lavado-Reparacion ( {{totalRegistrosLR}} )</i>
-            </div>
-            <ng-template #sincontLR>
-                <i class="fas fa-toolbox"> Lavado - Reparacion ( 0 )</i>
-            </ng-template>
-        </ng-template>
-        <br>
-        <div class="animated fadeIn" *ngIf="!cargando">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="text-right">
-                            <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div *ngIf="totalRegistrosLR > 0;else sincontLR">
+        <i class="fas fa-tint"> Lavado-Reparacion ( {{totalRegistrosLR}} )</i>
+      </div>
+      <ng-template #sincontLR>
+        <i class="fas fa-toolbox"> Lavado - Reparacion ( 0 )</i>
+      </ng-template>
+    </ng-template>
+    <br>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+              <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
                                                       <i class="fas fa-file-excel"></i> Exportar Excel
                                                   </button>
                                                   <button [routerLink]="['/buque2','nuevo']" type="button"
@@ -333,81 +327,92 @@
                                                       <i class="fa fa-plus"></i>
                                                       Añadir nuevo buque
                                                   </button> -->
-                        </div>
-                        <h3 class="card-title">Contenedores en Lavado Reparación : (
-                            <small>{{totalRegistrosLR}}</small> )</h3>
-         
-                        <div class="example-container mat-elevation-z8">
-                            <mat-table class="mat-table-medium" #MatSort2="matSort" [dataSource]="dataSourceLR" matSort>
+            </div>
+            <h3 class="card-title">Contenedores en Lavado Reparación : (
+              <small>{{totalRegistrosLR}}</small> )</h3>
 
-                                <ng-container matColumnDef="actions">
-                                    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <button
-                                            [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
-                                            class="btn btn-primary m-r-5">
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #MatSort2="matSort" [dataSource]="dataSourceLR" matSort>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
                                             <i class="fa fa-edit"></i>
                                         </button>
-                                    </mat-cell>
-                                </ng-container>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fLlegada">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="contenedor">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>contenedor</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="tipo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>tipo</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="peso">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>peso</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="cliente">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="agencia">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>peso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="lavado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.lavado}}
-                                    </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="reparaciones">
-                                    <mat-header-cell *matHeaderCellDef>Reparaciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <br>
-                                        <p *ngFor="let rep of row.reparaciones">
-                                            {{rep.reparacion}}
-                                        </p><br><br>
-                                    </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                </ng-container>
 
-                                <ng-container matColumnDef="grado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                                </ng-container>
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}}
+                  </mat-cell>
+                </ng-container>
 
-                                <mat-header-row *matHeaderRowDef="displayedColumnsLR" class="encabezado">
-                                </mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
-                            </mat-table>
-                            <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                                [showFirstLastButtons]>
-                            </mat-paginator>
-                        </div>
-                    </div>
-                </div>
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <br>
+                    <p *ngFor="let rep of row.reparaciones">
+                      {{rep.reparacion}}
+                    </p><br><br>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsLR" class="encabezado">
+                </mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
+              </mat-table>
+              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
             </div>
+          </div>
         </div>
-    </mat-tab>
+      </div>
+    </div>
+  </mat-tab>
 </mat-tab-group>
