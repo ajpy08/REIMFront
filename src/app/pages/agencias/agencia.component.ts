@@ -44,7 +44,8 @@ export class AgenciaComponent implements OnInit {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
       nombreComercial: [''],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
+      // rfc: ['', [Validators.required, Validators.minLength(12)]],
+      rfc: [''],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
