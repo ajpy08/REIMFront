@@ -39,7 +39,8 @@ export class TransportistaComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
+      // rfc: ['', [Validators.required, Validators.minLength(12)]],
+      rfc: [''],
       nombreComercial: [''],
       calle: [''],
       noExterior: [''],

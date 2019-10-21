@@ -41,7 +41,8 @@ export class NavieraComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
+      // rfc: ['', [Validators.required, Validators.minLength(12)]],
+      rfc: [''],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
