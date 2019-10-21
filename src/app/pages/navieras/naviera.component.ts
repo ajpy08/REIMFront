@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavieraService, SubirArchivoService } from 'src/app/services/service.index';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class NavieraComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private location: Location) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -156,14 +158,14 @@ export class NavieraComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    if ( this.tipoFile === 'img' ) {
-      if ( event.target.files[0] !== undefined) {
+    if (this.tipoFile === 'img') {
+      if (event.target.files[0] !== undefined) {
         this.fileImg = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
-      if ( this.tipoFile === 'formatoR1' ) {
-        if ( event.target.files[0] !== undefined ) {
+      if (this.tipoFile === 'formatoR1') {
+        if (event.target.files[0] !== undefined) {
           this.file = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
@@ -190,5 +192,9 @@ export class NavieraComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarNaviera();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

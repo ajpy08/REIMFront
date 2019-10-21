@@ -149,7 +149,7 @@ export class SolicitudTransportistaComponent implements OnInit {
     .subscribe(resp => this.camiones = resp.camiones);
   }
 
-  regresa()
+  back()
   {
 this.location.back();
 

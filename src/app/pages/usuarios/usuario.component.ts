@@ -5,6 +5,7 @@ import { Cliente } from '../../models/cliente.models';
 import { ClienteService, SubirArchivoService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ROLES_ARRAY } from '../../config/config';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-usuario',
@@ -24,7 +25,8 @@ export class UsuarioComponent implements OnInit {
     private _subirArchivoService: SubirArchivoService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private location: Location) {}
 
   ngOnInit() {
     this.createFormGroup();
@@ -150,5 +152,9 @@ export class UsuarioComponent implements OnInit {
         this.regForm.markAsPristine();
       });
     }
+  }
+
+  back() {
+    this.location.back();
   }
 }

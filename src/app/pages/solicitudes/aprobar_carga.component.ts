@@ -7,6 +7,7 @@ import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -19,50 +20,51 @@ export class AprobarCargaComponent implements OnInit {
   solicitud: Solicitud;
   usuario: Usuario;
 
-  constructor( public _usuarioService: UsuarioService,
+  constructor(public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
     private _ManiobraService: ManiobraService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
-    private fb: FormBuilder ) {
+    private fb: FormBuilder,
+    private location: Location) {
     this.usuario = this._usuarioService.usuario;
   }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.createFormGroup ();
+    this.createFormGroup();
     this.contenedores.removeAt(0);
-    this.cargarSolicitud( id );
+    this.cargarSolicitud(id);
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      _id: [{value: '', disabled: false}],
-      estatus: [{value: '', disabled: false}],
-      tipo: [{value: '', disabled: false}],
-      idagencia: [{value: '', disabled: false}],
-      agencia: [{value: '', disabled: true}],
-      blBooking: [{value: '', disabled: true}],
-      idcliente: [{value: '', disabled: false}],
-      cliente: [{value: '', disabled: true}],
-      credito: [{value: '', disabled: true}],
-      observaciones: [{value: '', disabled: true}],
-      rutaBL: [{value: '', disabled: true}],
-      rutaComprobante: [{value: '', disabled: true}],
-      correo: [{value: '', disabled: true}],
-      facturarA: [{value: '', disabled: true}],
-      rfc: [{value: '', disabled: true}],
-      razonSocial: [{value: '', disabled: true}],
-      calle: [{value: '', disabled: true}],
-      noExterior: [{value: '', disabled: true}],
-      noInterior: [{value: '', disabled: true}],
-      colonia: [{value: '', disabled: true}],
-      municipio: [{value: '', disabled: true}],
-      ciudad: [{value: '', disabled: true}],
-      estado: [{value: '', disabled: true}],
-      correoFac: [{value: '', disabled: true}],
-      cp: [{value: '', disabled: true}],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '','','') ])
+      _id: [{ value: '', disabled: false }],
+      estatus: [{ value: '', disabled: false }],
+      tipo: [{ value: '', disabled: false }],
+      idagencia: [{ value: '', disabled: false }],
+      agencia: [{ value: '', disabled: true }],
+      blBooking: [{ value: '', disabled: true }],
+      idcliente: [{ value: '', disabled: false }],
+      cliente: [{ value: '', disabled: true }],
+      credito: [{ value: '', disabled: true }],
+      observaciones: [{ value: '', disabled: true }],
+      rutaBL: [{ value: '', disabled: true }],
+      rutaComprobante: [{ value: '', disabled: true }],
+      correo: [{ value: '', disabled: true }],
+      facturarA: [{ value: '', disabled: true }],
+      rfc: [{ value: '', disabled: true }],
+      razonSocial: [{ value: '', disabled: true }],
+      calle: [{ value: '', disabled: true }],
+      noExterior: [{ value: '', disabled: true }],
+      noInterior: [{ value: '', disabled: true }],
+      colonia: [{ value: '', disabled: true }],
+      municipio: [{ value: '', disabled: true }],
+      ciudad: [{ value: '', disabled: true }],
+      estado: [{ value: '', disabled: true }],
+      correoFac: [{ value: '', disabled: true }],
+      cp: [{ value: '', disabled: true }],
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '')])
     });
   }
 
@@ -163,7 +165,7 @@ export class AprobarCargaComponent implements OnInit {
     return this.regForm.get('contenedores') as FormArray;
   }
 
-  creaContenedor(cont: string, tipo: string, estado: string, grado: string, transportista: string , patio: string , maniobra: string): FormGroup {
+  creaContenedor(cont: string, tipo: string, estado: string, grado: string, transportista: string, patio: string, maniobra: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
@@ -174,13 +176,13 @@ export class AprobarCargaComponent implements OnInit {
       maniobra: [maniobra]
     });
   }
-  addContenedor(cont: string, tipo: string, estado: string, grado: string, transportista: string , patio: string, maniobra: string): void {
+  addContenedor(cont: string, tipo: string, estado: string, grado: string, transportista: string, patio: string, maniobra: string): void {
     this.contenedores.push(this.creaContenedor(cont, tipo, estado, grado, transportista, patio, maniobra));
   }
-  
 
-  cargarSolicitud( id: string ) {
-    this._SolicitudService.getSolicitudIncludes( id ).subscribe( solicitud => {
+
+  cargarSolicitud(id: string) {
+    this._SolicitudService.getSolicitudIncludes(id).subscribe(solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
@@ -209,17 +211,21 @@ export class AprobarCargaComponent implements OnInit {
         this.contenedores.removeAt(0)
       }
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.contenedor , element.tipo, element.peso, element.grado, element.transportista.razonSocial,element.patio, element.maniobra);
+        this.addContenedor(element.contenedor, element.tipo, element.peso, element.grado, element.transportista.razonSocial, element.patio, element.maniobra);
       });
     });
   }
 
-  apruebaSolicitud( ) {
-//    if ( this.regForm.valid ) {
-     this._SolicitudService.apruebaSolicitudCarga(this.regForm.value).subscribe(res => {
+  apruebaSolicitud() {
+    //    if ( this.regForm.valid ) {
+    this._SolicitudService.apruebaSolicitudCarga(this.regForm.value).subscribe(res => {
       this.cargarSolicitud(this._id.value);
-      });
-    }
-//  }
+    });
+  }
+  //  }
+
+  back() {
+    this.location.back();
+  }
 
 }
