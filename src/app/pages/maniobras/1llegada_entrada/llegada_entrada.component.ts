@@ -197,4 +197,8 @@ export class LlegadaEntradaComponent implements OnInit {
         
       }
   }
+
+  back() {
+    this.location.back();
+  }
 }

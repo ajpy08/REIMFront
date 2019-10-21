@@ -9,7 +9,7 @@ import { AgenciaService, UsuarioService, TransportistaService, ClienteService, S
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
 import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
 import swal from 'sweetalert';
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -45,7 +45,8 @@ export class SolicitudCargaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private _subirArchivoService: SubirArchivoService) { }
+    private _subirArchivoService: SubirArchivoService,
+    private location: Location) { }
 
     ngOnInit() {
       this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
@@ -408,4 +409,7 @@ export class SolicitudCargaComponent implements OnInit {
     }
   }
 
+  back() {
+    this.location.back();
+  }
 }

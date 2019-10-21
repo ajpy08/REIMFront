@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angu
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import {ETAPAS_MANIOBRA} from '../../../config/config';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-revisar',
@@ -26,7 +27,8 @@ export class RevisarComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
     private fb: FormBuilder,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe,
+    private location: Location) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -234,5 +236,9 @@ guardaCambios() {
         this.mensajeError = error.error.mensaje;
     });
     }
+  }
+
+  back() {
+    this.location.back();
   }
 }

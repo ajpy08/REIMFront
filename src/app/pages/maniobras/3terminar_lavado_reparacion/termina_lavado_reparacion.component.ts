@@ -4,10 +4,11 @@ import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
 import { Reparacion } from '../../reparaciones/reparacion.models';
 import { ReparacionService } from '../../reparaciones/reparacion.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { Location } from '@angular/common';
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -27,9 +28,9 @@ export const MY_FORMATS = {
   selector: 'app-termina_lavado_reparacion',
   templateUrl: './termina_lavado_reparacion.component.html',
   providers: [DatePipe,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-    {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
   ],
 })
 
@@ -44,33 +45,34 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
-    private fb: FormBuilder, private datePipe: DatePipe) { }
+    private fb: FormBuilder, private datePipe: DatePipe,
+    private location: Location) { }
 
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarTiposReparaciones();
     this.createFormGroup();
     this.reparaciones.removeAt(0);
-    this.cargarManiobra( this.id );
+    this.cargarManiobra(this.id);
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
-      contenedor: [{value: '', disabled: true}],
-      tipo: [{value: '', disabled: true}],
-      cliente: [{value: '', disabled: true}],
-      agencia: [{value: '', disabled: true}],
-      transportista: [{value: '', disabled: true}],
-      camion: [{value: '', disabled: true}],
-      operador: [{value: '', disabled: true}],
-      fLlegada: [{value: '', disabled: true}],
-      hLlegada: [{value: '', disabled: true}],
-      hEntrada: [{value: '', disabled: true}],
-      hSalida: [{value: '', disabled: true}],
+      contenedor: [{ value: '', disabled: true }],
+      tipo: [{ value: '', disabled: true }],
+      cliente: [{ value: '', disabled: true }],
+      agencia: [{ value: '', disabled: true }],
+      transportista: [{ value: '', disabled: true }],
+      camion: [{ value: '', disabled: true }],
+      operador: [{ value: '', disabled: true }],
+      fLlegada: [{ value: '', disabled: true }],
+      hLlegada: [{ value: '', disabled: true }],
+      hEntrada: [{ value: '', disabled: true }],
+      hSalida: [{ value: '', disabled: true }],
       lavado: [''],
       lavadoObservacion: [''],
-      reparaciones: this.fb.array([ this.creaReparacion('', '', 0) ]),
+      reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
       reparacionesObservacion: [''],
       fIniLavado: [''],
       hIniLavado: [''],
@@ -169,12 +171,12 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
 
-  removeReparacion( index: number ) {
+  removeReparacion(index: number) {
     this.reparaciones.removeAt(index);
   }
 
-  cargarManiobra( id: string) {
-    this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
+  cargarManiobra(id: string) {
+    this._maniobraService.getManiobraConIncludes(id).subscribe(maniob => {
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.razonSocial);
@@ -273,39 +275,43 @@ export class TerminaLavadoReparacionComponent implements OnInit {
 
   cargarTiposReparaciones() {
     this._reparacionService.getReparaciones().subscribe((reparaciones) => {
-        this.tiposReparaciones = reparaciones.reparaciones;
+      this.tiposReparaciones = reparaciones.reparaciones;
     });
   }
 
 
-  ponHoraIniLavado( ) {
-    if (this.hIniLavado.value === undefined || this.hIniLavado.value === '' ) {
+  ponHoraIniLavado() {
+    if (this.hIniLavado.value === undefined || this.hIniLavado.value === '') {
       this.hIniLavado.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
 
   }
-  ponHoraFinLavado( ) {
+  ponHoraFinLavado() {
     if (this.hFinLavado.value === undefined || this.hFinLavado.value === '') {
       this.hFinLavado.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
   }
-  ponHoraIniReparacion( ) {
+  ponHoraIniReparacion() {
     if (this.hIniReparacion.value === undefined || this.hIniReparacion.value === '') {
       this.hIniReparacion.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
 
   }
-  ponHoraFinReparacion( ) {
+  ponHoraFinReparacion() {
     if (this.hFinReparacion.value === undefined || this.hFinReparacion.value === '') {
       this.hFinReparacion.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
     }
   }
 
-guardaCambios() {
+  guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.registraFinLavRep(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
       });
     }
+  }
+
+  back() {
+    this.location.back();
   }
 }

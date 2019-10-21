@@ -13,6 +13,7 @@ import { ROLES } from "../../config/config";
 
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Location } from '@angular/common';
 
 
 import * as _moment from 'moment';
@@ -59,7 +60,8 @@ export class CamionComponent implements OnInit {
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
     private serviceOperadores: OperadorService,
-    private usuarioService: UsuarioService) { }
+    private usuarioService: UsuarioService,
+    private location: Location) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -192,5 +194,9 @@ export class CamionComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarCamion();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

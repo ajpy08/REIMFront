@@ -317,7 +317,7 @@ export class FotosComponent implements OnInit {
     return false;
   }
 
-  atras() {
+  back() {
     this.location.back();
   }
 

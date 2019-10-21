@@ -3,6 +3,7 @@ import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ReparacionService } from 'src/app/pages/reparaciones/reparacion.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-reparacion',
@@ -16,7 +17,8 @@ export class ReparacionComponent implements OnInit {
   constructor(private reparacionService: ReparacionService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private location: Location) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -24,7 +26,7 @@ export class ReparacionComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarReparacion(id);
     } else {
-      for (var control in this.regForm.controls){
+      for (var control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
@@ -32,7 +34,8 @@ export class ReparacionComponent implements OnInit {
     // listen to input descripcion
     this.regForm.get('descripcion').valueChanges.subscribe(val => {
       this.regForm.get('descripcion').setValue(val.toUpperCase(), {
-        emitEvent: false});
+        emitEvent: false
+      });
     });
 
   }
@@ -45,7 +48,7 @@ export class ReparacionComponent implements OnInit {
     });
   }
 
-  
+
   get descripcion() {
     return this.regForm.get('descripcion');
   }
@@ -76,5 +79,9 @@ export class ReparacionComponent implements OnInit {
           this.regForm.markAsPristine();
         });
     }
+  }
+
+  back() {
+    this.location.back();
   }
 }

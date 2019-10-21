@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TransportistaService, SubirArchivoService} from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-transportista',
@@ -20,7 +21,8 @@ export class TransportistaComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private location: Location) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -192,5 +194,9 @@ export class TransportistaComponent implements OnInit {
         this.regForm.get(tipo).markAsDirty();
         this.guardarTransportista();
       });
+  }
+
+  back() {
+    this.location.back();
   }
 }

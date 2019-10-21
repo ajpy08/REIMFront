@@ -22,6 +22,7 @@ import { ModalUploadService } from '../../../components/modal-upload/modal-uploa
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
 import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI } from '../../../config/config';
 import swal from 'sweetalert';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -74,7 +75,8 @@ export class SolicitudDescargaComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder,
     public _subirArchivoService: SubirArchivoService,
-    public _modalUploadService: ModalUploadService) { }
+    public _modalUploadService: ModalUploadService,
+    private location: Location) { }
 
     ngOnInit() {
       this.usuarioLogueado = this._usuarioService.usuario;
@@ -540,5 +542,8 @@ export class SolicitudDescargaComponent implements OnInit {
     }
   }
 
+  back() {
+    this.location.back();
+  }
 }
 

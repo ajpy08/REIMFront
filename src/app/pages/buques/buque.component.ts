@@ -4,6 +4,7 @@ import { BuqueService, NavieraService } from '../../services/service.index';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from 'src/app/pages/navieras/navieras.models';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-buque',
@@ -14,13 +15,14 @@ export class BuqueComponent implements OnInit {
   buque: Buque = new Buque();
   navieras: Naviera[] = [];
   regForm: FormGroup;
-  
+
 
   constructor(public _buqueService: BuqueService,
     public _navieraService: NavieraService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,) {
+    private fb: FormBuilder,
+    private location: Location) {
   }
 
   ngOnInit() {
@@ -32,7 +34,7 @@ export class BuqueComponent implements OnInit {
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      
+
       this.cargarBuque(id);
     }
     else {
@@ -83,5 +85,9 @@ export class BuqueComponent implements OnInit {
           this.regForm.markAsPristine();
         });
     }
+  }
+
+  back() {
+    this.location.back();
   }
 }
