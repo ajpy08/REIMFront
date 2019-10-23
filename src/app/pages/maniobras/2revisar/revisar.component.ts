@@ -6,7 +6,7 @@ import { ReparacionService } from '../../reparaciones/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import {ETAPAS_MANIOBRA} from '../../../config/config';
+import {ETAPAS_MANIOBRA, GRADOS_CONTENEDOR_ARRAY} from '../../../config/config';
 import { Location } from '@angular/common';
 
 @Component({
@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 export class RevisarComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
-  grados: string[] = ['A', 'B', 'C'];
+  grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   mensajeError = '';
   constructor(
