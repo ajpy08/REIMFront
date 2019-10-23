@@ -105,7 +105,7 @@
               </mat-select> -->
 
               <mat-form-field>
-                <input type="text" placeholder="Selecciona un contenedor" aria-label="Number" matInput formControlName="contenedorTemp" [matAutocomplete]="auto" (change)="cargaContenedor($event.value)">
+                <input type="text" placeholder="Selecciona un contenedor" aria-label="Number" matInput formControlName="contenedorTemp" [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                   <mat-option *ngFor="let cont of contenedoresFiltrados | async" [value]="cont">
                     {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}

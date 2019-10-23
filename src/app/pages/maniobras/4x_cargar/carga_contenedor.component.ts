@@ -80,7 +80,7 @@ export class CargaContenedorComponent implements OnInit {
 
     this.contenedoresFiltrados = this.contenedorTemp.valueChanges.pipe(
       startWith(''),
-      map(value => typeof value === 'string' ? value : value.contenedor),
+      map(value => typeof value === 'string' || value===null ? value : value.contenedor),
       map(cont => cont ? this._filter(cont) : this.contenedores.slice())
     );
 
@@ -242,11 +242,11 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   cargaContenedor(maniobraDisponible) {
-    console.log(this.contenedorTemp.value);
-    this.contenedor.setValue(this.contenedorTemp.value.contenedor);
-    this.tipo.setValue(this.contenedorTemp.value.tipo);
-    this.grado.setValue(this.contenedorTemp.value.grado);
-    this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
+    // console.log(this.contenedorTemp.value);
+    // this.contenedor.setValue(this.contenedorTemp.value.contenedor);
+    // this.tipo.setValue(this.contenedorTemp.value.tipo);
+    // this.grado.setValue(this.contenedorTemp.value.grado);
+    // this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
   }
 
   ponHoraDescarga() {
@@ -262,11 +262,16 @@ export class CargaContenedorComponent implements OnInit {
 
 
   guardaCambios() {
+    this.contenedor.setValue(this.contenedorTemp.value.contenedor);
+    this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
+    this.tipo.setValue(this.contenedorTemp.value.tipo);
+    this.grado.setValue(this.contenedorTemp.value.grado);
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         this.mensajeExito = 'CONTENEDOR ASIGANDO CON EXITO';
         this.mensajeError = '';
+        this.contenedorTemp.setValue(null);
         if (res.estatus !== ETAPAS_MANIOBRA.XCARGAR) {
           this.router.navigate(['/maniobras']);
         }
