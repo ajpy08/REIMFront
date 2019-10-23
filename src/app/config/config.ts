@@ -23,8 +23,8 @@ export const ESTADOS_CONTENEDOR = {VACIO: 'VACIO',
                                   LLENO_EXPORT: 'LLENO_EXPORT' };
 export const ESTADOS_CONTENEDOR_ARRAY = ['VACIO', 'VACIO_IMPORT', 'VACIO_EXPORT', 'LLENO_IMPORT', 'LLENO_EXPORT'];
 
-export const GRADOS_CONTENEDOR = {A: 'A', B: 'B', C: 'C'};
-export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C'];
+export const GRADOS_CONTENEDOR = {A: 'A', B: 'B', C: 'C', PT: 'PT'};
+export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C', 'PT'];
 
 
 export const ROLES = {

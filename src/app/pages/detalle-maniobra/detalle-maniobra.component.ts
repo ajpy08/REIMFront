@@ -18,7 +18,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import { MatAccordion } from '@angular/material';
-import { ROLES } from 'src/app/config/config';
+import { ROLES, GRADOS_CONTENEDOR_ARRAY } from 'src/app/config/config';
 import { Location } from '@angular/common';
 const moment = _moment;
 
@@ -55,7 +55,7 @@ export class DetalleManiobraComponent implements OnInit {
   operadores: Operador[] = [];
   camiones: Camion[] = [];
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
-  grados: string[] = ['A', 'B', 'C'];
+  grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   regForm: FormGroup;
   maniobra: Maniobra;

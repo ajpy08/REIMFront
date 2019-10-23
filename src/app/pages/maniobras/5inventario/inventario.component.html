@@ -25,11 +25,15 @@
         <div class="card">
           <div class="card-body">
             <div class="text-right">
+              <button (click)="exportAsXLSX(dataSource, 'Contenedores Disponibles')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i> Exportar Excel
+              </button>
             </div>
             <h3 class="card-title">Disponibles: ( <small>{{totalRegistros}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -96,6 +100,106 @@
         </div>
       </div>
     </div>
+
+
+    <h2 class="text-center" mat-header>STOCK GENERAL REIM CONTAINER PARK</h2>
+    <mat-list>      
+      <h3 mat-line>Contenedores Disponibles 20" ( {{c20?.length}} )</h3>
+      <mat-list-item *ngFor="let g20 of groupedDisponibles20">
+        <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
+        <h4 mat-subheader>Contenedores {{g20.tipo}}: ( {{g20.maniobras.length}} )</h4>
+        <mat-list-item>
+          <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} - 'A' - DISPONIBLES </h4>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('B', 'DISPONIBLE', g20.maniobras)}} - 'B' - DISPONIBLES </h4>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}} - 'C' - DISPONIBLES </h4>
+        </mat-list-item>
+        <mat-divider></mat-divider><br><br>
+        <!-- <h3  mat-subheader>Contenedores Reparación 20" ( {{c20?.length}} )</h3> -->
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
+          <!-- <h4 mat-subheader>Reparaciones {{g20.tipo}}: ( {{cuentaReparaciones('', g20.tipo, dataSourceLR.data)}} )</h4> -->
+          <mat-list-item>
+            <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} - 'A' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} - 'B' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} - 'C' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}} - 'PT' - PERDIDA TOTAL </h4>
+          </mat-list-item>
+        </mat-list-item>
+      </mat-list-item>
+
+      <br><br>
+      <h3 mat-line>Contenedores Disponibles 40" ( {{c40?.length}} )</h3>
+      <mat-list-item *ngFor="let g40 of groupedDisponibles40">
+        <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
+        <h4 mat-subheader>Contenedores {{g40.tipo}}: ( {{g40.maniobras.length}} )</h4>
+        <mat-list-item>
+          <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} - 'A' - DISPONIBLES </h4>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('B', 'DISPONIBLE', g40.maniobras)}} - 'B' - DISPONIBLES </h4>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+          <h4 mat-line> {{cuentaInventario('C', 'DISPONIBLE', g40.maniobras)}} - 'C' - DISPONIBLES </h4>
+        </mat-list-item>
+
+        <mat-divider></mat-divider><br><br>
+        <!-- <h3  mat-subheader>Contenedores Reparación 40" ( {{c40?.length}} )</h3> -->
+        <mat-list-item>
+          <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
+          <!-- <h4 mat-subheader>Reparaciones {{g40.tipo}}: ( {{cuentaReparaciones('', g40.tipo, g40.maniobras)}} )</h4> -->
+          <mat-list-item>
+            <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} - 'A' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} - 'B' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} - 'C' - REPARACIONES </h4>
+          </mat-list-item>
+
+          <mat-list-item>
+            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
+            <h4 mat-line> {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}} - 'PT' - PERDIDA TOTAL </h4>
+          </mat-list-item>
+        </mat-list-item>
+      </mat-list-item>
+
+      <mat-divider></mat-divider><br>
+
+    </mat-list>
+
   </mat-tab>
 
   <mat-tab>
@@ -120,81 +224,94 @@
                   placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div> -->
-            <div *ngFor="let g of groupedDisponibles20"><br>
-              <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
-              </h3>
-              <div class="example-container mat-elevation-z8">
-                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+            <mat-accordion [multi]="true" #firstAccordion="matAccordion">
+              <div *ngFor="let g of groupedDisponibles20"><br>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Contenedores {{g.tipo}}: ( {{g.maniobras.length}} )
+                    </mat-panel-title>
+                    <!-- <mat-panel-description>
+                     Total: ( <small>{{g.maniobras.length}}</small> )
+                    </mat-panel-description> -->
+                  </mat-expansion-panel-header>
+                  <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
+                  </h3>
+                  <div class="example-container mat-elevation-z8">
+                    <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
 
-                  <ng-container matColumnDef="fLlegada">
-                    <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
-                    </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
-                  </ng-container>
+                      <ng-container matColumnDef="fLlegada">
+                        <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
+                      </ng-container>
 
-                  <ng-container matColumnDef="viaje">
-                    <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
-                  </ng-container>
+                      <ng-container matColumnDef="viaje">
+                        <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                      </ng-container>
 
-                  <ng-container matColumnDef="nombre">
-                    <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="fVigenciaTemporal">
-                    <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                      {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="fVigenciaTemporal">
+                        <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="pdfTemporal">
-                    <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                      <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
-                        <img src="\assets\images\icon\pdf_32x32.png">
-                      </a>
-                    </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="pdfTemporal">
+                        <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                            target="_blank">
+                            <img src="\assets\images\icon\pdf_32x32.png">
+                          </a>
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="contenedor">
-                    <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="contenedor">
+                        <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="tipo">
-                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="tipo">
+                        <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="peso">
-                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="peso">
+                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="grado">
-                    <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="grado">
+                        <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
-                  </mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                  <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
-                </mat-table>
-                <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      </mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                    </mat-table>
+                    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
                     </mat-paginator> -->
+                  </div>
+                </mat-expansion-panel>
               </div>
-            </div>
+            </mat-accordion>
           </div>
         </div>
       </div>
@@ -223,82 +340,94 @@
                   placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div> -->
+            <mat-accordion [multi]="true" #secondAccordion="matAccordion">
+              <div *ngFor="let g of groupedDisponibles40"><br>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Contenedores {{g.tipo}}: ( {{g.maniobras.length}} )
+                    </mat-panel-title>
+                    <!-- <mat-panel-description>
+                      Total: ( <small>{{g.maniobras.length}}</small> )
+                    </mat-panel-description> -->
+                  </mat-expansion-panel-header>
+                  <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
+                  </h3>
+                  <div class="example-container mat-elevation-z8">
+                    <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
 
-            <div *ngFor="let g of groupedDisponibles40"><br>
-              <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
-              </h3>
-              <div class="example-container mat-elevation-z8">
-                <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+                      <ng-container matColumnDef="fLlegada">
+                        <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
+                      </ng-container>
 
-                  <ng-container matColumnDef="fLlegada">
-                    <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}}
-                    </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
-                  </ng-container>
+                      <ng-container matColumnDef="viaje">
+                        <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                      </ng-container>
 
-                  <ng-container matColumnDef="viaje">
-                    <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
-                  </ng-container>
+                      <ng-container matColumnDef="nombre">
+                        <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="nombre">
-                    <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="fVigenciaTemporal">
+                        <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="fVigenciaTemporal">
-                    <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                      {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="pdfTemporal">
+                        <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                            target="_blank">
+                            <img src="\assets\images\icon\pdf_32x32.png">
+                          </a>
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="pdfTemporal">
-                    <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
-                    <mat-cell *matCellDef="let row">
-                      <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
-                        <img src="\assets\images\icon\pdf_32x32.png">
-                      </a>
-                    </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="contenedor">
+                        <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="contenedor">
-                    <mat-header-cell *matHeaderCellDef>Contenedor</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="tipo">
+                        <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="tipo">
-                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="peso">
+                        <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="peso">
-                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
+                      <ng-container matColumnDef="grado">
+                        <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
 
-                  <ng-container matColumnDef="grado">
-                    <mat-header-cell *matHeaderCellDef>Grado</mat-header-cell>
-                    <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                    <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
-                  </ng-container>
-
-                  <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
-                  </mat-header-row>
-                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                  <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
-                </mat-table>
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-                </mat-paginator>
+                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      </mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                    </mat-table>
+                    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+                    </mat-paginator> -->
+                  </div>
+                </mat-expansion-panel>
               </div>
-            </div>
+            </mat-accordion>
           </div>
         </div>
       </div>
@@ -319,14 +448,10 @@
         <div class="card">
           <div class="card-body">
             <div class="text-right">
-              <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
-                                                      <i class="fas fa-file-excel"></i> Exportar Excel
-                                                  </button>
-                                                  <button [routerLink]="['/buque2','nuevo']" type="button"
-                                                      class="btn btn-info waves-effect waves-light m-r-5">
-                                                      <i class="fa fa-plus"></i>
-                                                      Añadir nuevo buque
-                                                  </button> -->
+              <button (click)="exportAsXLSX(dataSourceLR, 'Contenedores en Lavado - Reparacion')"
+                class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i> Exportar Excel
+              </button>
             </div>
             <h3 class="card-title">Contenedores en Lavado Reparación : (
               <small>{{totalRegistrosLR}}</small> )</h3>
@@ -337,9 +462,10 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
+                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit"></i>
+                    </button>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="fLlegada">
@@ -407,7 +533,8 @@
                 </mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
+                [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
