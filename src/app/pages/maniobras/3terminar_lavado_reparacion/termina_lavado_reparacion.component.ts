@@ -10,6 +10,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Location } from '@angular/common';
 import * as _moment from 'moment';
+import { GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -38,7 +39,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   tiposReparaciones: Reparacion[] = [];
-  grados: string[] = ['A', 'B', 'C'];
+  grados = GRADOS_CONTENEDOR_ARRAY;
   id: string;
   constructor(
     public _maniobraService: ManiobraService,

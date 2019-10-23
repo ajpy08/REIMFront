@@ -3,9 +3,10 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ManiobraService } from '../maniobra.service';
 import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from '../../../config/config';
 import { Maniobra } from 'src/app/models/maniobra.models';
-import { UsuarioService } from 'src/app/services/service.index';
+import { UsuarioService, ExcelService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
+declare var swal: any;
 
 @Component({
   selector: 'app-inventario',
@@ -19,28 +20,30 @@ export class InventarioComponent implements OnInit {
   totalRegistros: number = 0;
   totalRegistrosLR: number = 0;
   displayedColumns = ['fLlegada', 'viaje', 'nombre', 'fVigenciaTemporal', 'pdfTemporal', 'contenedor', 'tipo', 'peso', 'grado'];
-  displayedColumnsLR = ['fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
+  displayedColumnsLR = ['fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
   dataSource: any;
   dataSourceLR: any;
   c40: any;
   c20: any;
   groupedDisponibles20: any;
   groupedDisponibles40: any;
+  datosExcel = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('MatPaginatorLR', {read: MatPaginator}) MatPaginatorLR: MatPaginator;
+  @ViewChild('MatPaginatorLR', { read: MatPaginator }) MatPaginatorLR: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("MatSort2") MatSort2: MatSort;
-  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService) { }
+  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService,
+    private _excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarInventario();
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
-      this.displayedColumnsLR = ['actions', 'fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
+      this.displayedColumnsLR = ['actions', 'fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
     } else {
-      this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre','contenedor', 'tipo', 'peso',  'grado', 'lavado', 'reparaciones'];
+      this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
     }
   }
 
@@ -106,10 +109,9 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      
+
       this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE)
         .subscribe(maniobras => {
-          console.log(maniobras.maniobras);
           this.c20 = maniobras.maniobras.filter(m => m.tipo.includes('20'));
 
           const grouped20 = this.c20.reduce((curr, m) => {
@@ -196,5 +198,57 @@ export class InventarioComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  CreaDatosExcel(datos) {
+    //console.log(datos)
+    datos.forEach(d => {
+      // console.log(d)
+      var dato = {
+        EntradaPatio: d.fLlegada,
+        Viaje: d.viaje.viaje,
+        Buque: d.viaje.buque.nombre,
+        VigenciaTemporal: d.viaje.fVigenciaTemporal,
+        Contenedor: d.contenedor,
+        Tipo: d.tipo,
+        Estado: d.peso,
+        Grado: d.grado,
+        // operador: d.operador != undefined ? d.operador.nombre : '',
+        FAlta: d.fAlta.substring(0, 10)
+      };
+      this.datosExcel.push(dato);
+    });
+  }
+
+  exportAsXLSX(dataSource, nombre: string): void {
+    this.CreaDatosExcel(dataSource.filteredData);
+    if (this.datosExcel) {
+      this._excelService.exportAsExcelFile(this.datosExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  cuentaInventario(grado: string, estatus: string, source: any): number {
+    let count = 0;
+    source.forEach(d => {
+      if (d.grado == grado && d.estatus == estatus) {
+        count++;
+      }
+    });
+    return count;
+  }
+
+  cuentaReparaciones(grado: string, tipo: string, source: any): number {
+    let count = 0;
+    source.forEach(d => {
+      if (d.grado == grado && d.tipo == tipo && d.reparaciones.length > 0) {
+        count++;
+      }
+      // } else if (grado == '' && d.tipo == tipo && d.reparaciones.length > 0) {
+      //   count++;
+      // }
+    });
+    return count;
   }
 }
