@@ -594,4 +594,11 @@ export class FacturacionManiobrasComponent implements OnInit {
       }
     });
   }
+
+
+  corregirContenedor(id) {
+    this._maniobraService.corrigeContenedor(id).subscribe(res => {
+      id.contenedor = 'CORREGIDO';
+    });
+  }
 }

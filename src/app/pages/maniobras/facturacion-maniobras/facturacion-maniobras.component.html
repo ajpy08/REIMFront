@@ -80,6 +80,9 @@
                     <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
+                    <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
+                      <i class="fa fa-eye" aria-hidden="true">Corregir</i>
+                    </button>
                   </mat-cell>
                 </ng-container>
 
@@ -269,6 +272,9 @@
                     <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
+                    <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
+                      <i class="fa fa-eye" aria-hidden="true">Corregir</i>
+                    </button>
                   </mat-cell>
                 </ng-container>
 
@@ -456,6 +462,9 @@
                   <mat-cell *matCellDef="let row">
                     <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
+                      <i class="fa fa-eye" aria-hidden="true">Corregir</i>
                     </button>
                   </mat-cell>
                 </ng-container>

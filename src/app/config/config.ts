@@ -1,6 +1,6 @@
 
 // export let URL_SERVICIOS = 'http://187.210.87.57:3000';
-export let URL_SERVICIOS = 'http://localhost:3000';
+ export let URL_SERVICIOS = 'http://localhost:3000';
 // export let URL_SERVICIOS = 'http://ec2-3-84-218-133.compute-1.amazonaws.com:3000';
 
 
