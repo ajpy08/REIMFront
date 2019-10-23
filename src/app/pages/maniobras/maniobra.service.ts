@@ -245,6 +245,14 @@ export class ManiobraService {
       }));
   }
 
+  corrigeContenedor(maniobra: Maniobra): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/' + maniobra._id + '/corrige_contenedor';
+    return this.http.put(url, maniobra)
+    .pipe(map((resp: any) => {
+      swal('Datos actualizados con éxito', '', 'success');
+      return resp.maniobra;
+    }));
+  }
 
   cargarManiobras(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
@@ -404,4 +412,7 @@ export class ManiobraService {
         return true;
       }));
   }
+
+  
+
 }
