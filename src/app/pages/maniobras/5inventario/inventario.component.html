@@ -100,108 +100,74 @@
         </div>
       </div>
     </div>
+    <mat-divider></mat-divider>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <img src="../../../../assets/images/logo_reim_container_park.jpg" width=224 height=60>
+          <h2 class="text-center" mat-header>STOCK GENERAL REIM CONTAINER PARK</h2>
+        </div>
+      </div>
+    </div>
 
-
-    <h2 class="text-center" mat-header>STOCK GENERAL REIM CONTAINER PARK</h2>
-    <mat-list>      
-      <h3 mat-line>Contenedores Disponibles 20" ( {{c20?.length}} )</h3>
+    <mat-divider></mat-divider>
+    <mat-list>
+      <h3 mat-line><b>TOTAL</b> Contenedores Disponibles 20" ( {{c20?.length}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
-        <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
-        <h4 mat-subheader>Contenedores {{g20.tipo}}: ( {{g20.maniobras.length}} )</h4>
-        <mat-list-item>
-          <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} - 'A' - DISPONIBLES </h4>
-        </mat-list-item>
-
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('B', 'DISPONIBLE', g20.maniobras)}} - 'B' - DISPONIBLES </h4>
-        </mat-list-item>
-
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}} - 'C' - DISPONIBLES </h4>
-        </mat-list-item>
-        <mat-divider></mat-divider><br><br>
-        <!-- <h3  mat-subheader>Contenedores Reparación 20" ( {{c20?.length}} )</h3> -->
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
-          <!-- <h4 mat-subheader>Reparaciones {{g20.tipo}}: ( {{cuentaReparaciones('', g20.tipo, dataSourceLR.data)}} )</h4> -->
-          <mat-list-item>
-            <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} - 'A' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} - 'B' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} - 'C' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}} - 'PT' - PERDIDA TOTAL </h4>
-          </mat-list-item>
-        </mat-list-item>
+        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
+        <h4 mat-line><b>Contenedores Disponibles {{g20.tipo}}: ( {{g20.maniobras.length}} )</b></h4>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} |
+              'A' | DISPONIBLES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaInventario('B', 'DISPONIBLE', g20.maniobras)}} |
+              'B' | DISPONIBLES</i></span></p>
+        <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}} |
+              'C' | DISPONIBLES</i></span></p>
+        <mat-divider></mat-divider>
+        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} |
+              'A' | REPARACIONES</i></span></p>
+        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} |
+              'B' | REPARACIONES</i></span></p>
+        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} |
+              'C' | REPARACIONES</i></span></p>
+        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}}
+              | 'PT' | PERDIDA TOTAL</i></span></p>
       </mat-list-item>
-
-      <br><br>
-      <h3 mat-line>Contenedores Disponibles 40" ( {{c40?.length}} )</h3>
-      <mat-list-item *ngFor="let g40 of groupedDisponibles40">
-        <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
-        <h4 mat-subheader>Contenedores {{g40.tipo}}: ( {{g40.maniobras.length}} )</h4>
-        <mat-list-item>
-          <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} - 'A' - DISPONIBLES </h4>
-        </mat-list-item>
-
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('B', 'DISPONIBLE', g40.maniobras)}} - 'B' - DISPONIBLES </h4>
-        </mat-list-item>
-
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-          <h4 mat-line> {{cuentaInventario('C', 'DISPONIBLE', g40.maniobras)}} - 'C' - DISPONIBLES </h4>
-        </mat-list-item>
-
-        <mat-divider></mat-divider><br><br>
-        <!-- <h3  mat-subheader>Contenedores Reparación 40" ( {{c40?.length}} )</h3> -->
-        <mat-list-item>
-          <mat-icon mat-list-icon><i class="fas fa-chevron-right"></i></mat-icon>
-          <!-- <h4 mat-subheader>Reparaciones {{g40.tipo}}: ( {{cuentaReparaciones('', g40.tipo, g40.maniobras)}} )</h4> -->
-          <mat-list-item>
-            <mat-icon mat-list-icon> <i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} - 'A' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} - 'B' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} - 'C' - REPARACIONES </h4>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon mat-list-icon><i class="fas fa-caret-right"></i></mat-icon>
-            <h4 mat-line> {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}} - 'PT' - PERDIDA TOTAL </h4>
-          </mat-list-item>
-        </mat-list-item>
-      </mat-list-item>
-
       <mat-divider></mat-divider><br>
-
     </mat-list>
-
+    <mat-list>
+      <br>
+      <h3 mat-line><b>TOTAL</b> Contenedores Disponibles 40" ( {{c40?.length}} )</h3>
+      <mat-list-item *ngFor="let g40 of groupedDisponibles40">
+        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
+        <h4 mat-line><b>Contenedores Disponibles {{g40.tipo}}: ( {{g40.maniobras.length}} )</b></h4>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} | 'A' |
+              DISPONIBLES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaInventario('B', 'DISPONIBLE', g40.maniobras)}} |
+              'B' | DISPONIBLES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g40.maniobras)}} |
+              'C' | DISPONIBLES</i></span></p>
+        <mat-divider></mat-divider>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} |
+              'A' | REPARACIONES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} |
+              'B' | REPARACIONES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} |
+              'C' | REPARACIONES</i></span></p>
+        <p matLine>
+          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}}
+              | 'PT' | PERDIDA TOTAL</i></span></p>
+        <mat-divider></mat-divider><br>
+      </mat-list-item>
+    </mat-list>
   </mat-tab>
-
   <mat-tab>
     <ng-template mat-tab-label>
       <div *ngIf="c20;else sincont20">
