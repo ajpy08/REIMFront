@@ -49,7 +49,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceDescargas.paginator = this.paginator;
           this.totalRegistros = maniobras.total;
         });
-      this._maniobraService.getManiobras('C', 'TRANSITO', this.usuarioLogueado.empresas[0]._id, null, null, 'VACIO,LLENO_IMPORT,LLENO_EXPORT')
+      this._maniobraService.getManiobras('C', 'TRANSITO', this.usuarioLogueado.empresas[0]._id, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT')
         .subscribe(maniobras => {
           // this.totalRegistrosCargas = maniobras.total;
           // this.maniobrasCarga = maniobras.maniobras;
@@ -71,7 +71,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceDescargas.paginator = this.paginator;
           this.totalRegistros = maniobras.total;          
         });
-      this._maniobraService.getManiobras('C', 'TRANSITO', null, null, null, 'VACIO,LLENO_IMPORT,LLENO_EXPORT')
+      this._maniobraService.getManiobras('C', 'TRANSITO', null, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT')
         .subscribe(maniobras => {
           // this.totalRegistrosCargas = maniobras.total;
           // this.maniobrasCarga = maniobras.maniobras;

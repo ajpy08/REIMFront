@@ -16,6 +16,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { DatePipe } from '@angular/common';
 import { ETAPAS_MANIOBRA } from '../../../config/config';
 import { Location } from '@angular/common';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -53,6 +56,8 @@ export class CargaContenedorComponent implements OnInit {
   mensajeExito = '';
   mensajeError = '';
 
+  contenedoresFiltrados: Observable<Maniobra[]>;
+
   constructor(
     public _maniobraService: ManiobraService,
     public _transportistaService: TransportistaService,
@@ -73,11 +78,40 @@ export class CargaContenedorComponent implements OnInit {
     this.createFormGroup();
     this.cargarManiobra(id);
 
+    this.contenedoresFiltrados = this.contenedorTemp.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' || value===null ? value : value.contenedor),
+      map(cont => cont ? this._filter(cont) : this.contenedores.slice())
+    );
+
   }
+//   private _filter(value: string): Maniobra[] {
+//     const filterValue = value.toLowerCase();
+//     let filtrados: Maniobra[] = [];
+//     this.contenedores.forEach(element => {
+//       if (element.contenedor.toLowerCase().indexOf(filterValue) === 0) {
+//         filtrados.push(element);
+//       }
+//     });
+//   return filtrados;
+// //    return this.contenedores.contenedor.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+//   }
+
+  private _filter(cont: string): Maniobra[] {
+    const filterValue = cont.toLowerCase();
+
+    return this.contenedores.filter(option => option.contenedor.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  displayFn(maniobra?: Maniobra): string | undefined {
+    return maniobra ? maniobra.contenedor + ' | Grado: ' + maniobra.grado + ' | Tamaño:' + maniobra.tipo : undefined;
+  }
+
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
       contenedor: [''],
+      contenedorTemp: [''],
       tipo: [''],
       grado: [''],
       maniobraAsociada: [''],
@@ -101,6 +135,9 @@ export class CargaContenedorComponent implements OnInit {
   }
   get contenedor() {
     return this.regForm.get('contenedor');
+  }
+  get contenedorTemp() {
+    return this.regForm.get('contenedorTemp');
   }
   get tipo() {
     return this.regForm.get('tipo');
@@ -205,10 +242,11 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   cargaContenedor(maniobraDisponible) {
-    this.contenedor.setValue(maniobraDisponible.contenedor);
-    this.tipo.setValue(maniobraDisponible.tipo);
-    this.grado.setValue(maniobraDisponible.grado);
-    this.maniobraAsociada.setValue(maniobraDisponible._id);
+    // console.log(this.contenedorTemp.value);
+    // this.contenedor.setValue(this.contenedorTemp.value.contenedor);
+    // this.tipo.setValue(this.contenedorTemp.value.tipo);
+    // this.grado.setValue(this.contenedorTemp.value.grado);
+    // this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
   }
 
   ponHoraDescarga() {
@@ -224,11 +262,16 @@ export class CargaContenedorComponent implements OnInit {
 
 
   guardaCambios() {
+    this.contenedor.setValue(this.contenedorTemp.value.contenedor);
+    this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
+    this.tipo.setValue(this.contenedorTemp.value.tipo);
+    this.grado.setValue(this.contenedorTemp.value.grado);
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         this.mensajeExito = 'CONTENEDOR ASIGANDO CON EXITO';
         this.mensajeError = '';
+        this.contenedorTemp.setValue(null);
         if (res.estatus !== ETAPAS_MANIOBRA.XCARGAR) {
           this.router.navigate(['/maniobras']);
         }
@@ -238,7 +281,9 @@ export class CargaContenedorComponent implements OnInit {
       });
     }
   }
-  
+
+
+
   back() {
     this.location.back();
   }
