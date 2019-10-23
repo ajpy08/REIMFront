@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 import { Solicitud } from './solicitud.models';
 import { SolicitudService, UsuarioService } from '../../services/service.index';
 
@@ -32,6 +32,7 @@ export class SolicitudesComponent implements OnInit {
       });
       this._solicitudService.getSolicitudes('C')
       .subscribe(res => {
+        
         this.totalRegistrosCargas = res.total;
         this.solicitudesCarga = res.solicitudes;
         this.cargando = false;
