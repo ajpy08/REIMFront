@@ -34,7 +34,7 @@ export class TransportistaService {
       url += '?token=' + this._usuarioService.token;           
       return this.http.put( url, transportista )
                 .pipe(map( (resp: any) => {
-                  swal('Transportista Actualizado', transportista.razonSocial, 'success');
+                  swal('Transportista Actualizado', transportista.nombreComercial, 'success');
                   return resp.transportista;
                 }));
 
@@ -42,7 +42,7 @@ export class TransportistaService {
       url += '?token=' + this._usuarioService.token;
       return this.http.post( url, transportista )
               .pipe(map( (resp: any) => {
-                swal('Transportista Creado', transportista.razonSocial, 'success');
+                swal('Transportista Creado', transportista.nombreComercial, 'success');
                 return resp.transportista;
               }));
     }

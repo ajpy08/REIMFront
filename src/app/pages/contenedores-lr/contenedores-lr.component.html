@@ -46,7 +46,7 @@
 
             <ng-container matColumnDef="naviera">
               <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.razonSocial}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="contenedor">
@@ -67,12 +67,12 @@
 
             <ng-container matColumnDef="cliente">
               <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="aa">
               <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}}</mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="lavado">

@@ -103,7 +103,7 @@ export class ClientesComponent implements OnInit {
   borrarCliente(cliente: Cliente) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + cliente.razonSocial,
+      text: 'Esta apunto de borrar a ' + cliente.nombreComercial,
       icon: 'warning',
       buttons: true,
       dangerMode: true,

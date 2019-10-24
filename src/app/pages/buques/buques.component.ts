@@ -68,7 +68,7 @@ export class BuquesComponent implements OnInit {
       var buque = {
         //Id: b._id,
         Buque: b.nombre,
-        Naviera: b.naviera.razonSocial,
+        Naviera: b.naviera.nombreComercial,
         UsuarioAlta: b.usuarioAlta.nombre,
         FAlta: b.fAlta.substring(0, 10)
       };

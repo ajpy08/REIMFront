@@ -15,7 +15,7 @@
                   <mat-label>Naviera</mat-label>
                   <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text" placeholder="Seleccione una naviera">
                     <mat-option *ngFor="let nav of navieras" [value]="nav._id">
-                      {{nav.razonSocial}}
+                      {{nav.nombreComercial}}
                     </mat-option>
                   </mat-select>
                   <mat-hint>Seleccione una naviera.</mat-hint>
@@ -61,7 +61,7 @@
                   <mat-label>Agencia</mat-label>
                   <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
-                      {{ag.razonSocial}}
+                      {{ag.nombreComercial}}
                     </mat-option>
                   </mat-select>
                   <mat-hint>Seleccione una Agencia Aduanal.</mat-hint>
@@ -72,7 +72,7 @@
                   <mat-label>Cliente</mat-label>
                   <mat-select formControlName="cliente" type="text" placeholder="Seleccione un cliente">
                     <mat-option *ngFor="let cli of clientes" [value]="cli._id">
-                      {{cli.razonSocial}}
+                      {{cli.nombreComercial}}
                     </mat-option>
                   </mat-select>
                   <mat-hint>Seleccione un cliente.</mat-hint>
@@ -251,7 +251,7 @@
                   <mat-label>Transportista</mat-label>
                   <mat-select formControlName="transportistaTemp">
                     <mat-option *ngFor="let transportista of transportistas" [value]="transportista">
-                      {{transportista.razonSocial}}
+                      {{transportista.nombreComercial}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -325,7 +325,7 @@
             <i class="fa fa-save "></i>
             Guardar
           </button>
-          <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button> -->
           </div>
         </form>

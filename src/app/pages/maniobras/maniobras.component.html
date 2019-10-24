@@ -28,8 +28,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterTransito($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterTransito($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -38,8 +37,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']"
-                      class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -67,7 +65,7 @@
 
                 <ng-container matColumnDef="transportista">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
@@ -87,12 +85,12 @@
 
                 <ng-container matColumnDef="cliente">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
 
@@ -121,8 +119,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterEspera($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterEspera($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -131,8 +128,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']"
-                      class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -160,7 +156,7 @@
 
                 <ng-container matColumnDef="transportista">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
@@ -180,12 +176,12 @@
 
                 <ng-container matColumnDef="cliente">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsEspera" class="encabezado"></mat-header-row>
@@ -212,8 +208,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterRevision($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterRevision($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -230,8 +225,7 @@
                 <ng-container matColumnDef="descargaAutorizada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Descarga Autorizada</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.descargaAutorizada"
-                      (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.descargaAutorizada" (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="folio">
@@ -251,7 +245,7 @@
 
                 <ng-container matColumnDef="transportista">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
@@ -271,12 +265,12 @@
 
                 <ng-container matColumnDef="cliente">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="grado">
@@ -292,8 +286,7 @@
                 <ng-container matColumnDef="fotosreparacion">
                   <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/fotos', row._id]"
-                      [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                    <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
                       Fotos
                     </button>
@@ -303,8 +296,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
-              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                [showFirstLastButtons]>
+              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -325,8 +317,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterLavadoRevision($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterLavadoRevision($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -335,8 +326,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
-                      class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -359,12 +349,12 @@
 
                 <ng-container matColumnDef="cliente">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="lavado">
@@ -421,8 +411,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterXCargar($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterXCargar($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -432,8 +421,7 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
 
-                    <button [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']"
-                      class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -445,7 +433,7 @@
 
                 <ng-container matColumnDef="transportista">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.transportista?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="grado">
@@ -465,19 +453,18 @@
 
                 <ng-container matColumnDef="cliente">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="agencia">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
-              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                [showFirstLastButtons]>
+              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>

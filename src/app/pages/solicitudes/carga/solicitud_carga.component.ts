@@ -242,7 +242,7 @@ export class SolicitudCargaComponent implements OnInit {
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.peso, element.grado,
                             element.maniobra, element.transportista, 
-                            element.transportista.razonSocial, element.patio, '');
+                            element.transportista.nombreComercial, element.patio, '');
       });
 
       if (solicitud.estatus === 'APROBADA') {
@@ -298,7 +298,7 @@ export class SolicitudCargaComponent implements OnInit {
     }
       this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value ,
         undefined, this.transportistaTemp.value._id, 
-        this.transportistaTemp.value.razonSocial, this.patioTemp.value, '');
+        this.transportistaTemp.value.nombreComercial, this.patioTemp.value, '');
       this.contenedorTemp.setValue('');
       this.tipoTemp.setValue('');
   }

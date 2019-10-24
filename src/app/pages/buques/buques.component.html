@@ -17,8 +17,7 @@
           <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
             <i class="fas fa-file-excel"></i> Exportar Excel
           </button>
-          <button [routerLink]="['/buques/buque','nuevo']" type="button"
-            class="btn btn-info waves-effect waves-light m-r-5">
+          <button [routerLink]="['/buques/buque','nuevo']" type="button" class="btn btn-info waves-effect waves-light m-r-5">
             <i class="fa fa-plus"></i>
             Añadir nuevo buque
           </button>
@@ -52,7 +51,7 @@
 
             <ng-container matColumnDef="razonSocial">
               <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.naviera?.razonSocial}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="fAlta">

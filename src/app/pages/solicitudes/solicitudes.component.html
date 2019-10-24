@@ -42,9 +42,9 @@
                         </button>
                   </td>
                   <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
-                  <td>{{sol.agencia.razonSocial}}</td>
-                  <td>{{sol.naviera.razonSocial}}</td>
-                  <td>{{sol.cliente.razonSocial}}</td>
+                  <td>{{sol.agencia.nombreComercial}}</td>
+                  <td>{{sol.naviera.nombreComercial}}</td>
+                  <td>{{sol.cliente.nombreComercial}}</td>
                   <td>{{sol.viaje?.viaje}} {{sol.noViaje}}</td>
                   <td>{{sol.buque?.nombre}} {{sol.nombreBuque}}</td>
                   <td>{{sol.observaciones}}</td>
@@ -103,8 +103,8 @@
                     </button>
                   </td>
                   <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
-                  <td>{{sol.agencia.razonSocial}}</td>
-                  <td>{{sol.cliente.razonSocial}}</td>
+                  <td>{{sol.agencia.nombreComercial}}</td>
+                  <td>{{sol.cliente.nombreComercial}}</td>
                   <td>{{sol.observaciones}}</td>
                   <td>
                     <p *ngFor="let cont of sol.contenedores">

@@ -16,7 +16,7 @@ export class CamionesComponent implements OnInit {
   cargando: boolean = true;
   totalRegistros: number = 0;
 
-  displayedColumns = ['actions', 'transportista.razonSocial', 'noEconomico', 'placa', 'vigenciaSeguro', 'pdfSeguro'];
+  displayedColumns = ['actions', 'transportista.nombreComercial', 'noEconomico', 'placa', 'vigenciaSeguro', 'pdfSeguro'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

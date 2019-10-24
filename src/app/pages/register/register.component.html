@@ -1,72 +1,72 @@
 <div class="row animated fadeIn">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Formulario de altas</h4>
-                <form ngNativeValidate [formGroup]="forma" (ngSubmit)="registrarUsuario()" class="form p-t-20" id="loginform" action="index.html">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="ti-user"></i></div>
-                            <input matInput formControlName="nombre" name="nombre" class="form-control" type="text" required placeholder="Nombre">
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="ti-email"></i></div>
-                            <input matInput formControlName="email" name="email" class="form-control" type="email" required placeholder="Correo">
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="ti-unlock"></i></div>
-                            <input matInput formControlName="password" name="password" class="form-control" type="password" required placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-addon"><i class="ti-unlock"></i></div>
-                            <input matInput formControlName="password2" name="password2" class="form-control" type="password" required placeholder="Confirmar Password">
-                        </div>
-                    </div>
-                    <div class="form-group" *ngIf="!!forma.errors?.sonIguales && !forma.pristine">
-
-                        <p class="text-danger">La contraseña es incorrecta</p>
-
-                    </div>
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <!--========Combombox ROLE=========-->
-                            <mat-form-field>
-                                <mat-select placeholder="ROLE" (selectionChange)="cambioRole( $event.value )" formControlName="role" name="role" type="text">
-                                    <mat-option value="ADMIN_ROLE">ADMIN_ROLE</mat-option>
-                                    <mat-option value="PATIOADMIN_ROLE">PATIOADMIN_ROLE</mat-option>
-                                    <mat-option value="PATIO_ROLE">PATIO_ROLE</mat-option>
-                                    <mat-option value="AA_ROLE">AA_ROLE</mat-option>
-                                    <mat-option value="NAVIERA_ROLE">NAVIERA_ROLE</mat-option>
-                                    <mat-option value="TRANSPORTISTA_ROLE">TRANSPORTISTA_ROLE</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <!--========Combombox EMPRESAS=========-->
-                            <mat-form-field>
-                                <mat-select placeholder="Empresas" formControlName="empresas" multiple>
-                                    <mat-option *ngFor="let cliente of clientes" [value]="cliente._id">{{ cliente.razonSocial }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="form-group text-center p-b-20">
-                        <div class="col-xs-12">
-                            <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">Regístrar</button>
-                        </div>
-                    </div>
-                </form>
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Formulario de altas</h4>
+        <form ngNativeValidate [formGroup]="forma" (ngSubmit)="registrarUsuario()" class="form p-t-20" id="loginform" action="index.html">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-user"></i></div>
+              <input matInput formControlName="nombre" name="nombre" class="form-control" type="text" required placeholder="Nombre">
             </div>
-        </div>
+          </div>
+          <div class="form-group ">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-email"></i></div>
+              <input matInput formControlName="email" name="email" class="form-control" type="email" required placeholder="Correo">
+            </div>
+          </div>
+          <div class="form-group ">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-unlock"></i></div>
+              <input matInput formControlName="password" name="password" class="form-control" type="password" required placeholder="Password">
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-unlock"></i></div>
+              <input matInput formControlName="password2" name="password2" class="form-control" type="password" required placeholder="Confirmar Password">
+            </div>
+          </div>
+          <div class="form-group" *ngIf="!!forma.errors?.sonIguales && !forma.pristine">
+
+            <p class="text-danger">La contraseña es incorrecta</p>
+
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <!--========Combombox ROLE=========-->
+              <mat-form-field>
+                <mat-select placeholder="ROLE" (selectionChange)="cambioRole( $event.value )" formControlName="role" name="role" type="text">
+                  <mat-option value="ADMIN_ROLE">ADMIN_ROLE</mat-option>
+                  <mat-option value="PATIOADMIN_ROLE">PATIOADMIN_ROLE</mat-option>
+                  <mat-option value="PATIO_ROLE">PATIO_ROLE</mat-option>
+                  <mat-option value="AA_ROLE">AA_ROLE</mat-option>
+                  <mat-option value="NAVIERA_ROLE">NAVIERA_ROLE</mat-option>
+                  <mat-option value="TRANSPORTISTA_ROLE">TRANSPORTISTA_ROLE</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <!--========Combombox EMPRESAS=========-->
+              <mat-form-field>
+                <mat-select placeholder="Empresas" formControlName="empresas" multiple>
+                  <mat-option *ngFor="let cliente of clientes" [value]="cliente._id">{{ cliente.nombreComercial }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="form-group text-center p-b-20">
+            <div class="col-xs-12">
+              <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light" type="submit">Regístrar</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

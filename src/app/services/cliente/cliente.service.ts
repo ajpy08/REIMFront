@@ -60,7 +60,7 @@ export class ClienteService {
       url += '?token=' + this._usuarioService.token;
       return this.http.put(url, cliente)
         .pipe(map((resp: any) => {
-          swal('Cliente Actualizado', cliente.razonSocial, 'success');
+          swal('Cliente Actualizado', cliente.nombreComercial, 'success');
           return resp.cliente;
         }),
           catchError(err => {
@@ -72,7 +72,7 @@ export class ClienteService {
       url += '?token=' + this._usuarioService.token;
       return this.http.post(url, cliente)
         .pipe(map((resp: any) => {
-          swal('Cliente Creado', cliente.razonSocial, 'success');
+          swal('Cliente Creado', cliente.nombreComercial, 'success');
           return resp.cliente;
         }));
     }

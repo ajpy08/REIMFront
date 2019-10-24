@@ -35,14 +35,14 @@ export class NavieraService {
       url += '?token=' + this._usuarioService.token;
       return this.http.put( url, naviera )
                 .pipe(map( (resp: any) => {
-                  swal('Naviera Actualizado', naviera.razonSocial, 'success');
+                  swal('Naviera Actualizado', naviera.nombreComercial, 'success');
                   return resp.naviera;
                 }));
     } else {      // creando
       url += '?token=' + this._usuarioService.token;
       return this.http.post( url, naviera )
               .pipe(map( (resp: any) => {
-                swal('Naviera Creado', naviera.razonSocial, 'success');
+                swal('Naviera Creado', naviera.nombreComercial, 'success');
                 return resp.naviera;
               }));
     }

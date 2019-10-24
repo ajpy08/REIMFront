@@ -7,8 +7,7 @@
           <form [formGroup]="regForm" (ngSubmit)="guardarCliente()" novalidate>
             <div class="my-container">
               <mat-form-field>
-                <input matInput formControlName="razonSocial" type="text" class="form-control"
-                  placeholder="Razón Social *">
+                <input matInput formControlName="razonSocial" type="text" class="form-control" placeholder="Razón Social *">
                 <mat-error *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
                   <sup>*</sup>Por Favor Ingrese la razonSocial
                 </mat-error>
@@ -26,26 +25,22 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="nombreComercial" type="text" class="form-control"
-                  placeholder="Nombre Comercial">
+                <input matInput formControlName="nombreComercial" type="text" class="form-control" placeholder="Nombre Comercial">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="calle" type="text" class="form-control" placeholder="Calle">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="noExterior" type="text" class="form-control"
-                  placeholder="Numero Exterior">
+                <input matInput formControlName="noExterior" type="text" class="form-control" placeholder="Numero Exterior">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="noInterior" type="text" class="form-control"
-                  placeholder="Numero Interior">
+                <input matInput formControlName="noInterior" type="text" class="form-control" placeholder="Numero Interior">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="colonia" type="text" class="form-control" placeholder="Colonia">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="municipio" type="text" class="form-control"
-                  placeholder="Municipio/Delegacion">
+                <input matInput formControlName="municipio" type="text" class="form-control" placeholder="Municipio/Delegacion">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="ciudad" type="text" class="form-control" placeholder="Ciudad">
@@ -63,12 +58,10 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="correo" type="text" class="form-control"
-                  placeholder="Correo Operativo">
+                <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Operativo">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="correoFac" type="text" class="form-control"
-                  placeholder="Correo De facturación">
+                <input matInput formControlName="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
               </mat-form-field>
               <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
                 Credito
@@ -78,16 +71,15 @@
                 <mat-select placeholder="Seleccione una empresa" formControlName="empresas" name="empresas" multiple>
                   <mat-option *ngFor="let empresa of usuarioLogueado.empresas" [value]="empresa._id">
                     <div *ngIf="empresa.role; else notShowEmpresa">
-                      {{ role(empresa.role) + ' | ' + empresa.razonSocial }}</div>
+                      {{ role(empresa.role) + ' | ' + empresa.nombreComercial }}</div>
                     <ng-template #notShowEmpresa>
-                      <div>{{ empresa.razonSocial }} </div>
+                      <div>{{ empresa.nombreComercial }} </div>
                     </ng-template>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
-            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-              [disabled]="regForm.pristine || regForm.invalid">
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
               <i class="fa fa-save"></i>
               Guardar
             </button>
@@ -104,14 +96,12 @@
       <div class="card-header">Logo</div>
       <div class="card-body">
         <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
-          <img (click)="file.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo
-          Temporal, debe guardar el registro del usuario para confirmar!
+          <img (click)="file.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
         </p>
         <ng-template #notShow>
           <img (click)="file.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
         </ng-template>
-        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*"
-          #file>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*" #file>
         <br>
         <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'img'"><i
             class="fa fa-file"></i> Cambiar foto</button>
@@ -132,8 +122,7 @@
         </ng-template>
         <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
         <br>
-        <button class="btn btn-info waves-effect waves-light" type="button"
-          (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
           R1</button>
         <mat-error *ngIf="formatoR1.invalid">
           <br><sup>*</sup>El Formato R1 es obligatorio

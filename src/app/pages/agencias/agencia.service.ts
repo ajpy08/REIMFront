@@ -36,14 +36,14 @@ export class AgenciaService {
       url += '?token=' + this._usuarioService.token;
       return this.http.put(url, agencia)
         .pipe(map((resp: any) => {
-          swal('Agencia Actualizada', agencia.razonSocial, 'success');
+          swal('Agencia Actualizada', agencia.nombreComercial, 'success');
           return resp.agencia;
         }));
     } else {      // creando
       url += '?token=' + this._usuarioService.token;
       return this.http.post(url, agencia)
         .pipe(map((resp: any) => {
-          swal('Agencia Creada', agencia.razonSocial, 'success');
+          swal('Agencia Creada', agencia.nombreComercial, 'success');
           return resp.agencia;
         }));
     }

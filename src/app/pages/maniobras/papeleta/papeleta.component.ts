@@ -97,9 +97,9 @@ export class PapeletaComponent implements OnInit {
       this.regForm.controls['buque'].setValue(maniobra.maniobra.viaje.buque.nombre);
       this.regForm.controls['viaje'].setValue(maniobra.maniobra.viaje.viaje);
       this.regForm.controls['BL'].setValue(maniobra.maniobra.BL);
-      this.regForm.controls['cliente'].setValue(maniobra.maniobra.cliente.razonSocial);
-      this.regForm.controls['agencia'].setValue(maniobra.maniobra.agencia.razonSocial);
-      this.regForm.controls['transportista'].setValue(maniobra.maniobra.transportista.razonSocial);
+      this.regForm.controls['cliente'].setValue(maniobra.maniobra.cliente.nombreComercial);
+      this.regForm.controls['agencia'].setValue(maniobra.maniobra.agencia.nombreComercial);
+      this.regForm.controls['transportista'].setValue(maniobra.maniobra.transportista.nombreComercial);
       this.regForm.controls['operador'].setValue(maniobra.maniobra.operador.nombre);
       this.regForm.controls['placa'].setValue(maniobra.maniobra.camion.placa);
       this.regForm.controls['licencia'].setValue(maniobra.maniobra.operador.licencia);
