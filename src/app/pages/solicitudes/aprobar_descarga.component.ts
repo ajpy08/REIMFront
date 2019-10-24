@@ -216,8 +216,8 @@ export class AprobarDescargaComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
       this.regForm.controls['idagencia'].setValue(solicitud.agencia._id);
-      this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
-      this.regForm.controls['naviera'].setValue(solicitud.naviera.razonSocial);
+      this.regForm.controls['agencia'].setValue(solicitud.agencia.nombreComercial);
+      this.regForm.controls['naviera'].setValue(solicitud.naviera.nombreComercial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       if (solicitud.buque) {
         this._BuqueService.getBuqueXNaviera(solicitud.naviera._id)
@@ -244,7 +244,7 @@ export class AprobarDescargaComponent implements OnInit {
 
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
-      this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);
+      this.regForm.controls['cliente'].setValue(solicitud.cliente.nombreComercial);
       this.regForm.controls['idcliente'].setValue(solicitud.cliente._id);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaBL'].setValue(solicitud.rutaBL);
@@ -265,7 +265,7 @@ export class AprobarDescargaComponent implements OnInit {
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.contenedor, element.tipo, element.peso,
           element.maniobra ? element.maniobra._id : '', element.transportista._id,
-          element.maniobra ? element.maniobra.estatus : '', element.transportista.razonSocial,
+          element.maniobra ? element.maniobra.estatus : '', element.transportista.nombreComercial,
           element.maniobra ? element.maniobra.folio : '',
           element.maniobra ? element.maniobra.solicitud : '', element.patio);
       });

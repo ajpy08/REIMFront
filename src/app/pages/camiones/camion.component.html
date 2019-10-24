@@ -8,10 +8,9 @@
             <div class="my-container">
               <!--========Combombox Transportistas=========-->
               <mat-form-field>
-                <mat-select placeholder="Seleccione un transportista" formControlName="transportista"
-                  name="transportista" (selectionChange)="cambioTransportista( $event.value )">
+                <mat-select placeholder="Seleccione un transportista" formControlName="transportista" name="transportista" (selectionChange)="cambioTransportista( $event.value )">
                   <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                    {{ transportista.razonSocial }}
+                    {{ transportista.nombreComercial }}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="transportista.touched && transportista.invalid">
@@ -32,8 +31,7 @@
               </mat-form-field>
               <!--========input placas=========-->
               <mat-form-field>
-                <input matInput formControlName="placa" name="placa" type="text" class="form-control"
-                  placeholder="Ingrese las placas">
+                <input matInput formControlName="placa" name="placa" type="text" class="form-control" placeholder="Ingrese las placas">
                 <mat-error *ngIf="placa.touched && placa.invalid && !placa.errors?.minlength">
                   <sup>*</sup>Por Favor Ingrese la Placa
                 </mat-error>
@@ -43,8 +41,7 @@
               </mat-form-field>
               <!--========input numeroEconomico=========-->
               <mat-form-field>
-                <input matInput formControlName="noEconomico" name="noEconomico" type="text" class="form-control"
-                  placeholder="Ingrese el numero economico">
+                <input matInput formControlName="noEconomico" name="noEconomico" type="text" class="form-control" placeholder="Ingrese el numero economico">
                 <mat-error *ngIf="noEconomico.touched && noEconomico.invalid && !noEconomico.errors?.minlength">
                   <sup>*</sup>Por Favor Ingrese el No Economico
                 </mat-error>
@@ -54,14 +51,12 @@
               </mat-form-field>
               <!--========datePiker vigencia del seguro=========-->
               <mat-form-field>
-                <input matInput [matDatepicker]="picker" formControlName="vigenciaSeguro" name="vigenciaSeguro"
-                  type="text" class="form-control" placeholder="Vigencia del seguro">
+                <input matInput [matDatepicker]="picker" formControlName="vigenciaSeguro" name="vigenciaSeguro" type="text" class="form-control" placeholder="Vigencia del seguro">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
-            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-              [disabled]="regForm.pristine || regForm.invalid">
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
               <i class="fa fa-save"></i>
               Guardar
             </button>
@@ -89,8 +84,7 @@
         </ng-template>
         <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
         <br><br>
-        <button class="btn btn-info waves-effect waves-light" type="button"
-          (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'pdfSeguro'"><i class="fa fa-file"></i> Cambiar Poliza
         </button>
       </div>
     </div>

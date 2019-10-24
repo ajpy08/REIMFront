@@ -68,7 +68,7 @@
             <div class="card-body">
               <h4 class="card-title">Mis Empresas</h4>
               <div class="form-group" *ngFor="let empresa of listaEmpresas">
-                <p class="form-control-static"> {{empresa.razonSocial}} </p>
+                <p class="form-control-static"> {{empresa.nombreComercial}} </p>
                 <button [routerLink]="['/misclientes', empresa._id ]" class="btn btn-danger"> <i class="fa fa-pencil"></i> Ver clientes</button>
               </div>
             </div>

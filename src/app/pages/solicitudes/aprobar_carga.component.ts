@@ -187,10 +187,10 @@ export class AprobarCargaComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
       this.regForm.controls['idagencia'].setValue(solicitud.agencia._id);
-      this.regForm.controls['agencia'].setValue(solicitud.agencia.razonSocial);
+      this.regForm.controls['agencia'].setValue(solicitud.agencia.nombreComercial);
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
-      this.regForm.controls['cliente'].setValue(solicitud.cliente.razonSocial);
+      this.regForm.controls['cliente'].setValue(solicitud.cliente.nombreComercial);
       this.regForm.controls['idcliente'].setValue(solicitud.cliente._id);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
@@ -211,7 +211,7 @@ export class AprobarCargaComponent implements OnInit {
         this.contenedores.removeAt(0)
       }
       solicitud.contenedores.forEach(element => {
-        this.addContenedor(element.contenedor, element.tipo, element.peso, element.grado, element.transportista.razonSocial, element.patio, element.maniobra);
+        this.addContenedor(element.contenedor, element.tipo, element.peso, element.grado, element.transportista.nombreComercial, element.patio, element.maniobra);
       });
     });
   }

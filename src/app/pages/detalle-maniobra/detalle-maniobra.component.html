@@ -61,7 +61,7 @@
             <mat-label>Agente Aduanal</mat-label>
             <mat-select formControlName="agencia" type="text">
               <mat-option *ngFor="let agente of agencias" [value]="agente._id">
-                {{agente.razonSocial}}
+                {{agente.nombreComercial}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -69,10 +69,9 @@
         <div class="form-group has-success">
           <mat-form-field>
             <mat-label>Transportista</mat-label>
-            <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista"
-              (selectionChange)="cargaOperadores($event.value)">
+            <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
               <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                {{transportista.razonSocial}}
+                {{transportista.nombreComercial}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="transportista.invalid">
@@ -122,8 +121,7 @@
           <label class="control-label"><b>Fecha y Hora de llegada</b></label>
           <div>
             <mat-form-field class="inputpersonalizado">
-              <input matInput formControlName="fLlegada" [matDatepicker]="pickerfLlegada" type="text"
-                class="form-control" placeholder="Fecha de llegada">
+              <input matInput formControlName="fLlegada" [matDatepicker]="pickerfLlegada" type="text" class="form-control" placeholder="Fecha de llegada">
               <mat-datepicker-toggle matSuffix [for]="pickerfLlegada"></mat-datepicker-toggle>
               <mat-datepicker #pickerfLlegada></mat-datepicker>
             </mat-form-field>
@@ -177,26 +175,22 @@
             <label class="control-label"><b>Fecha y Hora de Finalizacion Lavado</b></label>
             <mat-form-field class="inputpersonalizado">
               <mat-label>Fecha Lavado</mat-label>
-              <input matInput formControlName="fIniLavado" [matDatepicker]="pickerfIniLavado" type="text"
-                placeholder="Fecha de Lavado">
+              <input matInput formControlName="fIniLavado" [matDatepicker]="pickerfIniLavado" type="text" placeholder="Fecha de Lavado">
               <mat-datepicker-toggle matSuffix [for]="pickerfIniLavado"></mat-datepicker-toggle>
               <mat-datepicker #pickerfIniLavado></mat-datepicker>
             </mat-form-field>
             <br>
             <mat-form-field>
               <mat-label>Hora Inicio Lavado</mat-label>
-              <input matInput formControlName="hIniLavado" type="time" placeholder="Hora Inicio Lavado"
-                (focus)="ponHoraIniLavado()">
+              <input matInput formControlName="hIniLavado" type="time" placeholder="Hora Inicio Lavado" (focus)="ponHoraIniLavado()">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Hora Finalización Lavado</mat-label>
-              <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado"
-                (focus)="ponHoraFinLavado()">
+              <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado" (focus)="ponHoraFinLavado()">
             </mat-form-field>
           </div>
           <div class="col-md">
-            <button *ngIf="lavado.value" type="button" [routerLink]="['/fotos',  _id.value]"
-              [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+            <button *ngIf="lavado.value" type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Lavado
             </button>
@@ -206,8 +200,7 @@
         <h4 class="box-title"><b>Cotizaciones de Lavado de Terceros</b></h4><br>
         <div class="row">
           <div class="col-md">
-            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
-              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
               <h5>Suelta los archivos aquí</h5>
               <img src="assets/images/drop-images.png">
             </div>
@@ -243,8 +236,7 @@
         <h4 class="box-title"><b>Cotizaciones de Lavado de REIM Container Park</b></h4><br>
         <div class="row">
           <div class="col-md">
-            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
-              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
               <h5>Suelta los archivos aquí</h5>
               <img src="assets/images/drop-images.png">
             </div>
@@ -317,8 +309,7 @@
             </mat-form-field>
           </div>
           <div class="col-md">
-            <button *ngIf="reparaciones.controls" type="button" [routerLink]="['/fotos',_id.value]"
-              [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+            <button *ngIf="reparaciones.controls" type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Reparacion
             </button><br>
@@ -333,28 +324,24 @@
             <h4 class="control-label"><b>Fecha y Hora de Reparaciones</b></h4>
             <mat-form-field class="inputpersonalizado">
               <mat-label><b>Fecha Inicio Reparaciones</b></mat-label>
-              <input matInput formControlName="fIniReparacion" [matDatepicker]="pickerfIniReparacion" type="text"
-                placeholder="Fecha Inicio Reparaciones">
+              <input matInput formControlName="fIniReparacion" [matDatepicker]="pickerfIniReparacion" type="text" placeholder="Fecha Inicio Reparaciones">
               <mat-datepicker-toggle matSuffix [for]="pickerfIniReparacion"></mat-datepicker-toggle>
               <mat-datepicker #pickerfIniReparacion></mat-datepicker>
             </mat-form-field>
             <br>
             <mat-form-field>
               <mat-label><b>Hora Inicio Reparaciones</b></mat-label>
-              <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación"
-                (focus)="ponHoraIniReparacion()">
+              <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación" (focus)="ponHoraIniReparacion()">
             </mat-form-field>
             <mat-form-field class="inputpersonalizado">
               <mat-label><b>Fecha Fin Reparaciones</b></mat-label>
-              <input matInput formControlName="fFinReparacion" [matDatepicker]="pickerfFinReparacion" type="text"
-                placeholder="Fecha Fin Reparaciones">
+              <input matInput formControlName="fFinReparacion" [matDatepicker]="pickerfFinReparacion" type="text" placeholder="Fecha Fin Reparaciones">
               <mat-datepicker-toggle matSuffix [for]="pickerfFinReparacion"></mat-datepicker-toggle>
               <mat-datepicker #pickerfFinReparacion></mat-datepicker>
             </mat-form-field>
             <mat-form-field>
               <mat-label><b>Hora Finalización Reparaciones</b></mat-label>
-              <input matInput formControlName="hFinReparacion" type="time" placeholder="Hora Finalización Reparación"
-                (focus)="ponHoraFinReparacion()">
+              <input matInput formControlName="hFinReparacion" type="time" placeholder="Hora Finalización Reparación" (focus)="ponHoraFinReparacion()">
             </mat-form-field>
           </div>
         </div><br><br>
@@ -380,8 +367,7 @@
         <h4 class="box-title"><b>Cotizaciones de Reparación de Terceros</b></h4><br>
         <div class="row">
           <div class="col-md">
-            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
-              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
               <h5>Suelta los archivos aquí</h5>
               <img src="assets/images/drop-images.png">
             </div>
@@ -417,8 +403,7 @@
         <h4 class="box-title"><b>Cotizaciones de Reparación de REIM Container Park</b></h4><br>
         <div class="row">
           <div class="col-md">
-            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo"
-              [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+            <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
               <h5>Suelta los archivos aquí</h5>
               <img src="assets/images/drop-images.png">
             </div>
@@ -456,7 +441,7 @@
     </mat-expansion-panel>
   </mat-accordion>
   <br>
- <button type="button" class="btn btn-success" (click)="back()"> Regresar</button>
+  <button type="button" class="btn btn-success" (click)="back()"> Regresar</button>
 
   <!-- <div class="col-12">
     <div class="card">

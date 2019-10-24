@@ -307,7 +307,7 @@ export class SolicitudDescargaComponent implements OnInit {
       solicitud.contenedores.forEach(element => {
           this.addContenedor(element.contenedor, element.tipo, element.peso,
             element.maniobra, element.transportista._id, '',
-            element.transportista.razonSocial, element.patio);
+            element.transportista.nombreComercial, element.patio);
       });
       if (solicitud.estatus === 'APROBADA') {
         this.regForm.disable({onlySelf : true});
@@ -505,12 +505,12 @@ export class SolicitudDescargaComponent implements OnInit {
     if (this.navieraMELFI) {
       this.addContenedor(this.maniobraTemp.value.contenedor, this.maniobraTemp.value.tipo, this.estadoTemp.value,
         this.maniobraTemp.value._id, this.transportistaTemp.value._id, this.maniobraTemp.value.estatus,
-        this.transportistaTemp.value.razonSocial, this.patioTemp.value);
+        this.transportistaTemp.value.nombreComercial, this.patioTemp.value);
       this.maniobraTemp.setValue(null);
     } else {
       this.addContenedor(this.contenedorTemp.value, this.tipoTemp.value, this.estadoTemp.value,
         undefined, this.transportistaTemp.value._id, '',
-        this.transportistaTemp.value.razonSocial, this.patioTemp.value);
+        this.transportistaTemp.value.nombreComercial, this.patioTemp.value);
       this.contenedorTemp.setValue('');
       this.tipoTemp.setValue('');
     }

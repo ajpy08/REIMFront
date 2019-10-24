@@ -52,7 +52,7 @@ export class NavierasComponent implements OnInit {
   borrarNaviera( naviera: Naviera ) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + naviera.razonSocial,
+      text: 'Esta apunto de borrar a ' + naviera.nombreComercial,
       icon: 'warning',
       buttons: true,
       dangerMode: true,

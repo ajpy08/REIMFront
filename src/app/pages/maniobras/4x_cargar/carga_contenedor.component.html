@@ -14,7 +14,7 @@
               <label class="control-label"><b>A.A</b></label>
               <mat-select formControlName="agencia" type="text" placeholder="Seleccione una agencia">
                 <mat-option *ngFor="let agente of agencias" [value]="agente._id">
-                  {{agente.razonSocial}}
+                  {{agente.nombreComercial}}
                 </mat-option>
               </mat-select>
             </div>
@@ -22,7 +22,7 @@
               <label class="control-label"><b>Transportista</b></label>
               <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
                 <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                  {{transportista.razonSocial}}
+                  {{transportista.nombreComercial}}
                 </mat-option>
               </mat-select>
             </div>

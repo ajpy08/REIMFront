@@ -49,7 +49,7 @@ export class AgenciasComponent implements OnInit {
   borrarAgencia(agencia: Agencia) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + agencia.razonSocial,
+      text: 'Esta apunto de borrar a ' + agencia.nombreComercial,
       icon: 'warning',
       buttons: true,
       dangerMode: true,

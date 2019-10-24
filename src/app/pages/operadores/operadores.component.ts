@@ -16,7 +16,7 @@ export class OperadoresComponent implements OnInit {
   totalRegistros: number = 0;
   usuarioLogueado: Usuario;
 
-  displayedColumns = ['actions', 'foto', 'transportista.razonSocial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
+  displayedColumns = ['actions', 'foto', 'transportista.nombreComercial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

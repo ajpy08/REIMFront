@@ -49,7 +49,7 @@
               <mat-label>Agencia Aduanal</mat-label>
               <mat-select formControlName="agencia" type="text">
                 <mat-option *ngFor="let agente of agencias" [value]="agente._id">
-                  {{agente.razonSocial}}
+                  {{agente.nombreComercial}}
                 </mat-option>
               </mat-select>
             </div>
@@ -57,7 +57,7 @@
               <mat-label>Transportista</mat-label>
               <mat-select formControlName="transportista" type="text">
                 <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                  {{transportista.razonSocial}}
+                  {{transportista.nombreComercial}}
                 </mat-option>
               </mat-select>
             </div>

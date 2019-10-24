@@ -21,7 +21,7 @@
                 <mat-label>Agente Aduanal</mat-label>
                 <mat-select formControlName="agencia" type="text">
                   <mat-option *ngFor="let agente of agencias" [value]="agente._id">
-                    {{agente.razonSocial}}
+                    {{agente.nombreComercial}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -31,7 +31,7 @@
                 <mat-label>Transportista</mat-label>
                 <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
                   <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                    {{transportista.razonSocial}}
+                    {{transportista.nombreComercial}}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="transportista.invalid">

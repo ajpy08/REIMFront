@@ -53,7 +53,7 @@ export class TransportistasComponent implements OnInit {
   borrarTransportista(transportista: Transportista) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + transportista.razonSocial,
+      text: 'Esta apunto de borrar a ' + transportista.nombreComercial,
       icon: 'warning',
       buttons: true,
       dangerMode: true,
