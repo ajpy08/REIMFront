@@ -80,7 +80,7 @@ export class InventarioComponent implements OnInit {
             return {
               tipo: tipo,
               maniobras: grouped20[tipo]
-            };            
+            };
           });
 
           this.c40 = maniobras.maniobras.filter(m => m.tipo.includes('40'));
@@ -238,7 +238,6 @@ export class InventarioComponent implements OnInit {
         count++;
       }
     });
-    console.log('total inventario ' + count)
     return count;
   }
 
@@ -252,7 +251,37 @@ export class InventarioComponent implements OnInit {
       //   count++;
       // }
     });
-    console.log('total reparacion ' + tipo + ' ' + grado + ' ' + count)
     return count;
+  }
+
+  obtenTotales(tipo: string): number {
+    let total = 0;
+    if (tipo.includes('20')) {
+      if (this.groupedDisponibles20 != undefined) {
+        this.groupedDisponibles20.forEach(g20 => {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaReparaciones('A', g20.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('B', g20.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('C', g20.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('PT', g20.tipo, this.dataSourceLR.data)
+        });
+      }
+    } else if (tipo.includes('40')) {
+      if (this.groupedDisponibles40 != undefined) {
+        this.groupedDisponibles40.forEach(g40 => {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaReparaciones('A', g40.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('B', g40.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('C', g40.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('PT', g40.tipo, this.dataSourceLR.data)
+        });
+      }
+    }
+
+    return total;
   }
 }

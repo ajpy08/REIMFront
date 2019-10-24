@@ -111,7 +111,7 @@
 
     <mat-divider></mat-divider>
     <mat-list>
-      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{c20?.length}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
         <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
         <h4 mat-line><b>Contenedores Disponibles {{g20.tipo}}: ( {{g20.maniobras.length}} )</b></h4>
@@ -136,8 +136,7 @@
       <mat-divider></mat-divider><br>
     </mat-list>
     <mat-list>
-      <br>
-      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{c40?.length}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
       <mat-list-item *ngFor="let g40 of groupedDisponibles40">
         <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
         <h4 mat-line><b>Contenedores Disponibles {{g40.tipo}}: ( {{g40.maniobras.length}} )</b></h4>
@@ -494,7 +493,7 @@
                 </mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[50, 100, 200]" [pageSize]="100" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
