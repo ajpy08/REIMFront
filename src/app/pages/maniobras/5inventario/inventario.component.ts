@@ -28,6 +28,8 @@ export class InventarioComponent implements OnInit {
   groupedDisponibles20: any;
   groupedDisponibles40: any;
   datosExcel = [];
+  totalInventario: number = 0;
+  totalReparaciones: number = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('MatPaginatorLR', { read: MatPaginator }) MatPaginatorLR: MatPaginator;
@@ -78,7 +80,7 @@ export class InventarioComponent implements OnInit {
             return {
               tipo: tipo,
               maniobras: grouped20[tipo]
-            };
+            };            
           });
 
           this.c40 = maniobras.maniobras.filter(m => m.tipo.includes('40'));
@@ -236,6 +238,7 @@ export class InventarioComponent implements OnInit {
         count++;
       }
     });
+    console.log('total inventario ' + count)
     return count;
   }
 
@@ -249,6 +252,7 @@ export class InventarioComponent implements OnInit {
       //   count++;
       // }
     });
+    console.log('total reparacion ' + tipo + ' ' + grado + ' ' + count)
     return count;
   }
 }
