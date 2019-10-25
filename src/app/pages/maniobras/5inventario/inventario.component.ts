@@ -284,4 +284,46 @@ export class InventarioComponent implements OnInit {
 
     return total;
   }
+
+  obtenSubTotales(tipo: string, dataSource, dataSourceLR): number {
+    let subTotal = 0;
+    if (tipo.includes('20')) {
+      if (dataSource != undefined) {
+        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+
+        if (dataSourceLR != undefined) {
+          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+        }
+      } else if (dataSourceLR != undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('B', tipo, dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('C', tipo, dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('PT', tipo, dataSourceLR.data)
+      }
+    } else if (tipo.includes('40')) {
+      if (this.groupedDisponibles40 != undefined) {
+        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+
+        if (dataSourceLR != undefined) {
+          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
+          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+        }
+      } else if (dataSourceLR != undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
+        subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+      }
+    }
+    return subTotal;
+  }
 }

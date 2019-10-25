@@ -113,8 +113,8 @@
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
-        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
-        <h4 mat-line><b>Contenedores Disponibles {{g20.tipo}}: ( {{g20.maniobras.length}} )</b></h4>
+        <mat-icon><i class="fas fa-chevron-right"></i></mat-icon>
+        <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceLR)}} )</b></h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} |
               'A' | DISPONIBLES</i></span></p>
@@ -138,8 +138,8 @@
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
       <mat-list-item *ngFor="let g40 of groupedDisponibles40">
-        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
-        <h4 mat-line><b>Contenedores Disponibles {{g40.tipo}}: ( {{g40.maniobras.length}} )</b></h4>
+        <mat-icon><i class="fas fa-chevron-right"></i></mat-icon>
+        <h4 mat-line><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras, dataSourceLR)}} )</b></h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} | 'A' |
               DISPONIBLES</i></span></p>
