@@ -14,10 +14,11 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button [routerLink]="['/camiones/camion','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                        <i class="fa fa-plus"></i>
-                        Añadir nuevo camion
-                    </button>
+          <button [routerLink]="['/camiones/camion','nuevo']" type="button"
+            class="btn waves-effect waves-light btn-rounded btn-primary">
+            <i class="fa fa-plus"></i>
+            Añadir nuevo camion
+          </button>
         </div>
         <h3 class="card-title">Camiones ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
@@ -34,11 +35,11 @@
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let camion">
                 <button [routerLink]="['/camiones/camion', camion._id ]" class="btn btn-primary m-r-5">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
+                  <i class="fa fa-edit"></i>
+                </button>
                 <button (click)="borrarCamion( camion )" class="btn btn-danger m-r-5">
-                                            <i class="fa fa-trash-o"></i>
-                                        </button>
+                  <i class="fa fa-trash-o"></i>
+                </button>
               </mat-cell>
             </ng-container>
 
@@ -78,8 +79,6 @@
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
           </mat-paginator>
         </div>
-
-
       </div>
     </div>
   </div>

@@ -32,7 +32,8 @@
             <h3 class="card-title">Disponibles: ( <small>{{totalRegistros}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilter($event.target.value, dataSource, totalRegistros)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -108,13 +109,12 @@
         </div>
       </div>
     </div>
-
     <mat-divider></mat-divider>
     <mat-list>
-      <h3 mat-line><b>TOTAL</b> Contenedores Disponibles 20" ( {{c20?.length}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
-        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
-        <h4 mat-line><b>Contenedores Disponibles {{g20.tipo}}: ( {{g20.maniobras.length}} )</b></h4>
+        <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceLR)}} )</b>
+        </h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} |
               'A' | DISPONIBLES</i></span></p>
@@ -136,11 +136,10 @@
       <mat-divider></mat-divider><br>
     </mat-list>
     <mat-list>
-      <br>
-      <h3 mat-line><b>TOTAL</b> Contenedores Disponibles 40" ( {{c40?.length}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
       <mat-list-item *ngFor="let g40 of groupedDisponibles40">
-        <!-- <mat-icon><i class="fas fa-chevron-right"></i></mat-icon><br> -->
-        <h4 mat-line><b>Contenedores Disponibles {{g40.tipo}}: ( {{g40.maniobras.length}} )</b></h4>
+        <h4 mat-line><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras, dataSourceLR)}} )</b>
+        </h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} | 'A' |
               DISPONIBLES</i></span></p>
@@ -234,7 +233,8 @@
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                            target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
                         </mat-cell>
@@ -349,7 +349,8 @@
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                          <a *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                            target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
                         </mat-cell>
@@ -411,12 +412,20 @@
         <div class="card">
           <div class="card-body">
             <div class="text-right">
-              <button (click)="exportAsXLSX(dataSourceLR, 'Contenedores en Lavado - Reparacion')" class="btn btn-success m-r-5">
+              <button (click)="exportAsXLSX(dataSourceLR, 'Contenedores en Lavado - Reparacion')"
+                class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i> Exportar Excel
               </button>
             </div>
             <h3 class="card-title">Contenedores en Lavado Reparación : (
               <small>{{totalRegistrosLR}}</small> )</h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value, dataSourceLR, totalRegistrosLR)"
+                  placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
 
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-medium" #MatSort2="matSort" [dataSource]="dataSourceLR" matSort>
@@ -424,7 +433,8 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
+                    <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
+                      class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -494,7 +504,7 @@
                 </mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[50, 100, 200]" [pageSize]="100" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
