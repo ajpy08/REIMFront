@@ -23,8 +23,8 @@ export class ClienteService {
       .pipe(map((resp: any) => resp.clientes));
   }
 
-  getClientesEmpresa(id: string, desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/clientes/empresa/' + id + '?desde' + desde;
+  getClientesEmpresa(idEmpresa: string, desde: number = 0): Observable<any> {
+    const url = URL_SERVICIOS + '/clientes/empresa/' + idEmpresa + '?desde' + desde;
     return this.http.get(url);
   }
 
