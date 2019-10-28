@@ -28,6 +28,16 @@
             </div>
             <div class="form-group has-success">
               <mat-form-field>
+                <mat-label>Cliente</mat-label>
+                <mat-select formControlName="cliente" type="text">
+                  <mat-option *ngFor="let cliente of clientes" [value]="cliente._id">
+                    {{cliente.nombreComercial}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group has-success">
+              <mat-form-field>
                 <mat-label>Transportista</mat-label>
                 <mat-select formControlName="transportista" type="text" placeholder="Seleccione un transportista" (selectionChange)="cargaOperadores($event.value)">
                   <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">

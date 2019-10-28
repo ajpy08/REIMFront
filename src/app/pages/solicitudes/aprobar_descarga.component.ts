@@ -210,8 +210,6 @@ export class AprobarDescargaComponent implements OnInit {
 
   cargarSolicitud(id: string) {
     this._SolicitudService.getSolicitudIncludes(id).subscribe(solicitud => {
-      console.log(solicitud);
-
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
@@ -347,7 +345,7 @@ export class AprobarDescargaComponent implements OnInit {
   apruebaSolicitud() {
     if (this.solicitudCorrecta) {
       this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value)
-        .subscribe(resp => { });
+        .subscribe(resp => { this.location.back(); });
     }
   }
 

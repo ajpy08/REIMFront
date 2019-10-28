@@ -1,8 +1,9 @@
 import { Component, OnInit} from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService } from '../../../services/service.index';
+import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService, ClienteService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Transportista } from '../../transportistas/transportista.models';
+import { Cliente } from '../../../models/cliente.models';
 import { Agencia } from '../../agencias/agencia.models';
 import { Operador } from '../../operadores/operador.models';
 import { Camion } from '../../camiones/camion.models';
@@ -39,13 +40,14 @@ export const MY_FORMATS = {
 
 export class LlegadaEntradaComponent implements OnInit {
   agencias: Agencia[] = [];
+  clientes: Cliente[] = [];
   transportistas: Transportista[] = [];
   operadores: Operador[] = [];
   camiones: Camion[] = [];
   regForm: FormGroup;
   maniobra: Maniobra;
-  mensajeError='';
-  mensajeExito='';
+  mensajeError = '';
+  mensajeExito = '';
 
   constructor(
     private _maniobraService: ManiobraService,
@@ -53,9 +55,10 @@ export class LlegadaEntradaComponent implements OnInit {
     private _agenciaService: AgenciaService,
     private _operadorService: OperadorService,
     private _camionService: CamionService,
+    private _clienteService: ClienteService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private datePipe: DatePipe,
     private location: Location) { }
 
@@ -130,6 +133,10 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
       this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia);
+      if (maniob.maniobra.agencia){
+        this._clienteService.getClientesEmpresa(maniob.maniobra.agencia).subscribe( resp => this.clientes = resp.clientes );
+      }
+
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
@@ -140,7 +147,6 @@ export class LlegadaEntradaComponent implements OnInit {
       // this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       // this.regForm.controls['camion'].setValue(maniob.maniobra.camion);
       // this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
-      
       if (maniob.maniobra.transportista) {
         this.regForm.controls['transportista'].setValue(maniob.maniobra.transportista);
       }
@@ -150,7 +156,6 @@ export class LlegadaEntradaComponent implements OnInit {
       if (maniob.maniobra.operador) {
         this.regForm.controls['operador'].setValue(maniob.maniobra.operador);
       }
-            
       if (maniob.maniobra.fLlegada) {
         this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       }
