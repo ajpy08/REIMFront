@@ -39,6 +39,7 @@ export class CamionesComponent implements OnInit {
 
   cargarCamiones() {
     this.cargando = true;
+
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
       this._camionService.getCamiones()
         .subscribe(camiones => {
@@ -46,8 +47,6 @@ export class CamionesComponent implements OnInit {
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = camiones.camiones.length;
-
-          this.cargando = false;
         });
     } else {
       if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
@@ -57,11 +56,10 @@ export class CamionesComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
             this.totalRegistros = camiones.camiones.length;
-            
-            this.cargando = false;
           });
       }
     }
+    this.cargando = false;
   }
 
   borrarCamion(camion: Camion) {
