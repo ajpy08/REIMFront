@@ -403,16 +403,13 @@ export class ManiobraService {
     }
   }
 
-  habilitaDeshabilitaDescargaAutorizada(maniobra: Maniobra, aprueba: boolean) {
-    let url = URL_SERVICIOS + '/maniobras/maniobra/' + maniobra._id + '/aprueba_descarga';
+  actualizaDetalleManiobra(maniobra: Maniobra) {
+    let url = URL_SERVICIOS + '/maniobra/' + maniobra._id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, { descargaAutorizada: aprueba })
+    return this.http.put(url, maniobra)
       .pipe(map((resp: any) => {
-        swal('Estado del permiso de Descarga Aprobada cambiado con éxito', '', 'success');
+        swal('Maniobra Actualizada', '', 'success');
         return true;
       }));
   }
-
-  
-
 }
