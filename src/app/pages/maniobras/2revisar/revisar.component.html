@@ -6,68 +6,67 @@
           Datos Generales
         </mat-panel-title>
       </mat-expansion-panel-header>
+      <fieldset disabled>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Agencia</label>
+            <input type="text" class="form-control form-control-sm" formControlName="agencia">
+          </div>
+          <div class="form-group col-md-4">
+            <label>Cliente</label>
+            <input type="text" class="form-control form-control-sm" formControlName="cliente">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>Contenedor</label>
+            <input type="text" class="form-control form-control-sm" formControlName="contenedor">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Tipo</label>
+            <input type="text" class="form-control form-control-sm" formControlName="tipo">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Estado</label>
+            <input type="text" class="form-control form-control-sm" formControlName="peso">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label>Transportista</label>
+            <input type="text" class="form-control form-control-sm" formControlName="transportista">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Camion</label>
+            <input type="text" class="form-control form-control-sm" formControlName="camion">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Operador</label>
+            <input type="text" class="form-control form-control-sm" formControlName="operador">
+          </div>
+        </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <h4>Agencia</h4>
-          <p>{{agencia.value}}</p>
-        </div>
-        <div class="col-md-4">
-          <h4>Cliente</h4>
-          <p>{{cliente.value}}</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2">
-          <h4>Contenedor</h4>
-          <p>{{contenedor.value}}</p>
-        </div>
-        <div class="col-md-2">
-          <h4>Tipo</h4>
-          <p>{{tipo.value}}</p>
-        </div>
-        <div class="col-md-3">
-          <h4>Estado</h4>
-          <p>{{peso.value}}</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          <h4>Transportista</h4>
-          <p class="form-control-static">{{transportista.value}}</p>
-        </div>
-        <div class="col-md-3">
-          <h4>Camion</h4>
-          <p class="form-control-static">{{camion.value}}</p>
-        </div>
-        <div class="col-md-3">
-          <h4>Operador</h4>
-          <p class="form-control-static">{{operador.value}}</p>
-        </div>
-      </div>
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>Fecha Llegada:</label>
+            <input type="text" class="form-control form-control-sm" formControlName="fLlegada">
+            <!-- <p class="form-control-static"> {{fLlegada.value | date:'dd/MM/yyyy'}} </p> -->
 
-      <div class="row">
-        <div class="col-md-2">
-
-          <h4>Fecha Llegada:</h4>
-          <p class="form-control-static"> {{fLlegada.value | date:'dd/MM/yyyy'}} </p>
-
+          </div>
+          <div class="form-group col-md-2">
+            <label>Hora Llegada:</label>
+            <input type="time" class="form-control form-control-sm" formControlName="hLlegada">
+          </div>
+          <div class="form-group col-md-2">
+            <label>Hora Entrada:</label>
+            <input type="time" class="form-control form-control-sm" formControlName="hEntrada">
+          </div>
+          <div class="form-group col-md-2">
+            <label>estatus:</label>
+            <input type="text" class="form-control form-control-sm" formControlName="estatus">
+          </div>
         </div>
-        <div class="col-md-2">
-
-          <h4>Hora Llegada:</h4>
-          <p class="form-control-static"> {{hLlegada.value}} </p>
-
-        </div>
-        <div class="col-md-2">
-          <h4>Hora Entrada:</h4>
-          <p class="form-control-static"> {{hEntrada.value}} </p>
-        </div>
-        <div class="col-md-2">
-          <h4>estatus:</h4>
-          <p class="form-control-static"> {{estatus.value}} </p>
-        </div>
-      </div>
+      </fieldset>
     </mat-expansion-panel>
 
 
@@ -226,7 +225,7 @@
   <i class="fa fa-save"></i>
   Guardar Cambios
 </button>
-<button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+  <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
   <!-- <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
 
 </form>
