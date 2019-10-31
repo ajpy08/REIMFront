@@ -168,7 +168,7 @@ export class RevisarComponent implements OnInit {
       }
       
       
-      this.regForm.controls['fLlegada'].setValue(this.datePipe.transform(maniob.maniobra.fLlegada, 'dd/MM/yyyy'));
+      this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);

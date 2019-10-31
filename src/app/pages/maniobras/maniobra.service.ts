@@ -31,7 +31,7 @@ export class ManiobraService {
   }
 
   getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string, viaje?: string,
-    peso?: string, lavado?: boolean, reparacion?: boolean, naviera?: string): Observable<any> {
+    peso?: string, lavado?: boolean, reparacion?: boolean, naviera?: string, fIniLlegada?: string, fFinLlegada?: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/';
     let params = new HttpParams();
     if (cargadescarga) {
@@ -65,6 +65,11 @@ export class ManiobraService {
 
     if (naviera) {
       params = params.append('naviera', naviera);
+    }
+
+    if (fIniLlegada && fFinLlegada) {
+      params = params.append('finillegada', fIniLlegada);
+      params = params.append('ffinllegada', fFinLlegada);
     }
 
     return this.http.get(url, { params: params });
@@ -401,6 +406,16 @@ export class ManiobraService {
     } else {
 
     }
+  }
+
+  habilitaDeshabilitaDescargaAutorizada(maniobra: Maniobra, aprueba: boolean) {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + maniobra._id + '/aprueba_descarga';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, { descargaAutorizada: aprueba })
+      .pipe(map((resp: any) => {
+        swal('Estado del permiso de Descarga Aprobada cambiado con éxito', '', 'success');
+        return true;
+      }));
   }
 
   actualizaDetalleManiobra(maniobra: Maniobra) {

@@ -66,6 +66,12 @@
     justify-content: center!important;
 }
 
+.mat-table-extra-big {
+    width: 3000px;
+    white-space: inherit;
+    justify-content: center!important;
+}
+
 .example-container {
     display: flex;
     flex-direction: column;
