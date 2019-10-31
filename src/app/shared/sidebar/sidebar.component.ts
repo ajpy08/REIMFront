@@ -10,7 +10,7 @@ import { Usuario } from '../../pages/usuarios/usuario.model';
 })
 export class SidebarComponent implements OnInit {
   usuario: Usuario;
-  role = 'rol no asignado';
+  role = 'Rol no asignado';
 
   constructor(public _sidebar: SidebarService, public _usuarioService: UsuarioService) { }
 
