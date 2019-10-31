@@ -123,8 +123,7 @@ import {
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-factura.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
-
-
+import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
 @NgModule({
     declarations: [
         // PagesComponent,
@@ -180,7 +179,10 @@ import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras
         PapeletaComponent,        
         ContenedoresLRComponent,        
         DetalleManiobraComponent, 
-        AsignarFacturaComponent, FacturacionManiobrasComponent
+        AsignarFacturaComponent, 
+        FacturacionManiobrasComponent,
+        ManiobrasDiarioComponent
+        
     ],
     exports: [
         DashboardComponent
