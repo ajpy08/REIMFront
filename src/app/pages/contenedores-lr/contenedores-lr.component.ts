@@ -35,7 +35,7 @@ export class ContenedoresLRComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarManiobras();
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.displayedColumns = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     } else {
       this.displayedColumns = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
@@ -56,7 +56,7 @@ export class ContenedoresLRComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
         this.cargando = true;
         this.maniobraService.getManiobrasConLavadoReparacion(null,
           this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)

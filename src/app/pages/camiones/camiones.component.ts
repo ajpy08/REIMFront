@@ -40,10 +40,16 @@ export class CamionesComponent implements OnInit {
   cargarCamiones() {
     this.cargando = true;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this._camionService.getCamiones()
         .subscribe(camiones => {
           this.dataSource = new MatTableDataSource(camiones.camiones);
+
+          this.dataSource.sortingDataAccessor = (item, property) => {
+            if (property.includes('.')) return property.split('.').reduce((o,i)=>o[i], item)
+            return item[property];
+         };
+
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = camiones.camiones.length;
@@ -53,6 +59,12 @@ export class CamionesComponent implements OnInit {
         this._camionService.getCamiones(this.usuarioLogueado.empresas[0]._id)
           .subscribe(camiones => {
             this.dataSource = new MatTableDataSource(camiones.camiones);
+
+            this.dataSource.sortingDataAccessor = (item, property) => {
+              if (property.includes('.')) return property.split('.').reduce((o,i)=>o[i], item)
+              return item[property];
+           };
+
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
             this.totalRegistros = camiones.camiones.length;

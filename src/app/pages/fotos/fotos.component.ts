@@ -60,7 +60,7 @@ export class FotosComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIM_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
       this.okCargar = true;
     } else {
       this.okCargar = false;
@@ -322,7 +322,7 @@ export class FotosComponent implements OnInit {
   }
 
   mostrarReparaciones(maniobra: Maniobra) {
-    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIM_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
       return true;
     } else {
       if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && maniobra.mostrarFotosRNaviera) {

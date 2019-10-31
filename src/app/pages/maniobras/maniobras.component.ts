@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { ManiobraService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
@@ -21,18 +21,18 @@ export class ManiobrasComponent implements OnInit {
   totalXCargar = 0;
 
 
-  displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-    'peso', 'cliente', 'agencia'];
+  displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+    'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
-  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-    'peso', 'cliente', 'agencia'];
+  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+    'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
-  displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-    'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
+  displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+    'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
 
-  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente', 'agencia', 'lavado', 'reparaciones', 'grado'];
+  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre','agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
 
-  displayedColumnsXCargar = ['actions', 'folio', 'transportista', 'grado', 'tipo', 'peso', 'cliente', 'agencia'];
+  displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
   dtTransito: any;
   dtEspera: any;
@@ -63,15 +63,18 @@ export class ManiobrasComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
-      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-        'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+        'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     } else {
-      this.displayedColumnsRevision = ['actions', 'folio', 'viaje', 'buque', 'transportista', 'contenedor', 'tipo',
-        'peso', 'cliente', 'agencia', 'grado', 'lavado', 'fotosreparacion'];
+      this.displayedColumnsRevision = ['actions', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+        'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     }
 
     this.cargarManiobras();
+    
+    
+
   }
 
   applyFilterTransito(filterValue: string) {
@@ -98,6 +101,7 @@ export class ManiobrasComponent implements OnInit {
   applyFilterLavadoRevision(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    
     this.dtLavadoReparacion.filter = filterValue;
     this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
   }
@@ -114,41 +118,70 @@ export class ManiobrasComponent implements OnInit {
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO)
       .subscribe(maniobras => {
         this.dtTransito = new MatTableDataSource(maniobras.maniobras);
+        this.dtTransito.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          return item[property];
+       };
         this.dtTransito.sort = this.sort;
         this.dtTransito.paginator = this.paginator;
         this.totalTransito = maniobras.total;
+        this.dtTransito.filterPredicate  = this.Filtro();
       });
 
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.ESPERA)
       .subscribe(maniobras => {
         this.dtEspera = new MatTableDataSource(maniobras.maniobras);
+        this.dtEspera.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          return item[property];
+       };
         this.dtEspera.sort = this.sortEspera;
         this.dtEspera.paginator = this.pagEspera;
         this.totalEspera = maniobras.total;
+        this.dtEspera.filterPredicate  = this.Filtro();                
+
       });
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.REVISION)
       .subscribe(maniobras => {
         this.dtRevision = new MatTableDataSource(maniobras.maniobras);
+        this.dtRevision.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          return item[property];
+       };
         this.dtRevision.sort = this.sortRevision;
         this.dtRevision.paginator = this.pagRevision;
         this.totalRevision = maniobras.total;
+        this.dtRevision.filterPredicate  = this.Filtro();
       });
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
       .subscribe(maniobras => {
         this.dtLavadoReparacion = new MatTableDataSource(maniobras.maniobras);
+
+        this.dtLavadoReparacion.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          return item[property];
+       };
+
         this.dtLavadoReparacion.sort = this.sortLR;
         this.dtLavadoReparacion.paginator = this.pagLR;
         this.totalLavadoReparacion = maniobras.total;
+        this.dtLavadoReparacion.filterPredicate = this.Filtro();
+
       });
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
       .subscribe(maniobras => {
         this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
+        this.dtXCargar.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          return item[property];
+       };
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
+        this.dtEspera.filterPredicate  = this.Filtro();  
         this.cargando = false;
       });
 
@@ -179,6 +212,22 @@ export class ManiobrasComponent implements OnInit {
           event.source.checked = !event.checked;
         }
       });
+  }
+
+    
+  Filtro(): (data: any, filter: string) => boolean {
+    let filterFunction = function(data, filter): boolean {
+      const dataStr = data.contenedor.toLowerCase() + 
+                      (data.folio? data.folio:'') +
+                      data.tipo.toLowerCase() + 
+                      data.peso.toLowerCase() + 
+                      (data.viaje? data.viaje.viaje.toLowerCase():'') +
+                      (data.cliente? data.cliente.nombreComercial.toLowerCase():'') +
+                      (data.viaje? data.viaje.buque.nombre.toLowerCase():'') +
+                      (data.agencia? data.agencia.nombreComercial.toLowerCase():'');
+        return dataStr.indexOf(filter) != -1; 
+    }
+    return filterFunction;
   }
 
 }

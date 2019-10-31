@@ -20,9 +20,10 @@ import { ViajeService } from '../../../services/service.index';
 import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI } from '../../../config/config';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
+
 
 
 @Component({
@@ -80,7 +81,7 @@ export class SolicitudDescargaComponent implements OnInit {
 
     ngOnInit() {
       this.usuarioLogueado = this._usuarioService.usuario;
-      if (this.usuarioLogueado.role === 'ADMIN_ROLE') {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
         this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
       } else {
         this.agencias = this.usuarioLogueado.empresas;

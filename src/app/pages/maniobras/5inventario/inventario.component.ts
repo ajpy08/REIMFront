@@ -42,7 +42,7 @@ export class InventarioComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarInventario();
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.displayedColumnsLR = ['actions', 'fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
     } else {
       this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
@@ -178,7 +178,7 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
         this.cargando = true;
         this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
           .subscribe(maniobras => {

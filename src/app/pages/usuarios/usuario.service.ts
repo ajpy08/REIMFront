@@ -82,6 +82,7 @@ export class UsuarioService {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('menu');
+    localStorage.removeItem('AprobSolicitudes');
 
     this.router.navigate(['/login']);
   }

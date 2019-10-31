@@ -27,11 +27,11 @@ export class SidebarComponent implements OnInit {
       this.role = 'Administrador';
       return;
     }
-    if (this.usuario.role == 'REIMADMIN_ROLE') {
+    if (this.usuario.role == 'PATIOADMIN_ROLE') {
       this.role = 'Administrador Container Park';
       return;
     }
-    if (this.usuario.role == 'REIM_ROLE') {
+    if (this.usuario.role == 'PATIO_ROLE') {
       this.role = 'Usuario Container Park';
       return;
     }
