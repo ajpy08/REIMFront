@@ -203,7 +203,7 @@ export class InventarioComponent implements OnInit {
   }
 
   CreaDatosExcel(datos) {
-    //console.log(datos)
+    this.datosExcel = [];
     datos.forEach(d => {
       // console.log(d)
       var dato = {

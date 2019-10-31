@@ -1,0 +1,185 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn" *ngIf="!cargando">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada"
+                  placeholder="Fecha Inicial arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFinLlegada"
+                  placeholder="Fecha Final Arribo">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                (click)="consultaManiobras()">
+                <i class="fas fa-filter"></i>
+                Filtrar
+              </button>
+              <!-- <button type="reset" class="btn btn-success waves-effect">
+                      <i class="fa fa-filter "></i>
+                      Limpiar
+                   </button> -->
+            </div>
+            <div class="col-sm-3">
+              <mat-checkbox [checked]="checkedVacios" #vacios (change)="filtraManiobrasVacios(vacios.checked)">Vacios
+              </mat-checkbox>
+            </div>
+            <div class="col-sm">
+              <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i> Exportar Excel
+              </button>
+            </div>
+          </div>
+        </div> <br>
+        <h3 class="card-title">Maniobras Diarias ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="example-header mat-elevation-z8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+          </mat-form-field>
+        </div>
+        <br>
+        <div class="example-container mat-elevation-z8">
+          <mat-table class="mat-table-extra-big" #table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="contenedor">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estatus">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="grado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaingreso">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="operador">
+              <mat-header-cell *matHeaderCellDef>Operador</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="placa">
+              <mat-header-cell *matHeaderCellDef>Placas</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.camion?.placa}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="transportista">
+              <mat-header-cell *matHeaderCellDef>Transportista</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="facturaManiobra">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="viaje">
+              <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="buque">
+              <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="peso">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cliente">
+              <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="agencia">
+              <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="lavado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="reparaciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cargaDescarga">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="hDescarga">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[50, 100, 200, 500]" [pageSize]="50" [showFirstLastButtons]>
+          </mat-paginator>
+        </div><br><br>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+            </div>
+            <div class="col-sm">
+            </div>
+            <div class="col-sm">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

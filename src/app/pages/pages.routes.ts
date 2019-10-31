@@ -86,9 +86,7 @@ import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
-
-
-
+import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
 
 const pagesRoutes: Routes = [
     {path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' }},
@@ -141,6 +139,7 @@ const pagesRoutes: Routes = [
 
     {path: 'vacios', component: VaciosComponent, data: {titulo: 'Maniobras de Vacios'}},
     {path: 'facturacion-maniobras', component: FacturacionManiobrasComponent, data: {titulo: 'Facturación de Maniobras'}},
+    {path: 'maniobras_diario', component: ManiobrasDiarioComponent, data: {titulo: 'Maniobras Diario'}},
     {path: 'maniobra/:id', component: ManiobraComponent, data: {titulo: 'Maniobra'}},
     {path: 'fotos/:id', component: FotosComponent, data: {titulo: 'Fotos'}},
     {path: 'busqueda/:termino', component: BusquedaComponent, data: { titulo: 'Buscador' } },
