@@ -262,10 +262,15 @@ export class CargaContenedorComponent implements OnInit {
 
 
   guardaCambios() {
-    this.contenedor.setValue(this.contenedorTemp.value.contenedor);
-    this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
-    this.tipo.setValue(this.contenedorTemp.value.tipo);
-    this.grado.setValue(this.contenedorTemp.value.grado);
+    
+    if (this.contenedorTemp.value) {
+      this.contenedor.setValue(this.contenedorTemp.value.contenedor);
+      this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
+      this.tipo.setValue(this.contenedorTemp.value.tipo);
+      this.grado.setValue(this.contenedorTemp.value.grado);
+    }
+    
+    
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();

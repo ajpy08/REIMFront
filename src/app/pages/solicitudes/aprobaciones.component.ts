@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { Solicitud } from './solicitud.models';
 import { SolicitudService } from '../../services/service.index';
+import { MatTabGroup, MatTabChangeEvent, MatTab } from '@angular/material';
 
 
 declare var swal: any;
@@ -11,6 +12,8 @@ declare var swal: any;
   styles: []
 })
 export class AprobacionesComponent implements OnInit {
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   solicitudes: any[] = [];
   solicitudesCarga: any[] = [];
   cargando = true;
@@ -21,6 +24,12 @@ export class AprobacionesComponent implements OnInit {
 
   ngOnInit() {
     this.cargaSolicitudes();
+    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    if (indexTAB) { 
+          this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+      }
+    
+
   }
 
   cargaSolicitudes() {
@@ -38,6 +47,11 @@ export class AprobacionesComponent implements OnInit {
       this.solicitudesCarga = resp.solicitudes;
       this.cargando = false;
     });
+  }
+
+  onLinkClick(event: MatTabChangeEvent) {
+    //console.log(event.index);
+    localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
   borrarSolicitud( sol: Solicitud ) {

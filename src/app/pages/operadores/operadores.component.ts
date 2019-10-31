@@ -39,7 +39,7 @@ export class OperadoresComponent implements OnInit {
   cargarOperadores() {
     this.cargando = true;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this._operadorService.getOperadores()
         .subscribe(operadores => {
           this.dataSource = new MatTableDataSource(operadores.operadores);

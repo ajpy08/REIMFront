@@ -12,7 +12,7 @@ export class AdminGuard implements CanActivate {
 
   canActivate() {
 
-    if ( this._usuarioService.usuario.role === 'ADMIN_ROLE' || this._usuarioService.usuario.role === 'REIMADMIN_ROLE'
+    if ( this._usuarioService.usuario.role === 'ADMIN_ROLE' || this._usuarioService.usuario.role === 'PATIOADMIN_ROLE'
     || this._usuarioService.usuario.role === 'AA_ROLE' || this._usuarioService.usuario.role === 'NAVIERA_ROLE'
     || this._usuarioService.usuario.role === 'TRANSPORTISTA_ROLE'  ) {
       return true;

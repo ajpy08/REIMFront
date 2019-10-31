@@ -76,7 +76,7 @@ export class OperadorComponent implements OnInit {
       }
     }
 
-    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.REIMADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this._transportistaService.getTransportistas()
         .subscribe((transportistas) => {
           this.transportistas = transportistas.transportistas;

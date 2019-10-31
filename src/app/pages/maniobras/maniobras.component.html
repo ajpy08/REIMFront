@@ -53,17 +53,17 @@
                   <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="viaje">
+                <ng-container matColumnDef="viaje.viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="buque">
+                <ng-container matColumnDef="viaje.buque.nombre">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="transportista">
+                <ng-container matColumnDef="transportista.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -83,12 +83,12 @@
                   <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="cliente">
+                <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="agencia">
+                <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -97,7 +97,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsTransito" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsTransito;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -144,17 +144,17 @@
                   <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="viaje">
+                <ng-container matColumnDef="viaje.viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="buque">
+                <ng-container matColumnDef="viaje.buque.nombre">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="transportista">
+                <ng-container matColumnDef="transportista.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -174,12 +174,12 @@
                   <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="cliente">
+                <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="agencia">
+                <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -187,7 +187,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsEspera" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsEspera;"></mat-row>
               </mat-table>
-              <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -233,17 +233,17 @@
                   <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="viaje">
+                <ng-container matColumnDef="viaje.viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="buque">
+                <ng-container matColumnDef="viaje.buque.nombre">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="transportista">
+                <ng-container matColumnDef="transportista.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -263,12 +263,12 @@
                   <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="cliente">
+                <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="agencia">
+                <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -296,7 +296,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
-              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -347,12 +347,22 @@
                   <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="cliente">
+                <ng-container matColumnDef="viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje.buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="agencia">
+                <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -389,7 +399,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavadoReparacion" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavadoReparacion;"></mat-row>
               </mat-table>
-              <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -431,7 +441,7 @@
                   <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="transportista">
+                <ng-container matColumnDef="transportista.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -451,12 +461,12 @@
                   <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="cliente">
+                <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="agencia">
+                <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -464,7 +474,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
-              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>

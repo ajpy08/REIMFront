@@ -75,7 +75,7 @@ export class DetalleManiobraComponent implements OnInit {
 
   ngOnInit() {
     if (this.usuarioService.usuario.role != ROLES.ADMIN_ROLE) {
-      if (this.usuarioService.usuario.role != ROLES.REIMADMIN_ROLE) {
+      if (this.usuarioService.usuario.role != ROLES.PATIOADMIN_ROLE) {
         this.router.navigate(['/']);
       }
     }

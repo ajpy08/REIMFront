@@ -1,7 +1,7 @@
 
-// export let URL_SERVICIOS = 'http://187.210.87.57:3000';
-export let URL_SERVICIOS = 'http://localhost:3000';
-//  export let URL_SERVICIOS = 'http://ec2-3-84-218-133.compute-1.amazonaws.com:3000';
+export let URL_SERVICIOS = 'http://ec2-3-84-218-133.compute-1.amazonaws.com:3000';
+// export let URL_SERVICIOS = 'http://localhost:3000';
+
 
 export const ID_MELFI = '5c49e55b6b427b166466c9b3';
 
@@ -38,17 +38,18 @@ export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C', 'PT'];
 
 export const ROLES = {
   ADMIN_ROLE: 'ADMIN_ROLE',
-  REIMADMIN_ROLE: 'REIMADMIN_ROLE',
-  REIM_ROLE: 'REIM_ROLE',
+  PATIOADMIN_ROLE: 'PATIOADMIN_ROLE',
+  PATIO_ROLE: 'PATIO_ROLE',
   NAVIERA_ROLE: 'NAVIERA_ROLE',
   TRANSPORTISTA_ROLE: 'TRANSPORTISTA_ROLE',
   AA_ROLE: 'AA_ROLE',
   CLIENT_ROLE: 'CLIENT_ROLE'
 };
 
-export const ROLES_ARRAY = [{ _id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR' },
-{ _id: 'REIMADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK' },
-{ _id: 'REIM_ROLE', descripcion: 'USUARIO COINTAINER PARK' },
+export const ROLES_ARRAY = [
+{ _id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR' },
+{ _id: 'PATIOADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK' },
+{ _id: 'PATIO_ROLE', descripcion: 'USUARIO COINTAINER PARK' },
 { _id: 'NAVIERA_ROLE', descripcion: 'NAVIERA' },
 { _id: 'TRANSPORTISTA_ROLE', descripcion: 'TRANSPORTISTA' },
 { _id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL' },
