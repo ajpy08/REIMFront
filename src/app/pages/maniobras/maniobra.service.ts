@@ -46,32 +46,25 @@ export class ManiobraService {
     if (contenedor) {
       params = params.append('contenedor', contenedor);
     }
-
     if (viaje) {
       params = params.append('viaje', viaje);
     }
-
     if (peso) {
       params = params.append('peso', peso);
     }
-
     if (lavado) {
       params = params.append('lavado', 'true');
     }
-
     if (reparacion) {
       params = params.append('reparacion', 'true');
     }
-
     if (naviera) {
       params = params.append('naviera', naviera);
     }
-
     if (fIniLlegada && fFinLlegada) {
       params = params.append('finillegada', fIniLlegada);
       params = params.append('ffinllegada', fFinLlegada);
     }
-
     return this.http.get(url, { params: params });
   }
 

@@ -261,8 +261,15 @@
         <td colspan=4
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
-          <font color="#000000">
-            PENDIENTE</font>
+          <font color="#000000" *ngIf="cargaDescarga.value == 'D';else descarga">
+            {{this.patio?.value}}</font>
+
+            <ng-template #descarga>
+              <font color="#000000" *ngIf="cargaDescarga.value == 'C'">
+                
+              </font>
+            </ng-template>
+            
         </td>
       </tr>
       <tr>
@@ -490,6 +497,35 @@
           </font>
         </td>
       </tr>
+      <br>
+      <tr>
+          <td colspan=2 align="center" valign=bottom>            
+          </td>
+          <td align="left" valign=bottom>
+            <font color="#000000"><br></font>
+          </td>
+          <td colspan=2 align="center" valign=bottom>
+            <font color="#000000"><br><img src="../../../../assets/images/firma.png" width=137 height=1 hspace=0 vspace=9>
+            </font>
+          </td>
+          <td align="left" valign=bottom>
+            <font color="#000000"><br></font>
+          </td>
+          <td colspan=2 align="center" valign=bottom>
+          </td>
+        </tr>
+        <tr>
+          <td colspan=2 align="center" valign=top>
+          </td>
+          <td></td>
+          <td colspan=2 align="center" valign=top>
+            <font color="#000000">SELLO Y FIRMA DE AGENCIA
+            </font>
+          </td>
+          <td></td>
+          <td colspan=2 align="center" valign=top>
+          </td>
+        </tr>
     </table>
   </body>
 

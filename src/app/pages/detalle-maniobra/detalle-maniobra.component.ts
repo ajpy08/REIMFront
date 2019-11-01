@@ -103,7 +103,7 @@ export class DetalleManiobraComponent implements OnInit {
       transportista: [{ value: '', disabled: true }, [Validators.required]],
       camion: [ '', [Validators.required]],
       operador: ['', [Validators.required]],
-      fLlegada: [{ value: moment() }],
+      fLlegada: [''],
       hLlegada: [{ value: this.datePipe.transform(new Date(), 'HH:mm') }],
       hEntrada: [{ value: this.datePipe.transform(new Date(), 'HH:mm') }],
       hSalida: [{ value: this.datePipe.transform(new Date(), 'HH:mm') }],
@@ -148,7 +148,7 @@ export class DetalleManiobraComponent implements OnInit {
     this.cargando = true;
     this.maniobraService.getManiobra(id).subscribe(maniob => {
       this.maniobra = maniob.maniobra;
-      // console.log(this.maniobra)
+      console.log(this.maniobra)
       this._hLlegada = moment(maniob.maniobra.hLlegada, 'HH:mm');
       this._hEntrada = moment(maniob.maniobra.hEntrada, 'HH:mm');
       this._hDescarga = moment(maniob.maniobra.hDescarga, 'HH:mm');
