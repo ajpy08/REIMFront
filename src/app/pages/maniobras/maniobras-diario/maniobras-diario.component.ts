@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ManiobraService, ViajeService } from '../../../services/service.index';
 import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
@@ -15,6 +14,7 @@ import * as _moment from 'moment';
 // import * as Moment from 'moment';
 import swal from 'sweetalert';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 
 
@@ -22,13 +22,13 @@ const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'YYYY-MM-DD',
+    dateInput: ['l', 'L'],
   },
   display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY MMM DD',
+    dateInput: 'L',
+    monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY MMMM DD',
+    monthYearA11yLabel: 'MMMM YYYY',
   },
 };
 
@@ -36,9 +36,10 @@ export const MY_FORMATS = {
   selector: 'app-facturacion-maniobras',
   templateUrl: './maniobras-diario.component.html',
   styleUrls: ['./maniobras-diario.component.css'],
-  providers: [
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  providers: [DatePipe,
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
   ],
 })
 export class ManiobrasDiarioComponent implements OnInit {
@@ -51,8 +52,8 @@ export class ManiobrasDiarioComponent implements OnInit {
   fIniLlegada = moment().local().startOf('day');
   fFinLlegada = moment().local().startOf('day');
 
-  displayedColumns = ['actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
-    'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
+  displayedColumns = ['actions', 'fechaingreso', 'cargaDescarga', 'contenedor', 'grado', 'tipo',  
+    'operador', 'placa', 'transportista', 'lavado', 'reparaciones', 'viaje',
     'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
   dataSource: any;
 
