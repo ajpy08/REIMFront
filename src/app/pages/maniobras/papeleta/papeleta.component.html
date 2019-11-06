@@ -8,8 +8,8 @@
   Asignar Fecha
 </button> 
 <font color="ff0000" *ngIf="!this.fExpiracionPapeleta.valid">  <--- La fecha de Expiración esta vencida...(ASIGNA FECHA VALIDA) </font> <br><br>
-<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos.</h3><br><br>
-<!-- <button (click)="prueba()">Prueba</button><br><br> -->
+<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos.</h3>
+<button type="button" class="btn btn-danger" (click)="back()"> Regresar</button><br><br>
 <div id="print-section">
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
   <html>
@@ -142,7 +142,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            PENDIENTE</font>
+              {{this.descripcion.value}}</font>
         </td>
         <td align="center" valign=bottom>
           <font color="#000000"><br></font>
@@ -155,7 +155,7 @@
           style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000"
           align="center" valign=middle>
           <font color="#000000">
-            PENDIENTE</font>
+              {{this.codigoISO.value}}</font>
         </td>
       </tr>
       <tr>

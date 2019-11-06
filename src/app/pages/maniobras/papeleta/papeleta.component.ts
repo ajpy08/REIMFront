@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ManiobraService } from '../maniobra.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { Location } from '@angular/common';
 
 import * as moment from 'moment';
+import { TipoContenedorService } from 'src/app/services/service.index';
 
 
 
@@ -21,7 +23,9 @@ export class PapeletaComponent implements OnInit {
   constructor(private activateRoute: ActivatedRoute,
     public router: Router,
     private maniobraService: ManiobraService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private location: Location,
+    private tipoContenedorService: TipoContenedorService, ) {
   }
 
   ngOnInit() {
@@ -71,9 +75,9 @@ export class PapeletaComponent implements OnInit {
         if (control.value != undefined) {
           var CurrentDate = moment().startOf('day').toISOString();
           var fecha = moment(control.value).endOf('day').toISOString();
-          if (fecha <= CurrentDate) {            
+          if (fecha <= CurrentDate) {
             return {
-              fechaInvalida: true              
+              fechaInvalida: true
             };
           }
         }
@@ -84,7 +88,13 @@ export class PapeletaComponent implements OnInit {
 
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
-      console.log(maniobra.maniobra)
+      this.tipoContenedorService.getTipoContenedor(maniobra.maniobra.tipo).subscribe((t) => {
+        if (t[0] != undefined) {
+          console.log(t[0])
+          this.regForm.controls['descripcion'].setValue(t[0].descripcion);
+          this.regForm.controls['codigoISO'].setValue(t[0].codigoISO);
+        }
+      });
       this.regForm.controls['_id'].setValue(maniobra.maniobra._id);
       this.regForm.controls['folio'].setValue(maniobra.maniobra.folio);
       this.regForm.controls['fAsignacionPapeleta'].setValue(maniobra.maniobra.fAsignacionPapeleta);
@@ -93,12 +103,10 @@ export class PapeletaComponent implements OnInit {
       this.regForm.controls['peso'].setValue(maniobra.maniobra.peso);
       this.regForm.controls['grado'].setValue(maniobra.maniobra.grado);
       this.regForm.controls['tipo'].setValue(maniobra.maniobra.tipo);
-      this.regForm.controls['descripcion'].setValue(maniobra.maniobra.descripcion);
-      this.regForm.controls['codigoISO'].setValue(maniobra.maniobra.codigoISO);
       this.regForm.controls['contenedor'].setValue(maniobra.maniobra.contenedor);
       this.regForm.controls['buque'].setValue(maniobra.maniobra.viaje != undefined ? maniobra.maniobra.viaje.buque.nombre : '');
       this.regForm.controls['viaje'].setValue(maniobra.maniobra.viaje != undefined ? maniobra.maniobra.viaje.viaje : '');
-      this.regForm.controls['BL'].setValue(maniobra.maniobra.BL);
+      this.regForm.controls['BL'].setValue(maniobra.maniobra.solicitud.blBooking);
       this.regForm.controls['cliente'].setValue(maniobra.maniobra.cliente.nombreComercial);
       this.regForm.controls['patio'].setValue(maniobra.maniobra.patio);
       this.regForm.controls['agencia'].setValue(maniobra.maniobra.agencia.nombreComercial);
@@ -129,8 +137,8 @@ export class PapeletaComponent implements OnInit {
     });
   }
 
-  prueba() {
-    console.log(this.regForm)
+  back() {
+    this.location.back();
   }
 
   get _id() {
