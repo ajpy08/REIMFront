@@ -12,59 +12,125 @@
 <mat-tab-group (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Descargas">
     <ng-template mat-tab-label>
-      Descargas ( <small>{{totalRegistros}}</small> )
+      Descargas ( <small>{{totalRegistrosDescargas}}</small> )
     </ng-template>
-    <div class="row animated fadeIn" *ngIf="!cargando">
+    <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="text-right">
-              <button [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                      <i class="fa fa-plus"></i> 
-                      Nueva Solicitud Descarga
-                    </button>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIni"
+                    placeholder="Fecha Solicitud Inicial ">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFin"
+                    placeholder="Fecha Solicitud Final">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                  (click)="cargaSolicitudes('D')">
+                  <i class="fas fa-filter"></i>
+                  Filtrar
+                </button>
+              </div>
             </div>
-            <div class="table-responsive">
-              <table class="table table-hover table-responsive">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Fecha Solicitud</th>
-                    <th>Tipo</th>
-                    <th>Agencia</th>
-                    <th>Naviera</th>
-                    <th>Cliente</th>
-                    <th>Viaje</th>
-                    <th>Buque</th>
-                    <th>observaciones</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let sol of solicitudes">
-                    <td>
-                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='D'" [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', sol._id ]" class="btn btn-primary">
-                        <i class="fa fa-edit"> Aprobar Descarga</i>
-                       </button>
-                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='D'" [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', sol._id ]" class="btn btn-primary">
-                        <i class="fa fa-edit"> Ver Datos</i>
-                       </button>
-                      <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
-                        <i class="fa fa-trash-o"> Borrar</i>
-                      </button>
-                    </td>
-                    <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
-                    <td>{{sol.tipo}}</td>
-                    <td>{{sol.agencia.nombreComercial}}</td>
-                    <td>{{sol.naviera?.nombreComercial}}</td>
-                    <td>{{sol.cliente.nombreComercial}}</td>
-                    <td>{{sol.viaje?.viaje}}{{sol.noViaje}}</td>
-                    <td>{{sol.buque?.nombre}}{{sol.nombreBuque}}</td>
-                    <td>{{sol.observaciones}}</td>
-                    <td>{{sol.estatus}}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <br>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterDescargas($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+              <button [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button"
+                class="btn waves-effect waves-light btn-rounded btn-primary">
+                <i class="fa fa-plus"></i>
+                Nueva Solicitud Descarga
+              </button>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" [dataSource]="dtDescargas" #sortDescargas="matSort" matSort>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button *ngIf="row.estatus==='NA' && row.tipo==='D'"
+                      [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', row._id]"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit">Aprobar Descarga</i>
+                    </button>
+                    <button *ngIf="row.estatus!=='NA' && row.tipo==='D'"
+                      [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', row._id]"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit">Ver Datos</i>
+                    </button>
+                    <button *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
+                      <i class="fa fa-trash-o">Borrar</i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fAlta">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="naviera.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}}{{row.noViaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.buque?.nombre}}{{row.nombreBuque}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="observaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.observaciones}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsDescarga" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsDescarga;"></mat-row>
+              </mat-table>
+              <mat-paginator #pagDescargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+                [showFirstLastButtons]>
+              </mat-paginator>
             </div>
           </div>
         </div>
@@ -75,51 +141,107 @@
     <ng-template mat-tab-label>
       Cargas ( <small>{{totalRegistrosCargas}}</small> )
     </ng-template>
-    <div class="row animated fadeIn" *ngIf="!cargando">
+    <div class="animated fadeIn" *ngIf="!cargando">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="text-right">
-              <button [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
-                      <i class="fa fa-plus"></i> 
-                      Nueva solicitud Carga
-                    </button>
+            <div class="row">
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker3" type="text" [(ngModel)]="fIni"
+                    placeholder="Fecha Solicitud Inicial ">
+                  <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                  <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker4" type="text" [(ngModel)]="fFin"
+                    placeholder="Fecha Solicitud Final">
+                  <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                  <mat-datepicker #picker4></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-sm-3">
+                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                  (click)="cargaSolicitudes('C')">
+                  <i class="fas fa-filter"></i>
+                  Filtrar
+                </button>
+              </div>
             </div>
-            <div class="table-responsive">
-              <table class="table table-hover table-responsive">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Fecha Solicitud</th>
-                    <th>Tipo</th>
-                    <th>Agencia</th>
-                    <th>Cliente</th>
-                    <th>observaciones</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let sol of solicitudesCarga">
-                    <td>
-                      <button *ngIf="sol.estatus==='NA' && sol.tipo==='C'" [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', sol._id ]" class="btn btn-primary">
-                        <i class="fa fa-edit"> Aprobar Carga</i>
-                       </button>
-                      <button *ngIf="sol.estatus!=='NA' && sol.tipo==='C'" [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', sol._id ]" class="btn btn-primary">
-                        <i class="fa fa-edit"> Ver Datos</i>
-                       </button>
-                      <button *ngIf="sol.estatus==='NA'" (click)="borrarSolicitud( sol )" class="btn btn-danger">
-                        <i class="fa fa-trash-o"> Borrar</i>
-                      </button>
-                    </td>
-                    <td>{{sol.fAlta | date:"dd-MM-yyyy"}}</td>
-                    <td>{{sol.tipo}}</td>
-                    <td>{{sol.agencia.nombreComercial}}</td>
-                    <td>{{sol.cliente.nombreComercial}}</td>
-                    <td>{{sol.observaciones}}</td>
-                    <td>{{sol.estatus}}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <br>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterCargas($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+              <button [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button"
+                class="btn waves-effect waves-light btn-rounded btn-primary">
+                <i class="fa fa-plus"></i>
+                Nueva Solicitud Carga
+              </button>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" [dataSource]="dtCargas" #sortCargas="matSort" matSort>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button *ngIf="row.estatus==='NA' && row.tipo==='C'"
+                      [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', row._id ]"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit"> Aprobar Carga</i>
+                    </button>
+                    <button *ngIf="row.estatus!=='NA' && row.tipo==='C'"
+                      [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', row._id ]"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit"> Ver Datos</i>
+                    </button>
+                    <button *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
+                      <i class="fa fa-trash-o"> Borrar</i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fAlta">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="observaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.observaciones}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsCarga" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsCarga;"></mat-row>
+              </mat-table>
+              <mat-paginator #pagCargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+              </mat-paginator>
             </div>
           </div>
         </div>
