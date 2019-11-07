@@ -3,7 +3,6 @@ import { Solicitud } from './solicitud.models';
 import { SolicitudService } from '../../services/service.index';
 import { MatTabGroup, MatTabChangeEvent, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
-
 declare var swal: any;
 
 @Component({
@@ -18,15 +17,14 @@ export class AprobacionesComponent implements OnInit {
   @ViewChild('pagCargas', { read: MatPaginator }) pagCargas: MatPaginator; //cargas
   
   @ViewChild(MatSort) sort: MatSort; //descargas
-  @ViewChild('sortCargas') sortEspera: MatSort; //cargas
+  @ViewChild('sortCargas') sortCargas: MatSort; //cargas
 
   cargando = true;
 
-  displayedColumnsCarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'naviera.nombreComercial', 'cliente.nombreComercial', 'viaje.viaje', 'buque.nombre',
-    'observaciones', 'estatus'];
-
   displayedColumnsDescarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'naviera.nombreComercial', 'cliente.nombreComercial', 'viaje.viaje', 'buque.nombre',
-    'observaciones', 'estatus'];
+  'observaciones', 'estatus'];
+
+  displayedColumnsCarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'cliente.nombreComercial', 'observaciones', 'estatus'];
 
   dtCargas: any;
   dtDescargas: any;
@@ -62,15 +60,14 @@ export class AprobacionesComponent implements OnInit {
     this.cargando = true;
     this._solicitudesService.getSolicitudes('C')
       .subscribe(resp => {
-
-        this.dtCargas = resp.solicitudes;
-        // this.dtCargas = new MatTableDataSource(resp.solicitudes);
-        // this.dtCargas.sortingDataAccessor = (item, property) => {
-        //   if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
-        //   return item[property];
-        // };
-        // this.dtCargas.sort = this.sortCargas;
-        // this.dtCargas.paginator = this.pagCargas;
+        //this.dtCargas = resp.solicitudes;
+        this.dtCargas = new MatTableDataSource(resp.solicitudes);
+        this.dtCargas.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
+          return item[property];
+        };
+        this.dtCargas.sort = this.sortCargas;
+        this.dtCargas.paginator = this.pagCargas;
         this.totalRegistrosCargas = resp.total;
         //this.dtCargas.filterPredicate  = this.Filtro();
         this.cargando = false;
