@@ -87,7 +87,7 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
-import { TiposContenedoresComponent } from './tipos-contenedores/tipos-contenedores.component';
+import { TiposContenedoresComponent } from "./tipos-contenedores/TiposContenedoresComponent";
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 
 

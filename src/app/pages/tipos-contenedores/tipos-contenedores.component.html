@@ -9,20 +9,68 @@
     </div>
   </div>
 </div>
-
-
 <div class="row animated fadeIn" *ngIf="!cargando">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
-                        <i class="fas fa-file-excel"></i> Exportar Excel
-                    </button>
-                    <button [routerLink]="['/buque2','nuevo']" type="button"
-                        class="btn btn-info waves-effect waves-light m-r-5">
-                        <i class="fa fa-plus"></i>
-                        Añadir nuevo buque
-                    </button> -->
+          <!--<button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+            <i class="fas fa-file-excel"></i> Exportar Excel
+          </button> -->
+          <button [routerLink]="['/buques/buque','nuevo']" type="button" class="btn btn-info waves-effect waves-light m-r-5">
+            <i class="fa fa-plus"></i>
+            Añadir nuevo Tipo Contenedor
+          </button>
         </div>
-        <h3 class="card-title">Tipo de Contenedores : ( <small>{{totalRegistros}}</small> )</h3>
+        <h3 class="card-title">Tipo Contenedor: ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="example-header mat-elevation-z8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+          </mat-form-field>
+        </div>
+        <br>
+        <div class="example-container mat-elevation-z8">
+          <mat-table #table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let tipo">
+                <button [routerLink]="['/tipos_contenedores/tipoContenedor', tipo._id ]" class="btn btn-primary m-r-5">
+                  <i class="fa fa-edit"></i>
+                </button>
+                <button (click)="borrarTipo( tipo )" class="btn btn-danger m-r-5">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pies">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Pies</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.pies}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="codigoISO">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>CodigoISO</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.codigoISO}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,8 +19,7 @@ export class BuqueService {
 
   getBuques(): Observable<any> {
     let url = URL_SERVICIOS + '/buques';
-    console.log(url)
-    return this.http.get(url)
+        return this.http.get(url)
   }
 
   getBuqueXNaviera(id: string): Observable<any> {
