@@ -138,7 +138,7 @@ export class SolicitudesComponent implements OnInit {
         if (borrar) {
           this._solicitudService.borrarSolicitud(sol._id)
             .subscribe(borrado => {
-              this.cargarSolicitudes();
+              this.cargarSolicitudes(sol.tipo);
             });
         }
       });
