@@ -1,3 +1,45 @@
-<p>
-  tipo-contenedores works!
-</p>
+<div class="row animated fadeIn">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <!-- <button (click)=javi()>Javi</button> -->
+      <!-- <h3 class="box-title m-b-0">Tipo Contenedor: {{ tipoContenedor.tipo }}</h3><br> -->
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarTIpoContenedor()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="tipo" name="tipo" type="text" class="form-control" placeholder="Tipo de Contenedor">
+                <mat-error *ngIf="tipo.touched && tipo.invalid">
+                  <sup>*</sup>Por Favor Ingrese Tipo Contenedor
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control" placeholder="Descripción">
+                <mat-error *ngIf="descripcion.touched && descripcion.invalid">
+                  <sup>*</sup>Por Favor Ingrese la Descripción del Contenedor
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="pies" name="pies" type="text" class="form-control" placeholder="Pies">
+                <mat-error *ngIf="pies.touched && pies.invalid">
+                  <sup>*</sup>Por Favor Ingrese la Medida (Pies)
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="codigoISO" name="codigoISO" type="text" class="form-control" placeholder="Codigo ISO">
+                <mat-error *ngIf="codigoISO.touched && codigoISO.invalid">
+                  <sup>*</sup>Por Favor Ingrese CodigoISO
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar Catálogo</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

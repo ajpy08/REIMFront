@@ -57,6 +57,7 @@ export class BuqueComponent implements OnInit {
         }
       });
   }
+  
 
   get naviera() {
     return this.regForm.get('naviera');
