@@ -87,6 +87,9 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
+import { TiposContenedoresComponent } from "./tipos-contenedores/TiposContenedoresComponent";
+import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
+
 
 const pagesRoutes: Routes = [
     {path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' }},
@@ -120,6 +123,9 @@ const pagesRoutes: Routes = [
 
     {path: 'camiones', component: CamionesComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de camiones' }},
     {path: 'camiones/camion/:id', component: CamionComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de camiones'}},
+
+    {path: 'tipos_contenedores', component: TiposContenedoresComponent, canActivate: [ AdminGuard ], data: { titulo: 'Mantenimiento de Tipos Contenedores' }},
+    {path: 'tipos_contenedores/tipoContenedor/:id', component: TipoContenedoresComponent,  canActivate: [ AdminGuard ], data: {titulo: 'Actualizacion de Tipos Contenedores'}},
 
 
     //////////////////////////////////////////////

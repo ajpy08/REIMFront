@@ -124,6 +124,8 @@ import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.co
 import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-factura.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
+import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
+import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 @NgModule({
     declarations: [
         // PagesComponent,
@@ -181,7 +183,9 @@ import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras
         DetalleManiobraComponent, 
         AsignarFacturaComponent, 
         FacturacionManiobrasComponent,
-        ManiobrasDiarioComponent
+        ManiobrasDiarioComponent,
+        TiposContenedoresComponent,
+        TipoContenedoresComponent
         
     ],
     exports: [
