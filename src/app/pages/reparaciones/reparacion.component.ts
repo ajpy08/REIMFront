@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 export class ReparacionComponent implements OnInit {
   reparacion: Reparacion;
   regForm: FormGroup;
+  url: string;
 
   constructor(private reparacionService: ReparacionService,
     public router: Router,
@@ -37,7 +38,7 @@ export class ReparacionComponent implements OnInit {
         emitEvent: false
       });
     });
-
+    this.url = '/reparaciones';
   }
 
   createFormGroup() {
@@ -82,6 +83,10 @@ export class ReparacionComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }

@@ -12,12 +12,13 @@ import { Location } from '@angular/common';
 export class TipoContenedoresComponent implements OnInit {
   tipoContenedor;
   regForm: FormGroup;
+  url: string;
 
 
 
   constructor(private TiposContenedoresService: TipoContenedorService,
     private fb: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router, private location: Location) {
-    
+
    }
 
   ngOnInit() {
@@ -31,6 +32,7 @@ export class TipoContenedoresComponent implements OnInit {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
+    this.url = '/tipos_contenedores';
   }
 
   cargarTipoContenedor (id: string){
@@ -73,7 +75,7 @@ export class TipoContenedoresComponent implements OnInit {
       descripcion: ['', [Validators.required]],
       pies: ['', [Validators.required]],
       codigoISO: ['', [Validators.required]],
-      _id: [''] 
+      _id: ['']
     });
   }
 
@@ -92,7 +94,11 @@ export class TipoContenedoresComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 
 }

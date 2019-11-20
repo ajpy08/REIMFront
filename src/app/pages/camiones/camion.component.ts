@@ -51,6 +51,7 @@ export class CamionComponent implements OnInit {
   fileTemporal = false;
   usuarioLogueado = new Usuario;
   bloquearControl: boolean = false;
+  url: string;
 
   constructor(public _camionService: CamionService,
     public _transportistaService: TransportistaService,
@@ -90,6 +91,7 @@ export class CamionComponent implements OnInit {
         this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
       }
     }
+    this.url = '/camiones';
   }
 
   cambioTransportista(transportista: string) {
@@ -197,6 +199,10 @@ export class CamionComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }
