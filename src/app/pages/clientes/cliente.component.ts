@@ -21,6 +21,7 @@ export class ClienteComponent implements OnInit {
   fileTemporal = false;
   edicion = false;
   usuarioLogueado = new Usuario;
+  url: string;
 
   constructor(public _clienteService: ClienteService,
     public _agenciaService: AgenciaService,
@@ -52,6 +53,8 @@ export class ClienteComponent implements OnInit {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
+    
+    this.url = '/clientes';
   }
   
   role(role: string) {
@@ -224,6 +227,10 @@ export class ClienteComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }
