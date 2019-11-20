@@ -78,6 +78,12 @@
                   <mat-hint>Seleccione un cliente.</mat-hint>
                 </mat-form-field>
               </div>
+              <div class="sinpadding"> <abbr  title="Agregar Cliente">
+                   <button class="user" [routerLink]="['/cliente/nuevo']" class="btn btn-info btn-sm">
+                    <i class="fa fa-user"></i>
+                  </button>
+                </abbr>
+                  </div>
               <div class="col-md-2">
                 <label class="control-label">Facturar a: </label>
                 <br>
@@ -308,7 +314,7 @@
                               <i class="fas fa-trash"></i>
                           </button>
                           <!-- <button *ngIf="aprobada" [routerLink]="['/solicitudes/papeleta',  this.contenedores.controls[i].get('maniobra').value._id ]" class="btn btn-success">
-                                                                    
+
                             <i class="fas fa-print"></i>
                           </button> -->
                         </td>
