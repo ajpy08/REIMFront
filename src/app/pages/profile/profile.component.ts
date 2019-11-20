@@ -89,6 +89,6 @@ export class ProfileComponent implements OnInit {
   }
 
   verClientes(usuario: Usuario) {
-    console.log(usuario);
+    // console.log(usuario);
   }
 }

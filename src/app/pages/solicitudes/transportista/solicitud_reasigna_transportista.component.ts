@@ -19,6 +19,7 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
   agencias: Agencia[] = [];
   transportistas: Transportista[] = [];
   regForm: FormGroup;
+  url: string;
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -35,7 +36,7 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra( id );
-
+    this.url = '/solicitudes_transportista';        
   }
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -106,6 +107,10 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

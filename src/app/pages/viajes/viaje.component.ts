@@ -178,7 +178,6 @@ export const MY_FORMATS = {
     }
 
     guardarViaje( ) {
-      console.log(this.regForm.valid);
       if (this.regForm.valid) {
         this._viajeService.guardarViaje(this.regForm.value).subscribe(res => {
         this.fileTemporal = null;

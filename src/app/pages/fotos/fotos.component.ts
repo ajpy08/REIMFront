@@ -46,6 +46,7 @@ export class FotosComponent implements OnInit {
   yaCargo = false;
   usuarioLogueado: Usuario;
   okCargar = false;
+  url: string;
 
 
   constructor(public _maniobraService: ManiobraService,
@@ -115,6 +116,7 @@ export class FotosComponent implements OnInit {
         preview: false
       }
     ];
+    this.url = '/contenedoresLR'; 
   }
 
   onChange(data: any): void {
@@ -318,7 +320,11 @@ export class FotosComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
   mostrarReparaciones(maniobra: Maniobra) {

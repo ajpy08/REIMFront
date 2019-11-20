@@ -7,7 +7,7 @@ import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
 import { AgenciaService, UsuarioService, TransportistaService, ClienteService, SolicitudService, TipoContenedorService } from '../../../services/service.index';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
 
@@ -33,6 +33,8 @@ export class SolicitudCargaComponent implements OnInit {
   estadosContenedor = [ ESTADOS_CONTENEDOR.VACIO_EXPORT];
   patios = PATIOS_ARRAY;
   aprobada = false;
+  usuarioLogueado: any;
+  url: string;
 
 
   constructor(
@@ -62,6 +64,12 @@ export class SolicitudCargaComponent implements OnInit {
         this.credito.disable({onlySelf: true});
       }
       this.contenedores.removeAt(0);
+
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+        this.url = '/solicitudes/aprobaciones';
+      } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+        this.url = '/solicitudes';        
+      }
     }
 
   createFormGroup() {
@@ -410,6 +418,10 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

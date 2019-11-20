@@ -66,6 +66,7 @@ export class DetalleManiobraComponent implements OnInit {
   _hSalida;
   _hDescarga;
   espera;
+  url: string;
 
   constructor(private maniobraService: ManiobraService, public operadorService: OperadorService,
     private agenciaService: AgenciaService, private transportistaService: TransportistaService,
@@ -86,6 +87,8 @@ export class DetalleManiobraComponent implements OnInit {
     this.createFormGroup();
     this.reparaciones.removeAt(0);
     this.cargarManiobra(id);
+
+    this.url = '/contenedoresLR'; 
   }
 
   createFormGroup() {
@@ -148,7 +151,6 @@ export class DetalleManiobraComponent implements OnInit {
     this.cargando = true;
     this.maniobraService.getManiobra(id).subscribe(maniob => {
       this.maniobra = maniob.maniobra;
-      console.log(this.maniobra)
       this._hLlegada = moment(maniob.maniobra.hLlegada, 'HH:mm');
       this._hEntrada = moment(maniob.maniobra.hEntrada, 'HH:mm');
       this._hDescarga = moment(maniob.maniobra.hDescarga, 'HH:mm');
@@ -317,7 +319,11 @@ export class DetalleManiobraComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
   guardaCambios(){

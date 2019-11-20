@@ -118,8 +118,6 @@ export class ManiobraComponent implements OnInit {
   cargarManiobra( id: string ) {
     this._maniobraService.getManiobra( id )
           .subscribe( maniobra => {
-
-            console.log( maniobra );
             this.maniobra = maniobra;
             this.maniobra.operador = maniobra.operador._id;
             this.cambioOperador( this.maniobra.operador );

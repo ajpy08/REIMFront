@@ -26,6 +26,7 @@ export class SolicitudTransportistaComponent implements OnInit {
   operadores: Operador[] = [];
   camiones: Camion[] = [];
   regForm: FormGroup;
+  url: string;
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -44,6 +45,7 @@ export class SolicitudTransportistaComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra( id );
+    this.url = '/solicitudes_transportista';
 
   }
   createFormGroup() {
@@ -149,10 +151,12 @@ export class SolicitudTransportistaComponent implements OnInit {
     .subscribe(resp => this.camiones = resp.camiones);
   }
 
-  back()
-  {
-this.location.back();
-
+  back() {
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
   guardaCambios() {
