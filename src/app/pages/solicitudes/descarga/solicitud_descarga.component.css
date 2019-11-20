@@ -10,3 +10,12 @@
 .example-selected-value {
     margin: 15px 0;
 }
+
+.sinpadding [class*="col-"] {
+  padding: 0;
+}
+
+ .btn-info {
+  padding: 3px, 8px;
+}
+

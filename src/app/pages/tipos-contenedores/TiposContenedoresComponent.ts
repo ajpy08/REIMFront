@@ -16,9 +16,9 @@ export class TiposContenedoresComponent implements OnInit {
   cargando: boolean = true;
   totalRegistros: number = 0;
 
-  displayedColumns = ['actions', 'tipo', 'descripcion', 'pies','codigoISO'];
+  displayedColumns = ['actions', 'tipo', 'descripcion', 'pies', 'codigoISO'];
   dataSource: any;
-  
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -27,7 +27,7 @@ export class TiposContenedoresComponent implements OnInit {
   constructor(private tipoContenedorService: TipoContenedorService) { }
 
 
-  
+
   ngOnInit() {
     this.cargarTiposContenedor();
   }
