@@ -15,6 +15,7 @@ export class BuqueComponent implements OnInit {
   buque: Buque = new Buque();
   navieras: Naviera[] = [];
   regForm: FormGroup;
+  url: string;
 
 
   constructor(public _buqueService: BuqueService,
@@ -42,6 +43,7 @@ export class BuqueComponent implements OnInit {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
+    this.url = '/buques';
   }
 
   cargarBuque(id: string) {
@@ -57,7 +59,7 @@ export class BuqueComponent implements OnInit {
         }
       });
   }
-  
+
 
   get naviera() {
     return this.regForm.get('naviera');
@@ -89,6 +91,10 @@ export class BuqueComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }

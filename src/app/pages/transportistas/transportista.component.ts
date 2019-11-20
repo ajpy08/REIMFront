@@ -17,6 +17,8 @@ export class TransportistaComponent implements OnInit {
   file: File = null;
   fileTemporal = false;
   edicion = false;
+  url: string;
+
   constructor(public _transportistaService: TransportistaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -34,6 +36,8 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
+
+    this.url = '/transportistas';
   }
 
   createFormGroup() {
@@ -198,6 +202,10 @@ export class TransportistaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')){
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }

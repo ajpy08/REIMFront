@@ -18,6 +18,7 @@ export class AgenciaComponent implements OnInit {
   fileImgTemporal = false;
   file: File = null;
   fileTemporal = false;
+  url: string;
 
 
   constructor(public _agenciaService: AgenciaService,
@@ -38,6 +39,7 @@ export class AgenciaComponent implements OnInit {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
+    this.url = '/agencias';
   }
 
   createFormGroup() {
@@ -199,6 +201,10 @@ export class AgenciaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }
