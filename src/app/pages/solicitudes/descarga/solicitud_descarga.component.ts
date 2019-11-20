@@ -53,7 +53,6 @@ export class SolicitudDescargaComponent implements OnInit {
   clientes: Cliente[] = [];
   contenedoresXViaje: Maniobra[] = [];
 
-
    listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   //  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
    estadosContenedor = ESTADOS_CONTENEDOR_ARRAY;
@@ -545,6 +544,11 @@ export class SolicitudDescargaComponent implements OnInit {
 
   back() {
     this.location.back();
+  }
+
+  nuevoCliente() {
+    localStorage.setItem('history', '/solicitudes/solicitud_descarga/nuevo');
+    this.router.navigate(['/cliente/nuevo']);
   }
 }
 
