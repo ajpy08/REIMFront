@@ -24,6 +24,8 @@ export class AprobarDescargaComponent implements OnInit {
   solicitudCorrecta = false;
   buques: Buque[] = [];
   viajes: Viaje[] = [];
+  url: string;
+
 
   constructor(public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
@@ -42,6 +44,7 @@ export class AprobarDescargaComponent implements OnInit {
     this.createFormGroup();
     this.contenedores.removeAt(0);
     this.cargarSolicitud(id);
+    this.url = '/solicitudes/aprobaciones';
   }
 
   createFormGroup() {
@@ -298,7 +301,6 @@ export class AprobarDescargaComponent implements OnInit {
     });
   }
   validaSolicitud(cont) {
-    console.log('aqui');
     if (cont.get('solicitud').value === this._id.value) {
       this.solicitudCorrecta = this.solicitudCorrecta && true;
       return;
@@ -327,7 +329,6 @@ export class AprobarDescargaComponent implements OnInit {
         cont.get('tipo').value,
         cont.get('peso').value, '')
         .subscribe(maniobra => {
-          console.log(maniobra);
           cont.get('maniobra').setValue(maniobra.maniobra._id);
           cont.get('folio').setValue(maniobra.maniobra.folio);
         });
@@ -345,12 +346,9 @@ export class AprobarDescargaComponent implements OnInit {
   apruebaSolicitud() {
     if (this.solicitudCorrecta) {
       this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value)
-        .subscribe(resp => { this.location.back(); });
+        .subscribe(resp => { this.router.navigate([this.url]) });
     }
   }
-
-
-
 
   // apruebaSolicitud( ) {
   //   if ( this.regForm.valid ) {
@@ -368,6 +366,10 @@ export class AprobarDescargaComponent implements OnInit {
   // }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

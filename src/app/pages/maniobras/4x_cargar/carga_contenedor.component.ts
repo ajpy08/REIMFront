@@ -55,6 +55,7 @@ export class CargaContenedorComponent implements OnInit {
   maniobra: Maniobra;
   mensajeExito = '';
   mensajeError = '';
+  url: string;
 
   contenedoresFiltrados: Observable<Maniobra[]>;
 
@@ -83,7 +84,7 @@ export class CargaContenedorComponent implements OnInit {
       map(value => typeof value === 'string' || value===null ? value : value.contenedor),
       map(cont => cont ? this._filter(cont) : this.contenedores.slice())
     );
-
+    this.url = '/maniobras'; 
   }
 //   private _filter(value: string): Maniobra[] {
 //     const filterValue = value.toLowerCase();
@@ -290,6 +291,10 @@ export class CargaContenedorComponent implements OnInit {
 
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

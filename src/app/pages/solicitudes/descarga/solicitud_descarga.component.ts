@@ -60,6 +60,7 @@ export class SolicitudDescargaComponent implements OnInit {
    patios = PATIOS_ARRAY;
 
    formasPago: string [] = ['', ''];
+   url: string;
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -96,6 +97,13 @@ export class SolicitudDescargaComponent implements OnInit {
         this.credito.disable({onlySelf: true});
       }
       this.contenedores.removeAt(0);
+
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+        this.url = '/solicitudes/aprobaciones';
+      } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+        this.url = '/solicitudes';        
+      }
+
     }
 
   createFormGroup() {
@@ -450,7 +458,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.subirComprobante();
   }
   ver() {
-    console.log(this.rutaComprobante);
+    // console.log(this.rutaComprobante);
   }
 
   subirComprobante() {
@@ -543,7 +551,11 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
   nuevoCliente() {

@@ -41,8 +41,6 @@ export class MisclientesComponent implements OnInit {
     this.cargando = true;
     this._clienteService.getClientesEmpresa( id )
           .subscribe( clientes => {
-
-            console.log( clientes );
             this.clientes = clientes;
             // this.cliente.usuario = cliente.usuario._id;
           });

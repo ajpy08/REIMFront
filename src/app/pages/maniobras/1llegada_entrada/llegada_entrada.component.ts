@@ -48,6 +48,7 @@ export class LlegadaEntradaComponent implements OnInit {
   maniobra: Maniobra;
   mensajeError = '';
   mensajeExito = '';
+  url: string;
 
   constructor(
     private _maniobraService: ManiobraService,
@@ -69,6 +70,7 @@ export class LlegadaEntradaComponent implements OnInit {
     this.createFormGroup();
     this.cargarManiobra( id );
 
+    this.url = '/maniobras'; 
   }
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -194,7 +196,7 @@ export class LlegadaEntradaComponent implements OnInit {
         this.mensajeExito = 'Cambios Realizados con éxito.'
         this.estatus.setValue(res.estatus);
           if (res.estatus === ETAPAS_MANIOBRA.REVISION){
-            this.location.back();
+            this.router.navigate([ this.url ]);
           }
         },error => {
           this.mensajeError =  error.error.mensaje;
@@ -204,6 +206,10 @@ export class LlegadaEntradaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

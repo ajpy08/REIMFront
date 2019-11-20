@@ -94,7 +94,6 @@ export class NgDropFilesDirective {
   private _archivoYaFueronDroppeados(nombreArchivo: string): boolean {
     for (const archivo of this.archivos) {
       if (archivo.nombreArchivo === nombreArchivo) {
-        console.log('El archivo ' + nombreArchivo + ' ya esta agregado');
         return true;
       }
     }

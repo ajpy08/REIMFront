@@ -48,7 +48,6 @@ export class ViajesComponent implements OnInit {
   }
 
   createFormGroup() {
-    console.log();
     this.regForm = this.fb.group({
       viaje: [''],
       buque: [''],

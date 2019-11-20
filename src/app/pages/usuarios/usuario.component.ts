@@ -18,6 +18,7 @@ export class UsuarioComponent implements OnInit {
   fileFoto: File = null;
   fotoTemporal = false;
   roles = ROLES_ARRAY;
+  url: string;
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -34,6 +35,8 @@ export class UsuarioComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarUsuario( id );
     }
+
+    this.url = '/usuarios'; 
   }
 
   createFormGroup() {
@@ -155,6 +158,10 @@ export class UsuarioComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

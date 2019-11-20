@@ -19,6 +19,7 @@ export class AprobarCargaComponent implements OnInit {
   regForm: FormGroup;
   solicitud: Solicitud;
   usuario: Usuario;
+  url: string;
 
   constructor(public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
@@ -35,6 +36,8 @@ export class AprobarCargaComponent implements OnInit {
     this.createFormGroup();
     this.contenedores.removeAt(0);
     this.cargarSolicitud(id);
+
+    this.url = '/solicitudes/aprobaciones'; 
   }
 
   createFormGroup() {
@@ -225,7 +228,11 @@ export class AprobarCargaComponent implements OnInit {
   //  }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
 }

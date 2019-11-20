@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 })
 export class UsuarioResetPassComponent implements OnInit {
   regForm: FormGroup;
-
+  url: string;
   constructor(
     public _usuarioService: UsuarioService,
     public router: Router,
@@ -24,6 +24,7 @@ export class UsuarioResetPassComponent implements OnInit {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarUsuario(id);
+    this.url = '/usuarios';
   }
 
   createFormGroup() {
@@ -99,6 +100,10 @@ export class UsuarioResetPassComponent implements OnInit {
   }
   
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

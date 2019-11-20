@@ -303,8 +303,6 @@ export class ManiobraService {
 
 
   buscarManiobraFecha(fechaIncio: string, fechaFin: string): Observable<any> {
-    console.log(fechaIncio);
-    console.log(fechaFin);
     let url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.maniobras));
@@ -317,7 +315,6 @@ export class ManiobraService {
     return this.http.put(url, foto)
       .pipe(map((resp: any) => {
         swal('Foto borrada', 'La foto a sido eliminada correctamente', 'success');
-        console.log(resp.maniobra);
         return resp.maniobra;
 
       }),
@@ -334,7 +331,6 @@ export class ManiobraService {
     return this.http.put(url, foto)
       .pipe(map((resp: any) => {
         swal('Foto borrado', 'La foto a sido eliminada correctamente', 'success');
-        console.log(resp.maniobra);
         return resp.maniobra;
 
       }),
