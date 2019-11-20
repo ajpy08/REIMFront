@@ -18,6 +18,7 @@ export class NavieraComponent implements OnInit {
   file: File = null;
   fileTemporal = false;
   edicion = false;
+  url: string;
 
   constructor(public _navieraService: NavieraService,
     public router: Router,
@@ -36,6 +37,7 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
+    this.url = '/navieras';
   }
 
   createFormGroup() {
@@ -196,6 +198,10 @@ export class NavieraComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }

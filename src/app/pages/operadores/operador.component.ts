@@ -47,6 +47,7 @@ export class OperadorComponent implements OnInit {
   transportistas: Transportista[] = [];
   operador: Operador = new Operador();
   usuarioLogueado: Usuario;
+  url: string;
 
   constructor(
     public _operadorService: OperadorService,
@@ -86,6 +87,7 @@ export class OperadorComponent implements OnInit {
         this.transportistas = this.usuarioLogueado.empresas;
       }
     }
+    this.url = '/operadores';
   }
 
   cargarOperador(id: string) {
@@ -203,6 +205,10 @@ export class OperadorComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    //this.location.back();
   }
 }

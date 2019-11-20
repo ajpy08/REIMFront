@@ -38,7 +38,7 @@ export class ClienteComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.usuarioLogueado = this.usuarioService.usuario;
-    
+
     if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
       this._clienteService.getClientesRole().subscribe((empresas) => {
         this.usuarioLogueado.empresas = empresas;
@@ -53,10 +53,10 @@ export class ClienteComponent implements OnInit {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
-    
+
     this.url = '/clientes';
   }
-  
+
   role(role: string) {
     var result = role.substr(0, role.indexOf('_'));
     return result;
@@ -210,7 +210,7 @@ export class ClienteComponent implements OnInit {
     if (this.fileImg != null && tipo == 'img') {
       file = this.fileImg;
       this.fileImgTemporal = true;
-      //console.log('FileImgTemporal ' + this.fileImgTemporal)  
+      //console.log('FileImgTemporal ' + this.fileImgTemporal)
     } else {
       if (this.file != null && tipo == 'formatoR1') {
         file = this.file;
