@@ -55,7 +55,6 @@ export class ModalDropzoneComponent implements OnInit {
 
   seleccionImagen(fileInput: any) {
     this.filesToUpload = <Array<File>> fileInput.target.files[0];
-    console.log(this.filesToUpload);
     // this.product.photo = fileInput.target.files[0]['name'];
   }
 

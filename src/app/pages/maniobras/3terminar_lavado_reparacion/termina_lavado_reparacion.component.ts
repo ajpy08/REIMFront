@@ -41,6 +41,8 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   tiposReparaciones: Reparacion[] = [];
   grados = GRADOS_CONTENEDOR_ARRAY;
   id: string;
+  url: string;
+
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -55,6 +57,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     this.createFormGroup();
     this.reparaciones.removeAt(0);
     this.cargarManiobra(this.id);
+    this.url = '/maniobras'; 
   }
 
   createFormGroup() {
@@ -313,6 +316,10 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

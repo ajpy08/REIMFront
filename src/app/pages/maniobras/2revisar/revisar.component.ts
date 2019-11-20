@@ -21,6 +21,8 @@ export class RevisarComponent implements OnInit {
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   mensajeError = '';
+  url: string;
+
   constructor(
     public _maniobraService: ManiobraService,
     public router: Router,
@@ -37,6 +39,7 @@ export class RevisarComponent implements OnInit {
     this.cargarManiobra( id );
     this.reparaciones.removeAt(0);
 
+    this.url = '/maniobras'; 
   }
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -229,7 +232,7 @@ guardaCambios() {
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
-          this.router.navigate([ '/maniobras' ]);
+          this.router.navigate([ this.url ]);
         }
         this.estatus.setValue(res.estatus);
       }, error => {
@@ -239,6 +242,10 @@ guardaCambios() {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 }

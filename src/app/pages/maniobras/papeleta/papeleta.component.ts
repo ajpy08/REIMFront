@@ -20,6 +20,7 @@ export class PapeletaComponent implements OnInit {
   maniobra = new Maniobra();
   id: string;
   propiedades: [];
+  url: string;
   constructor(private activateRoute: ActivatedRoute,
     public router: Router,
     private maniobraService: ManiobraService,
@@ -32,8 +33,10 @@ export class PapeletaComponent implements OnInit {
     this.id = this.activateRoute.snapshot.paramMap.get('id');
     this.cargarManiobra(this.id);
 
+    this.url = '/solicitudes_transportista'; 
+
     if (this.maniobra == undefined) {
-      this.router.navigate(['/solicitudes_transportista']);
+      this.router.navigate([this.url]);
     }
 
     this.createFormGroup();
@@ -90,7 +93,6 @@ export class PapeletaComponent implements OnInit {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
       this.tipoContenedorService.getTipoContenedor(maniobra.maniobra.tipo).subscribe((t) => {
         if (t[0] != undefined) {
-          console.log(t[0])
           this.regForm.controls['descripcion'].setValue(t[0].descripcion);
           this.regForm.controls['codigoISO'].setValue(t[0].codigoISO);
         }
@@ -138,7 +140,11 @@ export class PapeletaComponent implements OnInit {
   }
 
   back() {
-    this.location.back();
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    // this.location.back();
   }
 
   get _id() {
