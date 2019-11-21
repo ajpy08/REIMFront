@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as FileSaver from 'file-saver';
 // import * as XLSX from 'xlsx';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import swal from 'sweetalert';

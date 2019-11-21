@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { Viaje } from './viaje.models';
 import { Observable, throwError } from 'rxjs';

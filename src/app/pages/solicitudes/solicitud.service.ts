@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { Solicitud } from './solicitud.models';
 import swal from 'sweetalert';

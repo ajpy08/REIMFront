@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { URL_SERVICIOS } from 'src/app/config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

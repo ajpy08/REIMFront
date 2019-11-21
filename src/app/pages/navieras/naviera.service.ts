@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import { Naviera } from './navieras.models';
 import { Observable} from 'rxjs';
