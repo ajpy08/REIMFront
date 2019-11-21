@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TipoContenedorService } from '../../services/tipoContenedor/tipoContenedor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { TiposContenedoresService } from './tipos-contenedores.service';
 
 @Component({
   selector: 'app-tipo-contenedores',
@@ -14,9 +14,7 @@ export class TipoContenedoresComponent implements OnInit {
   regForm: FormGroup;
   url: string;
 
-
-
-  constructor(private TiposContenedoresService: TipoContenedorService,
+  constructor(private tiposContenedoresService: TiposContenedoresService,
     private fb: FormBuilder, private activatedRoute: ActivatedRoute, private router: Router, private location: Location) {
 
    }
@@ -36,7 +34,7 @@ export class TipoContenedoresComponent implements OnInit {
   }
 
   cargarTipoContenedor (id: string){
-    this.TiposContenedoresService.getTipoContenedor(id).subscribe((res) => {
+    this.tiposContenedoresService.getTipoContenedor(id).subscribe((res) => {
       this.tipoContenedor = res;
         for (var propiedad in this.tipoContenedor){
           for (var control in this.regForm.controls){
@@ -82,7 +80,7 @@ export class TipoContenedoresComponent implements OnInit {
   guardarTIpoContenedor(){
     if(this.regForm.valid) {
       // console.log(this.regForm.value)
-      this.TiposContenedoresService.guardarContenedor(this.regForm.value)
+      this.tiposContenedoresService.guardarContenedor(this.regForm.value)
       .subscribe(res => {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);

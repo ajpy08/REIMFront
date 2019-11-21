@@ -6,10 +6,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { Location } from '@angular/common';
 
 import * as moment from 'moment';
-import { TipoContenedorService } from 'src/app/services/service.index';
 import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
-
-
 
 @Component({
   selector: 'app-papeleta',
@@ -27,7 +24,7 @@ export class PapeletaComponent implements OnInit {
     private maniobraService: ManiobraService,
     private fb: FormBuilder,
     private location: Location,
-    private tipoContenedorService: TipoContenedorService,
+    private tipoContenedorService: TiposContenedoresService,
     ) {
   }
 
