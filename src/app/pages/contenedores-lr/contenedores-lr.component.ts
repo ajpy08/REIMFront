@@ -5,6 +5,7 @@ import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
 import { Maniobra } from 'src/app/models/maniobra.models';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-contenedores-lr',
@@ -29,7 +30,7 @@ export class ContenedoresLRComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService) { }
+  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService, public router: Router) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -87,5 +88,15 @@ export class ContenedoresLRComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  fotos(id: string, tipo: string) {
+    // localStorage.setItem('history', '/contenedoresLR');
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: { 'opcion': tipo }
+    };
+
+    this.router.navigate(['/fotos', id], navigationExtras);
   }
 }

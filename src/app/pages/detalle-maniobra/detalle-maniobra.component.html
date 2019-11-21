@@ -213,14 +213,13 @@
               <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado"
                 (focus)="ponHoraFinLavado()">
             </mat-form-field>
-          </div>
-          <div class="col-md">
-            <button *ngIf="lavado.value" type="button" [routerLink]="['/fotos',  _id.value]"
-              [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+            <br>
+            <button *ngIf="lavado.value" type="button" (click)="fotos(_id.value, 'fotos_lavado')" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Lavado
             </button>
           </div>
+          
         </div>
         <br>
         <h4 class="box-title"><b>Cotizaciones de Lavado de Terceros</b></h4><br>
@@ -341,15 +340,20 @@
           </div>
           <div class="col-md">
             <mat-form-field>
-              <label class="control-label"><b>Observaciones Reparacioón:</b></label>
+              <label class="control-label"><b>Observaciones Reparación:</b></label>
               <textarea matInput formControlName="reparacionesObservacion" rows="3" cols="40"></textarea>
             </mat-form-field>
           </div>
           <div class="col-md">
-            <button *ngIf="reparaciones.controls" type="button" [routerLink]="['/fotos',_id.value]"
+            <!-- <button *ngIf="reparaciones.controls" type="button" [routerLink]="['/fotos',_id.value]"
               [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Reparacion
+            </button>-->
+            <button *ngIf="reparaciones.value.length > 0" type="button" (click)="fotos(_id.value, 'fotos_reparacion')"
+              class="btn btn-primary">
+              <i class="fas fa-camera-retro"></i>
+              Fotos Reparación
             </button><br>
             <mat-label><b>Permitir Ver Fotos Naviera</b></mat-label>
             <mat-slide-toggle formControlName="mostrarFotosRNaviera" color="primary" class="m-l-5"
@@ -488,7 +492,7 @@
     <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
   </form>
 </div>
- <br><br>
+<br><br>
 <!-- <p>Form value {{ regForm.value | json }} </p> -->
 <!--<p> Form status {{ regForm.status | json}} </p>
 <p> Form status2 {{ regForm.pristine | json}} </p> -->

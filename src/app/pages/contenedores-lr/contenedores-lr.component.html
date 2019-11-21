@@ -83,28 +83,31 @@
             <ng-container matColumnDef="fotoslavado">
               <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <!-- <button [routerLink]="['/fotos', 'params', {id: row._id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
-                  <i class="fas fa-camera-retro"></i>
-                  Fotos
-                </button> -->
-                <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
+                <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
+                <button (click)="fotos(row._id, 'fotos_lavado')"
+                  class="btn btn-primary">
                 <i class="fas fa-camera-retro"></i>
                 Fotos
-              </button>
+                </button>
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="reparaciones">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
+              <mat-cell *matCellDef="let row"> 
+                <p *ngFor="let rep of row.reparaciones">
+                  {{rep.reparacion}}
+                </p><br><br>
+              </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="fotosreparacion">
-              <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
-                  <i class="fas fa-camera-retro"></i>
-                  Fotos
+                <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
+                <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0" (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
+                <i class="fas fa-camera-retro"></i>
+                Fotos
                 </button>
               </mat-cell>
             </ng-container>
