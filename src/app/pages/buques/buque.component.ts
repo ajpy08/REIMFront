@@ -95,6 +95,7 @@ export class BuqueComponent implements OnInit {
       this.url = localStorage.getItem('history')
     }
     this.router.navigate([this.url]);
+    localStorage.removeItem('history')
     //this.location.back();
   }
 }

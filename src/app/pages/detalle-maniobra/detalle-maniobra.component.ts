@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ManiobraService } from '../maniobras/maniobra.service';
@@ -323,6 +323,7 @@ export class DetalleManiobraComponent implements OnInit {
       this.url = localStorage.getItem('history')
     }
     this.router.navigate([this.url]);
+    localStorage.removeItem('history')
     // this.location.back();
   }
 
@@ -332,6 +333,16 @@ export class DetalleManiobraComponent implements OnInit {
         this.regForm.markAsPristine();
       });
     }
+  }
+
+  fotos(id: string, tipo: string) {
+    localStorage.setItem('history', '/maniobras/maniobra/' + id + '/detalle');
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: { 'opcion': tipo }
+    };
+
+    this.router.navigate(['/fotos', id], navigationExtras);
   }
 
   get _id() {
