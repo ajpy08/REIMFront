@@ -2,7 +2,7 @@ import { throwError as observableThrowError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../usuarios/usuario.model';
 import { HttpClient } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import swal from 'sweetalert';

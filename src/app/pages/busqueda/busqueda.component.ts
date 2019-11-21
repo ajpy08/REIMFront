@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { Usuario } from '../usuarios/usuario.model';
 import { Operador } from '../operadores/operador.models';
 import { Camion } from '../camiones/camion.models';

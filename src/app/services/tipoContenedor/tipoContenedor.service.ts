@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { UsuarioService } from '../service.index';
+import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import swal from 'sweetalert';
 
 @Injectable()

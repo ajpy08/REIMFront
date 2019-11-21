@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { URL_SERVICIOS } from '../config/config';
+import { URL_SERVICIOS } from '../../environments/environment';
 
 
 @Pipe({

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { URL_SERVICIOS } from '../../config/config';
+import { URL_SERVICIOS } from '../../../environments/environment';
 import { FileItem } from '../../models/file-item.models';
 import swal from 'sweetalert';
 import { Observable} from 'rxjs';
