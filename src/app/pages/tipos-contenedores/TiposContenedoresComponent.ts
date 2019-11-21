@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { TipoContenedorService } from '../../services/tipoContenedor/tipoContenedor.service';
+import { TiposContenedoresService } from './tipos-contenedores.service';
+
 
 declare var swal: any;
 
@@ -22,11 +23,7 @@ export class TiposContenedoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-
-
-  constructor(private tipoContenedorService: TipoContenedorService) { }
-
-
+  constructor(private tipoContenedorService: TiposContenedoresService) { }
 
   ngOnInit() {
     this.cargarTiposContenedor();

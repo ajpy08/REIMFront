@@ -21,12 +21,12 @@ import {
     ViajeService,
     SolicitudService,
     SubirArchivoService,
+    TiposContenedoresService,
     ExcelService,
     LoginGuard,
     AdminGuard,
     VerificaTokenGuard,
-    RefreshTokenInterceptor,
-    TipoContenedorService
+    RefreshTokenInterceptor
    } from './service.index';
 
 
@@ -52,6 +52,7 @@ import {
       ViajeService,
       SolicitudService,
       SubirArchivoService,
+      TiposContenedoresService,
       ExcelService,
       ModalUploadService,
       ModalDropzoneService,
@@ -59,7 +60,6 @@ import {
       AdminGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
-      TipoContenedorService
     ],
     declarations: []
   })
