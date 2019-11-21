@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 
 import * as moment from 'moment';
 import { TipoContenedorService } from 'src/app/services/service.index';
+import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
 
 
 
@@ -26,14 +27,15 @@ export class PapeletaComponent implements OnInit {
     private maniobraService: ManiobraService,
     private fb: FormBuilder,
     private location: Location,
-    private tipoContenedorService: TipoContenedorService, ) {
+    private tipoContenedorService: TipoContenedorService,
+    ) {
   }
 
   ngOnInit() {
     this.id = this.activateRoute.snapshot.paramMap.get('id');
     this.cargarManiobra(this.id);
 
-    this.url = '/solicitudes_transportista'; 
+    this.url = '/solicitudes_transportista';
 
     if (this.maniobra == undefined) {
       this.router.navigate([this.url]);
@@ -74,7 +76,7 @@ export class PapeletaComponent implements OnInit {
   validaFechaExpiracion(controlKey: string) {
     return (control: AbstractControl): { [s: string]: boolean } => {
       // control.parent es el FormGroup
-      if (this.regForm) { // en las primeras llamadas control.parent es undefined     
+      if (this.regForm) { // en las primeras llamadas control.parent es undefined
         if (control.value != undefined) {
           var CurrentDate = moment().startOf('day').toISOString();
           var fecha = moment(control.value).endOf('day').toISOString();
@@ -91,8 +93,9 @@ export class PapeletaComponent implements OnInit {
 
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
-      this.tipoContenedorService.getTipoContenedor(maniobra.maniobra.tipo).subscribe((t) => {
-        if (t[0] != undefined) {
+      this.tipoContenedorService.getTipoContenedorXTipo(maniobra.maniobra.tipo).subscribe((t) => {
+        console.log(t[0]);
+        if (t[0] !== undefined) {
           this.regForm.controls['descripcion'].setValue(t[0].descripcion);
           this.regForm.controls['codigoISO'].setValue(t[0].codigoISO);
         }

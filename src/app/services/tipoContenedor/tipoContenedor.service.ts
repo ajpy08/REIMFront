@@ -20,9 +20,16 @@ export class TipoContenedorService {
 
   getTipoContenedor(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/tipos_contenedores/tipoContenedor/' + id;
-    return this.http.get(url)
+        return this.http.get(url)
     .pipe(map((resp:any) => resp.tipoContenedor));
   }
+
+  getTipoContenedorXTipo(tipo: string): Observable<any> {
+    const url = URL_SERVICIOS + '/tipos_contenedores/tipoCont/' + tipo;
+        return this.http.get(url)
+    .pipe(map((resp:any) => resp.tipo));
+  }
+
 
   borrarTipoContenedor(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/tipos_contenedores/tipo_contenedor/' + id;
@@ -43,7 +50,7 @@ export class TipoContenedorService {
 
           return resp.tipoConteneor;
         }));
-    } else { //crear contenedor 
+    } else { //crear contenedor
         url += '?token=' + this.usuarioService.token;
         return this.http.post(url, tipoContenedor)
         .pipe(
