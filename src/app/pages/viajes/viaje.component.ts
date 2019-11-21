@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { Buque } from '../buques/buques.models';
 import { Naviera } from '../navieras/navieras.models';
-import { ViajeService, BuqueService, NavieraService, TipoContenedorService } from '../../services/service.index';
+import { ViajeService, BuqueService, NavieraService } from '../../services/service.index';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { ExcelService } from '../../services/excel/excel.service';
 import swal from 'sweetalert';
@@ -13,6 +13,7 @@ import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import * as _moment from 'moment';
+import { TiposContenedoresService } from '../tipos-contenedores/tipos-contenedores.service';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -48,7 +49,7 @@ export const MY_FORMATS = {
 
     constructor(
       private _viajeService: ViajeService,
-      private _tipoContenedorService: TipoContenedorService,
+      private _tipoContenedorService: TiposContenedoresService,
       private _buqueService: BuqueService,
       private _navieraService: NavieraService,
       private router: Router,

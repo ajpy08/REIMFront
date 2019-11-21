@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService, UsuarioService } from '../../../services/service.index';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 
 
 
@@ -25,8 +25,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
   displayedCargasColumns = ['actions', 'folio', 'contenedor', 'tipo','peso','cliente','agencia','operador','camion'];
   dataSourceCargas: any;
 
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
 
 
 
@@ -35,6 +38,10 @@ export class SolicitudesTransportistaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarManiobras();
+    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+    }
   }
 
   cargarManiobras() {
@@ -69,7 +76,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceDescargas = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceDescargas.sort = this.sort;
           this.dataSourceDescargas.paginator = this.paginator;
-          this.totalRegistros = maniobras.total;          
+          this.totalRegistros = maniobras.total;
         });
       this._maniobraService.getManiobras('C', 'TRANSITO', null, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT')
         .subscribe(maniobras => {
@@ -78,7 +85,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceCargas = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceCargas.sort = this.sort;
           this.dataSourceCargas.paginator = this.paginator;
-          this.totalRegistrosCargas = maniobras.total;          
+          this.totalRegistrosCargas = maniobras.total;
         });
       this.cargando = false;
     }
@@ -90,6 +97,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dataSourceDescargas.filter = filterValue;
     this.totalRegistros = this.dataSourceDescargas.filteredData.length;
+  }
+
+  onLinkClick(event: MatTabChangeEvent) {
+
+    localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
   applyFilterCargas(filterValue: string) {

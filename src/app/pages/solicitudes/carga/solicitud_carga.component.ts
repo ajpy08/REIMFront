@@ -5,11 +5,12 @@ import { Agencia } from '../../agencias/agencia.models';
 import { Usuario } from '../../usuarios/usuario.model';
 import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
-import { AgenciaService, UsuarioService, TransportistaService, ClienteService, SolicitudService, TipoContenedorService } from '../../../services/service.index';
+import { AgenciaService, UsuarioService, TransportistaService, ClienteService, SolicitudService } from '../../../services/service.index';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
 import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
+import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class SolicitudCargaComponent implements OnInit {
 
 
   constructor(
-    private _tipoContenedorService: TipoContenedorService,
+    private _tipoContenedorService: TiposContenedoresService,
     private _agenciaService: AgenciaService,
     private _usuarioService: UsuarioService,
     private _transportistaService: TransportistaService,
@@ -68,7 +69,7 @@ export class SolicitudCargaComponent implements OnInit {
       if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
         this.url = '/solicitudes/aprobaciones';
       } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
-        this.url = '/solicitudes';        
+        this.url = '/solicitudes';
       }
     }
 
@@ -249,7 +250,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.onChangeCredito( {checked: this.credito} );
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.peso, element.grado,
-                            element.maniobra, element.transportista, 
+                            element.maniobra, element.transportista,
                             element.transportista.nombreComercial, element.patio, '');
       });
 
@@ -305,14 +306,14 @@ export class SolicitudCargaComponent implements OnInit {
       return;
     }
       this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value ,
-        undefined, this.transportistaTemp.value._id, 
+        undefined, this.transportistaTemp.value._id,
         this.transportistaTemp.value.nombreComercial, this.patioTemp.value, '');
       this.contenedorTemp.setValue('');
       this.tipoTemp.setValue('');
   }
 
   onChangeCredito( event ) {
-    
+
     if (event.checked) {
       if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
       this.rutaComprobante.disable({ onlySelf : true});
