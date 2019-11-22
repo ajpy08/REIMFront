@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { ManiobraService } from '../maniobra.service';
 import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from '../../../config/config';
 import { Maniobra } from 'src/app/models/maniobra.models';
@@ -32,6 +32,8 @@ export class InventarioComponent implements OnInit {
   totalInventario: number = 0;
   totalReparaciones: number = 0;
 
+
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('MatPaginatorLR', { read: MatPaginator }) MatPaginatorLR: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -47,6 +49,10 @@ export class InventarioComponent implements OnInit {
       this.displayedColumnsLR = ['actions', 'fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
     } else {
       this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
+    }
+    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
   }
 
@@ -326,6 +332,9 @@ export class InventarioComponent implements OnInit {
       }
     }
     return subTotal;
+  }
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
   detalle(id: string) {
