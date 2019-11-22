@@ -15,6 +15,7 @@ import * as _moment from 'moment';
 import swal from 'sweetalert';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 
@@ -63,7 +64,7 @@ export class ManiobrasDiarioComponent implements OnInit {
   checkedVacios = false;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
-    public _excelService: ExcelService, public matDialog: MatDialog) { }
+    public _excelService: ExcelService, public matDialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.consultaManiobras().then((value: { ok: Boolean, mensaje: String }) => { });
@@ -198,5 +199,11 @@ export class ManiobrasDiarioComponent implements OnInit {
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
+  }
+
+  detalle(id: string) {
+    localStorage.setItem('history', '/maniobras_diario');
+
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 }

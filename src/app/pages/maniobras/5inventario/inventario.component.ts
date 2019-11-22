@@ -6,6 +6,7 @@ import { Maniobra } from 'src/app/models/maniobra.models';
 import { UsuarioService, ExcelService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
+import { Router } from '@angular/router';
 declare var swal: any;
 
 @Component({
@@ -36,7 +37,7 @@ export class InventarioComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("MatSort2") MatSort2: MatSort;
   constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService,
-    private _excelService: ExcelService) { }
+    private _excelService: ExcelService, private router: Router) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -325,5 +326,11 @@ export class InventarioComponent implements OnInit {
       }
     }
     return subTotal;
+  }
+
+  detalle(id: string) {
+    localStorage.setItem('history', '/inventario');
+
+    this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
   }
 }
