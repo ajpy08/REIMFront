@@ -100,7 +100,6 @@ export class SolicitudesTransportistaComponent implements OnInit {
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-
     localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 

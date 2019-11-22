@@ -16,7 +16,7 @@
 </button>
 <!-- ///////////////////////////////////////T R A N S I T O ///////////////////////////////////////////////////////////// -->
 
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Transito">
     <ng-template mat-tab-label>
       Transito ( <small>{{totalTransito}}</small> )
@@ -372,7 +372,7 @@
                   <mat-cell *matCellDef="let row"> {{row.lavado}} <br>
                     <!-- <button [routerLink]="['/fotos',  row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos 
+                      Fotos
                   </button> -->
                   </mat-cell>
                 </ng-container>
@@ -382,7 +382,7 @@
                   <mat-cell *matCellDef="let row">
                     <!-- <button [routerLink]="['/fotos',  row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos 
+                      Fotos
                     </button> -->
                     <br>
                     <p *ngFor="let rep of row.reparaciones">
