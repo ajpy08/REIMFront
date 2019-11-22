@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { ManiobraService, UsuarioService } from '../../services/service.index';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
 import { Usuario } from '../usuarios/usuario.model';
 
@@ -43,7 +43,7 @@ export class ManiobrasComponent implements OnInit {
   usuarioLogueado: Usuario;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild('pagEspera', { read: MatPaginator }) pagEspera: MatPaginator;
   @ViewChild('pagRevision', { read: MatPaginator }) pagRevision: MatPaginator;
   @ViewChild('pagLR', { read: MatPaginator }) pagLR: MatPaginator;
@@ -70,11 +70,11 @@ export class ManiobrasComponent implements OnInit {
       this.displayedColumnsRevision = ['actions', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
         'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     }
-
     this.cargarManiobras();
-    
-    
-
+    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+    }
   }
 
   applyFilterTransito(filterValue: string) {
@@ -101,7 +101,7 @@ export class ManiobrasComponent implements OnInit {
   applyFilterLavadoRevision(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    
+
     this.dtLavadoReparacion.filter = filterValue;
     this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
   }
@@ -111,6 +111,10 @@ export class ManiobrasComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dtXCargar.filter = filterValue;
     this.totalXCargar = this.dtXCargar.filteredData.length;
+  }
+
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
   cargarManiobras() {
@@ -139,7 +143,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtEspera.sort = this.sortEspera;
         this.dtEspera.paginator = this.pagEspera;
         this.totalEspera = maniobras.total;
-        this.dtEspera.filterPredicate  = this.Filtro();                
+        this.dtEspera.filterPredicate  = this.Filtro();
 
       });
 
@@ -181,7 +185,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
-        this.dtEspera.filterPredicate  = this.Filtro();  
+        this.dtEspera.filterPredicate  = this.Filtro();
         this.cargando = false;
       });
 
@@ -214,18 +218,18 @@ export class ManiobrasComponent implements OnInit {
       });
   }
 
-    
+
   Filtro(): (data: any, filter: string) => boolean {
     let filterFunction = function(data, filter): boolean {
-      const dataStr = data.contenedor.toLowerCase() + 
+      const dataStr = data.contenedor.toLowerCase() +
                       (data.folio? data.folio:'') +
-                      data.tipo.toLowerCase() + 
-                      data.peso.toLowerCase() + 
+                      data.tipo.toLowerCase() +
+                      data.peso.toLowerCase() +
                       (data.viaje? data.viaje.viaje.toLowerCase():'') +
                       (data.cliente? data.cliente.nombreComercial.toLowerCase():'') +
                       (data.viaje? data.viaje.buque.nombre.toLowerCase():'') +
                       (data.agencia? data.agencia.nombreComercial.toLowerCase():'');
-        return dataStr.indexOf(filter) != -1; 
+        return dataStr.indexOf(filter) != -1;
     }
     return filterFunction;
   }
