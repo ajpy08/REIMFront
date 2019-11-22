@@ -20,6 +20,7 @@ import { Viaje } from '../viajes/viaje.models';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
+import { Router } from '@angular/router';
 
 const moment = _moment;
 
@@ -101,7 +102,7 @@ export class VaciosComponent implements OnInit {
   name: string;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
-    public _excelService: ExcelService, public matDialog: MatDialog) { }
+    public _excelService: ExcelService, public matDialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.cargarViajes(new Date().toString());
@@ -600,5 +601,11 @@ export class VaciosComponent implements OnInit {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {
       id.contenedor = res.contenedor;
     });
+  }
+
+  detalle(id: string) {
+    localStorage.setItem('history', '/vacios');
+
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 }

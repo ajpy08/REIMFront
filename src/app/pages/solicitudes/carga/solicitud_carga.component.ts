@@ -31,7 +31,7 @@ export class SolicitudCargaComponent implements OnInit {
   tiposContenedor: any[] = [];
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   grados = GRADOS_CONTENEDOR_ARRAY;
-  estadosContenedor = [ ESTADOS_CONTENEDOR.VACIO_EXPORT];
+  estadosContenedor = [ESTADOS_CONTENEDOR.VACIO_EXPORT];
   patios = PATIOS_ARRAY;
   aprobada = false;
   usuarioLogueado: any;
@@ -51,27 +51,28 @@ export class SolicitudCargaComponent implements OnInit {
     private _subirArchivoService: SubirArchivoService,
     private location: Location) { }
 
-    ngOnInit() {
-      this._agenciaService.getAgencias().subscribe(ag => {this.agencias = ag.agencias; });
-      this._transportistaService.getTransportistas().subscribe( transportistas => this.transportistas = transportistas.transportistas );
-      this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
-      this.createFormGroup();
-      const id = this.activatedRoute.snapshot.paramMap.get('id');
+  ngOnInit() {
+    this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+    this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
+    this.createFormGroup();
+    this.usuarioLogueado = this._usuarioService.usuario;
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
 
-      if (id !== 'nuevo') {
-        this.edicion = true;
-        this.cargarSolicitud ( id );
-      } else {
-        this.credito.disable({onlySelf: true});
-      }
-      this.contenedores.removeAt(0);
-
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-        this.url = '/solicitudes/aprobaciones';
-      } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
-        this.url = '/solicitudes';
-      }
+    if (id !== 'nuevo') {
+      this.edicion = true;
+      this.cargarSolicitud(id);
+    } else {
+      this.credito.disable({ onlySelf: true });
     }
+    this.contenedores.removeAt(0);
+
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+      this.url = '/solicitudes/aprobaciones';
+    } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+      this.url = '/solicitudes';
+    }
+  }
 
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -83,17 +84,17 @@ export class SolicitudCargaComponent implements OnInit {
       rutaComprobante: [''],
       correo: [''],
       facturarA: ['', [Validators.required]],
-      rfc: [{value: '', disabled: true}],
-      razonSocial: [{value: '', disabled: true}],
-      calle: [{value: '', disabled: true}],
-      noExterior: [{value: '', disabled: true}],
-      noInterior: [{value: '', disabled: true}],
-      colonia: [{value: '', disabled: true}],
-      municipio: [{value: '', disabled: true}],
-      ciudad: [{value: '', disabled: true}],
-      estado: [{value: '', disabled: true}],
+      rfc: [{ value: '', disabled: true }],
+      razonSocial: [{ value: '', disabled: true }],
+      calle: [{ value: '', disabled: true }],
+      noExterior: [{ value: '', disabled: true }],
+      noInterior: [{ value: '', disabled: true }],
+      colonia: [{ value: '', disabled: true }],
+      municipio: [{ value: '', disabled: true }],
+      ciudad: [{ value: '', disabled: true }],
+      estado: [{ value: '', disabled: true }],
       correoFac: [''],
-      cp: [{value: '', disabled: true}],
+      cp: [{ value: '', disabled: true }],
       maniobraTemp: [''],
       contenedorTemp: [''],
       tipoTemp: [''],
@@ -101,7 +102,7 @@ export class SolicitudCargaComponent implements OnInit {
       transportistaTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO_EXPORT],
       patioTemp: [PATIOS.POLIGONO],
-      contenedores: this.fb.array([ this.creaContenedor('', '' , '', '', '', '', '', '') ], {validators: Validators.required}),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '', '')], { validators: Validators.required }),
       _id: [''],
       tipo: ['C'],
       estatus: ['']
@@ -127,7 +128,7 @@ export class SolicitudCargaComponent implements OnInit {
     this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra, transportista, transportista2, patio, estatus));
   }
 
-  removeContenedor( index: number ) {
+  removeContenedor(index: number) {
     this.contenedores.removeAt(index);
     this.regForm.markAsDirty();
   }
@@ -222,12 +223,12 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
 
-  cargarSolicitud( id: string ) {
-    this._SolicitudService.cargarSolicitud( id ).subscribe( solicitud => {
+  cargarSolicitud(id: string) {
+    this._SolicitudService.cargarSolicitud(id).subscribe(solicitud => {
       this.regForm.controls['_id'].setValue(solicitud._id);
       this.regForm.controls['tipo'].setValue(solicitud.tipo);
       this.regForm.controls['agencia'].setValue(solicitud.agencia);
-      this.cargaClientes({value: solicitud.agencia});
+      this.cargaClientes({ value: solicitud.agencia });
       this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
       this.regForm.controls['credito'].setValue(solicitud.credito);
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
@@ -247,15 +248,15 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['cp'].setValue(solicitud.cp);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
-      this.onChangeCredito( {checked: this.credito} );
+      this.onChangeCredito({ checked: this.credito });
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.peso, element.grado,
-                            element.maniobra, element.transportista,
-                            element.transportista.nombreComercial, element.patio, '');
+          element.maniobra, element.transportista,
+          element.transportista.nombreComercial, element.patio, '');
       });
 
       if (solicitud.estatus === 'APROBADA') {
-        this.regForm.disable({onlySelf : true});
+        this.regForm.disable({ onlySelf: true });
         this.aprobada = true;
       }
     });
@@ -266,10 +267,10 @@ export class SolicitudCargaComponent implements OnInit {
     let cliente = new Cliente();
     cliente = this.clientes.find(x => x._id === event.value);
     if (cliente.credito) {
-      this.credito.enable({onlySelf : true});
+      this.credito.enable({ onlySelf: true });
       this.credito.setValue(true);
     } else {
-      this.credito.disable({onlySelf : true});
+      this.credito.disable({ onlySelf: true });
       this.credito.setValue(false);
     }
     this.correo.setValue(cliente.correo);
@@ -278,7 +279,7 @@ export class SolicitudCargaComponent implements OnInit {
 
   cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
-    .subscribe( cliente => this.clientes = cliente.clientes);
+      .subscribe(cliente => this.clientes = cliente.clientes);
 
     const reg = this.agencias.find(x => x._id == event.value);
     if (reg) { this.correo.setValue(reg.correo); }
@@ -297,7 +298,7 @@ export class SolicitudCargaComponent implements OnInit {
       swal('Faltan datos', 'No ha seleccionado grado', 'error');
       return;
     }
-    if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined  ) {
+    if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined) {
       swal('Faltan datos', 'No ha seleccionado transportista', 'error');
       return;
     }
@@ -305,25 +306,25 @@ export class SolicitudCargaComponent implements OnInit {
       swal('Faltan datos', 'No ha seleccionado estado', 'error');
       return;
     }
-      this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value ,
-        undefined, this.transportistaTemp.value._id,
-        this.transportistaTemp.value.nombreComercial, this.patioTemp.value, '');
-      this.contenedorTemp.setValue('');
-      this.tipoTemp.setValue('');
+    this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value,
+      undefined, this.transportistaTemp.value._id,
+      this.transportistaTemp.value.nombreComercial, this.patioTemp.value, '');
+    this.contenedorTemp.setValue('');
+    this.tipoTemp.setValue('');
   }
 
-  onChangeCredito( event ) {
+  onChangeCredito(event) {
 
     if (event.checked) {
       if (this.rutaComprobante.value === '') { this.rutaComprobante.setValue('..'); }
-      this.rutaComprobante.disable({ onlySelf : true});
+      this.rutaComprobante.disable({ onlySelf: true });
     } else {
       if (this.rutaComprobante.value === '..') { this.rutaComprobante.setValue(''); }
-      this.rutaComprobante.enable({ onlySelf : true});
+      this.rutaComprobante.enable({ onlySelf: true });
     }
   }
 
-  onChangeFacturarA( event) {
+  onChangeFacturarA(event) {
     switch (event.value) {
       case 'Cliente':
         if (!this.cliente || this.cliente.value === '') {
@@ -344,50 +345,50 @@ export class SolicitudCargaComponent implements OnInit {
           this.cp.setValue(reg.cp);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
-            this.credito.enable({onlySelf : true});
+            this.credito.enable({ onlySelf: true });
             this.credito.setValue(true);
-            this.onChangeCredito({checked: true});
+            this.onChangeCredito({ checked: true });
           } else {
-            this.credito.disable({onlySelf : true});
+            this.credito.disable({ onlySelf: true });
             this.credito.setValue(false);
-            this.onChangeCredito({checked: false});
+            this.onChangeCredito({ checked: false });
           }
         }
         break;
       case 'Agencia Aduanal':
-          if (!this.agencia || this.agencia.value === '') {
-            swal('Error', 'No ha seleccionado la agencia aduanal', 'error');
-            this.facturarA.setValue(null);
-            return;
+        if (!this.agencia || this.agencia.value === '') {
+          swal('Error', 'No ha seleccionado la agencia aduanal', 'error');
+          this.facturarA.setValue(null);
+          return;
+        } else {
+          const reg = this.agencias.find(x => x._id == this.agencia.value);
+          this.rfc.setValue(reg.rfc);
+          this.razonSocial.setValue(reg.razonSocial);
+          this.calle.setValue(reg.calle);
+          this.noExterior.setValue(reg.noExterior);
+          this.noInterior.setValue(reg.noInterior);
+          this.colonia.setValue(reg.colonia);
+          this.municipio.setValue(reg.municipio);
+          this.ciudad.setValue(reg.ciudad);
+          this.estado.setValue(reg.estado);
+          this.cp.setValue(reg.cp);
+          this.correoFac.setValue(reg.correoFac);
+          if (reg.credito) {
+            this.credito.enable({ onlySelf: true });
+            this.credito.setValue(true);
+            this.onChangeCredito({ checked: true });
           } else {
-            const reg = this.agencias.find(x => x._id == this.agencia.value);
-            this.rfc.setValue(reg.rfc);
-            this.razonSocial.setValue(reg.razonSocial);
-            this.calle.setValue(reg.calle);
-            this.noExterior.setValue(reg.noExterior);
-            this.noInterior.setValue(reg.noInterior);
-            this.colonia.setValue(reg.colonia);
-            this.municipio.setValue(reg.municipio);
-            this.ciudad.setValue(reg.ciudad);
-            this.estado.setValue(reg.estado);
-            this.cp.setValue(reg.cp);
-            this.correoFac.setValue(reg.correoFac);
-            if (reg.credito) {
-              this.credito.enable({onlySelf : true});
-              this.credito.setValue(true);
-              this.onChangeCredito({checked: true});
-            } else {
-              this.credito.disable({onlySelf : true});
-              this.credito.setValue(false);
-              this.onChangeCredito({checked: false});
-            }
+            this.credito.disable({ onlySelf: true });
+            this.credito.setValue(false);
+            this.onChangeCredito({ checked: false });
           }
+        }
         break;
     }
   }
 
   onFilePDFComprobanteSelected(event) {
-    this.fileComprobante = <File> event.target.files[0];
+    this.fileComprobante = <File>event.target.files[0];
     this.subirComprobante();
   }
 
@@ -400,7 +401,7 @@ export class SolicitudCargaComponent implements OnInit {
     });
   }
 
-  guardarSolicitud( ) {
+  guardarSolicitud() {
     if (this.regForm.valid) {
       this.transportistaTemp.setValue(null);
       this.estadoTemp.setValue(null);
@@ -408,7 +409,7 @@ export class SolicitudCargaComponent implements OnInit {
       this._SolicitudService.guardarSolicitud(this.regForm.getRawValue()).subscribe(res => {
         this.fileComprobante = null;
         this.temporalComprobante = false;
-        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value ===  undefined) {
+        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
           this.router.navigate(['/solicitudes/solicitud_carga', this.regForm.get('_id').value]);
