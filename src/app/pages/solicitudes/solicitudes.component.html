@@ -1,4 +1,4 @@
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Descargas">
     <ng-template mat-tab-label>
       Descargas ( <small>{{totalRegistrosDescargas}}</small> )
@@ -121,7 +121,7 @@
               </mat-table>
               <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
-            </div>            
+            </div>
           </div>
         </div>
       </div>

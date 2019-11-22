@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Solicitud } from './solicitud.models';
 import { SolicitudService, UsuarioService } from '../../services/service.index';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import * as _moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -40,7 +40,7 @@ export class SolicitudesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator; //descargas
   @ViewChild(MatSort) sort: MatSort; //descargas
-
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild('pagCargas', { read: MatPaginator }) pagCargas: MatPaginator; //cargas
   @ViewChild('sortCargas') sortCargas: MatSort; //cargas
 
@@ -61,6 +61,10 @@ export class SolicitudesComponent implements OnInit {
     this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarSolicitudes('D');
     this.cargarSolicitudes('C');
+    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+    }
   }
   cargarSolicitudes(CD: string) {
     this.cargando = true;
@@ -130,6 +134,10 @@ export class SolicitudesComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dtDescargas.filter = filterValue;
     this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+  }
+
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
   borrarSolicitud(sol: Solicitud) {
