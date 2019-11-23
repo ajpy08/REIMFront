@@ -320,12 +320,28 @@ export class FotosComponent implements OnInit {
   }
 
   back() {
-    if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (history)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+
+    
+      //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+      //pop() elimina del array el ultimo elemento
+      this.url = array.pop();
+
+      //Asigno a localStorage (history) el nuevo JSON 
+      localStorage.setItem('historyArray', JSON.stringify(array));
     }
+
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    // this.location.back();
   }
 
   mostrarReparaciones(maniobra: Maniobra) {

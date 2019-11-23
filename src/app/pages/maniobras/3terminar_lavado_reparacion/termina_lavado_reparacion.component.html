@@ -83,25 +83,33 @@
                 <label class="control-label"><b>Fecha y Hora de Finalizacion Lavado</b></label>
                 <mat-form-field class="inputpersonalizado">
                   <mat-label>Fecha Lavado</mat-label>
-                  <input matInput formControlName="fIniLavado" [matDatepicker]="picker" type="text" placeholder="Fecha de Lavado">
+                  <input matInput formControlName="fIniLavado" [matDatepicker]="picker" type="text"
+                    placeholder="Fecha de Lavado">
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
                 <br>
                 <mat-form-field>
                   <mat-label>Hora Inicio Lavado</mat-label>
-                  <input matInput formControlName="hIniLavado" type="time" placeholder="Hora Inicio Lavado" (focus)="ponHoraIniLavado()">
+                  <input matInput formControlName="hIniLavado" type="time" placeholder="Hora Inicio Lavado"
+                    (focus)="ponHoraIniLavado()">
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Hora Finalización Lavado</mat-label>
-                  <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado" (focus)="ponHoraFinLavado()">
+                  <input matInput formControlName="hFinLavado" type="time" placeholder="Hora Finalización Lavado"
+                    (focus)="ponHoraFinLavado()">
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
-                      <i class="fas fa-camera-retro"></i>
-                      Fotos 
-                  </button>
+                <!-- <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
+                  class="btn btn-primary">
+                  <i class="fas fa-camera-retro"></i>
+                  Fotos
+                </button> -->
+                <button type="button" *ngIf="lavado.value" (click)="open(_id.value, 'fotos_lavado')"
+                  class="btn btn-primary">
+                <i class="fas fa-camera-retro"></i>Fotos
+                </button>
               </div>
             </div>
 
@@ -119,7 +127,8 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+                  <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success"> <i
+                      class="fa fa-check"></i> Añadir</button>
                 </div>
               </div>
             </div>
@@ -139,7 +148,7 @@
                         <td>{{this.reparaciones.controls[i].get('reparacion').value}}</td>
                         <td>
                           <button (click)="removeReparacion( i )" class="btn btn-danger">
-                              <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i>
                           </button>
                         </td>
                       </tr>
@@ -157,31 +166,40 @@
                 <label class="control-label"><b>Fecha y Hora de Reparaciones</b></label>
                 <mat-form-field class="inputpersonalizado">
                   <mat-label>Fecha Inicio Reparaciones</mat-label>
-                  <input matInput formControlName="fIniReparacion" [matDatepicker]="picker3" type="text" placeholder="Fecha Inicio Reparaciones">
+                  <input matInput formControlName="fIniReparacion" [matDatepicker]="picker3" type="text"
+                    placeholder="Fecha Inicio Reparaciones">
                   <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                   <mat-datepicker #picker3></mat-datepicker>
                 </mat-form-field>
                 <br>
                 <mat-form-field>
                   <mat-label>Hora Inicio Reparaciones</mat-label>
-                  <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación" (focus)="ponHoraIniReparacion()">
+                  <input matInput formControlName="hIniReparacion" type="time" placeholder="Hora Inicio Reparación"
+                    (focus)="ponHoraIniReparacion()">
                 </mat-form-field>
                 <mat-form-field class="inputpersonalizado">
                   <mat-label>Fecha Fin Reparaciones</mat-label>
-                  <input matInput formControlName="fFinReparacion" [matDatepicker]="picker2" type="text" placeholder="Fecha Fin Reparaciones">
+                  <input matInput formControlName="fFinReparacion" [matDatepicker]="picker2" type="text"
+                    placeholder="Fecha Fin Reparaciones">
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Hora Finalización Reparaciones</mat-label>
-                  <input matInput formControlName="hFinReparacion" type="time" placeholder="Hora Finalización Reparación" (focus)="ponHoraFinReparacion()">
+                  <input matInput formControlName="hFinReparacion" type="time"
+                    placeholder="Hora Finalización Reparación" (focus)="ponHoraFinReparacion()">
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <button type="button" [routerLink]="['/fotos', _id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                <!-- <button type="button" [routerLink]="['/fotos', _id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
+                  class="btn btn-primary">
                   <i class="fas fa-camera-retro"></i>
                   Fotos Reparacion
-              </button>
+                </button> -->
+                <button type="button" *ngIf="reparaciones.value.length > 0" (click)="open(_id.value, 'fotos_reparacion')" class="btn btn-primary">
+                  <i class="fas fa-camera-retro"></i>
+                  Fotos
+                  </button>
               </div>
             </div>
             <div class="row">
@@ -197,10 +215,10 @@
               </div>
             </div>
             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-                <i class="fa fa-save"></i>
-                Guardar
-              </button>
-            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>            
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
           </form>
           <!-- <p>Form value {{ regForm.value | json }} </p> -->
         </div>

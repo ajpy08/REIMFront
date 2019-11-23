@@ -17,7 +17,7 @@ import * as _moment from 'moment';
 // import * as Moment from 'moment';
 import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig, MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
 import { Router } from '@angular/router';
@@ -81,6 +81,7 @@ export class VaciosComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   checkedVacios = true;
   checkedHDescargaVacios = true;
@@ -133,6 +134,11 @@ export class VaciosComponent implements OnInit {
         }
       }
     });
+
+    let indexTAB = localStorage.getItem('AprobSolicitudes');
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+    }
   }
 
   consultaManiobrasDescargaVacios() {
@@ -183,7 +189,7 @@ export class VaciosComponent implements OnInit {
 
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
-      // }     
+      // }
 
       this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
@@ -579,6 +585,8 @@ export class VaciosComponent implements OnInit {
     });
   }
 
+
+
   openDialogVaciosReparacion() {
     //console.log("Entre Reparacion")
     const dialogConfig = new MatDialogConfig();
@@ -596,16 +604,42 @@ export class VaciosComponent implements OnInit {
       }
     });
   }
-
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem('AprobSolicitudes', event.index.toString());
+  }
   corregirContenedor(id) {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {
       id.contenedor = res.contenedor;
     });
   }
 
-  detalle(id: string) {
-    localStorage.setItem('history', '/vacios');
+  // detalle(id: string) {
+  //   localStorage.setItem('history', '/vacios');
 
+  //   this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
+  // }
+
+  open(id: string) {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }
+    //Agrego mi nueva ruta al array
+    array.push("/vacios");
+
+
+    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 }

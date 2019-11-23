@@ -337,9 +337,26 @@ export class InventarioComponent implements OnInit {
     localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
-  detalle(id: string) {
-    localStorage.setItem('history', '/inventario');
+  open(id: string){
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
 
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }    
+    //Agrego mi nueva ruta a donde debo regresar al array
+    array.push("/inventario");
+
+    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
   }
 }

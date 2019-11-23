@@ -9,7 +9,7 @@
     </div>
   </div>
 </div>
-<mat-tab-group mat-stretch-tabs>
+<mat-tab-group mat-stretch-tabs mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Vacios">
     <ng-template mat-tab-label>
       Vacios Descarga ( <small>{{totalRegistrosVacios}}</small> )
@@ -80,7 +80,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button> -->
-                    <button (click)="detalle(row._id)" class="btn btn-sm btn-info m-r-5">
+                    <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
@@ -272,7 +272,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                    <button (click)="open(row._id)" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
@@ -463,7 +463,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
+                    <button (click)="open(row._id)" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <button class="btn btn-info btn-sm m-r-5" (click)="corregirContenedor(row)">
