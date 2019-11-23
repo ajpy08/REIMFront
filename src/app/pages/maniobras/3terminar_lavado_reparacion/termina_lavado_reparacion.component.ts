@@ -5,7 +5,7 @@ import { ManiobraService } from '../../../services/service.index';
 import { Reparacion } from '../../reparaciones/reparacion.models';
 import { ReparacionService } from '../../reparaciones/reparacion.service';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Location } from '@angular/common';
@@ -315,12 +315,64 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     }
   }
 
+  // back() {
+  //   if (localStorage.getItem('history')) {
+  //     this.url = localStorage.getItem('history')
+  //   }
+  //   this.router.navigate([this.url]);
+  //   localStorage.removeItem('history')
+  //   // this.location.back();
+  // }
+
+  open(id: string, tipo: string) {
+
+    let navigationExtras: NavigationExtras = {
+      queryParams: { 'opcion': tipo }
+    };
+
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }    
+    //Agrego mi nueva ruta a donde debo regresar al array
+    array.push("/maniobras/maniobra/" + id + "/termina_lavado_reparacion");
+
+    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/fotos', id], navigationExtras);
+  }
+
   back() {
-    if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+
+      //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+      //pop() elimina del array el ultimo elemento
+      this.url = array.pop();
+
+      //Asigno a localStorage (history) el nuevo JSON 
+      localStorage.setItem('historyArray', JSON.stringify(array));
     }
+
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    // this.location.back();
   }
 }

@@ -83,6 +83,8 @@ export class UsuarioService {
     localStorage.removeItem('usuario');
     localStorage.removeItem('menu');
     localStorage.removeItem('AprobSolicitudes');
+    localStorage.removeItem('history');
+    localStorage.removeItem('historyArray');
 
     this.router.navigate(['/login']);
   }
