@@ -3,6 +3,7 @@ import { ManiobraService, UsuarioService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
 import { Usuario } from '../usuarios/usuario.model';
+import { Router } from '@angular/router';
 
 declare var swal: any;
 
@@ -30,7 +31,7 @@ export class ManiobrasComponent implements OnInit {
   displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
 
-  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre','agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
+  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre', 'agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
 
   displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
@@ -58,7 +59,8 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('sortXCargar') sortXCargar: MatSort;
 
 
-  constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService) { }
+  constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService,
+    private router: Router) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -123,13 +125,13 @@ export class ManiobrasComponent implements OnInit {
       .subscribe(maniobras => {
         this.dtTransito = new MatTableDataSource(maniobras.maniobras);
         this.dtTransito.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
-       };
+        };
         this.dtTransito.sort = this.sort;
         this.dtTransito.paginator = this.paginator;
         this.totalTransito = maniobras.total;
-        this.dtTransito.filterPredicate  = this.Filtro();
+        this.dtTransito.filterPredicate = this.Filtro();
       });
 
 
@@ -137,13 +139,13 @@ export class ManiobrasComponent implements OnInit {
       .subscribe(maniobras => {
         this.dtEspera = new MatTableDataSource(maniobras.maniobras);
         this.dtEspera.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
-       };
+        };
         this.dtEspera.sort = this.sortEspera;
         this.dtEspera.paginator = this.pagEspera;
         this.totalEspera = maniobras.total;
-        this.dtEspera.filterPredicate  = this.Filtro();
+        this.dtEspera.filterPredicate = this.Filtro();
 
       });
 
@@ -151,13 +153,13 @@ export class ManiobrasComponent implements OnInit {
       .subscribe(maniobras => {
         this.dtRevision = new MatTableDataSource(maniobras.maniobras);
         this.dtRevision.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
-       };
+        };
         this.dtRevision.sort = this.sortRevision;
         this.dtRevision.paginator = this.pagRevision;
         this.totalRevision = maniobras.total;
-        this.dtRevision.filterPredicate  = this.Filtro();
+        this.dtRevision.filterPredicate = this.Filtro();
       });
 
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
@@ -165,9 +167,9 @@ export class ManiobrasComponent implements OnInit {
         this.dtLavadoReparacion = new MatTableDataSource(maniobras.maniobras);
 
         this.dtLavadoReparacion.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
-       };
+        };
 
         this.dtLavadoReparacion.sort = this.sortLR;
         this.dtLavadoReparacion.paginator = this.pagLR;
@@ -179,13 +181,13 @@ export class ManiobrasComponent implements OnInit {
       .subscribe(maniobras => {
         this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
         this.dtXCargar.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) return property.split('.').reduce((o,i)=> o ? o[i] : undefined  , item)
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
-       };
+        };
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
-        this.dtEspera.filterPredicate  = this.Filtro();
+        this.dtEspera.filterPredicate = this.Filtro();
         this.cargando = false;
       });
 
@@ -220,18 +222,48 @@ export class ManiobrasComponent implements OnInit {
 
 
   Filtro(): (data: any, filter: string) => boolean {
-    let filterFunction = function(data, filter): boolean {
+    let filterFunction = function (data, filter): boolean {
       const dataStr = data.contenedor.toLowerCase() +
-                      (data.folio? data.folio:'') +
-                      data.tipo.toLowerCase() +
-                      data.peso.toLowerCase() +
-                      (data.viaje? data.viaje.viaje.toLowerCase():'') +
-                      (data.cliente? data.cliente.nombreComercial.toLowerCase():'') +
-                      (data.viaje? data.viaje.buque.nombre.toLowerCase():'') +
-                      (data.agencia? data.agencia.nombreComercial.toLowerCase():'');
-        return dataStr.indexOf(filter) != -1;
+        (data.folio ? data.folio : '') +
+        data.tipo.toLowerCase() +
+        data.peso.toLowerCase() +
+        (data.viaje ? data.viaje.viaje.toLowerCase() : '') +
+        (data.cliente ? data.cliente.nombreComercial.toLowerCase() : '') +
+        (data.viaje ? data.viaje.buque.nombre.toLowerCase() : '') +
+        (data.agencia ? data.agencia.nombreComercial.toLowerCase() : '');
+      return dataStr.indexOf(filter) != -1;
     }
     return filterFunction;
+  }
+
+  // edit(id: string) {
+  //   localStorage.setItem('history', '/maniobras');
+
+  //   this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
+  // }
+
+  open(id: string) {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable history lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }    
+    //Agrego mi nueva ruta al array
+    array.push("/maniobras");
+
+
+    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
   }
 
 }

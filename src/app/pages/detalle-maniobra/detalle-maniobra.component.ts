@@ -318,14 +318,14 @@ export class DetalleManiobraComponent implements OnInit {
       });
   }
 
-  back() {
-    if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
-    }
-    this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    // this.location.back();
-  }
+  // back() {
+  //   if (localStorage.getItem('history')) {
+  //     this.url = localStorage.getItem('history')
+  //   }
+  //   this.router.navigate([this.url]);
+  //   localStorage.removeItem('history')
+  //   // this.location.back();
+  // }
 
   guardaCambios(){
     if (this.regForm.valid) {
@@ -335,14 +335,56 @@ export class DetalleManiobraComponent implements OnInit {
     }
   }
 
-  fotos(id: string, tipo: string) {
-    localStorage.setItem('history', '/maniobras/maniobra/' + id + '/detalle');
+  open(id: string, tipo: string) {
 
     let navigationExtras: NavigationExtras = {
       queryParams: { 'opcion': tipo }
     };
 
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }    
+    //Agrego mi nueva ruta a donde debo regresar al array
+    array.push("/maniobras/maniobra/" + id + "/detalle");
+
+    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
     this.router.navigate(['/fotos', id], navigationExtras);
+  }
+
+  back() {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+
+      //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+      //pop() elimina del array el ultimo elemento
+      this.url = array.pop();
+
+      //Asigno a localStorage (history) el nuevo JSON 
+      localStorage.setItem('historyArray', JSON.stringify(array));
+    }
+
+    this.router.navigate([this.url]);
   }
 
   get _id() {

@@ -99,4 +99,28 @@ export class ContenedoresLRComponent implements OnInit {
 
     this.router.navigate(['/fotos', id], navigationExtras);
   }
+
+  open(id: string) {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable history lo obtengo       
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }    
+    //Agrego mi nueva ruta al array
+    array.push("/contenedoresLR");
+
+
+    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
+  }
 }
