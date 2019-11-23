@@ -57,7 +57,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     this.createFormGroup();
     this.reparaciones.removeAt(0);
     this.cargarManiobra(this.id);
-    this.url = '/maniobras'; 
+    this.url = '/maniobras';
   }
 
   createFormGroup() {
@@ -332,7 +332,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
 
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -341,7 +341,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta a donde debo regresar al array
     array.push("/maniobras/maniobra/" + id + "/termina_lavado_reparacion");
 
@@ -355,7 +355,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   back() {
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -369,10 +369,10 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       //pop() elimina del array el ultimo elemento
       this.url = array.pop();
 
-      //Asigno a localStorage (history) el nuevo JSON 
+      //Asigno a localStorage (history) el nuevo JSON
       localStorage.setItem('historyArray', JSON.stringify(array));
     }
-
+    localStorage.removeItem('historyArray');
     this.router.navigate([this.url]);
   }
 }

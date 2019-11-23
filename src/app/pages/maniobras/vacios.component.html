@@ -9,7 +9,7 @@
     </div>
   </div>
 </div>
-<mat-tab-group mat-stretch-tabs>
+<mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Vacios">
     <ng-template mat-tab-label>
       Vacios Descarga ( <small>{{totalRegistrosVacios}}</small> )
