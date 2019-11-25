@@ -38,7 +38,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarManiobras();
-    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    let indexTAB = localStorage.getItem("TrasportistaTabs");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -100,7 +100,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("AprobSolicitudes", event.index.toString());
+    localStorage.setItem("TrasportistaTabs", event.index.toString());
   }
 
   applyFilterCargas(filterValue: string) {
