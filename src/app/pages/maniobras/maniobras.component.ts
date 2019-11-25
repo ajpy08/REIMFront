@@ -245,7 +245,7 @@ export class ManiobrasComponent implements OnInit {
   open(id: string) {
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo       
+    //Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -254,7 +254,7 @@ export class ManiobrasComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta al array
     array.push("/maniobras");
 
