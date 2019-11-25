@@ -187,7 +187,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
-        this.dtEspera.filterPredicate = this.Filtro();
+        this.dtXCargar.filterPredicate = this.Filtro();
         this.cargando = false;
       });
 
@@ -223,7 +223,7 @@ export class ManiobrasComponent implements OnInit {
 
   Filtro(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
-      const dataStr = data.contenedor.toLowerCase() +
+      const dataStr = (data.contenedor ? data.contenedor.toLowerCase() : '') +
         (data.folio ? data.folio : '') +
         data.tipo.toLowerCase() +
         data.peso.toLowerCase() +
