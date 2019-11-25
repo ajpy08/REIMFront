@@ -135,7 +135,7 @@ export class VaciosComponent implements OnInit {
       }
     });
 
-    let indexTAB = localStorage.getItem('AprobSolicitudes');
+    let indexTAB = localStorage.getItem('VacioTabs');
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -605,7 +605,7 @@ export class VaciosComponent implements OnInit {
     });
   }
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem('AprobSolicitudes', event.index.toString());
+    localStorage.setItem('VacioTabs', event.index.toString());
   }
   corregirContenedor(id) {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {

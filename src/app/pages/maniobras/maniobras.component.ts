@@ -73,7 +73,7 @@ export class ManiobrasComponent implements OnInit {
         'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     }
     this.cargarManiobras();
-    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    let indexTAB = localStorage.getItem("ManiobrasTabs");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -116,7 +116,7 @@ export class ManiobrasComponent implements OnInit {
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("AprobSolicitudes", event.index.toString());
+    localStorage.setItem("ManiobrasTabs", event.index.toString());
   }
 
   cargarManiobras() {

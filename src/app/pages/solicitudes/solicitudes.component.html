@@ -55,14 +55,14 @@
                   <mat-cell *matCellDef="let row">
                     <button *ngIf="row.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_descarga', row._id ]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Editar</i>
+                      <i class="fa fa-edit"></i>
                     </button>
                     <button *ngIf="row.estatus==='APROBADA'"
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Ver Datos</i>
+                      <i class="fa fa-eye"></i>
                     </button>
                     <button (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o"> Borrar</i>
+                      <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -183,14 +183,14 @@
                   <mat-cell *matCellDef="let row">
                     <button *ngIf="row.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_carga', row._id ]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Editar</i>
+                      <i class="fa fa-edit"></i>
                     </button>
                     <button *ngIf="row.estatus==='APROBADA'"
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Ver Datos</i>
+                      <i class="fa fa-eye"></i>
                     </button>
                     <button *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o"> Borrar</i>
+                      <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
                 </ng-container>

@@ -82,9 +82,15 @@ export class UsuarioService {
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('menu');
-    localStorage.removeItem('AprobSolicitudes');
     localStorage.removeItem('history');
     localStorage.removeItem('historyArray');
+    localStorage.removeItem('AprobSolicitudes');
+    localStorage.removeItem('ManiobrasTabs');
+    localStorage.removeItem('InventarioTabs');
+    localStorage.removeItem('AprobacionTabs');
+    localStorage.removeItem('TrasportistaTabs');
+    localStorage.removeItem('FacturacionTabs');
+    localStorage.removeItem('VacioTabs');
 
     this.router.navigate(['/login']);
   }

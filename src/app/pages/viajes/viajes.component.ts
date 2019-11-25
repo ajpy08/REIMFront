@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Viaje } from './viaje.models';
 import { ViajeService } from '../../services/service.index';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import * as _moment from 'moment';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -34,27 +35,39 @@ declare var swal: any;
 
 export class ViajesComponent implements OnInit {
   viajes: any[] = [];
-  cargando = false;
+  cargando: boolean = true;
   totalRegistros = 0;
   regForm: FormGroup;
+  pdfTemporal = false;
 
-  constructor(public _viajeService: ViajeService, private fb: FormBuilder,) { }
+  displayedColumns = ['actions' , 'viaje', 'buque', 'fArribo' , 'pdfTemporal', 'fVigenciaTemporal', 'anio'];
+  dataSource: any;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  constructor(private _viajeService: ViajeService, private fb: FormBuilder) { }
+
   ngOnInit() {
-    
+
     this.createFormGroup();
     this.viaje.setValue(undefined);
     this.buque.setValue(undefined);
     this.cargarViajes();
   }
 
-  createFormGroup() {
-    this.regForm = this.fb.group({
-      viaje: [''],
-      buque: [''],
-      fIniArribo: [moment().local().startOf('day').subtract(1, 'year')],
-      fFinArribo: [moment().local().startOf('day')],
-    });
-  }
+
+
+ createFormGroup() {
+   this.regForm = this.fb.group({
+     viaje: [''],
+     buque: ['', [Validators.required]],
+     fIniArribo: [moment().local().startOf('day').subtract(1, 'year')],
+     fFinArribo: [moment().local().startOf('day')],
+     anio: [''],
+     _id: [''],
+   });
+   }
 
   get viaje() {
     return this.regForm.get('viaje');
@@ -68,9 +81,16 @@ export class ViajesComponent implements OnInit {
   get fFinArribo() {
     return this.regForm.get('fFinArribo');
   }
+  get anio() {
+    return this.regForm.get('anio');
+  }
+
+  get _id(){
+    return this.regForm.get('_id');
+  }
 
   cargarViajes() {
-    this.cargando = true;
+
     this._viajeService.getViajes(
       this.fIniArribo.value ? this.fIniArribo.value.utc().format('DD-MM-YYYY') : '',
       this.fFinArribo.value ? this.fFinArribo.value.utc().format('DD-MM-YYYY') : '',
@@ -80,10 +100,12 @@ export class ViajesComponent implements OnInit {
     .subscribe(res => {
       if (res.ok) {
         this.totalRegistros = res.total;
-        this.viajes = res.viajes;
-        this.cargando = false;
+        this.dataSource = new MatTableDataSource(res.viajes);
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = res.viajes.length;
       }
     });
+    this.cargando = false;
   }
 
   filtrarViajes() {
