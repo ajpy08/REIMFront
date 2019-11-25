@@ -18,7 +18,7 @@ import * as _moment from 'moment';
 import swal from 'sweetalert';
 
 import { Viaje } from '../../viajes/viaje.models';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from '../asignar-factura/asignar-factura.component';
 import { Router } from '@angular/router';
@@ -78,6 +78,7 @@ export class FacturacionManiobrasComponent implements OnInit {
   selectionLavadoVacios = new SelectionModel<Maniobra>(true, []);
   selectionReparacionVacios = new SelectionModel<Maniobra>(true, []);
 
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -130,11 +131,15 @@ export class FacturacionManiobrasComponent implements OnInit {
         }
       }
     });
+    let indexTAB = localStorage.getItem('AprobSolicitudes');
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+    }
   }
 
   consultaManiobrasVacios() {
     return new Promise((resolve, reject) => {
-      
+
       // let cargaDescarga = "D";
 
       // if(this.filtrarCD.value) {
@@ -182,7 +187,7 @@ export class FacturacionManiobrasComponent implements OnInit {
 
       // if(this.filtrarCD.value) {
       //   cargaDescarga = this.CD;
-      // }     
+      // }
 
       this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
@@ -205,7 +210,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
 
-  filtraManiobrasDescargaVacios(sinFactura: boolean) {    
+  filtraManiobrasDescargaVacios(sinFactura: boolean) {
     this.maniobrasSinFacturaVacios = [];
     this.checkedVacios = sinFactura;
     if (sinFactura) {
@@ -218,7 +223,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       this.dataSourceVacios = new MatTableDataSource(this.maniobrasSinFacturaVacios);
       this.dataSourceVacios.sort = this.sort;
       this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;   
+      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
       if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
         //console.log("Filtro Descargados (dentro de filtro sin factura)")
         this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
@@ -245,7 +250,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }      
+      }
     }
   }
 
@@ -281,7 +286,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }      
+      }
     }
   }
 
@@ -317,7 +322,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         }).catch((error) => {
           console.log(error.mensaje)
         });
-      }      
+      }
     }
   }
 
@@ -549,7 +554,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     let dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {      
+      if (result) {
           // if (this.checkedVacios) {
             this.filtraManiobrasDescargaVacios(this.checkedVacios);
             // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
@@ -602,6 +607,9 @@ export class FacturacionManiobrasComponent implements OnInit {
     });
   }
 
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem('AprobSolicitudes', event.index.toString());
+  }
   // detalle(id: string) {
   //   localStorage.setItem('history', '/facturacion-maniobras');
 
@@ -611,7 +619,7 @@ export class FacturacionManiobrasComponent implements OnInit {
   open(id: string) {
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo       
+    //Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -620,7 +628,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta al array
     array.push("/facturacion-maniobras");
 
