@@ -187,7 +187,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
-        this.dtEspera.filterPredicate = this.Filtro();
+        this.dtXCargar.filterPredicate = this.Filtro();
         this.cargando = false;
       });
 
@@ -223,7 +223,7 @@ export class ManiobrasComponent implements OnInit {
 
   Filtro(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
-      const dataStr = data.contenedor.toLowerCase() +
+      const dataStr = (data.contenedor ? data.contenedor.toLowerCase() : '') +
         (data.folio ? data.folio : '') +
         data.tipo.toLowerCase() +
         data.peso.toLowerCase() +
@@ -245,7 +245,7 @@ export class ManiobrasComponent implements OnInit {
   open(id: string) {
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo       
+    //Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -254,7 +254,7 @@ export class ManiobrasComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta al array
     array.push("/maniobras");
 
