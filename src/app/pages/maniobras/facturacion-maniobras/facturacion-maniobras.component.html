@@ -12,7 +12,7 @@
 <mat-tab-group mat-stretch-tabs mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="Vacios">
     <ng-template mat-tab-label>
-      Vacios Descarga ( <small>{{totalRegistrosVacios}}</small> )
+      Maniobras ( <small>{{totalRegistrosVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
@@ -30,7 +30,8 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  (click)="consultaManiobrasVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
@@ -53,7 +54,7 @@
                 </div>
               </div>
             </div> <br>
-            <h3 class="card-title">Maniobras de Vacios Descarga( <small>{{totalRegistrosVacios}}</small> )</h3>
+            <h3 class="card-title">Total Maniobras ( <small>{{totalRegistrosVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -215,7 +216,7 @@
   </mat-tab>
   <mat-tab label="Lavado Vacios">
     <ng-template mat-tab-label>
-      Lavado Vacios Descarga ( <small>{{totalRegistrosLavadoVacios}}</small> )
+      Maniobras Lavado ( <small>{{totalRegistrosLavadoVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
@@ -226,29 +227,30 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viajeLavado">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasLavadoVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  (click)="consultaManiobrasLavadoVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedLavadoVacios" #s (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
+                  <mat-checkbox [checked]="checkedLavadoVacios" #sinFactL (change)="filtraManiobrasDescargaVaciosLavado(sinFactL.checked)">Por Facturar
                   </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
+                  <mat-checkbox [checked]="checkedHDescagaL" #DescargaVaciosLavado (change)="cargarManiobrasDescargadosVaciosLavados(DescargaVaciosLavado.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
                 </div>
               </div>
             </div><br>
-            <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
+            <h3 class="card-title">Maniobras en Lavado ( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -405,7 +407,7 @@
   </mat-tab>
   <mat-tab label="Reparación Vacios">
     <ng-template mat-tab-label>
-      Reparación Vacios Descarga ( <small>{{totalRegistrosReparacionVacios}}</small> )
+      Maniobras Reparación ( <small>{{totalRegistrosReparacionVacios}}</small> )
     </ng-template>
 
     <div class="animated fadeIn" *ngIf="!cargando">
@@ -416,29 +418,30 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viajeReparacion">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasReparacionVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  (click)="consultaManiobrasReparacionVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
                   </button>
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedReparacionVacios" #s (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
+                  <mat-checkbox [checked]="checkedReparacionVacios" #sinFactR (change)="filtraManiobrasDescargaVaciosReparacion(sinFactR.checked)">Por Facturar
                   </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
+                  <mat-checkbox [checked]="checkedHDescagaR" #hDescargaVaciosReparacion (change)="cargarManiobrasDescargadosVaciosReparaciones(hDescargaVaciosReparacion.checked)">Solo Descargados
                   </mat-checkbox>
                 </div>
                 <div class="col-sm">
                 </div>
               </div>
             </div><br>
-            <h3 class="card-title">Maniobras de Reparacion Vacios( <small>{{totalRegistrosReparacionVacios}}</small> )
+            <h3 class="card-title">Maniobras en Reparación ( <small>{{totalRegistrosReparacionVacios}}</small> )
             </h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
