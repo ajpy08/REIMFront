@@ -31,6 +31,7 @@ export const MY_FORMATS = {
 @Component({
     selector: 'app-viaje',
     templateUrl: './viaje.component.html',
+    styleUrls: ['./viaje.component.css'],
     providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
     {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
@@ -135,14 +136,14 @@ export const MY_FORMATS = {
     addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
 
       if (this._id.value) {
-        this._viajeService.addContenedor(this._id.value, cont, tipo, peso, destinatario)
+        this._viajeService.addContenedor(this._id.value, this.formateoContenedor(cont), tipo, peso, destinatario)
         .subscribe(res => {
           if (res.ok) {
-            this.addContenedor(cont, tipo, peso, destinatario, 'APROBACION' );
+            this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, 'APROBACION' );
             swal('Contenedor Agregado con exito', '', 'success');
           }
         });
-      } else {this.addContenedor(cont, tipo, peso, destinatario, '' ); }
+      } else {this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, '' ); }
     }
 
     quitarContenedor(indice: number) {
@@ -158,8 +159,6 @@ export const MY_FORMATS = {
       } else {
         this.contenedores.removeAt(indice);
       }
-
-
     }
 
     cargarViaje( id: string ) {
@@ -200,9 +199,7 @@ export const MY_FORMATS = {
       });
     }
 
-
     onFileExcelSelected(event) {
-
       this.fileExcel = <File> event.target.files[0];
       this.cargarExcel();
     }
@@ -242,7 +239,7 @@ export const MY_FORMATS = {
           // tslint:disable-next-line:max-line-length
           this.erroresCarga.push(`Contenedor: ${element.Contenedor} no agregado, tipo ( ${element.Tipo.replace('\'', '')} ) no encontrado`);
         } else {
-          this.addContenedor(element.Contenedor, element.Tipo.replace('\'', ''), element.Peso, element.Cliente, 'NUEVO');
+          this.addContenedor(this.formateoContenedor(element.Contenedor), element.Tipo.replace('\'', ''), element.Peso, element.Cliente, 'NUEVO');
         }
       });
       this.regForm.controls['viaje'].setValue(res[0].Viaje);
@@ -253,5 +250,15 @@ export const MY_FORMATS = {
         this.regForm.controls['buque'].setValue(index._id);
       }
     });
+  }
+
+  formateoContenedor(contenedor: string) : string {
+    var final;
+
+    final = contenedor.replace(/-/g,'');
+    final = final.replace(/ /g, '');
+    final = final.replace('\'', '');
+    
+    return final.trim();
   }
 }
