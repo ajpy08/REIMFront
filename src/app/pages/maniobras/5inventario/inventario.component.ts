@@ -50,7 +50,7 @@ export class InventarioComponent implements OnInit {
     } else {
       this.displayedColumnsLR = ['fLlegada', 'viaje', 'nombre', 'contenedor', 'tipo', 'peso', 'grado', 'lavado', 'reparaciones'];
     }
-    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    let indexTAB = localStorage.getItem("InventarioTabs");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -334,13 +334,13 @@ export class InventarioComponent implements OnInit {
     return subTotal;
   }
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("AprobSolicitudes", event.index.toString());
+    localStorage.setItem("InventarioTabs", event.index.toString());
   }
 
   open(id: string){
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -349,7 +349,7 @@ export class InventarioComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta a donde debo regresar al array
     array.push("/inventario");
 

@@ -67,15 +67,15 @@
                     <button *ngIf="row.estatus==='NA' && row.tipo==='D'"
                       [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', row._id]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit">Aprobar Descarga</i>
+                      <i class="far fa-check-circle"></i>
                     </button>
                     <button *ngIf="row.estatus!=='NA' && row.tipo==='D'"
                       [routerLink]="['/solicitudes/aprobaciones/aprobar_descarga', row._id]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit">Ver Datos</i>
+                      <i class="fa fa-eye"></i>
                     </button>
                     <button *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o">Borrar</i>
+                      <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -194,15 +194,15 @@
                     <button *ngIf="row.estatus==='NA' && row.tipo==='C'"
                       [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', row._id ]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Aprobar Carga</i>
+                      <i class="far fa-check-circle"></i>
                     </button>
                     <button *ngIf="row.estatus!=='NA' && row.tipo==='C'"
                       [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', row._id ]"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"> Ver Datos</i>
+                      <i class="fa fa-eye"></i>
                     </button>
                     <button *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o"> Borrar</i>
+                      <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
                 </ng-container>

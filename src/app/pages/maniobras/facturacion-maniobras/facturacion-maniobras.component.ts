@@ -131,7 +131,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         }
       }
     });
-    let indexTAB = localStorage.getItem('AprobSolicitudes');
+    let indexTAB = localStorage.getItem('FacturacionTabs');
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -608,7 +608,7 @@ export class FacturacionManiobrasComponent implements OnInit {
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem('AprobSolicitudes', event.index.toString());
+    localStorage.setItem('FacturacionTabs', event.index.toString());
   }
   // detalle(id: string) {
   //   localStorage.setItem('history', '/facturacion-maniobras');

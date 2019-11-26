@@ -66,7 +66,7 @@ export class AprobacionesComponent implements OnInit {
   ngOnInit() {
     this.cargaSolicitudes('D');
     this.cargaSolicitudes('C');
-    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    let indexTAB = localStorage.getItem("AprobacionTabs");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -127,7 +127,7 @@ export class AprobacionesComponent implements OnInit {
 
   onLinkClick(event: MatTabChangeEvent) {
     //console.log(event.index);
-    localStorage.setItem("AprobSolicitudes", event.index.toString());
+    localStorage.setItem("AprobacionTabs", event.index.toString());
   }
 
   borrarSolicitud(sol: Solicitud) {
