@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService } from '../maniobras/maniobra.service';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
@@ -17,67 +17,100 @@ export class ContenedoresLRComponent implements OnInit {
   maniobras: any[] = [];
   data: any = { fechaCreado: '' };
   cargando = true;
-  totalRegistros = 0;
+  totalRegistrosLavados = 0;
+  totalRegistrosReparaciones = 0;
   usuarioLogueado: Usuario;
   buque: string;
   viaje: string;
   fechaLlegadaInicio: string;
   fechaLlegadaFin: string
 
-  displayedColumns = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
-  dataSource: any;
+  displayedColumnsLavado = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+  displayedColumnsReparacion = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+  dataSourceLavados: any;
+  dataSourceReparaciones: any;
 
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('MatPaginatorReparacion', { read: MatPaginator }) MatPaginatorReparacion: MatPaginator;
+  @ViewChild('MatSortReparacion') MatSortReparacion: MatSort;
+
 
   constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService, public router: Router) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarManiobras();
+    this.cargarManiobrasLavadoOReparacion('L');
+    this.cargarManiobrasLavadoOReparacion('R');
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.displayedColumns = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsLavado = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsReparacion = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     } else {
-      this.displayedColumns = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsLavado = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsReparacion = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+    }
+    let indexTAB = localStorage.getItem("L/R");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
   }
 
-  cargarManiobras() {
+  cargarManiobrasLavadoOReparacion(LR: string) {
     if (this.usuarioLogueado.empresas.length > 0) {
       this.cargando = true;
-      this.maniobraService.getManiobrasConLavadoReparacion(this.usuarioLogueado.empresas[0]._id,
-        this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
+      this.maniobraService.getManiobrasLavadoOReparacion(this.usuarioLogueado.empresas[0]._id,
+        this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin, LR)
         .subscribe(maniobras => {
           // console.log(maniobras.maniobras)
-          this.dataSource = new MatTableDataSource(maniobras.maniobras);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-          this.totalRegistros = maniobras.maniobras.length;
+          if (LR === 'L') {
+            this.dataSourceLavados = new MatTableDataSource(maniobras.maniobras);
+            this.dataSourceLavados.sort = this.sort;
+            this.dataSourceLavados.paginator = this.paginator;
+            this.totalRegistrosLavados = maniobras.maniobras.length;
+
+          } else if (LR === 'R') {
+            this.dataSourceReparaciones = new MatTableDataSource(maniobras.maniobras);
+            this.dataSourceReparaciones.sort = this.MatSortReparacion;
+            this.dataSourceReparaciones.paginator = this.MatPaginatorReparacion;
+            this.totalRegistrosReparaciones = maniobras.maniobras.length;
+          }
         });
       this.cargando = false;
     } else {
       if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
         this.cargando = true;
-        this.maniobraService.getManiobrasConLavadoReparacion(null,
-          this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin)
+        this.maniobraService.getManiobrasLavadoOReparacion(null,
+          this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin, LR)
           .subscribe(maniobras => {
-            // console.log(maniobras.maniobras)
-            this.dataSource = new MatTableDataSource(maniobras.maniobras);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-            this.totalRegistros = maniobras.maniobras.length;
+            if (LR === 'L') {
+              this.dataSourceLavados = new MatTableDataSource(maniobras.maniobras);
+              this.dataSourceLavados.sort = this.sort;
+              this.dataSourceLavados.paginator = this.paginator;
+              this.totalRegistrosLavados = maniobras.maniobras.length;
+            } else if (LR === 'R') {
+              this.dataSourceReparaciones = new MatTableDataSource(maniobras.maniobras);
+              this.dataSourceReparaciones.sort = this.MatSortReparacion;
+              this.dataSourceReparaciones.paginator = this.MatPaginatorReparacion;
+              this.totalRegistrosReparaciones = maniobras.maniobras.length;
+            }
           });
         this.cargando = false;
       }
     }
   }
 
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string, LR: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-    this.totalRegistros = this.dataSource.filteredData.length;
+    if (LR === 'L') {
+      this.dataSourceLavados.filter = filterValue;
+      this.totalRegistrosLavados = this.dataSourceLavados.filteredData.length;
+    } else if (LR === 'R') {
+      this.dataSourceReparaciones.filter = filterValue;
+      this.totalRegistrosReparaciones = this.dataSourceReparaciones.filteredData.length;
+    }
   }
 
   mostrarFotosReparaciones(maniobra: Maniobra) {
@@ -100,10 +133,14 @@ export class ContenedoresLRComponent implements OnInit {
     this.router.navigate(['/fotos', id], navigationExtras);
   }
 
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem("L/R", event.index.toString());
+  }
+
   open(id: string) {
     var history;
     var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo       
+    //Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
       //asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
@@ -112,7 +149,7 @@ export class ContenedoresLRComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    }    
+    }
     //Agrego mi nueva ruta al array
     array.push("/contenedoresLR");
 

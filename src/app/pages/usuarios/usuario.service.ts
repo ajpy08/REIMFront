@@ -91,6 +91,7 @@ export class UsuarioService {
     localStorage.removeItem('TrasportistaTabs');
     localStorage.removeItem('FacturacionTabs');
     localStorage.removeItem('VacioTabs');
+    localStorage.removeItem('L/R');
 
     this.router.navigate(['/login']);
   }
