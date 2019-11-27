@@ -23,17 +23,17 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select (selectionChange)="consultaManiobrasDescargaVacios()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVacios()">
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedVacios" #sinFact (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
@@ -226,17 +226,17 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select (selectionChange)="consultaManiobrasDescargaVaciosLavado()" [(ngModel)]="viajeLavado" [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viajeLavado">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosLavado()">
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosLavado()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedLavadoVacios" #s (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
@@ -419,17 +419,17 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select (selectionChange)="consultaManiobrasDescargaVaciosReparacion()" [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viajeReparacion">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosReparacion()">
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="consultaManiobrasDescargaVaciosReparacion()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedReparacionVacios" #s (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
