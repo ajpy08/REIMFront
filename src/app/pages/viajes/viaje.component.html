@@ -98,7 +98,7 @@
                           </mat-select>
                         </mat-form-field>
                       </th>
-                      <th scope="col"><input type="number" #peso placeholder="Peso" size="6"></th>
+                      <th scope="col"><input type="number" onkeydown="javascript: return event.keyCode == 69 ? false : true" #peso placeholder="Peso" size="6"></th>
                       <th scope="col"><input #destinatario placeholder="destinatario" size="30"></th>
                       <th scope="col"></th>
                     </tr>
