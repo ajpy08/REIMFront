@@ -23,18 +23,18 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select (selectionChange)="consultaManiobrasVacios()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
                   (click)="consultaManiobrasVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedVacios" #sinFact (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
@@ -227,18 +227,18 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viajeLavado">
+                    <mat-select (selectionChange)="consultaManiobrasLavadoVacios()" [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viajeLavado">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
                   (click)="consultaManiobrasLavadoVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedLavadoVacios" #sinFactL (change)="filtraManiobrasDescargaVaciosLavado(sinFactL.checked)">Por Facturar
@@ -418,18 +418,18 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viajeReparacion">
+                    <mat-select (selectionChange)="consultaManiobrasReparacionVacios()" [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viajeReparacion">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
+                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
                   (click)="consultaManiobrasReparacionVacios()">
                     <i class="fas fa-filter"></i>
                     Filtrar
-                  </button>
+                  </button> -->
                 </div>
                 <div class="col-sm">
                   <mat-checkbox [checked]="checkedReparacionVacios" #sinFactR (change)="filtraManiobrasDescargaVaciosReparacion(sinFactR.checked)">Por Facturar
