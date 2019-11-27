@@ -564,6 +564,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
           // if (this.checkedVacios) {
+            this.selectionVacios = new SelectionModel<Maniobra>(true, []);
             this.filtraManiobrasDescargaVacios(this.checkedVacios);
             // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
             //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
@@ -582,6 +583,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedLavadoVacios) {
+          this.selectionLavadoVacios = new SelectionModel<Maniobra>(true, []);
           this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
           // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
           //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
@@ -600,6 +602,7 @@ export class FacturacionManiobrasComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedReparacionVacios) {
+          this.selectionReparacionVacios = new SelectionModel<Maniobra>(true, []);
           this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
           // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
           //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
