@@ -9,19 +9,266 @@
     </div>
   </div>
 </div>
-<div class="row animated fadeIn" *ngIf="!cargando">
+<!-- ========================== (LAVADO INICIO) ==========================================-->
+<mat-tab-group mat-stretch-tabs (selectedTabChange)="onLinkClick($event)">
+  <mat-tab label="Lavado">
+    <ng-template mat-tab-label>
+      Lavado ( <small> {{totalRegistrosLavados}} </small> )
+    </ng-template>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value, 'L')" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavados" matSort>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                          </button> -->
+                    <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="naviera">
+                  <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="aa">
+                  <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fotoslavado">
+                  <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
+                    <button *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let rep of row.reparaciones">
+                      {{rep.reparacion}}
+                    </p><br><br>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fotosreparacion">
+                  <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
+                    <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
+                      (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="fAlta">
+                                          <mat-header-cell *matHeaderCellDef mat-sort-header>FAlta</mat-header-cell>
+                                          <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy'}} </mat-cell>
+                                  </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsLavado" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsLavado;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <!-- ========================== (LAVADO FIN) ==========================================-->
+
+  <!-- ========================== (REPARACION INICIO) ==========================================-->
+
+
+  <mat-tab label="Reparacion">
+    <ng-template mat-tab-label>
+      Reparación ( <small> {{totalRegistrosReparaciones}} </small> )
+    </ng-template>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value, 'R')" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" [dataSource]="dataSourceReparaciones" #MatSortReparacion="matSort"
+                matSort>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                              <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button> -->
+                    <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
+                      <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="naviera">
+                  <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="aa">
+                  <mat-header-cell *matHeaderCellDef>A.A.</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fotoslavado">
+                  <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
+                    <button *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <p *ngFor="let rep of row.reparaciones">
+                      {{rep.reparacion}}
+                    </p><br><br>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fotosreparacion">
+                  <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
+                    <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
+                      (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>
+                      Fotos
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="fAlta">
+                                            <mat-header-cell *matHeaderCellDef mat-sort-header>FAlta</mat-header-cell>
+                                            <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy'}} </mat-cell>
+                                    </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsReparacion" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsReparacion;"></mat-row>
+              </mat-table>
+              <mat-paginator #MatPaginatorReparacion [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
+                [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+<!-- ========================== (REPARACIÓN FIN) ==========================================-->
+
+<!-- <div class="row animated fadeIn" *ngIf="!cargando">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <!-- <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+           <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
                         <i class="fas fa-file-excel"></i> Exportar Excel
                     </button>
                     <button [routerLink]="['/buque2','nuevo']" type="button"
                         class="btn btn-info waves-effect waves-light m-r-5">
                         <i class="fa fa-plus"></i>
                         Añadir nuevo buque
-                    </button> -->
+                    </button>
         </div>
         <h3 class="card-title">Contenedores con Lavado Reparación : ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
@@ -38,9 +285,9 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
+                 <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                   <i class="fa fa-eye" aria-hidden="true"></i>
-                </button> -->
+                </button>
                 <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                   <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>
@@ -86,7 +333,7 @@
             <ng-container matColumnDef="fotoslavado">
               <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
+                 <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
                 <button *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')"
                   class="btn btn-primary">
                 <i class="fas fa-camera-retro"></i>
@@ -97,7 +344,7 @@
 
             <ng-container matColumnDef="reparaciones">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-              <mat-cell *matCellDef="let row"> 
+              <mat-cell *matCellDef="let row">
                 <p *ngFor="let rep of row.reparaciones">
                   {{rep.reparacion}}
                 </p><br><br>
@@ -107,7 +354,7 @@
             <ng-container matColumnDef="fotosreparacion">
               <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
+                 <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
                 <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0" (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
                 <i class="fas fa-camera-retro"></i>
                 Fotos
@@ -120,10 +367,10 @@
               <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
             </ng-container>
 
-            <!-- <ng-container matColumnDef="fAlta">
+             <ng-container matColumnDef="fAlta">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header>FAlta</mat-header-cell>
                                 <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy'}} </mat-cell>
-                        </ng-container> -->
+                        </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -135,3 +382,4 @@
     </div>
   </div>
 </div>
+</mat-tab-group> -->
