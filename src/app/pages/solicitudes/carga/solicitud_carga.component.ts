@@ -52,7 +52,12 @@ export class SolicitudCargaComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+    this.usuarioLogueado = this._usuarioService.usuario;
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+    } else {
+      this.agencias = this.usuarioLogueado.empresas;
+    }
     this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
     this.createFormGroup();
