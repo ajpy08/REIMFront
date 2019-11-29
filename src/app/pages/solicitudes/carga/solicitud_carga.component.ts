@@ -52,7 +52,17 @@ export class SolicitudCargaComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+    this.usuarioLogueado = this._usuarioService.usuario;
+    
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+    } else {
+      if (this.usuarioLogueado.empresas) {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+          this._agenciaService.getAgencia(empresa._id).subscribe(ag  => {this.agencias.push(ag) });
+        });
+      }
+    }
     this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
     this.createFormGroup();
@@ -281,6 +291,7 @@ export class SolicitudCargaComponent implements OnInit {
     this._clienteService.getClientesEmpresa(event.value)
       .subscribe(cliente => this.clientes = cliente.clientes);
 
+    
     const reg = this.agencias.find(x => x._id == event.value);
     if (reg) { this.correo.setValue(reg.correo); }
   }
