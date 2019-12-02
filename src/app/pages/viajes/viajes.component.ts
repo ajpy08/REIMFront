@@ -102,6 +102,7 @@ export class ViajesComponent implements OnInit {
         this.totalRegistros = res.total;
         this.dataSource = new MatTableDataSource(res.viajes);
         this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.totalRegistros = res.viajes.length;
       }
     });

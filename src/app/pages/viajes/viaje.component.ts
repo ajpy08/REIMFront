@@ -38,6 +38,7 @@ export const MY_FORMATS = {
 })
 
 export class ViajeComponent implements OnInit {
+  cargando: boolean = true;
   regForm: FormGroup;
   fileTemporal: File = null;
   fileExcel: File = null;
