@@ -26,10 +26,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
   dataSourceCargas: any;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  @ViewChild('MatPaginatorCarga', { read: MatPaginator}) MatPaginatorCarga: MatPaginator
+  @ViewChild('MatSortCarga') MatSortCarga: MatSort;
 
 
 
@@ -61,8 +62,8 @@ export class SolicitudesTransportistaComponent implements OnInit {
           // this.totalRegistrosCargas = maniobras.total;
           // this.maniobrasCarga = maniobras.maniobras;
           this.dataSourceCargas = new MatTableDataSource(maniobras.maniobras);
-          this.dataSourceCargas.sort = this.sort;
-          this.dataSourceCargas.paginator = this.paginator;
+          this.dataSourceCargas.sort = this.MatSortCarga;
+          this.dataSourceCargas.paginator = this.MatPaginatorCarga;
           this.totalRegistrosCargas = maniobras.total;
         });
       this.cargando = false;
@@ -83,8 +84,8 @@ export class SolicitudesTransportistaComponent implements OnInit {
           // this.totalRegistrosCargas = maniobras.total;
           // this.maniobrasCarga = maniobras.maniobras;
           this.dataSourceCargas = new MatTableDataSource(maniobras.maniobras);
-          this.dataSourceCargas.sort = this.sort;
-          this.dataSourceCargas.paginator = this.paginator;
+          this.dataSourceCargas.sort = this.MatSortCarga;
+          this.dataSourceCargas.paginator = this.MatPaginatorCarga;
           this.totalRegistrosCargas = maniobras.total;
         });
       this.cargando = false;

@@ -90,6 +90,11 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
@@ -110,13 +115,13 @@
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="fechaingreso">
+                <ng-container matColumnDef="fLlegada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:"dd/MM/yyyy"}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="operador">
-                  <mat-header-cell *matHeaderCellDef>Operador</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef  mat-sort-header>Operador</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.operador?.nombre}} </mat-cell>
                 </ng-container>
 
@@ -258,7 +263,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-extra-big" #table [dataSource]="dataSourceLavadoVacios" matSort>
+              <mat-table class="mat-table-extra-big"  [dataSource]="dataSourceLavadoVacios" #MarSortlavado="matSort" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
@@ -282,6 +287,10 @@
                     </button> -->
                   </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
@@ -303,9 +312,9 @@
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="fechaingreso">
+                <ng-container matColumnDef="fLlegada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:"dd/MM/yyyy"}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="operador">
@@ -376,7 +385,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorLavado [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div><br><br>
             <div class="container">
@@ -450,7 +459,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-extra-big" #table [dataSource]="dataSourceReparacionVacios" matSort>
+              <mat-table class="mat-table-extra-big"  [dataSource]="dataSourceReparacionVacios" #MatSortReparacion="matSort" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
@@ -475,6 +484,10 @@
                   </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
@@ -496,9 +509,9 @@
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="fechaingreso">
+                <ng-container matColumnDef="fLlegada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:"dd/MM/yyyy"}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="operador">
@@ -571,7 +584,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorReparacion [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div><br><br>
             <div class="container">
