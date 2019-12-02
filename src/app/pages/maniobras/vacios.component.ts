@@ -70,8 +70,18 @@ export class VaciosComponent implements OnInit {
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
-    'fechaingreso', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
+    'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
     'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+
+    displayedColumnsLavado = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
+    'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
+    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+
+
+    displayedColumnsReparacion = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
+    'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
+    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
   dataSourceReparacionVacios: any;
@@ -81,6 +91,12 @@ export class VaciosComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('MatPaginatorLavado', { read: MatPaginator}) MatPaginatorLavado: MatPaginator;
+  @ViewChild('MatSortLavado') MatSortLavado: MatSort;
+
+  @ViewChild('MatPaginatorReparacion', { read: MatPaginator}) MatPaginatorReparacion: MatPaginator;
+  @ViewChild('MatSortReparacion') MatSortReparacion: MatSort;
+
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   checkedVacios = true;
@@ -174,11 +190,11 @@ export class VaciosComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viajeLavado, "VACIO", true, false)
+      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", true, false)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
-          this.dataSourceLavadoVacios.sort = this.sort;
-          this.dataSourceLavadoVacios.paginator = this.paginator;
+          this.dataSourceLavadoVacios.sort = this.MatSortLavado;
+          this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
           this.totalRegistrosLavadoVacios = maniobras.total;
 
           if (this.dataSourceLavadoVacios.data.length > 0 && this.checkedLavadoVacios) {
@@ -204,8 +220,8 @@ export class VaciosComponent implements OnInit {
       this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viajeReparacion, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
-          this.dataSourceReparacionVacios.sort = this.sort;
-          this.dataSourceReparacionVacios.paginator = this.paginator;
+          this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
+          this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
           this.totalRegistrosReparacionVacios = maniobras.total;
 
           if (this.dataSourceReparacionVacios.data.length > 0 && this.checkedReparacionVacios) {
@@ -226,6 +242,7 @@ export class VaciosComponent implements OnInit {
     this.dataSourceVacios.filter = filterValue;
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
+  
 
   filtraManiobrasDescargaVacios(sinFactura: boolean) {
     this.maniobrasSinFacturaVacios = [];
@@ -277,8 +294,8 @@ export class VaciosComponent implements OnInit {
         }
       });
       this.dataSourceLavadoVacios = new MatTableDataSource(this.maniobrasSinFacturaLavadoVacios);
-      this.dataSourceLavadoVacios.sort = this.sort;
-      this.dataSourceLavadoVacios.paginator = this.paginator;
+      this.dataSourceLavadoVacios.sort = this.MatSortLavado;
+      this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
       if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
         this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
@@ -310,8 +327,8 @@ export class VaciosComponent implements OnInit {
         }
       });
       this.dataSourceReparacionVacios = new MatTableDataSource(this.maniobrasSinFacturaReparacionVacios);
-      this.dataSourceReparacionVacios.sort = this.sort;
-      this.dataSourceReparacionVacios.paginator = this.paginator;
+      this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
+      this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
       if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
         this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
@@ -367,8 +384,8 @@ export class VaciosComponent implements OnInit {
         }
       });
       this.dataSourceLavadoVacios = new MatTableDataSource(this.maniobrasVaciosLavadoDescagadas);
-      this.dataSourceLavadoVacios.sort = this.sort;
-      this.dataSourceLavadoVacios.paginator = this.paginator;
+      this.dataSourceLavadoVacios.sort = this.MatSortLavado;
+      this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
     } else {
       this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
@@ -391,8 +408,8 @@ export class VaciosComponent implements OnInit {
         }
       });
       this.dataSourceReparacionVacios = new MatTableDataSource(this.maniobrasVaciosReparacionDescagadas);
-      this.dataSourceReparacionVacios.sort = this.sort;
-      this.dataSourceReparacionVacios.paginator = this.paginator;
+      this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
+      this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
     } else {
       this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
