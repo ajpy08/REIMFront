@@ -40,11 +40,11 @@ export class AprobacionesComponent implements OnInit {
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator; //descargas
-  // @ViewChild(MatSort) sort: MatSort; //descargas
+  @ViewChild(MatPaginator) paginator: MatPaginator; //descargas
+  @ViewChild(MatSort) sort: MatSort; //descargas
 
-  @ViewChild('pagDescargas', { read: MatPaginator }) pagDescargas: MatPaginator; //cargas
-  @ViewChild('sortDescargas') sortDescargas: MatSort; //cargas
+  // @ViewChild('pagDescargas', { read: MatPaginator }) pagDescargas: MatPaginator; //cargas
+  // @ViewChild('sortDescargas') sortDescargas: MatSort; //cargas
 
   @ViewChild('pagCargas', { read: MatPaginator }) pagCargas: MatPaginator; //cargas
   @ViewChild('sortCargas') sortCargas: MatSort; //cargas
@@ -73,8 +73,8 @@ export class AprobacionesComponent implements OnInit {
   }
 
   cargaSolicitudes(CD: string) {
+    this.cargando = true;
     if (CD == 'D') {
-      this.cargando = true;
       this._solicitudesService.getSolicitudes('D', null,
         this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
         this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '')
@@ -84,11 +84,10 @@ export class AprobacionesComponent implements OnInit {
           //   if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           //   return item[property];
           // };
-          this.dtDescargas.sort = this.sortDescargas;
-          this.dtDescargas.paginator = this.pagDescargas;
+          this.dtDescargas.sort = this.sort;
+          this.dtDescargas.paginator = this.paginator;
           this.totalRegistrosDescargas = resp.total;
           //this.dtDescargas.filterPredicate  = this.Filtro();
-          this.cargando = false;
         });
     } else if (CD == 'C') {
       this.cargando = true;
@@ -106,9 +105,9 @@ export class AprobacionesComponent implements OnInit {
           this.dtCargas.paginator = this.pagCargas;
           this.totalRegistrosCargas = resp.total;
           //this.dtCargas.filterPredicate  = this.Filtro();
-          this.cargando = false;
         });
-    }
+      }
+      this.cargando = false;
   }
 
   applyFilterCargas(filterValue: string) {
