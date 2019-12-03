@@ -34,10 +34,10 @@
             <ng-container matColumnDef="actions" sticky>
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let agencia">
-                <button [routerLink]="['/agencias/agencia', agencia._id ]" class="btn btn-primary m-r-5">
+                <button  matTooltip="Editar Agencia" [routerLink]="['/agencias/agencia', agencia._id ]" class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button (click)="borrarAgencia(agencia)" class="btn btn-danger m-r-5">
+                <button  matTooltip="Eliminar Agencia" (click)="borrarAgencia(agencia)" class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </mat-cell>
@@ -45,7 +45,7 @@
 
             <ng-container matColumnDef="img">
               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'"
+              <mat-cell matTooltip="Imagen de Agencia" *matCellDef="let row"> <img [src]="row.img | imagen:'cliente'"
                   class="img-50 img-circle pointer"> </mat-cell>
             </ng-container>
 
