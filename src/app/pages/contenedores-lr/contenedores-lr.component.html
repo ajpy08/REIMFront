@@ -34,7 +34,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </button> -->
-                    <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip="Ver Lavado"  (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -80,9 +80,9 @@
                   <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
-                    <button *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
+                    <button matTooltip="Ver Fotos" *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos
+                      
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -100,10 +100,10 @@
                   <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
-                    <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
+                    <button matTooltip="Ver Foto" *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
                       (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos
+                      
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -157,7 +157,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                               <i class="fa fa-eye" aria-hidden="true"></i>
                             </button> -->
-                    <button (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip="Ver Reparación" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -203,9 +203,9 @@
                   <mat-header-cell *matHeaderCellDef>Fotos Lavado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <!-- <button [routerLink]="['/fotos',row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary"> -->
-                    <button *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
+                    <button matTooltip="Ver Foto" *ngIf="row.lavado" (click)="fotos(row._id, 'fotos_lavado')" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos
+                      
                     </button>
                   </mat-cell>
                 </ng-container>
@@ -223,11 +223,10 @@
                   <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
-                    <button *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
+                    <button  matTooltip="Ver Foto" *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
                       (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
-                      Fotos
-                    </button>
+                      </button>
                   </mat-cell>
                 </ng-container>
 

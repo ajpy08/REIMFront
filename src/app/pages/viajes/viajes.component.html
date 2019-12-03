@@ -80,10 +80,10 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let viaje">
-                <button [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary m-r-5">
+                <button matTooltip="Editar Viaje" [routerLink]="['/viaje', viaje._id ]" class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button (click)="borrarViaje( viaje )" class="btn btn-danger m-r-5">
+                <button matTooltip="Eliminar Viaje" (click)="borrarViaje( viaje )" class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </mat-cell>
@@ -107,7 +107,7 @@
             <ng-container matColumnDef="pdfTemporal">
               <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <a *ngIf="row.pdfTemporal" [href]="row.pdfTemporal | imagen:'viaje'" target="_blank">
+                <a matTooltip="Descargar Formato PDF" *ngIf="row.pdfTemporal" [href]="row.pdfTemporal | imagen:'viaje'" target="_blank">
                   <img src="\assets\images\icon\pdf_32x32.png">
                 </a>
               </mat-cell>
