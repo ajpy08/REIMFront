@@ -188,9 +188,9 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
         this.dtXCargar.filterPredicate = this.Filtro();
-        this.cargando = false;
+        
       });
-
+      this.cargando = false;
   }
 
   habilitaDeshabilitaPermisoDescargaManiobra(maniobra, event) {
