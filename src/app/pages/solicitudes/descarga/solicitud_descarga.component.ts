@@ -448,7 +448,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   onFilePDFBLSelected(event) {
-    this.fileBL = <File> event.target.files[0];
+    this.fileBL = <File> event.target.files[0]; 
     this.subirBL();
   }
 
