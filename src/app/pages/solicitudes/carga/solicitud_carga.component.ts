@@ -399,7 +399,7 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   onFilePDFComprobanteSelected(event) {
-    this.fileComprobante = <File>event.target.files[0]);
+    this.fileComprobante = <File>event.target.files[0];
     this.subirComprobante();
   }
 
