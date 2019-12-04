@@ -17,9 +17,9 @@
           <!--<button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
             <i class="fas fa-file-excel"></i> Exportar Excel
           </button> -->
-          <button [routerLink]="['/tipos_contenedores/tipoContenedor','nuevo']" type="button" class="btn btn-info waves-effect waves-light m-r-5">
+          <button matTooltip="Añadir nuevo Tipo Contenedor" mat-mini-fab color="primary"
+            [routerLink]="['/tipos_contenedores/tipoContenedor','nuevo']" type="button">
             <i class="fa fa-plus"></i>
-            Añadir nuevo Tipo Contenedor
           </button>
         </div>
         <h3 class="card-title">Tipo Contenedor: ( <small>{{totalRegistros}}</small> )</h3>
@@ -34,10 +34,11 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let tipo">
-                <button  matTooltip="Editar Contenedor" [routerLink]="['/tipos_contenedores/tipoContenedor', tipo._id ]" class="btn btn-primary m-r-5">
+                <button matTooltip="Editar Contenedor" [routerLink]="['/tipos_contenedores/tipoContenedor', tipo._id ]"
+                  class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button  matTooltip="Eliminar Contenedor" (click)="borrarTipo( tipo )" class="btn btn-danger m-r-5">
+                <button matTooltip="Eliminar Contenedor" (click)="borrarTipo( tipo )" class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </mat-cell>
