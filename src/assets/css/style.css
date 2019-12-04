@@ -1601,7 +1601,12 @@ File: scss
     right: 0;
     margin: 0 auto;
 }
-
+/********************
+    COLOR TAB
+*********************/
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+    background-color: #002C77 !important;
+}
 
 /*******************
 Notify
