@@ -41,10 +41,8 @@
             </div>
             <br>
             <div class="text-right">
-              <button [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button"
-                class="btn waves-effect waves-light btn-rounded btn-primary">
-                <i class="fa fa-plus"></i>
-                Nueva Solicitud Descarga
+              <button matTooltip="Nueva Solicitud Descarga" mat-mini-fab color="primary"
+                [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button"> <i class="fa fa-plus"></i>
               </button>
             </div>
             <br>
@@ -53,15 +51,16 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Solicitud" *ngIf="row.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_descarga', row._id ]"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Solicitud" *ngIf="row.estatus==='NA'"
+                      [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                     <button matTooltip="Ver Solicitud" *ngIf="row.estatus==='APROBADA'"
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar Solicitud" (click)="borrarSolicitud( row )"
+                      class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
@@ -169,10 +168,9 @@
             </div>
             <br>
             <div class="text-right">
-              <button [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button"
-                class="btn waves-effect waves-light btn-rounded btn-primary">
+              <button matTooltip="Nueva solicitud Carga" mat-mini-fab color="primary"
+                [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button">
                 <i class="fa fa-plus"></i>
-                Nueva solicitud Carga
               </button>
             </div>
             <br>
@@ -181,15 +179,16 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Solicitud" *ngIf="row.estatus==='NA'" [routerLink]="['/solicitudes/solicitud_carga', row._id ]"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Solicitud" *ngIf="row.estatus==='NA'"
+                      [routerLink]="['/solicitudes/solicitud_carga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                     <button matTooltip="Ver Solicitud" *ngIf="row.estatus==='APROBADA'"
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar Solicitud" *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )"
+                      class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
