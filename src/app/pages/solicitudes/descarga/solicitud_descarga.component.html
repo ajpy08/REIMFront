@@ -59,7 +59,8 @@
               <div class="col-md-3">
                 <mat-form-field>
                   <mat-label>Agencia</mat-label>
-                  <mat-select formControlName="agencia" type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
+                  <mat-select [(ngModel)]="agenciaDescargaSelected" formControlName="agencia" 
+                  type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                       {{ag.nombreComercial}}
                     </mat-option>
