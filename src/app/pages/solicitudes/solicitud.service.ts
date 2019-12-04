@@ -65,14 +65,14 @@ export class SolicitudService {
         url += '?token=' + this._usuarioService.token;
         return this.http.put(url, solicitud)
         .pipe(map((resp: any) => {
-          swal('Solicitud Actualizada', solicitud.agencia, 'success');
+          swal('Solicitud Actualizada', 'Correctamente', 'success');
           return resp.solicitud;
         }));
       } else { // Creando
         url += '?token=' + this._usuarioService.token;
         return this.http.post(url, solicitud)
         .pipe(map((resp: any) => {
-          swal('Solicitud Creada', solicitud.agencia, 'success');
+          swal('Solicitud Creada', 'Correctamente', 'success');
           return resp.solicitud;
         }));
       }
