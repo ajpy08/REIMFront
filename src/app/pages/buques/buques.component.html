@@ -17,9 +17,9 @@
           <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
             <i class="fas fa-file-excel"></i> Exportar Excel
           </button>
-          <button [routerLink]="['/buques/buque','nuevo']" type="button" class="btn btn-info waves-effect waves-light m-r-5">
+          <button matTooltip="Añadir nuevo Buque" mat-mini-fab color="primary" [routerLink]="['/buques/buque','nuevo']"
+            type="button">
             <i class="fa fa-plus"></i>
-            Añadir nuevo buque
           </button>
         </div>
         <h3 class="card-title">Buques: ( <small>{{totalRegistros}}</small> )</h3>
@@ -34,10 +34,11 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let buque">
-                <button  matTooltip="Editar Buque" [routerLink]="['/buques/buque', buque._id ]" class="btn btn-primary m-r-5">
+                <button matTooltip="Editar Buque" [routerLink]="['/buques/buque', buque._id ]"
+                  class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button matTooltip="Eliminar Buque"  (click)="borrarBuque( buque )" class="btn btn-danger m-r-5">
+                <button matTooltip="Eliminar Buque" (click)="borrarBuque( buque )" class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </mat-cell>

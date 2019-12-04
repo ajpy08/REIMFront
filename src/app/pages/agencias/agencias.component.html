@@ -14,10 +14,8 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button [routerLink]="['/agencias/agencia','nuevo']" type="button"
-            class="btn waves-effect waves-light btn-rounded btn-primary">
+          <button matTooltip="Añadir nueva Agencia" mat-mini-fab color="primary"  [routerLink]="['/agencias/agencia','nuevo']" type="button">
             <i class="fa fa-plus"></i>
-            Añadir nueva agencia
           </button>
         </div>
         <h3 class="card-title">Agencias ( <small>{{totalRegistros}}</small> )</h3>

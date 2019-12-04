@@ -15,9 +15,8 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button [routerLink]="['/navieras/naviera','nuevo']" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+          <button  matTooltip="Añadir nueva Naviera" mat-mini-fab color="primary" [routerLink]="['/navieras/naviera','nuevo']" type="button">
               <i class="fa fa-plus"></i>
-              Añadir nueva naviera
           </button>
         </div>
         <h3 class="card-title">Navieras ( <small>{{totalRegistros}}</small> )</h3>
