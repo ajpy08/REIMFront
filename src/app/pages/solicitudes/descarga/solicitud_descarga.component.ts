@@ -52,6 +52,7 @@ export class SolicitudDescargaComponent implements OnInit {
   transportistas: Transportista[] = [];
   clientes: Cliente[] = [];
   contenedoresXViaje: Maniobra[] = [];
+  agenciaDescargaSelected;
 
    listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   //  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
@@ -86,8 +87,12 @@ export class SolicitudDescargaComponent implements OnInit {
       } else {
         if (this.usuarioLogueado.empresas) {
           this.usuarioLogueado.empresas.forEach(empresa => {
-            this._agenciaService.getAgencia(empresa._id).subscribe(ag => {this.agencias.push(ag) });
+            this._agenciaService.getAgencia(empresa._id).subscribe(ag => {
+              this.agencias.push(ag);               
+            });
           });   
+          this.agenciaDescargaSelected = this.usuarioLogueado.empresas[0]._id;
+          this.cargaClientes({value: this.agenciaDescargaSelected});
         }             
       }
       this._navieraService.getNavieras().subscribe( navieras => { this.navieras = navieras.navieras; });
