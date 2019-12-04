@@ -36,6 +36,7 @@ export class SolicitudCargaComponent implements OnInit {
   aprobada = false;
   usuarioLogueado: any;
   url: string;
+  agenciaCargaSelected;
 
 
   constructor(
@@ -55,12 +56,14 @@ export class SolicitudCargaComponent implements OnInit {
     this.usuarioLogueado = this._usuarioService.usuario;
     
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; this.agenciaCargaSelected = this.agencias[0]; });
     } else {
       if (this.usuarioLogueado.empresas) {
         this.usuarioLogueado.empresas.forEach(empresa => {
           this._agenciaService.getAgencia(empresa._id).subscribe(ag  => {this.agencias.push(ag) });
         });
+        this.agenciaCargaSelected = this.usuarioLogueado.empresas[0]._id;
+          this.cargaClientes({value: this.agenciaCargaSelected});
       }
     }
     this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
