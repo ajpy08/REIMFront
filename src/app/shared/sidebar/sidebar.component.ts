@@ -32,7 +32,7 @@ export class SidebarComponent implements OnInit {
       return;
     }
     if (this.usuario.role == 'PATIO_ROLE') {
-      this.role = 'Usuario Container Park';
+      this.role = 'Patio Container Park';
       return;
     }
     if (this.usuario.role == 'NAVIERA_ROLE') {

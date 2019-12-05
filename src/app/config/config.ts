@@ -46,7 +46,7 @@ export const ROLES = {
 export const ROLES_ARRAY = [
 { _id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR' },
 { _id: 'PATIOADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK' },
-{ _id: 'PATIO_ROLE', descripcion: 'USUARIO COINTAINER PARK' },
+{ _id: 'PATIO_ROLE', descripcion: 'PATIO COINTAINER PARK' },
 { _id: 'NAVIERA_ROLE', descripcion: 'NAVIERA' },
 { _id: 'TRANSPORTISTA_ROLE', descripcion: 'TRANSPORTISTA' },
 { _id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL' },
