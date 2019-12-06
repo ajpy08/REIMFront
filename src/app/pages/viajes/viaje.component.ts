@@ -6,6 +6,7 @@ import { Naviera } from '../navieras/navieras.models';
 import { ViajeService, BuqueService, NavieraService } from '../../services/service.index';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { ExcelService } from '../../services/excel/excel.service';
+import { ESTADOS_CONTENEDOR_ARRAY } from '../../config/config';    
 import swal from 'sweetalert';
 
 // datapiker
@@ -48,6 +49,8 @@ export class ViajeComponent implements OnInit {
   navieras: Naviera[] = [];
   tiposContenedor: any[] = [];
   erroresCarga: string[] = [];
+
+  estadosContenedor = ESTADOS_CONTENEDOR_ARRAY
 
   constructor(
     private _viajeService: ViajeService,
@@ -127,6 +130,7 @@ export class ViajeComponent implements OnInit {
   get contenedores() {
     return this.regForm.get('contenedores') as FormArray;
   }
+
   /* #endregion */
 
   addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string): void {
@@ -136,8 +140,10 @@ export class ViajeComponent implements OnInit {
     this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus));
   }
 
+  
+
   addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
-    if (this._id.value) {
+       if (this._id.value) {
       this._viajeService.addContenedor(this._id.value, this.formateoContenedor(cont), tipo, peso, destinatario)
         .subscribe(res => {
           if (res.ok) {

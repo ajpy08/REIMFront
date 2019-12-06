@@ -120,6 +120,7 @@ export class CargaContenedorComponent implements OnInit {
       hDescarga: [''],
       estatus: [{ value: '', disabled: true }],
       folio: [{ value: '', disabled: true }],
+      blBooking: [{ value: '', disabled: true }],
       cliente: [{ value: '', disabled: true }],
       agencia: [{ value: '', disabled: true }],
       transportista: [{ value: '', disabled: true }],
@@ -154,6 +155,10 @@ export class CargaContenedorComponent implements OnInit {
   }
   get folio() {
     return this.regForm.get('folio');
+  }
+
+  get blBooking() {
+    return this.regForm.get('blBooking');
   }
   get cliente() {
     return this.regForm.get('cliente');
@@ -196,6 +201,8 @@ export class CargaContenedorComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
+      var blBooking = maniob.maniobra.solicitud != undefined ? maniob.maniobra.solicitud.blBooking : '';
+      this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
       this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);

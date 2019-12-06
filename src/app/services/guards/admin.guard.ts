@@ -14,7 +14,8 @@ export class AdminGuard implements CanActivate {
 
     if ( this._usuarioService.usuario.role === 'ADMIN_ROLE' || this._usuarioService.usuario.role === 'PATIOADMIN_ROLE'
     || this._usuarioService.usuario.role === 'AA_ROLE' || this._usuarioService.usuario.role === 'NAVIERA_ROLE'
-    || this._usuarioService.usuario.role === 'TRANSPORTISTA_ROLE'  ) {
+    || this._usuarioService.usuario.role === 'TRANSPORTISTA_ROLE' ||
+    this._usuarioService.usuario.role === 'PATIO_ROLE' ) {
       return true;
     } else {
       console.log('Bloqueado por el ADMIN GUARD');
