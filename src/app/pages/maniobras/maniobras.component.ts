@@ -22,18 +22,18 @@ export class ManiobrasComponent implements OnInit {
   totalXCargar = 0;
 
 
-  displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+  displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
-  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
-  displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+  displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
 
-  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre', 'agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
+  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
 
-  displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
+  displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial','solicitud.blBooking'];
 
   dtTransito: any;
   dtEspera: any;
@@ -66,10 +66,10 @@ export class ManiobrasComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
         'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     } else {
-      this.displayedColumnsRevision = ['actions', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'transportista.nombreComercial', 'contenedor', 'tipo',
+      this.displayedColumnsRevision = ['actions', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
         'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     }
     this.cargarManiobras();
