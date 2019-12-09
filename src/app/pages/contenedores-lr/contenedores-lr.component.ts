@@ -41,8 +41,7 @@ export class ContenedoresLRComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarManiobrasLavadoOReparacion('L');
-    this.cargarManiobrasLavadoOReparacion('R');
+
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.displayedColumnsLavado = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
@@ -55,10 +54,12 @@ export class ContenedoresLRComponent implements OnInit {
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
+    this.cargarManiobrasLavadoOReparacion('L');
+    this.cargarManiobrasLavadoOReparacion('R');
   }
 
   cargarManiobrasLavadoOReparacion(LR: string) {
-    if (this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.cargando = true;
       this.maniobraService.getManiobrasLavadoOReparacion(this.usuarioLogueado.empresas[0]._id,
         this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin, LR)
@@ -79,7 +80,7 @@ export class ContenedoresLRComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
         this.cargando = true;
         this.maniobraService.getManiobrasLavadoOReparacion(null,
           this.buque, this.viaje, this.fechaLlegadaInicio, this.fechaLlegadaFin, LR)

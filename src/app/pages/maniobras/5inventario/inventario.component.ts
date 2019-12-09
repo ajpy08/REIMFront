@@ -65,7 +65,7 @@ export class InventarioComponent implements OnInit {
 
   cargarInventario() {
     this.cargando = true;
-    if (this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null, null, this.usuarioLogueado.empresas[0]._id)
         .subscribe(maniobras => {
 
@@ -119,7 +119,7 @@ export class InventarioComponent implements OnInit {
       this.cargando = false;
     } else {
 
-      this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE)
+      this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null,null, null, null, null)
         .subscribe(maniobras => {
           this.c20 = maniobras.maniobras.filter(m => m.tipo.includes('20'));
 
@@ -174,7 +174,7 @@ export class InventarioComponent implements OnInit {
   }
 
   cargarLR() {
-    if (this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.cargando = true;
       this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION, this.usuarioLogueado.empresas[0]._id)
         .subscribe(maniobras => {
@@ -185,7 +185,7 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE ||  this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
         this.cargando = true;
         this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
           .subscribe(maniobras => {

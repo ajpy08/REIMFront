@@ -68,6 +68,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       cliente: [{ value: '', disabled: true }],
       agencia: [{ value: '', disabled: true }],
       transportista: [{ value: '', disabled: true }],
+      blBooking: [{ value: '', disabled: true }],
       camion: [{ value: '', disabled: true }],
       operador: [{ value: '', disabled: true }],
       fLlegada: [{ value: '', disabled: true }],
@@ -103,6 +104,9 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   }
   get agencia() {
     return this.regForm.get('agencia');
+  }
+  get blBooking() {
+    return this.regForm.get('blBooking');
   }
   get transportista() {
     return this.regForm.get('transportista');
@@ -186,6 +190,8 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.nombreComercial);
       }
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
+      var blBooking = maniob.maniobra.solicitud != undefined ? maniob.maniobra.solicitud.blBooking : '';
+      this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       if (maniob.maniobra.cliente) {
         this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente.nombreComercial);

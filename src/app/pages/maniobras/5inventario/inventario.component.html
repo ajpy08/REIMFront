@@ -112,7 +112,7 @@
     <mat-divider></mat-divider>
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
-      <mat-list-item *ngFor="let g20 of groupedDisponibles20">
+      <mat-list-item *ngFor="let g20 of groupedDisponibles20?.data">
         <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceLR)}} )</b>
         </h4>
         <p matLine>

@@ -10,6 +10,14 @@
                 <input matInput formControlName="folio">
               </mat-form-field>
             </div>
+
+            <div class="form-group has-success">
+              <label class="control-label"><b>BL/Booking</b></label>
+              <mat-form-field>
+                <input matInput formControlName="blBooking">
+              </mat-form-field>
+            </div>
+
             <div class="form-group has-success">
               <label class="control-label"><b>A.A</b></label>
               <mat-select formControlName="agencia" type="text" placeholder="Seleccione una agencia">
@@ -98,11 +106,11 @@
 
             <div class="form-group has-success">
               <label class="control-label"><b>ASIGNA CONTENEDOR</b></label>
-              <!-- <mat-select type="text" placeholder="Seleccione un Contenedor" (selectionChange)="cargaContenedor($event.value) ">
-                <mat-option *ngFor=" let cont of contenedores " [value]="cont ">
-                  {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}
-                </mat-option>
-              </mat-select> -->
+                <!-- <mat-select type="text" placeholder="Seleccione un Contenedor" (selectionChange)="cargaContenedor($event.value) ">
+                  <mat-option *ngFor=" let cont of contenedores " [value]="cont ">
+                    {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}
+                  </mat-option>
+                </mat-select> -->
 
               <mat-form-field>
                 <input type="text" placeholder="Selecciona un contenedor" aria-label="Number" matInput formControlName="contenedorTemp" [matAutocomplete]="auto">

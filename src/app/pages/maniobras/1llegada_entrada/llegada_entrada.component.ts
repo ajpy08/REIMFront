@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService, ClienteService } from '../../../services/service.index';
+import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService, ClienteService, SolicitudService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
@@ -58,6 +58,7 @@ export class LlegadaEntradaComponent implements OnInit {
     private _camionService: CamionService,
     private _clienteService: ClienteService,
     private router: Router,
+    private SolicitudService: SolicitudService,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private datePipe: DatePipe,
@@ -79,6 +80,7 @@ export class LlegadaEntradaComponent implements OnInit {
       contenedor: [{value: '', disabled: true}],
       tipo: [{value: '', disabled: true}],
       cliente: [{value: '', disabled: true}],
+      blBooking: [{value: '', disabled: true}],
       agencia: [{value: '', disabled: true}],
       estatus: [{value: '', disabled: true}],
       transportista: [''],
@@ -104,6 +106,9 @@ export class LlegadaEntradaComponent implements OnInit {
   }
   get cliente() {
     return this.regForm.get('cliente');
+  }
+  get blBooking() {
+    return this.regForm.get('blBooking');
   }
   get agencia() {
     return this.regForm.get('agencia');
@@ -142,6 +147,8 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
+      var blBooking = maniob.maniobra.solicitud != undefined ? maniob.maniobra.solicitud.blBooking : '';
+      this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
       if ( maniob.maniobra.transportista ) {
         this.cargaOperadores(maniob.maniobra.transportista);
