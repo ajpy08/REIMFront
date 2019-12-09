@@ -339,12 +339,12 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="peso">
@@ -536,12 +536,12 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="peso">
