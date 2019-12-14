@@ -73,7 +73,7 @@
 
                 <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="naviera.nombreComercial">
@@ -83,7 +83,7 @@
 
                 <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="viaje.viaje">
@@ -202,12 +202,12 @@
 
                 <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="cliente.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="observaciones">

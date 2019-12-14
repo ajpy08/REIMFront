@@ -1,47 +1,165 @@
 <div class="row">
-    <div class="col-lg-3">
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'TRANSPORTISTA_ROLE'"
+        class="col-lg-3">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex no-block">
-                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
-                            src="assets/images/icon/income.png" alt="Income" /></div>
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span>
+                        <img src="assets/images/camiones.png" width="50px" height="50px" alt="Total Camiones" /></div>
                     <div class="align-self-center">
-                        <h6 class="text-muted m-t-10 m-b-0">Total De Descargas</h6>
-                        <h2 class="m-t-0">0</h2>
+                        <h6 class="text-muted m-t-10 m-b-0">Total De Camiones</h6>
+                        <h2 class="m-t-0">{{totalCamiones}}</h2>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3">
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'TRANSPORTISTA_ROLE'"
+        class="col-lg-3">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex no-block">
                     <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
-                            src="assets/images/icon/expense.png" alt="Income" /></div>
+                            src="assets/images/operador.png" width="50px" height="50px" alt="Total Operador" /></div>
                     <div class="align-self-center">
-                        <h6 class="text-muted m-t-10 m-b-0">Total De Cargas</h6>
-                        <h2 class="m-t-0">0</h2>
+                        <h6 class="text-muted m-t-10 m-b-0">Total De operadores</h6>
+                        <h2 class="m-t-0">{{totalOperadores}}</h2>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-3">
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'AA_ROLE'" class="col-lg-3">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex no-block">
                     <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
-                            src="assets/images/icon/assets.png" alt="Income" /></div>
+                            src="assets/images/cliente.png" width="50px" height="50px" alt="Clientes" /></div>
                     <div class="align-self-center">
-                        <h6 class="text-muted m-t-10 m-b-0">Totales</h6>
-                        <h2 class="m-t-0">0</h2>
+                        <h6 class="text-muted m-t-10 m-b-0">Total de Clientes</h6>
+                        <h2 class="m-t-0">{{totalClientes}}</h2>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'AA_ROLE'" class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
+                            src="assets/images/descarga.png" width="50px" height="50px" alt="Solicitud Descarga" />
+                    </div>
+                    <div class="align-self-center">
+                        <h6 class="text-muted m-t-10 m-b-0">Solicitudes de Descarga</h6>
+                        <h2 class="m-t-0">{{totalRegistrosDescargas}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'AA_ROLE'" class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
+                            src="assets/images/carga.png" width="65px" height="65px" alt="Solicitud Carga" /></div>
+                    <div class="align-self-center">
+                        <h6 class="text-muted m-t-10 m-b-0">Solicitudes de Carga</h6>
+                        <h2 class="m-t-0">{{totalRegistrosCargas}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'NAVIERA_ROLE' || usuarioLogueado.role === 'PATIO_ROLE'"
+        class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-10 align-self-center"><span class="lstick m-r-20"></span><img
+                            src="assets/images/inventario.jpg" width="65px" height="65px" alt="Inventaro" /></div>
+                    <div class="align-self-center">
+                        <h6 class="text-muted m-t-10 m-b-0">Inventario</h6>
+                        <h2 class="m-t-0">{{totalRegistrosInventario}}</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="aling-self-right">
+                        <div *ngFor="let g of groupedDisponibles20">
+                            <h6 class="text-muted m-t-0 m-b-0">{{g.tipo}}: ( {{g.maniobras.length}} ) &nbsp;&nbsp;</h6>
+                        </div>
+                    </div>
+                    <div class="align-self-center">
+                        <div *ngFor="let g of groupedDisponibles40">
+                            <h6 class="text-muted m-t-0 m-b-0">{{g.tipo}}: ( {{g.maniobras.length}} )&nbsp;&nbsp;</h6>
+                        </div>
+                    </div>
+                    <div class="alig-self-left">
+                        <h6 class="text-muted m-y-0 m-b-0">Lavado / Reparación ( {{totalRegistrosLR}} )</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'NAVIERA_ROLE' || usuarioLogueado.role === 'PATIO_ROLE'"
+        class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
+                            src="assets/images/lavado.png" width="55px" height="55px" alt="Lavado" /></div>
+                    <div class="align-self-center">
+                        <h6 class="text-muted m-t-10 m-b-0">Lavado</h6>
+                        <h2 class="m-t-0">{{totalLavado}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'NAVIERA_ROLE' || usuarioLogueado.role === 'PATIO_ROLE'"
+        class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
+                            src="assets/images/reparacion.png" width="65px" height="65px" alt="Reparación" /></div>
+                    <div class="align-self-center">
+                        <h6 class="text-muted m-t-10 m-b-0">Reparación</h6>
+                        <h2 class="m-t-0">{{totalReparacion}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'PATIO_ROLE'" class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-1 align-self-center"><span class="lstick m-r-1"></span><img
+                            src="assets/images/maniobra.png" width="65px" height="70px" alt="Reparación" /></div>
+                    <div class="align-self-center">
+                        <h6>Maniobras Patio</h6>
+                    </div>
+                    <div class="col-12">
+                        <h6 class="text-muted">Transito ( {{totalTransito}} )&nbsp;<br> Espera ( {{totalEspera}} )&nbsp; <br>
+                            Revisión ( {{totalRevision}} )&nbsp; <br> lavado / Reparación ( {{totalLavadoReparacion}} )<br>
+                            X Cargar ( {{totalXCargar}} )
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="col-lg-3">
         <div class="card">
             <div class="card-body">
@@ -59,7 +177,7 @@
 </div>
 <div class="container">
     <div class="row">
-            <div class="d-none d-md-flex justify-content-start">
+        <div class="d-none d-md-flex justify-content-start">
             <img src="assets/images/logo_reim_container_park_original.svg" style="width: 640px; height: 250; margin-left: 220px; margin-top: 50px; opacity: 0.5;
         filter: alpha(opacity=50);">
         </div>
