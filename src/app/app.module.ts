@@ -24,22 +24,35 @@ import { environment } from '../environments/environment';
 import { RefreshTokenInterceptor } from './services/service.index';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
-
+import { RegistroComponent } from './registro/registro.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatInputModule, MatSelectModule, MatTableModule } from '@angular/material';
+import {MatStepperModule} from '@angular/material/stepper';
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    PagesComponent
+    PagesComponent,
+    RegistroComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     APP_ROUTES,
-    FormsModule,
     ReactiveFormsModule,
     ServiceModule,
     SharedModule,
+    MatFormFieldModule,
     Ng2ImgMaxModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatSelectModule,
+    MatTableModule,
+    MatStepperModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
