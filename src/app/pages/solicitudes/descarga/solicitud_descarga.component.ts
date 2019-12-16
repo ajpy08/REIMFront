@@ -129,7 +129,7 @@ export class SolicitudDescargaComponent implements OnInit {
       credito: ['', [Validators.required]],
       observaciones: [''],
       rutaBL: [''],
-      rutaComprobante: [''],
+      rutaComprobante: ['', [Validators.required]],
       correo: [''],
       facturarA: ['', [Validators.required]],
       rfc: [{ value: '', disabled: true }],
