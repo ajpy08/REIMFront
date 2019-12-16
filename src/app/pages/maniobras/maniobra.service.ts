@@ -420,6 +420,23 @@ export class ManiobraService {
       }));
   }
 
+  enviaCorreo(maniobra: Maniobra): Observable<any> {
+    let params = new HttpParams();
+    let url = URL_SERVICIOS + '/maniobras/maniobra';
+    url += '/' + maniobra._id + '/enviacorreo';
+    if (maniobra._id) {
+      params = params.append('_id', maniobra._id);
+    }
 
+    return this.http.get(url, { params: params })
+    .pipe(map((resp: any) => {
+      if (resp.mensaje != '' && resp.mensaje != undefined && resp.mensaje.length > 0) {
+        swal('ALERTA', resp.mensaje, 'success');        
+      }else {
+        swal('Correo Enviado', '', 'success');
+      }
+      return resp.solicitud;
+    }));;
+  }
 
 }

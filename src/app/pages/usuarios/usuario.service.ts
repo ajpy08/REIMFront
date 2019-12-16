@@ -62,12 +62,13 @@ export class UsuarioService {
       this.menu = [];
     }
   }
-  guardarStorage(id: string, token: string, usuario: Usuario, menu: any) {
+  guardarStorage(id: string, token: string, usuario: Usuario, menu: any, urlWithoutLogin: string) {
 
     localStorage.setItem('id', id);
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
     localStorage.setItem('menu', JSON.stringify(menu));
+    localStorage.setItem('urlMain', urlWithoutLogin);
 
     this.usuario = usuario;
     this.token = token;
@@ -79,6 +80,7 @@ export class UsuarioService {
     this.token = '';
     this.menu = [];
 
+    localStorage.removeItem('id'); //Lo elimine no se si sirve para algo.
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('menu');
@@ -93,20 +95,25 @@ export class UsuarioService {
     localStorage.removeItem('VacioTabs');
     localStorage.removeItem('L/R');
 
+    localStorage.removeItem('urlMain');
+
     this.router.navigate(['/login']);
   }
 
-  login(usuario: Usuario, recordar: boolean = false): Observable<any> {
+  login(usuario: Usuario, recordar: boolean = false, urlWithoutLogin: string): Observable<any> {
     if (recordar) {
       localStorage.setItem('email', usuario.email);
     } else {
       localStorage.removeItem('email');
     }
+    if (urlWithoutLogin === undefined) {
+      urlWithoutLogin = '/dashboard'
+    }
     let url = URL_SERVICIOS + '/login';
     return this.http.post(url, usuario)
       .pipe(
         map((resp: any) => {
-          this.guardarStorage(resp.id, resp.token, resp.usuario, resp.menu);
+          this.guardarStorage(resp.id, resp.token, resp.usuario, resp.menu, urlWithoutLogin);
           return true;
         }));
 
@@ -164,7 +171,7 @@ actualizarUsuario(usuario: Usuario) {
             .pipe(map( (resp: any) => {
                     if ( usuario._id === this.usuario._id ) {
                       let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
                     return true;
@@ -180,7 +187,7 @@ actualizaPerfil(usuario: Usuario)
             .pipe(map( (resp: any) => {
                     if ( usuario._id === this.usuario._id ) {
                       let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
                     return true;
@@ -194,7 +201,7 @@ resetPass( usuario: Usuario ): Observable<any> {
             .pipe(map( (resp: any) => {
                     if ( usuario._id === this.usuario._id ) {
                       let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
                     }
                     swal('Usuario actualizado', usuario.nombre, 'success' );
                     return true;
@@ -208,7 +215,7 @@ habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean): Observable<any> {
             .pipe(map( (resp: any) => {
               if ( usuario._id === this.usuario._id ) {
                 let usuarioDB: Usuario = resp.usuario;
-                this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu );
+                this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
               }
                     swal('Cambio de estado del usuario realizado con éxito', usuario.nombre, 'success' );
                     return true;
