@@ -115,7 +115,7 @@ export class SolicitudCargaComponent implements OnInit {
       transportistaTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO_EXPORT],
       patioTemp: [PATIOS.POLIGONO],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '', '')], { validators: Validators.required }),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '','','')], { validators: Validators.required }),
       _id: [''],
       tipo: ['C'],
       estatus: ['']
@@ -123,13 +123,15 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   creaContenedor(tipo: string, peso: string, grado: string, maniobra: string,
-    transportista: string, transportista2: string, patio: string, estatus: string): FormGroup {
+    transportista: string, transportista2: string, 
+    correoTransportista: string, patio: string, estatus: string): FormGroup {
     return this.fb.group({
       tipo: [tipo],
       peso: [peso],
       grado: [grado],
       transportista: [transportista],
       transportista2: [transportista2],
+      correoTransportista: [correoTransportista],
       patio: [patio],
       maniobra: [maniobra],
       estatus: [estatus],
@@ -137,8 +139,8 @@ export class SolicitudCargaComponent implements OnInit {
   }
 
   addContenedor(tipo: string, peso: string, grado: string, maniobra: string,
-    transportista: string, transportista2: string, patio: string, estatus: string): void {
-    this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra, transportista, transportista2, patio, estatus));
+    transportista: string, transportista2: string, correoTransportista: string, patio: string, estatus: string): void {
+    this.contenedores.push(this.creaContenedor(tipo, peso, grado, maniobra, transportista, transportista2, correoTransportista, patio, estatus));
   }
 
   removeContenedor(index: number) {
@@ -265,7 +267,7 @@ export class SolicitudCargaComponent implements OnInit {
       solicitud.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.peso, element.grado,
           element.maniobra, element.transportista,
-          element.transportista.nombreComercial, element.patio, '');
+          element.transportista.nombreComercial, element.transportista.correo,  element.patio, '');
       });
 
       if (solicitud.estatus === 'APROBADA') {
@@ -322,7 +324,7 @@ export class SolicitudCargaComponent implements OnInit {
     }
     this.addContenedor(this.tipoTemp.value, this.estadoTemp.value, this.gradoTemp.value,
       undefined, this.transportistaTemp.value._id,
-      this.transportistaTemp.value.nombreComercial, this.patioTemp.value, '');
+      this.transportistaTemp.value.nombreComercial, this.transportistaTemp.value.correo, this.patioTemp.value, '');
     this.contenedorTemp.setValue('');
     this.tipoTemp.setValue('');
   }

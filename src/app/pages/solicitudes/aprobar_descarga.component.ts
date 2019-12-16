@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert';
 import { catchError } from 'rxjs/operators';
 import { Location } from '@angular/common';
+import { Maniobra } from 'src/app/models/maniobra.models';
 
 @Component({
   selector: 'app-aprobar-descarga',
@@ -345,8 +346,11 @@ export class AprobarDescargaComponent implements OnInit {
 
   apruebaSolicitud() {
     if (this.solicitudCorrecta) {
-      this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value)
-        .subscribe(resp => { this.router.navigate([this.url]) });
+      this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value).subscribe(resp => {
+        this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
+          this.router.navigate([this.url]);
+        });
+      });
     }
   }
 
@@ -372,5 +376,9 @@ export class AprobarDescargaComponent implements OnInit {
     this.router.navigate([this.url]);
     localStorage.removeItem('history')
     // this.location.back();
+  }
+
+  enviacorreo(maniobra) {
+    this._ManiobraService.enviaCorreo({_id: maniobra}).subscribe(() => { });
   }
 }
