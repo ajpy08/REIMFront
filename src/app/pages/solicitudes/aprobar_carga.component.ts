@@ -67,7 +67,7 @@ export class AprobarCargaComponent implements OnInit {
       estado: [{ value: '', disabled: true }],
       correoFac: [{ value: '', disabled: true }],
       cp: [{ value: '', disabled: true }],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '')])
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '','')], {validators: Validators.required}),
     });
   }
 
