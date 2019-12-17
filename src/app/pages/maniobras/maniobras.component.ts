@@ -320,17 +320,6 @@ export class ManiobrasComponent implements OnInit {
     this.router.navigate(['/fotos', id], navigationExtras);
   }
 
-  // fotos(id: string, tipo: string) {
-  //   localStorage.setItem('history', '/maniobras');
-
-  //   let navigationExtras: NavigationExtras = {
-  //     queryParams: { 'opcion': tipo }
-  //   };
-
-  //   this.router.navigate(['/fotos', id], navigationExtras);
-  // }
-
-
 
   exportAsXLSXespera(dtEspera, nombre: string): void {
     this.crearDatosExcel(dtEspera.filteredData);
@@ -431,8 +420,5 @@ export class ManiobrasComponent implements OnInit {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
-
-
-
 }
 
