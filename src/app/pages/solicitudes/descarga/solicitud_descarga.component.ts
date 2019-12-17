@@ -148,7 +148,7 @@ export class SolicitudDescargaComponent implements OnInit {
       tipoTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO_IMPORT],
       patioTemp: [PATIOS.POLIGONO],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '','','')]),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '','','')], {validators: Validators.required}),
       _id: [''],
       tipo: ['D'],
       estatus: ['']

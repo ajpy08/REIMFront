@@ -303,11 +303,16 @@
                 <ng-container matColumnDef="fotosreparacion">
                   <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                    <button matTooltip="Ver Foto" *ngIf="row.reparaciones.length > 0"
+                      (click)="openFotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
+                      <i class="fas fa-camera-retro"></i>                      
+                    </button>
+                    <!-- <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
                       Fotos
-                    </button>
+                    </button> -->
                   </mat-cell>
+
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>

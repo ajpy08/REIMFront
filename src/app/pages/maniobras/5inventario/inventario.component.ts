@@ -65,7 +65,8 @@ export class InventarioComponent implements OnInit {
 
   cargarInventario() {
     this.cargando = true;
-    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
+    if ((this.usuarioLogueado.role === ROLES.NAVIERA_ROLE || this.usuarioLogueado.role === ROLES.CLIENT_ROLE)
+      && this.usuarioLogueado.empresas.length > 0) {
       this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null, null, this.usuarioLogueado.empresas[0]._id)
         .subscribe(maniobras => {
 
@@ -118,57 +119,60 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || 
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || 
+        this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
+        this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null, null, null, null, null)
+          .subscribe(maniobras => {
+            this.c20 = maniobras.maniobras.filter(m => m.tipo.includes('20'));
 
-      this.maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null,null, null, null, null)
-        .subscribe(maniobras => {
-          this.c20 = maniobras.maniobras.filter(m => m.tipo.includes('20'));
+            const grouped20 = this.c20.reduce((curr, m) => {
+              if (!curr[m.tipo]) {
+                // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+                curr[m.tipo] = [m];
+              } else {
+                // Si ya tienes ese tipo lo agregas al final del arreglo
+                curr[m.tipo].push(m);
+              }
+              return curr;
+            }, {});
 
-          const grouped20 = this.c20.reduce((curr, m) => {
-            if (!curr[m.tipo]) {
-              // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
-              curr[m.tipo] = [m];
-            } else {
-              // Si ya tienes ese tipo lo agregas al final del arreglo
-              curr[m.tipo].push(m);
-            }
-            return curr;
-          }, {});
+            // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+            this.groupedDisponibles20 = Object.keys(grouped20).map(tipo => {
+              return {
+                tipo: tipo,
+                maniobras: grouped20[tipo]
+              };
+            });
 
-          // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
-          this.groupedDisponibles20 = Object.keys(grouped20).map(tipo => {
-            return {
-              tipo: tipo,
-              maniobras: grouped20[tipo]
-            };
+            this.c40 = maniobras.maniobras.filter(m => m.tipo.includes('40'));
+
+            const grouped40 = this.c40.reduce((curr, m) => {
+              if (!curr[m.tipo]) {
+                // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+                curr[m.tipo] = [m];
+              } else {
+                // Si ya tienes ese tipo lo agregas al final del arreglo
+                curr[m.tipo].push(m);
+              }
+              return curr;
+            }, {});
+
+            // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+            this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
+              return {
+                tipo: tipo,
+                maniobras: grouped40[tipo]
+              };
+            });
+
+            this.dataSource = new MatTableDataSource(maniobras.maniobras);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.totalRegistros = maniobras.maniobras.length;
           });
-
-          this.c40 = maniobras.maniobras.filter(m => m.tipo.includes('40'));
-
-          const grouped40 = this.c40.reduce((curr, m) => {
-            if (!curr[m.tipo]) {
-              // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
-              curr[m.tipo] = [m];
-            } else {
-              // Si ya tienes ese tipo lo agregas al final del arreglo
-              curr[m.tipo].push(m);
-            }
-            return curr;
-          }, {});
-
-          // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
-          this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
-            return {
-              tipo: tipo,
-              maniobras: grouped40[tipo]
-            };
-          });
-
-          this.dataSource = new MatTableDataSource(maniobras.maniobras);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-          this.totalRegistros = maniobras.maniobras.length;
-        });
-      this.cargando = false;
+        this.cargando = false;
+      }
     }
     this.cargarLR();
   }
@@ -185,7 +189,7 @@ export class InventarioComponent implements OnInit {
         });
       this.cargando = false;
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE ||  this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
         this.cargando = true;
         this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
           .subscribe(maniobras => {
@@ -337,7 +341,7 @@ export class InventarioComponent implements OnInit {
     localStorage.setItem("InventarioTabs", event.index.toString());
   }
 
-  open(id: string){
+  open(id: string) {
     var history;
     var array = [];
     //Si tengo algo en localStorage en la variable historyArray lo obtengo
