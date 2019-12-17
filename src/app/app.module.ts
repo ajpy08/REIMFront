@@ -30,6 +30,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatInputModule, MatSelectModule, MatTableModule } from '@angular/material';
 import {MatStepperModule} from '@angular/material/stepper';
 import { HttpClientModule } from '@angular/common/http';
+import {MatButtonModule} from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +54,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatSelectModule,
     MatTableModule,
     MatStepperModule,
+    MatButtonModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

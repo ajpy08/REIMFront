@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService } from '../maniobras/maniobra.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatTabChangeEvent, MatTabGroup } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
-import { UsuarioService } from 'src/app/services/service.index';
+import { UsuarioService, ExcelService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { NavigationExtras, Router } from '@angular/router';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-contenedores-lr',
@@ -22,6 +23,8 @@ export class ContenedoresLRComponent implements OnInit {
   usuarioLogueado: Usuario;
   buque: string;
   viaje: string;
+  lavadoExcel = [];
+  reparacionesExcel= [];
   fechaLlegadaInicio: string;
   fechaLlegadaFin: string
 
@@ -37,7 +40,7 @@ export class ContenedoresLRComponent implements OnInit {
   @ViewChild('MatSortReparacion') MatSortReparacion: MatSort;
 
 
-  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService, public router: Router) { }
+  constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService, public router: Router,private excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -56,6 +59,7 @@ export class ContenedoresLRComponent implements OnInit {
     }
     this.cargarManiobrasLavadoOReparacion('L');
     this.cargarManiobrasLavadoOReparacion('R');
+    
   }
 
   cargarManiobrasLavadoOReparacion(LR: string) {
@@ -161,4 +165,45 @@ export class ContenedoresLRComponent implements OnInit {
     //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
+
+
+
+  CreaDatosExcel(datos) {
+    this.lavadoExcel = [];
+    datos.forEach(b => {
+      var buque = {
+        Naviera: b.naviera && b.naviera.nombreComercial && b.naviera.nombreComercial != undefined && b.naviera.nombreComercial != '' && b.naviera.nombreComercial,
+        Contenedor: b.contenedor,
+        Tipo: b.tipo,
+        Estatus: b.estado,
+        Cliente: b.cliente && b.cliente.nombreComercial && b.cliente.nombreComercial != undefined && b.cliente.nombreComercial != '' && b.cliente.nombreComercial,
+        A_A: b.aa,
+        Lavado: b.lavado,
+        Reparación: b.reparaciones,
+        Grado: b.Grado
+        
+      };
+      this.lavadoExcel.push(buque);
+    });
+  }
+
+  exportAsXLSX(dataSourceLavados, nombre: string): void {
+    this.CreaDatosExcel(dataSourceLavados.filteredData);
+    if (this.lavadoExcel) {
+      this.excelService.exportAsExcelFile(this.lavadoExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+  exportAsXLSXR(dataSourceReparaciones, nombre: string): void {
+    this.CreaDatosExcel(dataSourceReparaciones.filteredData);
+    if (this.lavadoExcel) {
+      this.excelService.exportAsExcelFile(this.lavadoExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  
+  
 }

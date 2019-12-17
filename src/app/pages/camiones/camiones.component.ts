@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Camion } from './camion.models';
-import { CamionService, UsuarioService } from '../../services/service.index';
+import { CamionService, UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
@@ -15,6 +15,7 @@ export class CamionesComponent implements OnInit {
   camiones: Camion[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
+  camionesExcel = [];
 
   displayedColumns = ['actions', 'transportista.nombreComercial', 'noEconomico', 'placa', 'vigenciaSeguro', 'pdfSeguro'];
   dataSource: any;
@@ -23,7 +24,7 @@ export class CamionesComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(public _camionService: CamionService,
-    private usuarioService: UsuarioService) { }
+    private usuarioService: UsuarioService, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -46,9 +47,9 @@ export class CamionesComponent implements OnInit {
           this.dataSource = new MatTableDataSource(camiones.camiones);
 
           this.dataSource.sortingDataAccessor = (item, property) => {
-            if (property.includes('.')) return property.split('.').reduce((o,i)=>o[i], item)
+            if (property.includes('.')) return property.split('.').reduce((o, i) => o[i], item)
             return item[property];
-         };
+          };
 
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
@@ -61,9 +62,9 @@ export class CamionesComponent implements OnInit {
             this.dataSource = new MatTableDataSource(camiones.camiones);
 
             this.dataSource.sortingDataAccessor = (item, property) => {
-              if (property.includes('.')) return property.split('.').reduce((o,i)=>o[i], item)
+              if (property.includes('.')) return property.split('.').reduce((o, i) => o[i], item)
               return item[property];
-           };
+            };
 
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
@@ -91,4 +92,27 @@ export class CamionesComponent implements OnInit {
         }
       });
   }
+
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var camiones = {
+        Nombre_Comercial:d.transportista.nombreComercial,
+        No_Economico: d.noEconomico,
+        Placa: d.placa,
+        VigenciaSeguro: d.vigenciaSeguro
+      }
+      this.camionesExcel.push(camiones);
+    });
+  }
+
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.camionesExcel){
+      this.excelService.exportAsExcelFile(this.camionesExcel, 'Camiones');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
 }

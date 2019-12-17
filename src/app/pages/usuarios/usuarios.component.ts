@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from './usuario.model';
-import { UsuarioService } from '../../services/service.index';
+import { UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { ROLES_ARRAY } from '../../config/config';
+import { balancePreviousStylesIntoKeyframes } from '@angular/animations/browser/src/util';
 
 declare var swal: any;
 @Component({
@@ -16,13 +17,13 @@ export class UsuariosComponent implements OnInit {
   totalRegistros = 0;
   cargando = true;
   roles = ROLES_ARRAY;
-
+  usuarioExcel = [];
   displayedColumns = ['actions', 'foto', 'email', 'activo', 'nombre', 'role', 'empresas'];
   dataSource: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _usuarioService: UsuarioService) { }
+  constructor(public _usuarioService: UsuarioService, private excelService: ExcelService) { }
   ngOnInit() {
     this.cargarUsuarios();
   }
@@ -69,4 +70,27 @@ export class UsuariosComponent implements OnInit {
         }
       });
   }
+
+crearDatosExcel(datos){
+  datos.forEach(b => {
+    var usuario = {
+      Email: b.email,
+      Activo: b.activo,
+      Nombre: b.nombre,
+      Role: b.role,
+      Empresa: b.empresas,
+      FAlta: b.fAlta.substring(0, 10)
+    };
+    this.usuarioExcel.push(usuario);
+  });
+}
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.usuarioExcel){
+      this.excelService.exportAsExcelFile(this.usuarioExcel, 'Usuarios');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
 }

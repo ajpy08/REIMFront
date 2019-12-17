@@ -28,16 +28,26 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterTransito($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterTransito($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
+            <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSX(dtTransito, 'Transito')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+
             <br>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-big" [dataSource]="dtTransito" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Transito" [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Transito"
+                      [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -124,8 +134,16 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterEspera($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterEspera($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSX(dtEspera, 'Espera')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
@@ -133,7 +151,8 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Espera" [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Espera"
+                      [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -217,8 +236,16 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterRevision($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterRevision($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
+            </div>
+
+            <br>
+            <div class="text-right">
+              <button (click)="exportAsXLSXRevision(dtRevision, 'Revisión')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
@@ -226,7 +253,8 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Revisión" (click)="open(row._id)" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Revisión" (click)="open(row._id)"
+                      class="btn btn-primary m-r-5">
 
                       <i class="fa fa-edit"></i>
                     </button>
@@ -238,7 +266,8 @@
                 <ng-container matColumnDef="descargaAutorizada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Descarga Autorizada</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.descargaAutorizada" (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.descargaAutorizada"
+                      (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="folio">
@@ -303,7 +332,8 @@
                 <ng-container matColumnDef="fotosreparacion">
                   <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
+                    <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}"
+                      class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>
                       Fotos
                     </button>
@@ -313,7 +343,8 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
-              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+                [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -334,8 +365,16 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterLavadoRevision($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterLavadoRevision($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSXLavado(dtLavadoReparacion, 'Lavado_Reparación')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
@@ -346,7 +385,8 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button> -->
-                    <button matTooltip="Editar Maniobra de Lavado y Reparación" (click)="open(row._id)" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Lavado y Reparación" (click)="open(row._id)"
+                      class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -446,8 +486,16 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterXCargar($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterXCargar($event.target.value)"
+                  placeholder="Escriba algo para filtrar">
               </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSXX(dtXCargar, 'X_Cargar')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
@@ -456,7 +504,9 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
 
-                    <button matTooltip="Editar Maniobra por Cargar" [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra por Cargar"
+                      [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']"
+                      class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -495,7 +545,7 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
                 </ng-container>
-                
+
                 <ng-container matColumnDef="solicitud.blBooking">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
@@ -504,7 +554,8 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
-              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+                [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>

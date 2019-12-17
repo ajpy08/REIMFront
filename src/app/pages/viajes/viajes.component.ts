@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Viaje } from './viaje.models';
-import { ViajeService } from '../../services/service.index';
+import { ViajeService, ExcelService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -39,6 +39,7 @@ export class ViajesComponent implements OnInit {
   totalRegistros = 0;
   regForm: FormGroup;
   pdfTemporal = false;
+  viajeExcel = [];
 
   displayedColumns = ['actions' , 'viaje', 'buque', 'fArribo' , 'pdfTemporal', 'fVigenciaTemporal', 'anio'];
   dataSource: any;
@@ -46,7 +47,7 @@ export class ViajesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _viajeService: ViajeService, private fb: FormBuilder) { }
+  constructor(private _viajeService: ViajeService, private fb: FormBuilder, private excelService: ExcelService) { }
 
   ngOnInit() {
 
@@ -130,5 +131,27 @@ export class ViajesComponent implements OnInit {
         }
       });
   }
+  CreaDatosExcelC(datos) {
+    datos.forEach(b => {
+      var buque = {
+        Viaje: b.viaje,
+        Nombre_Buque: b.viaje && b.buque.nombre && b.buque.nombre != undefined && b.buque.nombre != '' ? b.buque.nombre : '' && b.buque.nombre,
+        Fecha_Arribo: b.fArribo.substring(0, 10),
+        Vijencia_Temporal: b.fVigenciaTemporal.substring(0, 10),
+        Año: b.anio
+        
+      };
+      this.viajeExcel.push(buque);
+    });
+  }
 
-}
+  exportAsXLSX(dataSource, nombre: string): void {
+    this.CreaDatosExcelC(dataSource.filteredData);
+    if (this.viajeExcel) {
+      this.excelService.exportAsExcelFile(this.viajeExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  }

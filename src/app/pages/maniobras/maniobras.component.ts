@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { ManiobraService, UsuarioService } from '../../services/service.index';
+import { ManiobraService, UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
 import { Usuario } from '../usuarios/usuario.model';
@@ -25,21 +25,22 @@ export class ManiobrasComponent implements OnInit {
   displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
-  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
+  displayedColumnsEspera = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
 
   displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
     'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
 
-  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
+  displayedColumnsLavadoReparacion = ['actions', 'contenedor', 'tipo', 'peso', 'cliente.nombreComercial', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'agencia.nombreComercial', 'lavado', 'reparaciones', 'grado'];
 
-  displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial','solicitud.blBooking'];
+  displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'solicitud.blBooking'];
 
   dtTransito: any;
   dtEspera: any;
   dtRevision: any;
   dtLavadoReparacion: any;
   dtXCargar: any;
+  maniobrasExcel = [];
 
   usuarioLogueado: Usuario;
 
@@ -60,13 +61,13 @@ export class ManiobrasComponent implements OnInit {
 
 
   constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService,
-    private router: Router) { }
+    private router: Router, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre','solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
+      this.displayedColumnsRevision = ['actions', 'descargaAutorizada', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
         'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'grado', 'lavado', 'fotosreparacion'];
     } else {
       this.displayedColumnsRevision = ['actions', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
@@ -188,9 +189,9 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
         this.dtXCargar.filterPredicate = this.Filtro();
-        
+
       });
-      this.cargando = false;
+    this.cargando = false;
   }
 
   habilitaDeshabilitaPermisoDescargaManiobra(maniobra, event) {
@@ -266,7 +267,141 @@ export class ManiobrasComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
   }
 
+
+  crearDatosExcel(datos) {
+
+    this.maniobrasExcel = [];
+    datos.forEach(d => {
+      var maniobras = {
+        Carga_O_Descarga: d.cargaDescarga,
+        Folio: d.folio,
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '' && d.viaje.viaje,
+        Nombre_Buque: d.viaje && d.viaje.buque.nombre && d.viaje.buque.nombre != undefined && d.viaje.buque.nombre != '' ? d.viaje.buque.nombre : '' && d.viaje.buque.nombre,
+        Booking: d.solicitud && d.solicitud.blBooking && d.solicitud.blBooking != undefined && d.solicitud.blBooking != '' ? d.solicitud.blBooking : '' && d.solicitud.blBooking,
+        Transportista: d.transportista && d.transportista.nombreComercial && d.transportista.nombreComercial != undefined && d.transportista.nombreComercial != '' && d.transportista.nombreComercial,
+        Contenedor: d.contenedor,
+        Tipo: d.tipo,
+        Peso: d.peso,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+
+      }
+      this.maniobrasExcel.push(maniobras);
+    });
+
+  }
+  exportAsXLSX(dtTransito, nombre: string): void {
+    this.crearDatosExcel(dtTransito.filteredData);
+    if (this.maniobrasExcel) {
+      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+
+
+  exportAsXLSXespera(dtEspera, nombre: string): void {
+    this.crearDatosExcel(dtEspera.filteredData);
+    if (this.maniobrasExcel) {
+      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  crearDatosExcelRevision(datos) {
+
+    this.maniobrasExcel = [];
+    datos.forEach(d => {
+      var maniobras = {
+        Descarga_Autorizada: d.descargaAutorizada,
+        Folio: d.folio,
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '' && d.viaje.viaje,
+        Nombre_Buque: d.viaje && d.viaje.buque.nombre && d.viaje.buque.nombre != undefined && d.viaje.buque.nombre != '' ? d.viaje.buque.nombre : '' && d.viaje.buque.nombre,
+        Booking: d.solicitud && d.solicitud.blBooking && d.solicitud.blBooking != undefined && d.solicitud.blBooking != '' ? d.solicitud.blBooking : '' && d.solicitud.blBooking,
+        Transportista: d.transportista && d.transportista.nombreComercial && d.transportista.nombreComercial != undefined && d.transportista.nombreComercial != '' && d.transportista.nombreComercial,
+        Contenedor: d.contenedor,
+        Tipo: d.tipo,
+        Peso: d.peso,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        Grado: d.grado,
+        lavado: d.lavado,
+
+      }
+      this.maniobrasExcel.push(maniobras);
+    });
+  }
+
+  exportAsXLSXRevision(dtRevision, nombre: string): void {
+    this.crearDatosExcelRevision(dtRevision.filteredData);
+    if (this.maniobrasExcel) {
+      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  crearDatosExcelLavado(datos) {
+
+    this.maniobrasExcel = [];
+    datos.forEach(d => {
+      var maniobras = {
+
+        Contenedor: d.contenedor,
+        Tipo: d.tipo,
+        Peso: d.peso,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '' && d.viaje.viaje,
+        Nombre_Buque: d.viaje.buque && d.viaje.buque != undefined && d.viaje.buque.nombre != '' ? d.viaje.buque.nombre : '' && d.viaje.buque.nombre,
+        Booking: d.solicitud && d.solicitud.blBooking && d.solicitud.blBooking != undefined && d.solicitud.blBooking != '' ? d.solicitud.blBooking : '' && d.solicitud.blBooking,
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        lavado: d.lavado,
+        Reparacion: d.reparaciones,
+        Grado: d.grado,
+      }
+      this.maniobrasExcel.push(maniobras);
+    });
+  }
+
+  exportAsXLSXLavado(dtLavadoReparacion, nombre: string): void {
+    this.crearDatosExcelLavado(dtLavadoReparacion.filteredData);
+    if (this.maniobrasExcel) {
+      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  crearDatosExcelX(datos) {
+
+    this.maniobrasExcel = [];
+    datos.forEach(d => {
+      var maniobras = {
+        Folio: d.folio,
+        Transportista: d.transportista && d.transportista.nombreComercial && d.transportista.nombreComercial != undefined && d.transportista.nombreComercial != '' && d.transportista.nombreComercial,
+        Grado: d.grado,
+        Tipo: d.tipo,
+        Peso: d.peso,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        Booking: d.solicitud && d.solicitud.blBooking && d.solicitud.blBooking != undefined && d.solicitud.blBooking != '' ? d.solicitud.blBooking : '' && d.solicitud.blBooking,
+      }
+      this.maniobrasExcel.push(maniobras);
+    });
+  }
+
+  exportAsXLSXX(dtXCargar, nombre: string): void {
+    this.crearDatosExcelX(dtXCargar.filteredData);
+    if (this.maniobrasExcel) {
+      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+
+
 }
-
-
 

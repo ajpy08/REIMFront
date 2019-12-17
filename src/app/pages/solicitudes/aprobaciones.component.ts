@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Solicitud } from './solicitud.models';
-import { SolicitudService } from '../../services/service.index';
+import { SolicitudService, ExcelService } from '../../services/service.index';
 import { MatTabGroup, MatTabChangeEvent, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import * as _moment from 'moment';
 import { DatePipe } from '@angular/common';
@@ -50,6 +50,7 @@ export class AprobacionesComponent implements OnInit {
   @ViewChild('sortCargas') sortCargas: MatSort; //cargas
 
   cargando = true;
+  aprobacionesExcel = [];
 
   displayedColumnsDescarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'naviera.nombreComercial', 'cliente.nombreComercial', 'viaje.viaje', 'buque.nombre',
     'observaciones', 'estatus'];
@@ -61,7 +62,7 @@ export class AprobacionesComponent implements OnInit {
   totalRegistrosDescargas = 0;
   totalRegistrosCargas = 0;
 
-  constructor(public _solicitudesService: SolicitudService) { }
+  constructor(public _solicitudesService: SolicitudService,private excelService: ExcelService) { }
 
   ngOnInit() {
     this.cargaSolicitudes('D');
@@ -106,8 +107,8 @@ export class AprobacionesComponent implements OnInit {
           this.totalRegistrosCargas = resp.total;
           //this.dtCargas.filterPredicate  = this.Filtro();
         });
-      }
-      this.cargando = false;
+    }
+    this.cargando = false;
   }
 
   applyFilterCargas(filterValue: string) {
@@ -155,4 +156,59 @@ export class AprobacionesComponent implements OnInit {
   //   }
   //   return filterFunction;
   // }
+
+
+  CreaDatosExcel(datos) {
+    datos.forEach(b => {
+      var buque = {
+        //Id: b._id,
+        FAlta: b.fAlta.substring(0, 10),
+        Tipo: b.tipo,
+        Agencia: b.agencia && b.agencia.nombreComercial && b.agencia.nombreComercial != undefined && b.agencia.nombreComercial != '' && b.agencia.nombreComercial,
+        Naviera: b.naviera && b.naviera.nombreComercial && b.naviera.nombreComercial != undefined && b.naviera.nombreComercial != '' && b.naviera.nombreComercial,
+        Cliente: b.cliente && b.cliente.nombreComercial && b.cliente.nombreComercial != undefined && b.cliente.nombreComercial != '' && b.cliente.nombreComercial,
+        Viaje: b.viaje && b.viaje.viaje && b.viaje.viaje != undefined && b.viaje.viaje != '' ? b.viaje.viaje : '' && b.viaje.viaje,
+        Nombre_Buque: b.viaje.buque && b.viaje.buque != undefined && b.viaje.buque.nombre != '' ? b.viaje.buque.nombre : '' && b.viaje.buque.nombre,
+        Observaciones: b.observaciones,
+        Estatus: b.estatus,
+      };
+      this.aprobacionesExcel.push(buque);
+    });
+  }
+
+  exportAsXLSXD(dtDescargas, nombre: string): void {
+    this.CreaDatosExcel(dtDescargas.filteredData);
+    if (this.aprobacionesExcel) {
+      this.excelService.exportAsExcelFile(this.aprobacionesExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  CreaDatosExcelC(datos) {
+    datos.forEach(b => {
+      var buque = {
+        //Id: b._id,
+        FAlta: b.fAlta.substring(0, 10),
+        Tipo: b.tipo,
+        Agencia: b.agencia && b.agencia.nombreComercial && b.agencia.nombreComercial != undefined && b.agencia.nombreComercial != '' && b.agencia.nombreComercial,
+        Cliente: b.cliente && b.cliente.nombreComercial && b.cliente.nombreComercial != undefined && b.cliente.nombreComercial != '' && b.cliente.nombreComercial,
+        Observaciones: b.observaciones,
+        Estatus: b.estatus,
+      };
+      this.aprobacionesExcel.push(buque);
+    });
+  }
+
+  exportAsXLSXC(dtCargas, nombre: string): void {
+    this.CreaDatosExcelC(dtCargas.filteredData);
+    if (this.aprobacionesExcel) {
+      this.excelService.exportAsExcelFile(this.aprobacionesExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+
+
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
 import { ReparacionService } from 'src/app/pages/reparaciones/reparacion.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ExcelService } from 'src/app/services/service.index';
 declare var swal: any;
 
 @Component({
@@ -15,6 +16,7 @@ export class ReparacionesComponent implements OnInit {
   reparaciones: Reparacion[] = [];
   cargando: boolean = true;
   totalRegistros: number = 0;
+  reparacionesExcel = [];
 
 
   displayedColumns = ['actions', 'descripcion', 'costo'];
@@ -23,7 +25,7 @@ export class ReparacionesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public reparacionService: ReparacionService) { }
+  constructor(public reparacionService: ReparacionService, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.cargarReparaciones();
@@ -61,5 +63,25 @@ export class ReparacionesComponent implements OnInit {
         });
       }
     });
+  }
+
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var reparaciones = {
+        Descripcion: d.descripción,
+        Costo: d.costo
+      }
+    this.reparacionesExcel.push(reparaciones);
+    });
+  }
+
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.reparacionesExcel){
+      this.excelService.exportAsExcelFile(this.reparacionesExcel, 'Reparaciones');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 }
