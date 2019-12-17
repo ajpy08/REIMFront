@@ -14,13 +14,13 @@ export class REIMGuard implements CanActivate {
       if (route.data.roles && route.data.roles.indexOf(usuario.role) === -1) {
         // role not authorised so redirect to home page
         this.router.navigate(['/']);
-        console.log('Bloqueado por el AA GUARD');
+        console.log('Bloqueado por REIM GUARD');
         return false;
       }
       // authorised so return true
       return true;
     } else {
-      console.log('Bloqueado por el AA GUARD');
+      console.log('Bloqueado por REIM GUARD');
       this.router.navigate(['/']);
       return false;
     }

@@ -21,7 +21,6 @@ export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';
 // Guards
 export { LoginGuard } from './guards/login-guard';
-export { AdminGuard } from './guards/admin.guard';
 export { VerificaTokenGuard } from './guards/verifica-token.guard';
 export { REIMGuard } from './guards/reim.guard';
 // Interceptors

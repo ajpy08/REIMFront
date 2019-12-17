@@ -23,8 +23,7 @@ import {
     SubirArchivoService,
     TiposContenedoresService,
     ExcelService,
-    LoginGuard,    
-    AdminGuard,    
+    LoginGuard,     
     VerificaTokenGuard,
     REIMGuard,
     RefreshTokenInterceptor
@@ -58,7 +57,6 @@ import {
       ModalUploadService,
       ModalDropzoneService,
       LoginGuard,
-      AdminGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
       REIMGuard
