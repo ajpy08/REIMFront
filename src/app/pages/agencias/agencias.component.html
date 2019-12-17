@@ -14,6 +14,9 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
+            <button (click)="exportarXLSX()" class="btn btn-success m-r-10">
+                <i class="fas fa-file-excel"></i>
+              </button>
           <button matTooltip="Añadir nueva Agencia" mat-mini-fab class="btn btn-primary"  [routerLink]="['/agencias/agencia','nuevo']" type="button">
             <i class="fa fa-plus"></i>
           </button>
@@ -27,10 +30,10 @@
         <br>
         <div class="example-container mat-elevation-z8">
         </div>
-        <div class="example-container mat-elevation-z8">
-          <mat-table class="mat-table-big" #table [dataSource]="dataSource" matSort>
+        <div class="catalogo-container mat-elevation-z8">
+          <table mat-table class="catalogo-table catalogo-table-big"  #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="actions" sticky>
-              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <th mat-header-cell *matHeaderCellDef> Actions </th>
               <mat-cell *matCellDef="let agencia">
                 <button  matTooltip="Editar Agencia" [routerLink]="['/agencias/agencia', agencia._id ]" class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
@@ -140,7 +143,7 @@
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
+          </table>
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
           </mat-paginator>
         </div>

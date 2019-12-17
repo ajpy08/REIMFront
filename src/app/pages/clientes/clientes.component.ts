@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Cliente } from '../../models/cliente.models';
-import { ClienteService, UsuarioService } from '../../services/service.index';
+import { ClienteService, UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { Observable } from 'rxjs';
@@ -17,6 +17,7 @@ export class ClientesComponent implements OnInit {
   totalRegistros: number = 0;
   desde: number = 0;
   usuarioLogueado = new Usuario;
+  clientesExcel = [];
 
   displayedColumns = ['actions', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
     'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'empresas'];
@@ -25,7 +26,7 @@ export class ClientesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _clienteService: ClienteService, private usuarioService: UsuarioService) { }
+  constructor(public _clienteService: ClienteService, private usuarioService: UsuarioService, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -54,12 +55,12 @@ export class ClientesComponent implements OnInit {
         });
     } else {
       var idsEmpresa = "";
-      if(this.usuarioLogueado.empresas.length > 0) {
+      if (this.usuarioLogueado.empresas.length > 0) {
         this.usuarioLogueado.empresas.forEach(empresa => {
           idsEmpresa += empresa._id + ',';
         })
-  
-        idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length-1); ;
+
+        idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length - 1);;
         //console.log(idsEmpresa)
         this._clienteService.getClientesEmpresas(idsEmpresa).subscribe((clientes) => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
@@ -69,7 +70,7 @@ export class ClientesComponent implements OnInit {
           // console.log(clientes.clientes)
           // console.log(this.dataSource)
         });
-      }      
+      }
     }
     this.cargando = false;
   }
@@ -116,5 +117,37 @@ export class ClientesComponent implements OnInit {
             });
         }
       });
+  }
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var clientes = {
+        RazonSocial: d.razonSocial,
+        NombreComercial: d.nombreComercial,
+        Rfc: d.rfc,
+        Calle: d.calle,
+        No_Exterior: d.noExterior,
+        No_Interior: d.noInterior,
+        Colonia: d.colonia,
+        Municipio: d.municipio,
+        Ciudad: d.ciudad,
+        Estado: d.estado,
+        Cp: d.cp,
+        Correo: d.Correo,
+        Correo_Facturación: d.correoFac,
+        Credito: d.credito,
+        Empresas: d.empresas
+      }
+      this.clientesExcel.push(clientes);
+    });
+  }
+
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.clientesExcel){
+      this.excelService.exportAsExcelFile(this.clientesExcel, 'Clientes');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 }

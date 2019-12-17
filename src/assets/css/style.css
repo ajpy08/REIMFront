@@ -351,6 +351,9 @@ html body .m-l-40 {
 html body .m-r-5 {
     margin-right: 5px;
 }
+.sep {
+    margin-right: 5px !important  ;
+}
 
 html body .m-r-10 {
     margin-right: 10px;

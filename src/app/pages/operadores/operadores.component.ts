@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Operador } from './operador.models';
-import { OperadorService, UsuarioService } from '../../services/service.index';
+import { OperadorService, UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
@@ -15,6 +15,7 @@ export class OperadoresComponent implements OnInit {
   cargando: boolean = true;
   totalRegistros: number = 0;
   usuarioLogueado: Usuario;
+  operadoresExcel = [];
 
   displayedColumns = ['actions', 'foto', 'transportista.nombreComercial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
   dataSource: any;
@@ -22,7 +23,7 @@ export class OperadoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _operadorService: OperadorService, private usuarioService: UsuarioService) { }
+  constructor(public _operadorService: OperadorService, private usuarioService: UsuarioService, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -50,12 +51,12 @@ export class OperadoresComponent implements OnInit {
     } else {
       if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
         this._operadorService.getOperadores(this.usuarioLogueado.empresas[0]._id)
-        .subscribe(operadores => {
-          this.dataSource = new MatTableDataSource(operadores.operadores);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-          this.totalRegistros = operadores.operadores.length;
-        });
+          .subscribe(operadores => {
+            this.dataSource = new MatTableDataSource(operadores.operadores);
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.totalRegistros = operadores.operadores.length;
+          });
       }
     }
     this.cargando = false;
@@ -68,13 +69,13 @@ export class OperadoresComponent implements OnInit {
       icon: 'warning',
       buttons: true,
       dangerMode: true,
-      })
+    })
       .then(borrar => {
         if (borrar) {
           this._operadorService.habilitaDeshabilitaOperador(operador, event.checked)
-          .subscribe(borrado => {
-            this.cargarOperadores();
-          });
+            .subscribe(borrado => {
+              this.cargarOperadores();
+            });
         } else {
           event.source.checked = !event.checked;
         }
@@ -98,5 +99,28 @@ export class OperadoresComponent implements OnInit {
             });
         }
       });
+  }
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var operadores = {
+        Nombre_comercial: d.transportista.nombreComercial,
+        Nombre: d.nombre,
+        VigenciaLicencia: d.vigenciaLicencia,
+        Licencia: d.licencia,
+        Activo: d.activo
+      }
+  this.operadoresExcel.push(operadores);
+    });
+  }
+  
+  
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.operadoresExcel){
+      this.excelService.exportAsExcelFile(this.operadoresExcel, 'Operadores');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 }

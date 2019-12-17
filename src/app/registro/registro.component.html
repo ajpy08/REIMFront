@@ -1,243 +1,262 @@
 <div class="topnav" id="myTopnav">
   <img class="logo" src="assets/images/logo_reim_container_park.svg" alt="Home" />
-</div>
+</div><br>
+<div class="container" style="max-width: 1500px">
 
+    
+    <!-- <img src="assets/images/logo_reim_container_park_original.svg" class="img-fluid"> -->
+<h1 class="box-title m-b-0"><strong>Registro de Datos para REIM Container Park</strong></h1><br>
 
-<div class="row animated fadeIn">
-  <div class="col-md-8">
-    <div class="card card-body"><br><br><br><br>
-      <h1 class="box-title m-b-0"><strong>Registro</strong></h1><br>
-      <div class="row">
-        <div class="col-sm-12 col-xs-12">
-          <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
-            <mat-form-field>
-              <mat-label>SELECCIONA UN ROL</mat-label>
-              <mat-select formControlName="role" type="text" placeholder="ROLE">
-                <mat-option *ngFor="let role of roles" [value]="role._id">
-                  {{role.descripcion}}
-                </mat-option>
+<form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
+  <mat-horizontal-stepper labelPosition="bottom" #stepper>
+    <mat-step [stepControl]="regForm">
+      <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
+        <ng-template matStepLabel>Datos Empresariales</ng-template>
+        <h5>En este apartado se registrará lo Datos Empresariales</h5>
+        <div class="row animated fadeIn">
+          <div class="col-md-6">
+            <div class="card card-body">
+              <div class="row">
+                <div class="col-sm-12 col-xs-12">
+                  <mat-form-field>
+                    <mat-select formControlName="role" type="text" placeholder="ROLE">
+                      <mat-option *ngFor="let role of roles" [value]="role._id">
+                        {{role.descripcion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
 
-              </mat-select>
-
-            </mat-form-field>
-            <div class="my-container">
-
-              <mat-form-field>
-                <input matInput formControlName="razonSocial" type="text" placeholder="Razón Social*">
-                <mat-error *ngIf="razonSocial.touched && razonSocial.invalid">
-                  <sup>*</sup>Por Favor Ingresar Razón Social
-                </mat-error>
-                <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
-                  <sup>*</sup>Por Favor Ingresar minimo 5 caracteres de Razón Social
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field>
-                <input matInput formControlName="rfc" type="text" placeholder="RFC *">
-                <mat-error *ngIf="rfc.touched && rfc.invalid">
-                  <sup>*</sup>Por Favor Ingresar RFC
-                </mat-error>
-                <mat-error *ngIf="rfc.errors && rfc.invalid && rfc.errors['minlength']">
-                  <sup>*</sup>Por Favor Ingresar minimo 12 Caracteres de RFC
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field>
-                <input matInput formControlName="direccionFiscal" type="text" placeholder="Direccion Fiscal*">
-                <mat-error
-                  *ngIf="direccionFiscal.touched && direccionFiscal.invalid && !direccionFiscal.errors?.minlength">
-                  <sup>*</sup>Por Favor Ingrese la Dirección de Fiscal
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field *ngIf="role.value === R.AA_ROLE">
-                <input matInput formControlName="codigo" type="text" placeholder="Patente">
-                <mat-error *ngIf="codigo.touched && codigo.invalid && !codigo.errors?.minlength">
-                  <sup>*</sup> Por Favor Ingresar Patente
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field *ngIf="role.value === R.TRANSPORTISTA_ROLE">
-                <input matInput formControlName="codigo" type="text" placeholder="CAT">
-                <mat-error *ngIf="codigo.touched && codigo.invalid && !codigo.errors?.minlength">
-                  <sup>*</sup> Por Favor Ingresar CAT
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <!--CORREO DE FACTURACION -->
-            <mat-label>Correo de Facturación</mat-label>
-            <table class="table table-responsive">
-              <thead>
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">
-                      <div *ngIf="regForm.get('correotem')">
-                    <button type="button" class="btn btn-success"[disabled]="regForm.pristine || regForm.invalid "
-                      (click)="addContenedor3(correoF.value); correoF.value=''">
-                      +
-                    </button>
-                      </div>
-                  </th>
-                  <mat-error
-                    *ngIf="correoFacturacion.touched && correoFacturacion.invalid && !correoFacturacion.errors?.minlength">
-                    <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
-                  </mat-error>
-                  <th scope="col-12"><input formControlName="correotem" class="form-control" #correoF
-                      placeholder="Correo Facturación" size="20"></th>
-                  <mat-error *ngIf="correotem.touched && correotem.invalid">
-                    <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
-                  </mat-error>
-                </tr>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col"></th>
-
-                  <th scope="col">Correo Facturación</th>
-
-                </tr>
-              </thead>
-              <tbody formArrayName="correoFacturacion" *ngFor="let item of correoFacturacion.controls; let i = index;">
-                <tr [formGroupName]="i">
-                  <td scope="row">{{i+1}}</td>
-                  <td>
-                    <button type="button" (click)="quitar( i )" class="btn btn-danger">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </td>
-                  <td *ngIf="item.get('correoF').value.length > 11;else notShow">
-                    {{item.get('correoF').value}}
-                  </td>
-                  <ng-template #notShow>
-                    <td>{{item.get('correoF').value}}</td>
-                  </ng-template>
-                </tr>
-              </tbody>
-            </table>
-            <!--FIN DE FACTURACION -->
-
-            <!-- <mat-form-field>
-                <input matInput formControlName="correoFacturacion" type="text" placeholder="Correo de Facturación*">
-                <mat-error
-                  *ngIf="correoFacturacion.touched && correoFacturacion.invalid && !correoFacturacion.errors?.minlength">
-                  <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
-                </mat-error>
-              </mat-form-field> -->
-
-            <!--CORREO OPERATIVO-->
-            <mat-label>Correo de Operativo</mat-label>
-            <table class="table  table-responsive">
-              <thead>
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">
-                    <div *ngIf="regForm.get('correotem2')">
-                    <button type="button" class="btn btn-success" [disabled]="regForm.pristine || regForm.invalid "
-
-                      (click)="addContenedor4(correoO.value ); correoO.value=''">
-                      +
-                    </button>
-                  </div>
-                  </th>
-                  <th scope="col"> <input formControlName="correotem2" class="form-control"  #correoO
-                      placeholder="Correo Operativo" size="20"> </th>
-                  <mat-error *ngIf="correotem2.touched && correotem2.invalid" >
-                    
-                    <sup>*</sup> Por Favor Ingresar correctamente correo de Operativo
-                  </mat-error>
-                </tr>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col"></th>
-                  <th scope="col">Correo Operativo</th>
-
-                </tr>
-              </thead>
-              <tbody formArrayName="correoOperativo" *ngFor="let item of correoOperativo.controls; let i = index;">
-                <tr [formGroupName]="i">
-                  <td scope="row">{{i+1}}</td>
-                  <td>
-                    <button type="button" (click)="quitar2( i )" class="btn btn-danger">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </td>
-                  <td *ngIf="item.get('correoO').value.length > 11;else notShow">
-                    {{item.get('correoO').value}}
-                  </td>
-                  <ng-template #notShow>
-                    <td>{{item.get('correoO').value}}</td>
-                  </ng-template>
-                </tr>
-              </tbody>
-            </table>
-            <!--FIN OPERATIVO-->
-            <!-- <mat-form-field>
-                <input matInput formControlName="correoOperativo" type="text" placeholder="Correo Operativo*">
-                <mat-error
-                  *ngIf="correoOperativo.touched && correoOperativo.invalid && !correoOperativo.errors?.minlength">
-                  <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
-                </mat-error>
-              </mat-form-field> -->
-
-
-            <!-- AGREGAR NOMBRE Y  CORREO -->
-            <mat-label>Nombre y Correo del Usuario*</mat-label>
-            <table class="table table-striped  table-responsive">
-              <thead>
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">
-                      <div *ngIf="regForm.get('correotem2')">
-                    <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !regForm.valid "
-                      (click)="addContenedor2(correo.value, nombre.value);correo.value='';nombre.value=''">
-                      +
-                    </button>
-                  </div>
-                  </th>
-                  <th scope="col"><input class="form-control" formControlName="correotem3"  #correo placeholder="Correo Usuario" size="20"></th>
-                  <mat-error *ngIf="correotem2.touched && correotem2.invalid" >
-                    
-                      <sup>*</sup> Por Favor Ingresar correctamente Correo Personal 
+                  <mat-form-field>
+                    <input matInput formControlName="razonSocial" type="text" placeholder="Razón Social" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <mat-error *ngIf="razonSocial.touched && razonSocial.invalid">
+                      <sup>*</sup>Por Favor Ingresar Razón Social
                     </mat-error>
-                  <th scope="col"><input class="form-control" #nombre placeholder="Nombre Completo del Usuario"
-                      size="30"></th>
-                </tr>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col"></th>
-                  <th scope="col">Correo</th>
-                  <th scope="col">Nombre del Usuario</th>
-                </tr>
-              </thead>
-              <tbody formArrayName="datosPersonales" *ngFor="let item of datosPersonales.controls; let i = index;">
-                <tr [formGroupName]="i">
-                  <td scope="row">{{i+1}}</td>
-                  <td>
-                    <button type="button" (click)="quitar3( i )" class="btn btn-danger">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
-                  </td>
-                  <td *ngIf="item.get('correo').value.length > 11;else notShow">
-                    {{item.get('correo').value}}
-                  </td>
-                  <ng-template #notShow>
-                    <td>{{item.get('correo').value}}</td>
-                  </ng-template>
-                  <td>{{item.get('nombre').value}}</td>
-                </tr>
-              </tbody>
-            </table>
-            <!-- FIN DE AGREGAR-->
-            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
-              [disabled]="regForm.pristine || !regForm.valid ">
-              <i class="fa fa-save "></i>
-              Guardar
-            </button>
-            <button type="button" class="btn btn-danger" (click)="salir()"> Salir</button>
+                    <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
+                      <sup>*</sup>Por Favor Ingresar minimo 5 caracteres de Razón Social
+                    </mat-error>
+                  </mat-form-field>
 
+                  <mat-form-field>
+                    <input matInput formControlName="rfc" type="text" placeholder="RFC "  required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <mat-error *ngIf="rfc.touched && rfc.invalid">
+                      <sup>*</sup>Por Favor Ingresar RFC
+                    </mat-error>
+                    <mat-error *ngIf="rfc.errors && rfc.invalid && rfc.errors['minlength']">
+                      <sup>*</sup>Por Favor Ingresar minimo 12 Caracteres de RFC
+                    </mat-error>
+                  </mat-form-field>
 
-          </form>
+                  <mat-form-field>
+                    <input matInput formControlName="direccionFiscal" type="text" placeholder="Direccion Fiscal"  required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <mat-error
+                      *ngIf="direccionFiscal.touched && direccionFiscal.invalid && !direccionFiscal.errors?.minlength">
+                      <sup>*</sup>Por Favor Ingrese la Dirección de Fiscal
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="role.value === R.AA_ROLE">
+                    <input matInput formControlName="codigo" type="number"
+                      onkeydown="javascript: return event.keyCode == 69 || event.keyCode == 109 || event.keyCode == 107 || 
+                      event.keyCode == 110 || event.keyCode == 187 || event.keyCode == 189 || event.keyCode == 190 ? false : true" placeholder="Patente">
+                    <mat-error *ngIf="codigo.touched && codigo.invalid && !codigo.errors?.minlength">
+                      <sup>*</sup> Por Favor Ingresar Patente
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field *ngIf="role.value === R.TRANSPORTISTA_ROLE">
+                    <input matInput formControlName="codigo" type="text" placeholder="CAT" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <mat-error *ngIf="codigo.touched && codigo.invalid && !codigo.errors?.minlength">
+                      <sup>*</sup> Por Favor Ingresar CAT
+                    </mat-error>
+                  </mat-form-field>
+
+                  <div>
+                    <button mat-button matStepperNext>Siguiente</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="regForm">
+      <!-- <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate> -->
+      <ng-template matStepLabel>Correo Facturación </ng-template>
+      <h5>En este apartado se registrarán los correos para envió de Facturas</h5><br>
+      <h5><b>Oprime (+) para agregar Correo</b></h5>
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">
+              <div *ngIf="regForm.get('correotem')">
+                <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !correotem.valid "
+                  (click)="addContenedor3(correoF.value); correoF.value=''">
+                  +
+                </button>
+              </div>
+            </th>
+            <mat-error
+              *ngIf="correoFacturacion.touched && correoFacturacion.invalid && !correoFacturacion.errors?.minlength">
+              <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
+            </mat-error>
+            <th scope="col-12"><input formControlName="correotem" (selectionChange)='quit(correotem)'
+                class="form-control" #correoF placeholder="Correo Facturación" size="20"></th>
+            <mat-error *ngIf="correotem.touched && correotem.invalid">
+              <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
+            </mat-error>
+          </tr>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col"></th>
+
+            <th scope="col">Correo Facturación</th>
+
+          </tr>
+        </thead>
+        <tbody formArrayName="correoFacturacion" *ngFor="let item of correoFacturacion.controls; let i = index;">
+          <tr [formGroupName]="i">
+            <td scope="row">{{i+1}}</td>
+            <td>
+              <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+            <td *ngIf="item.get('correoF').value.length > 11;else notShow">
+              {{item.get('correoF').value}}
+            </td>
+            <ng-template #notShow>
+              <td>{{item.get('correoF').value}}</td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <button mat-button matStepperPrevious>Regresar</button>
+          <button mat-button matStepperNext>Siguiente</button>
       </div>
-    </div>
-  </div>
+      <!-- </form> -->
+    </mat-step>
+    <mat-step [stepControl]="regForm">
+      <!-- <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate> -->
+      <ng-template matStepLabel>Correo Operativo </ng-template>
+      <h5>En este apartado se registrará el correo (o cuenta) donde se informará la alta solicitud de Carga / Descarga,
+        así como la aprobación de papeleta</h5><br>
+        <h5><b>Oprime (+) para agregar Correo</b></h5>
+      <table class="table  table-responsive">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">
+              <div *ngIf="regForm.get('correotem2')">
+                <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !correotem2.valid "
+                  (click)="addContenedor4(correoO.value ); correoO.value=''">
+                  +
+                </button>
+              </div>
+            </th>
+            <th scope="col"> <input formControlName="correotem2" class="form-control" #correoO
+                placeholder="Correo Operativo" size="20"> </th>
+            <mat-error *ngIf="correotem2.touched && correotem2.invalid">
+
+              <sup>*</sup> Por Favor Ingresar correctamente correo de Operativo
+            </mat-error>
+          </tr>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col"></th>
+            <th scope="col">Correo Operativo</th>
+
+          </tr>
+        </thead>
+        <tbody formArrayName="correoOperativo" *ngFor="let item of correoOperativo.controls; let i = index;">
+          <tr [formGroupName]="i">
+            <td scope="row">{{i+1}}</td>
+            <td>
+              <button type="button" (click)="quitar2( i )" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+            <td *ngIf="item.get('correoO').value.length > 11;else notShow">
+              {{item.get('correoO').value}}
+            </td>
+            <ng-template #notShow>
+              <td>{{item.get('correoO').value}}</td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <button mat-button matStepperPrevious>Regresar</button>
+        <button mat-button matStepperNext>Siguiente</button>
+      </div>
+      <!-- </form> -->
+    </mat-step>
+    <mat-step [stepControl]="regForm">
+      <!-- <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate> -->
+      <ng-template matStepLabel>Datos de Usuario </ng-template>
+      <h5>En este apartado se registrara los Usuarios que tendran acceso al sistema</h5>
+      <h5><b>Oprime (+) para agregar Correo y Nombre Usuario</b></h5>
+      <table class="table table-striped  table-responsive">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">
+              <div *ngIf="regForm.get('correotem2')">
+                <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !correotem3.valid "
+                  (click)="addContenedor2(correo.value, nombre.value);correo.value='';nombre.value=''">
+                  +
+                </button>
+              </div>
+            </th>
+            <th scope="col"><input class="form-control" formControlName="correotem3" #correo
+                placeholder="Correo Usuario" size="20"></th>
+
+            <th scope="col"><input class="form-control" #nombre placeholder="Nombre Completo del Usuario" size="30" onkeyup="javascript:this.value=this.value.toUpperCase();">
+            </th>
+            <mat-error *ngIf="correotem2.touched && correotem2.invalid">
+
+              <sup>*</sup> Por Favor Ingresar correctamente Correo Personal
+            </mat-error>
+          </tr>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col"></th>
+            <th scope="col">Correo</th>
+            <th scope="col">Nombre del Usuario</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="datosPersonales" *ngFor="let item of datosPersonales.controls; let i = index;">
+          <tr [formGroupName]="i">
+            <td scope="row">{{i+1}}</td>
+            <td>
+              <button type="button" (click)="quitar3( i )" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+            <td *ngIf="item.get('correo').value.length > 11;else notShow">
+              {{item.get('correo').value}}
+            </td>
+            <ng-template #notShow>
+              <td>{{item.get('correo').value}}</td>
+            </ng-template>
+            <td>{{item.get('nombre').value}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+
+              <button mat-button matStepperPrevious>Regresar</button>
+      </div>
+      <!-- </form> -->
+    </mat-step>
+  </mat-horizontal-stepper>
+  <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
+    [disabled]="regForm.pristine || !regForm.valid ">
+    <i class="fa fa-save "></i>
+    Guardar
+  </button>
+  <button type="button" class="btn btn-danger" (click)="salir()"> Salir</button>
+</form>
 </div>

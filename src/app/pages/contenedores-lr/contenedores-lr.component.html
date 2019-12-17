@@ -25,6 +25,14 @@
               </mat-form-field>
             </div>
             <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSX(dataSourceLavados, 'Lavado')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+
+            <br>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavados" matSort>
 
@@ -145,6 +153,13 @@
               <mat-form-field>
                 <input matInput (keyup)="applyFilter($event.target.value, 'R')" placeholder="Escriba algo para filtrar">
               </mat-form-field>
+            </div>
+            <br>
+            <div class="text-right">
+
+              <button (click)="exportAsXLSXR(dataSourceReparaciones, 'Reparación')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
