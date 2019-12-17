@@ -230,6 +230,9 @@
               <div class="col-md-2">
                 <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
               </div>
+              <div *ngIf="contenedores.controls.length > 0" class="alert alert-danger">
+                  <strong>Se enviará un correo a {{this.correo.value}} y a el correo de transportista(s)</strong>
+                </div>
             </div>
 
             <div class="row">
@@ -239,10 +242,11 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Tamaño - Tipo</th>
+                        <th scope="col">Tipo</th>
                         <th scope="col">Estado </th>
                         <th scope="col">Grado</th>
                         <th scope="col">Transportista</th>
+                        <th scope="col">Correo Transportista</th>
                         <th scope="col">Patio</th>
                       </tr>
                     </thead>
@@ -253,6 +257,7 @@
                         <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                         <td>{{this.contenedores.controls[i].get('grado').value}}</td>
                         <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
                         <td>{{this.contenedores.controls[i].get('patio').value}}</td>
                         <td>
                           <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">

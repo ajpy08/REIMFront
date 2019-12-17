@@ -13,19 +13,22 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Naviera</mat-label>
-                  <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text" placeholder="Seleccione una naviera">
+                  <mat-select formControlName="naviera" (selectionChange)="cargarBuques($event)" type="text"
+                    placeholder="Seleccione una naviera">
                     <mat-option *ngFor="let nav of navieras" [value]="nav._id">
                       {{nav.nombreComercial}}
                     </mat-option>
                   </mat-select>
                   <mat-hint>Seleccione una naviera.</mat-hint>
-                  <mat-error *ngIf="naviera.touched && naviera.hasError['required']">Debe seleccionar una naviera</mat-error>
+                  <mat-error *ngIf="naviera.touched && naviera.hasError['required']">Debe seleccionar una naviera
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field *ngIf="navieraMELFI">
                   <mat-label>Buque</mat-label>
-                  <mat-select formControlName="buque" (selectionChange)="cargarViajes($event)" type="text" placeholder="Seleccione un buque">
+                  <mat-select formControlName="buque" (selectionChange)="cargarViajes($event)" type="text"
+                    placeholder="Seleccione un buque">
                     <mat-option *ngFor="let buque of buques" [value]="buque._id">
                       {{buque.nombre}}
                     </mat-option>
@@ -40,7 +43,8 @@
               <div class="col-md-4">
                 <mat-form-field *ngIf="navieraMELFI">
                   <mat-label>Viaje</mat-label>
-                  <mat-select formControlName="viaje" (selectionChange)="cargarContenedores($event)" type="text" placeholder="Seleccione un viaje">
+                  <mat-select formControlName="viaje" (selectionChange)="cargarContenedores($event)" type="text"
+                    placeholder="Seleccione un viaje">
                     <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                       {{viaje.viaje}}
                     </mat-option>
@@ -59,8 +63,8 @@
               <div class="col-md-3">
                 <mat-form-field>
                   <mat-label>Agencia</mat-label>
-                  <mat-select [(ngModel)]="agenciaDescargaSelected" formControlName="agencia" 
-                  type="text" (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
+                  <mat-select [(ngModel)]="agenciaDescargaSelected" formControlName="agencia" type="text"
+                    (selectionChange)="cargaClientes($event)" placeholder="Seleccione un agente">
                     <mat-option *ngFor="let ag of agencias" [value]="ag._id">
                       {{ag.nombreComercial}}
                     </mat-option>
@@ -79,17 +83,19 @@
                   <mat-hint>Seleccione un cliente.</mat-hint>
                 </mat-form-field>
               </div>
-              <div class="sinpadding"> <abbr  title="Agregar Cliente">
-                   <button class="user" (click)="nuevoCliente()" class="btn btn-info btn-sm">
+              <div class="sinpadding"> <abbr title="Agregar Cliente">
+                  <button class="user" (click)="nuevoCliente()" class="btn btn-info btn-sm">
                     <i class="fa fa-user"></i>
                   </button>
                 </abbr>
-                  </div>
+              </div>
               <div class="col-md-2">
                 <label class="control-label">Facturar a: </label>
                 <br>
-                <mat-radio-group class="example-radio-group" formControlName="facturarA" (change)="onChangeFacturarA($event)">
-                  <mat-radio-button class="example-radio-button" *ngFor="let facturaA of listaFacturarA" [value]="facturaA">
+                <mat-radio-group class="example-radio-group" formControlName="facturarA"
+                  (change)="onChangeFacturarA($event)">
+                  <mat-radio-button class="example-radio-button" *ngFor="let facturaA of listaFacturarA"
+                    [value]="facturaA">
                     {{facturaA}}
                   </mat-radio-button>
                 </mat-radio-group>
@@ -172,7 +178,8 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito" (change)="onChangeCredito($event)">
+                <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito"
+                  (change)="onChangeCredito($event)">
                   Credito
                 </mat-checkbox>
                 <mat-error *ngIf="rutaComprobante.touched && rutaComprobante.invalid">
@@ -193,7 +200,8 @@
                     <!-- ¡Archivo Temporal, debe guardar el registro del usuario para confirmar! -->
                   </p>
                   <ng-template #notShow>
-                    <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
+                    <a *ngIf="rutaComprobante.value" [href]="rutaComprobante.value | imagen:'solicitud'"
+                      target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
                     </a>
                   </ng-template>
@@ -284,7 +292,11 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+                <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success m-r-10"> <i
+                    class="fa fa-check"></i> Añadir</button>
+              </div>
+              <div *ngIf="contenedores.controls.length > 0" class="alert alert-danger">
+                <strong>Se enviará un correo a {{this.correo.value}} y a el correo de transportista(s)</strong>
               </div>
             </div>
             <!--/span-->
@@ -299,6 +311,7 @@
                         <th scope="col">Tipo</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Transportista</th>
+                        <th scope="col">Correo Transportista</th>
                         <th scope="col">Patio</th>
                       </tr>
                     </thead>
@@ -309,10 +322,11 @@
                         <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
                         <td>{{this.contenedores.controls[i].get('peso').value}}</td>
                         <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                        <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
                         <td>{{this.contenedores.controls[i].get('patio').value}}</td>
                         <td>
                           <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
-                              <i class="fas fa-trash"></i>
+                            <i class="fas fa-trash"></i>
                           </button>
                           <!-- <button *ngIf="aprobada" [routerLink]="['/solicitudes/papeleta',  this.contenedores.controls[i].get('maniobra').value._id ]" class="btn btn-success">
 
@@ -328,10 +342,11 @@
           </div>
           <div class="form-actions">
             <!-- <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button> -->
-            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
-            <i class="fa fa-save "></i>
-            Guardar
-          </button>
+            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
+              [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save "></i>
+              Guardar
+            </button>
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button> -->
           </div>

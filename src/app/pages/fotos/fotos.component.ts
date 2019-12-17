@@ -331,7 +331,6 @@ export class FotosComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-
     
       //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
       //pop() elimina del array el ultimo elemento
