@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, RequiredValidator, AbstractControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import swal from 'sweetalert';
 import { ROLES, ROLES_ARRAY } from '../config/config';
 import { RegistroServiceService } from './registro.service';
-import { resolve } from 'url';
-import { reject } from 'q';
+
+declare function init_plugins();
+
 
 @Component({
   selector: 'app-registro',
@@ -13,12 +14,15 @@ import { reject } from 'q';
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent implements OnInit {
+  
   regForm: FormGroup
+  isEditable = true;
   R = ROLES;
   roles = [
     ROLES_ARRAY[4],
     ROLES_ARRAY[5]
   ];
+
 
   constructor(private fb: FormBuilder,
     public router: Router,
@@ -26,6 +30,7 @@ export class RegistroComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    init_plugins();
     this.createFormGroup();
     this.datosPersonales.removeAt(0);
     this.correoFacturacion.removeAt(0);
@@ -34,8 +39,8 @@ export class RegistroComponent implements OnInit {
 
 
   guardarRegistro() {
-    if(this.regForm.valid) {
-      this.registroService.guardarRegistro(this.regForm.value).subscribe(res =>{
+    if (this.regForm.valid) {
+      this.registroService.guardarRegistro(this.regForm.value).subscribe(res => {
 
         this.regForm.markAsPristine();
       })
@@ -49,31 +54,22 @@ export class RegistroComponent implements OnInit {
       rfc: ['', [Validators.required, Validators.minLength(12)]],
       direccionFiscal: ['', [Validators.required]],
       codigo: ['', [Validators.required]],
-      correotem: ['', [ Validators.required, Validators.email],this.cheketeEmail],
-      correotem2: ['', [Validators.required, Validators.email], this.cheketeEmail],
-      correotem3: ['', [Validators.required, Validators.email], this.cheketeEmail],
-      datosPersonales: this.fb.array([this.agregarArray('', '')]),
-      correoFacturacion: this.fb.array([this.agregarArray2('')]),
-      correoOperativo: this.fb.array([this.agregarArray3('')])
+      correotem: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotem2: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotem3: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correo:[''],
+      nombre: [''],
+      datosPersonales: this.fb.array([this.agregarArray('', '')], { validators: Validators.required }),
+      correoFacturacion: this.fb.array([this.agregarArray2('')], { validators: Validators.required }),
+      correoOperativo: this.fb.array([this.agregarArray3('')], { validators: Validators.required })
     });
   }
-
-cheketeEmail(Control: AbstractControl){
-  return new Promise ((resolve, reject) =>{
-    setTimeout(() =>{
-      if (Control.value === '@'){
-        resolve({emailIsTaken: true })
-      } else {
-        resolve(null)}
-    })
-  });
-}
 
   agregarArray(correo: string, nombre: string): FormGroup {
     return this.fb.group({
       correo: [correo],
       nombre: [nombre]
-    })
+    });
   }
   agregarArray2(correoF: String): FormGroup {
     return this.fb.group({
@@ -93,12 +89,12 @@ cheketeEmail(Control: AbstractControl){
 
 
   addContenedor2(correo: string, nombre: string): void {
-    if (correo === '' && nombre === '') {
-      swal('Error al Agregar', 'Los Campos Correo y Nombre no pueden estar Vacios.');
-    } else if (correo === '') {
-      swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
-    } else if (nombre === '') {
+     if (correo === '') {
+       swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
+       this.nombre.get(nombre)
+    } if (nombre === '') {
       swal('Error al Agregar', 'El campo Nombre no puede estar Vacio.')
+      this.correo.get(correo)
     } else {
       this.datosPersonales.push(this.agregarArray(correo, nombre));
     }
@@ -106,22 +102,29 @@ cheketeEmail(Control: AbstractControl){
   }
   addContenedor3(correoF: string): void {
     if (correoF === '') {
-   
+
       swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
     } else {
       this.correoFacturacion.push(this.agregarArray2(correoF));
     }
-    
+
 
   }
   addContenedor4(correoO: string): void {
     if (correoO === '') {
-      this.correoOperativo.disable({emitEvent: true})
+      this.correoOperativo.disable({ emitEvent: true })
       swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
     } else {
       this.correoOperativo.push(this.agregarArray3(correoO));
     }
 
+  }
+
+  quit(control: AbstractControl) {
+    if (!control.valid) {
+      // this.regForm.controls[control.].setValue(response.body.data.nombres);
+      control.setValue('');
+    }
   }
 
 
@@ -137,8 +140,6 @@ cheketeEmail(Control: AbstractControl){
     this.correoOperativo.removeAt(indice);
   }
 
-
-
   get rfc() {
     return this.regForm.get('rfc');
   }
@@ -150,17 +151,24 @@ cheketeEmail(Control: AbstractControl){
     return this.regForm.get('direccionFiscal');
   }
 
-  get correotem(){
+  get correotem() {
     return this.regForm.get('correotem');
   }
-  get correotem2(){
+  get correotem2() {
     return this.regForm.get('correotem2');
   }
-  get correotem3(){
+  get correotem3() {
     return this.regForm.get('correotem3');
   }
   get codigo() {
     return this.regForm.get('codigo');
+  }
+  get correo(){
+    return this.correo.get('correo');
+  }
+
+  get nombre(){
+    return this.nombre.get('nombre');
   }
 
   get datosPersonales() {

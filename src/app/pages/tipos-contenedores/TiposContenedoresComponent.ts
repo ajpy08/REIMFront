@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '
 import { Observable } from 'rxjs';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { TiposContenedoresService } from './tipos-contenedores.service';
+import { ExcelService } from 'src/app/services/service.index';
 
 
 declare var swal: any;
@@ -16,6 +17,7 @@ declare var swal: any;
 export class TiposContenedoresComponent implements OnInit {
   cargando: boolean = true;
   totalRegistros: number = 0;
+  contenedoresExcel = [];
 
   displayedColumns = ['actions', 'tipo', 'descripcion', 'pies', 'codigoISO'];
   dataSource: any;
@@ -23,7 +25,7 @@ export class TiposContenedoresComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private tipoContenedorService: TiposContenedoresService) { }
+  constructor(private tipoContenedorService: TiposContenedoresService, private excelService: ExcelService) { }
 
   ngOnInit() {
     this.cargarTiposContenedor();
@@ -35,7 +37,7 @@ export class TiposContenedoresComponent implements OnInit {
     this.totalRegistros = this.dataSource.filteredData.length;
   }
 
-  cargarTiposContenedor(){
+  cargarTiposContenedor() {
     this.cargando = true;
 
     this.tipoContenedorService.getTiposContenedor().subscribe((tipo) => {
@@ -61,6 +63,27 @@ export class TiposContenedoresComponent implements OnInit {
             .subscribe(() => this.cargarTiposContenedor());
         }
       });
+  }
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var contenedor = {
+        Tipo: d.tipo,
+        Descripcion: d.descripcion,
+        Pies: d.pies,
+        CodigoISO: d.codigoISO
+      }
+      this.contenedoresExcel.push(contenedor);
+    });
+  }
+
+  exportarXLSX(): void {
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.contenedoresExcel){
+      this.excelService.exportAsExcelFile(this.contenedoresExcel, 'Tipo_Contenedores');
+    }else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 }
 

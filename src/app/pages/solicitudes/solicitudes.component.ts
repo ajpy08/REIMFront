@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Solicitud } from './solicitud.models';
-import { SolicitudService, UsuarioService } from '../../services/service.index';
+import { SolicitudService, UsuarioService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import * as _moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { balancePreviousStylesIntoKeyframes } from '@angular/animations/browser/src/util';
 
 declare var swal: any;
 
@@ -37,7 +38,7 @@ export class SolicitudesComponent implements OnInit {
 
   fIni = moment().local().startOf('day').subtract(1, 'month');
   fFin = moment().local().startOf('day');
-
+  SolicitudesExcel = [];
   @ViewChild(MatPaginator) paginator: MatPaginator; //descargas
   @ViewChild(MatSort) sort: MatSort; //descargas
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
@@ -56,7 +57,7 @@ export class SolicitudesComponent implements OnInit {
   totalRegistrosCargas = 0;
   usuarioLogueado: any;
 
-  constructor(public _solicitudService: SolicitudService, private _usuarioService: UsuarioService) { }
+  constructor(public _solicitudService: SolicitudService, private _usuarioService: UsuarioService, private excelService: ExcelService) { }
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarSolicitudes('D');
@@ -151,5 +152,69 @@ export class SolicitudesComponent implements OnInit {
         }
       });
   }
+
+  cargarDatosExcelD(datos) {
+    this.SolicitudesExcel = [];
+    datos.forEach(d => {
+
+      var contenedoresDescarga = '';
+
+      d.contenedores.forEach(x => {
+        contenedoresDescarga += 'Contenedor: ' + x.contenedor + ' Tipo:' + x.tipo + '\n ,';
+      });
+      var solicitudes = {
+        Fecha_Alta: d.fAlta.substring(0, 10),
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '' && d.viaje.viaje,
+        Nombre_Buque: d.buque && d.buque.nombre && d.buque.nombre != undefined && d.buque.nombre != '' ? d.buque.nombre : '' && d.buque.nombre,
+        Observaciones: d.observaciones,
+        Contenedores: contenedoresDescarga,
+        Estatus: d.estatus
+      }
+      this.SolicitudesExcel.push(solicitudes);
+    });
+  }
+
+  exportAsXLSXD(dtDescargas, nombre: string): void {
+    this.cargarDatosExcelD(dtDescargas.filteredData);
+    if (this.SolicitudesExcel) {
+      this.excelService.exportAsExcelFile(this.SolicitudesExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  cargarDatosExcelC(datos) {
+    datos.forEach(d => {
+
+      var contendoresSolicitados = '';
+
+      d.contenedores.forEach(c => {
+        contendoresSolicitados += 'Tipo: ' + c.tipo + ' Grado: ' + c.grado + '\n';
+      });
+
+      var solicitudes = {
+        Fecha_Alta: d.fAlta.substring(0, 10),
+        Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
+        Observaciones: d.observaciones,
+        Solicitado: contendoresSolicitados,
+        Estatus: d.estatus
+      }
+      this.SolicitudesExcel.push(solicitudes);
+    });
+  }
+
+  exportAsXLSXC(dtCargas, nombre: string): void {
+    this.cargarDatosExcelC(dtCargas.filteredData);
+    if (this.SolicitudesExcel) {
+      this.excelService.exportAsExcelFile(this.SolicitudesExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+
 
 }

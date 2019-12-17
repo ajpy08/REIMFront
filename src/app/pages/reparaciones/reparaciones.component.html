@@ -24,7 +24,11 @@
     <div class="card">
       <div class="card-body">
         <div class="text-right">
-          <button matTooltip="Añadir nueva Reparación" mat-mini-fab class="btn btn-primary" [routerLink]="['/reparaciones/reparacion','nuevo']" type="button">
+          <button (click)="exportarXLSX()" class="btn btn-success m-r-10">
+            <i class="fas fa-file-excel"></i>
+          </button>
+          <button matTooltip="Añadir nueva Reparación" mat-mini-fab class="btn btn-primary"
+            [routerLink]="['/reparaciones/reparacion','nuevo']" type="button">
             <i class="fa fa-plus"></i>
           </button>
         </div>

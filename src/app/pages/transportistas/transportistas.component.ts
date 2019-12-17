@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Transportista } from './transportista.models';
-import { TransportistaService } from '../../services/service.index';
+import { TransportistaService, ExcelService } from '../../services/service.index';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 
@@ -15,6 +15,7 @@ export class TransportistasComponent implements OnInit {
   transportistas: Transportista[] = [];
   cargando = true;
   totalRegistros = 0;
+  transportistaExcel = [];
 
 
   displayedColumns = ['actions', 'img', 'rfc', 'razonSocial', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
@@ -24,7 +25,7 @@ export class TransportistasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _transportistaService: TransportistaService) { }
+  constructor(public _transportistaService: TransportistaService,private excelService: ExcelService) { }
   ngOnInit() {
     this.cargarTransportistas();
   }
@@ -48,7 +49,7 @@ export class TransportistasComponent implements OnInit {
     this.cargando = false;
   }
 
-  
+
 
   borrarTransportista(transportista: Transportista) {
     swal({
@@ -66,6 +67,38 @@ export class TransportistasComponent implements OnInit {
             });
         }
       });
+  }
+
+  crearDatosExcel(datos) {
+    datos.forEach(d => {
+      var transportista = {
+
+        Rfc: d.rfc,
+        RazonSocial: d.razonSocial,
+        Calle: d.calle,
+        No_Exterior: d.noExterior,
+        No_Interior: d.noInterior,
+        Colonia: d.colonia,
+        Municipio: d.municipio,
+        Ciudad: d.ciudad,
+        Estado: d.estado,
+        Cp: d.cp,
+        Correo: d.correo,
+        CorreoFac: d.correoFac,
+        Credito: d.credito,
+        Caat: d.Caat
+      }
+      this.transportistaExcel.push(transportista);
+    });
+  }
+
+  exportarXLSX(){
+    this.crearDatosExcel(this.dataSource.filteredData);
+    if(this.transportistaExcel){
+      this.excelService.exportAsExcelFile(this.transportistaExcel, 'Transportista');
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
   }
 
 }
