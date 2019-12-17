@@ -23,9 +23,9 @@ import {
     SubirArchivoService,
     TiposContenedoresService,
     ExcelService,
-    LoginGuard,
-    AdminGuard,
+    LoginGuard,     
     VerificaTokenGuard,
+    REIMGuard,
     RefreshTokenInterceptor
    } from './service.index';
 
@@ -57,9 +57,9 @@ import {
       ModalUploadService,
       ModalDropzoneService,
       LoginGuard,
-      AdminGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
+      REIMGuard
     ],
     declarations: []
   })

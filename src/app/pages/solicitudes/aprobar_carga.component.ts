@@ -67,7 +67,7 @@ export class AprobarCargaComponent implements OnInit {
       estado: [{ value: '', disabled: true }],
       correoFac: [{ value: '', disabled: true }],
       cp: [{ value: '', disabled: true }],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '')])
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '','')], {validators: Validators.required}),
     });
   }
 
@@ -220,12 +220,12 @@ export class AprobarCargaComponent implements OnInit {
   }
 
   apruebaSolicitud() {
-    //    if ( this.regForm.valid ) {
     this._SolicitudService.apruebaSolicitudCarga(this.regForm.value).subscribe(res => {
-      this.cargarSolicitud(this._id.value);
+      this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
+        this.cargarSolicitud(this._id.value);
+      });
     });
   }
-  //  }
 
   back() {
     if (localStorage.getItem('history')) {
@@ -236,4 +236,7 @@ export class AprobarCargaComponent implements OnInit {
     // this.location.back();
   }
 
+  enviacorreo(maniobra) {
+    this._ManiobraService.enviaCorreo(maniobra).subscribe(() => { });
+  }
 }

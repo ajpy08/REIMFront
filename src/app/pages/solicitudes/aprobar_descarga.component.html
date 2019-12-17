@@ -30,7 +30,8 @@
                   <mat-label>Buque A.A.</mat-label>
                   <input matInput formControlName="nombreBuque" type="text">
                 </mat-form-field>
-                <div *ngIf="buque.enabled && !buqueEncontrado">El buque no ha sido encontrado en nuestros registros</div>
+                <div *ngIf="buque.enabled && !buqueEncontrado">El buque no ha sido encontrado en nuestros registros
+                </div>
                 <div *ngIf="buque.enabled">
                   <button type="button" class="btn btn-primary" (click)="guardaViajeBuque()">Asignar Buque</button>
                 </div>
@@ -48,7 +49,8 @@
                   <mat-label>No. Viaje (A.A.)</mat-label>
                   <input matInput formControlName="noViaje" type="text">
                 </mat-form-field>
-                <div *ngIf="viaje.enabled && !viajeEncontrado">El viaje no ha sido encontrado en nuestros registros</div>
+                <div *ngIf="viaje.enabled && !viajeEncontrado">El viaje no ha sido encontrado en nuestros registros
+                </div>
 
                 <div *ngIf="viaje.enabled">
                   <button type="button" class="btn btn-primary" (click)="guardaViajeBuque()">Asignar Viaje</button>
@@ -208,17 +210,26 @@
                       <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
                       <td>{{this.contenedores.controls[i].get('patio').value}}</td>
                       <td>
-                        <img *ngIf="contenedores.controls[i].get('maniobra').value" src="../../../assets/images/check_32x32.png">
-                        <img *ngIf="!contenedores.controls[i].get('maniobra').value" src="../../../assets/images/cancel_32x32.png">
-                        <button type="button" *ngIf="!contenedores.controls[i].get('maniobra').value" class="btn btn-primary btn-success" (click)="altaContenedor( this.contenedores.controls[i] )"> 
-                          <i class="fa fa-check"></i> 
+                        <img *ngIf="contenedores.controls[i].get('maniobra').value"
+                          src="../../../assets/images/check_32x32.png">
+                        <img *ngIf="!contenedores.controls[i].get('maniobra').value"
+                          src="../../../assets/images/cancel_32x32.png">
+                        <button type="button" *ngIf="!contenedores.controls[i].get('maniobra').value"
+                          class="btn btn-primary btn-success" (click)="altaContenedor( this.contenedores.controls[i] )">
+                          <i class="fa fa-check"></i>
                           Alta Contenedor
                         </button>
                       </td>
                       <td>{{this.contenedores.controls[i].get('folio').value}}</td>
-                      <td><img *ngIf="contenedores.controls[i].get('solicitud').value" src="../../../assets/images/check_32x32.png"></td>
+                      <td><img *ngIf="contenedores.controls[i].get('solicitud').value"
+                          src="../../../assets/images/check_32x32.png"></td>
                       <td>
-                        <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button>
+                        <button *ngIf="estatus.value==='APROBADA'" matTooltip="Enviar Notificación" type="button"
+                          class="btn btn-info waves-effect waves-light m-r-10 m-l-10"
+                          (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
+                          <i class="fas fa-envelope"></i>
+                        </button>
+                        <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
                       </td>
                     </tr>
                   </tbody>
@@ -228,9 +239,12 @@
           </div>
 
           <div class="form-actions">
-            <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5" (click)="validaSolicitudes()"> <i class="fa fa-check"></i> Validar</button>
-            <button *ngIf="estatus.value==='NA'" type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="!solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>
-            <!-- <button type="button" class="btn btn-inverse" routerLink="/solicitudes/aprobaciones">Regresar</button> -->
+            <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5"
+              [disabled]="regForm.pristine || regForm.invalid" (click)="validaSolicitudes()"> <i
+                class="fa fa-check"></i> Validar</button>
+            <button *ngIf="estatus.value==='NA'" type="submit"
+              class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid"> <i class="fa fa-check"></i> Aprobar</button>
             <button type="button" class="btn btn-inverse" (click)="back()"> Regresar</button>
           </div>
 

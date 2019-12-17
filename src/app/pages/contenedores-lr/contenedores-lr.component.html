@@ -110,8 +110,7 @@
                     <!-- <button *ngIf="mostrarFotosReparaciones(row)" [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary"> -->
                     <button matTooltip="Ver Foto" *ngIf="mostrarFotosReparaciones(row) && row.reparaciones.length > 0"
                       (click)="fotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
-                      <i class="fas fa-camera-retro"></i>
-                      
+                      <i class="fas fa-camera-retro"></i>                      
                     </button>
                   </mat-cell>
                 </ng-container>

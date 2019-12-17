@@ -11,8 +11,8 @@
                     <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img [src]="usuario.img | imagen" alt="user" /><span class="hide-menu">{{usuario.nombre}} | {{role}}</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a routerLinkActive="active" routerLink='/profile'>Mi Perfil </a></li>
-                        <li><a href="javascript:void()">Reportes</a></li>
-                        <li><a href="javascript:void()">Bandeja de entrada</a></li>
+                        <!-- <li><a href="javascript:void()">Reportes</a></li>
+                        <li><a href="javascript:void()">Bandeja de entrada</a></li> -->
                         <li><a routerLinkActive="active" routerLink="/account-settings">Configuracion de la Cuenta</a></li>
                         <li><a (click)="_usuarioService.logout()" class="pointer">Salir</a></li>
                     </ul>

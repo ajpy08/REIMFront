@@ -3,7 +3,7 @@ import { ManiobraService, UsuarioService, ExcelService } from '../../services/se
 import { MatPaginator, MatSort, MatTableDataSource, MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { ETAPAS_MANIOBRA, ROLES } from '../../config/config';
 import { Usuario } from '../usuarios/usuario.model';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 
 declare var swal: any;
 
@@ -237,18 +237,12 @@ export class ManiobrasComponent implements OnInit {
     return filterFunction;
   }
 
-  // edit(id: string) {
-  //   localStorage.setItem('history', '/maniobras');
-
-  //   this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
-  // }
-
   open(id: string) {
     var history;
     var array = [];
     //Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      //asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
 
       //realizo este ciclo para asignar los valores del JSON al Array
@@ -266,7 +260,6 @@ export class ManiobrasComponent implements OnInit {
     //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
   }
-
 
   crearDatosExcel(datos) {
 
@@ -299,7 +292,34 @@ export class ManiobrasComponent implements OnInit {
     }
   }
 
+  openFotos(id: string, tipo: string) {
 
+    let navigationExtras: NavigationExtras = {
+      queryParams: { 'opcion': tipo }
+    };
+
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable historyArray lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }
+    //Agrego mi nueva ruta a donde debo regresar al array
+    array.push("/maniobras");
+
+    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/fotos', id], navigationExtras);
+  }
+}
 
   exportAsXLSXespera(dtEspera, nombre: string): void {
     this.crearDatosExcel(dtEspera.filteredData);
