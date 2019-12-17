@@ -319,7 +319,7 @@ export class ManiobrasComponent implements OnInit {
     //Voy a pagina.
     this.router.navigate(['/fotos', id], navigationExtras);
   }
-}
+
 
   exportAsXLSXespera(dtEspera, nombre: string): void {
     this.crearDatosExcel(dtEspera.filteredData);
