@@ -23,15 +23,10 @@ import {
     SubirArchivoService,
     TiposContenedoresService,
     ExcelService,
-    LoginGuard,
-    AAGuard,
-    AdminGuard,
-    ClienteGuard,
-    NavieraGuard,
-    PatioAdminGuard,
-    PatioGuard,
-    TransportistaGuard,
+    LoginGuard,    
+    AdminGuard,    
     VerificaTokenGuard,
+    REIMGuard,
     RefreshTokenInterceptor
    } from './service.index';
 
@@ -63,15 +58,10 @@ import {
       ModalUploadService,
       ModalDropzoneService,
       LoginGuard,
-      AAGuard,
       AdminGuard,
-      ClienteGuard,
-      NavieraGuard,
-      PatioAdminGuard,
-      PatioGuard,
-      TransportistaGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
+      REIMGuard
     ],
     declarations: []
   })

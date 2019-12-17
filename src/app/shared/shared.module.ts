@@ -11,6 +11,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
 import { ModalDropzoneComponent } from '../components/modal-dropzone/modal-dropzone.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ModalDropzoneComponent } from '../components/modal-dropzone/modal-dropz
         SidebarComponent,
         BreadcrumbsComponent,
         ModalUploadComponent,
-        ModalDropzoneComponent
+        ModalDropzoneComponent,
+        NotfoundComponent
     ],
     exports: [
         HeaderComponent,

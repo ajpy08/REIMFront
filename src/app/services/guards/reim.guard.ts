@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
-import { ROLES } from 'src/app/config/config';
+import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { UsuarioService } from 'src/app/pages/usuarios/usuario.service';
 
-@Injectable()
-export class AAGuard implements CanActivate {
+@Injectable({
+  providedIn: 'root'
+})
+export class REIMGuard implements CanActivate {
   constructor(public router: Router, public usuarioService: UsuarioService) { }
 
   canActivate(route: ActivatedRouteSnapshot) {
@@ -23,15 +24,5 @@ export class AAGuard implements CanActivate {
       this.router.navigate(['/']);
       return false;
     }
-
-
-
-    // if ( this.usuarioService.usuario.role === ROLES.AA_ROLE) {
-    //   return true;
-    // } else {
-    //   console.log('Bloqueado por el AA GUARD');
-    //   this.router.navigate(['/dashboard']);
-    //   return false;
-    // }
   }
 }

@@ -23,12 +23,7 @@ export { ExcelService } from './excel/excel.service';
 export { LoginGuard } from './guards/login-guard';
 export { AdminGuard } from './guards/admin.guard';
 export { VerificaTokenGuard } from './guards/verifica-token.guard';
-export { AAGuard } from './guards/aa.guard';
-export { ClienteGuard } from './guards/cliente.guard';
-export { NavieraGuard } from './guards/naviera.guard';
-export { PatioAdminGuard } from './guards/patio-admin.guard';
-export { PatioGuard } from './guards/patio.guard';
-export { TransportistaGuard } from './guards/transportista.guard';
+export { REIMGuard } from './guards/reim.guard';
 // Interceptors
 export { RefreshTokenInterceptor } from './interceptors/token-interceptor.service';
 
