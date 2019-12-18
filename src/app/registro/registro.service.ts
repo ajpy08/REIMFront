@@ -25,8 +25,7 @@ export class RegistroServiceService {
     return this.http.post(url, registro)
     .pipe(
       map((resp: any) => {
-        swal('Registro Guardado', 'Correctamente' ,'success');
-        console.log(resp);
+        swal('Registro Guardado', 'Pronto nos pondremos en contacto contigo !!' ,'success');
         return resp.registro;
       })
     );

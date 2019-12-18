@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { PagesComponent } from './pages/pages.component';
 import { LoginGuard, VerificaTokenGuard } from './services/service.index';
 import { RegistroComponent } from './registro/registro.component';
+import { NotfoundComponent } from './shared/notfound/notfound.component';
 
 const appRoutes: Routes = [
     {path: 'login', component: LoginComponent},
@@ -19,8 +20,10 @@ const appRoutes: Routes = [
         path: '',
         component: PagesComponent,
         loadChildren: './pages/pages.module#PagesModules'
-    }
-
+    },
+    
+    // otherwise redirect to home
+    { path: '**', component: NotfoundComponent }   
 
 ];
 
