@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import { Usuario } from '../usuarios/usuario.model';
 import { Location } from '@angular/common';
+import { ROLES } from 'src/app/config/config';
 
 @Component({
   selector: 'app-cliente',
@@ -39,7 +40,7 @@ export class ClienteComponent implements OnInit {
 
     this.usuarioLogueado = this.usuarioService.usuario;
 
-    if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this._clienteService.getClientesRole().subscribe((empresas) => {
         this.usuarioLogueado.empresas = empresas;
       });
