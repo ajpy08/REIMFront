@@ -55,16 +55,16 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.cargarCamiones();
       this.cargarOperadores();
     }
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.AA_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.AA_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.cargarClientes();
       this.cargarSolicitudes('D');
       this.cargarSolicitudes('C');
     }
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE  || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE  || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
       this.cargarInventario();
       this.cargarLR();
       this.cargarLavadoOReparacion('L');
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
 
   cargarCamiones() {
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.camionService.getCamiones().subscribe(camiones => {
         this.totalCamiones = camiones.camiones.length;
       });
@@ -89,7 +89,7 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarOperadores() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE)  {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE)  {
       this.operadoresServices.getOperadores().subscribe(operadores => {
         this.totalOperadores = operadores.operadores.length
       });
@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarClientes() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.clientesServices.getClientes().subscribe(clientes => {
         this.totalClientes = clientes.clientes.length
       });
@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
 
 
   cargarSolicitudes(CD: string) {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       if (CD == 'D') {
         this.solicitudService.getSolicitudes('D')
           .subscribe(res => {
@@ -385,7 +385,7 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarManiobras() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE || this.usuarioLogueado.role == ROLES.ADMIN_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO).subscribe(maniobras => {
         this.totalTransito = maniobras.total;
       });
