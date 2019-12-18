@@ -398,7 +398,7 @@ const pagesRoutes: Routes = [
     },
 
     // otherwise redirect to home
-    { path: '**', component: NotfoundComponent }
+    // { path: '**', component: NotfoundComponent }
 ];
 
 
