@@ -240,11 +240,11 @@
 
           <div class="form-actions">
             <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5"
-              [disabled]="regForm.pristine || regForm.invalid" (click)="validaSolicitudes()"> <i
+              [disabled]="regForm.invalid" (click)="validaSolicitudes()"> <i
                 class="fa fa-check"></i> Validar</button>
             <button *ngIf="estatus.value==='NA'" type="submit"
               class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-              [disabled]="regForm.pristine || regForm.invalid"> <i class="fa fa-check"></i> Aprobar</button>
+              [disabled]="regForm.invalid || !solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>
             <button type="button" class="btn btn-inverse" (click)="back()"> Regresar</button>
           </div>
 
@@ -252,8 +252,8 @@
       </div>
     </div>
   </form>
-  <!-- <p>Form value {{ regForm.value | json }} </p>
+  <p>Form value {{ regForm.value | json }} </p>
   <p> Form status {{ regForm.status | json}} </p>
-  <p> Form status2 {{ regForm.pristine | json}} </p> -->
+  <p> Form status2 {{ regForm.pristine | json}} </p>
 </div>
 <!-- Row -->
