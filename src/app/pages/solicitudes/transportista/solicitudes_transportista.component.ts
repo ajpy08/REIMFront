@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ManiobraService, UsuarioService } from '../../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator, MatTabGroup, MatTabChangeEvent } from '@angular/material';
+import { ROLES } from 'src/app/config/config';
 
 
 
@@ -69,7 +70,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
       this.cargando = false;
     }
 
-    if (this.usuarioLogueado.role === 'ADMIN_ROLE') {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this._maniobraService.getManiobras('D', 'TRANSITO', null, null, null, 'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT')
         .subscribe(maniobras => {
           // this.totalRegistros = maniobras.total;

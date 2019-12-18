@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { balancePreviousStylesIntoKeyframes } from '@angular/animations/browser/src/util';
+import { ROLES } from 'src/app/config/config';
 
 declare var swal: any;
 
@@ -69,7 +70,7 @@ export class SolicitudesComponent implements OnInit {
   }
   cargarSolicitudes(CD: string) {
     this.cargando = true;
-    if (this.usuarioLogueado.role === 'ADMIN_ROLE') {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       if (CD == 'D') {
         this._solicitudService.getSolicitudes('D', null,
           this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
