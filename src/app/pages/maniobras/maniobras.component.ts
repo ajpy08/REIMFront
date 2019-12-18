@@ -420,8 +420,5 @@ export class ManiobrasComponent implements OnInit {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
-
-
-
 }
 
