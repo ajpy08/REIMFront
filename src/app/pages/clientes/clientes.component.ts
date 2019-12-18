@@ -5,6 +5,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { Observable } from 'rxjs';
 import { stringify } from '@angular/core/src/render3/util';
+import { ROLES } from 'src/app/config/config';
 declare var swal: any;
 @Component({
   selector: 'app-clientes',
@@ -43,7 +44,7 @@ export class ClientesComponent implements OnInit {
   cargarClientes() {
     this.cargando = true;
 
-    if (this.usuarioLogueado.role == 'ADMIN_ROLE') {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this._clienteService.getClientes(this.desde)
         .subscribe(clientes => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
