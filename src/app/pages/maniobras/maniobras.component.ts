@@ -20,6 +20,7 @@ export class ManiobrasComponent implements OnInit {
   totalRevision = 0;
   totalLavadoReparacion = 0;
   totalXCargar = 0;
+  totalXAprobar = 0;
 
 
   displayedColumnsTransito = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
@@ -35,11 +36,15 @@ export class ManiobrasComponent implements OnInit {
 
   displayedColumnsXCargar = ['actions', 'folio', 'transportista.nombreComercial', 'grado', 'tipo', 'peso', 'cliente.nombreComercial', 'agencia.nombreComercial', 'solicitud.blBooking'];
 
+  displayedColumnsXAprobar = ['actions', 'cargaDescarga', 'folio', 'viaje.viaje', 'viaje.buque.nombre', 'solicitud.blBooking', 'transportista.nombreComercial', 'contenedor', 'tipo',
+    'peso', 'cliente.nombreComercial', 'agencia.nombreComercial'];
+  
   dtTransito: any;
   dtEspera: any;
   dtRevision: any;
   dtLavadoReparacion: any;
   dtXCargar: any;
+  dtXAprobar: any;
   maniobrasExcel = [];
 
   usuarioLogueado: Usuario;
@@ -50,6 +55,7 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('pagRevision', { read: MatPaginator }) pagRevision: MatPaginator;
   @ViewChild('pagLR', { read: MatPaginator }) pagLR: MatPaginator;
   @ViewChild('pagXCargar', { read: MatPaginator }) pagXCargar: MatPaginator;
+  @ViewChild('pagXAprobar', { read: MatPaginator }) pagXAprobar: MatPaginator;
 
 
 
@@ -58,6 +64,7 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('sortRevision') sortRevision: MatSort;
   @ViewChild('sortLR') sortLR: MatSort;
   @ViewChild('sortXCargar') sortXCargar: MatSort;
+  @ViewChild('sortXAprobar') sortXAprobar: MatSort;
 
 
   constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService,
@@ -75,6 +82,7 @@ export class ManiobrasComponent implements OnInit {
     }
     this.cargarManiobras();
     let indexTAB = localStorage.getItem("ManiobrasTabs");
+
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
@@ -114,6 +122,12 @@ export class ManiobrasComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     this.dtXCargar.filter = filterValue;
     this.totalXCargar = this.dtXCargar.filteredData.length;
+  }
+  applyFilterXAprobar(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dtXAprobar.filter = filterValue;
+    this.totalXAprobar = this.dtXAprobar.filteredData.length;
   }
 
   onLinkClick(event: MatTabChangeEvent) {
@@ -191,6 +205,20 @@ export class ManiobrasComponent implements OnInit {
         this.dtXCargar.filterPredicate = this.Filtro();
 
       });
+
+      this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.APROBACION)
+      .subscribe(maniobras => {
+        this.dtXAprobar = new MatTableDataSource(maniobras.maniobras);
+        this.dtXAprobar.sortingDataAccessor = (item, property) => {
+          if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
+          return item[property];
+        };
+        this.dtXAprobar.sort = this.sortXAprobar;
+        this.dtXAprobar.paginator = this.pagXAprobar;
+        this.totalXAprobar = maniobras.total;
+        this.dtXAprobar.filterPredicate = this.Filtro();
+      });
+
     this.cargando = false;
   }
 
