@@ -74,6 +74,57 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  // javi(){
+  //   this.cargarCamiones();
+  //     this.cargarOperadores();
+  //     this.cargarClientes();
+  //     this.cargarSolicitudes('D');
+  //     this.cargarSolicitudes('C');    
+  //     this.cargarInventario();
+  //     this.cargarLR();
+  //     this.cargarLavadoOReparacion('L');
+  //     this.cargarLavadoOReparacion('R');
+  //     this.cargarManiobras();
+
+
+  //     var text = "";
+  //     text += `Total De Camiones ${this.totalCamiones}
+  //     `
+  //     text += `Total De operadores ${this.totalOperadores}
+  //     `
+  //     text += `Total de Clientes ${this.totalClientes}
+  //     `
+  //     text += `Solicitudes de Descarga ${this.totalRegistrosDescargas}
+  //     `
+  //     text += `Solicitudes de Carga ${this.totalRegistrosCargas}
+  //     `
+  //     text += `Inventario ${this.totalRegistrosInventario}
+  //     `
+  //     this.groupedDisponibles20.forEach(g => {
+  //       text += `${g.tipo} : ( ${g.maniobras.length} )
+  //     `;
+  //     });
+
+  //     this.groupedDisponibles40.forEach(g => {
+  //       text += `${g.tipo} : ( ${g.maniobras.length} )
+  //     `;
+  //     });
+  //     text += `Lavado / Reparación ${this.totalRegistrosLR}
+  //     `
+  //     text += `Lavado ${this.totalLavado}
+  //     `
+  //     text += `Reparación ${this.totalReparacion}
+  //     `
+  //     text += `Maniobras Patio 
+  //     Transito ( ${this.totalTransito} ) 
+  //     Espera ( ${this.totalEspera} )
+  //     Revisión ( ${this.totalRevision} ) 
+  //     lavado / Reparación ( ${this.totalLavadoReparacion} )
+  //     X Cargar ( ${this.totalXCargar} )`
+
+  //     console.warn(text)
+  // }
+
   cargarCamiones() {
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
