@@ -82,10 +82,14 @@ export class ManiobrasComponent implements OnInit {
     }
     this.cargarManiobras();
     let indexTAB = localStorage.getItem("ManiobrasTabs");
+      if(localStorage.getItem('ManiobrasTabs')) {
+        if (indexTAB) {
+          this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+        }
+      } else {
+        this.tabGroup.selectedIndex = 1
+      }
 
-    if (indexTAB) {
-      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
-    }
   }
 
   applyFilterTransito(filterValue: string) {
