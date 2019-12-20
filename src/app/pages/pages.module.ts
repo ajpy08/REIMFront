@@ -128,6 +128,7 @@ import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
+import { MapaComponent } from './mapa/mapa.component';
 @NgModule({
     declarations: [
         // PagesComponent,
@@ -187,7 +188,8 @@ import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedore
         FacturacionManiobrasComponent,
         ManiobrasDiarioComponent,
         TiposContenedoresComponent,
-        TipoContenedoresComponent
+        TipoContenedoresComponent,
+        MapaComponent
         
     ],
     exports: [

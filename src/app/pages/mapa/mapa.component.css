@@ -1,0 +1,8 @@
+/* #lienzo{
+    background: url('/assets/images/grid.png');
+} */
+
+canvas {
+    border-style: solid;
+
+}
