@@ -34,6 +34,7 @@ export class MapaComponent implements OnInit {
     this.bahia14();
     this.bahia15();
     this.bahia16();
+    this.bahia17();
   }
 
   // =================== N I V E L  [ 1 ]====================================
@@ -563,4 +564,21 @@ export class MapaComponent implements OnInit {
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(96, 620, 22, 55);
   }
+bahia17(){
+  this.ctx.fillStyle = "red";
+  this.ctx.fillRect(237, 245, 110, 18);
+
+  this.ctx.fillStyle = "red";
+  this.ctx.fillRect(237, 20, 110, 18);
+
+  this.ctx.fillStyle = "red";
+  this.ctx.fillRect(237, 40, 110, 18);
+
+  this.ctx.fillStyle = "red";
+  this.ctx.fillRect(237, 60, 110, 18);
+
+  this.ctx.fillStyle = "red";
+  this.ctx.fillRect(237, 80, 110, 18);
+}
+
 }
