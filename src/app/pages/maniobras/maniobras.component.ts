@@ -265,7 +265,7 @@ export class ManiobrasComponent implements OnInit {
     return filterFunction;
   }
 
-  open(id: string) {
+  open(id: string, tag: string) {
     var history;
     var array = [];
     //Si tengo algo en localStorage en la variable history lo obtengo
@@ -286,7 +286,7 @@ export class ManiobrasComponent implements OnInit {
     localStorage.setItem('historyArray', JSON.stringify(array));
 
     //Voy a pagina.
-    this.router.navigate(['/maniobras/maniobra/' + id + '/termina_lavado_reparacion']);
+    this.router.navigate(['/maniobras/maniobra/' + id + '/' + tag]);
   }
 
   crearDatosExcel(datos) {
