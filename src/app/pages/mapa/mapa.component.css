@@ -4,5 +4,7 @@
 
 canvas {
     border-style: solid;
-
+    margin: 0 auto;
+    display: block;
+    border: 1px solid #d9d9d9;
 }
