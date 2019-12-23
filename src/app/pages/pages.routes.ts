@@ -51,6 +51,11 @@ import { EmpresaComponent } from './empresa/empresa.component';
 import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
+
+//MAPEO DE PATIO REIM 
+import { MapaComponent } from './mapa/mapa.component';
+
+
 // Guards
 import { REIMGuard } from '../services/service.index';
 import { ManiobraComponent } from './maniobras/maniobra.component';
@@ -70,10 +75,12 @@ const pagesRoutes: Routes = [
     { path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' } },
     { path: 'account-settings', component: AccountSettingsComponent, data: { titulo: 'Configuración de la cuenta' } },
     { path: 'profile', component: ProfileComponent, data: { titulo: 'Mi perfil' } },
+    { path: 'mapa', component: MapaComponent, data: {titulo: 'Mapa'}},
+    
 
     // CATALOGOS GENERALES
     {
-        path: 'usuarios', 
+        path: 'usuarios',
         component: UsuariosComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Mantenimiento de Usuarios', roles: [ROLES.ADMIN_ROLE] }
@@ -85,9 +92,9 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Actualizacion de Usuarios.', roles: [ROLES.ADMIN_ROLE] }
     },
     {
-        path: 'usuarios/usuario/:id/resetPass', 
+        path: 'usuarios/usuario/:id/resetPass',
         component: UsuarioResetPassComponent,
-        canActivate: [REIMGuard], 
+        canActivate: [REIMGuard],
         data: { titulo: 'Reseteo de contraseña.', roles: [ROLES.ADMIN_ROLE] }
     },
     {
@@ -276,21 +283,21 @@ const pagesRoutes: Routes = [
 
     // Solicitudes
     {
-        path: 'solicitudes', 
+        path: 'solicitudes',
         component: SolicitudesComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Solicitudes de carga/descarga', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.AA_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
     // // Solicitud Descarga
     {
-        path: 'solicitudes/solicitud_descarga/:id', 
+        path: 'solicitudes/solicitud_descarga/:id',
         component: SolicitudDescargaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.AA_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
     // // Solicitud Carga
     {
-        path: 'solicitudes/solicitud_carga/:id', 
+        path: 'solicitudes/solicitud_carga/:id',
         component: SolicitudCargaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de datos carga', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.AA_ROLE, ROLES.TRANSPORTISTA_ROLE] }
@@ -298,13 +305,13 @@ const pagesRoutes: Routes = [
 
     // Aprobaciones
     {
-        path: 'solicitudes/aprobaciones', 
+        path: 'solicitudes/aprobaciones',
         component: AprobacionesComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Aprobaciones de Solicitudes de Carga / Descargas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
-        path: 'solicitudes/aprobaciones/aprobar_descarga/:id', 
+        path: 'solicitudes/aprobaciones/aprobar_descarga/:id',
         component: AprobarDescargaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Aprobar Descarga', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
