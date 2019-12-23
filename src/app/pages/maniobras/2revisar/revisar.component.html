@@ -102,10 +102,11 @@
                   <i class="fas fa-camera-retro"></i>
                   Fotos Lavado
                 </button> -->
-          <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
-                  <i class="fas fa-camera-retro"></i>
-                  Fotos Lavado
-              </button>
+          <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}"
+            class="btn btn-primary">
+            <i class="fas fa-camera-retro"></i>
+            Fotos Lavado
+          </button>
         </div>
       </div>
 
@@ -131,14 +132,16 @@
           </mat-form-field>
         </div>
         <div class="col-md-4">
-          <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success"> <i class="fa fa-check"></i> Añadir</button>
+          <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success m-r-5"> <i
+              class="fa fa-check"></i> Añadir</button>
           <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Reparación
             </button> -->
-          <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Reparacion 
+          <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}"
+            class="btn btn-primary">
+            <i class="fas fa-camera-retro"></i>
+            Fotos Reparacion
           </button>
         </div>
       </div>
@@ -158,8 +161,8 @@
                   <td>{{this.reparaciones.controls[i].get('reparacion').value}}</td>
                   <td>
                     <button (click)="removeReparacion( i )" class="btn btn-danger">
-                    <i class="fas fa-trash"></i>
-                  </button>
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -216,17 +219,84 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-8">
+          <h4 class="alert alert-success text-center">Coordenadas</h4>
+          <table class="table table-responsive mat-elevation-z8">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">
+                  <div *ngIf="regForm.get('bahia') && regForm.get('posicion')">
+                    <button type="button" class="btn btn-success"
+                      [disabled]="regForm.pristine || !regForm.get('bahia').valid || !regForm.get('posicion').valid"
+                      (click)="addCoordenada(bahia.value, posicion.value); ">
+                      +
+                    </button>
+                  </div>
+                </th>
+                <mat-error *ngIf="coordenadas.touched && coordenadas.invalid && !coordenadas.errors?.minlength">
+                  <sup>*</sup> Por Favor Ingresar correctamente una Coordenada
+                </mat-error>
+                <th scope="col-12">
+                  <mat-form-field class="example-full-width">
+                    <input matInput formControlName="bahia" (selectionChange)='quit(bahia)' class="form-control" #bahia
+                      placeholder="Bahía">
+                  </mat-form-field>
+                  <mat-error *ngIf="regForm.get('bahia').touched && regForm.get('bahia').invalid">
+                    <sup>*</sup> Favor de ingresar correctamente una Bahía
+                  </mat-error>
+                </th>
+                <th scope="col-12">
+                  <mat-form-field class="example-full-width">
+                    <input matInput formControlName="posicion" (selectionChange)='quit(posicion)' class="form-control"
+                      #posicion placeholder="Posición">
+                  </mat-form-field>
+                  <mat-error *ngIf="regForm.get('posicion').touched && regForm.get('posicion').invalid">
+                    <sup>*</sup> Favor ingresar correctamente una Posición
+                  </mat-error>
+                </th>
+              </tr>
+              <tr class="info">
+                <th scope="col"></th>
+                <th scope="col">#</th>
+
+                <th scope="col">Bahía</th>
+                <th scope="col">Posición</th>
+
+              </tr>
+            </thead>
+            <tbody formArrayName="coordenadas" *ngFor="let item of coordenadas.controls; let i = index;">
+              <tr [formGroupName]="i">
+                <td>
+                  <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </td>
+                <td scope="row">{{i+1}}</td>
+                <td>
+                  {{item.get('bahia').value}}
+                </td>
+                <td>
+                  {{item.get('posicion').value}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </mat-expansion-panel>
 
   </mat-accordion>
   <div *ngIf="mensajeError" class="alert alert-danger">
     {{mensajeError}}
-  </div>
+  </div><br>
   <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-  <i class="fa fa-save"></i>
-  Guardar Cambios
-</button>
-<button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+    <i class="fa fa-save"></i>
+    Guardar
+  </button>
+  <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
   <!-- <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
 
 </form>
