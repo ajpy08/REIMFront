@@ -3,11 +3,13 @@ import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
 import { Reparacion } from '../../reparaciones/reparacion.models';
 import { ReparacionService } from '../../reparaciones/reparacion.service';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import {ETAPAS_MANIOBRA, GRADOS_CONTENEDOR_ARRAY} from '../../../config/config';
+import { ETAPAS_MANIOBRA, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
 import { Location } from '@angular/common';
+import swal from 'sweetalert';
+import { Coordenada } from 'src/app/models/coordenada.models';
 
 @Component({
   selector: 'app-revisar',
@@ -36,37 +38,42 @@ export class RevisarComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarTiposReparaciones();
     this.createFormGroup();
-    this.cargarManiobra( id );
+    this.cargarManiobra(id);
     this.reparaciones.removeAt(0);
+    this.coordenadas.removeAt(0);
 
-    this.url = '/maniobras'; 
+    this.url = '/maniobras';
   }
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
-      contenedor: [{value: '', disabled: true}],
-      tipo: [{value: '', disabled: true}],
-      peso: [{value: '', disabled: true}],
-      cliente: [{value: '', disabled: true}],
-      agencia: [{value: '', disabled: true}],
-      transportista: [{value: '', disabled: true}],
-      camion: [{value: '', disabled: true}],
-      operador: [{value: '', disabled: true}],
-      fLlegada: [{value: '', disabled: true}],
-      hLlegada: [{value: '', disabled: true}],
-      hEntrada: [{value: '', disabled: true}],
-      estatus: [{value: '', disabled: true}],
+      contenedor: [{ value: '', disabled: true }],
+      tipo: [{ value: '', disabled: true }],
+      peso: [{ value: '', disabled: true }],
+      cliente: [{ value: '', disabled: true }],
+      agencia: [{ value: '', disabled: true }],
+      transportista: [{ value: '', disabled: true }],
+      camion: [{ value: '', disabled: true }],
+      operador: [{ value: '', disabled: true }],
+      fLlegada: [{ value: '', disabled: true }],
+      hLlegada: [{ value: '', disabled: true }],
+      hEntrada: [{ value: '', disabled: true }],
+      estatus: [{ value: '', disabled: true }],
       hSalida: [''],
       hDescarga: [''],
-      descargaAutorizada: [{value: '', disabled: true}],
+      descargaAutorizada: [{ value: '', disabled: true }],
       grado: [''],
       lavado: [''],
       lavadoObservacion: [''],
-      reparaciones: this.fb.array([ this.creaReparacion('', '', 0) ]),
-      reparacionesObservacion: ['']
+      reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
+      reparacionesObservacion: [''],
+      bahia: ['',[Validators.required]],
+      posicion: ['', [Validators.required]],
+      coordenadas: this.fb.array([this.agregarArray(new Coordenada)])
     });
   }
 
+  /* #region  Propiedades */
   get _id() {
     return this.regForm.get('_id');
   }
@@ -130,6 +137,16 @@ export class RevisarComponent implements OnInit {
   get reparacionesObservacion() {
     return this.regForm.get('reparacionesObservacion');
   }
+  get bahia() {
+    return this.regForm.get('bahia');
+  }
+  get posicion() {
+    return this.regForm.get('posicion');
+  }
+  get coordenadas() {
+    return this.regForm.get('coordenadas') as FormArray;
+  }
+  /* #endregion */
 
   creaReparacion(id: string, desc: string, costo: number): FormGroup {
     return this.fb.group({
@@ -144,12 +161,12 @@ export class RevisarComponent implements OnInit {
     this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
   }
 
-  removeReparacion( index: number ) {
+  removeReparacion(index: number) {
     this.reparaciones.removeAt(index);
   }
 
-  cargarManiobra( id: string) {
-    this._maniobraService.getManiobraConIncludes( id ).subscribe( maniob => {
+  cargarManiobra(id: string) {
+    this._maniobraService.getManiobraConIncludes(id).subscribe(maniob => {
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       if (maniob.maniobra.agencia) {
         this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia.nombreComercial);
@@ -169,8 +186,8 @@ export class RevisarComponent implements OnInit {
       if (maniob.maniobra.operador) {
         this.regForm.controls['operador'].setValue(maniob.maniobra.operador.nombre);
       }
-      
-      
+
+
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
@@ -210,9 +227,9 @@ export class RevisarComponent implements OnInit {
     });
   }
 
-cargarTiposReparaciones() {
+  cargarTiposReparaciones() {
     this._reparacionService.getReparaciones().subscribe((reparaciones) => {
-        this.tiposReparaciones = reparaciones.reparaciones;
+      this.tiposReparaciones = reparaciones.reparaciones;
     });
   }
 
@@ -227,17 +244,17 @@ cargarTiposReparaciones() {
     }
   }
 
-guardaCambios() {
+  guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
         if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
-          this.router.navigate([ this.url ]);
+          this.router.navigate([this.url]);
         }
         this.estatus.setValue(res.estatus);
       }, error => {
         this.mensajeError = error.error.mensaje;
-    });
+      });
     }
   }
 
@@ -248,5 +265,42 @@ guardaCambios() {
     this.router.navigate([this.url]);
     localStorage.removeItem('history')
     // this.location.back();
+  }
+
+  agregarArray(coordenada: Coordenada): FormGroup {
+    return this.fb.group({
+      bahia: [coordenada.bahia],
+      posicion: [coordenada.posicion]
+    })
+  }
+
+
+
+  addCoordenada(bahia: string, posicion: string): void {
+    // if (bahia === '') {
+    //   swal('Error al Agregar', 'El campo bahia no puede estar vacio');
+    //   return;
+    // } 
+    
+    // if (posicion === '') {
+    //   swal('Error al Agregar', 'El campo posicion no puede estar vacio');    
+    //   return;
+    // } 
+
+    var coordenada = new Coordenada(bahia, posicion);
+    this.coordenadas.push(this.agregarArray(coordenada));    
+    this.bahia.setValue('');
+    this.posicion.setValue('');
+  }
+
+  quit(control: AbstractControl) {
+    if (!control.valid) {
+      // this.regForm.controls[control.].setValue(response.body.data.nombres);
+      control.setValue('');
+    }
+  }
+
+  quitar(indice: number) {
+    this.coordenadas.removeAt(indice);
   }
 }
