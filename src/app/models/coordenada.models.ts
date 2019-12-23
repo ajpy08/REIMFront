@@ -8,5 +8,5 @@ export class Coordenada {
         public activo?: boolean,
         public maniobra?: Maniobra,
         public _id?: string
-    ) {}
+    ) {} 
 }
