@@ -2998,6 +2998,10 @@ export class MapaComponent implements OnInit {
                       ancho = c.tipo / tipo
                     }
 
+                    if (coor.posicion.includes("1")) {
+                      
+                    }
+
                     //Contenedores 40
                     if (c.tipo === 40) {
                       if (c.tipo != tipo) {
@@ -3005,6 +3009,7 @@ export class MapaComponent implements OnInit {
                         this.ctx.fillStyle = 'green';
                         this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
                         this.ctx.stroke();
+                        
                       } else {
                         this.ctx.beginPath()
                         this.ctx.fillStyle = 'blue';
@@ -3031,12 +3036,15 @@ export class MapaComponent implements OnInit {
       this.ctx.setLineDash([0, 0])
       this.ctx.strokeStyle = 'black';
       this.ctx.beginPath();
+      
+
       array.forEach(a => {
         //Pintar contornos de mapa
 
         //Contenedores 40
         if (a.tipo == 40) {
           this.ctx.rect(a.x, a.y, 110, 18);
+          
           //Contenedores 20
         } else if (a.tipo == 20) {
           this.ctx.rect(a.x, a.y, 22, 55);
