@@ -95,10 +95,6 @@
                 </button>
               </div>
             </th>
-            <mat-error
-              *ngIf="correoFacturacion.touched && correoFacturacion.invalid && !correoFacturacion.errors?.minlength">
-              <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
-            </mat-error>
             <th scope="col-12"><input formControlName="correotem" (selectionChange)='quit(correotem)'
                 class="form-control" #correoF placeholder="Correo Facturación" size="20"></th>
             <mat-error *ngIf="correotem.touched && correotem.invalid">
