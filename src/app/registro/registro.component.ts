@@ -14,7 +14,7 @@ declare function init_plugins();
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent implements OnInit {
-  
+
   regForm: FormGroup
   isEditable = true;
   R = ROLES;
@@ -43,6 +43,7 @@ export class RegistroComponent implements OnInit {
       this.registroService.guardarRegistro(this.regForm.value).subscribe(res => {
 
         this.regForm.markAsPristine();
+          setTimeout('document.location.reload()',1800)
       })
     }
   }
@@ -54,10 +55,10 @@ export class RegistroComponent implements OnInit {
       rfc: ['', [Validators.required, Validators.minLength(12)]],
       direccionFiscal: ['', [Validators.required]],
       codigo: ['', [Validators.required]],
-      correotem: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
-      correotem2: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
-      correotem3: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
-      correo:[''],
+      correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotem2: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotem3: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correo: [''],
       nombre: [''],
       datosPersonales: this.fb.array([this.agregarArray('', '')], { validators: Validators.required }),
       correoFacturacion: this.fb.array([this.agregarArray2('')], { validators: Validators.required }),
@@ -89,9 +90,9 @@ export class RegistroComponent implements OnInit {
 
 
   addContenedor2(correo: string, nombre: string): void {
-     if (correo === '') {
-       swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
-       this.nombre.get(nombre)
+    if (correo === '') {
+      swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
+      this.nombre.get(nombre)
     } if (nombre === '') {
       swal('Error al Agregar', 'El campo Nombre no puede estar Vacio.')
       this.correo.get(correo)
@@ -163,11 +164,11 @@ export class RegistroComponent implements OnInit {
   get codigo() {
     return this.regForm.get('codigo');
   }
-  get correo(){
+  get correo() {
     return this.correo.get('correo');
   }
 
-  get nombre(){
+  get nombre() {
     return this.nombre.get('nombre');
   }
 
