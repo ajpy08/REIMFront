@@ -125,7 +125,7 @@ export class MapaComponent implements OnInit {
         x: nodo.point[0],
         y: nodo.point[1],
         tipo: 0,
-        maniobra: ''
+        maniobras: []
       };
       this.arrayJsons.push(json);
 
@@ -2978,135 +2978,159 @@ export class MapaComponent implements OnInit {
   // METODOS
 
   drawContainers(array) {
+
     this.coordenadaService.getCoordenadas().subscribe(coordenada => {
       this.coordenadas = coordenada.coordenadas;
 
-      array.forEach(c => {
-        if (this.coordenadas) {
-          this.coordenadas.forEach(coor => {
-            if (coor.bahia == c.coordenada.bahia && coor.posicion == c.coordenada.posicion) {
-              c.tipo = coor.tipo;
-              c.maniobra = coor.maniobra;
 
-              // Si tengo una maniobra en ese espacio
-              if (c.maniobra) {
-                // Obtengo el tipo
-                var tipo = this.TryParseInt(c.maniobra.tipo.substring(0, 2), 0);
-                var ancho = 0;
-                if (tipo) {
-                  // Calculo el ancho que voy a rellenar
-                  ancho = c.tipo / tipo
-                }
+      
 
-                if (coor.posicion.includes("1")) {
-                  if (c.tipo === 40) {
-                    if (c.tipo != tipo) {
-                      this.ctx.beginPath()
-                      this.ctx.fillStyle = 'green';
-                      this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
-                      this.ctx.stroke();
-
-                    } else {
-                      this.ctx.beginPath()
-                      this.ctx.fillStyle = 'blue';
-                      this.ctx.fillRect(c.x, c.y, 110, 18);
-                      this.ctx.stroke();
-                    }
-                    //Contenedores 20
-                  } else if (c.tipo === 20) {
-                    {
-                      this.ctx.beginPath()
-                      this.ctx.fillStyle = 'green';
-                      this.ctx.fillRect(c.x, c.y, 22, 55);
-                      this.ctx.stroke();
-                    }
-                  }
-
-                }
-
-                if (coor.posicion.includes("2")) {
-                  if (c.tipo === 40) {
-                    if (c.tipo != tipo) {
-                      this.ctx2.beginPath()
-                      this.ctx2.fillStyle = 'green';
-                      this.ctx2.fillRect(c.x, c.y, 110 / ancho, 18);
-                      this.ctx2.stroke();
-
-                    } else {
-                      this.ctx2.beginPath()
-                      this.ctx2.fillStyle = 'blue';
-                      this.ctx2.fillRect(c.x, c.y, 110, 18);
-                      this.ctx2.stroke();
-                    }
-                    //Contenedores 20
-                  } else if (c.tipo === 20) {
-                    {
-                      this.ctx2.beginPath()
-                      this.ctx2.fillStyle = 'green';
-                      this.ctx2.fillRect(c.x, c.y, 22, 55);
-                      this.ctx2.stroke();
-                    }
-                  }
-                }
-
-                if (coor.posicion.includes("3")) {
-
-                  //Contenedores 40
-                  if (c.tipo === 40) {
-                    if (c.tipo != tipo) {
-                      this.ctx3.beginPath()
-                      this.ctx3.fillStyle = 'green';
-                      this.ctx3.fillRect(c.x, c.y, 110 / ancho, 18);
-                      this.ctx3.stroke();
-
-                    } else {
-                      this.ctx3.beginPath()
-                      this.ctx3.fillStyle = 'blue';
-                      this.ctx3.fillRect(c.x, c.y, 110, 18);
-                      this.ctx3.stroke();
-                    }
-                    //Contenedores 20
-                  } else if (c.tipo === 20) {
-                    {
-                      this.ctx3.beginPath()
-                      this.ctx3.fillStyle = 'green';
-                      this.ctx3.fillRect(c.x, c.y, 22, 55);
-                      this.ctx3.stroke();
-                    }
-                  }
-                }
-
-                // });
-              }
-            }
-          });
-        }
-      });
+      /////////////////////DIBUJO CONTORNOS/////////////////////////
 
       this.ctx.lineWidth = 1;
       this.ctx.setLineDash([0, 0])
       this.ctx.strokeStyle = 'black';
       this.ctx.beginPath();
-
-
+  
+  
       array.forEach(a => {
-        //Pintar contornos de mapa
 
+
+        if (this.coordenadas) {
+          this.coordenadas.forEach(coor => {
+            if (coor.bahia == a.coordenada.bahia && coor.posicion == a.coordenada.posicion) {
+              a.tipo = coor.tipo;
+              a.maniobras = coor.maniobras;
+            }
+          })
+        }        
+        
+
+        //Pintar contornos de mapa
+  
         //Contenedores 40
         if (a.tipo == 40) {
           this.ctx.rect(a.x, a.y, 110, 18);
-
+  
           //Contenedores 20
         } else if (a.tipo == 20) {
           this.ctx.rect(a.x, a.y, 22, 55);
         }
       });
       this.ctx.stroke();
+
+      /////////////////////////////////////////////////////////////
+
+      array.forEach(c => {
+        // if (this.coordenadas) {
+          // this.coordenadas.forEach(coor => {
+            // if (coor.bahia == c.coordenada.bahia && coor.posicion == c.coordenada.posicion) {
+             
+
+              var count = 0;
+              // Si tengo mas de una maniobra
+              if (c.maniobras.length > 0) {
+                c.maniobras.forEach(m => {
+                  count++;
+
+                  // Obtengo el tipo
+                  var tipo = this.TryParseInt(m.maniobra.tipo.substring(0, 2), 0);
+                  var ancho = 0;
+                  if (tipo) {
+                    // Calculo el ancho que voy a rellenar
+                    ancho = c.tipo / tipo
+                  }
+
+                  if (count > 1) {
+                    c.x = c.x + (110 / ancho);
+                    //c.x = c.x;
+                  }
+
+                  if (c.coordenada.posicion.includes("1")) {
+                    if (c.tipo === 40) {
+                      if (c.tipo != tipo) {
+                        this.ctx.beginPath()
+                        this.ctx.fillStyle = 'green';
+                        this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
+                        this.ctx.stroke();
+
+                      } else {
+                        this.ctx.beginPath()
+                        this.ctx.fillStyle = 'blue';
+                        this.ctx.fillRect(c.x, c.y, 110, 18);
+                        this.ctx.stroke();
+                      }
+                      //Contenedores 20
+                    } else if (c.tipo === 20) {
+                      {
+                        this.ctx.beginPath()
+                        this.ctx.fillStyle = 'green';
+                        this.ctx.fillRect(c.x, c.y, 22, 55);
+                        this.ctx.stroke();
+                      }
+                    }
+
+                  }
+
+                  if (c.coordenada.posicion.includes("2")) {
+                    if (c.tipo === 40) {
+                      if (c.tipo != tipo) {
+                        this.ctx2.beginPath()
+                        this.ctx2.fillStyle = 'green';
+                        this.ctx2.fillRect(c.x, c.y, 110 / ancho, 18);
+                        this.ctx2.stroke();
+
+                      } else {
+                        this.ctx2.beginPath()
+                        this.ctx2.fillStyle = 'blue';
+                        this.ctx2.fillRect(c.x, c.y, 110, 18);
+                        this.ctx2.stroke();
+                      }
+                      //Contenedores 20
+                    } else if (c.tipo === 20) {
+                      {
+                        this.ctx2.beginPath()
+                        this.ctx2.fillStyle = 'green';
+                        this.ctx2.fillRect(c.x, c.y, 22, 55);
+                        this.ctx2.stroke();
+                      }
+                    }
+                  }
+
+                  if (c.coordenada.posicion.includes("3")) {
+
+                    //Contenedores 40
+                    if (c.tipo === 40) {
+                      if (c.tipo != tipo) {
+                        this.ctx3.beginPath()
+                        this.ctx3.fillStyle = 'green';
+                        this.ctx3.fillRect(c.x, c.y, 110 / ancho, 18);
+                        this.ctx3.stroke();
+
+                      } else {
+                        this.ctx3.beginPath()
+                        this.ctx3.fillStyle = 'blue';
+                        this.ctx3.fillRect(c.x, c.y, 110, 18);
+                        this.ctx3.stroke();
+                      }
+                      //Contenedores 20
+                    } else if (c.tipo === 20) {
+                      {
+                        this.ctx3.beginPath()
+                        this.ctx3.fillStyle = 'green';
+                        this.ctx3.fillRect(c.x, c.y, 22, 55);
+                        this.ctx3.stroke();
+                      }
+                    }
+                  }
+
+                });
+              }
+            // }
+          // });
+        // }
+      });
     });
-
-
-    console.log(array)
-
   }
 
   TryParseInt(str, defaultValue) {
