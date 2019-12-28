@@ -378,11 +378,11 @@ export class MapaComponent implements OnInit {
   bahia20() {
 
     this.point = new Uint16Array([836, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'F1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'J1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'G1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'I1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 120, 22, 55]);
@@ -390,32 +390,22 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'I1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'G1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'J1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'F1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
-
-
-    // bahia 20 A
-    // this.ctx.lineWidth = 1;
-    // this.ctx.strokeStyle = "rgba(0,0,0,1)";
-    // this.ctx.rect(836, 120, 22, 55);
-    // this.ctx.rect(860, 120, 22, 55);
-    // this.ctx.rect(884, 120, 22, 55);
-    // this.ctx.rect(908, 120, 22, 55);
-    // this.ctx.rect(932, 120, 22, 55);
 
     //bahia 20 b
 
     this.point = new Uint32Array([836, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'A1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'E1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'B1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'D1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 177, 22, 55]);
@@ -423,17 +413,13 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'D1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'B1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'E1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'A1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
-    // this.ctx.rect(836, 177, 22, 55);
-    // this.ctx.rect(860, 177, 22, 55);
-    // this.ctx.rect(884, 177, 22, 55);
-    // this.ctx.rect(908, 177, 22, 55);
-    // this.ctx.rect(932, 177, 22, 55);
+
   }
 
   bahia7() {
@@ -998,6 +984,7 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
   }
+
   bahia17() {
     //BAHIA 17
 
@@ -1105,15 +1092,26 @@ export class MapaComponent implements OnInit {
 
   bahiaLavadoOReparacion() {
     this.ctx.lineWidth = 1;
-    this.ctx.strokeStyle = 'black';
+    this.ctx.fillStyle = 'rgb(228,240,46)';
 
+    this.ctx.fillRect(474, 245, 22, 55);
+    this.ctx.fillRect(498, 245, 22, 55);
+    this.ctx.fillRect(522, 245, 22, 55);
+    this.ctx.fillRect(546, 245, 22, 55);
+    this.ctx.fillRect(570, 245, 22, 55);
+// contorno 
     this.ctx.rect(474, 245, 22, 55);
     this.ctx.rect(498, 245, 22, 55);
     this.ctx.rect(522, 245, 22, 55);
     this.ctx.rect(546, 245, 22, 55);
     this.ctx.rect(570, 245, 22, 55);
 
-    //REPARACION 20
+    this.ctx.fillRect(474, 302, 22, 55);
+    this.ctx.fillRect(498, 302, 22, 55);
+    this.ctx.fillRect(522, 302, 22, 55);
+    this.ctx.fillRect(546, 302, 22, 55);
+    this.ctx.fillRect(570, 302, 22, 55);
+// contorno
     this.ctx.rect(474, 302, 22, 55);
     this.ctx.rect(498, 302, 22, 55);
     this.ctx.rect(522, 302, 22, 55);
@@ -1122,20 +1120,37 @@ export class MapaComponent implements OnInit {
 
 
 
+    this.ctx.fillRect(478, 360, 110, 18);
+    this.ctx.fillRect(478, 380, 110, 18);
+
+    //contorno
+
     this.ctx.rect(478, 360, 110, 18);
     this.ctx.rect(478, 380, 110, 18);
 
     //reparacion 40
 
 
+    this.ctx.fillRect(474, 400, 22, 80);
+    this.ctx.fillRect(498, 400, 22, 80);
+    this.ctx.fillRect(522, 400, 22, 80);
+    this.ctx.fillRect(546, 400, 22, 80);
+    this.ctx.fillRect(570, 400, 22, 80);
+
+    //contorno
     this.ctx.rect(474, 400, 22, 80);
     this.ctx.rect(498, 400, 22, 80);
     this.ctx.rect(522, 400, 22, 80);
     this.ctx.rect(546, 400, 22, 80);
     this.ctx.rect(570, 400, 22, 80);
 
-    this.ctx.rect(608, 378, 22, 80);
-    this.ctx.rect(608, 270, 22, 55);
+    this.ctx.fillRect(608, 378, 22, 80);
+    this.ctx.fillRect(608, 270, 22, 55);
+ // CONTORNO
+
+ this.ctx.rect(608, 378, 22, 80);
+ this.ctx.rect(608, 270, 22, 55);
+
 
     this.ctx.stroke();
   }
@@ -1217,13 +1232,13 @@ export class MapaComponent implements OnInit {
   }
 
   lineaN2() {
-    this.ctx.beginPath();
-    this.ctx.moveTo(356, 0);
-    this.ctx.lineTo(356, 900);
-    this.ctx.strokeStyle = "red";
-    this.ctx.setLineDash([10, 10])
-    this.ctx.lineWidth = 5;
-    this.ctx.stroke();
+    this.ctx2.beginPath();
+    this.ctx2.moveTo(356, 0);
+    this.ctx2.lineTo(356, 900);
+    this.ctx2.strokeStyle = "red";
+    this.ctx2.setLineDash([10, 10])
+    this.ctx2.lineWidth = 5;
+    this.ctx2.stroke();
 
   }
   bahia10N2() {
@@ -2139,12 +2154,12 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
   lineaN3() {
-    this.ctx.beginPath();
-    this.ctx.moveTo(356, 0);
-    this.ctx.lineTo(356, 900);
-    this.ctx.strokeStyle = "red";
-    this.ctx.setLineDash([10, 10])
-    this.ctx.lineWidth = 5;
+    this.ctx3.beginPath();
+    this.ctx3.moveTo(356, 0);
+    this.ctx3.lineTo(356, 900);
+    this.ctx3.strokeStyle = "red";
+    this.ctx3.setLineDash([10, 10])
+    this.ctx3.lineWidth = 5;
 
 
   }
@@ -2983,19 +2998,18 @@ export class MapaComponent implements OnInit {
       this.coordenadas = coordenada.coordenadas;
 
 
-      
 
-      /////////////////////DIBUJO CONTORNOS/////////////////////////
+
+      /////////////////////DIBUJO CONTORNOS N1 /////////////////////////
 
       this.ctx.lineWidth = 1;
       this.ctx.setLineDash([0, 0])
       this.ctx.strokeStyle = 'black';
       this.ctx.beginPath();
-  
-  
+
+
+
       array.forEach(a => {
-
-
         if (this.coordenadas) {
           this.coordenadas.forEach(coor => {
             if (coor.bahia == a.coordenada.bahia && coor.posicion == a.coordenada.posicion) {
@@ -3003,136 +3017,275 @@ export class MapaComponent implements OnInit {
               a.maniobras = coor.maniobras;
             }
           })
-        }        
-        
+        }
+
 
         //Pintar contornos de mapa
-  
+
         //Contenedores 40
-        if (a.tipo == 40) {
-          this.ctx.rect(a.x, a.y, 110, 18);
-  
+        if (a.coordenada.posicion.includes("1")) {
+          if (a.tipo == 40) {
+            if (a.maniobras.length > 0) {
+            this.ctx.rect(a.x, a.y, 110, 18);
+            } else {
+              this.ctx.rect(a.x, a.y, 110, 18);
+              this.ctx.fillStyle = 'black';
+              this.ctx.font = "bold 11px sans-serif";
+              this.ctx.fillText(a.coordenada.posicion, a.x + 50, a.y + 13);
+
+            }
+          }
           //Contenedores 20
-        } else if (a.tipo == 20) {
-          this.ctx.rect(a.x, a.y, 22, 55);
+          else if (a.tipo == 20) {
+            this.ctx.rect(a.x, a.y, 22, 55);
+            this.ctx.fillStyle = 'black';
+            this.ctx.font = "bold 9px sans-serif";
+            this.ctx.fillText(a.coordenada.posicion, a.x + 5, a.y + 30);
+          }
         }
       });
+
+
       this.ctx.stroke();
 
       /////////////////////////////////////////////////////////////
 
+      //////////////////////// DIBUJAR CONTORNOS N2 ///////////////
+
+
+
+      this.ctx2.lineWidth = 1;
+      this.ctx2.setLineDash([0, 0])
+      this.ctx2.strokeStyle = 'black';
+      this.ctx2.beginPath();
+
+
+      array.forEach(b => {
+
+
+        if (this.coordenadas) {
+          this.coordenadas.forEach(coor => {
+            if (coor.bahia == b.coordenada.bahia && coor.posicion == b.coordenada.posicion) {
+              b.tipo = coor.tipo;
+              b.maniobras = coor.maniobras;
+            }
+          })
+        }
+
+
+        //Pintar contornos de mapa
+
+        //Contenedores 40
+        if (b.tipo == 40) {
+          this.ctx2.rect(b.x, b.y, 110, 18);
+
+
+          //Contenedores 20
+        } else if (b.tipo == 20) {
+          this.ctx2.rect(b.x, b.y, 22, 55);
+        }
+      });
+      this.ctx2.stroke();
+      /////////////////////////////////////////////////////////////
+
+
+      //////////////////////// DIBUJAR CONTORNOS N3 ///////////////
+
+
+
+      this.ctx3.lineWidth = 1;
+      this.ctx3.setLineDash([0, 0])
+      this.ctx3.strokeStyle = 'black';
+      this.ctx3.beginPath();
+
+
+      array.forEach(l => {
+
+
+        if (this.coordenadas) {
+          this.coordenadas.forEach(coor => {
+            if (coor.bahia == l.coordenada.bahia && coor.posicion == l.coordenada.posicion) {
+              l.tipo = coor.tipo;
+              l.maniobras = coor.maniobras;
+            }
+          })
+        }
+
+
+        //Pintar contornos de mapa
+
+        //Contenedores 40
+        if (l.tipo == 40) {
+          this.ctx3.rect(l.x, l.y, 110, 18);
+
+
+          //Contenedores 20
+        } else if (l.tipo == 20) {
+          this.ctx3.rect(l.x, l.y, 22, 55);
+        }
+      });
+      this.ctx3.stroke();
+      /////////////////////////////////////////////////////////////
+
       array.forEach(c => {
         // if (this.coordenadas) {
-          // this.coordenadas.forEach(coor => {
-            // if (coor.bahia == c.coordenada.bahia && coor.posicion == c.coordenada.posicion) {
-             
+        // this.coordenadas.forEach(coor => {
+        // if (coor.bahia == c.coordenada.bahia && coor.posicion == c.coordenada.posicion) {
 
-              var count = 0;
-              // Si tengo mas de una maniobra
-              if (c.maniobras.length > 0) {
-                c.maniobras.forEach(m => {
-                  count++;
 
-                  // Obtengo el tipo
-                  var tipo = this.TryParseInt(m.maniobra.tipo.substring(0, 2), 0);
-                  var ancho = 0;
-                  if (tipo) {
-                    // Calculo el ancho que voy a rellenar
-                    ancho = c.tipo / tipo
-                  }
+        var count = 0;
+        // Si tengo mas de una maniobra
+        if (c.maniobras.length > 0) {
+          c.maniobras.forEach(m => {
+            count++;
 
-                  if (count > 1) {
-                    c.x = c.x + (110 / ancho);
-                    //c.x = c.x;
-                  }
+            // Obtengo el tipo
+            var tipo = this.TryParseInt(m.maniobra.tipo.substring(0, 2), 0);
+            var ancho = 0;
+            if (tipo) {
+              // Calculo el ancho que voy a rellenar
+              ancho = c.tipo / tipo
+            }
 
-                  if (c.coordenada.posicion.includes("1")) {
-                    if (c.tipo === 40) {
-                      if (c.tipo != tipo) {
-                        this.ctx.beginPath()
-                        this.ctx.fillStyle = 'green';
-                        this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
-                        this.ctx.fillStyle = 'black';
-                        this.ctx.fillText(c.coordenada.posicion, c.x + ((110/ancho)/2 -10), c.y + 13);
-                        this.ctx.stroke();
+            if (count > 1) {
+              c.x = c.x + (110 / ancho);
+              //c.x = c.x;
+            }
 
-                      } else {
-                        this.ctx.beginPath()
-                        this.ctx.fillStyle = 'blue';
-                        this.ctx.fillRect(c.x, c.y, 110, 18);
-                        this.ctx.stroke();
-                      }
-                      //Contenedores 20
-                    } else if (c.tipo === 20) {
-                      {
-                        this.ctx.beginPath()
-                        this.ctx.fillStyle = 'green';
-                        this.ctx.fillRect(c.x, c.y, 22, 55);
-                        this.ctx.stroke();
-                      }
-                    }
+            if (c.coordenada.posicion.includes("1")) {
+              if (c.tipo === 40) {
+                if (c.tipo != tipo) {
+                  this.ctx.beginPath()
+                  this.ctx.fillStyle = 'rgb(14,121,19)';
+                  this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
+                  this.ctx.fillStyle = 'black';
+                  this.ctx.font = "bold 11px sans-serif";
+                  this.ctx.stroke();
+                  this.ctx.fillText(c.coordenada.posicion, c.x + ((110 / ancho) / 2 - 6), c.y + 13);
+                  this.ctx.lineWidth = 2;
+                  this.ctx.rect(c.x, c.y, 110/ ancho, 18);
+                  this.ctx.stroke();
 
-                  }
+                } else {
+                  this.ctx.beginPath()
+                  this.ctx.fillStyle = 'rgb(6,102,147)';
+                  this.ctx.fillRect(c.x, c.y, 110, 18);
+                  this.ctx.fillStyle = 'black';
+                  this.ctx.font = "bold 11px sans-serif";
+                  this.ctx.fillText(c.coordenada.posicion, c.x + ((110 / ancho) / 2 - 6), c.y + 13);
+                  this.ctx.lineWidth = 2;
+                  this.ctx.rect(c.x, c.y, 110,18);
+                  this.ctx.stroke();
+                }
+                //Contenedores 20
+              } if (c.tipo === 20) {
+                if (c.tipo != tipo) {
+                  this.ctx.beginPath()
+                  this.ctx.fillStyle = 'rgb(6,102,147)';
+                  this.ctx.fillRect(c.x, c.y, 22, 55);
+                  this.ctx.fillStyle = 'black';
+                  this.ctx.font = "bold 11px sans-serif";
+                  this.ctx.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx.stroke();
+                } else {
+                  this.ctx.beginPath()
+                  this.ctx.fillStyle = 'rgb(14,121,19)';
+                  this.ctx.fillRect(c.x, c.y, 22, 55);
+                  this.ctx.fillStyle = 'black';
+                  this.ctx.font = "bold 11px sans-serif";
+                  this.ctx.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx.stroke();
+                }
 
-                  if (c.coordenada.posicion.includes("2")) {
-                    if (c.tipo === 40) {
-                      if (c.tipo != tipo) {
-                        this.ctx2.beginPath()
-                        this.ctx2.fillStyle = 'green';
-                        this.ctx2.fillRect(c.x, c.y, 110 / ancho, 18);
-                        this.ctx2.stroke();
-
-                      } else {
-                        this.ctx2.beginPath()
-                        this.ctx2.fillStyle = 'blue';
-                        this.ctx2.fillRect(c.x, c.y, 110, 18);
-                        this.ctx2.stroke();
-                      }
-                      //Contenedores 20
-                    } else if (c.tipo === 20) {
-                      {
-                        this.ctx2.beginPath()
-                        this.ctx2.fillStyle = 'green';
-                        this.ctx2.fillRect(c.x, c.y, 22, 55);
-                        this.ctx2.stroke();
-                      }
-                    }
-                  }
-
-                  if (c.coordenada.posicion.includes("3")) {
-
-                    //Contenedores 40
-                    if (c.tipo === 40) {
-                      if (c.tipo != tipo) {
-                        this.ctx3.beginPath()
-                        this.ctx3.fillStyle = 'green';
-                        this.ctx3.fillRect(c.x, c.y, 110 / ancho, 18);
-                        this.ctx3.stroke();
-
-                      } else {
-                        this.ctx3.beginPath()
-                        this.ctx3.fillStyle = 'blue';
-                        this.ctx3.fillRect(c.x, c.y, 110, 18);
-                        this.ctx3.stroke();
-                      }
-                      //Contenedores 20
-                    } else if (c.tipo === 20) {
-                      {
-                        this.ctx3.beginPath()
-                        this.ctx3.fillStyle = 'green';
-                        this.ctx3.fillRect(c.x, c.y, 22, 55);
-                        this.ctx3.stroke();
-                      }
-                    }
-                  }
-
-                });
               }
-            // }
-          // });
-        // }
+            }
+
+
+
+            if (c.coordenada.posicion.includes("2")) {
+              if (c.tipo === 40) {
+                if (c.tipo != tipo) {
+                  this.ctx2.beginPath()
+                  this.ctx2.fillStyle = 'rgb(14,121,19)';
+                  this.ctx2.fillRect(c.x, c.y, 110 / ancho, 18);
+                  this.ctx2.fillStyle = 'black';
+                  this.ctx2.font = "bold 11px sans-serif";
+                  this.ctx2.stroke();
+                  this.ctx2.fillText(c.coordenada.posicion, c.x + ((110 / ancho) / 2 - 6), c.y + 13);
+                  this.ctx2.stroke();
+
+                } else {
+                  this.ctx2.beginPath()
+                  this.ctx2.fillStyle = 'blue';
+                  this.ctx2.fillRect(c.x, c.y, 110, 18);
+                  this.ctx2.stroke();
+                }
+                //Contenedores 20
+              } if (c.tipo === 20) {
+                if (c.tipo != tipo) {
+                  this.ctx2.beginPath()
+                  this.ctx2.fillStyle = 'rgb(6,102,147)';
+                  this.ctx2.fillRect(c.x, c.y, 22, 55);
+                  this.ctx2.fillStyle = 'black';
+                  this.ctx2.font = "bold 11px sans-serif";
+                  this.ctx2.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx2.stroke();
+                } else {
+                  this.ctx2.beginPath()
+                  this.ctx2.fillStyle = 'green';
+                  this.ctx2.fillRect(c.x, c.y, 22, 55);
+                  this.ctx2.fillStyle = 'black';
+                  this.ctx2.font = "bold 11px sans-serif";
+                  this.ctx2.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx2.stroke();
+                }
+              }
+            }
+
+            if (c.coordenada.posicion.includes("3")) {
+
+              //Contenedores 40
+              if (c.tipo === 40) {
+                if (c.tipo != tipo) {
+                  this.ctx3.beginPath()
+                  this.ctx3.fillStyle = 'rgb(14,121,19)';
+                  this.ctx3.fillRect(c.x, c.y, 110 / ancho, 18);
+                  this.ctx3.fillStyle = 'black';
+                  this.ctx3.font = "bold 11px sans-serif";
+                  this.ctx3.stroke();
+                  this.ctx3.fillText(c.coordenada.posicion, c.x + ((110 / ancho) / 2 - 6), c.y + 13);
+                  this.ctx3.stroke();
+
+                } else {
+                  this.ctx3.beginPath()
+                  this.ctx3.fillStyle = 'blue';
+                  this.ctx3.fillRect(c.x, c.y, 110, 18);
+                  this.ctx3.stroke();
+                }
+                //Contenedores 20
+              } if (c.tipo === 20) {
+                if (c.tipo != tipo) {
+                  this.ctx3.beginPath()
+                  this.ctx3.fillStyle = 'rgb(6,102,147)';
+                  this.ctx3.fillRect(c.x, c.y, 22, 55);
+                  this.ctx3.fillStyle = 'black';
+                  this.ctx3.font = "bold 11px sans-serif";
+                  this.ctx3.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx3.stroke();
+                } else {
+                  this.ctx3.beginPath()
+                  this.ctx3.fillStyle = 'green';
+                  this.ctx3.fillRect(c.x, c.y, 22, 55);
+                  this.ctx3.stroke();
+                }
+              }
+            }
+
+          });
+        }
       });
     });
+
   }
 
   TryParseInt(str, defaultValue) {
@@ -3146,4 +3299,5 @@ export class MapaComponent implements OnInit {
     }
     return retValue;
   }
+
 }
