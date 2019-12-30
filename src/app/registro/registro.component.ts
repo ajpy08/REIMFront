@@ -40,7 +40,7 @@ export class RegistroComponent implements OnInit {
 
   guardarRegistro() {
     if (this.regForm.invalid){
-      swal('Error', 'Falta Acompletar datos', 'error');     
+      swal('Error', 'Falta acompletar datos', 'error');     
     }
     if (this.regForm.valid) {
       this.registroService.guardarRegistro(this.regForm.value).subscribe(res => {
