@@ -782,44 +782,44 @@ export class MapaComponent implements OnInit {
 
     //bahia 21 A
     this.point = new Uint32Array([0, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'F1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'A1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'G1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'B1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'H1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'C1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'I1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'D1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'J1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'E1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 21 B
     this.point = new Uint32Array([0, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'A1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'F1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'B1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'G1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'C1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'H1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'D1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'I1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'E1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'J1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
@@ -828,44 +828,44 @@ export class MapaComponent implements OnInit {
 
 
     this.point = new Uint32Array([0, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'F1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'A1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'G1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'B1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'H1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'C1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'I1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'D1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'J1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'E1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 13 B 
     this.point = new Uint32Array([0, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'A1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'F1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'B1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'G1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'C1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'H1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'D1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'I1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'E1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'J1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
@@ -873,44 +873,44 @@ export class MapaComponent implements OnInit {
     // BAHIA 14 A
 
     this.point = new Uint32Array([0, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'F1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'A1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'G1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'B1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'H1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'C1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'I1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'D1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'J1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'E1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 14 B
     this.point = new Uint32Array([0, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'A1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'F1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'B1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'G1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'C1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'H1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'D1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'I1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'E1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'J1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
   }
@@ -919,44 +919,44 @@ export class MapaComponent implements OnInit {
 
     //bahia 15 A
     this.point = new Uint32Array([0, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'F1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'A1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'G1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'B1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'H1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'C1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'I1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'D1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'J1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'E1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 15 B
     this.point = new Uint32Array([0, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'A1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'F1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'B1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'G1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'C1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'H1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'D1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'I1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'E1', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'J1', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
@@ -1356,11 +1356,11 @@ export class MapaComponent implements OnInit {
   bahia20N2() {
     //bahia 20 A
     this.point = new Uint32Array([836, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 120, 22, 55]);
@@ -1368,22 +1368,22 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 120, 22, 55]);
-    this.coordenada = new Coordenada('20', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
 
 
     //bahia 20 b
     this.point = new Uint32Array([836, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 177, 22, 55]);
@@ -1391,22 +1391,22 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 177, 22, 55]);
-    this.coordenada = new Coordenada('20', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('20', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
   }
 
   bahia7N2() {
     this.point = new Uint32Array([836, 245, 22, 55]);
-    this.coordenada = new Coordenada('7', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 245, 22, 55]);
-    this.coordenada = new Coordenada('7', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 245, 22, 55]);
@@ -1414,20 +1414,20 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 245, 22, 55]);
-    this.coordenada = new Coordenada('7', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 245, 22, 55]);
-    this.coordenada = new Coordenada('7', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 7 B 
     this.point = new Uint32Array([836, 302, 22, 55]);
-    this.coordenada = new Coordenada('7', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 302, 22, 55]);
-    this.coordenada = new Coordenada('7', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 302, 22, 55]);
@@ -1435,22 +1435,22 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 302, 22, 55]);
-    this.coordenada = new Coordenada('7', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 302, 22, 55]);
-    this.coordenada = new Coordenada('7', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('7', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
   }
 
   bahia6N2() {
     this.point = new Uint32Array([836, 370, 22, 55]);
-    this.coordenada = new Coordenada('6', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 370, 22, 55]);
-    this.coordenada = new Coordenada('6', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 370, 22, 55]);
@@ -1458,20 +1458,20 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 370, 22, 55]);
-    this.coordenada = new Coordenada('6', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 370, 22, 55]);
-    this.coordenada = new Coordenada('6', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 6 B
     this.point = new Uint32Array([836, 427, 22, 55]);
-    this.coordenada = new Coordenada('6', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 427, 22, 55]);
-    this.coordenada = new Coordenada('6', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 427, 22, 55]);
@@ -1479,23 +1479,23 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 427, 22, 55]);
-    this.coordenada = new Coordenada('6', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
 
     this.point = new Uint32Array([932, 427, 22, 55]);
-    this.coordenada = new Coordenada('6', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('6', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia5N2() {
     //bahia 5 A
     this.point = new Uint32Array([836, 495, 22, 55]);
-    this.coordenada = new Coordenada('5', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 495, 22, 55]);
-    this.coordenada = new Coordenada('5', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 495, 22, 55]);
@@ -1503,21 +1503,21 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 495, 22, 55]);
-    this.coordenada = new Coordenada('5', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 495, 22, 55]);
-    this.coordenada = new Coordenada('5', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 5 B
 
     this.point = new Uint32Array([836, 552, 22, 55]);
-    this.coordenada = new Coordenada('5', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 552, 22, 55]);
-    this.coordenada = new Coordenada('5', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 552, 22, 55]);
@@ -1525,11 +1525,11 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 552, 22, 55]);
-    this.coordenada = new Coordenada('5', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 552, 22, 55]);
-    this.coordenada = new Coordenada('5', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('5', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
   }
@@ -1537,11 +1537,11 @@ export class MapaComponent implements OnInit {
   bahia19N2() {
     //bahia 19 A
     this.point = new Uint32Array([836, 620, 22, 55]);
-    this.coordenada = new Coordenada('19', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 620, 22, 55]);
-    this.coordenada = new Coordenada('19', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'H2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 620, 22, 55]);
@@ -1549,20 +1549,20 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 620, 22, 55]);
-    this.coordenada = new Coordenada('19', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 620, 22, 55]);
-    this.coordenada = new Coordenada('19', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
     //bahia 19 B
 
     this.point = new Uint32Array([836, 677, 22, 55]);
-    this.coordenada = new Coordenada('19', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([860, 677, 22, 55]);
-    this.coordenada = new Coordenada('19', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([884, 677, 22, 55]);
@@ -1570,22 +1570,22 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([908, 677, 22, 55]);
-    this.coordenada = new Coordenada('19', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([932, 677, 22, 55]);
-    this.coordenada = new Coordenada('19', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('19', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia4N2() {
     //bahia 4 A
     this.point = new Uint32Array([836, 750, 110, 18]);
-    this.coordenada = new Coordenada('4', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('4', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([836, 770, 110, 18]);
-    this.coordenada = new Coordenada('4', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('4', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([836, 790, 110, 18]);
@@ -1593,21 +1593,21 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([836, 810, 110, 18]);
-    this.coordenada = new Coordenada('4', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('4', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([836, 830, 110, 18]);
-    this.coordenada = new Coordenada('4', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('4', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia3N2() {
     this.point = new Uint32Array([711, 750, 110, 18]);
-    this.coordenada = new Coordenada('3', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([711, 770, 110, 18]);
-    this.coordenada = new Coordenada('3', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([711, 790, 110, 18]);
@@ -1616,21 +1616,21 @@ export class MapaComponent implements OnInit {
 
 
     this.point = new Uint32Array([711, 810, 110, 18]);
-    this.coordenada = new Coordenada('3', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([711, 830, 110, 18]);
-    this.coordenada = new Coordenada('3', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     // BAHIA 3 B
 
     this.point = new Uint32Array([599, 750, 110, 18]);
-    this.coordenada = new Coordenada('3', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([599, 770, 110, 18]);
-    this.coordenada = new Coordenada('3', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([599, 790, 110, 18]);
@@ -1638,21 +1638,21 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([599, 810, 110, 18]);
-    this.coordenada = new Coordenada('3', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([599, 830, 110, 18]);
-    this.coordenada = new Coordenada('3', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('3', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia2N2() {
     this.point = new Uint32Array([474, 750, 110, 18]);
-    this.coordenada = new Coordenada('2', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([474, 770, 110, 18]);
-    this.coordenada = new Coordenada('2', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([474, 790, 110, 18]);
@@ -1660,20 +1660,20 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([474, 810, 110, 18]);
-    this.coordenada = new Coordenada('2', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([474, 830, 110, 18]);
-    this.coordenada = new Coordenada('2', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
     //BAHIA 2 B
 
     this.point = new Uint32Array([362, 750, 110, 18]);
-    this.coordenada = new Coordenada('2', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([362, 770, 110, 18]);
-    this.coordenada = new Coordenada('2', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([362, 790, 110, 18]);
@@ -1681,21 +1681,21 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([362, 810, 110, 18]);
-    this.coordenada = new Coordenada('2', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([362, 830, 110, 18]);
-    this.coordenada = new Coordenada('2', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('2', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia1N2() {
     this.point = new Uint32Array([237, 750, 110, 18]);
-    this.coordenada = new Coordenada('1', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([237, 770, 110, 18]);
-    this.coordenada = new Coordenada('1', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([237, 790, 110, 18]);
@@ -1703,21 +1703,21 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([237, 810, 110, 18]);
-    this.coordenada = new Coordenada('1', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([237, 830, 110, 18]);
-    this.coordenada = new Coordenada('1', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //BAHIA 1 B
 
     this.point = new Uint32Array([125, 750, 110, 18]);
-    this.coordenada = new Coordenada('1', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([125, 770, 110, 18]);
-    this.coordenada = new Coordenada('1', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([125, 790, 110, 18]);
@@ -1725,206 +1725,206 @@ export class MapaComponent implements OnInit {
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([125, 810, 110, 18]);
-    this.coordenada = new Coordenada('1', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([125, 830, 110, 18]);
-    this.coordenada = new Coordenada('1', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('1', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia21N2() {
     //bahia 21 A
     this.point = new Uint32Array([0, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'H2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'C2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 120, 22, 55]);
-    this.coordenada = new Coordenada('21', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 21 B
     this.point = new Uint32Array([0, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'C2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'H2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 177, 22, 55]);
-    this.coordenada = new Coordenada('21', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('21', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia13N2() {
     //reim 13 A
     this.point = new Uint32Array([0, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'H2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'C2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 245, 22, 55]);
-    this.coordenada = new Coordenada('13', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 13 B 
     this.point = new Uint32Array([0, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'C2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'H2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 302, 22, 55]);
-    this.coordenada = new Coordenada('13', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('13', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia14N2() {
     this.point = new Uint32Array([0, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'H2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'C2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 370, 22, 55]);
-    this.coordenada = new Coordenada('14', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 14 B
     this.point = new Uint32Array([0, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'C2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'H2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 427, 22, 55]);
-    this.coordenada = new Coordenada('14', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('14', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia15N2() {
     this.point = new Uint32Array([0, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'F2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'G2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'H2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'C2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'I2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 495, 22, 55]);
-    this.coordenada = new Coordenada('15', 'J2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     //bahia 15 B
     this.point = new Uint32Array([0, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'A2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'F2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([24, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'B2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'G2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([48, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'C2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'H2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([72, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'D2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'I2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
     this.point = new Uint32Array([96, 552, 22, 55]);
-    this.coordenada = new Coordenada('15', 'E2', undefined, undefined, undefined)
+    this.coordenada = new Coordenada('15', 'J2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
 
   bahia16N2() {
-    this.ctx.rect(0, 620, 22, 55);
+    this.point = new Uint32Array([0, 620, 22, 55]);
     this.coordenada = new Coordenada('16', 'A2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
-    this.ctx.rect(24, 620, 22, 55);
+    this.point = new Uint32Array([24, 620, 22, 55]);
     this.coordenada = new Coordenada('16', 'B2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
-    this.ctx.rect(48, 620, 22, 55);
+    this.point = new Uint32Array([48, 620, 22, 55]);
     this.coordenada = new Coordenada('16', 'C2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
-    this.ctx.rect(72, 620, 22, 55);
+    this.point = new Uint32Array([72, 620, 22, 55]);
     this.coordenada = new Coordenada('16', 'D2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
 
-    this.ctx.rect(96, 620, 22, 55);
+    this.point = new Uint32Array([96, 620, 22, 55]);
     this.coordenada = new Coordenada('16', 'E2', undefined, undefined, undefined)
     this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
   }
@@ -3076,13 +3076,25 @@ export class MapaComponent implements OnInit {
         //Pintar contornos de mapa
 
         //Contenedores 40
-        if (b.tipo == 40) {
-          this.ctx2.rect(b.x, b.y, 110, 18);
+        if (b.coordenada.posicion.includes("2")) {
+          if (b.tipo == 40) {
+            if (b.maniobras.length > 0) {
+            this.ctx.rect(b.x, b.y, 110, 18);
+            } else {
+              this.ctx2.rect(b.x, b.y, 110, 18);
+              this.ctx2.fillStyle = 'black';
+              this.ctx2.font = "bold 11px sans-serif";
+              this.ctx2.fillText(b.coordenada.posicion, b.x + 50, b.y + 13);
 
-
+            }
+          }
           //Contenedores 20
-        } else if (b.tipo == 20) {
-          this.ctx2.rect(b.x, b.y, 22, 55);
+          else if (b.tipo == 20) {
+            this.ctx2.rect(b.x, b.y, 22, 55);
+            this.ctx2.fillStyle = 'black';
+            this.ctx2.font = "bold 9px sans-serif";
+            this.ctx2.fillText(b.coordenada.posicion, b.x + 5, b.y + 30);
+          }
         }
       });
       this.ctx2.stroke();
@@ -3155,6 +3167,7 @@ export class MapaComponent implements OnInit {
             if (c.coordenada.posicion.includes("1")) {
               if (c.tipo === 40) {
                 if (c.tipo != tipo) {
+                  if (c.maniobra )
                   this.ctx.beginPath()
                   this.ctx.fillStyle = 'rgb(14,121,19)';
                   this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
@@ -3232,12 +3245,12 @@ export class MapaComponent implements OnInit {
                   this.ctx2.stroke();
                 } else {
                   this.ctx2.beginPath()
-                  this.ctx2.fillStyle = 'green';
-                  this.ctx2.fillRect(c.x, c.y, 22, 55);
-                  this.ctx2.fillStyle = 'black';
-                  this.ctx2.font = "bold 11px sans-serif";
-                  this.ctx2.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
-                  this.ctx2.stroke();
+                  this.ctx.fillStyle = 'rgb(14,121,19)';
+                  this.ctx.fillRect(c.x, c.y, 22, 55);
+                  this.ctx.fillStyle = 'black';
+                  this.ctx.font = "bold 11px sans-serif";
+                  this.ctx.fillText(c.coordenada.posicion, c.x + 5, c.y + 30);
+                  this.ctx.stroke();
                 }
               }
             }
