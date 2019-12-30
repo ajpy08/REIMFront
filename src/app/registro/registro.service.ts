@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { URL_SERVICIOS } from 'src/environments/environment';
 import swal from 'sweetalert';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Registro } from './registro.models';
 import { UsuarioService } from '../services/service.index';
 
@@ -24,10 +24,9 @@ export class RegistroServiceService {
     let url = URL_SERVICIOS + '/registros/registro';
     return this.http.post(url, registro)
     .pipe(
-      map((resp: any) => {
-        swal('Registro Guardado', 'Pronto nos pondremos en contacto usted !!' ,'success');
-        return resp.registro;
-      })
-    );
+              map((resp: any) => {
+              swal('Registro Guardado', 'Pronto nos pondremos en contacto usted !!' ,'success');
+              return resp.registro;
+          }));
   }
 }
