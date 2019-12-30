@@ -39,6 +39,9 @@ export class RegistroComponent implements OnInit {
 
 
   guardarRegistro() {
+    if (this.regForm.invalid){
+      swal('Error', 'Falta Acompletar datos', 'error');     
+    }
     if (this.regForm.valid) {
       this.registroService.guardarRegistro(this.regForm.value).subscribe(res => {
 
@@ -50,11 +53,11 @@ export class RegistroComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      role: ['', [Validators.required]],
-      razonSocial: ['', [Validators.required, Validators.minLength(5)]],
-      rfc: ['', [Validators.required, Validators.minLength(12)]],
-      direccionFiscal: ['', [Validators.required]],
-      codigo: ['', [Validators.required]],
+      role: ['',],
+      razonSocial: ['',  Validators.minLength(5)],
+      rfc: ['', [ Validators.minLength(12)]],
+      direccionFiscal: ['', ],
+      codigo: ['', ],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correotem2: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correotem3: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
@@ -91,10 +94,10 @@ export class RegistroComponent implements OnInit {
 
   addContenedor2(correo: string, nombre: string): void {
     if (correo === '') {
-      swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
+      swal('Error al Agregar', 'El campo Correo no puede estar Vacio', 'error');
       this.nombre.get(nombre)
     } if (nombre === '') {
-      swal('Error al Agregar', 'El campo Nombre no puede estar Vacio.')
+      swal('Error al Agregar', 'El campo Nombre no puede estar Vacio.', 'error')
       this.correo.get(correo)
     } else {
       this.datosPersonales.push(this.agregarArray(correo, nombre));
