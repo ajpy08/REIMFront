@@ -3167,7 +3167,6 @@ export class MapaComponent implements OnInit {
             if (c.coordenada.posicion.includes("1")) {
               if (c.tipo === 40) {
                 if (c.tipo != tipo) {
-                  if (c.maniobra )
                   this.ctx.beginPath()
                   this.ctx.fillStyle = 'rgb(14,121,19)';
                   this.ctx.fillRect(c.x, c.y, 110 / ancho, 18);
