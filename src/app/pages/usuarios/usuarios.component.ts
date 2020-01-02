@@ -93,4 +93,8 @@ crearDatosExcel(datos){
     }
   }
 
+  // enviarcorreo(usuario) {
+  //   this._usuarioService.enviaCorreo(usuario).subscribe(() => { });
+  // }
+
 }
