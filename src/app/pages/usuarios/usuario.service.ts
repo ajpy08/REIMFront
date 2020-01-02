@@ -1,7 +1,7 @@
 import { throwError as observableThrowError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../usuarios/usuario.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
@@ -193,6 +193,27 @@ actualizaPerfil(usuario: Usuario)
                     return true;
                   }));
 }
+
+// enviaCorreo( usuario: Usuario): Observable<any>{
+// let params = new HttpParams();
+//   let url = URL_SERVICIOS + '/usuarios/usuario';
+//     url += '/' + usuario._id + '/enviacorreo';
+//     if (usuario._id) {
+//       params = params.append('_id', usuario._id);
+//     }
+
+//     return this.http.get( url, {params: params})
+//       .pipe(map( (resp: any) => {
+//         if( usuario._id === this.usuario._id) {
+//         swal('Correo Enviado', usuario.nombre, 'succes');
+//         } else {
+//           swal('Correo No enviado, error, error');
+//         }
+//           return resp.usuario;
+//       }));;
+// }
+
+
 
 resetPass( usuario: Usuario ): Observable<any> {
   let url = URL_SERVICIOS + '/reset_password/' + usuario._id;
