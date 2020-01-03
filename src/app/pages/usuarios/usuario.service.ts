@@ -204,11 +204,13 @@ export class UsuarioService {
     return this.http.get(url, { params: params })
       .pipe(map((resp: any) => {
         if (resp.mensaje != '' && resp.mensaje != undefined && resp.mensaje.length > 0) {
-          swal('ALERTA', resp.mensaje, 'success');
+          swal('ALERTA', 'Correo Enviado', 'success');
         }
         return resp.usuario;
       }));;
   }
+
+
 
 
 
