@@ -133,115 +133,114 @@ export class UsuarioService {
   // OBTIENE UN USUARIO DADO SU ID
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id
   // id = Identificador unico de usuario
-  getUsuario( id: string ): Observable<any> {
+  getUsuario(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios/usuario/' + id;
-    return this.http.get( url )
-                .pipe(map( (resp: any) => resp.usuario ));
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.usuario));
   }
 
-  getUsuarioConIncludes( id: string ): Observable<any> {
+  getUsuarioConIncludes(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios/usuario/' + id + '/includes';
-    return this.http.get( url )
-                .pipe(map( (resp: any) => resp.usuario ));
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.usuario));
   }
 
-  guardarUsuario( usuario: Usuario ): Observable<any> {
-    if ( usuario._id ) {// actualizando
+  guardarUsuario(usuario: Usuario): Observable<any> {
+    if (usuario._id) {// actualizando
       return this.actualizarUsuario(usuario);
     } else {// creando
       return (this.altaUsuario(usuario));
     }
   }
 
-  altaUsuario( usuario: Usuario ): Observable<any> {
+  altaUsuario(usuario: Usuario): Observable<any> {
     let url = URL_SERVICIOS + '/usuarios/usuario';
     url += '?token=' + this.token;
-    return this.http.post( url, usuario )
-            .pipe(map( (resp: any) => {
-              swal('Usuario creado', usuario.email, 'success' );
-              return resp.usuario;
-            }));
-   }
+    return this.http.post(url, usuario)
+      .pipe(map((resp: any) => {
+        swal('Usuario creado', usuario.email, 'success');
+        return resp.usuario;
+      }));
+  }
 
 
-actualizarUsuario(usuario: Usuario) {
-  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id;
-  url += '?token=' + this.token;
-  return this.http.put( url, usuario )
-            .pipe(map( (resp: any) => {
-                    if ( usuario._id === this.usuario._id ) {
-                      let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
-                    }
-                    swal('Usuario actualizado', usuario.nombre, 'success' );
-                    return true;
-                  }));
-                }
+  actualizarUsuario(usuario: Usuario) {
+    let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id;
+    url += '?token=' + this.token;
+    return this.http.put(url, usuario)
+      .pipe(map((resp: any) => {
+        if (usuario._id === this.usuario._id) {
+          let usuarioDB: Usuario = resp.usuario;
+          this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
+        }
+        swal('Usuario actualizado', usuario.nombre, 'success');
+        return true;
+      }));
+  }
 
 
-actualizaPerfil(usuario: Usuario)
-{
-  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id+'/perfil';
-  url += '?token=' + this.token;
-  return this.http.put( url, usuario )
-            .pipe(map( (resp: any) => {
-                    if ( usuario._id === this.usuario._id ) {
-                      let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
-                    }
-                    swal('Usuario actualizado', usuario.nombre, 'success' );
-                    return true;
-                  }));
-}
+  actualizaPerfil(usuario: Usuario) {
+    let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/perfil';
+    url += '?token=' + this.token;
+    return this.http.put(url, usuario)
+      .pipe(map((resp: any) => {
+        if (usuario._id === this.usuario._id) {
+          let usuarioDB: Usuario = resp.usuario;
+          this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
+        }
+        swal('Usuario actualizado', usuario.nombre, 'success');
+        return true;
+      }));
+  }
 
-// enviaCorreo( usuario: Usuario): Observable<any>{
-// let params = new HttpParams();
-//   let url = URL_SERVICIOS + '/usuarios/usuario';
-//     url += '/' + usuario._id + '/enviacorreo';
-//     if (usuario._id) {
-//       params = params.append('_id', usuario._id);
-//     }
+  enviaCorreoUsuario(usuario: Usuario): Observable<any> {
+    let params = new HttpParams();
+    let url = URL_SERVICIOS + '/usuarios/usuario';
+    url += '/' + usuario._id + '/enviacorreo';
+    if (usuario._id) {
+      params = params.append('_id', usuario._id);
+    }
 
-//     return this.http.get( url, {params: params})
-//       .pipe(map( (resp: any) => {
-//         if( usuario._id === this.usuario._id) {
-//         swal('Correo Enviado', usuario.nombre, 'succes');
-//         } else {
-//           swal('Correo No enviado, error, error');
-//         }
-//           return resp.usuario;
-//       }));;
-// }
+    return this.http.get(url, { params: params })
+      .pipe(map((resp: any) => {
+        if (resp.mensaje != '' && resp.mensaje != undefined && resp.mensaje.length > 0) {
+          swal('ALERTA', 'Correo Enviado', 'success');
+        }
+        return resp.usuario;
+      }));;
+  }
 
 
 
-resetPass( usuario: Usuario ): Observable<any> {
-  let url = URL_SERVICIOS + '/reset_password/' + usuario._id;
-  url += '?token=' + this.token;
-  return this.http.put( url, usuario )
-            .pipe(map( (resp: any) => {
-                    if ( usuario._id === this.usuario._id ) {
-                      let usuarioDB: Usuario = resp.usuario;
-                      this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
-                    }
-                    swal('Usuario actualizado', usuario.nombre, 'success' );
-                    return true;
-                  }));
-}
 
-habilitaDeshabilitaUsuario (usuario: Usuario, act: boolean): Observable<any> {
-  let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/habilita_deshabilita';
-  url += '?token=' + this.token;
-  return this.http.put( url, {activo: act} )
-            .pipe(map( (resp: any) => {
-              if ( usuario._id === this.usuario._id ) {
-                let usuarioDB: Usuario = resp.usuario;
-                this.guardarStorage( usuarioDB._id, this.token, usuarioDB, this.menu, undefined );
-              }
-                    swal('Cambio de estado del usuario realizado con éxito', usuario.nombre, 'success' );
-                    return true;
-                  }));
-}
+
+  resetPass(usuario: Usuario): Observable<any> {
+    let url = URL_SERVICIOS + '/reset_password/' + usuario._id;
+    url += '?token=' + this.token;
+    return this.http.put(url, usuario)
+      .pipe(map((resp: any) => {
+        if (usuario._id === this.usuario._id) {
+          let usuarioDB: Usuario = resp.usuario;
+          this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
+        }
+        swal('Usuario actualizado', usuario.nombre, 'success');
+        return true;
+      }));
+  }
+
+  habilitaDeshabilitaUsuario(usuario: Usuario, act: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/habilita_deshabilita';
+    url += '?token=' + this.token;
+    return this.http.put(url, { activo: act })
+      .pipe(map((resp: any) => {
+        if (usuario._id === this.usuario._id) {
+          let usuarioDB: Usuario = resp.usuario;
+          this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
+        }
+        swal('Cambio de estado del usuario realizado con éxito', usuario.nombre, 'success');
+        return true;
+      }));
+  }
 
 
   cargarUsuarioEmpresa(id: string): Observable<any> {
