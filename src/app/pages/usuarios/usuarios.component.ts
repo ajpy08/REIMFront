@@ -26,6 +26,7 @@ export class UsuariosComponent implements OnInit {
   constructor(public _usuarioService: UsuarioService, private excelService: ExcelService) { }
   ngOnInit() {
     this.cargarUsuarios();
+    
   }
 
   applyFilter(filterValue: string) {
@@ -93,8 +94,8 @@ crearDatosExcel(datos){
     }
   }
 
-  // enviarcorreo(usuario) {
-  //   this._usuarioService.enviaCorreo(usuario).subscribe(() => { });
-  // }
+  enviarcorreo(usuarios) {
+    this._usuarioService.enviaCorreoUsuario(usuarios).subscribe(() => { });
+  }
 
 }
