@@ -10,6 +10,7 @@ import { ETAPAS_MANIOBRA, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config
 import { Location } from '@angular/common';
 import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
+import { CoordenadaService } from '../coordenada.service';
 
 @Component({
   selector: 'app-revisar',
@@ -22,8 +23,12 @@ export class RevisarComponent implements OnInit {
   tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
+  coordenadasDisponibles;
+  bahias = [];
+  posiciones = [];
   mensajeError = '';
   url: string;
+  bahiaSelected = '1';
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -32,7 +37,7 @@ export class RevisarComponent implements OnInit {
     public _reparacionService: ReparacionService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private location: Location) { }
+    private coordenadaService: CoordenadaService) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -41,6 +46,7 @@ export class RevisarComponent implements OnInit {
     this.cargarManiobra(id);
     this.reparaciones.removeAt(0);
     this.coordenadas.removeAt(0);
+    this.ObtenCoordenadasDisponibles();
 
     this.url = '/maniobras';
   }
@@ -67,9 +73,9 @@ export class RevisarComponent implements OnInit {
       lavadoObservacion: [''],
       reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
       reparacionesObservacion: [''],
-      bahia: ['',[Validators.required]],
-      posicion: ['', [Validators.required]],
-      coordenadas: this.fb.array([this.agregarArray(new Coordenada)])
+      bahia: [''],
+      posicion: [''],
+      coordenadas: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
     });
   }
 
@@ -277,18 +283,8 @@ export class RevisarComponent implements OnInit {
 
 
   addCoordenada(bahia: string, posicion: string): void {
-    // if (bahia === '') {
-    //   swal('Error al Agregar', 'El campo bahia no puede estar vacio');
-    //   return;
-    // } 
-    
-    // if (posicion === '') {
-    //   swal('Error al Agregar', 'El campo posicion no puede estar vacio');    
-    //   return;
-    // } 
-
     var coordenada = new Coordenada(bahia, posicion);
-    this.coordenadas.push(this.agregarArray(coordenada));    
+    this.coordenadas.push(this.agregarArray(coordenada));
     this.bahia.setValue('');
     this.posicion.setValue('');
   }
@@ -302,5 +298,32 @@ export class RevisarComponent implements OnInit {
 
   quitar(indice: number) {
     this.coordenadas.removeAt(indice);
+  }
+
+  ObtenCoordenadasDisponibles() {
+    this.coordenadaService.getCoordenadasSinManiobra().subscribe(coordenadas => {
+      this.coordenadasDisponibles = coordenadas.coordenadas;
+      //console.log(coordenadas.coordenadas)
+      for (var g in this.coordenadasDisponibles) {  
+        this.bahias.push(g);  
+
+        // this.coordenadasDisponibles[g].forEach(c => {
+        //  var x = {
+        //     g: {
+        //       bahia: c.bahia,
+        //       posicion: c.posicion
+        //     }
+        //   }
+
+        //   this.posiciones.push(x);
+        // });
+      }
+    });
+  }
+
+  obtenPosicionesXBahia(bahia) {
+    this.posiciones = undefined;
+    this.posiciones = this.coordenadasDisponibles[bahia];
+    console.log(this.posiciones)
   }
 }

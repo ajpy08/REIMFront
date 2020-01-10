@@ -28,4 +28,9 @@ export class CoordenadaService {
     
     return this.http.get(url, { params: params });
   }
+
+  getCoordenadasSinManiobra(): Observable<any> {
+    const url = URL_SERVICIOS + '/coordenadas/sin_maniobra';       
+    return this.http.get(url);
+  }
 }
