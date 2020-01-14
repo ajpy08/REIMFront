@@ -51,12 +51,12 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="nombre">
                   <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="fVigenciaTemporal">
@@ -223,7 +223,7 @@
 
                       <ng-container matColumnDef="nombre">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
@@ -339,7 +339,7 @@
 
                       <ng-container matColumnDef="nombre">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 

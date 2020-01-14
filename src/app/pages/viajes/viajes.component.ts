@@ -41,7 +41,7 @@ export class ViajesComponent implements OnInit {
   pdfTemporal = false;
   viajeExcel = [];
 
-  displayedColumns = ['actions' , 'viaje', 'buque', 'fArribo' , 'pdfTemporal', 'fVigenciaTemporal', 'anio'];
+  displayedColumns = ['actions' , 'viaje', 'naviera.nombreComercial', 'buque', 'fArribo' , 'pdfTemporal', 'fVigenciaTemporal', 'anio'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
