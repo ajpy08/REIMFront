@@ -1,21 +1,25 @@
-<mat-tab-group>
-    <mat-tab>
-      <ng-template mat-tab-label>
-        Nivel 1
-      </ng-template>
-      <canvas #canvas  width="975" height="850"></canvas>
-    </mat-tab>
-<mat-tab>
-    <ng-template mat-tab-label>
-        Nivel 2
-      </ng-template>
-      <canvas #canvasN2 width="975" height="850"></canvas>
-    </mat-tab>
 
+<div class="col-lg-2 col-lg-2">
+  <mat-form-field>
+    
+    <mat-select  placeholder="Selecciona un Nivel" [(value)]="nivelSelected" (valueChange) = draw(nivelSelected)>
+      <mat-option value="N1">
+        Nivel 1
+      </mat-option>
+      <mat-option value="N2">
+        Nivel 2
+      </mat-option>
+      <mat-option value="N3">
+        Nivel 3
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  </div>
+  
+  <div id="contenedor">
+  <mat-tab-group class="header-less-tabs"> 
     <mat-tab>
-        <ng-template mat-tab-label>
-            Nivel 3
-          </ng-template>
-          <canvas #canvasN3 width="975" height="850"></canvas>
-        </mat-tab>
-</mat-tab-group>
+  <canvas #canvas  id="canvass" width="910" height="760"></canvas>
+  </mat-tab>
+  </mat-tab-group> 
+  </div>
