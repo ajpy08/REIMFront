@@ -82,7 +82,7 @@
 
             <ng-container matColumnDef="solicitud.blBooking">
               <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.solicitud.blBooking}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="estatus">
