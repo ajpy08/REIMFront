@@ -53,7 +53,7 @@ export class ManiobrasDiarioComponent implements OnInit {
   fIniLlegada = moment().local().startOf('day');
   fFinLlegada = moment().local().startOf('day');
 
-  displayedColumns = ['actions', 'fechaingreso', 'cargaDescarga', 'contenedor','solicitud.blBooking', 'grado', 'tipo',  
+  displayedColumns = ['actions', 'fechaingreso', 'cargaDescarga', 'contenedor','viaje.naviera.nombreComercial','solicitud.blBooking', 'grado', 'tipo',  
     'operador', 'placa', 'transportista', 'lavado', 'reparaciones', 'viaje',
     'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
   dataSource: any;

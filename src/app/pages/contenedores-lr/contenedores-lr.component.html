@@ -48,9 +48,9 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="naviera">
+                <ng-container matColumnDef="viaje.naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
@@ -177,7 +177,7 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="naviera">
+                <ng-container matColumnDef="viaje.naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
                 </ng-container>

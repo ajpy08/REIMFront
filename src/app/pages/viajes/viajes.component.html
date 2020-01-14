@@ -100,6 +100,11 @@
               <mat-cell *matCellDef="let row">{{row.buque.nombre}}</mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="naviera.nombreComercial">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
+              <mat-cell *matCellDef="let row">{{row.naviera?.nombreComercial}}</mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="fArribo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Arribo</mat-header-cell>
               <mat-cell *matCellDef="let row">{{row.fArribo | date:'dd/MM/yyyy'}}</mat-cell>
