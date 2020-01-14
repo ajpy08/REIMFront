@@ -238,8 +238,8 @@
                 <th scope="col-3">
                   <mat-form-field>
                     <mat-label>Bahia</mat-label>
-                    <mat-select formControlName="bahia" [value]="bahiaSelected"
-                      (valueChange)="obtenPosicionesXBahia(bahiaSelected)">
+                    <mat-select formControlName="bahia"
+                    (selectionChange)="obtenPosicionesXBahia( $event.value)">
                       <mat-option *ngFor="let b of bahias" [value]="b">
                         {{b}}
                       </mat-option>
@@ -256,7 +256,7 @@
                     </mat-select>
                   </mat-form-field>
                 </th>
-                <mat-error *ngIf="coordenadas.invalid && !coordenadas.errors?.minlength">
+                <mat-error *ngIf="historial.invalid && !historial.errors?.minlength">
                   <sup>*</sup> Debes ingresar una Coordenada
                 </mat-error>
               </tr>
@@ -269,7 +269,7 @@
 
               </tr>
             </thead>
-            <tbody formArrayName="coordenadas" *ngFor="let item of coordenadas.controls; let i = index;">
+            <tbody formArrayName="historial" *ngFor="let item of historial.controls; let i = index;">
               <tr [formGroupName]="i">
                 <td>
                   <button type="button" (click)="quitar( i )" class="btn btn-danger">
@@ -296,7 +296,7 @@
     {{mensajeError}}
   </div><br>
   <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
-    [disabled]="regForm.pristine || !regForm.valid ">
+    [disabled]="!regForm.valid ">
     <i class="fa fa-save"></i>
     Guardar
   </button>
@@ -304,6 +304,7 @@
   <!-- <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
 
 </form>
+
 <p>Form value {{ regForm.value | json }} </p>
 <p> Form status {{ regForm.status | json}} </p>
 <p> Form status2 {{ regForm.pristine | json}} </p>

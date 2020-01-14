@@ -28,7 +28,6 @@ export class RevisarComponent implements OnInit {
   posiciones = [];
   mensajeError = '';
   url: string;
-  bahiaSelected = '1';
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -45,7 +44,7 @@ export class RevisarComponent implements OnInit {
     this.createFormGroup();
     this.cargarManiobra(id);
     this.reparaciones.removeAt(0);
-    this.coordenadas.removeAt(0);
+    this.historial.removeAt(0);
     this.ObtenCoordenadasDisponibles();
 
     this.url = '/maniobras';
@@ -75,7 +74,8 @@ export class RevisarComponent implements OnInit {
       reparacionesObservacion: [''],
       bahia: [''],
       posicion: [''],
-      coordenadas: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
+      // historial: this.fb.array([]),
+      historial: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
     });
   }
 
@@ -149,8 +149,8 @@ export class RevisarComponent implements OnInit {
   get posicion() {
     return this.regForm.get('posicion');
   }
-  get coordenadas() {
-    return this.regForm.get('coordenadas') as FormArray;
+  get historial() {
+    return this.regForm.get('historial') as FormArray;
   }
   /* #endregion */
 
@@ -225,6 +225,14 @@ export class RevisarComponent implements OnInit {
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
       this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
       this.regForm.controls['descargaAutorizada'].setValue(maniob.maniobra.descargaAutorizada);
+
+      if (maniob.maniobra.historial) {
+        maniob.maniobra.historial.forEach(element => {
+          this.historial.push(this.agregarArray(new Coordenada(element.bahia, element.posicion)));
+        });
+      } else {
+        this.regForm.controls['historial'].setValue(undefined);
+      }
       // if (this.descargaAutorizada.value === false) {
       //   this.hDescarga.disable();
       //   this.hSalida.disable();
@@ -252,15 +260,35 @@ export class RevisarComponent implements OnInit {
 
   guardaCambios() {
     if (this.regForm.valid) {
-      this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
-        this.regForm.markAsPristine();
-        if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
-          this.router.navigate([this.url]);
-        }
-        this.estatus.setValue(res.estatus);
-      }, error => {
-        this.mensajeError = error.error.mensaje;
-      });
+      var ultima = this.historial.value[this.historial.value.length - 1]
+      if (ultima) {
+        this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
+
+          if (c.maniobras) {
+            c.maniobras.push(this.regForm.get('_id').value);
+          } else {
+            c.maniobras = [];
+            c.maniobras.push(this.regForm.get('_id').value)
+          }
+          this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+          });
+        });
+      }
+
+      // this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {    
+      //   var ultima = this.historial.value[this.historial.value.length -1]
+
+      //   this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
+      //     this.coordenadaService.actualizaCoordenadaManiobras(c.coordenada);
+      //   }); 
+      //   this.regForm.markAsPristine();
+      //   if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
+      //     this.router.navigate([this.url]);
+      //   }
+      //   this.estatus.setValue(res.estatus);
+      // }, error => {
+      //   this.mensajeError = error.error.mensaje;
+      // });
     }
   }
 
@@ -280,50 +308,69 @@ export class RevisarComponent implements OnInit {
     })
   }
 
-
-
   addCoordenada(bahia: string, posicion: string): void {
     var coordenada = new Coordenada(bahia, posicion);
-    this.coordenadas.push(this.agregarArray(coordenada));
+    this.historial.push(this.agregarArray(coordenada));
     this.bahia.setValue('');
     this.posicion.setValue('');
   }
 
   quit(control: AbstractControl) {
     if (!control.valid) {
-      // this.regForm.controls[control.].setValue(response.body.data.nombres);
       control.setValue('');
     }
   }
 
   quitar(indice: number) {
-    this.coordenadas.removeAt(indice);
+    this.historial.removeAt(indice);
   }
 
+  /* #region  Array de Arrays Javi */
+  ////////////////////////////////////////////////////////
+  //https://stackblitz.com/edit/angular-dffny7?file=app%2Fapp.component.ts
+
+  // addNewHistorial() {
+  //   let control = <FormArray>this.regForm.controls.historial;
+  //   control.push(
+  //     this.fb.group({
+  //       // nested form array, you could also add a form group initially
+  //       coordenadas: this.fb.array([])
+  //     })
+  //   )
+  // }
+
+  // deleteHistorial(index) {
+  //   let control = <FormArray>this.regForm.controls.historial;
+  //   control.removeAt(index)
+  // }
+
+  // addNewCoordenada(control) {
+  //   control.push(
+  //     this.fb.group({
+  //       coordenada: ['']
+  //     }))
+  // }
+
+  // deleteCoordenada(control, index) {
+  //   control.removeAt(index)
+  // }
+
+  //////////////////////////////////////////////////////
+  /* #endregion */
+
   ObtenCoordenadasDisponibles() {
-    this.coordenadaService.getCoordenadasSinManiobra().subscribe(coordenadas => {
+    this.coordenadaService.getCoordenadasDisponibles().subscribe(coordenadas => {
       this.coordenadasDisponibles = coordenadas.coordenadas;
-      //console.log(coordenadas.coordenadas)
-      for (var g in this.coordenadasDisponibles) {  
-        this.bahias.push(g);  
-
-        // this.coordenadasDisponibles[g].forEach(c => {
-        //  var x = {
-        //     g: {
-        //       bahia: c.bahia,
-        //       posicion: c.posicion
-        //     }
-        //   }
-
-        //   this.posiciones.push(x);
-        // });
+      for (var g in this.coordenadasDisponibles) {
+        this.bahias.push(g);
       }
     });
   }
 
   obtenPosicionesXBahia(bahia) {
-    this.posiciones = undefined;
     this.posiciones = this.coordenadasDisponibles[bahia];
-    console.log(this.posiciones)
+
+    var tipoManiobra = this.tipo.value.toString().substring(0, 2)
+    this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
   }
 }

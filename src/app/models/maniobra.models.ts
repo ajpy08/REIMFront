@@ -40,6 +40,7 @@ export class Maniobra {
         public facturaManiobra?: string,
         public fAsignacionPapeleta?: string,
         public fExpiracionPapeleta?: string,
+        public historial?: [],
         public usuarioAlta?: string,
         public fAlta?: Date,
         public usuarioMod?: string,
