@@ -79,6 +79,12 @@
               <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
             </ng-container>
 
+
+            <ng-container matColumnDef="solicitud.blBooking">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="estatus">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
