@@ -10,7 +10,7 @@
   </div>
 </div>
 <div class="row animated fadeIn" *ngIf="!cargando">
-  <div class="col-12">
+  <div class="col-11">
     <div class="card">
       <div class="card-body">
         <div class="text-right">
@@ -30,7 +30,9 @@
         </div>
         <br>
         <div class="example-container mat-elevation-z8">
-          <mat-table #table [dataSource]="dataSource" matSort>
+        </div>
+        <div class="catalogo-container mat-elevation-z8">
+          <mat-table  class="mat-table-big" #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let buque">
