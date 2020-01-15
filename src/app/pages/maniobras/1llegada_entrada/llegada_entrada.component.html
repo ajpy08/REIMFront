@@ -117,6 +117,16 @@
             <div *ngIf="mensajeError" class="alert alert-danger">
               {{mensajeError}}
             </div>
+
+            <h4 class="box-title"><b>SELLO</b></h4>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <input matInput formControlName="sello" type="text" placeholder="Sello"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                </mat-form-field>
+              </div>
+            </div>
             <br>
             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
               <i class="fa fa-save"></i>
@@ -124,6 +134,9 @@
             </button>
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
+
+
+
           </form>
           <!-- <p>Form value {{ regForm.value | json }} </p> -->
         </div>
