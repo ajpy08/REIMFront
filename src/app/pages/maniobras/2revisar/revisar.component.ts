@@ -59,6 +59,7 @@ export class RevisarComponent implements OnInit {
       hLlegada: [{ value: '', disabled: true }],
       hEntrada: [{ value: '', disabled: true }],
       estatus: [{ value: '', disabled: true }],
+      sello:[{value: '', disable: true}],
       hSalida: [''],
       hDescarga: [''],
       descargaAutorizada: [{ value: '', disabled: true }],
