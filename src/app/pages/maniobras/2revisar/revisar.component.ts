@@ -339,7 +339,6 @@ export class RevisarComponent implements OnInit {
 
     var tmp = this.historial.value.filter(c => c.bahia == bahia && c.posicion == posicion);
 
-    console.log(tmp)
     if (tmp && tmp.length > 0) {
       swal('Ya se encuentra en esta coordenada', '', 'error');
     } else {
