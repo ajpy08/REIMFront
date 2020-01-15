@@ -240,27 +240,30 @@
                     </button>
                   </div>
                 </th>
-                <mat-error *ngIf="coordenadas.touched && coordenadas.invalid && !coordenadas.errors?.minlength">
-                  <sup>*</sup> Por Favor Ingresar correctamente una Coordenada
+                <th scope="col-3">
+                  <mat-form-field>
+                    <mat-label>Bahia</mat-label>
+                    <mat-select formControlName="bahia"
+                    (selectionChange)="obtenPosicionesXBahia( $event.value)">
+                      <mat-option *ngFor="let b of bahias" [value]="b">
+                        {{b}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <th scope="col-12">
+                  <mat-form-field>
+                    <mat-label>Posición</mat-label>
+                    <mat-select formControlName="posicion">
+                      <mat-option *ngFor="let p of posiciones" [value]="p.posicion">
+                        {{p.posicion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <mat-error *ngIf="historial.invalid && !historial.errors?.minlength">
+                  <sup>*</sup> Debes ingresar una Coordenada
                 </mat-error>
-                <th scope="col-12">
-                  <mat-form-field class="example-full-width">
-                    <input matInput formControlName="bahia" (selectionChange)='quit(bahia)' class="form-control" #bahia
-                      placeholder="Bahía">
-                  </mat-form-field>
-                  <mat-error *ngIf="regForm.get('bahia').touched && regForm.get('bahia').invalid">
-                    <sup>*</sup> Favor de ingresar correctamente una Bahía
-                  </mat-error>
-                </th>
-                <th scope="col-12">
-                  <mat-form-field class="example-full-width">
-                    <input matInput formControlName="posicion" (selectionChange)='quit(posicion)' class="form-control"
-                      #posicion placeholder="Posición">
-                  </mat-form-field>
-                  <mat-error *ngIf="regForm.get('posicion').touched && regForm.get('posicion').invalid">
-                    <sup>*</sup> Favor ingresar correctamente una Posición
-                  </mat-error>
-                </th>
               </tr>
               <tr class="info">
                 <th scope="col"></th>
@@ -271,7 +274,7 @@
 
               </tr>
             </thead>
-            <tbody formArrayName="coordenadas" *ngFor="let item of coordenadas.controls; let i = index;">
+            <tbody formArrayName="historial" *ngFor="let item of historial.controls; let i = index;">
               <tr [formGroupName]="i">
                 <td>
                   <button type="button" (click)="quitar( i )" class="btn btn-danger">
@@ -297,7 +300,8 @@
   <div *ngIf="mensajeError" class="alert alert-danger">
     {{mensajeError}}
   </div><br>
-  <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+  <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
+    [disabled]="!regForm.valid ">
     <i class="fa fa-save"></i>
     Guardar
   </button>
@@ -308,4 +312,7 @@
   <p> Form status2 {{ regForm.pristine | json}} </p>
   
 </form>
-<!-- <p>Form value {{ regForm.value | json }} </p> -->
+
+<p>Form value {{ regForm.value | json }} </p>
+<p> Form status {{ regForm.status | json}} </p>
+<p> Form status2 {{ regForm.pristine | json}} </p>
