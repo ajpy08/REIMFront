@@ -6,7 +6,7 @@ export class Coordenada {
         public posicion?: string,
         public tipo?: number,
         public activo?: boolean,
-        public maniobra?: Maniobra,
+        public maniobras?: Maniobra[],
         public _id?: string
     ) {} 
 }
