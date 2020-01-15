@@ -196,6 +196,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtLavadoReparacion.filterPredicate = this.Filtro();
 
       });
+      
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR)
       .subscribe(maniobras => {
         this.dtXCargar = new MatTableDataSource(maniobras.maniobras);
