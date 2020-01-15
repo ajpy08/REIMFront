@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../coordenada.service';
+import { Maniobra } from 'src/app/models/maniobra.models';
 
 @Component({
   selector: 'app-revisar',
@@ -28,6 +29,7 @@ export class RevisarComponent implements OnInit {
   posiciones = [];
   mensajeError = '';
   url: string;
+  maniobraGuardadaEnCoordenada;
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -230,6 +232,7 @@ export class RevisarComponent implements OnInit {
         maniob.maniobra.historial.forEach(element => {
           this.historial.push(this.agregarArray(new Coordenada(element.bahia, element.posicion)));
         });
+        this.maniobraGuardadaEnCoordenada = this.historial.value[this.historial.value.length - 1]
       } else {
         this.regForm.controls['historial'].setValue(undefined);
       }
@@ -260,35 +263,58 @@ export class RevisarComponent implements OnInit {
 
   guardaCambios() {
     if (this.regForm.valid) {
+      //Elimino la maniobra que tenia guardada mi coordenada para despues agregar la maniobra actual
+      //a la ultima coordenada del array.
+
+      if (this.maniobraGuardadaEnCoordenada) {
+        this.coordenadaService.getCoordenada(this.maniobraGuardadaEnCoordenada.bahia,
+          this.maniobraGuardadaEnCoordenada.posicion).subscribe(c => {
+            if (c.maniobras) {
+              c.maniobras.forEach(m => {
+                if (m.maniobra == this.regForm.get('_id').value) {
+                  var indice = c.maniobras.indexOf(m); // obtenemos el indice
+                  c.maniobras.splice(indice, 1);
+                }
+              });
+            }
+
+            this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+            }, error => {
+              this.mensajeError = error.error.mensaje;
+            });
+          });
+      }
+
       var ultima = this.historial.value[this.historial.value.length - 1]
       if (ultima) {
         this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
 
+          var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
           if (c.maniobras) {
-            c.maniobras.push(this.regForm.get('_id').value);
+            c.maniobras.push({ maniobra });
           } else {
             c.maniobras = [];
-            c.maniobras.push(this.regForm.get('_id').value)
+            c.maniobras.push({ maniobra })
           }
+
           this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+          }, error => {
+            this.mensajeError = error.error.mensaje;
           });
         });
       }
 
-      // this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {    
-      //   var ultima = this.historial.value[this.historial.value.length -1]
+      this.maniobraGuardadaEnCoordenada = ultima;
 
-      //   this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
-      //     this.coordenadaService.actualizaCoordenadaManiobras(c.coordenada);
-      //   }); 
-      //   this.regForm.markAsPristine();
-      //   if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
-      //     this.router.navigate([this.url]);
-      //   }
-      //   this.estatus.setValue(res.estatus);
-      // }, error => {
-      //   this.mensajeError = error.error.mensaje;
-      // });
+      this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
+        this.regForm.markAsPristine();
+        if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
+          this.router.navigate([this.url]);
+        }
+        this.estatus.setValue(res.estatus);
+      }, error => {
+        this.mensajeError = error.error.mensaje;
+      });
     }
   }
 
@@ -310,9 +336,17 @@ export class RevisarComponent implements OnInit {
 
   addCoordenada(bahia: string, posicion: string): void {
     var coordenada = new Coordenada(bahia, posicion);
-    this.historial.push(this.agregarArray(coordenada));
-    this.bahia.setValue('');
-    this.posicion.setValue('');
+
+    var tmp = this.historial.value.filter(c => c.bahia == bahia && c.posicion == posicion);
+
+    console.log(tmp)
+    if (tmp && tmp.length > 0) {
+      swal('Ya se encuentra en esta coordenada', '', 'error');
+    } else {
+      this.historial.push(this.agregarArray(coordenada));
+      this.bahia.setValue('');
+      this.posicion.setValue('');
+    }
   }
 
   quit(control: AbstractControl) {
@@ -369,7 +403,7 @@ export class RevisarComponent implements OnInit {
 
   obtenPosicionesXBahia(bahia) {
     this.posiciones = this.coordenadasDisponibles[bahia];
-
+    console.log(this.posiciones)
     var tipoManiobra = this.tipo.value.toString().substring(0, 2)
     this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
   }
