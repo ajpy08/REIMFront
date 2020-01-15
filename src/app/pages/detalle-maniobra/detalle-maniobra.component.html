@@ -214,12 +214,13 @@
                 (focus)="ponHoraFinLavado()">
             </mat-form-field>
             <br>
-            <button *ngIf="lavado.value" type="button" (click)="open(_id.value, 'fotos_lavado')" class="btn btn-primary">
+            <button *ngIf="lavado.value" type="button" (click)="open(_id.value, 'fotos_lavado')"
+              class="btn btn-primary">
               <i class="fas fa-camera-retro"></i>
               Fotos Lavado
             </button>
           </div>
-          
+
         </div>
         <!-- <br>
         <h4 class="box-title"><b>Cotizaciones de Lavado de Terceros</b></h4><br>
@@ -408,6 +409,16 @@
             </mat-form-field>
           </div>
         </div><br><br>
+
+        <h4 class="box-title"><b>SELLO</b></h4>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field>
+              <input matInput formControlName="sello" type="text" placeholder="Sello"
+                onkeyup="javascript:this.value=this.value.toUpperCase();">
+            </mat-form-field>
+          </div>
+        </div>
         <!-- <h4 class="box-title"><b>Cotizaciones de Reparación de Terceros</b></h4><br>
         <div class="row">
           <div class="col-md">

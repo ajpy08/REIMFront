@@ -72,7 +72,7 @@ export class DetalleManiobraComponent implements OnInit {
     private agenciaService: AgenciaService, private transportistaService: TransportistaService,
     private camionService: CamionService, private usuarioService: UsuarioService, private location: Location,
     private activatedRoute: ActivatedRoute, private fb: FormBuilder, private datePipe: DatePipe, private router: Router,
-    private _reparacionService: ReparacionService, private _maniobraService : ManiobraService) { }
+    private _reparacionService: ReparacionService, private _maniobraService: ManiobraService) { }
 
   ngOnInit() {
     if (this.usuarioService.usuario.role != ROLES.ADMIN_ROLE) {
@@ -104,7 +104,7 @@ export class DetalleManiobraComponent implements OnInit {
       cliente: [''],
       agencia: [{ value: '', disabled: true }],
       transportista: [{ value: '', disabled: true }, [Validators.required]],
-      camion: [ '', [Validators.required]],
+      camion: ['', [Validators.required]],
       operador: ['', [Validators.required]],
       fLlegada: [''],
       hLlegada: [{ value: this.datePipe.transform(new Date(), 'HH:mm') }],
@@ -114,6 +114,7 @@ export class DetalleManiobraComponent implements OnInit {
       descargaAutorizada: [{ value: '', disabled: true }],
       facturaManiobra: [{ value: { value: '', disabled: true }, disabled: true }],
       grado: [''],
+      sello: [''],
       lavado: [''],
       lavadoObservacion: [''],
       reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
@@ -218,6 +219,12 @@ export class DetalleManiobraComponent implements OnInit {
       } else {
         this.regForm.controls['hFinLavado'].setValue(undefined);
       }
+      if (maniob.maniobra.sello){
+        this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
+      } else {
+        this.regForm.controls['sello'].setValue(undefined);
+      }
+
       if (maniob.maniobra.reparaciones) {
         maniob.maniobra.reparaciones.forEach(element => {
           this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
@@ -327,7 +334,7 @@ export class DetalleManiobraComponent implements OnInit {
   //   // this.location.back();
   // }
 
-  guardaCambios(){
+  guardaCambios() {
     if (this.regForm.valid) {
       this._maniobraService.actualizaDetalleManiobra(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
@@ -422,6 +429,9 @@ export class DetalleManiobraComponent implements OnInit {
   }
   get hEntrada() {
     return this.regForm.get('hEntrada');
+  }
+  get sello() {
+    return this.regForm.get('sello');
   }
 
   get lavado() {
