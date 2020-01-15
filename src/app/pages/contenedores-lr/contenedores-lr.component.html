@@ -48,9 +48,9 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="naviera">
+                <ng-container matColumnDef="viaje.naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
@@ -64,9 +64,9 @@
                   <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="estado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus  &nbsp; &nbsp; &nbsp; &nbsp;</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="cliente">
@@ -177,7 +177,7 @@
                   </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="naviera">
+                <ng-container matColumnDef="viaje.naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef>Naviera</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.naviera.nombreComercial}} </mat-cell>
                 </ng-container>
@@ -193,9 +193,9 @@
                   <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="estado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.estado}} </mat-cell>
+                <ng-container matColumnDef="estatus">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="cliente">

@@ -28,8 +28,8 @@ export class ContenedoresLRComponent implements OnInit {
   fechaLlegadaInicio: string;
   fechaLlegadaFin: string
 
-  displayedColumnsLavado = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
-  displayedColumnsReparacion = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+  displayedColumnsLavado = ['viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+  displayedColumnsReparacion = ['viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
   dataSourceLavados: any;
   dataSourceReparaciones: any;
 
@@ -47,11 +47,11 @@ export class ContenedoresLRComponent implements OnInit {
 
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.displayedColumnsLavado = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
-      this.displayedColumnsReparacion = ['actions', 'naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsLavado = ['actions', 'viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estatus', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsReparacion = ['actions', 'viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estatus', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     } else {
-      this.displayedColumnsLavado = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
-      this.displayedColumnsReparacion = ['naviera', 'contenedor', 'tipo', 'estado', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsLavado = ['viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estatus', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
+      this.displayedColumnsReparacion = ['viaje.naviera.nombreComercial', 'contenedor', 'tipo', 'estatus', 'cliente', 'aa', 'lavado', 'fotoslavado', 'reparaciones', 'fotosreparacion', 'grado'];
     }
     let indexTAB = localStorage.getItem("L/R");
     if (indexTAB) {

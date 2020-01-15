@@ -32,7 +32,7 @@
         </div>
         <div class="catalogo-container mat-elevation-z8">
           <table mat-table class="catalogo-table catalogo-table-big"  #table [dataSource]="dataSource" matSort>
-            <ng-container matColumnDef="actions" sticky>
+            <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef> Actions </th>
               <mat-cell *matCellDef="let agencia">
                 <button  matTooltip="Editar Agencia" [routerLink]="['/agencias/agencia', agencia._id ]" class="btn btn-primary m-r-5">

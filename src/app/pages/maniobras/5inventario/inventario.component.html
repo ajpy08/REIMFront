@@ -25,10 +25,10 @@
         <div class="card">
           <div class="card-body">
             <div class="text-right">
-              <!-- <button matTooltip="Ver Mapa" type="button" class="btn btn-primary m-r-5"  [routerLink]="['/mapa/']">
+              <button matTooltip="Ver Mapa" type="button" class="btn btn-primary m-r-5"  [routerLink]="['/mapa/']">
                 <i class="fa fa-map-marker" aria-hidden="true"></i>
   
-              </button> -->
+              </button>
               <button (click)="exportAsXLSX(dataSource, 'Contenedores Disponibles')" class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i> 
               </button>
@@ -51,12 +51,12 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="nombre">
                   <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="fVigenciaTemporal">
@@ -223,7 +223,7 @@
 
                       <ng-container matColumnDef="nombre">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
@@ -339,7 +339,7 @@
 
                       <ng-container matColumnDef="nombre">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.buque.nombre}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
