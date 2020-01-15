@@ -56,6 +56,7 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('pagLR', { read: MatPaginator }) pagLR: MatPaginator;
   @ViewChild('pagXCargar', { read: MatPaginator }) pagXCargar: MatPaginator;
   @ViewChild('pagXAprobar', { read: MatPaginator }) pagXAprobar: MatPaginator;
+  @ViewChild('pagTransito', { read: MatPaginator }) pagTransito: MatPaginator;
 
 
 
@@ -65,6 +66,7 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild('sortLR') sortLR: MatSort;
   @ViewChild('sortXCargar') sortXCargar: MatSort;
   @ViewChild('sortXAprobar') sortXAprobar: MatSort;
+  @ViewChild('sortTransito') sortTransito: MatSort;
 
 
   constructor(public _maniobraService: ManiobraService, private usuarioService: UsuarioService,
@@ -139,7 +141,7 @@ export class ManiobrasComponent implements OnInit {
   }
 
   cargarManiobras() {
-    this.cargando = true;
+
     this._maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO)
       .subscribe(maniobras => {
         this.dtTransito = new MatTableDataSource(maniobras.maniobras);
@@ -147,8 +149,8 @@ export class ManiobrasComponent implements OnInit {
           if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           return item[property];
         };
-        this.dtTransito.sort = this.sort;
-        this.dtTransito.paginator = this.paginator;
+        this.dtTransito.sort = this.sortTransito;
+        this.dtTransito.paginator = this.pagTransito;
         this.totalTransito = maniobras.total;
         this.dtTransito.filterPredicate = this.Filtro();
       });
@@ -261,9 +263,10 @@ export class ManiobrasComponent implements OnInit {
         (data.folio ? data.folio : '') +
         data.tipo.toLowerCase() +
         data.peso.toLowerCase() +
+        (data.viaje? data.viaje.naviera.nombreComercial.toLowerCase(): '') +
         (data.viaje ? data.viaje.viaje.toLowerCase() : '') +
         (data.cliente ? data.cliente.nombreComercial.toLowerCase() : '') +
-        (data.viaje ? data.viaje.buque.nombre.toLowerCase() : '') +
+        // (data.viaje ? data.viaje.buque.nombre.toLowerCase() : '') +
         (data.agencia ? data.agencia.nombreComercial.toLowerCase() : '');
       return dataStr.indexOf(filter) != -1;
     }

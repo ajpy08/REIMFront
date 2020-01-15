@@ -68,10 +68,10 @@
           <p class="form-control-static"> {{estatus.value}} </p>
         </div>
 
-        <!-- <div class="col-md-8">
-          <h4>Sello</h4>
-        <p class="form-control-static">{{sello.value}}</p>
-        </div> -->
+        <div class="col-md-2">
+          <h4>Sello:</h4>
+        <p class="form-control-static"> {{sello.value}} </p>
+        </div>
       </div>
     </mat-expansion-panel>
 
@@ -303,6 +303,9 @@
   </button>
   <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
   <!-- <a routerLink="/maniobras" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
-
+  <p>Form value {{ regForm.value | json }} </p>
+  <p> Form status {{ regForm.status | json}} </p>
+  <p> Form status2 {{ regForm.pristine | json}} </p>
+  
 </form>
 <!-- <p>Form value {{ regForm.value | json }} </p> -->
