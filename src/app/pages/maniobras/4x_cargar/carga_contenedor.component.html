@@ -105,6 +105,15 @@
             </div>
 
             <div class="form-group has-success">
+              <label class="control-label"><b>SELLO</b></label>
+                <mat-form-field>
+                  <input matInput formControlName="sello"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                </mat-form-field>
+
+            </div>
+
+            <div class="form-group has-success">
               <label class="control-label"><b>ASIGNA CONTENEDOR</b></label>
                 <!-- <mat-select type="text" placeholder="Seleccione un Contenedor" (selectionChange)="cargaContenedor($event.value) ">
                   <mat-option *ngFor=" let cont of contenedores " [value]="cont ">

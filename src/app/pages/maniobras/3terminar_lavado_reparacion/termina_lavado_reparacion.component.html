@@ -118,7 +118,7 @@
                 </button> -->
                 <button type="button" *ngIf="lavado.value" (click)="open(_id.value, 'fotos_lavado')"
                   class="btn btn-primary">
-                <i class="fas fa-camera-retro"></i>Fotos
+                  <i class="fas fa-camera-retro"></i>Fotos
                 </button>
               </div>
             </div>
@@ -206,10 +206,11 @@
                   <i class="fas fa-camera-retro"></i>
                   Fotos Reparacion
                 </button> -->
-                <button type="button" *ngIf="reparaciones.value.length > 0" (click)="open(_id.value, 'fotos_reparacion')" class="btn btn-primary">
+                <button type="button" *ngIf="reparaciones.value.length > 0"
+                  (click)="open(_id.value, 'fotos_reparacion')" class="btn btn-primary">
                   <i class="fas fa-camera-retro"></i>
                   Fotos
-                  </button>
+                </button>
               </div>
             </div>
             <div class="row">
@@ -223,7 +224,16 @@
                   </mat-select>
                 </mat-form-field>
               </div>
+              <div class="col-md-3">
+                <mat-form-field>
+                  <input matInput formControlName="sello" type="text" placeholder="Sello"
+                    onkeyup="javascript:this.value=this.value.toUpperCase();">
+                </mat-form-field>
+              </div>
             </div>
+
+
+
             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
               <i class="fa fa-save"></i>
               Guardar
