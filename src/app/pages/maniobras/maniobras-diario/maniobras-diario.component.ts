@@ -55,7 +55,7 @@ export class ManiobrasDiarioComponent implements OnInit {
 
   displayedColumns = ['actions', 'fechaingreso', 'cargaDescarga', 'contenedor','viaje.naviera.nombreComercial','solicitud.blBooking', 'grado', 'tipo',  
     'operador', 'placa', 'transportista', 'lavado', 'reparaciones', 'viaje',
-    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+    'viaje.buque.nombre', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -73,7 +73,7 @@ export class ManiobrasDiarioComponent implements OnInit {
   consultaManiobras() {
     this.cargando = true;
     return new Promise((resolve, reject) => {
-      this._maniobraService.getManiobras(null, null, null, null, null, null, null, null, null,
+      this._maniobraService.getManiobras(null, null, null, null, null, null,null, null, null, null,
         this.fIniLlegada ? this.fIniLlegada.utc().format('DD-MM-YYYY') : '',
         this.fFinLlegada ? this.fFinLlegada.utc().format('DD-MM-YYYY') : '')
         .subscribe(maniobras => {
@@ -155,15 +155,16 @@ export class ManiobrasDiarioComponent implements OnInit {
         FLlegada: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : '',
         Operador: m.operador,
         Placa: m.camion != undefined ? m.camion.placa : '',
-        Transportista: m.transportista,
+        Transportista: m.transportista && m.transportista.nombreComercial && m.transportista.nombreComercial != undefined && m.transportista.nombreComercial != '' ? m.transportista.nombreComercial: '' && m.transportista.nombreComercial,
         Reparaciones: m.reparaciones,
         ReparacionesObservacion: m.reparacionesObservacion,
         FacturaManiobra: m.facturaManiobra,
-        Viaje: m.viaje,
-        Buque: m.viaje != undefined ? m.viaje.buque : '',
+        Viaje: m.viaje && m.viaje.viaje && m.viaje != undefined && m.viaje.viaje != ''? m.viaje.viaje: '' && m.viaje.viaje,
+        Buque: m.viaje && m.viaje.buque.nombre && m.viaje.buque.nombre != undefined && m.viaje.buque.nombre != '' ? m.viaje.buque.nombre: '' && m.viaje.buque.nombre,
         Peso: m.peso,
-        Cliente: m.cliente,
-        Agencia: m.agencia,
+        Naviera: m.viaje && m.viaje.naviera.nombreComercial && m.viaje.naviera.nombreComercial != undefined && m.viaje.naviera.nombreComercial != '' ? m.viaje.naviera.nombreComercial: '' && m.viaje.naviera.nombreComercial,
+        Cliente: m.cliente && m.cliente.nombreComercial && m.cliente.nombreComercial != undefined && m.cliente.nombreComercial != '' && m.cliente.nombreComercial,
+        Agencia: m.agencia && m.agencia.nombreComercial && m.agencia.nombreComercial != undefined && m.agencia.nombreComercial != '' && m.agencia.nombreComercial,
         Estatus: m.estatus,
         HDescarga: m.hDescarga,
         FAlta: m.fAlta.substring(0, 10)
