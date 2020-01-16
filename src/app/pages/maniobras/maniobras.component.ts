@@ -313,6 +313,7 @@ export class ManiobrasComponent implements OnInit {
         Peso: d.peso,
         Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
         Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
+        Sello: d.sello,
 
       }
       this.maniobrasExcel.push(maniobras);
@@ -383,6 +384,7 @@ export class ManiobrasComponent implements OnInit {
         Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,
         Agencia: d.agencia && d.agencia.nombreComercial && d.agencia.nombreComercial != undefined && d.agencia.nombreComercial != '' && d.agencia.nombreComercial,
         Grado: d.grado,
+        Sello: d.sello,
         lavado: d.lavado,
 
       }
@@ -416,6 +418,7 @@ export class ManiobrasComponent implements OnInit {
         lavado: d.lavado,
         Reparacion: d.reparaciones,
         Grado: d.grado,
+        Sello: d.sello,
       }
       this.maniobrasExcel.push(maniobras);
     });
@@ -438,6 +441,7 @@ export class ManiobrasComponent implements OnInit {
         Folio: d.folio,
         Transportista: d.transportista && d.transportista.nombreComercial && d.transportista.nombreComercial != undefined && d.transportista.nombreComercial != '' && d.transportista.nombreComercial,
         Grado: d.grado,
+        Sello: d.sello,
         Tipo: d.tipo,
         Peso: d.peso,
         Cliente: d.cliente && d.cliente.nombreComercial && d.cliente.nombreComercial != undefined && d.cliente.nombreComercial != '' && d.cliente.nombreComercial,

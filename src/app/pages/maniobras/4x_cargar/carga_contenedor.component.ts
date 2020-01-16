@@ -118,6 +118,7 @@ export class CargaContenedorComponent implements OnInit {
       maniobraAsociada: [''],
       hSalida: [''],
       hDescarga: [''],
+      sello: [{ value:'', disabled: true}],
       estatus: [{ value: '', disabled: true }],
       folio: [{ value: '', disabled: true }],
       blBooking: [{ value: '', disabled: true }],
@@ -149,6 +150,9 @@ export class CargaContenedorComponent implements OnInit {
   }
   get maniobraAsociada() {
     return this.regForm.get('maniobraAsociada');
+  }
+  get sello(){
+    return this.regForm.get('sello');
   }
   get estatus() {
     return this.regForm.get('estatus');
@@ -207,6 +211,7 @@ export class CargaContenedorComponent implements OnInit {
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
       this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
+      this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
       if (maniob.maniobra.transportista) {
         this.cargaOperadores(maniob.maniobra.transportista);
       }
