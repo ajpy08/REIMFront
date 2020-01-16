@@ -34,8 +34,8 @@ export class CoordenadaService {
     return this.http.get(url, { params: params });
   }
   bahia_posicion
-  getCoordenadasDisponibles(): Observable<any> {
-    const url = URL_SERVICIOS + '/coordenadas/disponibles';       
+  getCoordenadasDisponibles(maniobra?: string): Observable<any> {
+    const url = URL_SERVICIOS + '/coordenadas/disponibles/?maniobra=' + maniobra;       
     return this.http.get(url);
   }
 

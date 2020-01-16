@@ -47,7 +47,7 @@ export class RevisarComponent implements OnInit {
     this.cargarManiobra(id);
     this.reparaciones.removeAt(0);
     this.historial.removeAt(0);
-    this.ObtenCoordenadasDisponibles();
+    this.ObtenCoordenadasDisponibles(id);
 
     this.url = '/maniobras';
   }
@@ -392,8 +392,8 @@ export class RevisarComponent implements OnInit {
   //////////////////////////////////////////////////////
   /* #endregion */
 
-  ObtenCoordenadasDisponibles() {
-    this.coordenadaService.getCoordenadasDisponibles().subscribe(coordenadas => {
+  ObtenCoordenadasDisponibles(maniobra?: string) {
+    this.coordenadaService.getCoordenadasDisponibles(maniobra).subscribe(coordenadas => {
       this.coordenadasDisponibles = coordenadas.coordenadas;
       for (var g in this.coordenadasDisponibles) {
         this.bahias.push(g);
@@ -403,7 +403,6 @@ export class RevisarComponent implements OnInit {
 
   obtenPosicionesXBahia(bahia) {
     this.posiciones = this.coordenadasDisponibles[bahia];
-    console.log(this.posiciones)
     var tipoManiobra = this.tipo.value.toString().substring(0, 2)
     this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
   }
