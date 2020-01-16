@@ -31,7 +31,7 @@ export class ManiobraService {
   }
 
   getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string, viaje?: string,
-    peso?: string, lavado?: boolean, reparacion?: boolean, naviera?: string, fIniLlegada?: string, fFinLlegada?: string): Observable<any> {
+    peso?: string, lavado?: boolean, reparacion?: boolean, naviera?: string, buque?: string, fIniLlegada?: string, fFinLlegada?: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/';
     let params = new HttpParams();
     if (cargadescarga) {
@@ -45,6 +45,9 @@ export class ManiobraService {
     }
     if (contenedor) {
       params = params.append('contenedor', contenedor);
+    }
+    if (buque) {
+      params = params.append('buque', buque);
     }
     if (viaje) {
       params = params.append('viaje', viaje);
