@@ -277,55 +277,57 @@ export class RevisarComponent implements OnInit {
                   c.maniobras.splice(indice, 1);
                 }
               });
+
+              this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+              }, error => {
+                this.mensajeError = error.error.mensaje;
+              });
             }
-            this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
-            }, error => {
-              this.mensajeError = error.error.mensaje;
-            });
-
-
 
             var ultima = this.historial.value[this.historial.value.length - 1]
             if (ultima) {
               this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
 
-                var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
-                if (c.maniobras) {
-                  c.maniobras.push({ maniobra });
-                } else {
-                  c.maniobras = [];
-                  c.maniobras.push({ maniobra })
-                }
+                if (c) {
+                  var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
+                  if (c.maniobras) {
+                    c.maniobras.push({ maniobra });
+                  } else {
+                    c.maniobras = [];
+                    c.maniobras.push({ maniobra })
+                  }
 
-                this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
-                }, error => {
-                  this.mensajeError = error.error.mensaje;
-                });
+                  this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+                  }, error => {
+                    this.mensajeError = error.error.mensaje;
+                  });
+                }
               });
             }
-
-            this.maniobraGuardadaEnCoordenada = ultima;
           });
       } else {
         var ultima = this.historial.value[this.historial.value.length - 1]
         if (ultima) {
           this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
+            if (c) {
+              var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
+              if (c.maniobras) {
+                c.maniobras.push({ maniobra });
+              } else {
+                c.maniobras = [];
+                c.maniobras.push({ maniobra })
+              }
 
-            var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
-            if (c.maniobras) {
-              c.maniobras.push({ maniobra });
-            } else {
-              c.maniobras = [];
-              c.maniobras.push({ maniobra })
+              this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+              }, error => {
+                this.mensajeError = error.error.mensaje;
+              });
             }
-
-            this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
-            }, error => {
-              this.mensajeError = error.error.mensaje;
-            });
           });
         }
       }
+
+      this.maniobraGuardadaEnCoordenada = ultima;
 
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
@@ -357,50 +359,54 @@ export class RevisarComponent implements OnInit {
   }
 
   addCoordenada(bahia: string, posicion: string): void {
-
-    var cordenadaActual = this.historial.value[this.historial.value.length - 1]
+    var coordenadaActual = this.historial.value[this.historial.value.length - 1]
     var ocupadoActual = 0;
-    this.coordenadaService.getCoordenada(cordenadaActual.bahia, cordenadaActual.posicion).subscribe(c => {
-      if (c.maniobras && c.maniobras.length > 0) {
-        c.maniobras.forEach(m => {
-          ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
-        });
-      }
-    });
-
-
-
-    var tiene = false;
-    var letraPosicion = cordenadaActual.posicion.substring(0, 1);
-    var nivelPosicion = cordenadaActual.posicion.substring(1, cordenadaActual.posicion.length)
-
-    var coordenadaSig = new Coordenada(cordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
-    this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
-      if (c && c.maniobras && c.maniobras.length > 0) {
-        c.maniobras.forEach(m => {
-          var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
-          if (ocupadoActual <= restante) {
-            tiene = true;
-          }
-        });
-      };
-
-      if (tiene) {
-        swal('No puedes agregar esta coordenada por que la posición (Bahía: ' + cordenadaActual.bahia + ' Posición: ' + cordenadaActual.posicion + ') contiene contenedores en sus niveles superiores', '', 'error');
-      } else {
-        var coordenada = new Coordenada(bahia, posicion);
-        var tmp = this.historial.value.filter(c => c.bahia == bahia && c.posicion == posicion);
-
-
-        if (cordenadaActual.bahia == bahia && cordenadaActual.posicion == posicion) {
-          swal('Ya se encuentra en esta coordenada', '', 'error');
-        } else {
-          this.historial.push(this.agregarArray(coordenada));
-          this.bahia.setValue('');
-          this.posicion.setValue('');
+    if (coordenadaActual) {
+      this.coordenadaService.getCoordenada(coordenadaActual.bahia, coordenadaActual.posicion).subscribe(c => {
+        if (c && c.maniobras && c.maniobras.length > 0) {
+          c.maniobras.forEach(m => {
+            ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
+          });
         }
-      }
-    });    
+      });
+
+      var tiene = false;
+      var letraPosicion = coordenadaActual.posicion.substring(0, 1);
+      var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
+
+      var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
+      this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
+        if (c && c.maniobras && c.maniobras.length > 0) {
+          c.maniobras.forEach(m => {
+            var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
+            if (ocupadoActual <= restante) {
+              tiene = true;
+            }
+          });
+        };
+
+        if (tiene) {
+          swal('No puedes agregar esta coordenada por que la posición (Bahía: ' + coordenadaActual.bahia + ' Posición: ' + coordenadaActual.posicion + ') contiene contenedores en sus niveles superiores', '', 'error');
+        } else {
+          var coordenada = new Coordenada(bahia, posicion);
+          var tmp = this.historial.value.filter(c => c.bahia == bahia && c.posicion == posicion);
+
+
+          if (coordenadaActual.bahia == bahia && coordenadaActual.posicion == posicion) {
+            swal('Ya se encuentra en esta coordenada', '', 'error');
+          } else {
+            this.historial.push(this.agregarArray(coordenada));
+            this.bahia.setValue('');
+            this.posicion.setValue('');
+          }
+        }
+      });
+    } else {
+      var coordenada = new Coordenada(bahia, posicion);
+      this.historial.push(this.agregarArray(coordenada));
+      this.bahia.setValue('');
+      this.posicion.setValue('');
+    }
   }
 
   quit(control: AbstractControl) {
@@ -410,10 +416,10 @@ export class RevisarComponent implements OnInit {
   }
 
   quitar(indice: number) {
-    var cordenadaActual = this.historial.value[indice];
+    var coordenadaActual = this.historial.value[indice];
     var ocupadoActual = 0;
-    this.coordenadaService.getCoordenada(cordenadaActual.bahia, cordenadaActual.posicion).subscribe(c => {
-      if (c.maniobras && c.maniobras.length > 0) {
+    this.coordenadaService.getCoordenada(coordenadaActual.bahia, coordenadaActual.posicion).subscribe(c => {
+      if (c && c.maniobras && c.maniobras.length > 0) {
         c.maniobras.forEach(m => {
           ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
         });
@@ -421,12 +427,12 @@ export class RevisarComponent implements OnInit {
     });
 
     var tiene = false;
-    var letraPosicion = cordenadaActual.posicion.substring(0, 1);
-    var nivelPosicion = cordenadaActual.posicion.substring(1, cordenadaActual.posicion.length)
+    var letraPosicion = coordenadaActual.posicion.substring(0, 1);
+    var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
 
-    var coordenadaSig = new Coordenada(cordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
+    var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
     this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
-      if (c.maniobras && c.maniobras.length > 0) {
+      if (c && c.maniobras && c.maniobras.length > 0) {
         c.maniobras.forEach(m => {
           var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
           if (ocupadoActual <= restante) {
