@@ -143,6 +143,35 @@ export class FacturacionManiobrasComponent implements OnInit {
     }
   }
 
+  consulta(){
+    this.consultaManiobrasVacios().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedVacios) {
+        this.filtraManiobrasDescargaVacios(this.checkedVacios);
+        if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+        }
+      }
+    });
+
+    this.consultaManiobrasLavadoVacios().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedLavadoVacios) {
+        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+        if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+        }
+      }
+    });
+
+    this.consultaManiobrasReparacionVacios().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedReparacionVacios) {
+        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+        if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+        }
+      }
+    });
+  }
+
   consultaManiobrasVacios() {
     return new Promise((resolve, reject) => {
 
@@ -181,7 +210,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getOtrasManiobras(null, this.viajeLavado, "VACIO", true, false)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", true, false)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceLavadoVacios.sort = this.MatSortLavado;
@@ -208,7 +237,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getOtrasManiobras(null, this.viajeReparacion, "VACIO", false, true)
+      this._maniobraService.getOtrasManiobras(null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.MatSortReparacion;

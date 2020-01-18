@@ -157,6 +157,35 @@ export class VaciosComponent implements OnInit {
     }
   }
 
+  consulta() {
+    this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedVacios) {
+        this.filtraManiobrasDescargaVacios(this.checkedVacios);
+        if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
+        }
+      }
+    });
+
+    this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedLavadoVacios) {
+        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+        if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
+        }
+      }
+    });
+
+    this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
+      if (value.ok && this.checkedReparacionVacios) {
+        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+        if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
+          this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
+        }
+      }
+    });
+  }
+
   consultaManiobrasDescargaVacios() {
     return new Promise((resolve, reject) => {
       let cargaDescarga = "D";
@@ -217,7 +246,7 @@ export class VaciosComponent implements OnInit {
       //   cargaDescarga = this.CD;
       // }
 
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viajeReparacion, "VACIO", false, true)
+      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.MatSortReparacion;

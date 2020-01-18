@@ -23,7 +23,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consultaManiobrasDescargaVacios()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -136,7 +136,7 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
@@ -226,7 +226,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consultaManiobrasDescargaVaciosLavado()" [(ngModel)]="viajeLavado" [(ngModel)]="viajeLavado" placeholder="Seleccione un viaje" name="viajeLavado">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viajeLavado">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -331,7 +331,7 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
@@ -420,7 +420,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consultaManiobrasDescargaVaciosReparacion()" [(ngModel)]="viajeReparacion" placeholder="Seleccione un viaje" name="viajeReparacion">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viajeReparacion">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -528,12 +528,12 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="buque">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.buque?.nombre}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="peso">
