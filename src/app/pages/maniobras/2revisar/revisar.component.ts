@@ -95,6 +95,10 @@ export class RevisarComponent implements OnInit {
   get peso() {
     return this.regForm.get('peso');
   }
+
+  get sello(){
+    return this.regForm.get('sello');
+  }
   get cliente() {
     return this.regForm.get('cliente');
   }
@@ -196,7 +200,7 @@ export class RevisarComponent implements OnInit {
         this.regForm.controls['operador'].setValue(maniob.maniobra.operador.nombre);
       }
 
-
+      this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);

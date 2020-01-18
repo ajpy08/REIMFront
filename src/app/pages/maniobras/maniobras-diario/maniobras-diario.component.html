@@ -135,9 +135,9 @@
               <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="buque">
-              <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+            <ng-container matColumnDef="viaje.buque.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row.viaje?.buque?.nombre}}</mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="peso">

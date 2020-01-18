@@ -1931,23 +1931,23 @@ export class MapaComponent implements OnInit {
 
     this.point = new Uint32Array([10, 520, 22, 55]);
     this.coordenada = new Coordenada('17', 'A2', undefined, undefined, undefined)
-    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
+    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada,"orientacion": "V" });
 
     this.point = new Uint32Array([34, 520, 22, 55]);
     this.coordenada = new Coordenada('17', 'B2', undefined, undefined, undefined)
-    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
+    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada, "orientacion": "V" });
 
     this.point = new Uint32Array([58, 520, 22, 55]);
     this.coordenada = new Coordenada('17', 'C2', undefined, undefined, undefined)
-    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
+    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada, "orientacion": "V" });
 
     this.point = new Uint32Array([82, 520, 22, 55]);
     this.coordenada = new Coordenada('17', 'D2', undefined, undefined, undefined)
-    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
+    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada, "orientacion": "V" });
 
     this.point = new Uint32Array([106, 520, 22, 55]);
     this.coordenada = new Coordenada('17', 'E2', undefined, undefined, undefined)
-    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada });
+    this.arrayClamped.push({ "point": this.point, "coordenada": this.coordenada,"orientacion": "V" });
 
     this.ctx.font = "20px Arial";
     this.ctx.fillText("17", 135, 550);
@@ -3066,6 +3066,7 @@ export class MapaComponent implements OnInit {
                   this.ctx.fillRect(c.x, c.y, c.an, c.al);
                   this.ctx.fillStyle = 'rgb(250,250,251)';
                   this.ctx.font = "bold 11px sans-serif";
+
                   this.ctx.fillText(c.coordenada.posicion, c.x + 4, c.y + 30);
                   this.ctx.rect(c.x, c.y, c.an, c.al);
                   this.ctx.stroke();
@@ -3081,6 +3082,7 @@ export class MapaComponent implements OnInit {
                 }
 
               }
+
 
 
 
@@ -3183,6 +3185,7 @@ export class MapaComponent implements OnInit {
                 }
 
               }
+
 
 
 

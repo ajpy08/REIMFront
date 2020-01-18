@@ -76,6 +76,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       hEntrada: [{ value: '', disabled: true }],
       hSalida: [{ value: '', disabled: true }],
       lavado: [''],
+      sello: [''],
       lavadoObservacion: [''],
       reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
       reparacionesObservacion: [''],
@@ -101,6 +102,9 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   }
   get cliente() {
     return this.regForm.get('cliente');
+  }
+  get sello() {
+    return this.regForm.get('sello');
   }
   get agencia() {
     return this.regForm.get('agencia');
@@ -214,6 +218,12 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
       } else {
         this.regForm.controls['lavado'].setValue(undefined);
+      }
+
+      if (maniob.maniobra.sello){
+        this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
+      } else {
+        this.regForm.controls['sello'].setValue(undefined);
       }
 
       if (maniob.maniobra.lavadoObservacion) {
