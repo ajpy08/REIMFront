@@ -30,6 +30,7 @@ export class ClientesComponent implements OnInit {
   constructor(public _clienteService: ClienteService, private usuarioService: UsuarioService, private excelService: ExcelService) { }
 
   ngOnInit() {
+    localStorage.removeItem('historyArray')
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarClientes();
   }

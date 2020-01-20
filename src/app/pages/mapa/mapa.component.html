@@ -1,5 +1,6 @@
 
 <div class="col-lg-2 col-lg-2">
+  
   <mat-form-field>
     
     <mat-select  placeholder="Selecciona un Nivel" [(value)]="nivelSelected" (valueChange) = draw(nivelSelected)>
@@ -14,8 +15,10 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  </div>
+  <button type="button" class="btn btn-primary btn-sm m-r-5 " (click)="back()"> <i class="fas fa-undo"></i></button>  
   
+  </div>
+  <br>
   <div id="contenedor">
   <mat-tab-group class="header-less-tabs"> 
     <mat-tab>

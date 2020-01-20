@@ -12,6 +12,8 @@ import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../coordenada.service';
 import { Maniobra } from 'src/app/models/maniobra.models';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 
 @Component({
   selector: 'app-revisar',
@@ -38,7 +40,7 @@ export class RevisarComponent implements OnInit {
     public _reparacionService: ReparacionService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private coordenadaService: CoordenadaService) { }
+    private coordenadaService: CoordenadaService, public dialog: MatDialog) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -351,6 +353,7 @@ export class RevisarComponent implements OnInit {
       this.url = localStorage.getItem('history')
     }
     this.router.navigate([this.url]);
+    localStorage.removeItem('historyArray')
     localStorage.removeItem('history')
     // this.location.back();
   }
@@ -453,6 +456,12 @@ export class RevisarComponent implements OnInit {
     });
   }
 
+
+
+
+
+
+
   /* #region  Array de Arrays Javi */
   ////////////////////////////////////////////////////////
   //https://stackblitz.com/edit/angular-dffny7?file=app%2Fapp.component.ts
@@ -500,4 +509,31 @@ export class RevisarComponent implements OnInit {
     var tipoManiobra = this.tipo.value.toString().substring(0, 2)
     this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
   }
+
+  open(id: string, tag: string) {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }
+    //Agrego mi nueva ruta al array
+    array.push("/maniobras/maniobra/" + id + "/" + tag);
+
+
+    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/reparaciones/reparacion/nuevo']);
+    
+  }
 }
+
+

@@ -295,6 +295,7 @@ export class ManiobrasComponent implements OnInit {
 
     //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/' + tag]);
+    
   }
 
   crearDatosExcel(datos) {
