@@ -4,6 +4,7 @@
       <div class="row">
         <div class="col-sm-12 col-xs-12">
           <form [formGroup]="regForm" (ngSubmit)="guardaCambios()" novalidate>
+            <mat-accordion [multi]="true">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group row">
@@ -232,16 +233,97 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-md-8">
+                <h4 class="alert alert-success text-center">Coordenadas</h4>
+                <table class="table table-responsive mat-elevation-z8">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">
+                        <div *ngIf="regForm.get('bahia') && regForm.get('posicion')">
+                          <button type="button" class="btn btn-success"
+                            [disabled]="regForm.pristine || !regForm.get('bahia').valid || !regForm.get('posicion').valid"
+                            (click)="addCoordenada(bahia.value, posicion.value);bahia.value=''; posicion.value=''">
+                            +
+                          </button>
+                        </div>
+                      </th>
+                      <th scope="col-3">
+                        <mat-form-field>
+                          <mat-label>Bahia</mat-label>
+                          <mat-select formControlName="bahia"
+                          (selectionChange)="obtenPosicionesXBahia( $event.value)">
+                            <mat-option *ngFor="let b of bahias" [value]="b">
+                              {{b}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
+                      <th scope="col-12">
+                        <mat-form-field>
+                          <mat-label>Posición</mat-label>
+                          <mat-select formControlName="posicion">
+                            <mat-option *ngFor="let p of posiciones" [value]="p.posicion">
+                              {{p.posicion}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
+                      <mat-error *ngIf="historial.invalid && !historial.errors?.minlength">
+                        <sup>*</sup> Debes ingresar una Coordenada
+                      </mat-error>
+                    </tr>
+                    <tr class="info">
+                      <th scope="col"></th>
+                      <th scope="col">#</th>
+      
+                      <th scope="col">Bahía</th>
+                      <th scope="col">Posición</th>
+      
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="historial" *ngFor="let item of historial.controls; let i = index;">
+                    <tr [formGroupName]="i">
+                      <td>
+                        <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </td>
+                      <td scope="row">{{i+1}}</td>
+                      <td>
+                        {{item.get('bahia').value}}
+                      </td>
+                      <td>
+                        {{item.get('posicion').value}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      
+      
 
+      
+        </mat-accordion>
 
-            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+            <div *ngIf="mensajeError" class="alert alert-danger">
+              {{mensajeError}}
+            </div><br>
+
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"
+              [disabled]="!regForm.valid ">
               <i class="fa fa-save"></i>
               Guardar
             </button>
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+           
           </form>
+
           <!-- <p>Form value {{ regForm.value | json }} </p> -->
         </div>
       </div>
     </div>
   </div>
+
