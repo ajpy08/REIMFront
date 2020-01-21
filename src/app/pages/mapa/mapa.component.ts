@@ -5,6 +5,7 @@ import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../maniobras/coordenada.service';
 import { Point_Coordenada } from 'src/app/models/point_coordenada.models';
 import { ELEMENT_PROBE_PROVIDERS } from '@angular/platform-browser/src/dom/debug/ng_probe';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mapa',
@@ -26,7 +27,7 @@ export class MapaComponent implements OnInit {
   private ctx: CanvasRenderingContext2D | null;
   // private ctx: CanvasRenderingContext2D;
   // private ctx: CanvasRenderingContext2D;
-
+  url: string;
 
 
 
@@ -38,13 +39,15 @@ export class MapaComponent implements OnInit {
   coordenadas;
   nivelSelected = 'N1';
 
-  constructor(private maniobraService: ManiobraService, private coordenadaService: CoordenadaService, private elemRef: ElementRef) { }
+  constructor(private maniobraService: ManiobraService, private coordenadaService: CoordenadaService, private elemRef: ElementRef, public router: Router,) { }
 
 
 
   ngOnInit(): void {
     this.draw(this.nivelSelected)
     this.numeracion();
+
+    this.url = '/inventario';
 
   }
 
@@ -3316,5 +3319,19 @@ export class MapaComponent implements OnInit {
 
     this.drawContainers(this.arrayJsons);
     // console.log(this.arrayJsons)
+  }
+
+
+
+
+  //BOTON DE REGRESAR A INVENTARIO 
+
+  back() {
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history')
+    }
+    this.router.navigate([this.url]);
+    localStorage.removeItem('history')
+    //this.location.back();
   }
 }

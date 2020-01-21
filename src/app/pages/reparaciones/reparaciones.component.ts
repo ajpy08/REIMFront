@@ -28,6 +28,7 @@ export class ReparacionesComponent implements OnInit {
   constructor(public reparacionService: ReparacionService, private excelService: ExcelService) { }
 
   ngOnInit() {
+    localStorage.removeItem('historyArray')
     this.cargarReparaciones();
   }
 

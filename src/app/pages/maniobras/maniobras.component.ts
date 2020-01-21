@@ -73,6 +73,7 @@ export class ManiobrasComponent implements OnInit {
     private router: Router, private excelService: ExcelService) { }
 
   ngOnInit() {
+    localStorage.removeItem('historyArray')
     this.usuarioLogueado = this.usuarioService.usuario;
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
@@ -295,6 +296,7 @@ export class ManiobrasComponent implements OnInit {
 
     //Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/' + tag]);
+    
   }
 
   crearDatosExcel(datos) {
