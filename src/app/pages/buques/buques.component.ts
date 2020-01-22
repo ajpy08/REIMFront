@@ -25,6 +25,7 @@ export class BuquesComponent implements OnInit {
   }
 
   ngOnInit() {
+    localStorage.removeItem('historyArray')
     this.cargarBuques();
   }
 

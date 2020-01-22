@@ -12,6 +12,8 @@ import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../coordenada.service';
 import { Maniobra } from 'src/app/models/maniobra.models';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 
 @Component({
   selector: 'app-revisar',
@@ -38,7 +40,7 @@ export class RevisarComponent implements OnInit {
     public _reparacionService: ReparacionService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private coordenadaService: CoordenadaService) { }
+    private coordenadaService: CoordenadaService, public dialog: MatDialog) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -96,7 +98,7 @@ export class RevisarComponent implements OnInit {
     return this.regForm.get('peso');
   }
 
-  get sello(){
+  get sello() {
     return this.regForm.get('sello');
   }
   get cliente() {
@@ -351,6 +353,7 @@ export class RevisarComponent implements OnInit {
       this.url = localStorage.getItem('history')
     }
     this.router.navigate([this.url]);
+    localStorage.removeItem('historyArray')
     localStorage.removeItem('history')
     // this.location.back();
   }
@@ -399,7 +402,13 @@ export class RevisarComponent implements OnInit {
           if (coordenadaActual.bahia == bahia && coordenadaActual.posicion == posicion) {
             swal('Ya se encuentra en esta coordenada', '', 'error');
           } else {
-            this.historial.push(this.agregarArray(coordenada));
+            if (bahia === '' || posicion === '') {
+              swal('Error al Agregar', 'No puede estar vacio ningun campo', 'error');
+            } else {
+
+              this.historial.push(this.agregarArray(coordenada));
+            }
+
             this.bahia.setValue('');
             this.posicion.setValue('');
           }
@@ -407,7 +416,14 @@ export class RevisarComponent implements OnInit {
       });
     } else {
       var coordenada = new Coordenada(bahia, posicion);
-      this.historial.push(this.agregarArray(coordenada));
+      if (bahia === '' || posicion === '') {
+        swal('Error al Agregar', 'No puede estar vacio ningun campo', 'error');
+      } else {
+
+        this.historial.push(this.agregarArray(coordenada));
+      }
+
+
       this.bahia.setValue('');
       this.posicion.setValue('');
     }
@@ -428,30 +444,36 @@ export class RevisarComponent implements OnInit {
           ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
         });
       }
-    });
 
-    var tiene = false;
-    var letraPosicion = coordenadaActual.posicion.substring(0, 1);
-    var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
 
-    var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
-    this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
-      if (c && c.maniobras && c.maniobras.length > 0) {
-        c.maniobras.forEach(m => {
-          var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
-          if (ocupadoActual <= restante) {
-            tiene = true;
-          }
-        });
+      var tiene = false;
+      var letraPosicion = coordenadaActual.posicion.substring(0, 1);
+      var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
 
+      var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
+      this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
+        if (c && c.maniobras && c.maniobras.length > 0) {
+          c.maniobras.forEach(m => {
+            var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
+            if (ocupadoActual <= restante) {
+              tiene = true;
+            }
+          });
+        }
         if (tiene) {
           swal('No puedes eliminar esta coordenada por que tiene contenedores en sus niveles superiores', '', 'error');
         } else {
           this.historial.removeAt(indice);
         }
-      }
+      });
     });
   }
+
+
+
+
+
+
 
   /* #region  Array de Arrays Javi */
   ////////////////////////////////////////////////////////
@@ -500,4 +522,31 @@ export class RevisarComponent implements OnInit {
     var tipoManiobra = this.tipo.value.toString().substring(0, 2)
     this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
   }
+
+  open(id: string, tag: string) {
+    var history;
+    var array = [];
+    //Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      //asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      //realizo este ciclo para asignar los valores del JSON al Array
+      for (var i in history) {
+        array.push(history[i]);
+      }
+    }
+    //Agrego mi nueva ruta al array
+    array.push("/maniobras/maniobra/" + id + "/" + tag);
+
+
+    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    //Voy a pagina.
+    this.router.navigate(['/reparaciones/reparacion/nuevo']);
+    
+  }
 }
+
+
