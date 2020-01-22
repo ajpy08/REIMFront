@@ -20,7 +20,7 @@ import { ViajeService } from '../../../services/service.index';
 import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI, ROLES } from '../../../config/config';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI,ID_MSC, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
 
@@ -338,7 +338,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   cargarBuques(event) {
-    if (event.value === ID_MELFI) {
+    if (event.value === ID_MELFI || event.value === ID_MSC) {
       this._buqueService.getBuqueXNaviera(event.value)
         .subscribe(buques => this.buques = buques.buques);
       this.navieraMELFI = true;
