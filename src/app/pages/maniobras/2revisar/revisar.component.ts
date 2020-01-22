@@ -79,8 +79,8 @@ export class RevisarComponent implements OnInit {
       reparacionesObservacion: [''],
       bahia: [''],
       posicion: [''],
-      // historial: this.fb.array([]),
-      historial: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
+      // historial: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
+      historial: this.fb.array([this.agregarArray(new Coordenada)])
     });
   }
 
