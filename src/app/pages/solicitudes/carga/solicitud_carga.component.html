@@ -201,7 +201,9 @@
               <div class="col-md-1">
                 <mat-form-field>
                   <mat-label>* Cantidad </mat-label>
-                  <input matInput formControlName="cantidad">
+                  <input matInput formControlName="cantidad" type="number"
+                  onkeydown="javascript: return event.keyCode == 69 || event.keyCode == 109 || event.keyCode == 107 || 
+                  event.keyCode == 110 || event.keyCode == 187 || event.keyCode == 189 || event.keyCode == 190 ? false : true">
                 </mat-form-field>
 
               </div>
