@@ -266,7 +266,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
-      this.regForm.controls['correo'].setValue(solicitud.correo);
+      // this.regForm.controls['correo'].setValue(solicitud.correo);
       this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
       this.regForm.controls['rfc'].setValue(solicitud.rfc);
       this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
@@ -382,6 +382,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          this.correo.setValue(reg.correo);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -411,6 +412,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          this.correo.setValue(reg.correo);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -440,6 +442,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          this.correo.setValue(reg.correo);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
