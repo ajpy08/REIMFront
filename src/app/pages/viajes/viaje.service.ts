@@ -89,10 +89,10 @@ export class ViajeService {
       .pipe(map(resp => swal('Viaje Borrado', 'Eliminado correctamente', 'success')));
   }
 
-  addContenedor(id: string, contenedor: string, tipo: string, peso: string, destinatario: string): Observable<any> {
+  addContenedor(id: string, contenedor: string, tipo: string, peso: string, destinatario: string, patio: string): Observable<any> {
     let url = URL_SERVICIOS + '/viajes/viaje/' + id + '/addcontenedor';
     url += '?token=' + this._usuarioService.token;
-    url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario;
+    url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario + '&patio='+ patio;
     return this.http.put(url, '')
       .pipe(map((resp: any) => {
         swal('Contenedor Agregado con exito', 'success');
