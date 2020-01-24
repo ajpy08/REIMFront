@@ -83,7 +83,7 @@
                       <th scope="col"></th>
                       <th scope="col">
                         <button type="button" class="btn btn-success"
-                          (click)="addContenedor2(contenedor.value, tipo.value, peso.value, destinatario.value);contenedor.value='';peso.value=''">
+                          (click)="addContenedor2(contenedor.value, tipo.value, peso.value, destinatario.value, patio.value);contenedor.value='';peso.value=''; patio.value=''">
                           +
                         </button>
                       </th>
@@ -91,7 +91,7 @@
                       <th scope="col">
                         <mat-form-field style="width:80px">
                           <mat-label>Tipo</mat-label>
-                          <mat-select  #tipo>
+                          <mat-select #tipo>
                             <mat-option style="width:80px" *ngFor="let tipoC of tiposContenedor" [value]="tipoC.tipo">
                               {{tipoC.tipo}}
                             </mat-option>
@@ -109,7 +109,16 @@
                         </mat-form-field>
                       </th>
                       <th scope="col"><input #destinatario placeholder="destinatario" size="30"></th>
-                      <th scope="col"></th>
+                      <th scope="col">
+                        <mat-form-field>
+                          <mat-label>Patio</mat-label>
+                          <mat-select #patio>
+                            <mat-option *ngFor="let patio of PA" [value]="patio">
+                              {{patio}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
                     </tr>
                     <tr>
                       <th scope="col">#</th>
@@ -119,6 +128,7 @@
                       <th scope="col">Peso</th>
                       <th scope="col">Cliente</th>
                       <th scope="col">Estatus</th>
+                      <th scope="col">Patio</th>
                     </tr>
                   </thead>
                   <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
@@ -143,6 +153,7 @@
                       <td>{{item.get('peso').value}}</td>
                       <td>{{item.get('destinatario').value}}</td>
                       <td>{{item.get('estatus').value}}</td>
+                      <td>{{item.get('patio').value}}</td>
                     </tr>
                   </tbody>
                 </table>

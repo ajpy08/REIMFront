@@ -6,7 +6,7 @@ import { Naviera } from '../navieras/navieras.models';
 import { ViajeService, BuqueService, NavieraService } from '../../services/service.index';
 import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.service';
 import { ExcelService } from '../../services/excel/excel.service';
-import { ESTADOS_CONTENEDOR_ARRAY } from '../../config/config';    
+import { ESTADOS_CONTENEDOR_ARRAY, PATIOS_ARRAY } from '../../config/config';    
 import swal from 'sweetalert';
 
 // datapiker
@@ -51,6 +51,7 @@ export class ViajeComponent implements OnInit {
   erroresCarga: string[] = [];
 
   estadosContenedor = ESTADOS_CONTENEDOR_ARRAY
+  PA = PATIOS_ARRAY
 
   constructor(
     private _viajeService: ViajeService,
@@ -86,19 +87,20 @@ export class ViajeComponent implements OnInit {
       fArribo: [moment().local().startOf('day')],
       fVigenciaTemporal: [moment().local().startOf('day').add(10, 'years')],
       pdfTemporal: [''],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '')]),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '')]),
       anio: [moment().local().year()],
       _id: ['']
     });
   }
 
-  creaContenedor(cont: string, tipo: string, peso: string, dest: string, estatus: string): FormGroup {
+  creaContenedor(cont: string, tipo: string, peso: string, dest: string, estatus: string, patio: string): FormGroup {
     return this.fb.group({
       contenedor: [cont],
       tipo: [tipo],
       peso: [peso],
       destinatario: [dest],
-      estatus: [estatus] // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
+      estatus: [estatus], // DETERMINA EN QUE FASE SE ENCUENTRA LA MANIOBRA
+      patio: [patio]
     });
   }
 
@@ -133,25 +135,25 @@ export class ViajeComponent implements OnInit {
 
   /* #endregion */
 
-  addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string): void {
+  addContenedor(cont: string, tipo: string, peso: string, destinatario: string, estatus: string, patio: string): void {
     if (cont === '') {
       swal('', 'El contenedor no pues estar vacio.', 'error');
     }
-    this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus));
+    this.contenedores.push(this.creaContenedor(cont, tipo, peso, destinatario, estatus, patio));
   }
 
   
 
-  addContenedor2(cont: string, tipo: string, peso: string, destinatario: string): void {
+  addContenedor2(cont: string, tipo: string, peso: string, destinatario: string, patio: string): void {
        if (this._id.value) {
-      this._viajeService.addContenedor(this._id.value, this.formateoContenedor(cont), tipo, peso, destinatario)
+      this._viajeService.addContenedor(this._id.value, this.formateoContenedor(cont), tipo, peso, destinatario, patio)
         .subscribe(res => {
           if (res.ok) {
-            this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, 'APROBACION');
+            this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, 'APROBACION', patio);
             swal('Contenedor Agregado con exito', '', 'success');
           }
         });
-    } else { this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, ''); }
+    } else { this.addContenedor(this.formateoContenedor(cont), tipo, peso, destinatario, '', patio); }
   }
 
   quitarContenedor(indice: number) {
@@ -180,7 +182,7 @@ export class ViajeComponent implements OnInit {
       this.regForm.controls['pdfTemporal'].setValue(viaje.pdfTemporal);
       this.regForm.controls['anio'].setValue(viaje.anio);
       viaje.contenedores.forEach(element => {
-        this.addContenedor(element.contenedor, element.tipo, element.peso, element.destinatario, element.estatus);
+        this.addContenedor(element.contenedor, element.tipo, element.peso, element.destinatario, element.estatus, element.patio);
       });
     });
   }
@@ -247,7 +249,7 @@ export class ViajeComponent implements OnInit {
             // tslint:disable-next-line:max-line-length
             this.erroresCarga.push(`Contenedor: ${element.Contenedor} no agregado, tipo ( ${element.Tipo.replace('\'', '')} ) no encontrado`);
           } else {
-            this.addContenedor(this.formateoContenedor(element.Contenedor), element.Tipo.replace('\'', ''), element.Peso, element.Cliente, 'NUEVO');
+            this.addContenedor(this.formateoContenedor(element.Contenedor), element.Tipo.replace('\'', ''), element.Peso, element.Cliente, 'NUEVO', element.Patio );
           }
         });
         this.regForm.controls['viaje'].setValue(res[0].Viaje);
