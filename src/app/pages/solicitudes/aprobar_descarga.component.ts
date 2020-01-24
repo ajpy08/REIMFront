@@ -328,6 +328,7 @@ export class AprobarDescargaComponent implements OnInit {
       this._viajeService.addContenedor(this.viaje.value,
         cont.get('contenedor').value,
         cont.get('tipo').value,
+        cont.get('patio').value,
         cont.get('peso').value, '')
         .subscribe(maniobra => {
           cont.get('maniobra').setValue(maniobra.maniobra._id);
