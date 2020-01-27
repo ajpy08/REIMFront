@@ -264,7 +264,7 @@ export class ManiobrasComponent implements OnInit {
         (data.folio ? data.folio : '') +
         data.tipo.toLowerCase() +
         data.peso.toLowerCase() +
-        (data.viaje? data.naviera.nombreComercial.toLowerCase(): '') +
+        (data.viaje? data.viaje.naviera.nombreComercial.toLowerCase(): '') +
         (data.viaje ? data.viaje.viaje.toLowerCase() : '') +
         (data.cliente ? data.cliente.nombreComercial.toLowerCase() : '') +
         // (data.viaje ? data.viaje.buque.nombre.toLowerCase() : '') +
