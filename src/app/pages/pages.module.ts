@@ -86,6 +86,8 @@ import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/report
 import { PapeletaComponent } from './maniobras/papeleta/papeleta.component';
 
 import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.component';
+import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component';
+import { LiberacionesBLComponent } from './liberacion-bl/liberaciones-bl.component';
 
 
 import { RegisterComponent } from './register/register.component';
@@ -129,8 +131,7 @@ import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { MapaComponent } from './mapa/mapa.component';
-import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component';
-import { LiberacionesBLComponent } from './liberacion-bl/liberaciones-bl.component';
+
 @NgModule({
     declarations: [
         // PagesComponent,

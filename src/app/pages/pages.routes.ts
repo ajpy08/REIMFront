@@ -22,6 +22,12 @@ import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
+
+///////////////LIBERACIONES BLBOOKING/////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////////
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
@@ -69,6 +75,8 @@ import { TiposContenedoresComponent } from "./tipos-contenedores/TiposContenedor
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { ROLES } from '../config/config';
 import { NotfoundComponent } from '../shared/notfound/notfound.component';
+import { LiberacionesBLComponent } from './liberacion-bl/liberaciones-bl.component'
+import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component'
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -192,6 +200,21 @@ const pagesRoutes: Routes = [
         component: TipoContenedoresComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Tipos Contenedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+
+    /////////LIBERACION-BLBOOKING/////////////////////////////////////
+    {
+        path: 'liberaciones_bl',
+        component: LiberacionesBLComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'liberaciones', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+    },
+
+    {
+        path: 'liberacion_bl/:id',
+        component: LiberacionBLComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'liberacion', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     //////////////////////////////////////////////

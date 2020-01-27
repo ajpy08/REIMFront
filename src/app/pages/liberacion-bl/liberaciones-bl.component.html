@@ -1,3 +1,122 @@
-<p>
-  liberaciones-bl works!
-</p>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
+<mat-tab label="Cargas">
+  <ng-template mat-tab-label>
+    Cargas ( <small>{{totalRegistrosCargas}}</small> )
+  </ng-template>
+  <div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker3" type="text" [(ngModel)]="fIni"
+                  placeholder="Fecha Solicitud Inicial ">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker4" type="text" [(ngModel)]="fFin"
+                  placeholder="Fecha Solicitud Final">
+                <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                <mat-datepicker #picker4></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                (click)="cargarSolicitudes('C')">
+                <i class="fas fa-filter"></i>
+                Filtrar
+              </button>
+            </div>
+          </div>
+          <br>
+          <div class="example-header mat-elevation-z8">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilterCargas($event.target.value)"
+                placeholder="Escriba algo para filtrar">
+            </mat-form-field>
+          </div>
+          <br>
+          <div class="text-right">
+              <button (click)="exportAsXLSXC(dtCargas, 'Cargas')" class="btn btn-success m-r-10">
+                  <i class="fas fa-file-excel"></i>
+                </button>
+            <button matTooltip="Nueva solicitud Carga" mat-mini-fab class="btn btn-primary"
+              [routerLink]="['/liberacion_bl','nuevo']" type="button">
+              <i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <br>
+          <div class="example-container mat-elevation-z8">
+            <mat-table class="mat-table-medium" [dataSource]="dtCargas" #sortCargas="matSort" matSort>
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+
+                  <button matTooltip="Editar Solicitud" *ngIf="row.estatus==='NA'"
+                    [routerLink]="['/solicitudes/solicitud_carga', row._id ]" class="btn btn-primary m-r-5">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button matTooltip="Ver Solicitud" *ngIf="row.estatus==='APROBADA'"
+                    [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
+                    <i class="fa fa-eye"></i>
+                  </button>
+                  <button matTooltip="Eliminar Solicitud" *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )"
+                    class="btn btn-danger m-r-5">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="fAlta">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
+              </ng-container>
+
+
+              <ng-container matColumnDef="agencia.nombreComercial">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="cliente.nombreComercial">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="observaciones">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.observaciones}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="solicitado">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Solicitado</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <p *ngFor="let cont of row.contenedores">
+                    Tipo: {{cont.tipo}} <br> Grado: {{cont.grado}}
+                  </p>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="estatus">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+              </ng-container>
+
+
+              <mat-header-row *matHeaderRowDef="displayedColumnsCarga" class="encabezado"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumnsCarga;"></mat-row>
+            </mat-table>
+            <mat-paginator #pagCargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</mat-tab>
+</mat-tab-group>
