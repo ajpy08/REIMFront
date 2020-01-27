@@ -204,14 +204,14 @@ const pagesRoutes: Routes = [
 
     /////////LIBERACION-BLBOOKING/////////////////////////////////////
     {
-        path: 'liberaciones_bl',
+        path: 'liberaciones_bk',
         component: LiberacionesBLComponent,
         canActivate: [REIMGuard],
         data: {titulo: 'liberaciones', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     {
-        path: 'liberacion_bl/:id',
+        path: 'liberacion_bk/:id',
         component: LiberacionBLComponent,
         canActivate: [REIMGuard],
         data: {titulo: 'liberacion', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }

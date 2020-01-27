@@ -82,7 +82,7 @@ export class LiberacionBLComponent implements OnInit {
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.url = '/solicitudes/aprobaciones';
     } else if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE) {
-      this.url = '/liberaciones_bl';
+      this.url = '/liberaciones_bk';
     }
   }
 
@@ -475,7 +475,7 @@ export class LiberacionBLComponent implements OnInit {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.edicion = true;
-          this.router.navigate(['/liberacion_bl', this.regForm.get('_id').value]);
+          this.router.navigate(['/liberacion_bk', this.regForm.get('_id').value]);
         }
         this.regForm.markAsPristine();
       });

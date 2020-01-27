@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { Liberacion } from './liberacion.models';
 import swal from 'sweetalert';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Solicitud } from '../solicitudes/solicitud.models';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,22 +18,22 @@ export class LiberacionBLService {
 
     ///crear liberacion////
 
-    guardarliberacion(liberacion: Liberacion): Observable<any> {
-      let url = URL_SERVICIOS + '/liberacion/liberacion_bl';
-      if (liberacion._id) { // Actualizando
-        url += '/' + liberacion._id;
+    guardarliberacion(solicitud: Solicitud): Observable<any> {
+      let url = URL_SERVICIOS + '/liberacion/liberacion_bk';
+      if (solicitud._id) { // Actualizando
+        url += '/' + solicitud._id;
         url += '?token=' + this._usuarioService.token;
-        return this.http.put(url, liberacion)
+        return this.http.put(url, solicitud)
           .pipe(map((resp: any) => {
             swal('liberacion Actualizada', 'Correctamente', 'success');
             return resp.liberacion;
           }));
       } else { // Creando
         url += '?token=' + this._usuarioService.token;
-        return this.http.post(url, liberacion)
+        return this.http.post(url, solicitud)
           .pipe(map((resp: any) => {
             swal('liberacion Creada', 'Correctamente', 'success');
-            return resp.liberacion;
+            return resp.solicitud;
           }));
       }
     }
