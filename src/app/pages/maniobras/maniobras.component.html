@@ -513,7 +513,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dtLavadoReparacion" #sortLR="matSort" matSort>
+              <mat-table class="mat-table" [dataSource]="dtLavadoReparacion" #sortLR="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
@@ -585,16 +585,13 @@
                 </ng-container>
 
                 <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef>Reparaciones</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <!-- <button [routerLink]="['/fotos',  row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
-                      <i class="fas fa-camera-retro"></i>
-                      Fotos
-                    </button> -->
-                    <br>
-                    <p *ngFor="let rep of row.reparaciones">
-                      {{rep.reparacion}}
-                    </p><br><br>
+                    <mat-select class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                        {{rep.reparacion}}
+                      </mat-option>
+                    </mat-select>
                   </mat-cell>
                 </ng-container>
 
