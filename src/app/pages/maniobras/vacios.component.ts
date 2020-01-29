@@ -475,6 +475,14 @@ export class VaciosComponent implements OnInit {
 
   CreaDatosVaciosExcel(datos, tipo) {
     datos.forEach(m => {
+
+      var reparaciones = '';
+
+      m.reparaciones.forEach(r => {
+        reparaciones += r.reparacion + ", ";
+      });
+      reparaciones = reparaciones.substring(0, reparaciones.length - 2);
+
       var maniobra = {
         cargaDescarga: m.cargaDescarga,
         contenedor: m.contenedor,
@@ -483,17 +491,17 @@ export class VaciosComponent implements OnInit {
         lavadoObservacion: m.lavadoObservacion,
         grado: m.grado,
         fLlegada: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : '',
-        operador: m.operador,
+        Operador: m.operador && m.operador.nombre && m.operador.nombre != undefined && m.operador.nombre && m.operador.nombre != ''? m.operador.nombre: '' && m.operador.nombre,
         placa: m.camion != undefined ? m.camion.placa : '',
-        transportista: m.transportista,
-        reparaciones: m.reparaciones,
+        Transportista: m.transportista && m.transportista.nombreComercial && m.transportista.nombreComercial != undefined && m.transportista.nombreComercial != '' ? m.transportista.nombreComercial: '' && m.transportista.nombreComercial,
+        reparaciones: reparaciones,
         reparacionesObservacion: m.reparacionesObservacion,
         facturaManiobra: m.facturaManiobra,
-        viaje: m.viaje,
-        buque: m.viaje != undefined ? m.viaje.buque : '',
+        Viaje: m.viaje && m.viaje.viaje && m.viaje.viaje != undefined && m.viaje.viaje != '' ? m.viaje.viaje : '' && m.viaje.viaje,
+        Buque: m.viaje && m.viaje != undefined && m.viaje.buque && m.viaje.buque && m.viaje.buque != undefined && m.viaje.buque.nombre != ''? m.viaje.buque.nombre: '' && m.viaje.buque.nombre,
         peso: m.peso,
-        cliente: m.cliente,
-        agencia: m.agencia,
+        Cliente: m.cliente && m.cliente.nombreComercial && m.cliente.nombreComercial != undefined && m.cliente.nombreComercial != '' && m.cliente.nombreComercial,
+        Agencia: m.agencia && m.agencia.nombreComercial && m.agencia.nombreComercial != undefined && m.agencia.nombreComercial != '' && m.agencia.nombreComercial,
         estatus: m.estatus,
         hDescarga: m.hDescarga,
         fAlta: m.fAlta.substring(0, 10)
