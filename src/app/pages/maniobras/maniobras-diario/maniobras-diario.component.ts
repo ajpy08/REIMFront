@@ -5,13 +5,7 @@ import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-// Depending on whether rollup is used, moment needs to be imported differently.
-// Since Moment.js doesn't have a default export, we normally need to import using the `* as`
-// syntax. However, rollup creates a synthetic default module and we thus need to import it using
-// the `default as` syntax.
 import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
-// import * as Moment from 'moment';
 import swal from 'sweetalert';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { DatePipe } from '@angular/common';
@@ -53,9 +47,9 @@ export class ManiobrasDiarioComponent implements OnInit {
   fIniLlegada = moment().local().startOf('day');
   fFinLlegada = moment().local().startOf('day');
 
-  displayedColumns = ['actions', 'fechaingreso', 'cargaDescarga', 'contenedor','viaje.naviera.nombreComercial','solicitud.blBooking', 'grado', 'tipo',  
-    'operador', 'placa', 'transportista', 'lavado', 'reparaciones', 'viaje',
-    'viaje.buque.nombre', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+
+  displayedColumns = ['actions', 'fechaingreso', 'hLlegada','operador', 'placa', 'transportista','hEntrada','contenedor', 'tipo','cliente', 'agencia', 'solicitud.blBooking','hDescarga','grado', 'cargaDescarga', 'hSalida', 'lavado', 'reparaciones',
+  'viaje.naviera.nombreComercial', 'viaje','viaje.buque.nombre', 'estatus'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -145,29 +139,62 @@ export class ManiobrasDiarioComponent implements OnInit {
   CreaDatosExcel(datos) {
     this.ManiobrasExcel = [];
     datos.forEach(m => {
+
+      var reparaciones = '';
+
+     
+
+      m.reparaciones.forEach(r => {
+        reparaciones += r.reparacion + ", ";
+      });
+
+
+      
+      reparaciones = reparaciones.substring(0, reparaciones.length - 2);
+
+      var observaciones = '';
+
+      if (m.lavadoObservacion != undefined && reparaciones != '') {
+        observaciones += `LAVADO OBSERVACION: ${m.lavadoObservacion} \nREPARACION OBSERVACION: ${reparaciones}`;
+      } else {
+        if (m.lavadoObservacion != undefined) {
+          observaciones += `LAVADO OBSERVACION: ${m.lavadoObservacion}`;
+        } else {
+          if (reparaciones != '') {
+            observaciones += `REPARACION OBSERVACION: ${reparaciones}`;
+          }
+        }
+      }
+
       var maniobra = {
-        CargaDescarga: m.cargaDescarga,
-        Contenedor: m.contenedor,
-        Tipo: m.tipo,
-        Lavado: m.lavado,
-        LavadoObservacion: m.lavadoObservacion,
-        Grado: m.grado,
-        FLlegada: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : '',
-        Operador: m.operador,
+        Fecha: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : '',
+        Hora_Llegada: m.hLlegada,
+        Operador: m.operador && m.operador.nombre && m.operador.nombre != undefined && m.operador.nombre && m.operador.nombre != ''? m.operador.nombre: '' && m.operador.nombre,
         Placa: m.camion != undefined ? m.camion.placa : '',
         Transportista: m.transportista && m.transportista.nombreComercial && m.transportista.nombreComercial != undefined && m.transportista.nombreComercial != '' ? m.transportista.nombreComercial: '' && m.transportista.nombreComercial,
-        Reparaciones: m.reparaciones,
-        ReparacionesObservacion: m.reparacionesObservacion,
-        FacturaManiobra: m.facturaManiobra,
-        Viaje: m.viaje && m.viaje.viaje && m.viaje != undefined && m.viaje.viaje != ''? m.viaje.viaje: '' && m.viaje.viaje,
-        Buque: m.viaje && m.viaje.buque.nombre && m.viaje.buque.nombre != undefined && m.viaje.buque.nombre != '' ? m.viaje.buque.nombre: '' && m.viaje.buque.nombre,
-        Peso: m.peso,
-        Naviera: m.viaje && m.viaje.naviera.nombreComercial && m.viaje.naviera.nombreComercial != undefined && m.viaje.naviera.nombreComercial != '' ? m.viaje.naviera.nombreComercial: '' && m.viaje.naviera.nombreComercial,
+        Hora_Entrada: m.hEntrada,
+        Contenedor: m.contenedor,
+        Tipo: m.tipo,
         Cliente: m.cliente && m.cliente.nombreComercial && m.cliente.nombreComercial != undefined && m.cliente.nombreComercial != '' && m.cliente.nombreComercial,
-        Agencia: m.agencia && m.agencia.nombreComercial && m.agencia.nombreComercial != undefined && m.agencia.nombreComercial != '' && m.agencia.nombreComercial,
-        Estatus: m.estatus,
-        HDescarga: m.hDescarga,
-        FAlta: m.fAlta.substring(0, 10)
+        A_A: m.agencia && m.agencia.nombreComercial && m.agencia.nombreComercial != undefined && m.agencia.nombreComercial != '' && m.agencia.nombreComercial,
+        Booking: m.solicitud && m.solicitud.blBooking && m.solicitud.blBooking != undefined && m.solicitud.blBooking != '' ? m.solicitud.blBooking : '' && m.solicitud.blBooking,
+        EIR: m.null,
+        Hora_Descarga: m.hDescarga,
+        Grado: m.grado,
+        CargaDescarga: m.cargaDescarga,
+        Hora_Salida: m.hSalida,
+        Obervaciones: observaciones ,
+        // Lavado: m.lavado,
+        // LavadoObservacion: m.lavadoObservacion,
+        // Reparaciones: reparaciones,
+        // ReparacionesObservacion: m.reparacionesObservacion,
+        // FacturaManiobra: m.facturaManiobra,
+        // Viaje: m.viaje && m.viaje.viaje && m.viaje.viaje != undefined && m.viaje.viaje != ''? m.viaje.viaje: '' && m.viaje.viaje,
+        // Buque: m.viaje && m.viaje.buque.nombre && m.viaje.buque.nombre != undefined && m.viaje.buque.nombre != '' ? m.viaje.buque.nombre: '' && m.viaje.buque.nombre,
+        // Peso: m.peso,
+        // Naviera: m.viaje && m.viaje.naviera.nombreComercial && m.viaje.naviera.nombreComercial != undefined && m.viaje.naviera.nombreComercial != '' ? m.viaje.naviera.nombreComercial: '' && m.viaje.naviera.nombreComercial,
+        // Estatus: m.estatus,
+        // FAlta: m.fAlta.substring(0, 10)
 
         // folio: m.folio,
         // camion: m.camion,
