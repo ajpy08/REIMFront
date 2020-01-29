@@ -587,7 +587,7 @@
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-select class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
                       <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
                         {{rep.reparacion}}
                       </mat-option>
