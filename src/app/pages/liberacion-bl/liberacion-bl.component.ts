@@ -248,39 +248,39 @@ export class LiberacionBLComponent implements OnInit {
 
 
   cargaliberacion(id: string) {
-    this.liberacionService.cargarSolicitud(id).subscribe(solicitud => {
-      this.regForm.controls['_id'].setValue(solicitud._id);
-      this.regForm.controls['tipo'].setValue(solicitud.tipo);
-      // this.regForm.controls['agencia'].setValue(solicitud.agencia);
-      this.regForm.controls['naviera'].setValue(solicitud.naviera);
-      this.regForm.controls['naviera'].setValue(solicitud.naviera);
-      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      this.regForm.controls['credito'].setValue(solicitud.credito);
-      this.regForm.controls['cliente'].setValue(solicitud.cliente);
-      this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
-      this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
-      this.regForm.controls['correo'].setValue(solicitud.correo);
-      this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
-      this.regForm.controls['rfc'].setValue(solicitud.rfc);
-      this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
-      this.regForm.controls['calle'].setValue(solicitud.calle);
-      this.regForm.controls['noExterior'].setValue(solicitud.noExterior);
-      this.regForm.controls['noInterior'].setValue(solicitud.noInterior);
-      this.regForm.controls['colonia'].setValue(solicitud.colonia);
-      this.regForm.controls['municipio'].setValue(solicitud.municipio);
-      this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
-      this.regForm.controls['estado'].setValue(solicitud.estado);
-      this.regForm.controls['cp'].setValue(solicitud.cp);
-      this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
-      this.regForm.controls['estatus'].setValue(solicitud.estatus);
+    this.liberacionService.cargarliberacion(id).subscribe(liberacion => {
+      this.regForm.controls['_id'].setValue(liberacion._id);
+      this.regForm.controls['tipo'].setValue(liberacion.tipo);
+      // this.regForm.controls['agencia'].setValue(liberacion.agencia);
+      this.regForm.controls['naviera'].setValue(liberacion.naviera);
+      this.regForm.controls['naviera'].setValue(liberacion.naviera);
+      this.regForm.controls['blBooking'].setValue(liberacion.blBooking);
+      this.regForm.controls['credito'].setValue(liberacion.credito);
+      this.regForm.controls['cliente'].setValue(liberacion.cliente);
+      this.regForm.controls['observaciones'].setValue(liberacion.observaciones);
+      this.regForm.controls['rutaComprobante'].setValue(liberacion.rutaComprobante);
+      this.regForm.controls['correo'].setValue(liberacion.correo);
+      this.regForm.controls['facturarA'].setValue(liberacion.facturarA);
+      this.regForm.controls['rfc'].setValue(liberacion.rfc);
+      this.regForm.controls['razonSocial'].setValue(liberacion.razonSocial);
+      this.regForm.controls['calle'].setValue(liberacion.calle);
+      this.regForm.controls['noExterior'].setValue(liberacion.noExterior);
+      this.regForm.controls['noInterior'].setValue(liberacion.noInterior);
+      this.regForm.controls['colonia'].setValue(liberacion.colonia);
+      this.regForm.controls['municipio'].setValue(liberacion.municipio);
+      this.regForm.controls['ciudad'].setValue(liberacion.ciudad);
+      this.regForm.controls['estado'].setValue(liberacion.estado);
+      this.regForm.controls['cp'].setValue(liberacion.cp);
+      this.regForm.controls['correoFac'].setValue(liberacion.correoFac);
+      this.regForm.controls['estatus'].setValue(liberacion.estatus);
       this.onChangeCredito({ checked: this.credito });
-      solicitud.contenedores.forEach(element => {
+      liberacion.contenedores.forEach(element => {
         this.addContenedor(element.tipo, element.peso, element.grado,
           element.maniobra, element.transportista,
           element.transportista.nombreComercial, element.transportista.correo, element.patio, '');
       });
 
-      if (solicitud.estatus === 'APROBADA') {
+      if (liberacion.estatus === 'APROBADA') {
         this.regForm.disable({ onlySelf: true });
         this.aprobada = true;
       }

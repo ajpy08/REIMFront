@@ -70,16 +70,15 @@
                   </button>
                 </mat-cell>
               </ng-container>
-
-              <ng-container matColumnDef="fAlta">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
+              <ng-container matColumnDef="blBooking">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>BLbooking</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.blBooking}} </mat-cell>
               </ng-container>
 
 
-              <ng-container matColumnDef="agencia.nombreComercial">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
+              <ng-container matColumnDef="naviera.nombreComercial">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
               </ng-container>
 
               <ng-container matColumnDef="cliente.nombreComercial">
@@ -104,6 +103,11 @@
               <ng-container matColumnDef="estatus">
                 <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
                 <mat-cell *matCellDef="let row"> {{row.estatus}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="fAlta">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
               </ng-container>
 
 

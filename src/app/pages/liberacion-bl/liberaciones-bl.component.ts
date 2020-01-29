@@ -6,8 +6,9 @@ import * as _moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { Solicitud } from '../solicitudes/solicitud.models';
+import { Liberacion } from './liberacion.models';
 import { ROLES } from 'src/app/config/config';
+import { LiberacionBLService } from './liberacion-bl.service';
 
 declare var swal: any;
 
@@ -47,77 +48,52 @@ export class LiberacionesBLComponent implements OnInit {
   @ViewChild('sortCargas') sortCargas: MatSort; //cargas
 
   cargando = true;
-  displayedColumnsDescarga = ['actions', 'fAlta', 'agencia.nombreComercial', 'naviera.nombreComercial', 'cliente.nombreComercial', 'viaje.viaje', 'buque.nombre',
-    'observaciones', 'contenedores', 'estatus'];
-
-  displayedColumnsCarga = ['actions', 'fAlta', 'agencia.nombreComercial', 'cliente.nombreComercial', 'observaciones', 'solicitado', 'estatus'];
+  displayedColumnsCarga = ['actions', 'blBooking', 'naviera.nombreComercial', 'cliente.nombreComercial', 'observaciones', 'solicitado', 'estatus','fAlta'];
 
   dtCargas: any;
-  dtDescargas: any;
   totalRegistrosDescargas = 0;
   totalRegistrosCargas = 0;
   usuarioLogueado: any;
+  agencias: string = null;
 
-  constructor(public _solicitudService: SolicitudService, private _usuarioService: UsuarioService, private excelService: ExcelService) { }
+  constructor( private _usuarioService: UsuarioService, private excelService: ExcelService, private liberacionService: LiberacionBLService) { }
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
-    this.cargarSolicitudes('D');
     this.cargarSolicitudes('C');
     let indexTAB = localStorage.getItem("AprobSolicitudes");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
 
-  }
+    }
 
   cargarSolicitudes(CD: string) {
     this.cargando = true;
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      if (CD == 'D') {
-        this._solicitudService.getSolicitudes('D', null,
+      if (CD == 'C') {
+        this.liberacionService.getLiberacion('C', null,
           this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '')
-          .subscribe(res => {
-            this.totalRegistrosDescargas = res.total;
-            this.dtDescargas = new MatTableDataSource(res.solicitudes);
-            this.dtDescargas.sort = this.sort;
-            this.dtDescargas.paginator = this.paginator;
-          });
-      } else if (CD == 'C') {
-        this._solicitudService.getSolicitudes('C', null,
-          this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '')
+          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', null, this.agencias )
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
-            this.dtCargas = new MatTableDataSource(res.solicitudes);
+            this.dtCargas = new MatTableDataSource(res.liberacion);
             this.dtCargas.sort = this.sortCargas;
             this.dtCargas.paginator = this.pagCargas;
             this.cargando = false;
           });
       }
     } else {
-      let agencias = '';
+      let navieras = '';
       this.usuarioLogueado.empresas.forEach(emp => {
-        agencias = agencias + emp._id + ',';
+        navieras = navieras + emp._id;
       });
-      agencias = agencias.slice(0, -1);
-      if (CD == 'D') {
-        this._solicitudService.getSolicitudes('D', null,
+       if (CD == 'C') {
+        this.liberacionService.getLiberacion('C',null,
           this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', agencias)
-          .subscribe(res => {
-            this.totalRegistrosDescargas = res.total;
-            this.dtDescargas = new MatTableDataSource(res.solicitudes);
-            this.dtDescargas.sort = this.sort;
-            this.dtDescargas.paginator = this.paginator;
-          });
-      } else if (CD == 'C') {
-        this._solicitudService.getSolicitudes('C', null,
-          this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', agencias)
+          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', navieras, this.agencias)
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
-            this.dtCargas = new MatTableDataSource(res.solicitudes);
+            this.dtCargas = new MatTableDataSource(res.liberacion);
             this.dtCargas.sort = this.sortCargas;
             this.dtCargas.paginator = this.pagCargas;
             this.cargando = false;
@@ -133,22 +109,22 @@ export class LiberacionesBLComponent implements OnInit {
     this.totalRegistrosCargas = this.dtCargas.filteredData.length;
   }
 
-  applyFilterDescargas(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dtDescargas.filter = filterValue;
-    this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
-  }
+  // applyFilterDescargas(filterValue: string) {
+  //   filterValue = filterValue.trim(); // Remove whitespace
+  //   filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+  //   this.dtDescargas.filter = filterValue;
+  //   this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+  // }
 
   onLinkClick(event: MatTabChangeEvent) {
     localStorage.setItem("AprobSolicitudes", event.index.toString());
   }
 
-  borrarSolicitud(sol: Solicitud) {
+  borrarSolicitud(sol: Liberacion) {
     swal({ title: '¿Esta seguro?', text: 'Esta apunto de borrar la solicitud.', icon: 'warning', buttons: true, dangerMode: true, })
       .then(borrar => {
         if (borrar) {
-          this._solicitudService.borrarSolicitud(sol._id)
+          this.liberacionService.borrarSolicitud(sol._id)
             .subscribe(borrado => {
               this.cargarSolicitudes(sol.tipo);
             });

@@ -207,7 +207,7 @@ const pagesRoutes: Routes = [
         path: 'liberaciones_bk',
         component: LiberacionesBLComponent,
         canActivate: [REIMGuard],
-        data: {titulo: 'liberaciones', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+        data: {titulo: 'liberaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     {
