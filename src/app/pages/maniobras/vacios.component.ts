@@ -71,16 +71,16 @@ export class VaciosComponent implements OnInit {
 
   displayedColumns = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
     'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
-    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
     displayedColumnsLavado = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
     'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
-    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
 
     displayedColumnsReparacion = ['select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado',
     'fLlegada', 'operador', 'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje',
-    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga',];
+    'buque', 'peso', 'cliente', 'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
@@ -101,10 +101,17 @@ export class VaciosComponent implements OnInit {
 
   checkedVacios = true;
   checkedHDescargaVacios = true;
-  checkedHDescagaL = true;
-  checkedHDescagaR = true;
+  checkedYaLavados = false;
+
   checkedLavadoVacios = true;
+  checkedHDescagaL = true;
+  checkedYaLavadosL = false;
+  checkedConReparacion = false;
+
   checkedReparacionVacios = true;
+  checkedHDescagaR = true;
+  checkedYaLavadosR = false;
+
   facturaVacios: string;
   facturaLavadoVacios: string;
   facturaReparacionVacios: string;
@@ -115,8 +122,8 @@ export class VaciosComponent implements OnInit {
   viajeReparacion: string = undefined;
   CD: string = undefined;
   //filtrarCD = new FormControl(false);
-  animal: string;
-  name: string;
+  // animal: string;
+  // name: string;
 
   constructor(public _maniobraService: ManiobraService, public _viajeService: ViajeService,
     public _excelService: ExcelService, public matDialog: MatDialog, private router: Router) { }
@@ -124,32 +131,7 @@ export class VaciosComponent implements OnInit {
   ngOnInit() {
     this.cargarViajes(new Date().toString());
 
-    this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedVacios) {
-        this.filtraManiobrasDescargaVacios(this.checkedVacios);
-        if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-        }
-      }
-    });
-
-    this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedLavadoVacios) {
-        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-        if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-        }
-      }
-    });
-
-    this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedReparacionVacios) {
-        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-        if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-        }
-      }
-    });
+    this.consulta();
 
     let indexTAB = localStorage.getItem('VacioTabs');
     if (indexTAB) {
@@ -158,110 +140,46 @@ export class VaciosComponent implements OnInit {
   }
 
   consulta() {
-    this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedVacios) {
-        this.filtraManiobrasDescargaVacios(this.checkedVacios);
-        if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-        }
-      }
-    });
+    this.consultaManiobrasDescargaVacios();
 
-    this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedLavadoVacios) {
-        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-        if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-        }
-      }
-    });
+    this.consultaManiobrasDescargaVaciosLavado();
 
-    this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
-      if (value.ok && this.checkedReparacionVacios) {
-        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-        if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-          this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-        }
-      }
-    });
+    this.consultaManiobrasDescargaVaciosReparacion();
   }
 
   consultaManiobrasDescargaVacios() {
-    return new Promise((resolve, reject) => {
       let cargaDescarga = "D";
-      // if(this.filtrarCD.value) {
-      //   cargaDescarga = this.CD;
-      // }
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, false)
+      this._maniobraService.getManiobrasVacios(cargaDescarga, this.viaje, "VACIO", false, null,
+      this.checkedVacios, this.checkedHDescargaVacios, this.checkedYaLavados)
         .subscribe(maniobras => {
           this.dataSourceVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceVacios.sort = this.sort;
           this.dataSourceVacios.paginator = this.paginator;
           this.totalRegistrosVacios = maniobras.total;
-
-          if (this.dataSourceVacios.data.length > 0 && this.checkedVacios) {
-            this.filtraManiobrasDescargaVacios(this.checkedVacios);
-          }
-
-          resolve({ ok: true, mensaje: 'Termine' })
-        },
-          () => {
-            reject('Failed!!');
-          });
     });
   }
 
   consultaManiobrasDescargaVaciosLavado() {
-    return new Promise((resolve, reject) => {
       let cargaDescarga = "D";
-
-      // if(this.filtrarCD.value) {
-      //   cargaDescarga = this.CD;
-      // }
-
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", true, false)
+      this._maniobraService.getManiobrasVacios(cargaDescarga,this.viaje, "VACIO", true, this.checkedConReparacion,
+      this.checkedLavadoVacios, this.checkedHDescagaL, this.checkedYaLavadosL)
         .subscribe(maniobras => {
           this.dataSourceLavadoVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceLavadoVacios.sort = this.MatSortLavado;
           this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
           this.totalRegistrosLavadoVacios = maniobras.total;
-
-          if (this.dataSourceLavadoVacios.data.length > 0 && this.checkedLavadoVacios) {
-            this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-          }
-
-          resolve({ ok: true, mensaje: 'Termine' })
-        },
-          () => {
-            reject('Failed!!');
-          });
     });
   }
 
   consultaManiobrasDescargaVaciosReparacion() {
-    return new Promise((resolve, reject) => {
       let cargaDescarga = "D";
-
-      // if(this.filtrarCD.value) {
-      //   cargaDescarga = this.CD;
-      // }
-
-      this._maniobraService.getManiobras(cargaDescarga, null, null, null, this.viaje, "VACIO", false, true)
+      this._maniobraService.getManiobrasVacios(cargaDescarga, this.viaje, "VACIO", false, true,
+      this.checkedReparacionVacios, this.checkedHDescagaR, this.checkedYaLavadosR)
         .subscribe(maniobras => {
           this.dataSourceReparacionVacios = new MatTableDataSource(maniobras.maniobras);
           this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
           this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
           this.totalRegistrosReparacionVacios = maniobras.total;
-
-          if (this.dataSourceReparacionVacios.data.length > 0 && this.checkedReparacionVacios) {
-            this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-          }
-
-          resolve({ ok: true, mensaje: 'Termine' })
-        },
-          () => {
-            reject('Failed!!');
-          });
     });
   }
 
@@ -271,186 +189,21 @@ export class VaciosComponent implements OnInit {
     this.dataSourceVacios.filter = filterValue;
     this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
   }
+
+  applyFilterLavados(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSourceLavadoVacios.filter = filterValue;
+    this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.filteredData.length;
+  }
+
+  applyFilterReparaciones(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSourceReparacionVacios.filter = filterValue;
+    this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.filteredData.length;
+  }
   
-
-  filtraManiobrasDescargaVacios(sinFactura: boolean) {
-    this.maniobrasSinFacturaVacios = [];
-    this.checkedVacios = sinFactura;
-    if (sinFactura) {
-      //console.log("Filtro sin factura")
-      this.dataSourceVacios.data.forEach(m => {
-        if (!m.facturaManiobra) {
-          this.maniobrasSinFacturaVacios.push(m);
-        }
-      });
-      this.dataSourceVacios = new MatTableDataSource(this.maniobrasSinFacturaVacios);
-      this.dataSourceVacios.sort = this.sort;
-      this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
-      if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-        //console.log("Filtro Descargados (dentro de filtro sin factura)")
-        this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-      } else {
-        //console.log("No Filtro Descargados por que Descargados : " + this.checkedHDescargaVacios + " y el datasource tiene " + this.dataSourceVacios.data.length)
-      }
-    } else {
-      //console.log("Filtro todos con y sin factura")
-      if (this.checkedHDescargaVacios) {
-        this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
-          // if (value.ok && this.checkedVacios) {
-          //   //console.log("Sin factura despues de recargar")
-          //   this.filtraManiobrasDescargaVacios(this.checkedVacios);
-          // } else {
-          if (value.ok && this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-            //console.log("Descargados despues de recargar")
-            this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-          }
-          // }
-        }).catch((error) => {
-          console.log(error.mensaje)
-        });
-      }
-    }
-  }
-
-  filtraManiobrasDescargaVaciosLavado(sinFactura: boolean) {
-    this.maniobrasSinFacturaLavadoVacios = [];
-    this.checkedLavadoVacios = sinFactura;
-    if (sinFactura) {
-      this.dataSourceLavadoVacios.data.forEach(m => {
-        if (!m.facturaManiobra) {
-          this.maniobrasSinFacturaLavadoVacios.push(m);
-        }
-      });
-      this.dataSourceLavadoVacios = new MatTableDataSource(this.maniobrasSinFacturaLavadoVacios);
-      this.dataSourceLavadoVacios.sort = this.MatSortLavado;
-      this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
-      this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
-      if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-        this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-      }
-    } else {
-      if (this.checkedHDescagaL) {
-        this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
-          // if (value.ok && this.checkedLavadoVacios) {
-          //   this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-          // } else {
-          if (value.ok && this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
-          }
-          // }
-        }).catch((error) => {
-          console.log(error.mensaje)
-        });
-      }
-    }
-  }
-
-  filtraManiobrasDescargaVaciosReparacion(sinFactura: boolean) {
-    this.maniobrasSinFacturaReparacionVacios = [];
-    this.checkedReparacionVacios = sinFactura;
-    if (sinFactura) {
-      this.dataSourceReparacionVacios.data.forEach(m => {
-        if (!m.facturaManiobra) {
-          this.maniobrasSinFacturaReparacionVacios.push(m);
-        }
-      });
-      this.dataSourceReparacionVacios = new MatTableDataSource(this.maniobrasSinFacturaReparacionVacios);
-      this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
-      this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
-      this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
-      if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-        this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-      }
-    } else {
-      if (this.checkedHDescagaR) {
-        this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
-          // if (value.ok && this.checkedReparacionVacios) {
-          //   this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-          // } else {
-          if (value.ok && this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-            this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-          }
-          // }
-        }).catch((error) => {
-          console.log(error.mensaje)
-        });
-      }
-    }
-  }
-
-  cargarManiobrasDescargadosVacios(descargados: boolean) {
-    this.maniobrasVaciosDescagadas = [];
-    this.checkedHDescargaVacios = descargados;
-    if (descargados) {
-      this.dataSourceVacios.data.forEach(m => {
-        if (m.hDescarga) {
-          this.maniobrasVaciosDescagadas.push(m);
-        }
-      });
-      this.dataSourceVacios = new MatTableDataSource(this.maniobrasVaciosDescagadas);
-      this.dataSourceVacios.sort = this.sort;
-      this.dataSourceVacios.paginator = this.paginator;
-      this.totalRegistrosVacios = this.dataSourceVacios.data.length;
-    } else {
-      this.consultaManiobrasDescargaVacios().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedVacios) {
-          this.filtraManiobrasDescargaVacios(this.checkedVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
-    }
-  }
-
-  cargarManiobrasDescargadosVaciosLavados(descargados: boolean) {
-    this.maniobrasVaciosLavadoDescagadas = [];
-    this.checkedHDescagaL = descargados;
-    if (descargados) {
-      this.dataSourceLavadoVacios.data.forEach(m => {
-        if (m.hDescarga) {
-          this.maniobrasVaciosLavadoDescagadas.push(m);
-        }
-      });
-      this.dataSourceLavadoVacios = new MatTableDataSource(this.maniobrasVaciosLavadoDescagadas);
-      this.dataSourceLavadoVacios.sort = this.MatSortLavado;
-      this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
-      this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.data.length;
-    } else {
-      this.consultaManiobrasDescargaVaciosLavado().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedLavadoVacios) {
-          this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
-    }
-  }
-
-  cargarManiobrasDescargadosVaciosReparaciones(descargados: boolean) {
-    this.maniobrasVaciosReparacionDescagadas = [];
-    this.checkedHDescagaR = descargados;
-    if (descargados) {
-      this.dataSourceReparacionVacios.data.forEach(m => {
-        if (m.hDescarga) {
-          this.maniobrasVaciosReparacionDescagadas.push(m);
-        }
-      });
-      this.dataSourceReparacionVacios = new MatTableDataSource(this.maniobrasVaciosReparacionDescagadas);
-      this.dataSourceReparacionVacios.sort = this.MatSortReparacion;
-      this.dataSourceReparacionVacios.paginator = this.MatPaginatorReparacion;
-      this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.data.length;
-    } else {
-      this.consultaManiobrasDescargaVaciosReparacion().then((value: { ok: Boolean, mensaje: String }) => {
-        if (value.ok && this.checkedReparacionVacios) {
-          this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-        }
-      }).catch((error) => {
-        console.log(error.mensaje)
-      });
-    }
-  }
-
   cargarViajes(anio: string) {
     this.cargando = true;
     this._viajeService.getViajesA(anio)
@@ -504,6 +257,7 @@ export class VaciosComponent implements OnInit {
         Agencia: m.agencia && m.agencia.nombreComercial && m.agencia.nombreComercial != undefined && m.agencia.nombreComercial != '' && m.agencia.nombreComercial,
         estatus: m.estatus,
         hDescarga: m.hDescarga,
+        fFinLavado: m.fFinLavado,
         fAlta: m.fAlta.substring(0, 10)
 
         // folio: m.folio,
@@ -618,7 +372,7 @@ export class VaciosComponent implements OnInit {
       if (result) {
         // if (this.checkedVacios) {
         this.selectionVacios = new SelectionModel<Maniobra>(true, []);
-        this.filtraManiobrasDescargaVacios(this.checkedVacios);
+        //this.filtraManiobrasDescargaVacios(this.checkedVacios);
         // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
         // }
@@ -637,7 +391,7 @@ export class VaciosComponent implements OnInit {
       if (result) {
         // if (this.checkedLavadoVacios) {
         this.selectionLavadoVacios = new SelectionModel<Maniobra>(true, []);
-        this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+        //this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
         // }
@@ -658,7 +412,7 @@ export class VaciosComponent implements OnInit {
       if (result) {
         // if (this.checkedReparacionVacios) {
         this.selectionReparacionVacios = new SelectionModel<Maniobra>(true, []);
-        this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+        //this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
         // }

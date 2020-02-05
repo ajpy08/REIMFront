@@ -104,8 +104,49 @@ export class ManiobraService {
     return this.http.get(url, { params: params });
   }
 
+  // Vacios
+  getManiobrasVacios(cargadescarga?: string, viaje?: string, peso?: string, lavado?: boolean, reparacion?: boolean, 
+    sinFactura?: boolean, descargados?: boolean, yaLavados?: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/maniobras/facturacion-vacios';
+    let params = new HttpParams();
+    if (cargadescarga) {
+      params = params.append('cargadescarga', cargadescarga);
+    }
+
+    if (viaje) {
+      params = params.append('viaje', viaje);
+    }
+
+    if (peso) {
+      params = params.append('peso', peso);
+    }
+
+    if (lavado) {
+      params = params.append('lavado', lavado.toString());
+    }
+
+    if (reparacion) {
+      params = params.append('reparacion', reparacion == true ? 'true' : 'false');
+    }
+
+    if (sinFactura) {
+      params = params.append('sinFactura', sinFactura.toString());
+    }
+
+    if (descargados) {
+      params = params.append('descargados', descargados.toString());
+    }
+
+    if (yaLavados) {
+      params = params.append('yaLavados', yaLavados.toString());
+    }
+
+    return this.http.get(url, { params: params });
+  }
+
   // Excepto Vacios
-  getOtrasManiobras(cargadescarga?: string, viaje?: string, peso?: string, lavado?: boolean, reparacion?: boolean): Observable<any> {
+  getOtrasManiobras(cargadescarga?: string, viaje?: string, peso?: string, lavado?: boolean, reparacion?: boolean, 
+    sinFactura?: boolean, descargados?: boolean, yaLavados?: boolean): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/facturacion-maniobras';
     let params = new HttpParams();
     if (cargadescarga) {
@@ -121,11 +162,23 @@ export class ManiobraService {
     }
 
     if (lavado) {
-      params = params.append('lavado', 'true');
+      params = params.append('lavado', lavado.toString());
     }
 
     if (reparacion) {
-      params = params.append('reparacion', 'true');
+      params = params.append('reparacion', reparacion == true ? 'true' : 'false');
+    }
+
+    if (sinFactura) {
+      params = params.append('sinFactura', sinFactura.toString());
+    }
+
+    if (descargados) {
+      params = params.append('descargados', descargados.toString());
+    }
+
+    if (yaLavados) {
+      params = params.append('yaLavados', yaLavados.toString());
     }
 
     return this.http.get(url, { params: params });
