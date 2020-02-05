@@ -37,20 +37,21 @@
                   </button> -->
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedVacios" #sinFact
-                    (change)="filtraManiobrasDescargaVacios(sinFact.checked)">Por Facturar
-                  </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescargaVacios" #hDescargaVacios
-                    (change)="cargarManiobrasDescargadosVacios(hDescargaVacios.checked)">Solo Descargados
-                  </mat-checkbox>
-                  <!-- <p>
-                    <mat-checkbox [formControl]="filtrarCD">CARGA-DESCARGA</mat-checkbox>
-                  </p>
-                  <mat-select [(ngModel)]="CD" placeholder="Selecciona..." name="CD" [disabled]="!filtrarCD.value">
-                    <mat-option>--- NINGUNO ---</mat-option>
-                    <mat-option value="C">CARGA</mat-option>
-                    <mat-option value="D">DESCARGA</mat-option>
-                  </mat-select> -->
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedVacios" #sinFactura (change)="consultaManiobrasDescargaVacios()">
+                      Por Facturar
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedHDescargaVacios" #DescargaVacios
+                      (change)="consultaManiobrasDescargaVacios()">Ya Descargados
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedYaLavados" #hFinLavadoVacios (change)="consultaManiobrasDescargaVacios()">
+                      Ya Lavados
+                    </mat-checkbox>
+                  </div>
                 </div>
                 <div class="col-sm">
                 </div>
@@ -195,6 +196,11 @@
                   <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="hFinLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Fin Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
@@ -255,12 +261,26 @@
                   </button> -->
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedLavadoVacios" #s
-                    (change)="filtraManiobrasDescargaVaciosLavado(s.checked)">Por Facturar
-                  </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaL" #checkedHDescagaL
-                    (change)="cargarManiobrasDescargadosVaciosLavados(checkedHDescagaL.checked)">Solo Descargados
-                  </mat-checkbox>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedLavadoVacios" #sinFactL
+                      (change)="consultaManiobrasDescargaVaciosLavado()">Por Facturar
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedHDescagaL" #DescargaVaciosLavado
+                      (change)="consultaManiobrasDescargaVaciosLavado()">Ya Descargados
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedYaLavadosL" #hFinLavadoVaciosR
+                      (change)="consultaManiobrasDescargaVaciosLavado()">Ya Lavados
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedConReparacion" #conReparacionR
+                      (change)="consultaManiobrasDescargaVaciosLavado()">Con Reparacion
+                    </mat-checkbox>
+                  </div>
                 </div>
                 <div class="col-sm">
                 </div>
@@ -269,7 +289,7 @@
             <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterLavados($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -405,6 +425,11 @@
                   <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="hFinLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Fin Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
+                </ng-container>
+
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavado" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavado;"></mat-row>
               </mat-table>
@@ -466,12 +491,22 @@
                   </button> -->
                 </div>
                 <div class="col-sm">
-                  <mat-checkbox [checked]="checkedReparacionVacios" #s
-                    (change)="filtraManiobrasDescargaVaciosReparacion(s.checked)">Por Facturar
-                  </mat-checkbox><br><br>
-                  <mat-checkbox [checked]="checkedHDescagaR" #checkedHDescagaR
-                    (change)="cargarManiobrasDescargadosVaciosReparaciones(checkedHDescagaR.checked)">Solo Descargados
-                  </mat-checkbox>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedReparacionVacios" #sinFactR
+                      (change)="consultaManiobrasDescargaVaciosReparacion()">Por Facturar
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedHDescagaR" #hDescargaVaciosReparacion
+                      (change)="consultaManiobrasDescargaVaciosReparacion()">Ya
+                      Descargados
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-sm">
+                    <mat-checkbox [(ngModel)]="checkedYaLavadosR" #hFinLavadoVaciosR
+                      (change)="consultaManiobrasDescargaVaciosReparacion()">Ya Lavados
+                    </mat-checkbox>
+                  </div>
                 </div>
                 <div class="col-sm">
                 </div>
@@ -481,7 +516,7 @@
             </h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterReparaciones($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -617,6 +652,11 @@
                 <ng-container matColumnDef="hDescarga">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Descarga</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.hDescarga}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="hFinLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Fin Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
