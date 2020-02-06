@@ -181,9 +181,9 @@
             </div>
             <br>
             <div class="text-right">
-                <button class="btn btn-success m-r-10" (click)="exportAsXLSXC(dtCargas, 'Cargas')"  >
-                    <i class="fas fa-file-excel"></i>
-                  </button>
+              <button class="btn btn-success m-r-10" (click)="exportAsXLSXC(dtCargas, 'Cargas')">
+                <i class="fas fa-file-excel"></i>
+              </button>
               <button matTooltip="Nueva Solicitud" mat-mini-fab class="btn btn-primary"
                 [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button">
                 <i class="fa fa-plus"></i>
@@ -216,6 +216,11 @@
                 <ng-container matColumnDef="fAlta">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Solicitud</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="blBooking">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.blBooking}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="tipo">

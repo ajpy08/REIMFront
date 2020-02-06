@@ -526,7 +526,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
       this.maniobraGuardadaEnCoordenada = ultima;
 
       this._maniobraService
-        .registraLavRepDescarga(this.regForm.value)
+        .registraFinLavRep(this.regForm.value)
         .subscribe(
           res => {
             this.regForm.markAsPristine();
