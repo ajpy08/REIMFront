@@ -41,9 +41,9 @@
             </div>
             <br>
             <div class="text-right">
-                <button (click)="exportAsXLSXD(dtDescargas, 'Descargas')" class="btn btn-success m-r-10">
-                    <i class="fas fa-file-excel"></i>
-                  </button>
+              <button (click)="exportAsXLSXD(dtDescargas, 'Descargas')" class="btn btn-success m-r-10">
+                <i class="fas fa-file-excel"></i>
+              </button>
               <button matTooltip="Nueva Solicitud Descarga" mat-mini-fab class="btn btn-primary"
                 [routerLink]="['/solicitudes/solicitud_descarga','nuevo']" type="button"> <i class="fa fa-plus"></i>
               </button>
@@ -171,9 +171,9 @@
             </div>
             <br>
             <div class="text-right">
-                <button (click)="exportAsXLSXC(dtCargas, 'Cargas')" class="btn btn-success m-r-10">
-                    <i class="fas fa-file-excel"></i>
-                  </button>
+              <button (click)="exportAsXLSXC(dtCargas, 'Cargas')" class="btn btn-success m-r-10">
+                <i class="fas fa-file-excel"></i>
+              </button>
               <button matTooltip="Nueva solicitud Carga" mat-mini-fab class="btn btn-primary"
                 [routerLink]="['/solicitudes/solicitud_carga','nuevo']" type="button">
                 <i class="fa fa-plus"></i>
@@ -206,6 +206,10 @@
                   <mat-cell *matCellDef="let row"> {{row.fAlta | date:"dd-MM-yyyy"}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="blBooking">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.blBooking}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="agencia.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
