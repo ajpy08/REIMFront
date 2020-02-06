@@ -1,11 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Solicitud } from './solicitud.models';
-import { SolicitudService, ExcelService } from '../../services/service.index';
-import { MatTabGroup, MatTabChangeEvent, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import * as _moment from 'moment';
-import { DatePipe } from '@angular/common';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Solicitud } from "./solicitud.models";
+import { SolicitudService, ExcelService } from "../../services/service.index";
+import {
+  MatTabGroup,
+  MatTabChangeEvent,
+  MatPaginator,
+  MatSort,
+  MatTableDataSource
+} from "@angular/material";
+import * as _moment from "moment";
+import { DatePipe } from "@angular/common";
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE
+} from "@angular/material/core";
 
 declare var swal: any;
 
@@ -13,30 +23,39 @@ const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: ['l', 'L'],
+    dateInput: ["l", "L"]
   },
   display: {
-    dateInput: 'L',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
+    dateInput: "L",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
 };
 
 @Component({
-  selector: 'app-aprobaciones',
-  templateUrl: './aprobaciones.component.html',
+  selector: "app-aprobaciones",
+  templateUrl: "./aprobaciones.component.html",
   styles: [],
-  providers: [DatePipe,
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+  providers: [
+    DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' },
-  ],
+    { provide: MAT_DATE_LOCALE, useValue: "es-mx" }
+  ]
 })
 export class AprobacionesComponent implements OnInit {
-
-  fIni = moment().local().startOf('day').subtract(1, 'month');
-  fFin = moment().local().startOf('day');
+  fIni = moment()
+    .local()
+    .startOf("day")
+    .subtract(1, "month");
+  fFin = moment()
+    .local()
+    .startOf("day");
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -46,27 +65,49 @@ export class AprobacionesComponent implements OnInit {
   // @ViewChild('pagDescargas', { read: MatPaginator }) pagDescargas: MatPaginator; //cargas
   // @ViewChild('sortDescargas') sortDescargas: MatSort; //cargas
 
-  @ViewChild('pagCargas', { read: MatPaginator }) pagCargas: MatPaginator; //cargas
-  @ViewChild('sortCargas') sortCargas: MatSort; //cargas
+  @ViewChild("pagCargas", { read: MatPaginator }) pagCargas: MatPaginator; //cargas
+  @ViewChild("sortCargas") sortCargas: MatSort; //cargas
 
   cargando = true;
   aprobacionesExcel = [];
 
-  displayedColumnsDescarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'naviera.nombreComercial', 'cliente.nombreComercial', 'viaje.viaje', 'buque.nombre',
-    'observaciones', 'estatus'];
+  displayedColumnsDescarga = [
+    "actions",
+    "fAlta",
+    "tipo",
+    "agencia.nombreComercial",
+    "naviera.nombreComercial",
+    "cliente.nombreComercial",
+    "viaje.viaje",
+    "buque.nombre",
+    "observaciones",
+    "estatus"
+  ];
 
-  displayedColumnsCarga = ['actions', 'fAlta', 'tipo', 'agencia.nombreComercial', 'cliente.nombreComercial', 'observaciones', 'estatus'];
+  displayedColumnsCarga = [
+    "actions",
+    "fAlta",
+    "blBooking",
+    "tipo",
+    "agencia.nombreComercial",
+    "cliente.nombreComercial",
+    "observaciones",
+    "estatus"
+  ];
 
   dtCargas: any;
   dtDescargas: any;
   totalRegistrosDescargas = 0;
   totalRegistrosCargas = 0;
 
-  constructor(public _solicitudesService: SolicitudService,private excelService: ExcelService) { }
+  constructor(
+    public _solicitudesService: SolicitudService,
+    private excelService: ExcelService
+  ) {}
 
   ngOnInit() {
-    this.cargaSolicitudes('D');
-    this.cargaSolicitudes('C');
+    this.cargaSolicitudes("D");
+    this.cargaSolicitudes("C");
     let indexTAB = localStorage.getItem("AprobacionTabs");
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
@@ -75,10 +116,14 @@ export class AprobacionesComponent implements OnInit {
 
   cargaSolicitudes(CD: string) {
     this.cargando = true;
-    if (CD == 'D') {
-      this._solicitudesService.getSolicitudes('D', null,
-        this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-        this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '')
+    if (CD == "D") {
+      this._solicitudesService
+        .getSolicitudes(
+          "D",
+          null,
+          this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
+          this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : ""
+        )
         .subscribe(resp => {
           this.dtDescargas = new MatTableDataSource(resp.solicitudes);
           // this.dtDescargas.sortingDataAccessor = (item, property) => {
@@ -90,11 +135,15 @@ export class AprobacionesComponent implements OnInit {
           this.totalRegistrosDescargas = resp.total;
           //this.dtDescargas.filterPredicate  = this.Filtro();
         });
-    } else if (CD == 'C') {
+    } else if (CD == "C") {
       this.cargando = true;
-      this._solicitudesService.getSolicitudes('C', null,
-        this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-        this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '')
+      this._solicitudesService
+        .getSolicitudes(
+          "C",
+          null,
+          this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
+          this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : ""
+        )
         .subscribe(resp => {
           //this.dtCargas = resp.solicitudes;
           this.dtCargas = new MatTableDataSource(resp.solicitudes);
@@ -131,15 +180,19 @@ export class AprobacionesComponent implements OnInit {
   }
 
   borrarSolicitud(sol: Solicitud) {
-    swal({ title: '¿Esta seguro?', text: 'Esta apunto de borrar la solicitud.', icon: 'warning', buttons: true, dangerMode: true, })
-      .then(borrar => {
-        if (borrar) {
-          this._solicitudesService.borrarSolicitud(sol._id)
-            .subscribe(borrado => {
-              this.cargaSolicitudes(sol.tipo);
-            });
-        }
-      });
+    swal({
+      title: "¿Esta seguro?",
+      text: "Esta apunto de borrar la solicitud.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        this._solicitudesService.borrarSolicitud(sol._id).subscribe(borrado => {
+          this.cargaSolicitudes(sol.tipo);
+        });
+      }
+    });
   }
 
   // Filtro(): (data: any, filter: string) => boolean {
@@ -157,20 +210,45 @@ export class AprobacionesComponent implements OnInit {
   //   return filterFunction;
   // }
 
-
   CreaDatosExcel(datos) {
     datos.forEach(b => {
       var buque = {
         //Id: b._id,
         FAlta: b.fAlta.substring(0, 10),
         Tipo: b.tipo,
-        Agencia: b.agencia && b.agencia.nombreComercial && b.agencia.nombreComercial != undefined && b.agencia.nombreComercial != '' && b.agencia.nombreComercial,
-        Naviera: b.naviera && b.naviera.nombreComercial && b.naviera.nombreComercial != undefined && b.naviera.nombreComercial != '' && b.naviera.nombreComercial,
-        Cliente: b.cliente && b.cliente.nombreComercial && b.cliente.nombreComercial != undefined && b.cliente.nombreComercial != '' && b.cliente.nombreComercial,
-        Viaje: b.viaje && b.viaje.viaje && b.viaje.viaje != undefined && b.viaje.viaje != '' ? b.viaje.viaje : '' && b.viaje.viaje,
-        Nombre_Buque: b.viaje.buque && b.viaje.buque != undefined && b.viaje.buque.nombre != '' ? b.viaje.buque.nombre : '' && b.viaje.buque.nombre,
+        Agencia:
+          b.agencia &&
+          b.agencia.nombreComercial &&
+          b.agencia.nombreComercial != undefined &&
+          b.agencia.nombreComercial != "" &&
+          b.agencia.nombreComercial,
+        Naviera:
+          b.naviera &&
+          b.naviera.nombreComercial &&
+          b.naviera.nombreComercial != undefined &&
+          b.naviera.nombreComercial != "" &&
+          b.naviera.nombreComercial,
+        Cliente:
+          b.cliente &&
+          b.cliente.nombreComercial &&
+          b.cliente.nombreComercial != undefined &&
+          b.cliente.nombreComercial != "" &&
+          b.cliente.nombreComercial,
+        Viaje:
+          b.viaje &&
+          b.viaje.viaje &&
+          b.viaje.viaje != undefined &&
+          b.viaje.viaje != ""
+            ? b.viaje.viaje
+            : "" && b.viaje.viaje,
+        Nombre_Buque:
+          b.viaje.buque &&
+          b.viaje.buque != undefined &&
+          b.viaje.buque.nombre != ""
+            ? b.viaje.buque.nombre
+            : "" && b.viaje.buque.nombre,
         Observaciones: b.observaciones,
-        Estatus: b.estatus,
+        Estatus: b.estatus
       };
       this.aprobacionesExcel.push(buque);
     });
@@ -181,7 +259,7 @@ export class AprobacionesComponent implements OnInit {
     if (this.aprobacionesExcel) {
       this.excelService.exportAsExcelFile(this.aprobacionesExcel, nombre);
     } else {
-      swal('No se puede exportar un excel vacio', '', 'error');
+      swal("No se puede exportar un excel vacio", "", "error");
     }
   }
 
@@ -191,10 +269,20 @@ export class AprobacionesComponent implements OnInit {
         //Id: b._id,
         FAlta: b.fAlta.substring(0, 10),
         Tipo: b.tipo,
-        Agencia: b.agencia && b.agencia.nombreComercial && b.agencia.nombreComercial != undefined && b.agencia.nombreComercial != '' && b.agencia.nombreComercial,
-        Cliente: b.cliente && b.cliente.nombreComercial && b.cliente.nombreComercial != undefined && b.cliente.nombreComercial != '' && b.cliente.nombreComercial,
+        Agencia:
+          b.agencia &&
+          b.agencia.nombreComercial &&
+          b.agencia.nombreComercial != undefined &&
+          b.agencia.nombreComercial != "" &&
+          b.agencia.nombreComercial,
+        Cliente:
+          b.cliente &&
+          b.cliente.nombreComercial &&
+          b.cliente.nombreComercial != undefined &&
+          b.cliente.nombreComercial != "" &&
+          b.cliente.nombreComercial,
         Observaciones: b.observaciones,
-        Estatus: b.estatus,
+        Estatus: b.estatus
       };
       this.aprobacionesExcel.push(buque);
     });
@@ -205,10 +293,7 @@ export class AprobacionesComponent implements OnInit {
     if (this.aprobacionesExcel) {
       this.excelService.exportAsExcelFile(this.aprobacionesExcel, nombre);
     } else {
-      swal('No se puede exportar un excel vacio', '', 'error');
+      swal("No se puede exportar un excel vacio", "", "error");
     }
   }
-
-
-
 }
