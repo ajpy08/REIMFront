@@ -8,7 +8,7 @@ import { Naviera } from '../navieras/navieras.models';
 import { Transportista } from '../transportistas/transportista.models';
 import { Cliente } from 'src/app/models/cliente.models';
 import { SubirArchivoService, TiposContenedoresService, AgenciaService, NavieraService, UsuarioService, TransportistaService, ClienteService } from 'src/app/services/service.index';
-import { GRADOS_CONTENEDOR_ARRAY, ESTADOS_CONTENEDOR, PATIOS_ARRAY, ROLES, PATIOS } from 'src/app/config/config';
+import { GRADOS_CONTENEDOR_ARRAY, ESTADOS_CONTENEDOR, PATIOS_ARRAY, ROLES, PATIOS, STATUS_SOLICITUD } from 'src/app/config/config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LiberacionBLService } from './liberacion-bl.service';
 
@@ -80,7 +80,7 @@ export class LiberacionBLComponent implements OnInit {
     this.contenedores.removeAt(0);
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.url = '/solicitudes/aprobaciones';
+      this.url = '/aprobacion_tbk';
     } else if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE) {
       this.url = '/liberaciones_bk';
     }
@@ -88,9 +88,9 @@ export class LiberacionBLComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      // agencia: ['', [Validators.required]],
       naviera: ['', [Validators.required]],
       cliente: ['', [Validators.required]],
+      idcliente: [{ value: '', disabled: false }],
       blBooking: ['', [Validators.required]],
       credito: ['', [Validators.required]],
       observaciones: [''],
@@ -152,15 +152,16 @@ export class LiberacionBLComponent implements OnInit {
   get _id() {
     return this.regForm.get('_id');
   }
-  // get agencia() {
-  //   return this.regForm.get('agencia');
-  // }
+
   get naviera() {
     return this.regForm.get('naviera');
   }
 
   get cliente() {
     return this.regForm.get('cliente');
+  }
+  get idcliente() {
+    return this.regForm.get('idcliente');
   }
   get blBooking() {
     return this.regForm.get('blBooking');
@@ -251,12 +252,11 @@ export class LiberacionBLComponent implements OnInit {
     this.liberacionService.cargarliberacion(id).subscribe(liberacion => {
       this.regForm.controls['_id'].setValue(liberacion._id);
       this.regForm.controls['tipo'].setValue(liberacion.tipo);
-      // this.regForm.controls['agencia'].setValue(liberacion.agencia);
       this.regForm.controls['naviera'].setValue(liberacion.naviera);
-      this.regForm.controls['naviera'].setValue(liberacion.naviera);
+      this.regForm.controls['cliente'].setValue(liberacion.cliente);
+      this.regForm.controls['idcliente'].setValue(liberacion.cliente._id);
       this.regForm.controls['blBooking'].setValue(liberacion.blBooking);
       this.regForm.controls['credito'].setValue(liberacion.credito);
-      this.regForm.controls['cliente'].setValue(liberacion.cliente);
       this.regForm.controls['observaciones'].setValue(liberacion.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(liberacion.rutaComprobante);
       this.regForm.controls['correo'].setValue(liberacion.correo);
@@ -275,9 +275,18 @@ export class LiberacionBLComponent implements OnInit {
       this.regForm.controls['estatus'].setValue(liberacion.estatus);
       this.onChangeCredito({ checked: this.credito });
       liberacion.contenedores.forEach(element => {
-        this.addContenedor(element.tipo, element.peso, element.grado,
-          element.maniobra, element.transportista,
-          element.transportista.nombreComercial, element.transportista.correo, element.patio, '');
+
+        if (element.transportista == null || element.transportista == undefined) {
+          this.addContenedor(element.tipo, element.peso, element.grado,
+            element.maniobra, element.transportista,
+            element.transportista = '', element.transportista.correo, element.patio, '');
+
+        } else {
+          this.addContenedor(element.tipo, element.peso, element.grado,
+            element.maniobra, element.transportista,
+            element.transportista.nombreComercial, element.transportista.correo, element.patio, '');
+
+        }
       });
 
       if (liberacion.estatus === 'APROBADA') {
@@ -324,10 +333,7 @@ export class LiberacionBLComponent implements OnInit {
       swal('Faltan datos', 'No ha seleccionado grado', 'error');
       return;
     }
-    // if (this.transportistaTemp.value === '' || this.transportistaTemp.value === undefined) {
-    //   swal('Faltan datos', 'No ha seleccionado transportista', 'error');
-    //   return;
-    // }
+
     if (this.patioTemp.value === '' || this.patioTemp.value === undefined) {
       swal('Faltan datos', 'No ha seleccionado estado', 'error');
       return;
@@ -339,6 +345,7 @@ export class LiberacionBLComponent implements OnInit {
         this.transportistaTemp.value.nombreComercial, this.transportistaTemp.value.correo, this.patioTemp.value, '');
     }
     this.contenedorTemp.setValue('');
+    this.transportistaTemp.setValue('');
     this.tipoTemp.setValue('');
 
 
@@ -388,36 +395,6 @@ export class LiberacionBLComponent implements OnInit {
           }
         }
         break;
-      // case 'Agencia Aduanal':
-      //   if (!this.agencia || this.agencia.value === '') {
-      //     swal('Error', 'No ha seleccionado la agencia aduanal', 'error');
-      //     this.facturarA.setValue(null);
-      //     return;
-      //   } else {
-      //     const reg = this.agencias.find(x => x._id == this.agencia.value);
-      //     this.rfc.setValue(reg.rfc);
-      //     this.razonSocial.setValue(reg.razonSocial);
-      //     this.calle.setValue(reg.calle);
-      //     this.noExterior.setValue(reg.noExterior);
-      //     this.noInterior.setValue(reg.noInterior);
-      //     this.colonia.setValue(reg.colonia);
-      //     this.municipio.setValue(reg.municipio);
-      //     this.ciudad.setValue(reg.ciudad);
-      //     this.estado.setValue(reg.estado);
-      //     this.cp.setValue(reg.cp);
-      //     this.correo.setValue(reg.correo);
-      //     this.correoFac.setValue(reg.correoFac);
-      //     if (reg.credito) {
-      //       this.credito.enable({ onlySelf: true });
-      //       this.credito.setValue(true);
-      //       this.onChangeCredito({ checked: true });
-      //     } else {
-      //       this.credito.disable({ onlySelf: true });
-      //       this.credito.setValue(false);
-      //       this.onChangeCredito({ checked: false });
-      //     }
-      //   }
-      //   break;
       case 'Naviera':
         if (!this.naviera || this.naviera.value === '') {
           swal('Error', 'No ha seleccionado la naviera', 'error');
@@ -465,20 +442,69 @@ export class LiberacionBLComponent implements OnInit {
   }
 
   guardarSolicitud() {
+
+    var ok = true;
+
+    this.contenedores.value.forEach(c => {
+      this.regForm.controls['estatus'].setValue(null);
+      if (!c.transportista) {
+        if (ok) {
+          ok = false;
+        }
+      }
+    });
+
+    if (ok) {
+      this.regForm.controls['estatus'].setValue(STATUS_SOLICITUD.NA);
+    } else {
+      this.regForm.controls['estatus'].setValue(STATUS_SOLICITUD.ESPERA)
+     
+    }
+
     if (this.regForm.valid) {
       this.transportistaTemp.setValue(null);
       this.estadoTemp.setValue(null);
       this.maniobraTemp.setValue(null);
-      this.liberacionService.guardarliberacion(this.regForm.getRawValue()).subscribe(res => {
-        this.fileComprobante = null;
-        this.temporalComprobante = false;
-        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
-          this.regForm.get('_id').setValue(res._id);
-          this.edicion = true;
-          this.router.navigate(['/liberacion_bk', this.regForm.get('_id').value]);
-        }
-        this.regForm.markAsPristine();
-      });
+
+
+
+      if (!ok) {
+
+        this.liberacionService.guardarliberacion(this.regForm.getRawValue()).subscribe(res => {
+          this.fileComprobante = null;
+          this.temporalComprobante = false;
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
+            this.regForm.get('_id').setValue(res._id);
+            this.edicion = true;
+            this.router.navigate(['/liberacion_bk', this.regForm.get('_id').value]);
+          }
+
+        });
+      } else {
+
+        this.liberacionService.guardarSolicitud(this.regForm.getRawValue()).subscribe(res => {
+          this.fileComprobante = null;
+          this.temporalComprobante = false;
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
+            this.regForm.get('_id').setValue(res._id);
+            this.edicion = true;
+            this.router.navigate(['/liberacion_bk', this.regForm.get('_id').value]);
+          }
+
+        });
+
+      }
+      //   this.liberacionService.guardarliberacion(this.regForm.getRawValue()).subscribe(res => {
+      //     this.fileComprobante = null;
+      //     this.temporalComprobante = false;
+      //     if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
+      //       this.regForm.get('_id').setValue(res._id);
+      //       this.edicion = true;
+      //       this.router.navigate(['/liberacion_bk', this.regForm.get('_id').value]);
+      //     }
+
+          this.regForm.markAsPristine();
+      //   });
     }
   }
 
@@ -490,5 +516,4 @@ export class LiberacionBLComponent implements OnInit {
     localStorage.removeItem('history')
     // this.location.back();
   }
-
 }

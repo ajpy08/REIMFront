@@ -10,6 +10,13 @@
             <h3 class="card-title">Datos generales</h3>
             <hr>
             <div class="row p-t-20">
+              <div class="col-md-3">
+                <mat-form-field>
+                  <mat-label>* Booking </mat-label>
+                  <input matInput formControlName="blBooking">
+                </mat-form-field>
+                <mat-error *ngIf="blBooking.hasError('required')">El Booking es Necesario.</mat-error>
+              </div>
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Naviera</mat-label>
@@ -50,13 +57,6 @@
 
 
 
-              <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>* Booking </mat-label>
-                  <input matInput formControlName="blBooking">
-                </mat-form-field>
-                <mat-error *ngIf="blBooking.hasError('required')">El Booking es Necesario.</mat-error>
-              </div>
 
               <div class="col-md-4">
                 <label class="control-label">*Facturar a: </label>
@@ -249,6 +249,14 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+                <!-- <mat-form-field>
+                  <mat-label>Transportista</mat-label>
+                  <mat-select formControlName="transportistaTemp" type="text" placeholder="Seleccione un Transportista">
+                    <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
+                      {{transportista.nombreComercial}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field> -->
               </div>
               <div class="col-md-2">
                 <mat-form-field>
@@ -264,8 +272,8 @@
                 <button *ngIf="!aprobada" (click)="agregarContenedor()" type="button" class="btn btn-success"> <i
                     class="fa fa-check"></i> Añadir</button>
               </div>
-              <div *ngIf="contenedores.controls.length > 0" class="alert alert-danger">
-                <strong>Se enviará un correo a {{this.correo.value}} y a el correo de transportista(s)</strong>
+              <div *ngIf="contenedores.controls.length > 0" class="alert alert-warning">
+                <strong>Se enviará un correo a {{this.correo.value}} y a el correo de transportista(s) </strong>
               </div>
             </div>
 

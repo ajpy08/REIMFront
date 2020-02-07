@@ -1,0 +1,137 @@
+<form class="form-horizontal" [formGroup]="regForm" (submit)="actualizarSolicitud()">
+
+  <mat-accordion [multi]="true">
+
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Datos Generales
+        </mat-panel-title>
+        <mat-panel-description>
+          Naviera , Cliente
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="row">
+        <div class="col-md-5">
+          <mat-form-field>
+            <mat-label>Naviera</mat-label>
+            <input matInput formControlName="naviera" type="text">
+          </mat-form-field>
+        </div>
+        <div class="col-md-5">
+          <mat-form-field>
+            <mat-label>Cliente</mat-label>
+            <input matInput formControlName="cliente" type="text">
+          </mat-form-field>
+
+        </div>
+        <div class="col-md-4">
+
+          <mat-form-field>
+            <mat-label>Booking</mat-label>
+            <input matInput type="text" formControlName="blBooking">
+          </mat-form-field>
+
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Detalles de la Carga
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <h3>Estatus Solicitud {{estatus.value}}</h3>
+        <!-- <button type="button " class="btn btn-success " (click)="validaSolicitud() "> <i class="fa fa-check "></i> Validar</button> -->
+
+      </div>
+
+      <div class="row ">
+        <div class="col-md-12">
+          <table matNativeControl class="table table-striped ">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tamaño - Tipo</th>
+                <th scope="col">Grado</th>
+                <th scope="col">Estado contenedor</th>
+                <th scope="col">Transportista</th>
+                <th scope="col">Patio</th>
+
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i=index;">
+
+              <tr [formGroupName]="i ">
+                <th scope="row ">{{i+1}}</th>
+                <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                <td>{{this.contenedores.controls[i].get('grado').value}}</td>
+                <td>{{this.contenedores.controls[i].get('peso').value}}</td>
+                <td>
+                  <mat-form-field>
+                  <mat-select (selectionChange)="asignaTransportista($event.value, i)" [(value)]="this.contenedores.controls[i].get('transportista').value" type="text" placeholder="Transportista">
+                    <mat-option *ngFor="let trans of transportistas" [value]="trans._id">
+                      {{trans.nombreComercial}}
+                    </mat-option>    
+                  </mat-select>
+                </mat-form-field>
+
+
+
+                  <!-- <div class="col-md-4" *ngIf="item.value.transportista == ''; else notshow ">
+                  <mat-form-field >
+                    <mat-label>Transportista</mat-label>
+                    <mat-select  formControlName="transportista" >
+                      <mat-option  *ngFor="let trans of transportistas" [value]="trans._id">
+                        {{trans.nombreComercial}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  </div> -->
+                </td>
+
+                <td>
+                  <!-- <ng-template #notshow>
+                    <mat-cell *matCellDef="let row">
+                   <mat-select [(ngModel)]="row.transportistas" name="transportista">
+                      <mat-option  *ngFor="let trans of transportistas" [value]="trans._id">
+                        {{trans.nombreComercial}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-cell>
+                   <td>{{this.contenedores.controls[i].get('transportista').value}}</td>  
+                  </ng-template> -->
+                </td> 
+                <!-- <td>{{this.contenedores.controls[i].get('transportista').value}}</td> -->
+                <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                <!-- <td>{{this.contenedores.controls[i].get('maniobra').value?.folio}}</td> -->
+                <td>
+
+
+                  <!-- <button *ngIf="estatus.value==='APROBADA'" matTooltip="Enviar Notificación" type="button"
+                    class="btn btn-info waves-effect waves-light m-r-10 m-l-10"
+                    (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
+                    <i class="fas fa-envelope"></i>
+                  </button> -->
+                  <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button *ngIf="estatus.value==='ESPERA'" type="submit" class="btn btn-success m-r-10"
+          [disabled]="contenedores.invalid">
+            <i class="fa fa-check "></i> GUARDAR</button>
+          <button type="button" class="btn btn-inverse" (click)="back()"> Regresar</button>
+        </div>
+      </div>
+
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+
+</form>

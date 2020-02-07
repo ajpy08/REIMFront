@@ -1,13 +1,10 @@
 export class Liberacion {
 
     constructor (
-        // public agencia?: string,
         public naviera?: string,
         public transportista?: string,
         public cliente?: string,
         public facturarA?: string,
-        // public buque?: string,
-        // public viaje?: string,
         public observaciones?: string,
         public rutaBL?: string,
         public credito?: boolean,

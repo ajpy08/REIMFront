@@ -131,6 +131,9 @@ import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { MapaComponent } from './mapa/mapa.component';
+import { AprobacionesBkComponent } from './liberacion-bl/aprobaciones-bk/aprobaciones-bk.component';
+import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobacion-tbk/aprobacion-tbk.component';
+import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
 
 @NgModule({
     declarations: [
@@ -194,7 +197,10 @@ import { MapaComponent } from './mapa/mapa.component';
         TipoContenedoresComponent,
         MapaComponent,
         LiberacionBLComponent,
-        LiberacionesBLComponent
+        LiberacionesBLComponent,
+        AprobacionesBkComponent,
+        AprobacionTBKComponent,
+        AsignacionTransportistaComponent
         
     ],
     exports: [

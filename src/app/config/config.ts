@@ -54,3 +54,9 @@ export const ROLES_ARRAY = [
 { _id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL' },
 { _id: 'CLIENT_ROLE', descripcion: 'CLIENTE' }
 ];
+
+export const STATUS_SOLICITUD = {
+  NA: 'NA',
+  ESPERA: 'ESPERA',
+  NULL: 'NULL'
+}

@@ -1,4 +1,4 @@
-<form class="form-horizontal" [formGroup]="regForm" (submit)="apruebaSolicitud()">
+<form class="form-horizontal" [formGroup]="regForm" (submit)="apruebaLiberacion()">
 
   <mat-accordion [multi]="true">
 
@@ -8,15 +8,15 @@
           Datos Generales
         </mat-panel-title>
         <mat-panel-description>
-          Agencia , Cliente
+          Naviera , Cliente
         </mat-panel-description>
       </mat-expansion-panel-header>
 
       <div class="row">
         <div class="col-md-5">
           <mat-form-field>
-            <mat-label>Agencia</mat-label>
-            <input matInput formControlName="agencia" type="text">
+            <mat-label>Naviera</mat-label>
+            <input matInput formControlName="naviera" type="text">
           </mat-form-field>
         </div>
         <div class="col-md-5">

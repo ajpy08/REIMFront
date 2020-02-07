@@ -73,7 +73,7 @@ export class LiberacionesBLComponent implements OnInit {
       if (CD == 'C') {
         this.liberacionService.getLiberacion('C', null,
           this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', null, this.agencias )
+          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', null )
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
             this.dtCargas = new MatTableDataSource(res.liberacion);
@@ -90,7 +90,7 @@ export class LiberacionesBLComponent implements OnInit {
        if (CD == 'C') {
         this.liberacionService.getLiberacion('C',null,
           this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
-          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', navieras, this.agencias)
+          this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '', navieras)
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
             this.dtCargas = new MatTableDataSource(res.liberacion);

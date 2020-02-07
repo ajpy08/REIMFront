@@ -1,52 +1,58 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Solicitud } from './solicitud.models';
-import { SolicitudService } from '../../services/service.index';
-import { ManiobraService } from '../maniobras/maniobra.service';
-import { Usuario } from '../usuarios/usuario.model';
-import { UsuarioService } from '../../services/service.index';
-import { Router, ActivatedRoute } from '@angular/router';
-import swal from 'sweetalert';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Liberacion } from '../liberacion.models';
+import { Usuario } from '../../usuarios/usuario.model';
+import { UsuarioService } from '../../usuarios/usuario.service';
+import { LiberacionBLService } from '../liberacion-bl.service';
+import { ManiobraService } from '../../maniobras/maniobra.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-
+import { ROLES } from 'src/app/config/config';
 
 @Component({
-  selector: 'app-aprobar-carga',
-  templateUrl: './aprobar_carga.component.html',
-  styles: []
+  selector: 'app-aprobaciones-bk',
+  templateUrl: './aprobaciones-bk.component.html',
+  styleUrls: ['./aprobaciones-bk.component.css']
 })
-export class AprobarCargaComponent implements OnInit {
+export class AprobacionesBkComponent implements OnInit {
+
   regForm: FormGroup;
-  solicitud: Solicitud;
+  liberacion: Liberacion;
   usuario: Usuario;
   url: string;
+  usuarioLogueado: any;
 
-  constructor(public _usuarioService: UsuarioService,
-    public _SolicitudService: SolicitudService,
-    private _ManiobraService: ManiobraService,
-    public activatedRoute: ActivatedRoute,
+  constructor(public usuarioService: UsuarioService,
+    public liberacionService: LiberacionBLService,
+    private maniobraService: ManiobraService,
+    public activateRoute: ActivatedRoute,
     public router: Router,
     private fb: FormBuilder,
     private location: Location) {
-    this.usuario = this._usuarioService.usuario;
+    this.usuario = this.usuarioService.usuario;
   }
 
   ngOnInit() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.usuarioLogueado = this.usuarioService.usuario;
+    const id = this.activateRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.contenedores.removeAt(0);
     this.cargarSolicitud(id);
 
-    this.url = '/solicitudes/aprobaciones';
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+      this.url = '/aprobacion_tbk';
+    } else if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE) {
+      this.url = '/liberaciones_bk';
+    }
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [{ value: '', disabled: false }],
+      naviera: [{ value: '', disabled: false}],
+      idnaviera: [{ value: '', disabled: false}],
       estatus: [{ value: '', disabled: false }],
       tipo: [{ value: '', disabled: false }],
-      idagencia: [{ value: '', disabled: false }],
-      agencia: [{ value: '', disabled: true }],
       blBooking: [{ value: '', disabled: true }],
       idcliente: [{ value: '', disabled: false }],
       cliente: [{ value: '', disabled: true }],
@@ -71,20 +77,18 @@ export class AprobarCargaComponent implements OnInit {
     });
   }
 
-
+  get naviera() {
+    return this.regForm.get('naviera');
+  }
+  get idnaviera() {
+    return this.regForm.get('idnaviera');
+  }
   get tipo() {
     return this.regForm.get('tipo');
   }
   get estatus() {
     return this.regForm.get('estatus');
   }
-  get idagencia() {
-    return this.regForm.get('idagencia');
-  }
-  get agencia() {
-    return this.regForm.get('agencia');
-  }
-
   get transportistaTemp() {
     return this.regForm.get('transportistaTemp');
   }
@@ -185,54 +189,43 @@ export class AprobarCargaComponent implements OnInit {
 
 
   cargarSolicitud(id: string) {
-    this._SolicitudService.getSolicitudIncludes(id).subscribe(solicitud => {
-      
-      this.regForm.controls['_id'].setValue(solicitud._id);
-      this.regForm.controls['tipo'].setValue(solicitud.tipo);
-      this.regForm.controls['estatus'].setValue(solicitud.estatus);
-
-      if (solicitud.idagencia) {
-        this.regForm.controls['idagencia'].setValue(solicitud.agencia._id);
-      } else {
-        this.regForm.controls['idagencia'].setValue(undefined);
-      }
-
-      if(solicitud.agencia){
-        this.regForm.controls['agencia'].setValue(solicitud.agencia.nombreComercial);
-      } else {
-        this.regForm.controls['agencia'].setValue(undefined);
-      }
-      this.regForm.controls['blBooking'].setValue(solicitud.blBooking);
-      this.regForm.controls['credito'].setValue(solicitud.credito);
-      this.regForm.controls['cliente'].setValue(solicitud.cliente.nombreComercial);
-      this.regForm.controls['idcliente'].setValue(solicitud.cliente._id);
-      this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
-      this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
-      this.regForm.controls['correo'].setValue(solicitud.correo);
-      this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
-      this.regForm.controls['rfc'].setValue(solicitud.rfc);
-      this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
-      this.regForm.controls['calle'].setValue(solicitud.calle);
-      this.regForm.controls['noExterior'].setValue(solicitud.noExterior);
-      this.regForm.controls['noInterior'].setValue(solicitud.noInterior);
-      this.regForm.controls['colonia'].setValue(solicitud.colonia);
-      this.regForm.controls['municipio'].setValue(solicitud.municipio);
-      this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
-      this.regForm.controls['estado'].setValue(solicitud.estado);
-      this.regForm.controls['cp'].setValue(solicitud.cp);
-      this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
+    this.liberacionService.getLiberacionIncludes(id).subscribe(liberacion => {
+      this.regForm.controls['_id'].setValue(liberacion._id);
+      this.regForm.controls['tipo'].setValue(liberacion.tipo);
+      this.regForm.controls['estatus'].setValue(liberacion.estatus);
+      this.regForm.controls['naviera'].setValue(liberacion.naviera.nombreComercial);
+      this.regForm.controls['idnaviera'].setValue(liberacion.naviera._id);
+      this.regForm.controls['blBooking'].setValue(liberacion.blBooking);
+      this.regForm.controls['credito'].setValue(liberacion.credito);
+      this.regForm.controls['cliente'].setValue(liberacion.cliente.nombreComercial);
+      this.regForm.controls['idcliente'].setValue(liberacion.cliente._id);
+      this.regForm.controls['observaciones'].setValue(liberacion.observaciones);
+      this.regForm.controls['rutaComprobante'].setValue(liberacion.rutaComprobante);
+      this.regForm.controls['correo'].setValue(liberacion.correo);
+      this.regForm.controls['facturarA'].setValue(liberacion.facturarA);
+      this.regForm.controls['rfc'].setValue(liberacion.rfc);
+      this.regForm.controls['razonSocial'].setValue(liberacion.razonSocial);
+      this.regForm.controls['calle'].setValue(liberacion.calle);
+      this.regForm.controls['noExterior'].setValue(liberacion.noExterior);
+      this.regForm.controls['noInterior'].setValue(liberacion.noInterior);
+      this.regForm.controls['colonia'].setValue(liberacion.colonia);
+      this.regForm.controls['municipio'].setValue(liberacion.municipio);
+      this.regForm.controls['ciudad'].setValue(liberacion.ciudad);
+      this.regForm.controls['estado'].setValue(liberacion.estado);
+      this.regForm.controls['cp'].setValue(liberacion.cp);
+      this.regForm.controls['correoFac'].setValue(liberacion.correoFac);
       while (this.contenedores.length !== 0) {
         this.contenedores.removeAt(0)
       }
-      solicitud.contenedores.forEach(element => {
+      liberacion.contenedores.forEach(element => {
         this.addContenedor(element.contenedor, element.tipo, element.peso, element.grado, element.transportista.nombreComercial, element.patio, element.maniobra);
       });
     });
   }
 
-  apruebaSolicitud() {
-    this._SolicitudService.apruebaSolicitudCarga(this.regForm.value).subscribe(res => {
-      this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
+  apruebaLiberacion() {
+    this.liberacionService.apruebaLiberacionCarga(this.regForm.value).subscribe(res => {
+      this.liberacionService.enviaCorreoAprobacionLiberacion(this.regForm.value).subscribe((resp) => {
         this.cargarSolicitud(this._id.value);
       });
     });
@@ -248,6 +241,9 @@ export class AprobarCargaComponent implements OnInit {
   }
 
   enviacorreo(maniobra) {
-    this._ManiobraService.enviaCorreo(maniobra).subscribe(() => { });
+    this.maniobraService.enviaCorreo(maniobra).subscribe(() => { });
   }
+
 }
+
+
