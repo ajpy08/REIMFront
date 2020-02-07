@@ -24,6 +24,7 @@ export class AgenciasComponent implements OnInit {
   constructor(public _agenciaService: AgenciaService,  private excelService: ExcelService) { }
 
   ngOnInit() {
+    throw new Error('Sentry Test Error Javi');
     localStorage.removeItem('historyArray')
     this.cargarAgencias();
   }
