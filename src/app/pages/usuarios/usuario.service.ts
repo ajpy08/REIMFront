@@ -8,6 +8,7 @@ import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.s
 import swal from 'sweetalert';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import * as Sentry from "@sentry/browser";
 
 @Injectable()
 export class UsuarioService {
@@ -77,6 +78,7 @@ export class UsuarioService {
 
   logout() {
     this.usuario = null;
+    // Sentry.configureScope(scope => scope.setUser(null));
     this.token = '';
     this.menu = [];
 

@@ -1,6 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-
+import { NgModule, OnInit } from "@angular/core";
 
 // RUTAS
 import { APP_ROUTES } from "./app.routes";
@@ -22,7 +21,10 @@ import { PagesComponent } from "./pages/pages.component";
 import { SharedModule } from "./shared/shared.module";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
-import { RefreshTokenInterceptor } from "./services/service.index";
+import {
+  RefreshTokenInterceptor,
+  UsuarioService
+} from "./services/service.index";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { Ng2ImgMaxModule } from "ng2-img-max";
 import { RegistroComponent } from "./registro/registro.component";
@@ -37,29 +39,42 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { HttpClientModule } from "@angular/common/http";
 import { MatButtonModule } from "@angular/material";
 
-
 import { ErrorHandler, Injectable } from "@angular/core";
 import * as Sentry from "@sentry/browser";
-import {Id_sentry} from '../app/config/config'
+import { Id_sentry } from "../app/config/config";
+import { Usuario } from "./pages/usuarios/usuario.model";
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {
     Sentry.init({
       dsn: Id_sentry
-    })
+    });
+
+    const user = JSON.parse(localStorage.getItem("usuario")) || "";
+    console.log(user);
+    if (user != "") {
+      Sentry.configureScope(function(scope) {
+        scope.setUser({
+          nombre: user.nombre,
+          email: user.email,
+          roles: user.role,
+          empresas: user.empresas
+        });
+      });
+    }
   }
 
   handleError(error) {
-    Sentry.captureException(error.originalError || error)
+    Sentry.captureException(error.originalError || error);
   }
 }
 
 export function getErrorHandler(): ErrorHandler {
   if (environment.production) {
-    return new SentryErrorHandler()
+    return new SentryErrorHandler();
   }
-  return new ErrorHandler()
+  return new ErrorHandler();
 }
 
 @NgModule({
@@ -96,7 +111,7 @@ export function getErrorHandler(): ErrorHandler {
       useClass: RefreshTokenInterceptor,
       multi: true
     },
-    {provide: ErrorHandler, useFactory: getErrorHandler}
+    { provide: ErrorHandler, useFactory: getErrorHandler }
   ],
   bootstrap: [AppComponent]
 })
