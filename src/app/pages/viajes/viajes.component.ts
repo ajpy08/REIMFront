@@ -52,8 +52,8 @@ export class ViajesComponent implements OnInit {
   ngOnInit() {
 
     this.createFormGroup();
-    this.viaje.setValue(undefined);
-    this.buque.setValue(undefined);
+    // this.viaje.setValue(undefined);
+    // this.buque.setValue(undefined);
     this.cargarViajes();
   }
 
