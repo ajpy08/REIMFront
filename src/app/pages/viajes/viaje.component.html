@@ -8,7 +8,7 @@
             <div class="col-sm-8 col-xs-8">
               <div class="my-container">
                 <h3>Seleccione archivo</h3>
-                <input (change)="onFileExcelSelected($event);" type="file" name="file"
+                <input *ngIf="!_id.value" (change)="onFileExcelSelected($event);" type="file" name="file"
                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                 <mat-form-field class="inputpersonalizado">
                   <input matInput formControlName="viaje" type="text" placeholder="Ingrese el viaje">
