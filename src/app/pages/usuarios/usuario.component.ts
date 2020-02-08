@@ -4,7 +4,7 @@ import { UsuarioService } from './usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService, SubirArchivoService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { ROLES_ARRAY } from '../../config/config';
+import { ROLES_ARRAY, PERMISOS } from '../../config/config';
 import { Location } from '@angular/common';
 
 @Component({
@@ -18,7 +18,10 @@ export class UsuarioComponent implements OnInit {
   fileFoto: File = null;
   fotoTemporal = false;
   roles = ROLES_ARRAY;
+  per = PERMISOS;
   url: string;
+  seleccionados: string;
+  verSeleccion: string  = ''; 
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -35,9 +38,10 @@ export class UsuarioComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarUsuario( id );
     }
-
     this.url = '/usuarios'; 
+
   }
+
 
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -47,6 +51,7 @@ export class UsuarioComponent implements OnInit {
       passwordConfirm: ['', [ Validators.required, this.match('password')]],
       role: ['', [Validators.required]],
       empresas: [''],
+      permiso:[''],
       activo: [''],
       observaciones: [''],
       img: [''],
@@ -87,6 +92,10 @@ export class UsuarioComponent implements OnInit {
   get role() {
     return this.regForm.get('role');
   }
+
+  get permiso() {
+    return this.regForm.get('permiso');
+  }
   get empresas() {
     return this.regForm.get('empresas');
   }
@@ -116,6 +125,8 @@ export class UsuarioComponent implements OnInit {
       this.observaciones.setValue(usuario.observaciones);
       this.img.setValue(usuario.img);
       this._id.setValue(usuario._id);
+      this.permiso.setValue(usuario.permiso);
+
     });
   }
   

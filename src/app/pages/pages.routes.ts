@@ -22,6 +22,12 @@ import { OperadoresComponent } from './operadores/operadores.component';
 import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
+
+///////////////LIBERACIONES BLBOOKING/////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////////
 import { ManiobrasComponent } from './maniobras/maniobras.component';
 import { LlegadaEntradaComponent } from './maniobras/1llegada_entrada/llegada_entrada.component';
@@ -69,6 +75,11 @@ import { TiposContenedoresComponent } from "./tipos-contenedores/TiposContenedor
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { ROLES } from '../config/config';
 import { NotfoundComponent } from '../shared/notfound/notfound.component';
+import { LiberacionesBLComponent } from './liberacion-bl/liberaciones-bl.component';
+import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component';
+import { AprobacionesBkComponent } from './liberacion-bl/aprobaciones-bk/aprobaciones-bk.component';
+import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobacion-tbk/aprobacion-tbk.component';
+import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -192,6 +203,42 @@ const pagesRoutes: Routes = [
         component: TipoContenedoresComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Tipos Contenedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+
+    /////////LIBERACION-BLBOOKING/////////////////////////////////////
+    {
+        path: 'liberaciones_bk', // tabala donde el (USUARIO) vera sus solicitudes liberacion BK 
+        component: LiberacionesBLComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'liberaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+    },
+
+    {
+        path: 'liberacion_bk/:id', // ED de solicitudes de liberacion BK  de (USUARIO) 
+        component: LiberacionBLComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'Solicitud de Liberación Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+    },
+
+    {
+        path: 'aprobaciones_bk/:id', // el (ADMIN) aprobara la solicitud de liberacion BK 
+        component: AprobacionesBkComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Aprobaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+
+    {
+        path: 'aprobacion_tbk', // tabla donde se mostraran las solicitudes de liberacion BK para aprobar Y ELIMINAR (ADMIN)
+        component: AprobacionTBKComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Aprobaciones de Solicitud Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE ] }
+    },
+
+    {
+        path: 'asignacion_transportista_bk/:id', // ED donde el usuario podra asignar el transportista para la solicitud de liberacion_bk y asi se pase a estatus NA
+        component: AsignacionTransportistaComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Asignacion de Transportista Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE ] }
     },
 
     //////////////////////////////////////////////
