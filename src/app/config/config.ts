@@ -46,13 +46,13 @@ export const ROLES = {
 };
 
 export const ROLES_ARRAY = [
-{ _id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR' },
-{ _id: 'PATIOADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK' },
-{ _id: 'PATIO_ROLE', descripcion: 'PATIO COINTAINER PARK' },
-{ _id: 'NAVIERA_ROLE', descripcion: 'NAVIERA' },
-{ _id: 'TRANSPORTISTA_ROLE', descripcion: 'TRANSPORTISTA' },
-{ _id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL' },
-{ _id: 'CLIENT_ROLE', descripcion: 'CLIENTE' }
+  { _id: 'ADMIN_ROLE', descripcion: 'ADMINISTRADOR' },
+  { _id: 'PATIOADMIN_ROLE', descripcion: 'ADMIN CONTAINER PARK' },
+  { _id: 'PATIO_ROLE', descripcion: 'PATIO COINTAINER PARK' },
+  { _id: 'NAVIERA_ROLE', descripcion: 'NAVIERA' },
+  { _id: 'TRANSPORTISTA_ROLE', descripcion: 'TRANSPORTISTA' },
+  { _id: 'AA_ROLE', descripcion: 'AGENCIA ADUANAL' },
+  { _id: 'CLIENT_ROLE', descripcion: 'CLIENTE' }
 ];
 
 export const STATUS_SOLICITUD = {
@@ -60,3 +60,9 @@ export const STATUS_SOLICITUD = {
   ESPERA: 'ESPERA',
   NULL: 'NULL'
 }
+
+export const PERMISOS = [
+  { _id: 'ASIGNACION_EQUIPO', descripcion: 'ASIGANCION_EQUIPO' },
+  { _id: 'ASIGNACION_TRANSPORTISTA', descripcion: 'ASIGNACION_TRANSPORTISTA'}
+]
+

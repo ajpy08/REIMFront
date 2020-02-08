@@ -29,35 +29,53 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field *ngIf="password.enabled">
-              <input matInput formControlName="passwordConfirm" type="password" placeholder="Confirmar Password" required compare="password">
+              <input matInput formControlName="passwordConfirm" type="password" placeholder="Confirmar Password"
+                required compare="password">
               <mat-error *ngIf="passwordConfirm.errors">
                 <sup>*</sup>La confirmación de la contraseña no coincide...
               </mat-error>
             </mat-form-field>
             <!--========Combombox ROLE=========-->
             <mat-form-field>
-              <mat-select formControlName="role" (selectionChange)="cambioRole( $event.value )" type="text" placeholder="ROLE">
+              <mat-select formControlName="role" (selectionChange)="cambioRole( $event.value )" type="text"
+                placeholder="ROLE">
                 <mat-option *ngFor="let role of roles" [value]="role._id">
                   {{role.descripcion}}
                 </mat-option>
 
               </mat-select>
             </mat-form-field>
+
             <!--========Combombox Empresas ligadas segun el ROL=========-->
             <mat-form-field>
-              <mat-select placeholder="Seleccione una empresa" formControlName="empresas" multiple>
+              <mat-select [(ngModel)]="seleccionados" placeholder="Seleccione una empresa" formControlName="empresas"
+                multiple>
                 <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa._id">
                   {{ empresa.nombreComercial }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field>
+
+            <!--==================== SI ES NAVIERA MSC ASIGNAR PERMISO=========-->
+            <div *ngIf="seleccionados == '5e279f5f18e40063e7539339'">
+              <mat-form-field>
+                <mat-select placeholder="Selecciona un permiso" formControlName="permiso">
+                  <mat-option *ngFor="let permiso of per" [value]="permiso._id">
+                    {{permiso.descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+  
+            </div>
+
+            <mat-form-field>            
               <mat-label>Observaciones </mat-label>
               <textarea matInput formControlName="observaciones" rows="3" cols="40"></textarea>
             </mat-form-field>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
+          <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+            [disabled]="regForm.pristine || regForm.invalid">
             <i class="fa fa-save"></i>
             Guardar
           </button>
@@ -84,9 +102,11 @@
         <ng-template #notShow>
           <img (click)="fileFoto.click()" [src]="img.value | imagen:'usuario'" class="w150 img-circle pointer">
         </ng-template>
-        <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*" #fileFoto>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*"
+          #fileFoto>
         <br><br>
-        <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click();"><i class="fa fa-file"></i> Cambiar foto</button>
+        <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click();"><i
+            class="fa fa-file"></i> Cambiar foto</button>
       </div>
     </div>
   </div>
