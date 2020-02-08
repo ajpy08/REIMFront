@@ -56,14 +56,14 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   
                   <mat-cell *matCellDef="let row">
-                  <div  *ngIf="row.estatus=== 'ESPERA' && usuarioLogueado.permiso=== 'ASIGNACION_TRANSPORTISTA'  ">
+                  <div  *ngIf="row.estatus=== 'ESPERA' && (usuarioLogueado.permiso=== 'ASIGNACION_TRANSPORTISTA' || usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
                     <button matTooltip="Asignar Transportista"
                       [routerLink]="['/asignacion_transportista_bk', row._id]" class="btn btn-danger m-r-5">
                       <i class="fa fa-truck"></i>
                     </button>                  
                    </div>
 
-                    <div *ngIf=" usuarioLogueado.permiso!='ASIGNACION_TRANSPORTISTA' && row.estatus ==='NA' || row.estatus === 'ESPERA'">
+                    <div *ngIf="(row.estatus ==='NA' || row.estatus === 'ESPERA') && (usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
                     <button matTooltip="Editar Solicitud" 
                       [routerLink]="['/liberacion_bk', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
@@ -78,7 +78,7 @@
                     </button>
                     </div>
 
-                    <div *ngIf="usuarioLogueado.permiso==='ASIGNACION_EQUIPO' && row.estatus==='NA' ||  row.estatus === 'ESPERA'">
+                    <div *ngIf=" (row.estatus==='NA' ||  row.estatus === 'ESPERA') && (usuarioLogueado.permiso==='ASIGNACION_EQUIPO'  || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE') ">
                       <button matTooltip="Eliminar Solicitud" 
                       (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
