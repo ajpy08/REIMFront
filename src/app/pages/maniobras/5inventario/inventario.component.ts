@@ -3,10 +3,11 @@ import { MatPaginator, MatSort, MatTableDataSource, MatTabChangeEvent, MatTabGro
 import { ManiobraService } from '../maniobra.service';
 import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from '../../../config/config';
 import { Maniobra } from 'src/app/models/maniobra.models';
-import { UsuarioService, ExcelService } from 'src/app/services/service.index';
+import { UsuarioService, ExcelService, NavieraService } from 'src/app/services/service.index';
 import { ROLES } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
 import { Router } from '@angular/router';
+import { Naviera } from '../../navieras/navieras.models';
 declare var swal: any;
 
 @Component({
@@ -31,6 +32,8 @@ export class InventarioComponent implements OnInit {
   datosExcel = [];
   totalInventario: number = 0;
   totalReparaciones: number = 0;
+  navieras: Naviera[] = [];
+  naviera: string = undefined;
 
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
@@ -39,10 +42,12 @@ export class InventarioComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("MatSort2") MatSort2: MatSort;
   constructor(public maniobraService: ManiobraService, private usuarioService: UsuarioService,
+    private navieraService: NavieraService,
     private _excelService: ExcelService, private router: Router) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
+    this.cargarNavieras();
     this.cargarInventario();
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
@@ -61,6 +66,21 @@ export class InventarioComponent implements OnInit {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     dataSource.filter = filterValue;
     totalRegistros = dataSource.filteredData.length;
+  }
+
+  cargarNavieras() {
+    this.cargando = true;
+    if (
+      this.usuarioLogueado.role === ROLES.NAVIERA_ROLE ||
+      this.usuarioLogueado.role === ROLES.CLIENT_ROLE
+    ) {
+      this.navieras = this.usuarioLogueado.empresas;
+    } else {
+      this.navieraService.getNavieras().subscribe(navieras => {
+        this.navieras = navieras.navieras;
+      });
+    }
+    this.cargando = false;
   }
 
   cargarInventario() {
