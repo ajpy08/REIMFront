@@ -28,7 +28,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <mat-form-field>
-                    <mat-select (selectionChange)="cargarInventario()" [(ngModel)]="naviera"
+                    <mat-select (selectionChange)="cargarInventario()" [(ngModel)]="navieraSeleccionada"
                       placeholder="Seleccione una Naviera" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
@@ -79,7 +79,7 @@
 
                 <ng-container matColumnDef="naviera">
                   <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="fVigenciaTemporal">
@@ -253,7 +253,7 @@
 
                       <ng-container matColumnDef="naviera">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.razonSocial}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="fVigenciaTemporal">
@@ -374,7 +374,7 @@
 
                       <ng-container matColumnDef="naviera">
                         <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.razonSocial}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="fVigenciaTemporal">
@@ -498,7 +498,7 @@
 
                 <ng-container matColumnDef="naviera">
                   <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.razonSocial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">
