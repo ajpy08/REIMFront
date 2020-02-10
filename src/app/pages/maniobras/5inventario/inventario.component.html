@@ -61,14 +61,14 @@
 
                 <ng-container matColumnDef="fVigenciaTemporal">
                   <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}}
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}}
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="pdfTemporal">
                   <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                    <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje?.pdfTemporal" [href]="row.viaje?.pdfTemporal | imagen:'viaje'" target="_blank">
                       <img src="\assets\images\icon\pdf_32x32.png">
                     </a>
                   </mat-cell>
@@ -217,7 +217,7 @@
 
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
                       </ng-container>
 
@@ -230,14 +230,14 @@
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                          {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje?.pdfTemporal" [href]="row.viaje?.pdfTemporal | imagen:'viaje'"
                             target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
@@ -333,7 +333,7 @@
 
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
                       </ng-container>
 
@@ -346,14 +346,14 @@
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                          {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
+                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje?.pdfTemporal" [href]="row.viaje?.pdfTemporal | imagen:'viaje'"
                             target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
@@ -453,7 +453,7 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="nombre">

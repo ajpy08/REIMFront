@@ -350,6 +350,11 @@
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button> -->
           </div>
+
+          <p>Form value {{ regForm.value | json }} </p>
+<p> Form status {{ regForm.status | json}} </p>
+<p> Form status2 {{ regForm.pristine | json}} </p>
+
         </form>
         <!-- <p>Form value {{ regForm.getRawValue() | json }} </p> -->
       </div>
