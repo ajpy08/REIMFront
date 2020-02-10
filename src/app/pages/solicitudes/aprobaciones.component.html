@@ -215,7 +215,8 @@
                       <i class="fa fa-trash-o"></i>
                     </button>
 
-                    <button matTooltip="Eliminar Viaje" (click)="borrarSolicitudes( row )" class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar Solicitudes" *ngIf="(row.estatus!='NA') && (row.estatus!='ESPERA')" (click)="borrarSolicitudes( row )"
+                     class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
                   </mat-cell>
