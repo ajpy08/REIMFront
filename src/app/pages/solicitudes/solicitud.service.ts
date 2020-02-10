@@ -141,6 +141,13 @@ export class SolicitudService {
     }));;
   }
 
+  boorarSolicitudes(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.delete(url)
+      .pipe(map(resp => swal('Solicitud Borrada', 'Eliminado correctamente', 'success')));
+  }
+
 
 
 
