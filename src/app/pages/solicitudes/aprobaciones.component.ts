@@ -296,4 +296,26 @@ export class AprobacionesComponent implements OnInit {
       swal("No se puede exportar un excel vacio", "", "error");
     }
   }
+
+
+  borrarSolicitudes(solicitud: Solicitud, CD: string){
+    swal({
+      title: '¿Estas seguro?',
+      text: 'Estas apunto de borrar la solicitud ' + solicitud._id,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }) .then(borrar => {
+      if(borrar){
+        this._solicitudesService.boorarSolicitudes(solicitud._id).subscribe(borrado => {
+          if(CD =="D"){
+            this.cargaSolicitudes("D");
+
+          } else {
+            this.cargaSolicitudes("C");
+          }
+        })
+      }
+    })
+  }
 }
