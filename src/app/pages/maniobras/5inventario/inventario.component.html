@@ -24,14 +24,32 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="text-right">
-              <button matTooltip="Ver Mapa" type="button" class="btn btn-primary m-r-5"  [routerLink]="['/mapa/']">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-  
-              </button>
-              <button (click)="exportAsXLSX(dataSource, 'Contenedores Disponibles')" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i> 
-              </button>
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <mat-select [(value)]="navieraSeleccionada" [disabled]="blockNaviera" (selectionChange)="cargarInventario()" [(ngModel)]="navieraSeleccionada"
+                      placeholder="Seleccione una Naviera" name="viaje">
+                      <mat-option>--- NINGUNO ---</mat-option>
+                      <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
+                        {{ naviera.nombreComercial }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm">
+                  <div class="text-right">
+                    <button matTooltip="Ver Mapa" type="button" class="btn btn-primary m-r-5" [routerLink]="['/mapa/']">
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+
+                    </button>
+                    <button (click)="exportAsXLSX(dataSource, 'Contenedores Disponibles')"
+                      class="btn btn-success m-r-5">
+                      <i class="fas fa-file-excel"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             <h3 class="card-title">Disponibles: ( <small>{{totalRegistros}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
@@ -42,7 +60,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table" [dataSource]="dataSource" matSort>
+              <mat-table class="mat-table-medium" [dataSource]="dataSource" matSort>
 
                 <ng-container matColumnDef="fLlegada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
@@ -50,25 +68,31 @@
                 </ng-container>
 
                 <ng-container matColumnDef="viaje">
-                  <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="nombre">
-                  <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="nombreComercial">
+                  <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="fVigenciaTemporal">
-                  <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}}
+                  <mat-header-cell *matHeaderCellDef >Vigencia Temporal</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}}
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="pdfTemporal">
-                  <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Temporal</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
+                    <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje?.pdfTemporal"
+                      [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
                       <img src="\assets\images\icon\pdf_32x32.png">
                     </a>
                   </mat-cell>
@@ -116,7 +140,7 @@
     <mat-divider></mat-divider>
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
-      <mat-list-item *ngFor="let g20 of groupedDisponibles20?.data">
+      <mat-list-item *ngFor="let g20 of groupedDisponibles20">
         <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceLR)}} )</b>
         </h4>
         <p matLine>
@@ -128,13 +152,17 @@
         <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}} |
               'C' | DISPONIBLES</i></span></p>
         <mat-divider></mat-divider>
-        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} |
               'A' | REPARACIONES</i></span></p>
-        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} |
               'B' | REPARACIONES</i></span></p>
-        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} |
               'C' | REPARACIONES</i></span></p>
-        <p matLine><span><i class="fas fa-caret-right"> {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}}
+        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}}
               | 'PT' | PERDIDA TOTAL</i></span></p>
       </mat-list-item>
       <mat-divider></mat-divider><br>
@@ -155,16 +183,20 @@
               'C' | DISPONIBLES</i></span></p>
         <mat-divider></mat-divider>
         <p matLine>
-          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} |
               'A' | REPARACIONES</i></span></p>
         <p matLine>
-          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} |
               'B' | REPARACIONES</i></span></p>
         <p matLine>
-          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} |
               'C' | REPARACIONES</i></span></p>
         <p matLine>
-          <span><i class="fas fa-caret-right"> {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}}
+          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}}
               | 'PT' | PERDIDA TOTAL</i></span></p>
         <mat-divider></mat-divider><br>
       </mat-list-item>
@@ -183,15 +215,6 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <!-- <div class="text-right">
-            </div> -->
-            <!-- <h3 class="card-title">Disponibles: ( <small>{{totalRegistros20}}</small> )</h3> -->
-            <!-- <div class="example-header mat-elevation-z8">
-              <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value, dataSource20, totalRegistros20)"
-                  placeholder="Escriba algo para filtrar">
-              </mat-form-field>
-            </div> -->
             <mat-accordion [multi]="true" #firstAccordion="matAccordion">
               <div *ngFor="let g of groupedDisponibles20"><br>
                 <mat-expansion-panel>
@@ -199,14 +222,11 @@
                     <mat-panel-title>
                       Contenedores {{g.tipo}}: ( {{g.maniobras.length}} )
                     </mat-panel-title>
-                    <!-- <mat-panel-description>
-                     Total: ( <small>{{g.maniobras.length}}</small> )
-                    </mat-panel-description> -->
                   </mat-expansion-panel-header>
                   <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
                   </h3>
                   <div class="example-container mat-elevation-z8">
-                    <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+                    <mat-table class="mat-table-medium" [dataSource]="g.maniobras" matSort>
 
                       <ng-container matColumnDef="fLlegada">
                         <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
@@ -217,7 +237,7 @@
 
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
                       </ng-container>
 
@@ -227,18 +247,23 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
+                      <ng-container matColumnDef="nombreComercial">
+                        <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                      </ng-container>
+
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                          {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
-                            target="_blank">
+                          <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje?.pdfTemporal"
+                            [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
                         </mat-cell>
@@ -269,13 +294,11 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      <mat-header-row *matHeaderRowDef="displayedColumnsGroups" class="encabezado">
                       </mat-header-row>
-                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumnsGroups;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumnsGroups; sticky: true"></mat-footer-row>
                     </mat-table>
-                    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-                    </mat-paginator> -->
                   </div>
                 </mat-expansion-panel>
               </div>
@@ -299,15 +322,6 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <!-- <div class="text-right">
-            </div>
-            <h3 class="card-title">Disponibles: ( <small>{{totalRegistros40}}</small> )</h3>
-            <div class="example-header mat-elevation-z8">
-              <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value, dataSource40, totalRegistros40)"
-                  placeholder="Escriba algo para filtrar">
-              </mat-form-field>
-            </div> -->
             <mat-accordion [multi]="true" #secondAccordion="matAccordion">
               <div *ngFor="let g of groupedDisponibles40"><br>
                 <mat-expansion-panel>
@@ -322,7 +336,7 @@
                   <h3 class="card-title"> Contenedores {{g.tipo}} : ( <small>{{g.maniobras.length}}</small> )
                   </h3>
                   <div class="example-container mat-elevation-z8">
-                    <mat-table class="mat-table" [dataSource]="g.maniobras" matSort>
+                    <mat-table class="mat-table-medium" [dataSource]="g.maniobras" matSort>
 
                       <ng-container matColumnDef="fLlegada">
                         <mat-header-cell *matHeaderCellDef>Entrada Patio</mat-header-cell>
@@ -333,28 +347,33 @@
 
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                        <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                        <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
                       </ng-container>
 
                       <ng-container matColumnDef="nombre">
-                        <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef >Buque</mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="nombreComercial">
+                        <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          {{row.viaje.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
+                          {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}} </mat-cell>
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="pdfTemporal">
                         <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
                         <mat-cell *matCellDef="let row">
-                          <a matTooltip="Descargar Inevntario PDF"  *ngIf="row.viaje.pdfTemporal" [href]="row.viaje.pdfTemporal | imagen:'viaje'"
-                            target="_blank">
+                          <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje?.pdfTemporal"
+                            [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
                             <img src="\assets\images\icon\pdf_32x32.png">
                           </a>
                         </mat-cell>
@@ -385,13 +404,11 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      <mat-header-row *matHeaderRowDef="displayedColumnsGroups" class="encabezado">
                       </mat-header-row>
-                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumnsGroups;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumnsGroups; sticky: true"></mat-footer-row>
                     </mat-table>
-                    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-                    </mat-paginator> -->
                   </div>
                 </mat-expansion-panel>
               </div>
@@ -418,7 +435,7 @@
             <div class="text-right">
               <button (click)="exportAsXLSX(dataSourceLR, 'Contenedores en Lavado - Reparacion')"
                 class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i> 
+                <i class="fas fa-file-excel"></i>
               </button>
             </div>
             <h3 class="card-title">Contenedores en Lavado Reparación : (
@@ -437,11 +454,8 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <!-- <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']"
+                    <button matTooltip="Editar Lavado y Reparación" (click)="open(row._id)"
                       class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button> -->
-                    <button matTooltip="Editar Lavado y Reparación"  (click)="open(row._id)" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit" aria-hidden="true"></i>
                     </button>
                   </mat-cell>
@@ -453,12 +467,17 @@
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje.viaje}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="nombre">
-                  <mat-header-cell *matHeaderCellDef>Buque</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Buque</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nombreComercial">
+                  <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="contenedor">

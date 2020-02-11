@@ -7,6 +7,14 @@
         "name": "Launch Chrome against localhost",
         "url": "http://localhost:4200",
         "webRoot": "${workspaceFolder}"
+      },
+      {
+        "name": "Launch localhost in Microsoft Edge (Chromium) Canary",
+        "type": "edge",
+        "request": "launch",
+        "version": "dev",
+        "url": "http://localhost:4200",
+        "webRoot": "${workspaceFolder}"
       }
     ]
   }
