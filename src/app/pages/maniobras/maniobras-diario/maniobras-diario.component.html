@@ -15,7 +15,14 @@
       <div class="card-body">
         <div class="container">
           <div class="row">
-            <div class="col-sm-3">
+
+            <div class="col-sm-2">
+              <mat-form-field>
+                <input matInput  [(ngModel)]="contenedor" placeholder="Escriba contenedor para filtrar">
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-2">
               <mat-form-field>
                 <mat-select (selectionChange)="consultaManiobras()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
                   name="viaje">
@@ -26,18 +33,18 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <mat-form-field>
-                <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada"
-                  placeholder="Fecha Llegada Inicial">
+                <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada" 
+                  placeholder="Fecha Llegada Inicial" [disabled]="this.checkedContenedor=== true" >
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
               <mat-form-field>
                 <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFinLlegada"
-                  placeholder="Fecha Llegada Final">
+                  placeholder="Fecha Llegada Final" [disabled]="this.checkedContenedor=== true">
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
@@ -53,10 +60,18 @@
                       Limpiar
                    </button> -->
             </div>
-            <div class="col-sm">
+
+            
+            <div class="col-sm-2">
               <mat-checkbox [checked]="checkedVacios" #vacios (change)="filtraManiobrasVacios(vacios.checked)">Vacios
               </mat-checkbox>
             </div>
+
+            <div class="col-sm-2">
+              <mat-checkbox [checked]="checkedContenedor" #bool (change)="consulta(bool.checked)">Contenedor
+              </mat-checkbox>
+            </div>
+
             <div class="col-sm">
               <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i>

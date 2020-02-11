@@ -20,6 +20,9 @@ import {
 import { DatePipe } from "@angular/common";
 import { Router } from "@angular/router";
 import { Viaje } from "../../viajes/viaje.models";
+import { resolve } from "url";
+import { rejects } from "assert";
+import { DISABLED } from "@angular/forms/src/model";
 
 const moment = _moment;
 
@@ -52,6 +55,7 @@ export const MY_FORMATS = {
 })
 export class ManiobrasDiarioComponent implements OnInit {
   maniobrasVacios: any[] = [];
+  maniobraContenedor: any[] = [];
   ManiobrasExcel = [];
 
   data: any = { fechaCreado: "" };
@@ -66,6 +70,7 @@ export class ManiobrasDiarioComponent implements OnInit {
 
   viajes: Viaje[] = [];
   viaje: string = undefined;
+  contenedor: string = undefined;
 
   displayedColumns = [
     "actions",
@@ -84,7 +89,7 @@ export class ManiobrasDiarioComponent implements OnInit {
     "grado",
     "lavado",
     "cargaDescarga",
-    "hSalida",    
+    "hSalida",
     "reparaciones",
     "viaje.naviera.nombreComercial",
     "viaje",
@@ -97,6 +102,7 @@ export class ManiobrasDiarioComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   checkedVacios = false;
+  checkedContenedor = false;
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -104,14 +110,67 @@ export class ManiobrasDiarioComponent implements OnInit {
     public _excelService: ExcelService,
     public matDialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarViajes(new Date().toString());
     this.consultaManiobras().then(
-      (value: { ok: Boolean; mensaje: String }) => {}
+      (value: { ok: Boolean; mensaje: String }) => { }
     );
   }
+
+  consulta(contenedor: Boolean) {
+    if(contenedor) {
+      if(this.contenedor == undefined){
+        this.checkedContenedor = false
+        swal('error', ' El filtro de contenedor no puede estar vacio', 'error')
+      } else {
+        this.checkedContenedor = true;
+        this.consultarContenedor();
+      }
+    } else {
+      this.checkedContenedor = false;
+      this.consultaManiobras();
+    }
+  }
+
+  javi(x: boolean){
+    console.log(x)
+  }
+
+  consultarContenedor() {
+    return new Promise((resolve, reject) => {
+      this._maniobraService.getManiobras(
+        null, null, null, this.contenedor, this.viaje, null, null, null, null, null, null, null
+      ).subscribe(maniobras => {
+        this.dataSource = new MatTableDataSource(maniobras.maniobras);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = maniobras.total;
+        resolve({ ok: true, mensaje: "Termine" });
+      }, () => {
+        reject("Failed!!");
+      });
+    });
+  }
+
+  // filtrarContenedor(contenedor: boolean){
+
+
+  // //   this.maniobraContenedor = [];
+  // // this.checkedContenedor = contenedor;
+  // // if(this.contenedor.length > 0) {
+  // //     this.dataSource.data.forEach(c => {
+  // //       if(c.contenedor === this.contenedor) {
+  // //         this.maniobraContenedor.push(c)
+  // //       }
+  // //     });
+  // //     this.dataSource = new MatTableDataSource(this.maniobrasVacios);
+  // //     this.dataSource.sort = this.sort;
+  // //     this.dataSource.paginator = this.paginator;
+  // //     this.totalRegistros = this.dataSource.data.length;
+  // // }
+  // }
 
   consultaManiobras() {
     this.cargando = true;
@@ -127,7 +186,7 @@ export class ManiobrasDiarioComponent implements OnInit {
           null,
           null,
           null,
-          null,          
+          null,
           this.fIniLlegada ? this.fIniLlegada.utc().format("DD-MM-YYYY") : "",
           this.fFinLlegada ? this.fFinLlegada.utc().format("DD-MM-YYYY") : ""
         )
@@ -239,18 +298,18 @@ export class ManiobrasDiarioComponent implements OnInit {
         Hora_Llegada: m.hLlegada,
         Operador:
           m.operador &&
-          m.operador.nombre &&
-          m.operador.nombre != undefined &&
-          m.operador.nombre &&
-          m.operador.nombre != ""
+            m.operador.nombre &&
+            m.operador.nombre != undefined &&
+            m.operador.nombre &&
+            m.operador.nombre != ""
             ? m.operador.nombre
             : "" && m.operador.nombre,
         Placa: m.camion != undefined ? m.camion.placa : "",
         Transportista:
           m.transportista &&
-          m.transportista.nombreComercial &&
-          m.transportista.nombreComercial != undefined &&
-          m.transportista.nombreComercial != ""
+            m.transportista.nombreComercial &&
+            m.transportista.nombreComercial != undefined &&
+            m.transportista.nombreComercial != ""
             ? m.transportista.nombreComercial
             : "" && m.transportista.nombreComercial,
         Hora_Entrada: m.hEntrada,
@@ -270,9 +329,9 @@ export class ManiobrasDiarioComponent implements OnInit {
           m.agencia.nombreComercial,
         Booking:
           m.solicitud &&
-          m.solicitud.blBooking &&
-          m.solicitud.blBooking != undefined &&
-          m.solicitud.blBooking != ""
+            m.solicitud.blBooking &&
+            m.solicitud.blBooking != undefined &&
+            m.solicitud.blBooking != ""
             ? m.solicitud.blBooking
             : "" && m.solicitud.blBooking,
         EIR: m.null,
@@ -284,27 +343,27 @@ export class ManiobrasDiarioComponent implements OnInit {
         Obervaciones: observaciones,
         Buque:
           m.viaje &&
-          m.viaje.buque.nombre &&
-          m.viaje.buque.nombre != undefined &&
-          m.viaje.buque.nombre != ""
+            m.viaje.buque.nombre &&
+            m.viaje.buque.nombre != undefined &&
+            m.viaje.buque.nombre != ""
             ? m.viaje.buque.nombre
             : "" && m.viaje.buque.nombre,
         Viaje:
           m.viaje &&
-          m.viaje.viaje &&
-          m.viaje.viaje != undefined &&
-          m.viaje.viaje != ""
+            m.viaje.viaje &&
+            m.viaje.viaje != undefined &&
+            m.viaje.viaje != ""
             ? m.viaje.viaje
             : "" && m.viaje.viaje,
         Naviera:
           m.viaje &&
-          m.viaje.naviera.nombreComercial &&
-          m.viaje.naviera.nombreComercial != undefined &&
-          m.viaje.naviera.nombreComercial != ""
+            m.viaje.naviera.nombreComercial &&
+            m.viaje.naviera.nombreComercial != undefined &&
+            m.viaje.naviera.nombreComercial != ""
             ? m.viaje.naviera.nombreComercial
             : "" && m.viaje.naviera.nombreComercial,
         Peso: m.peso,
-        Estatus: m.estatus        
+        Estatus: m.estatus
         // LavadoObservacion: m.lavadoObservacion,
         // Reparaciones: reparaciones,
         // ReparacionesObservacion: m.reparacionesObservacion,
