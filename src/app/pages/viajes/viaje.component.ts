@@ -304,7 +304,7 @@ export class ViajeComponent implements OnInit {
           buttons: ["No!", "Si, Estoy seguro!"],
           dangerMode: true
         })
-      
+       
         .then(ok => {
           if (ok) {
             this._viajeService
