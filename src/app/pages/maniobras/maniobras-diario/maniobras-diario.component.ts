@@ -119,24 +119,20 @@ export class ManiobrasDiarioComponent implements OnInit {
     );
   }
 
-  consulta(contenedor: Boolean) {
-    if(contenedor) {
-      if(this.contenedor == undefined){
-        this.checkedContenedor = false
-        swal('error', ' El filtro de contenedor no puede estar vacio', 'error')
-      } else {
-        this.checkedContenedor = true;
-        this.consultarContenedor();
-      }
-    } else {
-      this.checkedContenedor = false;
-      this.consultaManiobras();
-    }
-  }
 
-  javi(x: boolean){
-    console.log(x)
-  }
+
+
+  filtrar(bool: boolean){
+  if(bool == true) {
+    if(this.contenedor != undefined && this.contenedor != ''){
+        this.consultarContenedor()
+      } else {
+        swal("Error", "Debes de escribir un contenedor", "error")
+      }
+   } else if(bool == false) {
+     this.consultaManiobras();
+   }
+}
 
   consultarContenedor() {
     return new Promise((resolve, reject) => {
@@ -153,24 +149,6 @@ export class ManiobrasDiarioComponent implements OnInit {
       });
     });
   }
-
-  // filtrarContenedor(contenedor: boolean){
-
-
-  // //   this.maniobraContenedor = [];
-  // // this.checkedContenedor = contenedor;
-  // // if(this.contenedor.length > 0) {
-  // //     this.dataSource.data.forEach(c => {
-  // //       if(c.contenedor === this.contenedor) {
-  // //         this.maniobraContenedor.push(c)
-  // //       }
-  // //     });
-  // //     this.dataSource = new MatTableDataSource(this.maniobrasVacios);
-  // //     this.dataSource.sort = this.sort;
-  // //     this.dataSource.paginator = this.paginator;
-  // //     this.totalRegistros = this.dataSource.data.length;
-  // // }
-  // }
 
   consultaManiobras() {
     this.cargando = true;

@@ -18,14 +18,15 @@
 
             <div class="col-sm-2">
               <mat-form-field>
-                <input matInput  [(ngModel)]="contenedor" placeholder="Escriba contenedor para filtrar">
+                <input matInput [(ngModel)]="contenedor" [disabled]="this.bool.checked === false"
+                  placeholder="Escriba contenedor">
               </mat-form-field>
 
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
               <mat-form-field>
-                <mat-select (selectionChange)="consultaManiobras()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
-                  name="viaje">
+                <mat-select (selectionChange)="consultaManiobras()" [(ngModel)]="viaje"
+                  placeholder="Seleccione un viaje" name="viaje">
                   <mat-option>--- NINGUNO ---</mat-option>
                   <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                     {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -33,52 +34,61 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
               <mat-form-field>
-                <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada" 
-                  placeholder="Fecha Llegada Inicial" [disabled]="this.checkedContenedor=== true" >
+                <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada"
+                  placeholder="Fecha Llegada Inicial" [disabled]="this.bool.checked === true">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
               <mat-form-field>
                 <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFinLlegada"
-                  placeholder="Fecha Llegada Final" [disabled]="this.checkedContenedor=== true">
+                  placeholder="Fecha Llegada Final" [disabled]="this.bool.checked === true">
                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                 <mat-datepicker #picker2></mat-datepicker>
               </mat-form-field>
             </div>
-            <div class="col-sm-3">
-              <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                (click)="consultaManiobras()">
-                <i class="fas fa-filter"></i>
-                Filtrar
-              </button>
+
+
+
+          </div>
+          <div class="row">
+            <div class="col-sm-2">
+              <mat-checkbox [checked]="checkedContenedor" #bool (vale)="bool.checked">Contenedor
+              </mat-checkbox>
+            </div>
+
+            <div class="col-sm-2">
+              <mat-checkbox [checked]="checkedVacios" #vacios (change)="filtraManiobrasVacios(vacios.checked)">Vacios
+              </mat-checkbox>
+            </div>
+            <
+            <div class="col-sm">
+              <div class="text-right">
+                <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                  (click)="filtrar(bool.checked)">
+                  <i class="fas fa-filter"></i>
+                  Filtrar
+                </button>
+              </div>
               <!-- <button type="reset" class="btn btn-success waves-effect">
                       <i class="fa fa-filter "></i>
                       Limpiar
                    </button> -->
             </div>
-
-            
-            <div class="col-sm-2">
-              <mat-checkbox [checked]="checkedVacios" #vacios (change)="filtraManiobrasVacios(vacios.checked)">Vacios
-              </mat-checkbox>
-            </div>
-
-            <div class="col-sm-2">
-              <mat-checkbox [checked]="checkedContenedor" #bool (change)="consulta(bool.checked)">Contenedor
-              </mat-checkbox>
-            </div>
-
-            <div class="col-sm">
-              <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i>
-              </button>
-            </div>
           </div>
+
+
+
         </div> <br>
+
+        <div class="text-right">
+          <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+            <i class="fas fa-file-excel"></i>
+          </button>
+        </div>
         <h3 class="card-title">Maniobras Diarias ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
