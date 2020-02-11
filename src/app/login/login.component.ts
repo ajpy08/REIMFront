@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Usuario } from '../pages/usuarios/usuario.model';
 import { UsuarioService } from '../pages/usuarios/usuario.service';
+import {URL_SERVICIOS} from '../config/config';
 
 
 declare function init_plugins();
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   recuerdame: boolean = false;
 
   urlWithoutLogin: string;
+  ruta: string;
 
   constructor(public router: Router, public _usuarioService: UsuarioService) { }
 
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem('urlMain')) {
       this.urlWithoutLogin = localStorage.getItem('urlMain');
     }
+    this.ruta= URL_SERVICIOS + '/forgot_password';
   }
 
   ingresar(forma: NgForm) {
