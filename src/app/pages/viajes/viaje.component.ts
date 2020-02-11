@@ -303,7 +303,9 @@ export class ViajeComponent implements OnInit {
           icon: "warning",
           buttons: ["No!", "Si, Estoy seguro!"],
           dangerMode: true
-        }).then(ok => {
+        })
+      
+        .then(ok => {
           if (ok) {
             this._viajeService
               .guardarViaje(this.regForm.value)
@@ -336,6 +338,23 @@ export class ViajeComponent implements OnInit {
         //     swal("Cancelled", "Your imaginary file is safe :)", "error");
         //   }
         // })
+      } else {         
+           this._viajeService
+        .guardarViaje(this.regForm.value)
+        .subscribe(res => {
+          this.fileTemporal = null;
+          this.temporal = false;
+          if (this.regForm.get("_id").value === "") {
+            this.regForm.get("_id").setValue(res._id);
+            this.edicion = true;
+            this.router.navigate([
+              "/viaje",
+              this.regForm.get("_id").value
+            ]);
+          }
+          this.regForm.markAsPristine();
+        });
+
       }
     }
   }
