@@ -16,8 +16,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { DatePipe } from '@angular/common';
 import { ETAPAS_MANIOBRA } from '../../../config/config';
 import { Location } from '@angular/common';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 
 import * as _moment from 'moment';
@@ -71,32 +71,32 @@ export class CargaContenedorComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE).subscribe(resp => this.contenedores = resp.maniobras);
     this._agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
     this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.maniobra = new Maniobra('', '', '', '', '', '', '', '', '', '', '', '', '', null, '', '', '', null, null, '', null, '');
+    this.maniobra = new Maniobra('', '', '', '', null, '', '', '', '', '', '', '', '', '', null, '', '', '', null, null, '', null, '');
     this.createFormGroup();
     this.cargarManiobra(id);
+    
 
     this.contenedoresFiltrados = this.contenedorTemp.valueChanges.pipe(
       startWith(''),
-      map(value => typeof value === 'string' || value===null ? value : value.contenedor),
+      map(value => typeof value === 'string' || value === null ? value : value.contenedor),
       map(cont => cont ? this._filter(cont) : this.contenedores.slice())
     );
-    this.url = '/maniobras'; 
+    this.url = '/maniobras';
   }
-//   private _filter(value: string): Maniobra[] {
-//     const filterValue = value.toLowerCase();
-//     let filtrados: Maniobra[] = [];
-//     this.contenedores.forEach(element => {
-//       if (element.contenedor.toLowerCase().indexOf(filterValue) === 0) {
-//         filtrados.push(element);
-//       }
-//     });
-//   return filtrados;
-// //    return this.contenedores.contenedor.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
-//   }
+  //   private _filter(value: string): Maniobra[] {
+  //     const filterValue = value.toLowerCase();
+  //     let filtrados: Maniobra[] = [];
+  //     this.contenedores.forEach(element => {
+  //       if (element.contenedor.toLowerCase().indexOf(filterValue) === 0) {
+  //         filtrados.push(element);
+  //       }
+  //     });
+  //   return filtrados;
+  // //    return this.contenedores.contenedor.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  //   }
 
   private _filter(cont: string): Maniobra[] {
     const filterValue = cont.toLowerCase();
@@ -105,7 +105,7 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   displayFn(maniobra?: Maniobra): string | undefined {
-    return maniobra ? maniobra.contenedor + ' | Grado: ' + maniobra.grado + ' | Tamaño:' + maniobra.tipo : undefined;
+    return maniobra ? maniobra.naviera._id + '| Naviera' + maniobra.contenedor + ' | Grado: ' + maniobra.grado + ' | Tamaño:' + maniobra.tipo : undefined;
   }
 
   createFormGroup() {
@@ -118,9 +118,10 @@ export class CargaContenedorComponent implements OnInit {
       maniobraAsociada: [''],
       hSalida: [''],
       hDescarga: [''],
-      sello: [{ value:'', disabled: true}],
+      sello: [{ value: '', disabled: true }],
       estatus: [{ value: '', disabled: true }],
       folio: [{ value: '', disabled: true }],
+      naviera: [{ value: '', disabled: true }],
       blBooking: [{ value: '', disabled: true }],
       cliente: [{ value: '', disabled: true }],
       agencia: [{ value: '', disabled: true }],
@@ -151,7 +152,7 @@ export class CargaContenedorComponent implements OnInit {
   get maniobraAsociada() {
     return this.regForm.get('maniobraAsociada');
   }
-  get sello(){
+  get sello() {
     return this.regForm.get('sello');
   }
   get estatus() {
@@ -159,6 +160,9 @@ export class CargaContenedorComponent implements OnInit {
   }
   get folio() {
     return this.regForm.get('folio');
+  }
+  get naviera() {
+    return this.regForm.get('naviera');
   }
 
   get blBooking() {
@@ -198,6 +202,7 @@ export class CargaContenedorComponent implements OnInit {
   cargarManiobra(id: string) {
     this._maniobraService.getManiobra(id).subscribe(maniob => {
       this.maniobra = maniob.maniobra;
+      this._maniobraService.getManiobras('D', ETAPAS_MANIOBRA.DISPONIBLE, null, null, null, null, null, null, maniob.maniobra.naviera._id).subscribe(resp => this.contenedores = resp.maniobras);
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       this.regForm.controls['agencia'].setValue(maniob.maniobra.agencia);
       this.regForm.controls['maniobraAsociada'].setValue(maniob.maniobra.maniobraAsociada);
@@ -205,7 +210,8 @@ export class CargaContenedorComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
-      var blBooking = maniob.maniobra.solicitud != undefined ? maniob.maniobra.solicitud.blBooking : '';
+      this.regForm.controls['naviera'].setValue(maniob.maniobra.naviera.nombreComercial);
+      var blBooking = maniob.maniobra.solicitud.blBooking != undefined ? maniob.maniobra.solicitud.blBooking : '';
       this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
@@ -275,15 +281,15 @@ export class CargaContenedorComponent implements OnInit {
 
 
   guardaCambios() {
-    
+
     if (this.contenedorTemp.value) {
       this.contenedor.setValue(this.contenedorTemp.value.contenedor);
       this.maniobraAsociada.setValue(this.contenedorTemp.value._id);
       this.tipo.setValue(this.contenedorTemp.value.tipo);
       this.grado.setValue(this.contenedorTemp.value.grado);
     }
-    
-    
+
+
     if (this.regForm.valid) {
       this._maniobraService.registraCargaContenedor(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();

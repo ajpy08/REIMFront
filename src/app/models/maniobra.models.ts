@@ -1,4 +1,5 @@
 import { Reparacion } from '../pages/reparaciones/reparacion.models';
+import { Naviera } from '../pages/navieras/navieras.models';
 
 export class Maniobra {
     constructor(
@@ -6,6 +7,7 @@ export class Maniobra {
         public folio?: string,
         public viaje?: string,
         public agencia?: string,
+        public naviera?: Naviera,
         public cliente?: string,
         public transportista?: string,
         public camion?: string,
