@@ -28,7 +28,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <mat-form-field>
-                    <mat-select (selectionChange)="cargarInventario()" [(ngModel)]="navieraSeleccionada"
+                    <mat-select [(value)]="navieraSeleccionada" [disabled]="blockNaviera" (selectionChange)="cargarInventario()" [(ngModel)]="navieraSeleccionada"
                       placeholder="Seleccione una Naviera" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let naviera of navieras" [value]="naviera._id">
@@ -77,19 +77,19 @@
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
-                // <ng-container matColumnDef="naviera">
-                //   <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
-                //   <mat-cell *matCellDef="let row"> {{row.maniobra?.naviera?.nombreComercial}} </mat-cell>
-                // </ng-container>
+                <ng-container matColumnDef="nombreComercial">
+                  <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="fVigenciaTemporal">
-                  <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Vigencia Temporal</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.fVigenciaTemporal | date:'dd/MM/yyyy'}}
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="pdfTemporal">
-                  <mat-header-cell *matHeaderCellDef>Temporal</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Temporal</mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     <a matTooltip="Descargar Inevntario PDF" *ngIf="row.viaje?.pdfTemporal"
                       [href]="row.viaje.pdfTemporal | imagen:'viaje'" target="_blank">
@@ -247,10 +247,10 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      // <ng-container matColumnDef="naviera">
-                      //   <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
-                      //   <mat-cell *matCellDef="let row"> {{row.maniobra.naviera.nombreComercial}} </mat-cell>
-                      // </ng-container>
+                      <ng-container matColumnDef="nombreComercial">
+                        <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                      </ng-container>
 
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
@@ -294,10 +294,10 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      <mat-header-row *matHeaderRowDef="displayedColumnsGroups" class="encabezado">
                       </mat-header-row>
-                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumnsGroups;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumnsGroups; sticky: true"></mat-footer-row>
                     </mat-table>
                   </div>
                 </mat-expansion-panel>
@@ -357,10 +357,10 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      // <ng-container matColumnDef="naviera">
-                      //   <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
-                      //   <mat-cell *matCellDef="let row"> {{row.maniobra.naviera.nombreComercial}} </mat-cell>
-                      // </ng-container>
+                      <ng-container matColumnDef="nombreComercial">
+                        <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                      </ng-container>
 
                       <ng-container matColumnDef="fVigenciaTemporal">
                         <mat-header-cell *matHeaderCellDef>Vigencia Temporal</mat-header-cell>
@@ -404,10 +404,10 @@
                         <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
-                      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado">
+                      <mat-header-row *matHeaderRowDef="displayedColumnsGroups" class="encabezado">
                       </mat-header-row>
-                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                      <mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></mat-footer-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumnsGroups;"></mat-row>
+                      <mat-footer-row *matFooterRowDef="displayedColumnsGroups; sticky: true"></mat-footer-row>
                     </mat-table>
                   </div>
                 </mat-expansion-panel>
@@ -475,10 +475,10 @@
                   <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
                 </ng-container>
 
-                // <ng-container matColumnDef="naviera">
-                //   <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
-                //   <mat-cell *matCellDef="let row"> {{row.maniobra.naviera.nombreComercial}} </mat-cell>
-                // </ng-container>
+                <ng-container matColumnDef="nombreComercial">
+                  <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>contenedor</mat-header-cell>

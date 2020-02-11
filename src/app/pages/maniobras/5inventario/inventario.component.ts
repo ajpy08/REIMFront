@@ -34,6 +34,7 @@ export class InventarioComponent implements OnInit {
     "fLlegada",
     "viaje",
     "nombre",
+    "nombreComercial",
     "fVigenciaTemporal",
     "pdfTemporal",
     "contenedor",
@@ -41,17 +42,20 @@ export class InventarioComponent implements OnInit {
     "peso",
     "grado"
   ];
-  displayedColumnsLR = [
+  displayedColumnsGroups = [
     "fLlegada",
     "viaje",
     "nombre",
+    // "nombreComercial",
+    "fVigenciaTemporal",
+    "pdfTemporal",
     "contenedor",
     "tipo",
     "peso",
-    "grado",
-    "lavado",
-    "reparaciones"
+    "grado"
   ];
+  displayedColumnsLR;
+
   dataSource: any;
   dataSourceLR: any;
   c40: any;
@@ -64,6 +68,7 @@ export class InventarioComponent implements OnInit {
   maniobras: Maniobra[] = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
+  blockNaviera = false;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -81,8 +86,7 @@ export class InventarioComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarNavieras();
-    this.cargarInventario();
+    this.cargarNavieras();    
 
     if (
       this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
@@ -93,6 +97,7 @@ export class InventarioComponent implements OnInit {
         "fLlegada",
         "viaje",
         "nombre",
+        "nombreComercial",
         "contenedor",
         "tipo",
         "peso",
@@ -101,10 +106,13 @@ export class InventarioComponent implements OnInit {
         "reparaciones"
       ];
     } else {
+      this.navieraSeleccionada = this.usuarioLogueado.empresas[0]._id;
+      this.blockNaviera = true;
       this.displayedColumnsLR = [
         "fLlegada",
         "viaje",
         "nombre",
+        "nombreComercial",
         "contenedor",
         "tipo",
         "peso",
@@ -117,6 +125,8 @@ export class InventarioComponent implements OnInit {
     if (indexTAB) {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
+
+    this.cargarInventario();
   }
 
   applyFilter(filterValue: string, dataSource: any, totalRegistros: number) {
@@ -346,42 +356,68 @@ export class InventarioComponent implements OnInit {
   //   this.cargarLR();
   // }
 
+  // cargarLR() {
+  //   if (
+  //     this.usuarioLogueado.role === ROLES.NAVIERA_ROLE &&
+  //     this.usuarioLogueado.empresas.length > 0
+  //   ) {
+  //     this.cargando = true;
+  //     this.maniobraService
+  //       .getManiobrasNaviera(
+  //         ETAPAS_MANIOBRA.LAVADO_REPARACION,
+  //         this.usuarioLogueado.empresas[0]._id
+  //       )
+  //       .subscribe(maniobras => {
+  //         this.dataSourceLR = new MatTableDataSource(maniobras.maniobras);
+  //         this.dataSourceLR.sort = this.MatSort2;
+  //         this.dataSourceLR.paginator = this.MatPaginatorLR;
+  //         this.totalRegistrosLR = maniobras.total;
+  //       });
+  //     this.cargando = false;
+  //   } else {
+  //     if (
+  //       this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
+  //       this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE ||
+  //       this.usuarioLogueado.role == ROLES.PATIO_ROLE
+  //     ) {
+  //       this.cargando = true;
+  //       this.maniobraService
+  //         .getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
+  //         .subscribe(maniobras => {
+  //           this.dataSourceLR = new MatTableDataSource(maniobras.maniobras);
+  //           this.dataSourceLR.sort = this.MatSort2;
+  //           this.dataSourceLR.paginator = this.MatPaginatorLR;
+  //           this.totalRegistrosLR = maniobras.total;
+  //         });
+  //       this.cargando = false;
+  //     }
+  //   }
+  // }
+
   cargarLR() {
-    if (
-      this.usuarioLogueado.role === ROLES.NAVIERA_ROLE &&
-      this.usuarioLogueado.empresas.length > 0
-    ) {
-      this.cargando = true;
-      this.maniobraService
-        .getManiobrasNaviera(
-          ETAPAS_MANIOBRA.LAVADO_REPARACION,
-          this.usuarioLogueado.empresas[0]._id
-        )
-        .subscribe(maniobras => {
-          this.dataSourceLR = new MatTableDataSource(maniobras.maniobras);
-          this.dataSourceLR.sort = this.MatSort2;
-          this.dataSourceLR.paginator = this.MatPaginatorLR;
-          this.totalRegistrosLR = maniobras.total;
-        });
-      this.cargando = false;
-    } else {
-      if (
-        this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
-        this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE ||
-        this.usuarioLogueado.role == ROLES.PATIO_ROLE
-      ) {
-        this.cargando = true;
-        this.maniobraService
-          .getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
-          .subscribe(maniobras => {
-            this.dataSourceLR = new MatTableDataSource(maniobras.maniobras);
-            this.dataSourceLR.sort = this.MatSort2;
-            this.dataSourceLR.paginator = this.MatPaginatorLR;
-            this.totalRegistrosLR = maniobras.total;
-          });
-        this.cargando = false;
-      }
-    }
+    this.cargando = true;
+
+    this.maniobraService
+      .getManiobras(
+        null,
+        ETAPAS_MANIOBRA.LAVADO_REPARACION,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        this.navieraSeleccionada
+      )
+      .subscribe(maniobras => {
+        this.maniobras = maniobras.maniobras;
+
+        this.dataSourceLR = new MatTableDataSource(maniobras.maniobras);
+        this.dataSourceLR.sort = this.sort;
+        this.dataSourceLR.paginator = this.paginator;
+        this.totalRegistrosLR = maniobras.maniobras.length;
+      });
+    this.cargando = false;
   }
 
   mostrarFotosReparaciones(maniobra: Maniobra) {
