@@ -61,6 +61,7 @@ export class InventarioComponent implements OnInit {
   datosExcel = [];
   totalInventario: number = 0;
   totalReparaciones: number = 0;
+  maniobras: Maniobra[] = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
 
@@ -141,71 +142,94 @@ export class InventarioComponent implements OnInit {
   }
 
   cargarInventario() {
-    this.cargando = true;
+    const promesa = this.cargaManiobras();
 
-    this.maniobraService
-      .getManiobras(
-        "D",
-        ETAPAS_MANIOBRA.DISPONIBLE,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        this.navieraSeleccionada
-      )
-      .subscribe(maniobras => {
-        this.c20 = maniobras.maniobras.filter(m => m.tipo.includes("20"));
+    promesa.then((value: boolean) => {
+      if (value) {
+        this.agrupa20_40(this.maniobras);
+        this.cargarLR();
+      }
+    });
+  }
 
-        const grouped20 = this.c20.reduce((curr, m) => {
-          if (!curr[m.tipo]) {
-            // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
-            curr[m.tipo] = [m];
-          } else {
-            // Si ya tienes ese tipo lo agregas al final del arreglo
-            curr[m.tipo].push(m);
-          }
-          return curr;
-        }, {});
+  agrupa20_40(maniobras) {
+    this.c20 = maniobras.filter(m => m.tipo.includes("20"));
 
-        // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
-        this.groupedDisponibles20 = Object.keys(grouped20).map(tipo => {
-          return {
-            tipo: tipo,
-            maniobras: grouped20[tipo]
-          };
-        });
+    const grouped20 = this.c20.reduce((curr, m) => {
+      if (!curr[m.tipo]) {
+        // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+        curr[m.tipo] = [m];
+      } else {
+        // Si ya tienes ese tipo lo agregas al final del arreglo
+        curr[m.tipo].push(m);
+      }
+      return curr;
+    }, {});
 
-        this.c40 = maniobras.maniobras.filter(m => m.tipo.includes("40"));
-
-        const grouped40 = this.c40.reduce((curr, m) => {
-          if (!curr[m.tipo]) {
-            // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
-            curr[m.tipo] = [m];
-          } else {
-            // Si ya tienes ese tipo lo agregas al final del arreglo
-            curr[m.tipo].push(m);
-          }
-          return curr;
-        }, {});
-
-        // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
-        this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
-          return {
-            tipo: tipo,
-            maniobras: grouped40[tipo]
-          };
-        });
-
-        this.dataSource = new MatTableDataSource(maniobras.maniobras);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = maniobras.maniobras.length;
+    // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+    if (grouped20) {
+      this.groupedDisponibles20 = Object.keys(grouped20).map(tipo => {
+        return {
+          tipo: tipo,
+          maniobras: grouped20[tipo]
+        };
       });
-    this.cargando = false;
+    }
 
-    this.cargarLR();
+    this.c40 = maniobras.filter(m => m.tipo.includes("40"));
+
+    const grouped40 = this.c40.reduce((curr, m) => {
+      if (!curr[m.tipo]) {
+        // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+        curr[m.tipo] = [m];
+      } else {
+        // Si ya tienes ese tipo lo agregas al final del arreglo
+        curr[m.tipo].push(m);
+      }
+      return curr;
+    }, {});
+
+    // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+    if (grouped40) {
+      this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
+        return {
+          tipo: tipo,
+          maniobras: grouped40[tipo]
+        };
+      });
+    }
+  }
+
+  cargaManiobras() {
+    return new Promise((resolve, reject) => {
+      this.cargando = true;
+
+      this.maniobraService
+        .getManiobras(
+          "D",
+          ETAPAS_MANIOBRA.DISPONIBLE,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          this.navieraSeleccionada
+        )
+        .subscribe(maniobras => {
+          this.maniobras = maniobras.maniobras;
+
+          this.dataSource = new MatTableDataSource(maniobras.maniobras);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          this.totalRegistros = maniobras.maniobras.length;
+
+          if (this.maniobras) {
+            resolve(true);
+          }
+        });
+      this.cargando = false;
+    });
   }
 
   // cargarInventario() {
@@ -408,24 +432,25 @@ export class InventarioComponent implements OnInit {
 
   cuentaInventario(grado: string, estatus: string, source: any): number {
     let count = 0;
-    source.forEach(d => {
-      if (d.grado == grado && d.estatus == estatus) {
-        count++;
-      }
-    });
+    if (source) {
+      source.forEach(d => {
+        if (d.grado == grado && d.estatus == estatus) {
+          count++;
+        }
+      });
+    }
     return count;
   }
 
   cuentaReparaciones(grado: string, tipo: string, source: any): number {
     let count = 0;
-    source.forEach(d => {
-      if (d.grado == grado && d.tipo == tipo && d.reparaciones.length > 0) {
-        count++;
-      }
-      // } else if (grado == '' && d.tipo == tipo && d.reparaciones.length > 0) {
-      //   count++;
-      // }
-    });
+    if (source) {
+      source.forEach(d => {
+        if (d.grado == grado && d.tipo == tipo && d.reparaciones.length > 0) {
+          count++;
+        }
+      });
+    }
     return count;
   }
 
@@ -437,26 +462,28 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario("A", "DISPONIBLE", g20.maniobras);
           total += this.cuentaInventario("B", "DISPONIBLE", g20.maniobras);
           total += this.cuentaInventario("C", "DISPONIBLE", g20.maniobras);
-          total += this.cuentaReparaciones(
-            "A",
-            g20.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "B",
-            g20.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "C",
-            g20.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "PT",
-            g20.tipo,
-            this.dataSourceLR.data
-          );
+          if (this.dataSourceLR != undefined) {
+            total += this.cuentaReparaciones(
+              "A",
+              g20.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "B",
+              g20.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "C",
+              g20.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "PT",
+              g20.tipo,
+              this.dataSourceLR.data
+            );
+          }
         });
       }
     } else if (tipo.includes("40")) {
@@ -465,26 +492,28 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario("A", "DISPONIBLE", g40.maniobras);
           total += this.cuentaInventario("B", "DISPONIBLE", g40.maniobras);
           total += this.cuentaInventario("C", "DISPONIBLE", g40.maniobras);
-          total += this.cuentaReparaciones(
-            "A",
-            g40.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "B",
-            g40.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "C",
-            g40.tipo,
-            this.dataSourceLR.data
-          );
-          total += this.cuentaReparaciones(
-            "PT",
-            g40.tipo,
-            this.dataSourceLR.data
-          );
+          if (this.dataSourceLR != undefined) {
+            total += this.cuentaReparaciones(
+              "A",
+              g40.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "B",
+              g40.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "C",
+              g40.tipo,
+              this.dataSourceLR.data
+            );
+            total += this.cuentaReparaciones(
+              "PT",
+              g40.tipo,
+              this.dataSourceLR.data
+            );
+          }
         });
       }
     }
