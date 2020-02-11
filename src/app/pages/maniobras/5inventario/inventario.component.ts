@@ -443,15 +443,18 @@ export class InventarioComponent implements OnInit {
       // console.log(d)
       var dato = {
         EntradaPatio: d.fLlegada,
-        Viaje: d.viaje.viaje,
-        Buque: d.viaje.buque.nombre,
-        VigenciaTemporal: d.viaje.fVigenciaTemporal,
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '',
+        Buque: d.viaje && d.viaje.buque && d.viaje.buque != undefined && d.viaje.buque != null && d.viaje.buque.nombre && d.viaje.buque.nombre != undefined && d.viaje.buque.nombre != '' ? d.viaje.buque.nombre : '',
+        VigenciaTemporal: d.viaje && d.viaje.fVigenciaTemporal != undefined && d.viaje.fVigenciaTemporal != null && d.viaje.fVigenciaTemporal ? d.viaje.fVigenciaTemporal : '',
+        
+        
         Contenedor: d.contenedor,
         Tipo: d.tipo,
         Estado: d.peso,
         Grado: d.grado,
         // operador: d.operador != undefined ? d.operador.nombre : '',
-        FAlta: d.fAlta.substring(0, 10)
+        Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial != undefined && d.naviera.nombreComercial != '' ? d.naviera.nombreComercial : '',
+        FAlta: d.fAlta.substring(0, 10),
       };
       this.datosExcel.push(dato);
     });
