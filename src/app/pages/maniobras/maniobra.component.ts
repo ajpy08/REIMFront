@@ -28,7 +28,7 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class ManiobraComponent implements OnInit {
 
-  maniobra: Maniobra = new Maniobra('', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+  maniobra: Maniobra = new Maniobra('', '', '', '', null, '', '', '', '', '', '', '', '', '', '');
   operadores: Operador[] = [];
   operador: Operador = new Operador();
   camiones: Camion[] = [];
