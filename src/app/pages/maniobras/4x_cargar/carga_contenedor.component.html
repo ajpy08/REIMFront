@@ -92,7 +92,7 @@
             </div>
 
             <div class="alert alert-success" *ngIf="maniobraAsociada.value">
-              <label class="control-label"><b>CONTENEDOR ASIGNADO</b></label><br> CONTENEDOR : {{contenedor.value}} <br> TIPO : {{tipo.value}} <br> GRADO : {{grado.value}}
+            <label class="control-label"><b>CONTENEDOR ASIGNADO</b></label><br> NAVIERA: {{naviera.value}}<br> CONTENEDOR : {{contenedor.value}} <br> TIPO : {{tipo.value}} <br> GRADO : {{grado.value}}
             </div>
 
             <div class="form-group has-success">
@@ -132,7 +132,7 @@
                 <input type="text" placeholder="Selecciona un contenedor" aria-label="Number" matInput formControlName="contenedorTemp" [matAutocomplete]="auto">
                 <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
                   <mat-option *ngFor="let cont of contenedoresFiltrados | async" [value]="cont">
-                   {{cont.naviera.nombreComercial}} | {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}
+                    NAVIERA:{{cont.naviera.nombreComercial}} | {{cont.contenedor}} | GRADO:{{cont.grado}} | TAMAÑO: {{cont.tipo}}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
