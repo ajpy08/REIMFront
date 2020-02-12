@@ -52,7 +52,7 @@ export class SentryErrorHandler implements ErrorHandler {
     });
 
     const user = JSON.parse(localStorage.getItem("usuario")) || "";
-    console.log(user);
+    // console.log(user);
     if (user != "") {
       Sentry.configureScope(function(scope) {
         scope.setUser({
