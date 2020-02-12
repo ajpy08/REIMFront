@@ -194,15 +194,31 @@ export class SolicitudesComponent implements OnInit {
   applyFilterCargas(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dtCargas.filter = filterValue;
-    this.totalRegistrosCargas = this.dtCargas.filteredData.length;
+
+    if (this.dtCargas && this.dtCargas.data.length > 0) {
+      this.dtCargas.filter = filterValue;
+      this.totalRegistrosCargas = this.dtCargas.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Aprobaciones Cargas");
+    }
+
+    // this.dtCargas.filter = filterValue;
+    // this.totalRegistrosCargas = this.dtCargas.filteredData.length;
   }
 
   applyFilterDescargas(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dtDescargas.filter = filterValue;
-    this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+
+    if (this.dtDescargas && this.dtDescargas.data.length > 0) {
+      this.dtDescargas.filter = filterValue;
+      this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Aprobaciones Descargas");
+    }
+
+    // this.dtDescargas.filter = filterValue;
+    // this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
   }
 
   onLinkClick(event: MatTabChangeEvent) {

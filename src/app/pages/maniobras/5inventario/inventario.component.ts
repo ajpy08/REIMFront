@@ -132,8 +132,12 @@ export class InventarioComponent implements OnInit {
   applyFilter(filterValue: string, dataSource: any, totalRegistros: number) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    dataSource.filter = filterValue;
-    totalRegistros = dataSource.filteredData.length;
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      this.dataSource.filter = filterValue;
+      this.totalRegistros = this.dataSource.filteredData.length;
+    } else {
+      console.error('Error al filtrar el dataSource de Inventario');
+    }
   }
 
   cargarNavieras() {
