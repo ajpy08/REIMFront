@@ -105,7 +105,7 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   displayFn(maniobra?: Maniobra): string | undefined {
-    return maniobra ? maniobra.naviera._id + '| Naviera' + maniobra.contenedor + ' | Grado: ' + maniobra.grado + ' | Tamaño:' + maniobra.tipo : undefined;
+    return maniobra ? 'Naviera: ' + maniobra.naviera.nombreComercial + ' | Contenedor: ' + maniobra.contenedor + ' | Grado: ' + maniobra.grado + ' | Tamaño: ' + maniobra.tipo : undefined;
   }
 
   createFormGroup() {
@@ -211,7 +211,10 @@ export class CargaContenedorComponent implements OnInit {
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['folio'].setValue(maniob.maniobra.folio);
       this.regForm.controls['naviera'].setValue(maniob.maniobra.naviera.nombreComercial);
-      var blBooking = maniob.maniobra.solicitud.blBooking != undefined ? maniob.maniobra.solicitud.blBooking : '';
+
+    var blBooking = maniob.maniobra.solicitud && maniob.maniobra.solicitud.blBooking != undefined ? maniob.maniobra.solicitud.blBooking: '';
+
+      
       this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);

@@ -268,6 +268,12 @@ export class AprobacionesComponent implements OnInit {
       var buque = {
         //Id: b._id,
         FAlta: b.fAlta.substring(0, 10),
+        Booking:
+          b.blBooking &&
+          b.blBooking != undefined &&
+          b.blBooking != ""
+          ? b.blBooking
+          : "" && b.blBooking,
         Tipo: b.tipo,
         Agencia:
           b.agencia &&
