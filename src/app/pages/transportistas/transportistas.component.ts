@@ -1,31 +1,51 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Transportista } from './transportista.models';
-import { TransportistaService, ExcelService } from '../../services/service.index';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Transportista } from "./transportista.models";
+import {
+  TransportistaService,
+  ExcelService
+} from "../../services/service.index";
+import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
 declare var swal: any;
 
 @Component({
-  selector: 'app-transportistas',
-  templateUrl: './transportistas.component.html',
+  selector: "app-transportistas",
+  templateUrl: "./transportistas.component.html",
   styles: []
 })
-
 export class TransportistasComponent implements OnInit {
-
   transportistas: Transportista[] = [];
   cargando = true;
   totalRegistros = 0;
   transportistaExcel = [];
 
-
-  displayedColumns = ['actions', 'img', 'rfc', 'razonSocial', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
-    'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'caat'];
+  displayedColumns = [
+    "actions",
+    "img",
+    "rfc",
+    "razonSocial",
+    "calle",
+    "noExterior",
+    "noInterior",
+    "colonia",
+    "municipio",
+    "ciudad",
+    "estado",
+    "cp",
+    "formatoR1",
+    "correo",
+    "correoFac",
+    "credito",
+    "caat"
+  ];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _transportistaService: TransportistaService,private excelService: ExcelService) { }
+  constructor(
+    public _transportistaService: TransportistaService,
+    private excelService: ExcelService
+  ) {}
   ngOnInit() {
     this.cargarTransportistas();
   }
@@ -33,46 +53,46 @@ export class TransportistasComponent implements OnInit {
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-    this.totalRegistros = this.dataSource.filteredData.length;
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      this.dataSource.filter = filterValue;
+      this.totalRegistros = this.dataSource.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Transportistas");
+    }
   }
 
   cargarTransportistas() {
     this.cargando = true;
-    this._transportistaService.getTransportistas()
-      .subscribe(transportistas => {
-        this.dataSource = new MatTableDataSource(transportistas.transportistas);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = transportistas.transportistas.length;
-      });
+    this._transportistaService.getTransportistas().subscribe(transportistas => {
+      this.dataSource = new MatTableDataSource(transportistas.transportistas);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = transportistas.transportistas.length;
+    });
     this.cargando = false;
   }
 
-
-
   borrarTransportista(transportista: Transportista) {
     swal({
-      title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + transportista.nombreComercial,
-      icon: 'warning',
+      title: "¿Esta seguro?",
+      text: "Esta apunto de borrar a " + transportista.nombreComercial,
+      icon: "warning",
       buttons: true,
-      dangerMode: true,
-    })
-      .then(borrar => {
-        if (borrar) {
-          this._transportistaService.borrarTransportista(transportista._id)
-            .subscribe(borrado => {
-              this.cargarTransportistas();
-            });
-        }
-      });
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        this._transportistaService
+          .borrarTransportista(transportista._id)
+          .subscribe(borrado => {
+            this.cargarTransportistas();
+          });
+      }
+    });
   }
 
   crearDatosExcel(datos) {
     datos.forEach(d => {
       var transportista = {
-
         Rfc: d.rfc,
         RazonSocial: d.razonSocial,
         Calle: d.calle,
@@ -87,18 +107,20 @@ export class TransportistasComponent implements OnInit {
         CorreoFac: d.correoFac,
         Credito: d.credito,
         Caat: d.Caat
-      }
+      };
       this.transportistaExcel.push(transportista);
     });
   }
 
-  exportarXLSX(){
+  exportarXLSX() {
     this.crearDatosExcel(this.dataSource.filteredData);
-    if(this.transportistaExcel){
-      this.excelService.exportAsExcelFile(this.transportistaExcel, 'Transportista');
+    if (this.transportistaExcel) {
+      this.excelService.exportAsExcelFile(
+        this.transportistaExcel,
+        "Transportista"
+      );
     } else {
-      swal('No se puede exportar un excel vacio', '', 'error');
+      swal("No se puede exportar un excel vacio", "", "error");
     }
   }
-
 }

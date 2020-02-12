@@ -163,8 +163,16 @@ export class SolicitudesTransportistaComponent implements OnInit {
   applyFilterDescargas(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSourceDescargas.filter = filterValue;
-    this.totalRegistros = this.dataSourceDescargas.filteredData.length;
+
+    if (this.dataSourceDescargas && this.dataSourceDescargas.data.length > 0) {
+      this.dataSourceDescargas.filter = filterValue;
+      this.totalRegistros = this.dataSourceDescargas.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Solicitudes Transportista Descargas");
+    }
+
+    // this.dataSourceDescargas.filter = filterValue;
+    // this.totalRegistros = this.dataSourceDescargas.filteredData.length;
   }
 
   onLinkClick(event: MatTabChangeEvent) {
@@ -174,7 +182,15 @@ export class SolicitudesTransportistaComponent implements OnInit {
   applyFilterCargas(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSourceCargas.filter = filterValue;
-    this.totalRegistrosCargas = this.dataSourceCargas.filteredData.length;
+
+    if (this.dataSourceCargas && this.dataSourceCargas.data.length > 0) {
+      this.dataSourceCargas.filter = filterValue;
+      this.totalRegistrosCargas = this.dataSourceCargas.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Solicitudes Transportista Cargas");
+    }
+
+    // this.dataSourceCargas.filter = filterValue;
+    // this.totalRegistrosCargas = this.dataSourceCargas.filteredData.length;
   }
 }

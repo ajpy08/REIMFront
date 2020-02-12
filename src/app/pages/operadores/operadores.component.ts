@@ -1,13 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Operador } from './operador.models';
-import { OperadorService, UsuarioService, ExcelService } from '../../services/service.index';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from '../usuarios/usuario.model';
-import { ROLES } from 'src/app/config/config';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Operador } from "./operador.models";
+import {
+  OperadorService,
+  UsuarioService,
+  ExcelService
+} from "../../services/service.index";
+import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { Usuario } from "../usuarios/usuario.model";
+import { ROLES } from "src/app/config/config";
 declare var swal: any;
 @Component({
-  selector: 'app-operadores',
-  templateUrl: './operadores.component.html',
+  selector: "app-operadores",
+  templateUrl: "./operadores.component.html",
   styles: []
 })
 export class OperadoresComponent implements OnInit {
@@ -17,13 +21,25 @@ export class OperadoresComponent implements OnInit {
   usuarioLogueado: Usuario;
   operadoresExcel = [];
 
-  displayedColumns = ['actions', 'foto', 'transportista.nombreComercial', 'nombre', 'vigenciaLicencia', 'licencia', 'activo'];
+  displayedColumns = [
+    "actions",
+    "foto",
+    "transportista.nombreComercial",
+    "nombre",
+    "vigenciaLicencia",
+    "licencia",
+    "activo"
+  ];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(public _operadorService: OperadorService, private usuarioService: UsuarioService, private excelService: ExcelService) { }
+  constructor(
+    public _operadorService: OperadorService,
+    private usuarioService: UsuarioService,
+    private excelService: ExcelService
+  ) {}
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -33,24 +49,31 @@ export class OperadoresComponent implements OnInit {
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-    this.totalRegistros = this.dataSource.filteredData.length;
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      this.dataSource.filter = filterValue;
+      this.totalRegistros = this.dataSource.filteredData.length;
+    } else {
+      console.error("Error al filtrar el dataSource de Operadores");
+    }
   }
 
   cargarOperadores() {
     this.cargando = true;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this._operadorService.getOperadores()
-        .subscribe(operadores => {
-          this.dataSource = new MatTableDataSource(operadores.operadores);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-          this.totalRegistros = operadores.operadores.length;
-        });
+    if (
+      this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE
+    ) {
+      this._operadorService.getOperadores().subscribe(operadores => {
+        this.dataSource = new MatTableDataSource(operadores.operadores);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = operadores.operadores.length;
+      });
     } else {
       if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
-        this._operadorService.getOperadores(this.usuarioLogueado.empresas[0]._id)
+        this._operadorService
+          .getOperadores(this.usuarioLogueado.empresas[0]._id)
           .subscribe(operadores => {
             this.dataSource = new MatTableDataSource(operadores.operadores);
             this.dataSource.sort = this.sort;
@@ -64,41 +87,40 @@ export class OperadoresComponent implements OnInit {
 
   habilitaDeshabilitaOperador(operador, event) {
     swal({
-      title: '¿Esta seguro?',
-      text: 'Esta apunto de deshabilitar a ' + operador.nombre,
-      icon: 'warning',
+      title: "¿Esta seguro?",
+      text: "Esta apunto de deshabilitar a " + operador.nombre,
+      icon: "warning",
       buttons: true,
-      dangerMode: true,
-    })
-      .then(borrar => {
-        if (borrar) {
-          this._operadorService.habilitaDeshabilitaOperador(operador, event.checked)
-            .subscribe(borrado => {
-              this.cargarOperadores();
-            });
-        } else {
-          event.source.checked = !event.checked;
-        }
-      });
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        this._operadorService
+          .habilitaDeshabilitaOperador(operador, event.checked)
+          .subscribe(borrado => {
+            this.cargarOperadores();
+          });
+      } else {
+        event.source.checked = !event.checked;
+      }
+    });
   }
-
 
   borrarOperador(operador: Operador) {
     swal({
-      title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + operador.nombre,
-      icon: 'warning',
+      title: "¿Esta seguro?",
+      text: "Esta apunto de borrar a " + operador.nombre,
+      icon: "warning",
       buttons: true,
-      dangerMode: true,
-    })
-      .then(borrar => {
-        if (borrar) {
-          this._operadorService.borrarOperador(operador._id)
-            .subscribe(borrado => {
-              this.cargarOperadores();
-            });
-        }
-      });
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        this._operadorService
+          .borrarOperador(operador._id)
+          .subscribe(borrado => {
+            this.cargarOperadores();
+          });
+      }
+    });
   }
 
   crearDatosExcel(datos) {
@@ -109,18 +131,17 @@ export class OperadoresComponent implements OnInit {
         VigenciaLicencia: d.vigenciaLicencia,
         Licencia: d.licencia,
         Activo: d.activo
-      }
-  this.operadoresExcel.push(operadores);
+      };
+      this.operadoresExcel.push(operadores);
     });
   }
-  
-  
+
   exportarXLSX(): void {
     this.crearDatosExcel(this.dataSource.filteredData);
-    if(this.operadoresExcel){
-      this.excelService.exportAsExcelFile(this.operadoresExcel, 'Operadores');
-    }else {
-      swal('No se puede exportar un excel vacio', '', 'error');
+    if (this.operadoresExcel) {
+      this.excelService.exportAsExcelFile(this.operadoresExcel, "Operadores");
+    } else {
+      swal("No se puede exportar un excel vacio", "", "error");
     }
   }
 }
