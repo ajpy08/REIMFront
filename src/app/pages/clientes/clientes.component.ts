@@ -38,8 +38,12 @@ export class ClientesComponent implements OnInit {
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
-    this.totalRegistros = this.dataSource.filteredData.length;
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      this.dataSource.filter = filterValue;
+      this.totalRegistros = this.dataSource.filteredData.length;
+    } else {
+      console.error('Error al filtrar el dataSource de Clientes');
+    }
   }
 
   cargarClientes() {
