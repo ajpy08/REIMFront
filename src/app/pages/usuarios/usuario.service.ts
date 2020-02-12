@@ -109,7 +109,7 @@ export class UsuarioService {
       localStorage.removeItem('email');
     }
     if (urlWithoutLogin === undefined) {
-      urlWithoutLogin = '/dashboard'
+      urlWithoutLogin = '/#/dashboard'
     }
     let url = URL_SERVICIOS + '/login';
     return this.http.post(url, usuario)
