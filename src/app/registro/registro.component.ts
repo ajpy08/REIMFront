@@ -22,7 +22,13 @@ export class RegistroComponent implements OnInit {
     ROLES_ARRAY[4],
     ROLES_ARRAY[5]
   ];
-
+  grazonSocial;
+  grfc;
+  gdireccion;
+  gcf;
+  gco;
+  gc ;
+  gn;
 
   constructor(private fb: FormBuilder,
     public router: Router,
@@ -32,16 +38,32 @@ export class RegistroComponent implements OnInit {
   ngOnInit() {
     init_plugins();
     this.createFormGroup();
-    this.datosPersonales.removeAt(0);
-    this.correoFacturacion.removeAt(0);
-    this.correoOperativo.removeAt(0);
+    if(this.datosPersonales){
+      this.datosPersonales.removeAt(0);
+    } 
+    if(this.correoFacturacion){
+      this.correoFacturacion.removeAt(0);
+    }
+    if(this.correoOperativo){
+      this.correoOperativo.removeAt(0);
+    }
   }
 
 
   guardarRegistro() {
     if (this.regForm.invalid){
-      swal('Error', 'Falta acompletar datos', 'error');     
-    }
+        if(this.grazonSocial == undefined || this.grfc == undefined || this.gdireccion == undefined){
+          swal('Error', 'Faltan Datos Empresriales', 'error');
+        } if (this.gcf == undefined ){
+          swal('Error', 'Faltan Datos en Correo Facturación', 'error');
+      } if(this.gco == undefined) {
+        swal('Error', 'Faltan Datos en Correo Operativo', 'error');
+      }
+     if(this.gc == undefined) {
+        swal('Error', 'Faltan Datos en Datos de Usuario', 'error')
+      }
+    } 
+    
     if (this.regForm.valid) {
       this.registroService.guardarRegistro(this.regForm.value).subscribe(res => {
 
@@ -57,7 +79,7 @@ export class RegistroComponent implements OnInit {
       razonSocial: ['',  Validators.minLength(5)],
       rfc: ['', [ Validators.minLength(12)]],
       direccionFiscal: ['', ],
-      codigo: ['', ],
+      codigo: [''],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correotem2: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correotem3: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
@@ -107,7 +129,7 @@ export class RegistroComponent implements OnInit {
   addContenedor3(correoF: string): void {
     if (correoF === '') {
 
-      swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
+      swal('Error al Agregar', 'El campo Correo Facturacion no puede estar Vacio', 'error');
     } else {
       this.correoFacturacion.push(this.agregarArray2(correoF));
     }
@@ -117,7 +139,7 @@ export class RegistroComponent implements OnInit {
   addContenedor4(correoO: string): void {
     if (correoO === '') {
       this.correoOperativo.disable({ emitEvent: true })
-      swal('Error al Agregar', 'El campo Correo no puede estar Vacio');
+      swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
     } else {
       this.correoOperativo.push(this.agregarArray3(correoO));
     }
@@ -168,11 +190,11 @@ export class RegistroComponent implements OnInit {
     return this.regForm.get('codigo');
   }
   get correo() {
-    return this.correo.get('correo');
+    return this.regForm.get('correo');
   }
 
   get nombre() {
-    return this.nombre.get('nombre');
+    return this.regForm.get('nombre');
   }
 
   get datosPersonales() {
