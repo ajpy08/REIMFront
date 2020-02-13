@@ -102,7 +102,9 @@ export class ViajeComponent implements OnInit {
     } else {
       this.naviera.setValue("5c49e55b6b427b166466c9b3"); // por default se pone a maritima maya..
     }
-    this.contenedores.removeAt(0);
+    if (this.contenedores.length > 0) {
+      this.contenedores.removeAt(0);      
+    }
   }
 
   createFormGroup() {
