@@ -52,8 +52,14 @@ export class ViajesComponent implements OnInit {
   ngOnInit() {
 
     this.createFormGroup();
-    // this.viaje.setValue(undefined);
-    // this.buque.setValue(undefined);
+    if (this.viaje) {
+      this.viaje.setValue('');      
+    }
+
+    if (this.buque) {
+      this.buque.setValue('');      
+    }
+
     this.cargarViajes();
   }
 
@@ -92,7 +98,16 @@ export class ViajesComponent implements OnInit {
 
   cargarViajes() {
 
-    this._viajeService.getViajes(
+    // let x = `
+    // fini: ${this.fIniArribo.value != null ? this.fIniArribo.value : 'undefined'}
+    // ffin: ${this.fFinArribo.value != null ? this.fFinArribo.value : 'undefined'}
+    // viaje: ${this.viaje.value != null ? this.viaje.value : 'undefined'}
+    // buque: ${this.buque.value != null ? this.buque.value : 'undefined'}
+    // `
+
+    // console.log(x);
+
+    this._viajeService.getViajes(  
       this.fIniArribo.value ? this.fIniArribo.value.utc().format('DD-MM-YYYY') : '',
       this.fFinArribo.value ? this.fFinArribo.value.utc().format('DD-MM-YYYY') : '',
       //fecha2 ? fecha2.local().endOf('day') : '' ,
