@@ -54,35 +54,37 @@
               <mat-table class="mat-table-medium" [dataSource]="dtCargas" #sortCargas="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                  
-                  <mat-cell *matCellDef="let row">
-                  <div  *ngIf="row.estatus=== 'ESPERA' && (usuarioLogueado.permiso=== 'ASIGNACION_TRANSPORTISTA' || usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
-                    <button matTooltip="Asignar Transportista"
-                      [routerLink]="['/asignacion_transportista_bk', row._id]" class="btn btn-danger m-r-5">
-                      <i class="fa fa-truck"></i>
-                    </button>                  
-                   </div>
 
-                    <div *ngIf="(row.estatus ==='NA' || row.estatus === 'ESPERA') && (usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
-                    <button matTooltip="Editar Solicitud" 
-                      [routerLink]="['/liberacion_bk', row._id ]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button>
+                  <mat-cell *matCellDef="let row">
+                    <div
+                      *ngIf="row.estatus=== 'ESPERA' && (usuarioLogueado.permiso=== 'ASIGNACION_TRANSPORTISTA' || usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
+                      <button matTooltip="Asignar Transportista"
+                        [routerLink]="['/asignacion_transportista_bk', row._id]" class="btn btn-danger m-r-5">
+                        <i class="fa fa-truck"></i>
+                      </button>
                     </div>
-                    
+
+                    <div
+                      *ngIf="(row.estatus ==='NA' || row.estatus === 'ESPERA') && (usuarioLogueado.permiso=='ASIGNACION_EQUIPO' || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE')">
+                      <button matTooltip="Editar Solicitud" [routerLink]="['/liberacion_bk', row._id ]"
+                        class="btn btn-primary m-r-5">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </div>
+
 
                     <div *ngIf="row.estatus==='APROBADA'">
-                      <button matTooltip="Ver Solicitud" 
-                      [routerLink]="['/aprobaciones_bk', row._id ]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-eye"></i>
-                    </button>
+                      <button matTooltip="Ver Solicitud" [routerLink]="['/aprobaciones_bk', row._id ]"
+                        class="btn btn-primary m-r-5">
+                        <i class="fa fa-eye"></i>
+                      </button>
                     </div>
 
                     <div *ngIf=" (row.estatus==='NA' ||  row.estatus === 'ESPERA') && (usuarioLogueado.permiso==='ASIGNACION_EQUIPO'  || usuarioLogueado.role=== 'ADMIN_ROLE' || usuarioLogueado.role=== 'PATIOADMIN_ROLE') ">
-                      <button matTooltip="Eliminar Solicitud" 
-                      (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o"></i>
-                    </button>
+                      <button matTooltip="Eliminar Solicitud" (click)="borrarSolicitud( row )"
+                        class="btn btn-danger m-r-5">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
                     </div>
                   </mat-cell>
 
@@ -112,9 +114,12 @@
                 <ng-container matColumnDef="solicitado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Solicitado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <p *ngFor="let cont of row.contenedores">
-                      Tipo: {{cont.tipo}} <br> Grado: {{cont.grado}}
-                    </p>
+                    <mat-select class="form-control" [(ngModel)]="row.contenedores" name="contenedores">
+                      <mat-option *ngFor="let soli of row.contenedores" [value]="row.contenedores">
+                        Tipo: {{soli.tipo}} &nbsp; Grado: {{soli.grado}}
+                      </mat-option>
+                    </mat-select>
+
                   </mat-cell>
                 </ng-container>
 
@@ -129,7 +134,7 @@
                 </ng-container>
 
 
-                <mat-header-row *matHeaderRowDef="displayedColumnsCarga" class="encabezado"></mat-header-row>
+                <mat-header-row  *matHeaderRowDef="displayedColumnsCarga;"  class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsCarga;"></mat-row>
               </mat-table>
               <mat-paginator #pagCargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
