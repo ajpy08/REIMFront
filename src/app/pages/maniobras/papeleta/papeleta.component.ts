@@ -91,7 +91,7 @@ export class PapeletaComponent implements OnInit {
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
       this.tipoContenedorService.getTipoContenedorXTipo(maniobra.maniobra.tipo).subscribe((t) => {
-        console.log(t[0]);
+        // console.log(t[0]);
         if (t[0] !== undefined) {
           this.regForm.controls['descripcion'].setValue(t[0].descripcion);
           this.regForm.controls['codigoISO'].setValue(t[0].codigoISO);

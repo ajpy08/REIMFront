@@ -36,7 +36,7 @@ export class UsuarioService {
         map((resp: any) => {
           this.token = resp.token;
           localStorage.setItem('token', this.token);
-          console.log('Token renovado');
+          // console.log('Token renovado');
           return true;
         }),
         catchError(err => {
@@ -109,7 +109,7 @@ export class UsuarioService {
       localStorage.removeItem('email');
     }
     if (urlWithoutLogin === undefined) {
-      urlWithoutLogin = '/dashboard'
+      urlWithoutLogin = '/#/dashboard'
     }
     let url = URL_SERVICIOS + '/login';
     return this.http.post(url, usuario)
