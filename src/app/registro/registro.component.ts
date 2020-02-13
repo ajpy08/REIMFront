@@ -22,13 +22,13 @@ export class RegistroComponent implements OnInit {
     ROLES_ARRAY[4],
     ROLES_ARRAY[5]
   ];
-  grazonSocial: string;
-  grfc: string;
-  gdireccion: string;
-  gcf: string;
-  gco: string;
-  gc: string;
-  gn: string;
+  grazonSocial;
+  grfc;
+  gdireccion;
+  gcf;
+  gco;
+  gc ;
+  gn;
 
   constructor(private fb: FormBuilder,
     public router: Router,
@@ -54,14 +54,12 @@ export class RegistroComponent implements OnInit {
     if (this.regForm.invalid){
         if(this.grazonSocial == undefined || this.grfc == undefined || this.gdireccion == undefined){
           swal('Error', 'Faltan Datos Empresriales', 'error');
-        }
-
-       else  if (this.gcf == undefined ){
+        } if (this.gcf == undefined ){
           swal('Error', 'Faltan Datos en Correo Facturación', 'error');
-      } else if(this.gco == undefined) {
+      } if(this.gco == undefined) {
         swal('Error', 'Faltan Datos en Correo Operativo', 'error');
       }
-      else if(this.gc == undefined) {
+     if(this.gc == undefined) {
         swal('Error', 'Faltan Datos en Datos de Usuario', 'error')
       }
     } 

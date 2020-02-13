@@ -100,7 +100,7 @@
                 </button>
               </div>
             </th>
-            <th scope="col-12"><input formControlName="correotem"  [(ngModel)]="gcf" (selectionChange)='quit(correotem)'
+            <th scope="col-12"><input formControlName="correotem"  (selectionChange)='quit(correotem)'
                 class="form-control" #correoF placeholder="Correo Facturación" size="20"></th>
             <mat-error *ngIf="correotem.touched && correotem.invalid">
               <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
@@ -114,11 +114,11 @@
 
           </tr>
         </thead>
-        <tbody formArrayName="correoFacturacion" *ngFor="let item of correoFacturacion.controls; let i = index;">
-          <tr formGroupName="{{i}}">
-            <td scope="row">{{i+1}}</td>
+        <tbody formArrayName="correoFacturacion" *ngFor="let item of correoFacturacion.controls; let cf = index;">
+          <tr [formGroupName]="cf">
+            <td scope="row">{{cf+1}}</td>
             <td>
-              <button type="button" (click)="quitar( i )" class="btn btn-danger">
+              <button type="button" (click)="quitar( cf )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
@@ -130,8 +130,8 @@
       </table>
 
       <div>
-        <button type="button" mat-button class="btn btn-success" matStepperPrevious>Regresar</button>
-          <button  type="button"  mat-button matStepperNext>Siguiente</button>
+        <button type="button" mat-raised-button color="primary" class="m-r-10" matStepperPrevious>Regresar</button>
+          <button  type="button"   mat-raised-button color="primary" matStepperNext>Siguiente</button>
       </div>
       <!-- </form> -->
     </mat-step>
@@ -171,24 +171,24 @@
 
           </tr>
         </thead>
-        <tbody formArrayName="correoOperativo" *ngFor="let item of correoOperativo.controls; let i = index;">
-          <tr formGroupName= "i">
-            <td scope="row">{{i+1}}</td>
+        <tbody formArrayName="correoOperativo" *ngFor="let itemw of correoOperativo.controls; let item = index;">
+          <tr [formGroupName]="item">
+            <td scope="row">{{item+1}}</td>
             <td>
-              <button type="button" (click)="quitar2( i )" class="btn btn-danger">
+              <button type="button" (click)="quitar2( item )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
-            <td *ngIf="item.get('correoO').value">
-              {{item.get('correoO').value}}
+            <td *ngIf="itemw.get('correoO').value">
+              {{itemw.get('correoO').value}}
             </td>
 
           </tr>
         </tbody>
       </table>
       <div>
-        <button type="button"  mat-button matStepperPrevious>Regresar</button>
-        <button type="button"   mat-button matStepperNext>Siguiente</button>
+        <button type="button"  mat-raised-button color="primary" class="m-r-10" matStepperPrevious>Regresar</button>
+        <button type="button"   mat-raised-button color="primary"  matStepperNext>Siguiente</button>
       </div>
       <!-- </form> -->
     </mat-step>
@@ -230,11 +230,11 @@
             <th scope="col">Nombre del Usuario</th>
           </tr>
         </thead>
-        <tbody formArrayName="datosPersonales" *ngFor="let item of datosPersonales.controls; let i = index;">
-          <tr formGroupName="{{i}}">
-            <td scope="row">{{i+1}}</td>
+        <tbody formArrayName="datosPersonales" *ngFor="let item of datosPersonales.controls; let cp = index;">
+          <tr [formGroupName]="cp">
+            <td scope="row">{{cp+1}}</td>
             <td>
-              <button type="button" (click)="quitar3( i )" class="btn btn-danger">
+              <button type="button" (click)="quitar3( cp )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
@@ -248,7 +248,7 @@
         </tbody>
       </table>
       <div>
-              <button  type="button"  mat-button matStepperPrevious>Regresar</button>
+              <button  type="button"  mat-raised-button color="primary" matStepperPrevious>Regresar</button>
       </div>
       <!-- </form> -->
     </mat-step>
