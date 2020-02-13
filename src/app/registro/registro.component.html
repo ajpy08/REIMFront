@@ -1,3 +1,4 @@
+
 <div class="topnav" id="myTopnav">
   <img class="logo" src="assets/images/logo_reim_container_park.svg" alt="Home" />
 </div>
@@ -25,27 +26,27 @@
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="razonSocial" type="text" placeholder="Razón Social" required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input matInput formControlName="razonSocial" [(ngModel)]="grazonSocial" type="text" placeholder="Razón Social" required onkeyup="javascript:this.value=this.value.toUpperCase();">
                     <mat-error *ngIf="razonSocial.touched && razonSocial.invalid">
                       <sup>*</sup>Por Favor Ingresar Razón Social
                     </mat-error>
                     <mat-error *ngIf="razonSocial.errors && razonSocial.errors['minlength']">
                       <sup>*</sup>Por Favor Ingresar minimo 5 caracteres de Razón Social
-                    </mat-error>
+                    </mat-error><br>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="rfc" type="text" placeholder="RFC "  required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input matInput formControlName="rfc" type="text"  [(ngModel)]="grfc" placeholder="RFC "  required onkeyup="javascript:this.value=this.value.toUpperCase();">
                     <mat-error *ngIf="rfc.touched && rfc.invalid">
                       <sup>*</sup>Por Favor Ingresar RFC
                     </mat-error>
                     <mat-error *ngIf="rfc.errors && rfc.invalid && rfc.errors['minlength']">
                       <sup>*</sup>Por Favor Ingresar minimo 12 Caracteres de RFC
-                    </mat-error>
+                    </mat-error><br>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="direccionFiscal" type="text" placeholder="Direccion Fiscal"  required onkeyup="javascript:this.value=this.value.toUpperCase();">
+                    <input matInput formControlName="direccionFiscal" [(ngModel)]="gdireccion" type="text" placeholder="Direccion Fiscal"  required onkeyup="javascript:this.value=this.value.toUpperCase();">
                     <mat-error
                       *ngIf="direccionFiscal.touched && direccionFiscal.invalid && !direccionFiscal.errors?.minlength">
                       <sup>*</sup>Por Favor Ingrese la Dirección de Fiscal
@@ -69,7 +70,7 @@
                   </mat-form-field>
 
                   <div>
-                    <button type="button"  mat-button matStepperNext>Siguiente</button>
+                    <button type="button" mat-raised-button color="primary" matStepperNext>Siguiente</button>
                   </div>
                 </div>
               </div>
@@ -82,20 +83,24 @@
       <!-- <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate> -->
       <ng-template matStepLabel>Correo Facturación </ng-template>
       <h5>En este apartado se registrarán los correos para envió de Facturas</h5><br>
-      <h5><b>Oprime (+) para agregar Correo</b></h5>
+      <mat-error *ngIf="correotem.dirty">
+        <div class="alert alert-warning" >
+          PRESIONE [+] PARA AGREGAR EL CORREO FACTURACION
+        </div>
+      </mat-error>
       <table class="table table-responsive">
         <thead>
           <tr>
             <th scope="col"></th>
             <th scope="col">
               <div *ngIf="regForm.get('correotem')">
-                <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !correotem.valid "
+                <button type="button" class="btn btn-success"  [disabled]="regForm.pristine || !correotem.valid "
                   (click)="addContenedor3(correoF.value); correoF.value=''">
                   +
                 </button>
               </div>
             </th>
-            <th scope="col-12"><input formControlName="correotem" (selectionChange)='quit(correotem)'
+            <th scope="col-12"><input formControlName="correotem"  [(ngModel)]="gcf" (selectionChange)='quit(correotem)'
                 class="form-control" #correoF placeholder="Correo Facturación" size="20"></th>
             <mat-error *ngIf="correotem.touched && correotem.invalid">
               <sup>*</sup> Por Favor Ingresar correctamente correo de Facturación
@@ -110,24 +115,22 @@
           </tr>
         </thead>
         <tbody formArrayName="correoFacturacion" *ngFor="let item of correoFacturacion.controls; let i = index;">
-          <tr [formGroupName]="i">
+          <tr formGroupName="{{i}}">
             <td scope="row">{{i+1}}</td>
             <td>
               <button type="button" (click)="quitar( i )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
-            <td *ngIf="item.get('correoF').value.length > 11;else notShow">
+            <td *ngIf="item.get('correoF').value">
               {{item.get('correoF').value}}
             </td>
-            <ng-template #notShow>
-              <td>{{item.get('correoF').value}}</td>
-            </ng-template>
           </tr>
         </tbody>
       </table>
+
       <div>
-        <button type="button" mat-button matStepperPrevious>Regresar</button>
+        <button type="button" mat-button class="btn btn-success" matStepperPrevious>Regresar</button>
           <button  type="button"  mat-button matStepperNext>Siguiente</button>
       </div>
       <!-- </form> -->
@@ -137,7 +140,11 @@
       <ng-template matStepLabel>Correo Operativo </ng-template>
       <h5>En este apartado se registrará el correo (o cuenta) donde se informará la alta solicitud de Carga / Descarga,
         así como la aprobación de papeleta</h5><br>
-        <h5><b>Oprime (+) para agregar Correo</b></h5>
+        <mat-error *ngIf="correotem2.dirty">
+          <div class="alert alert-warning" >
+            PRESIONE [+] PARA AGREGAR EL CORREO OPERATIVO
+          </div>
+        </mat-error>
       <table class="table  table-responsive">
         <thead>
           <tr>
@@ -150,7 +157,7 @@
                 </button>
               </div>
             </th>
-            <th scope="col"> <input formControlName="correotem2" class="form-control" #correoO
+            <th scope="col"> <input formControlName="correotem2" [(ngModel)]="gco"  class="form-control" #correoO
                 placeholder="Correo Operativo" size="20"> </th>
             <mat-error *ngIf="correotem2.touched && correotem2.invalid">
 
@@ -165,19 +172,17 @@
           </tr>
         </thead>
         <tbody formArrayName="correoOperativo" *ngFor="let item of correoOperativo.controls; let i = index;">
-          <tr [formGroupName]="i">
+          <tr formGroupName= "i">
             <td scope="row">{{i+1}}</td>
             <td>
               <button type="button" (click)="quitar2( i )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
-            <td *ngIf="item.get('correoO').value.length > 11;else notShow">
+            <td *ngIf="item.get('correoO').value">
               {{item.get('correoO').value}}
             </td>
-            <ng-template #notShow>
-              <td>{{item.get('correoO').value}}</td>
-            </ng-template>
+
           </tr>
         </tbody>
       </table>
@@ -191,13 +196,17 @@
       <!-- <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate> -->
       <ng-template matStepLabel>Datos de Usuario </ng-template>
       <h5>En este apartado se registrara los Usuarios que tendran acceso al sistema</h5>
-      <h5><b>Oprime (+) para agregar Correo y Nombre Usuario</b></h5>
+      <mat-error *ngIf="correotem3.dirty">
+        <div class="alert alert-warning" >
+          PRESIONE [+] PARA AGREGAR EL CORREO Y NOMBRE USUARIO
+        </div>
+      </mat-error>
       <table class="table table-striped  table-responsive">
         <thead>
           <tr>
             <th scope="col"></th>
             <th scope="col">
-              <div *ngIf="regForm.get('correotem2')">
+              <div *ngIf="regForm.get('correotem3')">
                 <button type="button" class="btn btn-success" [disabled]="regForm.pristine || !correotem3.valid "
                   (click)="addContenedor2(correo.value, nombre.value);correo.value='';nombre.value=''">
                   +
@@ -205,11 +214,11 @@
               </div>
             </th>
             <th scope="col"><input class="form-control" formControlName="correotem3" #correo
-                placeholder="Correo Usuario" size="20"></th>
+                placeholder="Correo Usuario"   size="20"></th>
 
-            <th scope="col"><input class="form-control" #nombre placeholder="Nombre Completo del Usuario" size="30" onkeyup="javascript:this.value=this.value.toUpperCase();">
+            <th scope="col"><input class="form-control"  #nombre  placeholder="Nombre Completo del Usuario" size="30" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </th>
-            <mat-error *ngIf="correotem2.touched && correotem2.invalid">
+            <mat-error *ngIf="correotem3.touched && correotem3.invalid">
 
               <sup>*</sup> Por Favor Ingresar correctamente Correo Personal
             </mat-error>
@@ -222,19 +231,18 @@
           </tr>
         </thead>
         <tbody formArrayName="datosPersonales" *ngFor="let item of datosPersonales.controls; let i = index;">
-          <tr [formGroupName]="i">
+          <tr formGroupName="{{i}}">
             <td scope="row">{{i+1}}</td>
             <td>
               <button type="button" (click)="quitar3( i )" class="btn btn-danger">
                 <i class="fa fa-trash-o"></i>
               </button>
             </td>
-            <td *ngIf="item.get('correo').value.length > 11;else notShow">
-              {{item.get('correo').value}}
-            </td>
-            <ng-template #notShow>
-              <td>{{item.get('correo').value}}</td>
-            </ng-template>
+              <td>
+                {{item.get('correo').value}}
+
+                              </td>
+
             <td>{{item.get('nombre').value}}</td>
           </tr>
         </tbody>
