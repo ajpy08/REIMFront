@@ -63,9 +63,9 @@
               <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
               </mat-form-field>
-              <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
+              <mat-checkbox *ngIf="soyAdmin()" formControlName="credito" class="form-control " placeholder="Credito">
                 Credito
-              </mat-checkbox>
+              </mat-checkbox><br>
               <!--========Combombox Agencias=========-->
               <mat-form-field>
                 <mat-select placeholder="Seleccione una empresa" formControlName="empresas" name="empresas" multiple>
