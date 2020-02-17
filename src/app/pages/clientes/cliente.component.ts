@@ -49,8 +49,7 @@ export class ClienteComponent implements OnInit {
     if (id !== 'nuevo') {
       this.edicion = true;
       this.cargarCliente(id);
-    }
-    else {
+    } else {
       this.regForm.controls['noInterior'].setValue(undefined);
       this.regForm.controls['noExterior'].setValue(undefined);
     }
@@ -61,6 +60,14 @@ export class ClienteComponent implements OnInit {
   role(role: string) {
     var result = role.substr(0, role.indexOf('_'));
     return result;
+  }
+
+  soyAdmin() {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   createFormGroup() {
