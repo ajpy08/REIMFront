@@ -67,7 +67,7 @@ import { SolicitudesComponent } from './solicitudes/solicitudes.component';
 import { SolicitudDescargaComponent } from './solicitudes/descarga/solicitud_descarga.component';
 import { SolicitudCargaComponent } from './solicitudes/carga/solicitud_carga.component';
 import { AprobarDescargaComponent } from './solicitudes/aprobar_descarga.component';
-import { AprobarCargaComponent } from './solicitudes/aprobar_carga.component';
+import { AprobarCargaComponent, BLBookingDialog } from './solicitudes/aprobar_carga.component';
 import { SolicitudesTransportistaComponent } from './solicitudes/transportista/solicitudes_transportista.component';
 import { SolicitudTransportistaComponent } from './solicitudes/transportista/solicitud_transportista.component';
 import { SolicitudReasignaTransportistaComponent } from './solicitudes/transportista/solicitud_reasigna_transportista.component';
@@ -163,7 +163,7 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         RevisarComponent,
         TerminaLavadoReparacionComponent,
         CargaContenedorComponent,
-        InventarioComponent,        
+        InventarioComponent,
         VaciosComponent,
         ManiobraComponent,
         ClientesComponent,
@@ -187,10 +187,11 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         MiclienteComponent,
         ReporteContenedoresRLComponent,
         RegisterComponent,
-        PapeletaComponent,        
-        ContenedoresLRComponent,        
-        DetalleManiobraComponent, 
-        AsignarFacturaComponent, 
+        PapeletaComponent,
+        ContenedoresLRComponent,
+        DetalleManiobraComponent,
+        AsignarFacturaComponent,
+        BLBookingDialog,
         FacturacionManiobrasComponent,
         ManiobrasDiarioComponent,
         TiposContenedoresComponent,
@@ -201,7 +202,7 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         AprobacionesBkComponent,
         AprobacionTBKComponent,
         AsignacionTransportistaComponent
-        
+
     ],
     exports: [
         DashboardComponent
@@ -239,7 +240,7 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         MatTooltipModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog]
 })
 
 export class PagesModules { }
