@@ -62,7 +62,7 @@
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" (click)="borrarSolicitud( row )"
+                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')" (click)="borrarSolicitud( row )"
                       class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
@@ -194,7 +194,7 @@
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" *ngIf="row.estatus==='NA'" (click)="borrarSolicitud( row )"
+                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')" (click)="borrarSolicitud( row )"
                       class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>

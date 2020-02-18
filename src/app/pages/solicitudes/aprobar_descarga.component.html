@@ -224,6 +224,13 @@
                       <td><img *ngIf="contenedores.controls[i].get('solicitud').value"
                           src="../../../assets/images/check_32x32.png"></td>
                       <td>
+
+                        <button matTooltip="Eliminar Contenedor" type="button" 
+                        class="btn btn-danger waves-effect waves-light m-r-10 m-l-10" 
+                        (click)="borrarContenedor(i)">
+                          <i class="fa fa-trash-o"></i>
+
+                        </button>
                         <button *ngIf="estatus.value==='APROBADA'" matTooltip="Enviar Notificación" type="button"
                           class="btn btn-info waves-effect waves-light m-r-10 m-l-10"
                           (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">

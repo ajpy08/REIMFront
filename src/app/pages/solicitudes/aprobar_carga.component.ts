@@ -6,9 +6,8 @@ import { ManiobraService } from '../maniobras/maniobra.service';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
-import swal from 'sweetalert';
 import { Location } from '@angular/common';
-
+declare var swal: any;
 
 @Component({
   selector: 'app-aprobar-carga',
@@ -250,4 +249,67 @@ export class AprobarCargaComponent implements OnInit {
   enviacorreo(maniobra) {
     this._ManiobraService.enviaCorreo(maniobra).subscribe(() => { });
   }
+
+  removeContenedor(index: number) {
+    this.contenedores.removeAt(index);
+    this.regForm.markAsDirty();
+  }
+
+  borrarContenedor(indice: number) {
+    if (this.contenedores.controls.length > 1) {
+      swal({
+        title: '¿Esta seguro?',
+        text: 'Esta apunto de borrar el contenedor ',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then(borrar => {
+        if (borrar) {
+        const idManiobra = this.contenedores.controls[indice].value.maniobra._id;
+        if (idManiobra) {
+          this._SolicitudService.borrarManiobra(idManiobra)
+            .subscribe(res => {
+              if (res) {
+                this.contenedores.controls[idManiobra].get("contenedor").value
+                this.contenedores.removeAt(indice);
+                this.regForm.markAsDirty();
+                
+              }
+
+            });
+          this._SolicitudService.removeConte(this._id.value, idManiobra).subscribe(res => {
+            this.contenedores.removeAt(indice);
+            this.regForm.markAsDirty();
+          })
+        }
+      }
+      });
+    
+      } else {
+        swal ({
+          title: 'ADVERTENCIA',
+          text: ' Al borrar este contenedor se eliminara la solicitud',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+        }).then(borrar => {
+          if (borrar) {
+            this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
+
+              swal({
+                title: "ELIMINADO",
+                text: "Borrado",
+                icon: "success",
+              }).then(ok => {
+                if(ok) {
+                  this.router.navigate(["/solicitudes/aprobaciones"]);
+                }
+              })
+            })
+          }
+        })
+      }
+
+    }
+
 }

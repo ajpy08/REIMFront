@@ -331,11 +331,9 @@ export class AprobacionesComponent implements OnInit {
         this._solicitudesService
           .boorarSolicitudes(solicitud._id)
           .subscribe(borrado => {
-            if (CD == "D") {
               this.cargaSolicitudes("D");
-            } else {
               this.cargaSolicitudes("C");
-            }
+
           });
       }
     });
