@@ -227,12 +227,12 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Aprobaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
-    {
-        path: 'aprobacion_tbk', // tabla donde se mostraran las solicitudes de liberacion BK para aprobar Y ELIMINAR (ADMIN)
-        component: AprobacionTBKComponent,
-        canActivate: [REIMGuard],
-        data: { titulo: 'Aprobaciones de Solicitud Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE ] }
-    },
+    // {
+    //     path: 'aprobacion_tbk', // tabla donde se mostraran las solicitudes de liberacion BK para aprobar Y ELIMINAR (ADMIN)
+    //     component: AprobacionTBKComponent,
+    //     canActivate: [REIMGuard],
+    //     data: { titulo: 'Aprobaciones de Solicitud Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE ] }
+    // },
 
     {
         path: 'asignacion_transportista_bk/:id', // ED donde el usuario podra asignar el transportista para la solicitud de liberacion_bk y asi se pase a estatus NA
