@@ -80,7 +80,7 @@ export class LiberacionBLComponent implements OnInit {
     this.contenedores.removeAt(0);
 
     if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      this.url = '/aprobacion_tbk';
+      this.url = '/solicitudes/aprobaciones';
     } else if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE) {
       this.url = '/liberaciones_bk';
     }

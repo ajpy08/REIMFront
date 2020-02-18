@@ -7,11 +7,17 @@ import { Viaje } from '../viajes/viaje.models';
 import { Usuario } from '../usuarios/usuario.model';
 import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
-import swal from 'sweetalert';
+
 import { catchError } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { Maniobra } from 'src/app/models/maniobra.models';
+import { Solicitud } from './solicitud.models';
+import { type } from 'os';
+import { url } from 'inspector';
 
+
+
+declare var swal: any;
 @Component({
   selector: 'app-aprobar-descarga',
   templateUrl: './aprobar_descarga.component.html',
@@ -46,6 +52,7 @@ export class AprobarDescargaComponent implements OnInit {
     this.contenedores.removeAt(0);
     this.cargarSolicitud(id);
     this.url = '/solicitudes/aprobaciones';
+    this.contenedores.removeAt(0);
   }
 
   createFormGroup() {
@@ -80,7 +87,7 @@ export class AprobarDescargaComponent implements OnInit {
       estado: [{ value: '', disabled: true }],
       correoFac: [{ value: '', disabled: true }],
       cp: [{ value: '', disabled: true }],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '', '', '', '')], {validators: Validators.required}),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '', '', '', '')], { validators: Validators.required }),
     });
   }
 
@@ -380,6 +387,78 @@ export class AprobarDescargaComponent implements OnInit {
   }
 
   enviacorreo(maniobra) {
-    this._ManiobraService.enviaCorreo({_id: maniobra}).subscribe(() => { });
+    this._ManiobraService.enviaCorreo({ _id: maniobra }).subscribe(() => { });
   }
-}
+
+  removeContenedor(index: number) {
+    this.contenedores.removeAt(index);
+    this.regForm.markAsDirty();
+  }
+
+
+
+
+
+
+  borrarContenedor(indice: number) {
+    if (this.contenedores.controls.length > 1) {
+      swal({
+        title: '¿Esta seguro?',
+        text: 'Esta apunto de borrar el contenedor ',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then(borrar => {
+        if (borrar) {
+        const idManiobra = this.contenedores.controls[indice].value.maniobra;
+        if (idManiobra) {
+          this._SolicitudService.borrarManiobra(idManiobra)
+            .subscribe(res => {
+              if (res) {
+                this.contenedores.controls[idManiobra].get("contenedor").value
+                this.contenedores.removeAt(indice);
+                this.regForm.markAsDirty();
+                
+              }
+
+            });
+          this._SolicitudService.removeConte(this._id.value, idManiobra).subscribe(res => {
+            this.contenedores.removeAt(indice);
+            this.regForm.markAsDirty();
+          })
+        }
+      }
+      });
+    
+      } else {
+        swal ({
+          title: 'ADVERTENCIA',
+          text: ' Al borrar este contenedor se eliminara la solicitud',
+          icon: 'warning',
+          buttons: true,
+          dangerMode: true,
+        }).then(borrar => {
+          if (borrar) {
+            this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
+
+              swal({
+                title: "ELIMINADO",
+                text: "Borrado",
+                icon: "success",
+              }).then(ok => {
+                if(ok) {
+                  this.router.navigate(["/solicitudes/aprobaciones"]);
+                }
+              })
+            })
+          }
+        })
+      }
+
+    }
+  }
+
+
+
+
+
