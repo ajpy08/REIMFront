@@ -64,7 +64,7 @@
               <mat-checkbox [checked]="checkedVacios" #vacios (change)="filtraManiobrasVacios(vacios.checked)">Vacios
               </mat-checkbox>
             </div>
-            <
+
             <div class="col-sm">
               <div class="text-right">
                 <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
@@ -148,6 +148,11 @@
             <ng-container matColumnDef="tipo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sello">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Sello</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.sello}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="cliente">

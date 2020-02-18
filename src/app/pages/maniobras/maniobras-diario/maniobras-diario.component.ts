@@ -1,47 +1,43 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ManiobraService, ViajeService } from "../../../services/service.index";
-import { ExcelService } from "../../../services/service.index";
-import * as jspdf from "jspdf";
-import html2canvas from "html2canvas";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ManiobraService, ViajeService } from '../../../services/service.index';
+import { ExcelService } from '../../../services/service.index';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE
-} from "@angular/material/core";
-import * as _moment from "moment";
-import swal from "sweetalert";
+} from '@angular/material/core';
+import * as _moment from 'moment';
+import swal from 'sweetalert';
 import {
   MatPaginator,
   MatSort,
   MatTableDataSource,
   MatDialog
-} from "@angular/material";
-import { DatePipe } from "@angular/common";
-import { Router } from "@angular/router";
-import { Viaje } from "../../viajes/viaje.models";
-import { resolve } from "url";
-import { rejects } from "assert";
-import { DISABLED } from "@angular/forms/src/model";
-
+} from '@angular/material';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { Viaje } from '../../viajes/viaje.models';
 const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: ["l", "L"]
+    dateInput: ['l', 'L']
   },
   display: {
-    dateInput: "L",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "MMMM YYYY"
+    dateInput: 'L',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
   }
 };
 
 @Component({
-  selector: "app-facturacion-maniobras",
-  templateUrl: "./maniobras-diario.component.html",
-  styleUrls: ["./maniobras-diario.component.css"],
+  selector: 'app-facturacion-maniobras',
+  templateUrl: './maniobras-diario.component.html',
+  styleUrls: ['./maniobras-diario.component.css'],
   providers: [
     DatePipe,
     {
@@ -50,7 +46,7 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: "es-mx" }
+    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }
   ]
 })
 export class ManiobrasDiarioComponent implements OnInit {
@@ -58,43 +54,44 @@ export class ManiobrasDiarioComponent implements OnInit {
   maniobraContenedor: any[] = [];
   ManiobrasExcel = [];
 
-  data: any = { fechaCreado: "" };
+  data: any = { fechaCreado: '' };
   cargando = false;
   totalRegistros = 0;
   fIniLlegada = moment()
     .local()
-    .startOf("day");
+    .startOf('day');
   fFinLlegada = moment()
     .local()
-    .startOf("day");
+    .startOf('day');
 
   viajes: Viaje[] = [];
   viaje: string = undefined;
   contenedor: string = undefined;
 
   displayedColumns = [
-    "actions",
-    "fechaingreso",
-    "hLlegada",
-    "operador",
-    "placa",
-    "transportista",
-    "hEntrada",
-    "contenedor",
-    "tipo",
-    "cliente",
-    "agencia",
-    "solicitud.blBooking",
-    "hDescarga",
-    "grado",
-    "lavado",
-    "cargaDescarga",
-    "hSalida",
-    "reparaciones",
-    "viaje.naviera.nombreComercial",
-    "viaje",
-    "viaje.buque.nombre",
-    "estatus"
+    'actions',
+    'fechaingreso',
+    'hLlegada',
+    'operador',
+    'placa',
+    'transportista',
+    'hEntrada',
+    'contenedor',
+    'tipo',
+    'sello',
+    'cliente',
+    'agencia',
+    'solicitud.blBooking',
+    'hDescarga',
+    'grado',
+    'lavado',
+    'cargaDescarga',
+    'hSalida',
+    'reparaciones',
+    'viaje.naviera.nombreComercial',
+    'viaje',
+    'viaje.buque.nombre',
+    'estatus'
   ];
   dataSource: any;
 
@@ -120,13 +117,13 @@ export class ManiobrasDiarioComponent implements OnInit {
   }
 
   filtrar(bool: boolean) {
-    if (bool == true) {
-      if (this.contenedor != undefined && this.contenedor != "") {
+    if (bool === true) {
+      if (this.contenedor !== undefined && this.contenedor !== '') {
         this.consultarContenedor();
       } else {
-        swal("Error", "Debes de escribir un contenedor", "error");
+        swal('Error', 'Debes de escribir un contenedor', 'error');
       }
-    } else if (bool == false) {
+    } else if (bool === false) {
       this.consultaManiobras();
     }
   }
@@ -154,10 +151,10 @@ export class ManiobrasDiarioComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
             this.totalRegistros = maniobras.total;
-            resolve({ ok: true, mensaje: "Termine" });
+            resolve({ ok: true, mensaje: 'Termine' });
           },
           () => {
-            reject("Failed!!");
+            reject('Failed!!');
           }
         );
     });
@@ -178,8 +175,8 @@ export class ManiobrasDiarioComponent implements OnInit {
           null,
           null,
           null,
-          this.fIniLlegada ? this.fIniLlegada.utc().format("DD-MM-YYYY") : "",
-          this.fFinLlegada ? this.fFinLlegada.utc().format("DD-MM-YYYY") : ""
+          this.fIniLlegada ? this.fIniLlegada.utc().format('DD-MM-YYYY') : '',
+          this.fFinLlegada ? this.fFinLlegada.utc().format('DD-MM-YYYY') : ''
         )
         .subscribe(
           maniobras => {
@@ -187,10 +184,10 @@ export class ManiobrasDiarioComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
             this.totalRegistros = maniobras.total;
-            resolve({ ok: true, mensaje: "Termine" });
+            resolve({ ok: true, mensaje: 'Termine' });
           },
           () => {
-            reject("Failed!!");
+            reject('Failed!!');
           }
         );
       this.cargando = false;
@@ -212,7 +209,7 @@ export class ManiobrasDiarioComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Maniobras Diario");
+      console.error('Error al filtrar el dataSource de Maniobras Diario');
     }
   }
 
@@ -220,9 +217,8 @@ export class ManiobrasDiarioComponent implements OnInit {
     this.maniobrasVacios = [];
     this.checkedVacios = vacios;
     if (vacios) {
-      //console.log("Filtro sin factura")
       this.dataSource.data.forEach(m => {
-        if (m.peso === "VACIO") {
+        if (m.peso === 'VACIO') {
           this.maniobrasVacios.push(m);
         }
       });
@@ -231,7 +227,6 @@ export class ManiobrasDiarioComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.totalRegistros = this.dataSource.data.length;
     } else {
-      //console.log("Recargo todo")
       this.consultaManiobras()
         .then((value: { ok: Boolean; mensaje: String }) => {})
         .catch(error => {
@@ -240,94 +235,86 @@ export class ManiobrasDiarioComponent implements OnInit {
     }
   }
 
-  // cargarViajes(anio: string) {
-  //   this.cargando = true;
-  //   this._viajeService.getViajesA(anio)
-  //     .subscribe(viajes => {
-  //       this.viajes = viajes.viajes;
-  //       this.cargando = false;
-  //     });
-  // }
-
   public exportpdf() {
-    const data = document.getElementById("contentToConvert");
+    const data = document.getElementById('contentToConvert');
     html2canvas(data).then(canvas => {
       const imgWidth = 208;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const contentDataURL = canvas.toDataURL("image/png");
-      const pdf = new jspdf("p", "mm", "a4"); // A4 size page of PDF
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       const position = 0;
-      pdf.addImage(contentDataURL, "PNG", 0, position, imgWidth, imgHeight);
-      pdf.save("MYPdf.pdf"); // Generated PDF
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('MYPdf.pdf'); // Generated PDF
     });
   }
 
   CreaDatosExcel(datos) {
     this.ManiobrasExcel = [];
     datos.forEach(m => {
-      var reparaciones = "";
+      let reparaciones = '';
 
       m.reparaciones.forEach(r => {
-        reparaciones += r.reparacion + ", ";
+        reparaciones += r.reparacion + ', ';
       });
 
       reparaciones = reparaciones.substring(0, reparaciones.length - 2);
 
-      var observaciones = "";
+      let observaciones = '';
 
-      if (m.lavadoObservacion != undefined && reparaciones != "") {
+      if (m.lavadoObservacion !== undefined && reparaciones !== '') {
         observaciones += `LAVADO OBSERVACION: ${m.lavadoObservacion} \nREPARACION OBSERVACION: ${reparaciones}`;
       } else {
-        if (m.lavadoObservacion != undefined) {
+        if (m.lavadoObservacion !== undefined) {
           observaciones += `LAVADO OBSERVACION: ${m.lavadoObservacion}`;
         } else {
-          if (reparaciones != "") {
+          if (reparaciones !== '') {
             observaciones += `REPARACION OBSERVACION: ${reparaciones}`;
           }
         }
       }
 
-      var maniobra = {
-        Fecha: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : "",
+      const maniobra = {
+        Fecha: m.fLlegada !== undefined ? m.fLlegada.substring(0, 10) : '',
         Hora_Llegada: m.hLlegada,
         Operador:
           m.operador &&
           m.operador.nombre &&
-          m.operador.nombre != undefined &&
+          m.operador.nombre !== undefined &&
           m.operador.nombre &&
-          m.operador.nombre != ""
+          m.operador.nombre !== ''
             ? m.operador.nombre
-            : "" && m.operador.nombre,
-        Placa: m.camion != undefined ? m.camion.placa : "",
+            : '' && m.operador.nombre,
+        Placa: m.camion !== undefined && m.camion !== null ? m.camion.placa : '',
         Transportista:
           m.transportista &&
           m.transportista.nombreComercial &&
-          m.transportista.nombreComercial != undefined &&
-          m.transportista.nombreComercial != ""
+          m.transportista.nombreComercial !== undefined &&
+          m.transportista.nombreComercial !== ''
             ? m.transportista.nombreComercial
-            : "" && m.transportista.nombreComercial,
+            : '' && m.transportista.nombreComercial,
         Hora_Entrada: m.hEntrada,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
+        Sello: m.sello,
         Cliente:
           m.cliente &&
           m.cliente.nombreComercial &&
-          m.cliente.nombreComercial != undefined &&
-          m.cliente.nombreComercial != "" &&
+          m.cliente.nombreComercial !== undefined &&
+          m.cliente.nombreComercial !== '' &&
           m.cliente.nombreComercial,
         A_A:
           m.agencia &&
           m.agencia.nombreComercial &&
-          m.agencia.nombreComercial != undefined &&
-          m.agencia.nombreComercial != "" &&
+          m.agencia.nombreComercial !== undefined &&
+          m.agencia.nombreComercial !== '' &&
           m.agencia.nombreComercial,
         Booking:
           m.solicitud &&
           m.solicitud.blBooking &&
-          m.solicitud.blBooking != undefined &&
-          m.solicitud.blBooking != ""
+          m.solicitud.blBooking !== undefined &&
+          m.solicitud.blBooking !== ''
             ? m.solicitud.blBooking
-            : "" && m.solicitud.blBooking,
+            : '' && m.solicitud.blBooking,
         EIR: m.null,
         Hora_Descarga: m.hDescarga,
         Grado: m.grado,
@@ -338,24 +325,24 @@ export class ManiobrasDiarioComponent implements OnInit {
         Buque:
           m.viaje &&
           m.viaje.buque.nombre &&
-          m.viaje.buque.nombre != undefined &&
-          m.viaje.buque.nombre != ""
+          m.viaje.buque.nombre !== undefined &&
+          m.viaje.buque.nombre !== ''
             ? m.viaje.buque.nombre
-            : "" && m.viaje.buque.nombre,
+            : '' && m.viaje.buque.nombre,
         Viaje:
           m.viaje &&
           m.viaje.viaje &&
-          m.viaje.viaje != undefined &&
-          m.viaje.viaje != ""
+          m.viaje.viaje !== undefined &&
+          m.viaje.viaje !== ''
             ? m.viaje.viaje
-            : "" && m.viaje.viaje,
+            : '' && m.viaje.viaje,
         Naviera:
           m.viaje &&
           m.viaje.naviera.nombreComercial &&
-          m.viaje.naviera.nombreComercial != undefined &&
-          m.viaje.naviera.nombreComercial != ""
+          m.viaje.naviera.nombreComercial !== undefined &&
+          m.viaje.naviera.nombreComercial !== ''
             ? m.viaje.naviera.nombreComercial
-            : "" && m.viaje.naviera.nombreComercial,
+            : '' && m.viaje.naviera.nombreComercial,
         Peso: m.peso,
         Estatus: m.estatus
         // LavadoObservacion: m.lavadoObservacion,
@@ -393,10 +380,10 @@ export class ManiobrasDiarioComponent implements OnInit {
     if (this.ManiobrasExcel) {
       this._excelService.exportAsExcelFile(
         this.ManiobrasExcel,
-        "Maniobras Diarias"
+        'Maniobras Diarias'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
@@ -407,25 +394,26 @@ export class ManiobrasDiarioComponent implements OnInit {
   // }
 
   open(id: string) {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo
-    if (localStorage.getItem("historyArray")) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
-      history = JSON.parse(localStorage.getItem("historyArray"));
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta al array
-    array.push("maniobras_diario");
+    // Agrego mi nueva ruta al array
+    array.push('maniobras_diario');
 
-    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
-    localStorage.setItem("historyArray", JSON.stringify(array));
+    //// sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
-    this.router.navigate(["/maniobras/maniobra/" + id + "/detalle"]);
+    // Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 }
