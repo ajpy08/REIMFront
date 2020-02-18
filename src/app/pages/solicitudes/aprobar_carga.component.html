@@ -149,7 +149,7 @@
         </div>
         <div class="col-md-4">
 
-          <mat-form-field>
+          <mat-form-field #blBookingChange>
             <mat-label>Booking</mat-label>
             <input matInput type="text" formControlName="blBooking">
           </mat-form-field>
@@ -212,7 +212,12 @@
                     (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
                     <i class="fas fa-envelope"></i>
                   </button>
-                  <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
+
+                  <button *ngIf="soyAdmin()" matTooltip="Cambiar BL/Booking" type="button"
+                    class="btn btn-warning waves-effect waves-light m-r-10 m-l-10"
+                    (click)="openDialog()">
+                    <i class="fas fa-edit"></i>
+                  </button>
                 </td>
               </tr>
             </tbody>

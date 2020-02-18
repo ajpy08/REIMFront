@@ -31,7 +31,7 @@ export class SolicitudCargaComponent implements OnInit {
   transportistas: Transportista[] = [];
   clientes: Cliente[] = [];
   tiposContenedor: any[] = [];
-  listaFacturarA: string[] = ['Naviera','Agencia Aduanal', 'Cliente'];
+  listaFacturarA: string[] = ['Naviera', 'Agencia Aduanal', 'Cliente'];
   grados = GRADOS_CONTENEDOR_ARRAY;
   estadosContenedor = [ESTADOS_CONTENEDOR.VACIO_EXPORT];
   patios = PATIOS_ARRAY;
@@ -65,7 +65,7 @@ export class SolicitudCargaComponent implements OnInit {
     } else {
       if (this.usuarioLogueado.empresas) {
         this.usuarioLogueado.empresas.forEach(empresa => {
-          this._agenciaService.getAgencia(empresa._id).subscribe(ag => { this.agencias.push(ag) });
+          this._agenciaService.getAgencia(empresa._id).subscribe(ag => { this.agencias.push(ag); });
         });
         this.agenciaCargaSelected = this.usuarioLogueado.empresas[0]._id;
         this.cargaClientes({ value: this.agenciaCargaSelected });
@@ -86,9 +86,9 @@ export class SolicitudCargaComponent implements OnInit {
     }
     this.contenedores.removeAt(0);
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.url = '/solicitudes/aprobaciones';
-    } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+    } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
       this.url = '/solicitudes';
     }
   }
@@ -314,7 +314,7 @@ export class SolicitudCargaComponent implements OnInit {
       .subscribe(cliente => this.clientes = cliente.clientes);
 
 
-    const reg = this.agencias.find(x => x._id == event.value);
+    const reg = this.agencias.find(x => x._id === event.value);
     if (reg) { this.correo.setValue(reg.correo); }
   }
 
@@ -371,7 +371,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.clientes.find(x => x._id == this.cliente.value);
+          const reg = this.clientes.find(x => x._id === this.cliente.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -401,7 +401,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.agencias.find(x => x._id == this.agencia.value);
+          const reg = this.agencias.find(x => x._id === this.agencia.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -431,7 +431,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.navieras.find(x => x._id == this.naviera.value);
+          const reg = this.navieras.find(x => x._id === this.naviera.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -491,10 +491,10 @@ export class SolicitudCargaComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 }
