@@ -319,10 +319,27 @@ export class AprobacionesComponent implements OnInit {
     }
   }
 
-  borrarSolicitudes(solicitud: Solicitud, CD: string) {
+
+borrarSolicitudDescarga(solicitud: Solicitud){
+  swal({
+    title: "¿Estas Seguro?",
+    text: "Estas por borrar toda la solicitud",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true
+  }).then(borrar => {
+    if(borrar){
+      this._solicitudesService.borrarSolicitudManiobraCampo(solicitud._id).subscribe(borrado => {
+        this.cargaSolicitudes("D");
+      });
+    }
+    });
+}
+
+  borrarSolicitudes(solicitud: Solicitud,) {
     swal({
       title: "¿Estas seguro?",
-      text: "Estas apunto de borrar la solicitud " + solicitud._id,
+      text: "Estas apunto de borrar la solicitud ",
       icon: "warning",
       buttons: true,
       dangerMode: true

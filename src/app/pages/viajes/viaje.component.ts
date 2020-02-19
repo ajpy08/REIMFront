@@ -218,7 +218,7 @@ export class ViajeComponent implements OnInit {
             tipo,
             peso,
             destinatario,
-            patio
+            patio != undefined ? patio: null
           )
           .subscribe(res => {
             if (res.ok) {

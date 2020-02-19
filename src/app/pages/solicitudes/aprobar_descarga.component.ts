@@ -412,12 +412,10 @@ export class AprobarDescargaComponent implements OnInit {
         if (borrar) {
         const idManiobra = this.contenedores.controls[indice].value.maniobra;
         if (idManiobra) {
-          this._SolicitudService.borrarManiobra(idManiobra)
+          this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value)
             .subscribe(res => {
               if (res) {
                 this.contenedores.controls[idManiobra].get("contenedor").value
-                this.contenedores.removeAt(indice);
-                this.regForm.markAsDirty();
                 
               }
 
