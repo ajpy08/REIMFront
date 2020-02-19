@@ -92,7 +92,12 @@ export class ViajeService {
   addContenedor(id: string, contenedor: string, tipo: string, peso: string, destinatario: string, patio: string): Observable<any> {
     let url = URL_SERVICIOS + '/viajes/viaje/' + id + '/addcontenedor';
     url += '?token=' + this._usuarioService.token;
-    url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario + '&patio='+ patio;
+    url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario;
+
+    if (patio) {
+      url += '&patio='+ patio;      
+    }
+
     return this.http.put(url, '')
       .pipe(map((resp: any) => {
         swal('Contenedor Agregado con exito', 'success');
