@@ -9,13 +9,19 @@ import { map, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class SolicitudService {
-
   constructor(
     public http: HttpClient,
-    public _usuarioService: UsuarioService) { }
+    public _usuarioService: UsuarioService
+  ) {}
 
   // El campo agencias es un string de IDS separados por comas..
-  getSolicitudes(tipo?: string, estatus?: string, fIniAlta?: string, fFinAlta?: string, agencias?: string): Observable<any> {
+  getSolicitudes(
+    tipo?: string,
+    estatus?: string,
+    fIniAlta?: string,
+    fFinAlta?: string,
+    agencias?: string
+  ): Observable<any> {
     let params = new HttpParams();
     if (fIniAlta && fFinAlta) {
       params = params.append('finialta', fIniAlta);
@@ -36,12 +42,14 @@ export class SolicitudService {
   }
 
   cargarSolicitud(id: string): Observable<any> {
-    return this.http.get(URL_SERVICIOS + '/solicitudes/solicitud/' + id)
+    return this.http
+      .get(URL_SERVICIOS + '/solicitudes/solicitud/' + id)
       .pipe(map((resp: any) => resp.solicitud));
   }
 
   getSolicitudIncludes(id: string): Observable<any> {
-    return this.http.get(URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes')
+    return this.http
+      .get(URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes')
       .pipe(map((resp: any) => resp.solicitud));
   }
 
@@ -50,104 +58,149 @@ export class SolicitudService {
     if (solicitud._id) {
       url += '/solicitudes/solicitud/' + solicitud._id + '/guarda_buque_viaje';
       url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, solicitud)
-        .pipe(map((resp: any) => {
-          swal('Datos Asignados con éxito', 'Datos Asignados con éxito', 'success');
+      return this.http.put(url, solicitud).pipe(
+        map((resp: any) => {
+          swal(
+            'Datos Asignados con éxito',
+            'Datos Asignados con éxito',
+            'success'
+          );
           return resp.solicitud;
-        }));
+        })
+      );
     }
   }
 
   guardarSolicitud(solicitud: Solicitud): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud';
-    if (solicitud._id) { // Actualizando
+    if (solicitud._id) {
+      // Actualizando
       url += '/' + solicitud._id;
       url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, solicitud)
-        .pipe(map((resp: any) => {
+      return this.http.put(url, solicitud).pipe(
+        map((resp: any) => {
           swal('Solicitud Actualizada', 'Correctamente', 'success');
           return resp.solicitud;
-        }));
-    } else { // Creando
+        })
+      );
+    } else {
+      // Creando
       url += '?token=' + this._usuarioService.token;
-      return this.http.post(url, solicitud)
-        .pipe(map((resp: any) => {
+      return this.http.post(url, solicitud).pipe(
+        map((resp: any) => {
           swal('Solicitud Creada', 'Correctamente', 'success');
           return resp.solicitud;
-        }));
+        })
+      );
     }
   }
 
   borrarSolicitud(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.delete(url)
-      .pipe(map(resp => swal('Borrado Solicitudes', 'Eliminado Correctamente', 'success')));
+    return this.http
+      .delete(url)
+      .pipe(
+        map(resp =>
+          swal('Borrado Solicitudes', 'Eliminado Correctamente', 'success')
+        )
+      );
   }
-
-
 
   apruebaSolicitudDescarga(solicitud: Solicitud): Observable<any> {
     let url = URL_SERVICIOS + '/solicitud/apruebadescarga';
     url += '/' + solicitud._id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, solicitud)
-      .pipe(map((resp: any) => {
-        swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+    return this.http.put(url, solicitud).pipe(
+      map((resp: any) => {
+        swal(
+          'Solicitud de descarga Aprobada',
+          'La solicitud fue aprobada',
+          'success'
+        );
         return resp.solicitud;
-      }));
+      })
+    );
   }
 
-  apruebaSolicitudDescargaContenedor(idSol: string, idCont: string): Observable<any> {
-    let url = URL_SERVICIOS + '/solicitud/apruebadescarga/' + idSol + '/contenedor/' + idCont;
+  apruebaSolicitudDescargaContenedor(
+    idSol: string,
+    idCont: string
+  ): Observable<any> {
+    let url =
+      URL_SERVICIOS +
+      '/solicitud/apruebadescarga/' +
+      idSol +
+      '/contenedor/' +
+      idCont;
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, idSol)
-      .pipe(map((resp: any) => {
-        swal('Solicitud de descarga Aprobada', 'La solicitud fue aprobada', 'success');
+    return this.http.put(url, idSol).pipe(
+      map((resp: any) => {
+        swal(
+          'Solicitud de descarga Aprobada',
+          'La solicitud fue aprobada',
+          'success'
+        );
         return resp.solicitud;
-      }));
+      })
+    );
   }
 
   apruebaSolicitudCarga(solicitud: Solicitud): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud';
     url += '/' + solicitud._id + '/apruebacarga';
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, solicitud)
-      .pipe(map((resp: any) => {
-        swal('Solicitud de Carga Aprobada', 'La solicitud fue aprobada', 'success');
+    return this.http.put(url, solicitud).pipe(
+      map((resp: any) => {
+        swal(
+          'Solicitud de Carga Aprobada',
+          'La solicitud fue aprobada',
+          'success'
+        );
         return resp.solicitud;
       }),
-        catchError(err => {
-          swal(err.error.mensaje, err.error.errors.message, 'error');
-          return throwError(err);
-        }));
+      catchError(err => {
+        swal(err.error.mensaje, err.error.errors.message, 'error');
+        return throwError(err);
+      })
+    );
   }
 
   enviaCorreoAprobacionSolicitud(solicitud: Solicitud): Observable<any> {
     let params = new HttpParams();
     let url = URL_SERVICIOS + '/solicitudes/solicitud';
     url += '/' + solicitud._id + '/enviacorreo';
-    //url += '?token=' + this._usuarioService.token;
     if (solicitud._id) {
       params = params.append('_id', solicitud._id);
     }
 
-    return this.http.get(url, { params: params })
-    .pipe(map((resp: any) => {
-      if (resp.mensaje != '' && resp.mensaje != undefined && resp.mensaje.length > 0) {
-        swal('ALERTA', resp.mensaje, 'success');        
-      }
-      return resp.solicitud;
-    }));;
+    return this.http.get(url, { params: params }).pipe(
+      map((resp: any) => {
+        if (
+          resp.mensaje !== '' &&
+          resp.mensaje !== undefined &&
+          resp.mensaje.length > 0
+        ) {
+          swal('ALERTA', resp.mensaje, 'success');
+        }
+        return resp.solicitud;
+      })
+    );
   }
 
   //ESTE SERVICIO SIRVE PARA ELIMINAR TODAS LAS MANIOS BRAS DE LA SOLICITUD DE CARGA (BOTON DE ELIMINAR DE TABLA CARGAS)/////
   boorarSolicitudes(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/' + id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.delete(url)
-      .pipe(map(resp => swal('Solicitud Borrada', 'Eliminado correctamente', 'success')));
+    return this.http
+      .delete(url)
+      .pipe(
+        map(resp =>
+          swal('Solicitud Borrada', 'Eliminado correctamente', 'success')
+        )
+      );
   }
+
 
 
   //ESTE SERVICIO SIRVE PARA ELIMINAR SOLAMENTE EL CAMPO DE SOLICITUD DE LA MANIOBRA (BOTON DE ELIMINAR DE TABLA DESCARGAS)////
@@ -207,6 +260,27 @@ export class SolicitudService {
         swal("ERROR", "La maniobra no se elimino de solicitudes", "error");
         return throwError(err);
       }));
+
+  actualizaBLBooking(id: string, blBooking: string): Observable<any> {
+    let url =
+      URL_SERVICIOS +
+      '/solicitudes/solicitud/' +
+      id +
+      '/actualizaBLBooking/' +
+      blBooking +
+      '/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, id).pipe(
+      map((resp: any) => {
+        swal(resp.mensaje, 'El BL/Booking es ' + resp.solicitud.blBooking, 'success');
+        return resp.solicitud;
+      }),
+      catchError(err => {
+        swal(err.error.mensaje, err.error.errors.message, 'error');
+        return throwError(err);
+      })
+    );
+
   }
 
 
@@ -238,10 +312,6 @@ export class SolicitudService {
 
   // }
 
-
-
-
-
   // cambioEstado(solicitud: Solicitud): Observable<any> {
 
   //     let url = URL_SERVICIOS + '/solicitudD/aprobacion/' + solicitud._id;
@@ -260,5 +330,49 @@ export class SolicitudService {
 
 
 
+
+
+
+  borrarManiobra(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobra/eliminarManiobra/Solicitud/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.delete(url).pipe(
+      map((resp: any) => resp.solicitud),
+      catchError(err => {
+        swal(
+          'ERROR',
+          'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
+          'error'
+        );
+        return throwError(err);
+      })
+    );
+  }
+
+  removeConte(id: string, maniobra: string): Observable<any> {
+    let url =
+      URL_SERVICIOS + '/solicitud/soli/Contenedor/' + id + '&' + maniobra;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, id).pipe(
+      map((resp: any) => {
+        swal('Eliminado', 'Se elimino el contenedor correctamente', 'success');
+      }),
+      catchError(err => {
+        swal('ERROR', 'La maniobra no se elimino de solicitudes', 'error');
+        return throwError(err);
+      })
+    );
+  }
+
+  // borrarContenedor(id:string): Observable<any> {
+  //   let url = URL_SERVICIOS +'/solicitudes/eliminarContenedor' + id;
+  //   return this.http.put(url, id).pipe(map((resp: any) =>{
+  //     console.log('Contenedor eliminado correctamente de la solicitud');
+  //   }),
+  //     catchError(err => {
+  //       console.log('el contenedor no se borro de la solicitud');
+  //       return throwError(err);
+  //     }));
+  // }
 
 }

@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Actualizando BL/Booking {{data.blBooking}}</h1>
+<div mat-dialog-content>
+  <p>Cual será el nuevo BL/Booking?</p>
+  <mat-form-field>
+    <mat-label>BL/Booking</mat-label>
+    <input matInput [(ngModel)]="data.blBookingChange" required>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button class="btn btn-danger waves-effect waves-light" mat-button (click)="onNoClick()">Cancelar</button>
+  <button [disabled]="!data.blBookingChange" class="btn btn-info waves-effect waves-light" mat-button [mat-dialog-close]="data.blBookingChange" cdkFocusInitial>Ok</button>
+</div>
