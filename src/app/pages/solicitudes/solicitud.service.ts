@@ -244,7 +244,7 @@ export class SolicitudService {
     swal("Eliminado", "Se elimino la solicitud correctamente", "success")
   }), 
     catchError(err=> {
-      swal("ERROR", "La solicitud no se ha eliminado", "error")
+      swal("ERROR", "La solicitud no se ha eliminado, debido a que un contenedor no se encuentra en TRANSITO", "error")
       return throwError(err);
     }));
   }
@@ -260,6 +260,7 @@ export class SolicitudService {
         swal("ERROR", "La maniobra no se elimino de solicitudes", "error");
         return throwError(err);
       }));
+    }
 
   actualizaBLBooking(id: string, blBooking: string): Observable<any> {
     let url =
@@ -327,42 +328,6 @@ export class SolicitudService {
   //             }));
 
   // }
-
-
-
-
-
-
-  borrarManiobra(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/maniobra/eliminarManiobra/Solicitud/' + id;
-    url += '?token=' + this._usuarioService.token;
-    return this.http.delete(url).pipe(
-      map((resp: any) => resp.solicitud),
-      catchError(err => {
-        swal(
-          'ERROR',
-          'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
-          'error'
-        );
-        return throwError(err);
-      })
-    );
-  }
-
-  removeConte(id: string, maniobra: string): Observable<any> {
-    let url =
-      URL_SERVICIOS + '/solicitud/soli/Contenedor/' + id + '&' + maniobra;
-    url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, id).pipe(
-      map((resp: any) => {
-        swal('Eliminado', 'Se elimino el contenedor correctamente', 'success');
-      }),
-      catchError(err => {
-        swal('ERROR', 'La maniobra no se elimino de solicitudes', 'error');
-        return throwError(err);
-      })
-    );
-  }
 
   // borrarContenedor(id:string): Observable<any> {
   //   let url = URL_SERVICIOS +'/solicitudes/eliminarContenedor' + id;
