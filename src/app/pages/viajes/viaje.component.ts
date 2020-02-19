@@ -210,15 +210,17 @@ export class ViajeComponent implements OnInit {
     patio: string
   ): void {
     if (this._id.value) {
-      if (cont != "" && tipo != "" && peso != "") {
+      if (cont != "" && tipo != "" && peso != "" && 
+      cont != undefined && tipo != undefined && peso != undefined && 
+      cont != 'undefined' && tipo != 'undefined' && peso != 'undefined') {
         this._viajeService
           .addContenedor(
             this._id.value,
             this.formateoContenedor(cont),
             tipo,
             peso,
-            destinatario,
-            patio != undefined ? patio: null
+            destinatario, 
+            patio != '' && patio != 'undefined' ? patio : undefined
           )
           .subscribe(res => {
             if (res.ok) {
