@@ -134,6 +134,7 @@ import { MapaComponent } from './mapa/mapa.component';
 import { AprobacionesBkComponent } from './liberacion-bl/aprobaciones-bk/aprobaciones-bk.component';
 import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobacion-tbk/aprobacion-tbk.component';
 import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
+import { InfoDialogComponent } from '../dialogs/info-dialog/info-dialog.component';
 
 @NgModule({
     declarations: [
@@ -192,6 +193,7 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         DetalleManiobraComponent,
         AsignarFacturaComponent,
         BLBookingDialog,
+        InfoDialogComponent,
         FacturacionManiobrasComponent,
         ManiobrasDiarioComponent,
         TiposContenedoresComponent,
@@ -240,7 +242,7 @@ import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-b
         MatTooltipModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent, BLBookingDialog]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent]
 })
 
 export class PagesModules { }

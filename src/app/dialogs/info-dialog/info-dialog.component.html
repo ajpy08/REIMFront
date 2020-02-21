@@ -1,0 +1,54 @@
+<div mat-dialog-content *ngIf="data.data.cargaDescarga=='D'">
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-primary">
+        <th>ESTATUS</th>
+        <th *ngIf="data.data.fAlta">FECHA ALTA</th>
+        <th *ngIf="data.data.fLlegada">FECHA LLEGADA</th>
+        <th *ngIf="data.data.hLlegada">LLEGADA</th>
+        <th *ngIf="data.data.sello">SELLO</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <td>{{data.data.estatus}}</td>
+      <td *ngIf="data.data.fAlta">{{data.data.fAlta | date:'dd/MM/yyyy'}}</td>
+      <td *ngIf="data.data.fLlegada">{{data.data.fLlegada | date:'dd/MM/yyyy' }}</td>
+      <td *ngIf="data.data.hLlegada">{{data.data.hLlegada }}</td>
+      <td *ngIf="data.data.sello">{{data.data.sello}}</td>
+
+    </tbody>
+  </table>
+  <div mat-dialog-actions>
+    <button class="btn btn-danger m-r-5" (click)="close()">Cancelar</button>
+  </div>
+</div>
+
+<div mat-dialog-content *ngIf="data.data.cargaDescarga=='C'">
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-primary">
+        <th *ngIf="data.data.contenedor">CONTENEDOR</th>
+        <th *ngIf="data.data.estatus">ESTATUS</th>
+        <th *ngIf="data.data.fAlta">FECHA ALTA</th>
+        <th *ngIf="data.data.fLlegada">FECHA LLEGADA</th>
+        <th *ngIf="data.data.hLlegada">LLEGADA</th>
+        <th *ngIf="data.data.naviera.nombreComercial">NAVIERA</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <td *ngIf="data.data.contenedor">{{data.data.contenedor}}</td>
+      <td *ngIf="data.data.estatus">{{data.data.estatus}}</td>
+      <td *ngIf="data.data.fAlta">{{data.data.fAlta | date:'dd/MM/yyyy'}}</td>
+      <td *ngIf="data.data.fLlegada">{{data.data.fLlegada | date:'dd/MM/yyyy' }}</td>
+      <td *ngIf="data.data.hLlegada">{{data.data.hLlegada }}</td>
+    <td *ngIf="data.data.naviera.nombreComercial">{{data.data.naviera.nombreComercial}}</td>
+
+    </tbody>
+  </table>
+  <div mat-dialog-actions>
+    <button class="btn btn-danger m-r-5" (click)="close()">Salir</button>
+  </div>
+
+</div>

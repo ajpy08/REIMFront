@@ -1,0 +1,8 @@
+.mat-dialog-content {
+    height: 193px;
+}
+
+.table-primary, .table-primary>td, .table-primary>th {
+    background-color: #002c77;
+    color: white;
+}
