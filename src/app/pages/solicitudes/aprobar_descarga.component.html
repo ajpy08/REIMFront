@@ -225,9 +225,8 @@
                           src="../../../assets/images/check_32x32.png"></td>
                       <td>
 
-                        <button matTooltip="Eliminar Contenedor" type="button" 
-                        class="btn btn-danger waves-effect waves-light m-r-10 m-l-10" 
-                        (click)="borrarContenedor(i)">
+                        <button matTooltip="Eliminar Contenedor" type="button"
+                          class="btn btn-danger waves-effect waves-light m-r-10 m-l-10" (click)="borrarContenedor(i)">
                           <i class="fa fa-trash-o"></i>
 
                         </button>
@@ -235,6 +234,12 @@
                           class="btn btn-info waves-effect waves-light m-r-10 m-l-10"
                           (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
                           <i class="fas fa-envelope"></i>
+                        </button>
+
+
+                        <button matTooltip="Ver informacion de Maniobra" type="button"
+                          class="btn btn-info waves-effect waves-light m-r-10 m-l-10" (click)="openDialog( this.contenedores.controls[i])">
+                          <i class="fas fa-edit"></i>
                         </button>
                         <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
                       </td>
@@ -247,8 +252,7 @@
 
           <div class="form-actions">
             <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5"
-              [disabled]="regForm.invalid" (click)="validaSolicitudes()"> <i
-                class="fa fa-check"></i> Validar</button>
+              [disabled]="regForm.invalid" (click)="validaSolicitudes()"> <i class="fa fa-check"></i> Validar</button>
             <button *ngIf="estatus.value==='NA'" type="submit"
               class="btn btn-primary btn-success waves-effect waves-light m-r-10"
               [disabled]="regForm.invalid || !solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>

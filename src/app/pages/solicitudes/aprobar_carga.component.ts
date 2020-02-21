@@ -13,6 +13,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
+import { InfoDialogComponent } from 'src/app/dialogs/info-dialog/info-dialog.component';
 declare var swal: any;
 
 export interface DialogData {
@@ -398,6 +399,29 @@ export class AprobarCargaComponent implements OnInit {
       // }
     });
   }
+
+  openDialogC(obj): void {
+    let maniobra;
+    this._ManiobraService.getManiobra(obj.value.maniobra._id).subscribe((maniobra) => {
+      maniobra = maniobra.maniobra;
+      console.log(maniobra)
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        width: '800px',
+        
+        data: { data: maniobra },
+        // data: { maniobra: maniobra },
+
+
+        hasBackdrop: false,
+        panelClass: 'filter.popup'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+
+      })
+    })
+
+  }
+
 }
 
 @Component({
