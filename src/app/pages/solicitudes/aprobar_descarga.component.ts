@@ -14,6 +14,12 @@ import { Maniobra } from 'src/app/models/maniobra.models';
 import { Solicitud } from './solicitud.models';
 import { type } from 'os';
 import { url } from 'inspector';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import { InfoDialogComponent } from 'src/app/dialogs/info-dialog/info-dialog.component';
 
 
 
@@ -34,6 +40,7 @@ export class AprobarDescargaComponent implements OnInit {
   url: string;
 
 
+
   constructor(public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
     private _ManiobraService: ManiobraService,
@@ -42,7 +49,8 @@ export class AprobarDescargaComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public router: Router,
     private fb: FormBuilder,
-    private location: Location) {
+    private location: Location,
+    public dialog: MatDialog) {
     this.usuario = this._usuarioService.usuario;
   }
 
@@ -410,51 +418,73 @@ export class AprobarDescargaComponent implements OnInit {
         dangerMode: true,
       }).then(borrar => {
         if (borrar) {
-        const idManiobra = this.contenedores.controls[indice].value.maniobra;
-        if (idManiobra) {
-          this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value)
-            .subscribe(res => {
-              if (res) {
-                this.contenedores.controls[idManiobra].get("contenedor").value
-                
-              }
+          const idManiobra = this.contenedores.controls[indice].value.maniobra;
+          if (idManiobra) {
+            this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value)
+              .subscribe(res => {
+                if (res) {
+                  this.contenedores.controls[idManiobra].get("contenedor").value
 
-            });
-          this._SolicitudService.removeConte(this._id.value, idManiobra).subscribe(res => {
-            this.contenedores.removeAt(indice);
-            this.regForm.markAsDirty();
-          })
-        }
-      }
-      });
-    
-      } else {
-        swal ({
-          title: 'ADVERTENCIA',
-          text: ' Al borrar este contenedor se eliminara la solicitud',
-          icon: 'warning',
-          buttons: true,
-          dangerMode: true,
-        }).then(borrar => {
-          if (borrar) {
-            this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
-
-              swal({
-                title: "ELIMINADO",
-                text: "Borrado",
-                icon: "success",
-              }).then(ok => {
-                if(ok) {
-                  this.router.navigate(["/solicitudes/aprobaciones"]);
                 }
-              })
+
+              });
+            this._SolicitudService.removeConte(this._id.value, idManiobra).subscribe(res => {
+              this.contenedores.removeAt(indice);
+              this.regForm.markAsDirty();
             })
           }
-        })
-      }
+        }
+      });
 
+    } else {
+      swal({
+        title: 'ADVERTENCIA',
+        text: ' Al borrar este contenedor se eliminara la solicitud',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+      }).then(borrar => {
+        if (borrar) {
+          this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
+
+            swal({
+              title: "ELIMINADO",
+              text: "Borrado",
+              icon: "success",
+            }).then(ok => {
+              if (ok) {
+                this.router.navigate(["/solicitudes/aprobaciones"]);
+              }
+            })
+          })
+        }
+      })
     }
+
   }
+
+  openDialog(obj): void {
+    let maniobra;
+    this._ManiobraService.getManiobra(obj.value.maniobra).subscribe((maniobra) => {
+      maniobra = maniobra.maniobra;
+      const dialogRef = this.dialog.open(InfoDialogComponent, {
+        width: '800px',
+        
+        data: { data: maniobra },
+        // data: { maniobra: maniobra },
+
+
+        hasBackdrop: false,
+        panelClass: 'filter.popup'
+      });
+      dialogRef.afterClosed().subscribe(result => {
+
+      })
+    })
+
+  }
+
+}
 
 
 
