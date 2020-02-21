@@ -393,9 +393,11 @@ export class AprobarCargaComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       // if (result) {
         this.blBookingChange = result;
-        this._SolicitudService.actualizaBLBooking(this._id.value, result).subscribe(() => {
-          this.cargarSolicitud(this._id.value);
-        });
+        if (this.blBooking.value !== this.blBookingChange && this.blBookingChange !== '' && this.blBookingChange !== undefined) {
+          this._SolicitudService.actualizaBLBooking(this._id.value, result).subscribe(() => {
+            this.cargarSolicitud(this._id.value);
+          });
+        }
       // }
     });
   }
