@@ -82,3 +82,9 @@ Login register and recover password Page
     width: 290px;
     height: auto;
 }
+
+img[src="assets/images/optimizado2.png"] {
+    margin-left: 62px;
+    width: 211px;
+    margin-bottom: 20px;
+}
