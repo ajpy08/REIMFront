@@ -8,6 +8,7 @@ import { OperadorService } from '../operadores/operador.service';
 import { Operador } from '../operadores/operador.models';
 import { ClienteService, SolicitudService, ManiobraService } from 'src/app/services/service.index';
 import { Cliente } from 'src/app/models/cliente.models';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,8 @@ export class DashboardComponent implements OnInit {
 
   totalRegistrosDescargas: number = 0;
   totalRegistrosCargas: number = 0;
+  totalSolicitudTransportistaD: number = 0;
+  totalSolicitudTransportistaC: number = 0;
 
   totalRegistrosInventario: number = 0;
   c40: any;
@@ -64,13 +67,15 @@ export class DashboardComponent implements OnInit {
       this.cargarSolicitudes('D');
       this.cargarSolicitudes('C');
     }
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE  || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
       this.cargarInventario();
       this.cargarLR();
       this.cargarLavadoOReparacion('L');
       this.cargarLavadoOReparacion('R');
       this.cargarManiobras();
     }
+
+    this.cargarSolicitudesTransportista();
 
   }
 
@@ -140,7 +145,7 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarOperadores() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE)  {
+    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
       this.operadoresServices.getOperadores().subscribe(operadores => {
         this.totalOperadores = operadores.operadores.length
       });
@@ -185,19 +190,19 @@ export class DashboardComponent implements OnInit {
             this.totalRegistrosCargas = res.total;
           });
       }
-    } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+    } else {
       let agencias = '';
       this.usuarioLogueado.empresas.forEach(emp => {
         agencias = agencias + emp._id + ',';
       });
       agencias = agencias.slice(0, -1);
-      if (CD == 'D') {
-        this.solicitudService.getSolicitudes('D', null, null, null, agencias)
+      if (CD == "D") {
+        this.solicitudService.getSolicitudes("D", null, null, null, agencias)
           .subscribe(res => {
             this.totalRegistrosDescargas = res.total;
           });
-      } else if (CD == 'C') {
-        this.solicitudService.getSolicitudes('C', null, null, null, agencias)
+      } else if (CD == "C") {
+        this.solicitudService.getSolicitudes("C", null, null, null, agencias)
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
           });
@@ -307,8 +312,10 @@ export class DashboardComponent implements OnInit {
     }
     this.cargarLR();
   }
+
+
   cargarLR() {
-    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION, this.usuarioLogueado.empresas[0]._id)
         .subscribe(maniobras => {
 
@@ -423,8 +430,15 @@ export class DashboardComponent implements OnInit {
 
 
   cargarLavadoOReparacion(LR: string) {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE ||
-      this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
+      this.maniobraService.getManiobrasLavadoOReparacion(this.usuarioLogueado.empresas[0]._id, null, null, null, null, LR).subscribe(maniobras => {
+        if (LR === 'L') {
+          this.totalLavado = maniobras.maniobras.length;
+        } else if (LR == 'R') {
+          this.totalReparacion = maniobras.maniobras.length;
+        }
+      });
+    } else {
       this.maniobraService.getManiobrasLavadoOReparacion(null, null, null, null, null, LR).subscribe(maniobras => {
         if (LR === 'L') {
           this.totalLavado = maniobras.maniobras.length;
@@ -432,6 +446,7 @@ export class DashboardComponent implements OnInit {
           this.totalReparacion = maniobras.maniobras.length;
         }
       });
+
     }
   }
 
@@ -460,7 +475,66 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  cargarSolicitudesTransportista() {
+    if (this.usuarioLogueado.role === "TRANSPORTISTA_ROLE") {
+      this.maniobraService
+        .getManiobras(
+          "D",
+          "TRANSITO",
+          this.usuarioLogueado.empresas[0]._id,
+          null,
+          null,
+          "VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT"
+        )
+        .subscribe(maniobras => {
+          this.totalSolicitudTransportistaD = maniobras.total;
+        });
+      this.maniobraService
+        .getManiobras(
+          "C",
+          "TRANSITO",
+          this.usuarioLogueado.empresas[0]._id,
+          null,
+          null,
+          "VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT"
+        )
+        .subscribe(maniobras => {
+          this.totalSolicitudTransportistaC = maniobras.total;
+        });
+    } else
+      if (this.usuarioLogueado.role === "PATIOADMIN_ROLE" || "ADMIN_ROLE") {
+        this.maniobraService
+        .getManiobras(
+          "D",
+          "TRANSITO",
+         null,
+          null,
+          null,
+          "VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT"
+        )
+        .subscribe(maniobras => {
+          this.totalSolicitudTransportistaD = maniobras.total;
+        });
+      this.maniobraService
+        .getManiobras(
+          "C",
+          "TRANSITO",
+         null,
+          null,
+          null,
+          "VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT"
+        )
+        .subscribe(maniobras => {
+          this.totalSolicitudTransportistaC = maniobras.total;
+        });
+      }
+  }
+
+
 }
+
+
+
 
 
 
