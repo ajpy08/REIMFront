@@ -91,6 +91,7 @@ export class FotosComponent implements OnInit {
         //  previewForceFullscreen: true,
         previewCloseOnEsc: true,
         previewZoom: true,
+        previewDownload: true,
         previewRotate: true,
         previewKeyboardNavigation: true,
         //  imageAutoPlay: true,
