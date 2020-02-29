@@ -33,10 +33,6 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let maniobra">
-                    <button matTooltip="Imprimir Solicitud" [routerLink]="['/solicitudes/papeleta', maniobra._id ]"
-                      class="btn btn-info m-r-5">
-                      <i class="fa fa-print"></i>
-                    </button>
                     <button matTooltip="Editar Solicitud" [routerLink]="['/solicitud_transportista', maniobra._id ]"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
@@ -45,12 +41,11 @@
                       [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn btn-danger m-r-5">
                       <i class="fa fa-refresh"></i>
                     </button>
-                    <!-- <button [routerLink]="['/buques/buque', buque._id ]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
+                    <button matTooltip="Imprimir Solicitud" [routerLink]="['/solicitudes/papeleta', maniobra._id ]"
+                      class="btn btn-info m-r-5">
+                      <i class="fa fa-print"></i>
                     </button>
-                    <button (click)="borrarBuque( buque )" class="btn btn-danger m-r-5">
-                      <i class="fa fa-trash-o"></i>
-                    </button> -->
+
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="folio">
@@ -117,10 +112,6 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let maniobra">
-                    <button matTooltip="Imprimir Solicitud" [routerLink]="['/solicitudes/papeleta', maniobra._id ]"
-                      class="btn btn-info m-r-5">
-                      <i class="fa fa-print"></i>
-                    </button>
                     <button matTooltip="Editar Solicitud" [routerLink]="['/solicitud_transportista', maniobra._id ]"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
@@ -128,6 +119,10 @@
                     <button matTooltip="Reasigna Transportista"
                       [routerLink]="['/solicitud_reasigna_transportista', maniobra._id ]" class="btn btn-danger m-r-5">
                       <i class="fa fa-refresh"></i>
+                    </button>
+                    <button matTooltip="Imprimir Solicitud" [routerLink]="['/solicitudes/papeleta', maniobra._id ]"
+                      class="btn btn-info m-r-5">
+                      <i class="fa fa-print"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
