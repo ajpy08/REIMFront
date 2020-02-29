@@ -29,7 +29,7 @@
                   placeholder="Seleccione un viaje" name="viaje">
                   <mat-option>--- NINGUNO ---</mat-option>
                   <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
-                    {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
+                    {{ viaje.viaje + ' | ' + viaje?.buque?.nombre }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
