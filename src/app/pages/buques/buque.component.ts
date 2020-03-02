@@ -48,9 +48,10 @@ export class BuqueComponent implements OnInit {
     this.socket.on('update-data', function(data: any) {
       if (data.data._id) {
         this.cargarBuque(data.data._id);
-      } else {
-        this.cargarBuque(id);
       }
+      // } else {
+      //   this.cargarBuque(id);
+      // }
     }.bind(this));
 
     this.socket.on('delete-data', function(data: any) {
