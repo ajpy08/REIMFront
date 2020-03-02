@@ -61,33 +61,51 @@
                 </mat-option>
               </mat-select>
             </div>
-            <div class="form-group has-success">
-              <mat-form-field>
-                <mat-label>Camion</mat-label>
-                <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
-                  <mat-option *ngFor="let camion of camiones" [value]="camion._id">
-                    {{camion.placa + ' | ' + camion.noEconomico}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="camion.invalid">
-                  <sup>*</sup>Debe seleccionar un Camión
-                </mat-error>
-              </mat-form-field>
+            <div class="row">
+              <div class="col-md-11">
+                <mat-form-field>
+                  <mat-label>Camion</mat-label>
+                  <mat-select formControlName="camion" type="text" placeholder="Seleccione un camion">
+                    <mat-option *ngFor="let camion of camiones" [value]="camion._id">
+                      {{camion.placa + ' | ' + camion.noEconomico}}
+                    </mat-option>
+                  </mat-select>
+
+
+                  <mat-error *ngIf="camion.invalid">
+                    <sup>*</sup>Debe seleccionar un Camión
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="text-right">
+                <button matTooltip="Agregar Camion Nuevo" (click)="nuevoCamion(_id.value)" class="btn btn-info btn-sm">
+                  <i class="fa fa-truck"></i>
+                </button>
+              </div>
             </div>
-            <div class="form-group has-success">
-              <mat-form-field>
-                <mat-label>Operador</mat-label>
-                <mat-select formControlName="operador" type="text" placeholder="Seleccione un operador">
-                  <mat-option *ngFor="let operador of operadores" [value]="operador._id">
-                    {{operador.nombre}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="operador.invalid">
-                  <sup>*</sup>Debe seleccionar un Operador.
-                </mat-error>
-              </mat-form-field>
+            <div class="row">
+              <div class="col-md-11">
+                <mat-form-field>
+                  <mat-label>Operador</mat-label>
+                  <mat-select formControlName="operador" type="text" placeholder="Seleccione un operador">
+                    <mat-option *ngFor="let operador of operadores" [value]="operador._id">
+                      {{operador.nombre}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="operador.invalid">
+                    <sup>*</sup>Debe seleccionar un Operador.
+                  </mat-error>
+                </mat-form-field>
+              </div>
+                  <div class="text-right">
+                    <button class="user" matTooltip="Agregar Operador Nuevo" (click)="nuevoOperador(_id.value)"
+                      class="btn btn-info btn-sm">
+                      <i class="fa fa-user" aria-hidden="true"></i>
+                    </button>
+                  </div>
             </div>
-            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+            <button type="submit" class="btn btn-success waves-effect waves-light m-r-10 "
+              [disabled]="regForm.pristine || regForm.invalid ">
               <i class="fa fa-save"></i>
               Guardar
             </button>
