@@ -31,6 +31,16 @@ export class BuquesComponent implements OnInit {
     localStorage.removeItem('historyArray');
     this.cargarBuques();
 
+    this.socket.on('new-data', function(data: any) {
+        this.cargarBuques();
+    }.bind(this));
+
+    this.socket.on('update-data', function(data: any) {
+      if (data.data._id) {
+        this.cargarBuques();
+      }
+    }.bind(this));
+
     this.socket.on('delete-data', function(data: any) {
       this.cargarBuques();
     }.bind(this));

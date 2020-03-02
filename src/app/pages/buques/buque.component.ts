@@ -26,7 +26,7 @@ export class BuqueComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private location: Location
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.createFormGroup();
@@ -45,19 +45,18 @@ export class BuqueComponent implements OnInit {
     }
     this.url = '/buques';
 
-    this.socket.on('new-data', function (data: any) {
-      if (id) {
+    this.socket.on('update-data', function(data: any) {
+      if (data.data._id) {
+        this.cargarBuque(data.data._id);
+      } else {
         this.cargarBuque(id);
       }
-    }.bind(this)
-    );
+    }.bind(this));
 
-    this.socket.on('update-data', function (data: any) {
-      if (id) {
-        this.cargarBuque(id);
-      }
-    }.bind(this)
-    );
+    this.socket.on('delete-data', function(data: any) {
+      this.router.navigate(['/buques']);
+    }.bind(this));
+
   }
 
   cargarBuque(id: string) {
@@ -93,16 +92,10 @@ export class BuqueComponent implements OnInit {
   guardarBuque() {
     if (this.regForm.valid) {
       this._buqueService.guardarBuque(this.regForm.value).subscribe(res => {
-        if (
-          this.regForm.get('_id').value === '' ||
-          this.regForm.get('_id').value === undefined
-        ) {
+        if ( this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined ) {
           this.regForm.get('_id').setValue(res._id);
           this.socket.emit('newdata', res);
-          this.router.navigate([
-            '/buques/buque',
-            this.regForm.get('_id').value
-          ]);
+          this.router.navigate(['/buques/buque', this.regForm.get('_id').value]);
         } else {
           this.socket.emit('updatedata', res);
         }
