@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Buque } from './buques.models';
 import { BuqueService, ExcelService } from '../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { URL_SOCKET_IO } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 
 declare var swal: any;
@@ -17,7 +18,7 @@ export class BuquesComponent implements OnInit {
   displayedColumns = ['actions', 'nombre', 'razonSocial', 'fAlta'];
   dataSource: any;
 
-  socket = io('http://localhost:4000');
+  socket = io(URL_SOCKET_IO);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

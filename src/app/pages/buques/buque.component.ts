@@ -5,6 +5,7 @@ import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from 'src/app/pages/navieras/navieras.models';
 import { Location } from '@angular/common';
+import { URL_SOCKET_IO } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -17,7 +18,7 @@ export class BuqueComponent implements OnInit {
   navieras: Naviera[] = [];
   regForm: FormGroup;
   url: string;
-  socket = io('http://localhost:4000');
+  socket = io(URL_SOCKET_IO);
 
   constructor(
     public _buqueService: BuqueService,
