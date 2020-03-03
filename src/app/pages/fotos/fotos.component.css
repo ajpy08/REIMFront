@@ -46,3 +46,11 @@ ngx-gallery-preview-img /deep/ .ngx-gallery-center {
         margin-left: 120px;
     }
 }
+
+ngx-gallery-animation-slide /deep/ [_ngcontent-c10] .ngx-gallery-image.ngx-gallery-active[_ngcontent-c10] {
+    top: 10px;
+}
+
+.ngx-gallery-animation-slide[_ngcontent-c10] .ngx-gallery-image.ngx-gallery-active[_ngcontent-c10] {
+    top: 10px;
+}
