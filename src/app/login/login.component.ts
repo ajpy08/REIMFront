@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Usuario } from '../pages/usuarios/usuario.model';
 import { UsuarioService } from '../pages/usuarios/usuario.service';
-import {URL_SERVICIOS} from '../config/config';
+import { URL_SERVICIOS } from '../../environments/environment.prod';
 
 
 declare function init_plugins();

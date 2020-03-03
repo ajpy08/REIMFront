@@ -45,6 +45,7 @@ import { Id_sentry } from "../app/config/config";
 import { Usuario } from "./pages/usuarios/usuario.model";
 
 
+
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
   constructor() {
@@ -83,7 +84,8 @@ export function getErrorHandler(): ErrorHandler {
     AppComponent,
     LoginComponent,
     PagesComponent,
-    RegistroComponent
+    RegistroComponent,
+
     ],
   imports: [
     BrowserModule,
