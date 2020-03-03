@@ -1,15 +1,15 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Transportista } from "./transportista.models";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Transportista } from './transportista.models';
 import {
   TransportistaService,
   ExcelService
-} from "../../services/service.index";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+} from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 
 @Component({
-  selector: "app-transportistas",
-  templateUrl: "./transportistas.component.html",
+  selector: 'app-transportistas',
+  templateUrl: './transportistas.component.html',
   styles: []
 })
 export class TransportistasComponent implements OnInit {
@@ -19,23 +19,24 @@ export class TransportistasComponent implements OnInit {
   transportistaExcel = [];
 
   displayedColumns = [
-    "actions",
-    "img",
-    "rfc",
-    "razonSocial",
-    "calle",
-    "noExterior",
-    "noInterior",
-    "colonia",
-    "municipio",
-    "ciudad",
-    "estado",
-    "cp",
-    "formatoR1",
-    "correo",
-    "correoFac",
-    "credito",
-    "caat"
+    'actions',
+    'img',
+    'rfc',
+    'razonSocial',
+    'nombreComercial',
+    'calle',
+    'noExterior',
+    'noInterior',
+    'colonia',
+    'municipio',
+    'ciudad',
+    'estado',
+    'cp',
+    'formatoR1',
+    'correo',
+    'correoFac',
+    'credito',
+    'caat'
   ];
   dataSource: any;
 
@@ -57,7 +58,7 @@ export class TransportistasComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Transportistas");
+      console.error('Error al filtrar el dataSource de Transportistas');
     }
   }
 
@@ -74,9 +75,9 @@ export class TransportistasComponent implements OnInit {
 
   borrarTransportista(transportista: Transportista) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar a " + transportista.nombreComercial,
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + transportista.nombreComercial,
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
@@ -92,7 +93,7 @@ export class TransportistasComponent implements OnInit {
 
   crearDatosExcel(datos) {
     datos.forEach(d => {
-      var transportista = {
+      const transportista = {
         Rfc: d.rfc,
         RazonSocial: d.razonSocial,
         Calle: d.calle,
@@ -117,10 +118,10 @@ export class TransportistasComponent implements OnInit {
     if (this.transportistaExcel) {
       this.excelService.exportAsExcelFile(
         this.transportistaExcel,
-        "Transportista"
+        'Transportista'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 }
