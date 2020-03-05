@@ -12,7 +12,7 @@ import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../coordenada.service';
 import { Maniobra } from 'src/app/models/maniobra.models';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 
 @Component({
@@ -173,7 +173,7 @@ export class RevisarComponent implements OnInit {
 
   addReparacion(item): void {
     const rep = this.tiposReparaciones.find(x => x._id === item);
-    this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
+    this.reparaciones.push(this.creaReparacion(rep._id, rep.reparacion, rep.costo));
   }
 
   removeReparacion(index: number) {
@@ -239,7 +239,7 @@ export class RevisarComponent implements OnInit {
         maniob.maniobra.historial.forEach(element => {
           this.historial.push(this.agregarArray(new Coordenada(element.bahia, element.posicion)));
         });
-        this.maniobraGuardadaEnCoordenada = this.historial.value[this.historial.value.length - 1]
+        this.maniobraGuardadaEnCoordenada = this.historial.value[this.historial.value.length - 1];
       } else {
         this.regForm.controls['historial'].setValue(undefined);
       }
@@ -270,16 +270,16 @@ export class RevisarComponent implements OnInit {
 
   guardaCambios() {
     if (this.regForm.valid) {
-      //Elimino la maniobra que tenia guardada mi coordenada para despues agregar la maniobra actual
-      //a la ultima coordenada del array.
+      // Elimino la maniobra que tenia guardada mi coordenada para despues agregar la maniobra actual
+      // a la ultima coordenada del array.
 
       if (this.maniobraGuardadaEnCoordenada) {
         this.coordenadaService.getCoordenada(this.maniobraGuardadaEnCoordenada.bahia,
           this.maniobraGuardadaEnCoordenada.posicion).subscribe(c => {
             if (c && c.maniobras && c.maniobras.length > 0) {
               c.maniobras.forEach(m => {
-                if (m.maniobra._id == this.regForm.get('_id').value) {
-                  var indice = c.maniobras.indexOf(m); // obtenemos el indice
+                if (m.maniobra._id === this.regForm.get('_id').value) {
+                  const indice = c.maniobras.indexOf(m); // obtenemos el indice
                   c.maniobras.splice(indice, 1);
                 }
               });
@@ -290,20 +290,20 @@ export class RevisarComponent implements OnInit {
               });
             }
 
-            var ultima = this.historial.value[this.historial.value.length - 1]
+            var ultima = this.historial.value[this.historial.value.length - 1];
             if (ultima) {
-              this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
+              this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(cor => {
 
-                if (c) {
-                  var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
-                  if (c.maniobras) {
-                    c.maniobras.push({ maniobra });
+                if (cor) {
+                  const maniobra = new Maniobra()._id = this.regForm.get('_id').value;
+                  if (cor.maniobras) {
+                    cor.maniobras.push({ maniobra });
                   } else {
-                    c.maniobras = [];
-                    c.maniobras.push({ maniobra })
+                    cor.maniobras = [];
+                    cor.maniobras.push({ maniobra });
                   }
 
-                  this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
+                  this.coordenadaService.actualizaCoordenadaManiobras(cor).subscribe(x => {
                   }, error => {
                     this.mensajeError = error.error.mensaje;
                   });
@@ -316,12 +316,12 @@ export class RevisarComponent implements OnInit {
         if (ultima) {
           this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
             if (c) {
-              var maniobra = new Maniobra()._id = this.regForm.get('_id').value;
+              const maniobra = new Maniobra()._id = this.regForm.get('_id').value;
               if (c.maniobras) {
                 c.maniobras.push({ maniobra });
               } else {
                 c.maniobras = [];
-                c.maniobras.push({ maniobra })
+                c.maniobras.push({ maniobra });
               }
 
               this.coordenadaService.actualizaCoordenadaManiobras(c).subscribe(x => {
@@ -350,11 +350,11 @@ export class RevisarComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('historyArray')
-    localStorage.removeItem('history')
+    localStorage.removeItem('historyArray');
+    localStorage.removeItem('history');
     // this.location.back();
   }
 
@@ -362,44 +362,48 @@ export class RevisarComponent implements OnInit {
     return this.fb.group({
       bahia: [coordenada.bahia],
       posicion: [coordenada.posicion]
-    })
+    });
   }
 
   addCoordenada(bahia: string, posicion: string): void {
-    var coordenadaActual = this.historial.value[this.historial.value.length - 1]
-    var ocupadoActual = 0;
+    const coordenadaActual = this.historial.value[this.historial.value.length - 1];
+    let ocupadoActual = 0;
     if (coordenadaActual) {
       this.coordenadaService.getCoordenada(coordenadaActual.bahia, coordenadaActual.posicion).subscribe(c => {
         if (c && c.maniobras && c.maniobras.length > 0) {
           c.maniobras.forEach(m => {
+            // tslint:disable-next-line: radix
             ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
           });
         }
       });
 
-      var tiene = false;
-      var letraPosicion = coordenadaActual.posicion.substring(0, 1);
-      var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
+      let tiene = false;
+      const letraPosicion = coordenadaActual.posicion.substring(0, 1);
+      const nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length);
 
-      var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
+      // tslint:disable-next-line: radix
+      const coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
       this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
         if (c && c.maniobras && c.maniobras.length > 0) {
           c.maniobras.forEach(m => {
-            var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
+            // tslint:disable-next-line: radix
+            const restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
             if (ocupadoActual <= restante) {
               tiene = true;
             }
           });
-        };
+        }
 
         if (tiene) {
-          swal('No puedes agregar esta coordenada por que la posición (Bahía: ' + coordenadaActual.bahia + ' Posición: ' + coordenadaActual.posicion + ') contiene contenedores en sus niveles superiores', '', 'error');
+          swal('No puedes agregar esta coordenada por que la posición (Bahía: ' +
+            coordenadaActual.bahia + ' Posición: ' + coordenadaActual.posicion + ') contiene contenedores en sus niveles superiores', '', 'error');
         } else {
-          var coordenada = new Coordenada(bahia, posicion);
-          var tmp = this.historial.value.filter(c => c.bahia == bahia && c.posicion == posicion);
+          const coordenada = new Coordenada(bahia, posicion);
+          const tmp = this.historial.value.filter(cor => cor.bahia === bahia && cor.posicion === posicion);
 
 
-          if (coordenadaActual.bahia == bahia && coordenadaActual.posicion == posicion) {
+          if (coordenadaActual.bahia === bahia && coordenadaActual.posicion === posicion) {
             swal('Ya se encuentra en esta coordenada', '', 'error');
           } else {
             if (bahia === '' || posicion === '') {
@@ -415,7 +419,7 @@ export class RevisarComponent implements OnInit {
         }
       });
     } else {
-      var coordenada = new Coordenada(bahia, posicion);
+      const coordenada = new Coordenada(bahia, posicion);
       if (bahia === '' || posicion === '') {
         swal('Error al Agregar', 'No puede estar vacio ningun campo', 'error');
       } else {
@@ -436,25 +440,28 @@ export class RevisarComponent implements OnInit {
   }
 
   quitar(indice: number) {
-    var coordenadaActual = this.historial.value[indice];
-    var ocupadoActual = 0;
+    const coordenadaActual = this.historial.value[indice];
+    let ocupadoActual = 0;
     this.coordenadaService.getCoordenada(coordenadaActual.bahia, coordenadaActual.posicion).subscribe(c => {
       if (c && c.maniobras && c.maniobras.length > 0) {
         c.maniobras.forEach(m => {
+          // tslint:disable-next-line: radix
           ocupadoActual += parseInt(m.maniobra.tipo.substring(0, 2));
         });
       }
 
 
-      var tiene = false;
-      var letraPosicion = coordenadaActual.posicion.substring(0, 1);
-      var nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length)
+      let tiene = false;
+      const letraPosicion = coordenadaActual.posicion.substring(0, 1);
+      const nivelPosicion = coordenadaActual.posicion.substring(1, coordenadaActual.posicion.length);
 
-      var coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
-      this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(c => {
-        if (c && c.maniobras && c.maniobras.length > 0) {
-          c.maniobras.forEach(m => {
-            var restante = c.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
+      // tslint:disable-next-line: radix
+      const coordenadaSig = new Coordenada(coordenadaActual.bahia, letraPosicion + (parseInt(nivelPosicion) + 1));
+      this.coordenadaService.getCoordenada(coordenadaSig.bahia, coordenadaSig.posicion).subscribe(cor => {
+        if (cor && cor.maniobras && cor.maniobras.length > 0) {
+          cor.maniobras.forEach(m => {
+            // tslint:disable-next-line: radix
+            const restante = cor.tipo - parseInt(m.maniobra.tipo.substring(0, 2));
             if (ocupadoActual <= restante) {
               tiene = true;
             }
@@ -477,7 +484,7 @@ export class RevisarComponent implements OnInit {
 
   /* #region  Array de Arrays Javi */
   ////////////////////////////////////////////////////////
-  //https://stackblitz.com/edit/angular-dffny7?file=app%2Fapp.component.ts
+  // https://stackblitz.com/edit/angular-dffny7?file=app%2Fapp.component.ts
 
   // addNewHistorial() {
   //   let control = <FormArray>this.regForm.controls.historial;
@@ -511,7 +518,8 @@ export class RevisarComponent implements OnInit {
   ObtenCoordenadasDisponibles(maniobra?: string) {
     this.coordenadaService.getCoordenadasDisponibles(maniobra).subscribe(coordenadas => {
       this.coordenadasDisponibles = coordenadas.coordenadas;
-      for (var g in this.coordenadasDisponibles) {
+      // tslint:disable-next-line: forin
+      for (const g in this.coordenadasDisponibles) {
         this.bahias.push(g);
       }
     });
@@ -519,33 +527,34 @@ export class RevisarComponent implements OnInit {
 
   obtenPosicionesXBahia(bahia) {
     this.posiciones = this.coordenadasDisponibles[bahia];
-    var tipoManiobra = this.tipo.value.toString().substring(0, 2)
-    this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra)
+    const tipoManiobra = this.tipo.value.toString().substring(0, 2);
+    this.posiciones = this.posiciones.filter(p => p.tipo >= tipoManiobra);
   }
 
   open(id: string, tag: string) {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
     if (localStorage.getItem('historyArray')) {
-      //asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
+      // asigno a mi variable historyArray lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta al array
-    array.push("/maniobras/maniobra/" + id + "/" + tag);
+    // Agrego mi nueva ruta al array
+    array.push('/maniobras/maniobra/' + id + '/' + tag);
 
 
-    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    //// sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
     localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
+    // Voy a pagina.
     this.router.navigate(['/reparaciones/reparacion/nuevo']);
-    
+
   }
 }
 

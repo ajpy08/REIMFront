@@ -49,8 +49,6 @@ export class FotosComponent implements OnInit {
   url: string;
 
   LR: string;
-  
-
 
   constructor(public _maniobraService: ManiobraService,
     public _subirArchivoService: SubirArchivoService,
@@ -64,7 +62,9 @@ export class FotosComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
       this.okCargar = true;
     } else {
       this.okCargar = false;
@@ -122,18 +122,19 @@ export class FotosComponent implements OnInit {
     this.url = '/contenedoresLR';
 
 
-    let indexTAB = localStorage.getItem("LR");
+    const indexTAB = localStorage.getItem('LR');
     if (indexTAB) {
+      // tslint:disable-next-line: radix
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
       this.tabGroup.selectedIndex = 0;
     }
 
-    if(this.selected == 'fotos_lavado'){
-      this.LR = 'L'
+    if (this.selected === 'fotos_lavado') {
+      this.LR = 'L';
     } else {
-      this.LR = 'R'
+      this.LR = 'R';
     }
-    
+
   }
 
   onChange(data: any): void {
@@ -190,14 +191,14 @@ export class FotosComponent implements OnInit {
   }
 
   eliminaFoto(key: string, LR: string) {
-    if (key == undefined && this.galleryImagesL.length > 0 && LR == 'L') {
+    if (key === undefined && this.galleryImagesL.length > 0 && LR === 'L') {
       key = this.galleryImagesL[0].medium as string;
-    } else if (key == undefined && this.galleryImagesR.length > 0 && LR == 'R') {
+    } else if (key === undefined && this.galleryImagesR.length > 0 && LR === 'R') {
       key = this.galleryImagesR[0].medium as string;
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
-    var ruta = key.substring(key.lastIndexOf("maniobras"), key.length);
+    const ruta = key.substring(key.lastIndexOf('maniobras'), key.length);
     swal({
       title: '¿Esta seguro?',
       text: 'Esta apunto de borrar a la foto seleccionada \n ' + key.substring(key.lastIndexOf('/') + 1, key.length),
@@ -260,7 +261,7 @@ export class FotosComponent implements OnInit {
 
   onLinkClick(event: MatTabChangeEvent) {
     // if (event.tab.textLabel !== 'carga' && this.archivos.length > 0) {
-      localStorage.setItem("LR", event.index.toString());
+    localStorage.setItem('LR', event.index.toString());
     //   this.limpiarArchivos();
     // // }
   }
@@ -293,14 +294,12 @@ export class FotosComponent implements OnInit {
 
 
   DescargarZip(id: string) {
-   if (localStorage.getItem("LR") === '0') {
-      this.LR = 'L'
-    } else if (localStorage.getItem("L/R") === '1' || localStorage.getItem("LR") === '1') {
-      this.LR = 'R'
+    if (localStorage.getItem('LR') === '0') {
+      this.LR = 'L';
+    } else if (localStorage.getItem('L/R') === '1' || localStorage.getItem('LR') === '1') {
+      this.LR = 'R';
     }
-    this._maniobraService.DescargaZip(id, this.LR).subscribe(maniobra => {
-
-    })
+    this._maniobraService.DescargaZip(id, this.LR).subscribe(maniobra => { });
 
 
 
@@ -310,6 +309,7 @@ export class FotosComponent implements OnInit {
     if (this.yaCargo) {
       this.limpiarArchivos();
     }
+    // tslint:disable-next-line: forin
     for (const propiedad in Object.getOwnPropertyNames(archivosLista)) {
       const archivoTemporal = archivosLista[propiedad];
       if (this._archivoPuedeSerCargado(archivoTemporal)) {
@@ -353,23 +353,24 @@ export class FotosComponent implements OnInit {
   }
 
   back() {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
-      //asigno a mi variable history lo que obtengo de localStorage (history)
+      // asigno a mi variable history lo que obtengo de localStorage (history)
       history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
 
-      //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
-      //pop() elimina del array el ultimo elemento
+      // Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+      // pop() elimina del array el ultimo elemento
       this.url = array.pop();
 
-      //Asigno a localStorage (history) el nuevo JSON 
+      // Asigno a localStorage (history) el nuevo JSON
       localStorage.setItem('historyArray', JSON.stringify(array));
     }
 
@@ -377,7 +378,9 @@ export class FotosComponent implements OnInit {
   }
 
   mostrarReparaciones(maniobra: Maniobra) {
-    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
       return true;
     } else {
       if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && maniobra.mostrarFotosRNaviera) {
