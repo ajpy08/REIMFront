@@ -90,6 +90,3 @@ export const PERMISOS = [
   { _id: 'ASIGNACION_EQUIPO', descripcion: 'ASIGANCION_EQUIPO' },
   { _id: 'ASIGNACION_TRANSPORTISTA', descripcion: 'ASIGNACION_TRANSPORTISTA'}
 ]
-
-
-export const URL_SERVICIOS = 'https://app.reimcontainerpark.com.mx';

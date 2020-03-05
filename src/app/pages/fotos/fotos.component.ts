@@ -48,6 +48,9 @@ export class FotosComponent implements OnInit {
   okCargar = false;
   url: string;
 
+  LR: string;
+  
+
 
   constructor(public _maniobraService: ManiobraService,
     public _subirArchivoService: SubirArchivoService,
@@ -71,7 +74,6 @@ export class FotosComponent implements OnInit {
     // this.selected = this.activatedRoute.snapshot.params.get('opcion');
     this.selected = this.activatedRoute.snapshot.queryParams['opcion'];
     // console.log(this.id);
-    // console.log(this.selected);
     this.cargarManiobra(this.id);
     this.cargarFotos(this.id, 'L');
     this.cargarFotos(this.id, 'R');
@@ -117,7 +119,21 @@ export class FotosComponent implements OnInit {
         preview: false
       }
     ];
-    this.url = '/contenedoresLR'; 
+    this.url = '/contenedoresLR';
+
+
+    let indexTAB = localStorage.getItem("LR");
+    if (indexTAB) {
+      this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+      this.tabGroup.selectedIndex = 0;
+    }
+
+    if(this.selected == 'fotos_lavado'){
+      this.LR = 'L'
+    } else {
+      this.LR = 'R'
+    }
+    
   }
 
   onChange(data: any): void {
@@ -191,8 +207,8 @@ export class FotosComponent implements OnInit {
     })
       .then(borrar => {
         if (borrar) {
-          
-          const promesa = this._maniobraService.eliminaFoto(ruta);          
+
+          const promesa = this._maniobraService.eliminaFoto(ruta);
           promesa.then((value: boolean) => {
             if (value) {
               this.rutaFotoActual = undefined;
@@ -243,9 +259,10 @@ export class FotosComponent implements OnInit {
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-    if (event.tab.textLabel !== 'carga' && this.archivos.length > 0) {
-      this.limpiarArchivos();
-    }
+    // if (event.tab.textLabel !== 'carga' && this.archivos.length > 0) {
+      localStorage.setItem("LR", event.index.toString());
+    //   this.limpiarArchivos();
+    // // }
   }
 
   cargarImgenesSelect() {
@@ -271,6 +288,21 @@ export class FotosComponent implements OnInit {
         this.maniobra._id = this.maniobra._id;
         this.cargarManiobra(this.maniobra._id);
       });
+
+  }
+
+
+  DescargarZip(id: string) {
+   if (localStorage.getItem("LR") === '0') {
+      this.LR = 'L'
+    } else if (localStorage.getItem("L/R") === '1' || localStorage.getItem("LR") === '1') {
+      this.LR = 'R'
+    }
+    this._maniobraService.DescargaZip(id, this.LR).subscribe(maniobra => {
+
+    })
+
+
 
   }
 
@@ -332,7 +364,7 @@ export class FotosComponent implements OnInit {
       for (var i in history) {
         array.push(history[i]);
       }
-    
+
       //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
       //pop() elimina del array el ultimo elemento
       this.url = array.pop();
@@ -357,4 +389,7 @@ export class FotosComponent implements OnInit {
       }
     }
   }
+
+
+
 }

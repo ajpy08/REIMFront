@@ -26,6 +26,7 @@
     "@angular/service-worker": "^7.1.1",
     "@sentry/browser": "^5.12.1",
     "blueimp-canvas-to-blob": "^3.16.0",
+    "bowser": "^2.9.0",
     "core-js": "^2.6.0",
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",

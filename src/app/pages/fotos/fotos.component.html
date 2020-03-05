@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
-<mat-tab-group (selectedTabChange)="onLinkClick($event)" mat-stretch-tabs>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
   <mat-tab label="lavado">
     <ng-template mat-tab-label>
       <div *ngIf="galleryImagesL;else imagesL">
@@ -26,13 +26,20 @@
       <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
-            <button *ngIf="galleryImagesL && galleryImagesL.length >0" class="btn btn-danger" (click)="eliminaFoto(rutaFotoActual, 'L')">
+            <button *ngIf="galleryImagesL && galleryImagesL.length >0" class="btn btn-danger m-r-5" (click)="eliminaFoto(rutaFotoActual, 'L')">
                 <i class="fas fa-trash"></i> Eliminar Foto
             </button>
+            <button *ngIf="galleryImagesL && galleryImagesL.length >0" class="btn btn-primary m-r-5" (click)="DescargarZip(id, 'L')">
+              <i class="fas fa-download"></i> Descargar zip
+            </button>
         </div>
+        <br>
+
         <div class="col-md-4"></div>
       </div>
+      <br><br>
       <div class="row">
+        <br>
         <div class="col-md text-center"></div>
         <div class="col-md text-center">
           <ngx-gallery [options]="galleryOptions" [images]="galleryImagesL" (change)="onChange($event)"
@@ -41,6 +48,7 @@
         <div class="col-md text-center"></div>
       </div>
     </div>
+    <br>
   </mat-tab>
   <mat-tab *ngIf="mostrarReparaciones(maniobra)" label="reparaciones">
     <ng-template mat-tab-label>
@@ -74,12 +82,16 @@
       <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
-            <button *ngIf="galleryImagesR && galleryImagesR.length >0" class="btn btn-danger" (click)="eliminaFoto(rutaFotoActual, 'R')">
+            <button *ngIf="galleryImagesR && galleryImagesR.length >0" class="btn btn-danger m-r-5"  (click)="eliminaFoto(rutaFotoActual, 'R')">
                 <i class="fas fa-trash"></i> Eliminar Foto
+            </button>
+          <button *ngIf="galleryImagesR && galleryImagesR.length >0" class="btn btn-primary m-r-5" type="button"  (click)="DescargarZip(id, 'R')">
+            <i class="fas fa-download"></i> Descargar Zip
             </button>
         </div>
         <div class="col-md-4"></div>
       </div>
+      <br><br>
       <div class="row">
         <div class="col-md text-center"></div>
         <div class="col-md text-center">
@@ -89,6 +101,8 @@
         <div class="col-md text-center"></div>
       </div>
     </div>
+
+    <br>
   </mat-tab>
 
   <mat-tab label="carga" *ngIf="okCargar">
