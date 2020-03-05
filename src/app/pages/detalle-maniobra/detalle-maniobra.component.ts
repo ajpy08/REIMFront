@@ -60,7 +60,7 @@ export class DetalleManiobraComponent implements OnInit {
   tiposReparaciones: Reparacion[] = [];
   regForm: FormGroup;
   maniobra: Maniobra;
-  cargando: boolean = true;
+  cargando = true;
   _hLlegada;
   _hEntrada;
   _hSalida;
@@ -75,8 +75,8 @@ export class DetalleManiobraComponent implements OnInit {
     private _reparacionService: ReparacionService, private _maniobraService: ManiobraService) { }
 
   ngOnInit() {
-    if (this.usuarioService.usuario.role != ROLES.ADMIN_ROLE) {
-      if (this.usuarioService.usuario.role != ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioService.usuario.role !== ROLES.ADMIN_ROLE) {
+      if (this.usuarioService.usuario.role !== ROLES.PATIOADMIN_ROLE) {
         this.router.navigate(['/']);
       }
     }
@@ -135,7 +135,7 @@ export class DetalleManiobraComponent implements OnInit {
 
   addReparacion(item): void {
     const rep = this.tiposReparaciones.find(x => x._id === item);
-    this.reparaciones.push(this.creaReparacion(rep._id, rep.descripcion, rep.costo));
+    this.reparaciones.push(this.creaReparacion(rep._id, rep.reparacion, rep.costo));
   }
 
   removeReparacion(index: number) {
@@ -156,7 +156,7 @@ export class DetalleManiobraComponent implements OnInit {
       this._hEntrada = moment(maniob.maniobra.hEntrada, 'HH:mm');
       this._hDescarga = moment(maniob.maniobra.hDescarga, 'HH:mm');
       this._hSalida = moment(maniob.maniobra.hSalida, 'HH:mm');
-      this.espera = moment.duration(this._hEntrada - this._hLlegada).humanize()
+      this.espera = moment.duration(this._hEntrada - this._hLlegada).humanize();
 
       this.regForm.controls['_id'].setValue(maniob.maniobra._id);
       this.regForm.controls['cargaDescarga'].setValue(maniob.maniobra.cargaDescarga);
@@ -219,7 +219,7 @@ export class DetalleManiobraComponent implements OnInit {
       } else {
         this.regForm.controls['hFinLavado'].setValue(undefined);
       }
-      if (maniob.maniobra.sello){
+      if (maniob.maniobra.sello) {
         this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
       } else {
         this.regForm.controls['sello'].setValue(undefined);
@@ -344,50 +344,52 @@ export class DetalleManiobraComponent implements OnInit {
 
   open(id: string, tipo: string) {
 
-    let navigationExtras: NavigationExtras = {
+    const navigationExtras: NavigationExtras = {
       queryParams: { 'opcion': tipo }
     };
 
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta a donde debo regresar al array
-    array.push("/maniobras/maniobra/" + id + "/detalle");
+    // Agrego mi nueva ruta a donde debo regresar al array
+    array.push('/maniobras/maniobra/' + id + '/detalle');
 
-    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
     localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
+    // Voy a pagina.
     this.router.navigate(['/fotos', id], navigationExtras);
   }
 
   back() {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
       history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
 
-      //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
-      //pop() elimina del array el ultimo elemento
+      // Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+      // pop() elimina del array el ultimo elemento
       this.url = array.pop();
 
-      //Asigno a localStorage (history) el nuevo JSON
+      // Asigno a localStorage (history) el nuevo JSON
       localStorage.setItem('historyArray', JSON.stringify(array));
     }
     localStorage.removeItem('historyArray');

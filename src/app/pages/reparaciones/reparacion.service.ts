@@ -43,7 +43,7 @@ export class ReparacionService {
       return this.http.put(url, reparacion)
         .pipe(
           map((resp: any) => {
-            swal('Reparacion Actualizada', reparacion.descripcion, 'success');
+            swal('Reparacion Actualizada', reparacion.reparacion, 'success');
             return resp.reparacion;
           }));
 
@@ -52,7 +52,7 @@ export class ReparacionService {
       return this.http.post(url, reparacion)
         .pipe(
           map((resp: any) => {
-            swal('Reparacion Creada', reparacion.descripcion, 'success');
+            swal('Reparacion Creada', reparacion.reparacion, 'success');
             return resp.reparacion;
           }));
     }
