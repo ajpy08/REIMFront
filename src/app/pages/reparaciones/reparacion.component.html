@@ -1,14 +1,14 @@
 <div class="row animated fadeIn">
   <div class="col-md-6">
     <div class="card card-body">
-      <h3 class="box-title m-b-0" *ngIf="reparacion">Reparacion: {{ reparacion.descripcion }}</h3><br>
+      <h3 class="box-title m-b-0" *ngIf="reparacionObj">Reparacion: {{ reparacionObj.reparacion }}</h3><br>
       <div class="row">
         <div class="col-sm-12 col-xs-12">
           <form [formGroup]="regForm" (ngSubmit)="guardarReparacion()" novalidate>
             <mat-form-field>
-              <input matInput formControlName="descripcion" name="descripcion" type="text" placeholder="Descripcion de la reparación *">
-              <mat-error *ngIf="descripcion.touched && descripcion.invalid">
-                <sup>*</sup>Por Favor Ingrese la Descripcion
+              <input matInput formControlName="reparacion" name="reparacion" type="text" placeholder="Nombre de la reparación *">
+              <mat-error *ngIf="reparacion.touched && reparacion.invalid">
+                <sup>*</sup>Por Favor Ingrese la Reparacion
               </mat-error>
             </mat-form-field>
             <mat-form-field>

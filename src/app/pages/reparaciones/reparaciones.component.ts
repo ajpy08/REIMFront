@@ -1,22 +1,22 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Reparacion } from "src/app/pages/reparaciones/reparacion.models";
-import { ReparacionService } from "src/app/pages/reparaciones/reparacion.service";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
-import { ExcelService } from "src/app/services/service.index";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Reparacion } from 'src/app/pages/reparaciones/reparacion.models';
+import { ReparacionService } from 'src/app/pages/reparaciones/reparacion.service';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ExcelService } from 'src/app/services/service.index';
 declare var swal: any;
 
 @Component({
-  selector: "app-reparaciones",
-  templateUrl: "./reparaciones.component.html",
+  selector: 'app-reparaciones',
+  templateUrl: './reparaciones.component.html',
   styleUrls: []
 })
 export class ReparacionesComponent implements OnInit {
   reparaciones: Reparacion[] = [];
-  cargando: boolean = true;
-  totalRegistros: number = 0;
+  cargando = true;
+  totalRegistros = 0;
   reparacionesExcel = [];
 
-  displayedColumns = ["actions", "descripcion", "costo"];
+  displayedColumns = ['actions', 'descripcion', 'costo'];
   dataSource: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -28,7 +28,7 @@ export class ReparacionesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    localStorage.removeItem("historyArray");
+    localStorage.removeItem('historyArray');
     this.cargarReparaciones();
   }
 
@@ -39,7 +39,7 @@ export class ReparacionesComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Reparaciones");
+      console.error('Error al filtrar el dataSource de Reparaciones');
     }
   }
 
@@ -56,9 +56,9 @@ export class ReparacionesComponent implements OnInit {
 
   borrarReparacion(reparacion: Reparacion) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar a " + reparacion.descripcion,
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + reparacion.reparacion,
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
@@ -74,7 +74,7 @@ export class ReparacionesComponent implements OnInit {
 
   crearDatosExcel(datos) {
     datos.forEach(d => {
-      var reparaciones = {
+      const reparaciones = {
         Descripcion: d.descripción,
         Costo: d.costo
       };
@@ -87,10 +87,10 @@ export class ReparacionesComponent implements OnInit {
     if (this.reparacionesExcel) {
       this.excelService.exportAsExcelFile(
         this.reparacionesExcel,
-        "Reparaciones"
+        'Reparaciones'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 }

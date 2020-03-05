@@ -42,7 +42,7 @@
         <div class="example-container mat-elevation-z8">
         </div>
         <div class="catalogo-container mat-elevation-z8">
-          <mat-table  class="mat-table-smal"  #table [dataSource]="dataSource" matSort>
+          <mat-table class="mat-table-smal" #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let reparacion">
@@ -59,7 +59,7 @@
 
             <ng-container matColumnDef="descripcion">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.reparacion}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="costo">
