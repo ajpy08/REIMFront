@@ -1,3 +1,4 @@
+import { StatusComponent } from './usuarios/status/status.component';
 /* #region  IMPORTS */
 import { RouterModule, Routes } from '@angular/router';
 // import { PagesComponent } from './pages.component';
@@ -23,9 +24,9 @@ import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
 
-///////////////LIBERACIONES BLBOOKING/////////////////////////////////////////////
+//////////////////////////// LIBERACIONES BLBOOKING /////////////////////////
 
-////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 
 ////////////////////////////////////////////////////////////
@@ -58,7 +59,7 @@ import { MisclientesComponent } from './misclientes/misclientes.component';
 import { MiclienteComponent } from './misclientes/micliente.component';
 import { ReporteContenedoresRLComponent } from './reporte-contenedores-rl/reporte-contenedores-rl.component';
 
-//MAPEO DE PATIO REIM 
+// MAPEO DE PATIO REIM
 import { MapaComponent } from './mapa/mapa.component';
 
 
@@ -71,7 +72,7 @@ import { ContenedoresLRComponent } from './contenedores-lr/contenedores-lr.compo
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
-import { TiposContenedoresComponent } from "./tipos-contenedores/TiposContenedoresComponent";
+import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { ROLES } from '../config/config';
 import { NotfoundComponent } from '../shared/notfound/notfound.component';
@@ -86,8 +87,8 @@ const pagesRoutes: Routes = [
     { path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard' } },
     { path: 'account-settings', component: AccountSettingsComponent, data: { titulo: 'Configuración de la cuenta' } },
     { path: 'profile', component: ProfileComponent, data: { titulo: 'Mi perfil' } },
-    { path: 'mapa', component: MapaComponent, data: {titulo: 'Mapa'}},
-    
+    { path: 'mapa', component: MapaComponent, data: { titulo: 'Mapa' } },
+
 
     // CATALOGOS GENERALES
     {
@@ -95,6 +96,12 @@ const pagesRoutes: Routes = [
         component: UsuariosComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Mantenimiento de Usuarios', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'status',
+        component: StatusComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Status de Usuarios', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: 'usuarios/usuario/:id',
@@ -205,23 +212,23 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Actualizacion de Tipos Contenedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
-    /////////LIBERACION-BLBOOKING/////////////////////////////////////
+    ///////// LIBERACION-BLBOOKING/////////////////////////////////////
     {
-        path: 'liberaciones_bk', // tabala donde el (USUARIO) vera sus solicitudes liberacion BK 
+        path: 'liberaciones_bk', // tabala donde el (USUARIO) vera sus solicitudes liberacion BK
         component: LiberacionesBLComponent,
         canActivate: [REIMGuard],
-        data: {titulo: 'liberaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+        data: { titulo: 'liberaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     {
-        path: 'liberacion_bk/:id', // ED de solicitudes de liberacion BK  de (USUARIO) 
+        path: 'liberacion_bk/:id', // ED de solicitudes de liberacion BK  de (USUARIO)
         component: LiberacionBLComponent,
         canActivate: [REIMGuard],
-        data: {titulo: 'Solicitud de Liberación Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
+        data: { titulo: 'Solicitud de Liberación Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     {
-        path: 'aprobaciones_bk/:id', // el (ADMIN) aprobara la solicitud de liberacion BK 
+        path: 'aprobaciones_bk/:id', // el (ADMIN) aprobara la solicitud de liberacion BK
         component: AprobacionesBkComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Aprobaciones Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
@@ -235,10 +242,11 @@ const pagesRoutes: Routes = [
     // },
 
     {
-        path: 'asignacion_transportista_bk/:id', // ED donde el usuario podra asignar el transportista para la solicitud de liberacion_bk y asi se pase a estatus NA
+        // ED donde el usuario podra asignar el transportista para la solicitud de liberacion_bk y asi se pase a estatus NA
+        path: 'asignacion_transportista_bk/:id',
         component: AsignacionTransportistaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Asignacion de Transportista Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE ] }
+        data: { titulo: 'Asignacion de Transportista Booking', role: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE] }
     },
 
     //////////////////////////////////////////////
