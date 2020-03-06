@@ -307,7 +307,7 @@ const pagesRoutes: Routes = [
         path: 'maniobras_diario',
         component: ManiobrasDiarioComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Maniobras Diario', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Maniobras Diario', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'maniobra/:id',
