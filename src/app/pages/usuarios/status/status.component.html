@@ -10,37 +10,7 @@
   </div>
 </div>
 
-<!-- <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
-      aria-haspopup="true" aria-expanded="false"> <i class="fas fa-envelope"></i>
-      <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-  </a> -->
-  <div class="dropdown-menu mailbox dropdown-menu-right animated fadeIn" aria-labelledby="2">
-      <ul>
-          <li>
-              <div class="message-center">
-                 <a href="#">
-                      <div class="user-img"> 
-                          <img src="../../../assets/notifications/solicitud.png" alt="user" class="img-circle">
-                          <span class="profile-status busy pull-right"></span>
-                      </div>
-                      <div class="mail-contnet">
-                          <h5>Sonu Nigam</h5>
-                          <span class="mail-desc">I've sung a song! See you at</span>
-                          <span class="time">9:10 AM</span>
-                      </div>
-                  </a>                   
-              </div>
-          </li>
-          <li>
-              <a class="nav-link text-center" href="javascript:void(0);"> <strong>Ver todos los
-                      e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
-          </li>
-      </ul>
-  </div>
-<!-- </li> -->
-
-<!-- <div class="row animated fadeIn" *ngIf="!cargando">
+<div class="row animated fadeIn" *ngIf="!cargando">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -58,9 +28,12 @@
         <div class="example-container mat-elevation-z8">
           <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="status">
-              <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
               <mat-cell *matCellDef="let usuario">
-
+                <span *ngIf="usuario.status === true;else offline" >ONLINE</span>
+                <ng-template #offline>
+                  <span>OFFLINE</span>
+                </ng-template>
               </mat-cell>
             </ng-container>
 
@@ -133,4 +106,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>

@@ -7,6 +7,7 @@ export class Usuario {
         public role?: number,
         public img?: boolean,
         public empresas?: Cliente[],
+        public status?: string,
         public _id?: string
     ) {}
 }

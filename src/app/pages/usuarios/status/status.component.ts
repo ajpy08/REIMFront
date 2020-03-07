@@ -40,9 +40,7 @@ export class StatusComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('logout-user', function (data: any) {
-      if (data.data._id) {
         this.cargarUsuarios();
-      }
     }.bind(this));
   }
 

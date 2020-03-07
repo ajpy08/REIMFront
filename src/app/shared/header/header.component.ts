@@ -13,8 +13,8 @@ import * as io from 'socket.io-client';
 export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
-  socket = io(URL_SOCKET_IO);
   ultimos = [];
+  socket = io(URL_SOCKET_IO);
 
   constructor(public _usuarioService: UsuarioService,
     public router: Router) { }
@@ -37,5 +37,12 @@ export class HeaderComponent implements OnInit {
     console.log(today);
     const minutesAgo = 1;
     return fAlta;
+  }
+
+  logout() {
+    this._usuarioService.updateStatusUser().subscribe((usuario) => {
+      this._usuarioService.logout();
+      this.socket.emit('logoutuser', usuario);
+    });
   }
 }

@@ -44,14 +44,12 @@ export class UsuarioService {
           swal('No se pudo renovar token', 'No fue posible renovar token', 'error');
           return throwError(err);
         }));
-
-
   }
 
   estaLogueado() {
     return (this.token.length > 5) ? true : false;
-
   }
+
   cargarStorage() {
     if (localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
@@ -77,10 +75,10 @@ export class UsuarioService {
   }
 
   logout() {
-    this.usuario = null;
     // Sentry.configureScope(scope => scope.setUser(null));
-    this.token = '';
     this.menu = [];
+    this.usuario = null;
+    this.token = '';
 
     localStorage.removeItem('id'); // Lo elimine no se si sirve para algo.
     localStorage.removeItem('token');
@@ -98,8 +96,15 @@ export class UsuarioService {
     localStorage.removeItem('L/R');
 
     localStorage.removeItem('urlMain');
-
     this.router.navigate(['/login']);
+  }
+
+  updateStatusUser() {
+    if (this.usuario) {
+      let url = URL_SERVICIOS + '/usuarios/usuario/' + this.usuario._id + '/user/logout';
+      url += '?token=' + this.token;
+      return this.http.put(url, this.usuario);
+    }
   }
 
   login(usuario: Usuario, recordar: boolean = false, urlWithoutLogin: string): Observable<any> {
@@ -170,7 +175,6 @@ export class UsuarioService {
       }));
   }
 
-
   actualizarUsuario(usuario: Usuario) {
     let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id;
     url += '?token=' + this.token;
@@ -184,7 +188,6 @@ export class UsuarioService {
         return true;
       }));
   }
-
 
   actualizaPerfil(usuario: Usuario) {
     let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/perfil';
@@ -245,13 +248,10 @@ export class UsuarioService {
       }));
   }
 
-
   cargarUsuarioEmpresa(id: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/usuario/' + id;
 
     return this.http.get(url);
-
   }
-
 }
