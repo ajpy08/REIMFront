@@ -11,8 +11,8 @@ import { Operador } from '../operadores/operador.models';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from "../../config/config";
 
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Location } from '@angular/common';
 
 
@@ -35,9 +35,9 @@ export const MY_FORMATS = {
   selector: 'app-camion',
   templateUrl: './camion.component.html',
   styles: [],
-  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-              {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-              {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
+  providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+  { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 
 export class CamionComponent implements OnInit {
@@ -74,7 +74,7 @@ export class CamionComponent implements OnInit {
           this.transportistas = transportistas.transportistas;
         });
     } else {
-      if(this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+      if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
         this.transportistas = this.usuarioLogueado.empresas;
       }
     }
@@ -89,6 +89,10 @@ export class CamionComponent implements OnInit {
       }
       if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
         this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
+        this.serviceOperadores.getOperadores(this.usuarioLogueado.empresas[0]._id, true).subscribe((operadores) => {
+          this.operadores = operadores.operadores;
+        });
+
       }
     }
     this.url = '/camiones';
@@ -104,7 +108,7 @@ export class CamionComponent implements OnInit {
     this._camionService.getCamion(id)
       .subscribe(res => {
         this.camion = res;
-        //console.log(this.camion)
+        // console.log(this.camion)
         this.serviceOperadores.getOperadores(this.camion.transportista.toString(), true).subscribe((operadores) => {
           this.operadores = operadores.operadores;
         });
