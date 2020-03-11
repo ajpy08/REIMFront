@@ -62,8 +62,8 @@
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')" (click)="borrarSolicitud( row )"
-                      class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')"
+                      (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
@@ -107,9 +107,11 @@
                 <ng-container matColumnDef="contenedores">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedores</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <p *ngFor="let cont of row.contenedores">
-                      {{cont.contenedor}} <br> Tipo: {{cont.tipo}}
-                    </p>
+                    <mat-select name="contenedores" class="form-control" [(ngModel)]=" row.contenedores">
+                      <mat-option *ngFor="let cont of row.contenedores" [value]="row.contenedores">
+                        Cont: {{cont.contenedor}} &nbsp;Tipo: {{cont.tipo}}
+                      </mat-option>
+                    </mat-select>
                   </mat-cell>
                 </ng-container>
 
@@ -194,8 +196,8 @@
                       [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')" (click)="borrarSolicitud( row )"
-                      class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')"
+                      (click)="borrarSolicitud( row )" class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </mat-cell>
@@ -229,9 +231,11 @@
                 <ng-container matColumnDef="solicitado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Solicitado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <p *ngFor="let cont of row.contenedores">
-                      Tipo: {{cont.tipo}} <br> Grado: {{cont.grado}}
-                    </p>
+                    <mat-select class="form-control" [(ngModel)]="row.contenedores" name="contenedores">
+                      <mat-option *ngFor="let cont of row.contenedores" [value]="row.contenedores">
+                        Tipo: {{cont.tipo}} &nbsp; Grado: {{cont.grado}}
+                      </mat-option>
+                    </mat-select>
                   </mat-cell>
                 </ng-container>
 
