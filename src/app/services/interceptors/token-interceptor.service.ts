@@ -30,7 +30,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       });
     }
 
-    //console.log(request);
+    // console.log(request);
 
     //      return next.handle(request)
     //      .pipe(
@@ -83,7 +83,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
           default:
             break;
         }
-        //const er = error && error.error && error.error.reason;
+        // const er = error && error.error && error.error.reason;
 
         return throwError(error);
       }));

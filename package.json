@@ -25,6 +25,7 @@
     "@angular/router": "^7.1.1",
     "@angular/service-worker": "^7.1.1",
     "@sentry/browser": "^5.12.1",
+    "@types/socket.io-client": "^1.4.32",
     "blueimp-canvas-to-blob": "^3.16.0",
     "bowser": "^2.9.0",
     "core-js": "^2.6.0",

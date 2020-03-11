@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute  } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UsuarioService } from './usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { ClienteService, SubirArchivoService } from '../../services/service.index';
@@ -21,7 +21,7 @@ export class UsuarioComponent implements OnInit {
   per = PERMISOS;
   url: string;
   seleccionados: string;
-  verSeleccion: string  = ''; 
+  verSeleccion = '';
 
   constructor(
     private _usuarioService: UsuarioService,
@@ -30,15 +30,15 @@ export class UsuarioComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private location: Location) {}
+    private location: Location) { }
 
   ngOnInit() {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.cargarUsuario( id );
+      this.cargarUsuario(id);
     }
-    this.url = '/usuarios'; 
+    this.url = '/usuarios';
 
   }
 
@@ -48,10 +48,10 @@ export class UsuarioComponent implements OnInit {
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
-      passwordConfirm: ['', [ Validators.required, this.match('password')]],
+      passwordConfirm: ['', [Validators.required, this.match('password')]],
       role: ['', [Validators.required]],
       empresas: [''],
-      permiso:[''],
+      permiso: [''],
       activo: [''],
       observaciones: [''],
       img: [''],
@@ -62,8 +62,8 @@ export class UsuarioComponent implements OnInit {
   match(controlKey: string) {
     return (control: AbstractControl): { [s: string]: boolean } => {
       // control.parent es el FormGroup
-      if ( this.regForm ) { // en las primeras llamadas control.parent es undefined
-        const checkValue =  this.regForm.controls[controlKey].value;
+      if (this.regForm) { // en las primeras llamadas control.parent es undefined
+        const checkValue = this.regForm.controls[controlKey].value;
         if (control.value !== checkValue) {
           return {
             match: true
@@ -112,9 +112,9 @@ export class UsuarioComponent implements OnInit {
   }
 
 
-  cargarUsuario( id: string ) {
-    this._usuarioService.getUsuario( id ).subscribe(usuario => {
-      this._clienteService.getClientesRole( usuario.role ).subscribe( empresas => this.listaEmpresas = empresas );
+  cargarUsuario(id: string) {
+    this._usuarioService.getUsuario(id).subscribe(usuario => {
+      this._clienteService.getClientesRole(usuario.role).subscribe(empresas => this.listaEmpresas = empresas);
       this.nombre.setValue(usuario.nombre);
       this.email.setValue(usuario.email);
       this.password.disable();
@@ -129,51 +129,51 @@ export class UsuarioComponent implements OnInit {
 
     });
   }
-  
-  cambioRole( role: string ) {
+
+  cambioRole(role: string) {
     this._clienteService.getClientesRole(role)
-    .subscribe( empresas => this.listaEmpresas = empresas );
+      .subscribe(empresas => this.listaEmpresas = empresas);
   }
-  
+
   onFileSelected(event) {
-    this.fileFoto = <File> event.target.files[0];
+    this.fileFoto = <File>event.target.files[0];
     this.subirFoto();
   }
-  
+
   subirFoto() {
     this._subirArchivoService.subirArchivoBucketTemporal(this.fileFoto)
-    .subscribe( nombreArchivo => {
-      this.regForm.get('img').setValue(nombreArchivo);
-      this.regForm.get('img').markAsDirty();
-      this.fotoTemporal = true;
-      this.guardarUsuario();
-    });
+      .subscribe(nombreArchivo => {
+        this.regForm.get('img').setValue(nombreArchivo);
+        this.regForm.get('img').markAsDirty();
+        this.fotoTemporal = true;
+        this.guardarUsuario();
+      });
   }
-  
+
   guardarUsuario() {
     if (this.regForm.valid) {
-      this._usuarioService.guardarUsuario( this.regForm.value )
-      .subscribe( usuario => {
-        this.fileFoto = null;
-        this.fotoTemporal = false;
-        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
-          this.regForm.get('_id').setValue(usuario._id);
-          this.password.disable();
-          this.passwordConfirm.disable();
-          this.role.disable();
-          this.router.navigate(['/usuarios/usuario', this.regForm.get('_id').value ]);
-        }
-        this.regForm.markAsPristine();
-      });
+      this._usuarioService.guardarUsuario(this.regForm.value)
+        .subscribe(usuario => {
+          this.fileFoto = null;
+          this.fotoTemporal = false;
+          if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
+            this.regForm.get('_id').setValue(usuario._id);
+            this.password.disable();
+            this.passwordConfirm.disable();
+            this.role.disable();
+            this.router.navigate(['/usuarios/usuario', this.regForm.get('_id').value]);
+          }
+          this.regForm.markAsPristine();
+        });
     }
   }
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 }
