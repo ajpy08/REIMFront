@@ -30,9 +30,19 @@
             <ng-container matColumnDef="status">
               <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
               <mat-cell *matCellDef="let usuario">
-                <span *ngIf="usuario.status === true;else offline" >ONLINE</span>
-                <ng-template #offline>
-                  <span>OFFLINE</span>
+                <span *ngIf="usuario.status === true;else offline">
+                  <!-- <i class="fas fa-user"></i> -->
+                  <div class="notify2">
+                    <span class="green-heartbit"></span>
+                    <span class="green-point"></span>
+                  </div>
+                </span>
+                <ng-template #offline>                  
+                  <!-- <i class="fas fa-user"></i> -->
+                  <div class="notify2">
+                    <!-- <span class="red-heartbit"></span> -->
+                    <span class="red-point"></span>
+                  </div>
                 </ng-template>
               </mat-cell>
             </ng-container>
@@ -43,7 +53,7 @@
                 <div class="user-img">
                   <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row"> <img [src]="row.img | imagen"
                       class="img-50 img-circle pointer">
-                    
+
                   </mat-cell>
                   <span class="profile-status online pull-right"></span>
                 </div>

@@ -1651,6 +1651,72 @@ Notify
     top: -10px;
 }
 
+.notify2 {
+    position: relative;
+    top: -28px;
+    right: -7px;
+}
+
+.notify2 .red-heartbit {
+    position: absolute;
+    top: 13px;
+    right: -12px;
+    height: 32px;
+    width: 32px;
+    z-index: 10;
+    border: 5px solid #ef5350;
+    border-radius: 70px;
+    -moz-animation: heartbit 1s ease-out;
+    -moz-animation-iteration-count: infinite;
+    -o-animation: heartbit 1s ease-out;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation: heartbit 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+
+.notify2 .red-point {
+    width: 8.5px;
+    height: 8.5px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #ef5350;
+    position: absolute;
+    right: 0px;
+    top: 25px;
+}
+
+.notify2 .green-heartbit {
+    position: absolute;
+    top: 13px;
+    right: -12px;
+    height: 32px;
+    width: 32px;
+    z-index: 10;
+    border: 5px solid #0cdf28;
+    border-radius: 70px;
+    -moz-animation: heartbit 1s ease-out;
+    -moz-animation-iteration-count: infinite;
+    -o-animation: heartbit 1s ease-out;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation: heartbit 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+
+.notify2 .green-point {
+    width: 8.5px;
+    height: 8.5px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #0cdf28;
+    position: absolute;
+    right: 0px;
+    top: 25px;
+}
+
 @-moz-keyframes heartbit {
     0% {
         -moz-transform: scale(0);
