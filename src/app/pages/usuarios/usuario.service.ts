@@ -138,7 +138,12 @@ export class UsuarioService {
 
   getUserStatus(): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios';
-    return this.http.get(url);
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.usuarios.sort((a, b) => {
+        if (a.status !== b.status) {
+          return a.status ? -1 : 1;
+        }
+      })));
   }
 
 

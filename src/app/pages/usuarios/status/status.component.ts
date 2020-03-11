@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/service.index';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatSortable } from '@angular/material';
 import { URL_SOCKET_IO } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ROLES_ARRAY } from 'src/app/config/config';
@@ -51,17 +51,17 @@ export class StatusComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalOnline = this.dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Buques');
+      console.error('Error al filtrar el dataSource de Status');
     }
   }
 
   cargarUsuarios() {
     this.cargando = true;
-    this.usuarioService.getUsuarios().subscribe((usuarios: any) => {
-      this.dataSource = new MatTableDataSource(usuarios.usuarios);
+    this.usuarioService.getUserStatus().subscribe((usuarios: any) => {
+      this.dataSource = new MatTableDataSource(usuarios);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.totalOnline = usuarios.usuarios.length;
+      this.totalOnline = usuarios.filter(u => u.status === true).length;
     });
     this.cargando = false;
   }
