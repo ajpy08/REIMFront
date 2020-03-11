@@ -9,7 +9,8 @@ export class Usuario {
         public role?: string,
         public empresas?: Cliente[],
         public img?: string,
-        public rutaImg?:string,
+        public rutaImg?: string,
+        public status?: boolean,
         public _id?: string
     ) {}
 }
