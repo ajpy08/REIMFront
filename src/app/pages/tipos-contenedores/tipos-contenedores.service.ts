@@ -25,6 +25,7 @@ export class TiposContenedoresService {
   }
 
   getTipoContenedorXTipo(tipo: string): Observable<any> {
+    tipo = encodeURIComponent(tipo);
     const url = URL_SERVICIOS + '/tipos_contenedores/tipoCont/' + tipo;
         return this.http.get(url)
     .pipe(map((resp:any) => resp.tipo));

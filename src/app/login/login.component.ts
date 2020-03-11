@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { Usuario } from '../pages/usuarios/usuario.model';
 import { UsuarioService } from '../pages/usuarios/usuario.service';
-import { URL_SERVICIOS } from '../config/config';
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO } from 'src/environments/environment';
+import { URL_SERVICIOS } from '../../environments/environment.prod';
+import * as Bowser from "bowser";
+declare var swal: any;
 
 
 declare function init_plugins();
@@ -27,6 +29,21 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     init_plugins();
+    const browser = Bowser.getParser(window.navigator.userAgent);
+    if (browser.getBrowser().name === 'Microsoft Edge' || browser.getBrowser().name === 'Edge') {
+      swal({
+        title: "Error",
+        text: `El navegador ${browser.getBrowser().name} no es COMPATIBLE con el sistema`,
+        icon: "error",
+        closeOnClickOutside: false,
+      }).then(ok => {
+        if (ok) {
+          window.location.reload();
+        }
+      });
+    }
+
+
     this.email = localStorage.getItem('email') || '';
     if (this.email.length > 1) {
       this.recuerdame = true;

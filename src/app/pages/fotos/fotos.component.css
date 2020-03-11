@@ -2,7 +2,6 @@
     margin-top: 40px;
 }
 
-
 /* Drop zone */
 
 .drop-zone {
@@ -23,4 +22,35 @@
 ngx-gallery /deep/ .ngx-gallery-arrow {
     color: rgb(255, 238, 0);
     font-size: 40px;
+}
+
+div /deep/ .ngx-gallery-preview-top {
+    float: none;
+    top: 90px !important;
+}
+
+ngx-gallery /deep/ ngx-gallery-preview .ngx-gallery-arrow {
+    /* your styles */
+    right: 100px;
+    margin-left: 250px;
+}
+
+ngx-gallery-preview-img /deep/ .ngx-gallery-center {
+    left: 117px;
+}
+
+@media (max-width: 600px) {
+    ngx-gallery /deep/ ngx-gallery-preview .ngx-gallery-arrow {
+        /* your styles */
+        right: 100px;
+        margin-left: 120px;
+    }
+}
+
+ngx-gallery-animation-slide /deep/ [_ngcontent-c10] .ngx-gallery-image.ngx-gallery-active[_ngcontent-c10] {
+    top: 10px;
+}
+
+.ngx-gallery-animation-slide[_ngcontent-c10] .ngx-gallery-image.ngx-gallery-active[_ngcontent-c10] {
+    top: 10px;
 }

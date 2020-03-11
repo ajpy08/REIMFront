@@ -638,4 +638,11 @@ export class ManiobraService {
       })
     );
   }
+
+  DescargaZip(id: string, LR: string): Observable<any> {
+    let url = URL_SERVICIOS + "/documentos/maniobra/" + id;
+    url += "/zipLR/" + LR;
+    window.open(url)
+    return this.http.get(url, {responseType:'blob'});
+  }
 }

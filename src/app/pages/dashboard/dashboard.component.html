@@ -24,7 +24,7 @@
                     <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
                             src="assets/images/operador.png" width="50px" height="50px" alt="Total Operador" /></div>
                     <div class="align-self-center">
-                        <h6 class="text-muted m-t-10 m-b-0">Total De operadores</h6>
+                        <h6 class="text-muted m-t-10 m-b-0">Total De Operadores</h6>
                         <h2 class="m-t-0">{{totalOperadores}}</h2>
                     </div>
                 </div>
@@ -79,6 +79,25 @@
             </div>
         </div>
     </div>
+
+
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'TRANSPORTISTA_ROLE' || 
+    usuarioLogueado.role === 'PATIOADMIN_ROLE'" class="col-lg-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex no-block">
+                <div class="m-r-20 align-self-center"><span class="listick m-r-20"></span>
+                    <img src="assets/images/solicitud_transportista.jpg" width="65px" height="65px" alt="Solicitud Transportista">
+                </div>
+                <div class="align-self-center">
+                    <h4 class="text-muted m-t-10 m-b-0">Solicitudes Transportista</h4>
+                    <h6 class="text-muted m-y-0 m-b-0">Descarga ( {{totalSolicitudTransportistaD }} )</h6>
+                    <h6 class="text-muted m-y-0 m-b-0">Carga ( {{ totalSolicitudTransportistaC }} )</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'NAVIERA_ROLE' || usuarioLogueado.role === 'PATIO_ROLE' || 
     usuarioLogueado.role === 'PATIOADMIN_ROLE'"

@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
   styleUrls: []
 })
 export class ReparacionComponent implements OnInit {
-  reparacion: Reparacion;
+  reparacionObj: Reparacion;
   regForm: FormGroup;
   url: string;
 
@@ -27,14 +27,15 @@ export class ReparacionComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarReparacion(id);
     } else {
-      for (var control in this.regForm.controls) {
+      // tslint:disable-next-line: forin
+      for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
 
-    // listen to input descripcion
-    this.regForm.get('descripcion').valueChanges.subscribe(val => {
-      this.regForm.get('descripcion').setValue(val.toUpperCase(), {
+    // listen to input reparacion
+    this.regForm.get('reparacion').valueChanges.subscribe(val => {
+      this.regForm.get('reparacion').setValue(val.toUpperCase(), {
         emitEvent: false
       });
     });
@@ -43,15 +44,15 @@ export class ReparacionComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      descripcion: ['', [Validators.required]],
+      reparacion: ['', [Validators.required]],
       costo: ['', [Validators.required]],
       _id: ['']
     });
   }
 
 
-  get descripcion() {
-    return this.regForm.get('descripcion');
+  get reparacion() {
+    return this.regForm.get('reparacion');
   }
   get costo() {
     return this.regForm.get('costo');
@@ -63,7 +64,8 @@ export class ReparacionComponent implements OnInit {
   cargarReparacion(id: string) {
     this.reparacionService.getReparacion(id)
       .subscribe(res => {
-        this.descripcion.setValue(res.descripcion);
+        this.reparacionObj = res;
+        this.reparacion.setValue(res.reparacion);
         this.costo.setValue(res.costo);
         this._id.setValue(res._id);
       });
@@ -84,46 +86,47 @@ export class ReparacionComponent implements OnInit {
 
   back() {
 
-    if (localStorage.getItem('historyArray')){
+    if (localStorage.getItem('historyArray')) {
 
-      var history;
-      var array = [];
-      //Si tengo algo en localStorage en la variable historyArray lo obtengo       
+      let history;
+      const array = [];
+      // Si tengo algo en localStorage en la variable historyArray lo obtengo
       if (localStorage.getItem('historyArray')) {
-        //asigno a mi variable history lo que obtengo de localStorage (history)
+        // asigno a mi variable history lo que obtengo de localStorage (history)
         history = JSON.parse(localStorage.getItem('historyArray'));
-  
-        //realizo este ciclo para asignar los valores del JSON al Array
-        for (var i in history) {
+
+        // realizo este ciclo para asignar los valores del JSON al Array
+        // tslint:disable-next-line: forin
+        for (const i in history) {
           array.push(history[i]);
         }
-      
-        //Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
-        //pop() elimina del array el ultimo elemento
+
+        // Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
+        // pop() elimina del array el ultimo elemento
         this.url = array.pop();
-  
-        //Asigno a localStorage (history) el nuevo JSON 
+
+        // Asigno a localStorage (history) el nuevo JSON 
         localStorage.setItem('historyArray', JSON.stringify(array));
       }
-  
+
       this.router.navigate([this.url]);
-    }  else {
+    } else {
       this.open();
     }
-    }
-    
-    // if (localStorage.getItem('history')) {
-    //   this.url = localStorage.getItem('history');
-    // }
-    // this.router.navigate([this.url]);
-    // localStorage.removeItem('history')
-    // //this.location.back();
-
-    open(){
-      if (localStorage.getItem('history')) {
-          this.url = localStorage.getItem('history');
-        }
-        this.router.navigate([this.url]);
-        localStorage.removeItem('history')
-    }
   }
+
+  // if (localStorage.getItem('history')) {
+  //   this.url = localStorage.getItem('history');
+  // }
+  // this.router.navigate([this.url]);
+  // localStorage.removeItem('history')
+  // //this.location.back();
+
+  open() {
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    localStorage.removeItem('history')
+  }
+}

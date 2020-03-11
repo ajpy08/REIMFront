@@ -297,7 +297,7 @@ const pagesRoutes: Routes = [
         path: 'solicitudes/papeleta/:id',
         component: PapeletaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Papeleta', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Papeleta', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
     {
         path: 'vacios',
@@ -315,7 +315,7 @@ const pagesRoutes: Routes = [
         path: 'maniobras_diario',
         component: ManiobrasDiarioComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Maniobras Diario', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Maniobras Diario', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'maniobra/:id',
@@ -383,19 +383,19 @@ const pagesRoutes: Routes = [
         path: 'solicitudes_transportista',
         component: SolicitudesTransportistaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Solicitudes Transportista', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Solicitudes Transportista', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
     {
         path: 'solicitud_transportista/:id',
         component: SolicitudTransportistaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Asignar Camion / Chofer', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Asignar Camion / Chofer', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
     {
         path: 'solicitud_reasigna_transportista/:id',
         component: SolicitudReasignaTransportistaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Reasigna Transportista', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Reasigna Transportista', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
     },
 
     // Mantenimientos ADMIN ROLE

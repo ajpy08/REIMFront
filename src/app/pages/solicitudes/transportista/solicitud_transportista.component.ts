@@ -167,4 +167,14 @@ export class SolicitudTransportistaComponent implements OnInit {
         });
       }
   }
+
+
+  nuevoCamion(id: string) {
+    localStorage.setItem('history', '/solicitud_transportista/'+ id);
+    this.router.navigate(['/camiones/camion/nuevo']);
+  }
+  nuevoOperador(id: string) {
+    localStorage.setItem('history', '/solicitud_transportista/'+ id);
+    this.router.navigate(['/operadores/operador/nuevo']);
+  }
 }
