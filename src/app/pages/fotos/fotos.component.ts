@@ -91,6 +91,7 @@ export class FotosComponent implements OnInit {
         imageSize: NgxGalleryImageSize.Contain,
         //  previewFullscreen: true,
         //  previewForceFullscreen: true,
+        previewDownload: true,
         previewCloseOnEsc: true,
         previewZoom: true,
         previewDownload: true,

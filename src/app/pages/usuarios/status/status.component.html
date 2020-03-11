@@ -1,0 +1,109 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+
+<div class="row animated fadeIn" *ngIf="!cargando">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+        </div>
+        <h3 class="card-title">Usuarios Online (<small>{{totalOnline}}</small>)</h3>
+        <div class="example-header mat-elevation-z8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+          </mat-form-field>
+        </div>
+        <br>
+        <div class="example-container mat-elevation-z8">
+        </div>
+        <div class="example-container mat-elevation-z8">
+          <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="status">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
+              <mat-cell *matCellDef="let usuario">
+                <span *ngIf="usuario.status === true;else offline" >ONLINE</span>
+                <ng-template #offline>
+                  <span>OFFLINE</span>
+                </ng-template>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="img">
+              <div class="mailbox">
+                <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
+                <div class="user-img">
+                  <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row"> <img [src]="row.img | imagen"
+                      class="img-50 img-circle pointer">
+                    
+                  </mat-cell>
+                  <span class="profile-status online pull-right"></span>
+                </div>
+              </div>
+              <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
+              <div class="dropdown-menu mailbox dropdown-menu-right animated fadeIn" aria-labelledby="2">
+                <ul>
+                  <li>
+                    <div class="message-center">
+                      <a href="#">
+                        <div class="user-img">
+                          <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row">
+                            <img [src]="row.img | imagen" class="img-50 img-circle pointer">
+                            <span class="profile-status online pull-right"></span>
+                          </mat-cell>
+                        </div>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="role">
+              <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-select disabled [(ngModel)]="row.role" name="role" class="form-control">
+                  <mat-option *ngFor="let role of roles" [value]="role._id">
+                    {{role.descripcion}}
+                  </mat-option>
+                </mat-select>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="empresas">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-cell *ngFor="let empresa of row.empresas" class="m-r-5"> {{empresa.razonSocial}}
+                </mat-cell>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

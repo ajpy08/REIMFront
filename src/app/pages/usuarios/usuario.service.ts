@@ -8,7 +8,7 @@ import { SubirArchivoService } from '../../services/subirArchivo/subir-archivo.s
 import swal from 'sweetalert';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import * as Sentry from "@sentry/browser";
+import * as Sentry from '@sentry/browser';
 
 @Injectable()
 export class UsuarioService {
@@ -44,14 +44,12 @@ export class UsuarioService {
           swal('No se pudo renovar token', 'No fue posible renovar token', 'error');
           return throwError(err);
         }));
-
-
   }
 
   estaLogueado() {
     return (this.token.length > 5) ? true : false;
-
   }
+
   cargarStorage() {
     if (localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
@@ -77,12 +75,12 @@ export class UsuarioService {
   }
 
   logout() {
-    this.usuario = null;
     // Sentry.configureScope(scope => scope.setUser(null));
-    this.token = '';
     this.menu = [];
+    this.usuario = null;
+    this.token = '';
 
-    localStorage.removeItem('id'); //Lo elimine no se si sirve para algo.
+    localStorage.removeItem('id'); // Lo elimine no se si sirve para algo.
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('menu');
@@ -98,8 +96,15 @@ export class UsuarioService {
     localStorage.removeItem('L/R');
     localStorage.removeItem('LR');
     localStorage.removeItem('urlMain');
-
     this.router.navigate(['/login']);
+  }
+
+  updateStatusUser() {
+    if (this.usuario) {
+      let url = URL_SERVICIOS + '/usuarios/usuario/' + this.usuario._id + '/user/logout';
+      url += '?token=' + this.token;
+      return this.http.put(url, this.usuario);
+    }
   }
 
   login(usuario: Usuario, recordar: boolean = false, urlWithoutLogin: string): Observable<any> {
@@ -109,9 +114,9 @@ export class UsuarioService {
       localStorage.removeItem('email');
     }
     if (urlWithoutLogin === undefined) {
-      urlWithoutLogin = '/#/dashboard'
+      urlWithoutLogin = '/#/dashboard';
     }
-    let url = URL_SERVICIOS + '/login';
+    const url = URL_SERVICIOS + '/login';
     return this.http.post(url, usuario)
       .pipe(
         map((resp: any) => {
@@ -127,6 +132,11 @@ export class UsuarioService {
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios
 
   getUsuarios(): Observable<any> {
+    const url = URL_SERVICIOS + '/usuarios';
+    return this.http.get(url);
+  }
+
+  getUserStatus(): Observable<any> {
     const url = URL_SERVICIOS + '/usuarios';
     return this.http.get(url);
   }
@@ -165,14 +175,13 @@ export class UsuarioService {
       }));
   }
 
-
   actualizarUsuario(usuario: Usuario) {
     let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id;
     url += '?token=' + this.token;
     return this.http.put(url, usuario)
       .pipe(map((resp: any) => {
         if (usuario._id === this.usuario._id) {
-          let usuarioDB: Usuario = resp.usuario;
+          const usuarioDB: Usuario = resp.usuario;
           this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
         }
         swal('Usuario actualizado', usuario.nombre, 'success');
@@ -180,14 +189,13 @@ export class UsuarioService {
       }));
   }
 
-
   actualizaPerfil(usuario: Usuario) {
     let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/perfil';
     url += '?token=' + this.token;
     return this.http.put(url, usuario)
       .pipe(map((resp: any) => {
         if (usuario._id === this.usuario._id) {
-          let usuarioDB: Usuario = resp.usuario;
+          const usuarioDB: Usuario = resp.usuario;
           this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
         }
         swal('Usuario actualizado', usuario.nombre, 'success');
@@ -205,16 +213,12 @@ export class UsuarioService {
 
     return this.http.get(url, { params: params })
       .pipe(map((resp: any) => {
-        if (resp.mensaje != '' && resp.mensaje != undefined && resp.mensaje.length > 0) {
+        if (resp.mensaje !== '' && resp.mensaje !== undefined && resp.mensaje.length > 0) {
           swal('ALERTA', 'Correo Enviado', 'success');
         }
         return resp.usuario;
-      }));;
+      }));
   }
-
-
-
-
 
   resetPass(usuario: Usuario): Observable<any> {
     let url = URL_SERVICIOS + '/reset_password/' + usuario._id;
@@ -222,7 +226,7 @@ export class UsuarioService {
     return this.http.put(url, usuario)
       .pipe(map((resp: any) => {
         if (usuario._id === this.usuario._id) {
-          let usuarioDB: Usuario = resp.usuario;
+          const usuarioDB: Usuario = resp.usuario;
           this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
         }
         swal('Usuario actualizado', usuario.nombre, 'success');
@@ -236,7 +240,7 @@ export class UsuarioService {
     return this.http.put(url, { activo: act })
       .pipe(map((resp: any) => {
         if (usuario._id === this.usuario._id) {
-          let usuarioDB: Usuario = resp.usuario;
+          const usuarioDB: Usuario = resp.usuario;
           this.guardarStorage(usuarioDB._id, this.token, usuarioDB, this.menu, undefined);
         }
         swal('Cambio de estado del usuario realizado con éxito', usuario.nombre, 'success');
@@ -244,13 +248,10 @@ export class UsuarioService {
       }));
   }
 
-
   cargarUsuarioEmpresa(id: string): Observable<any> {
     // tslint:disable-next-line:prefer-const
     let url = URL_SERVICIOS + '/usuario/' + id;
 
     return this.http.get(url);
-
   }
-
 }
