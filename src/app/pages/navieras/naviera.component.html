@@ -57,9 +57,54 @@
                   <sup>*</sup>Por Favor Ingrese el CP
                 </mat-error>
               </mat-form-field>
-              <mat-form-field>
+
+              <ng-template matStepLabel> Correo Operativo </ng-template>
+                <div class="alert alert-danger">
+                    PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
+                </div>
+                <table class="table  table-responsive">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">
+                        <div *ngIf="regForm.get('correotem')">
+                          <button type="button" class="btn btn-success" [disabled]=" !correotem.valid "
+                            (click)="addContenedor(correoO.value ); correoO.value=''">
+                            +
+                          </button>
+                        </div>
+                      </th>
+                      <th scope="col"> <input formControlName="correotem"  class="form-control" #correoO
+                          placeholder="Correo Operativo" size="20"> </th>
+                          <mat-error *ngIf="correotem.invalid">
+                            <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
+                          </mat-error>
+                    </tr>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col"></th>
+                      <th scope="col">Correo Operativo</th>
+          
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="correo" *ngFor="let itemw of correo.controls; let item = index;">
+                    <tr [formGroupName]="item">
+                      <td scope="row">{{item+1}}</td>
+                      <td>
+                          <button type="button" (click)="quitar( item )" class="btn btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                          </button>
+                      </td>
+                      <td *ngIf="itemw.get('correoO').value">
+                        {{itemw.get('correoO').value}}
+                      </td>
+          
+                    </tr>
+                  </tbody>
+                </table>
+              <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" placeholder="Correo Operativo">
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" placeholder="Correo De facturación">
               </mat-form-field>
@@ -80,6 +125,11 @@
             </button>
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <a routerLink="/navieras" class="btn btn-danger waves-effect waves-light ">Regresar</a> -->
+
+            <p>Form value {{ regForm.value | json }} </p>
+<p> Form status {{ regForm.status | json}} </p>
+<p> Form status2 {{ regForm.pristine | json}} </p>
+
           </form>
         </div>
       </div>
