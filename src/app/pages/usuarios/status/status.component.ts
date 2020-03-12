@@ -22,7 +22,7 @@ export class StatusComponent implements OnInit {
   displayedColumns = ['img', 'nombre', 'status'];
   dataSource: any;
 
-  socket = io(URL_SOCKET_IO);
+  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
