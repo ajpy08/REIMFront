@@ -74,7 +74,8 @@ export class SentryErrorHandler implements ErrorHandler {
 
 export function getErrorHandler(): ErrorHandler {
   if (environment.production) {
-    return new SentryErrorHandler();
+    return new ErrorHandler();
+    // return new SentryErrorHandler();
   }
   return new ErrorHandler();
 }
