@@ -9,7 +9,7 @@ export class REIMGuard implements CanActivate {
   constructor(public router: Router, public usuarioService: UsuarioService) { }
 
   canActivate(route: ActivatedRouteSnapshot) {
-    var usuario = this.usuarioService.usuario;
+    const usuario = this.usuarioService.usuario;
     if (usuario) {
       if (route.data.roles && route.data.roles.indexOf(usuario.role) === -1) {
         // role not authorised so redirect to home page

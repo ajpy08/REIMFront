@@ -1,20 +1,24 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Buque } from "./buques.models";
-import { BuqueService, ExcelService } from "../../services/service.index";
-import { MatTableDataSource, MatSort, MatPaginator } from "@angular/material";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Buque } from './buques.models';
+import { BuqueService, ExcelService } from '../../services/service.index';
+import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { URL_SOCKET_IO } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 
 declare var swal: any;
 @Component({
-  selector: "app-buques",
-  templateUrl: "./buques.component.html"
+  selector: 'app-buques',
+  templateUrl: './buques.component.html'
 })
 export class BuquesComponent implements OnInit {
   buquesExcel = [];
-  cargando: boolean = true;
-  totalRegistros: number = 0;
+  cargando = true;
+  totalRegistros = 0;
 
-  displayedColumns = ["actions", "nombre", "razonSocial", "fAlta"];
+  displayedColumns = ['actions', 'nombre', 'razonSocial', 'fAlta'];
   dataSource: any;
+
+  socket = io(URL_SOCKET_IO);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -25,8 +29,22 @@ export class BuquesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    localStorage.removeItem("historyArray");
+    localStorage.removeItem('historyArray');
     this.cargarBuques();
+
+    this.socket.on('new-data', function(data: any) {
+        this.cargarBuques();
+    }.bind(this));
+
+    this.socket.on('update-data', function(data: any) {
+      if (data.data._id) {
+        this.cargarBuques();
+      }
+    }.bind(this));
+
+    this.socket.on('delete-data', function(data: any) {
+      this.cargarBuques();
+    }.bind(this));
   }
 
   applyFilter(filterValue: string) {
@@ -36,7 +54,7 @@ export class BuquesComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Buques')
+      console.error('Error al filtrar el dataSource de Buques');
     }
   }
 
@@ -53,24 +71,26 @@ export class BuquesComponent implements OnInit {
 
   borrarBuque(buque: Buque) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar a " + buque.nombre,
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + buque.nombre,
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
       if (borrar) {
         this._buqueService
-          .borrarBuque(buque._id)
-          .subscribe(() => this.cargarBuques());
+          .borrarBuque(buque._id).subscribe((res) => {
+            this.socket.emit('deletedata', res);
+          });
+          // .subscribe(() => this.cargarBuques());
       }
     });
   }
 
   CreaDatosExcel(datos) {
     datos.forEach(b => {
-      var buque = {
-        //Id: b._id,
+      const buque = {
+        // Id: b._id,
         Buque: b.nombre,
         Naviera: b.naviera.nombreComercial,
         UsuarioAlta: b.usuarioAlta.nombre,
@@ -83,9 +103,9 @@ export class BuquesComponent implements OnInit {
   exportAsXLSX(): void {
     this.CreaDatosExcel(this.dataSource.filteredData);
     if (this.buquesExcel) {
-      this._excelService.exportAsExcelFile(this.buquesExcel, "Buques");
+      this._excelService.exportAsExcelFile(this.buquesExcel, 'Buques');
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 }
