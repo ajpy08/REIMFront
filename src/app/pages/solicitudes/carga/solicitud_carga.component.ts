@@ -315,7 +315,14 @@ export class SolicitudCargaComponent implements OnInit {
 
 
     const reg = this.agencias.find(x => x._id === event.value);
-    if (reg) { this.correo.setValue(reg.correo); }
+    if (reg) { 
+      if(reg.correo == ''){
+        swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+        this.agencia.setValue('');
+        this.correo.setValue('');
+      }else{
+        this.correo.setValue(reg.correo); }
+      }
   }
 
   agregarContenedor() {
@@ -382,7 +389,13 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          this.correo.setValue(reg.correo);
+          if (reg.correo == '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+            this.cliente.setValue('');
+            this.correo.setValue('');
+          } else {
+            this.correo.setValue(reg.correo);
+          }
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -412,7 +425,13 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          this.correo.setValue(reg.correo);
+          if (reg.correo == '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+            this.agencia.setValue('');
+            this.correo.setValue('');
+          } else {
+            this.correo.setValue(reg.correo);
+          }
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -442,7 +461,13 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          this.correo.setValue(reg.correo);
+          if (reg.correo == '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+            this.naviera.setValue('');
+            this.correo.setValue('');
+          } else {
+            this.correo.setValue(reg.correo);
+          }
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
