@@ -58,6 +58,9 @@
                 </mat-error>
               </mat-form-field>
 
+
+              <!-- CORREO OPERATIVO  -->
+
               <ng-template matStepLabel> Correo Operativo </ng-template>
                 <div class="alert alert-danger">
                     PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
@@ -74,7 +77,7 @@
                           </button>
                         </div>
                       </th>
-                      <th scope="col"> <input formControlName="correotem"  class="form-control" #correoO
+                      <th scope="col"> <input formControlName="correotem"  class="form-control"  #correoO
                           placeholder="Correo Operativo" size="20"> </th>
                           <mat-error *ngIf="correotem.invalid">
                             <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
@@ -105,6 +108,9 @@
               <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" placeholder="Correo Operativo">
               </mat-form-field> -->
+
+
+              <!-- FIN CORREO OPERATIVO  -->
               <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" placeholder="Correo De facturación">
               </mat-form-field>
@@ -119,16 +125,14 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.pristine || regForm.invalid ">
+            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.invalid ">
               <i class="fa fa-save "></i>
               Guardar
             </button>
             <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
             <!-- <a routerLink="/navieras" class="btn btn-danger waves-effect waves-light ">Regresar</a> -->
 
-            <p>Form value {{ regForm.value | json }} </p>
-<p> Form status {{ regForm.status | json}} </p>
-<p> Form status2 {{ regForm.pristine | json}} </p>
+
 
           </form>
         </div>

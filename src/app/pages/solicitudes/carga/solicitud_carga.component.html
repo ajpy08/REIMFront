@@ -56,7 +56,7 @@
                   (change)="onChangeFacturarA($event)">
                   <mat-radio-button class="custom-control custom-radio" *ngFor="let facturaA of listaFacturarA"
                     [value]="facturaA">
-                    {{facturaA}} 
+                    {{facturaA}}
                   </mat-radio-button>
                 </mat-radio-group>
                 <mat-error *ngIf="facturarA.hasError('required')">Debe seleccionar a quien facturar.</mat-error>
@@ -179,6 +179,10 @@
                   <mat-label>Correo </mat-label>
                   <textarea matInput formControlName="correo" rows="3" cols="40"></textarea>
                 </mat-form-field>
+                <div class="alert alert-warning">
+                  A ESTOS CORREOS SE LES NOTIFICARA CUANDO LA SOLICITUD SEA APROBADA
+                  <textarea matInput formControlName="correo"></textarea>
+                </div>
               </div>
               <div class="col-md-3 ">
                 <mat-form-field>
@@ -202,7 +206,7 @@
                 <mat-form-field>
                   <mat-label>* Cantidad </mat-label>
                   <input matInput formControlName="cantidad" type="number"
-                  onkeydown="javascript: return event.keyCode == 69 || event.keyCode == 109 || event.keyCode == 107 || 
+                    onkeydown="javascript: return event.keyCode == 69 || event.keyCode == 109 || event.keyCode == 107 || 
                   event.keyCode == 110 || event.keyCode == 187 || event.keyCode == 189 || event.keyCode == 190 ? false : true">
                 </mat-form-field>
 

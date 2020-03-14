@@ -363,7 +363,14 @@ export class SolicitudDescargaComponent implements OnInit {
       .subscribe(cliente => this.clientes = cliente.clientes);
 
     const reg = this.agencias.find(x => x._id == event.value);
-    if (reg) { this.correo.setValue(reg.correo); }
+    if (reg) { 
+      if(reg.correo == ''){
+        swal('ERROR', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio','error');
+        this.agencia.setValue('');
+        this.correo.setValue('');
+      }else{
+        this.correo.setValue(reg.correo); }
+      }
   }
 
   cargarContenedores(event) {
