@@ -56,7 +56,7 @@ export class SentryErrorHandler implements ErrorHandler {
     const user = JSON.parse(localStorage.getItem("usuario")) || "";
     // console.log(user);
     if (user != "") {
-      Sentry.configureScope(function(scope) {
+      Sentry.configureScope(function (scope) {
         scope.setUser({
           nombre: user.nombre,
           email: user.email,
@@ -74,8 +74,8 @@ export class SentryErrorHandler implements ErrorHandler {
 
 export function getErrorHandler(): ErrorHandler {
   if (environment.production) {
-    return new ErrorHandler();
-    // return new SentryErrorHandler();
+    // return new ErrorHandler();
+    return new SentryErrorHandler();
   }
   return new ErrorHandler();
 }
@@ -87,7 +87,7 @@ export function getErrorHandler(): ErrorHandler {
     PagesComponent,
     RegistroComponent,
 
-    ],
+  ],
   imports: [
     BrowserModule,
     FormsModule,
@@ -119,4 +119,4 @@ export function getErrorHandler(): ErrorHandler {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

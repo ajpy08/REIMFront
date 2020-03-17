@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
 
   urlWithoutLogin: string;
   ruta: string;
-  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
+  urlSocket = URL_SOCKET_IO + '/users';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   constructor(public router: Router, public _usuarioService: UsuarioService) { }
 

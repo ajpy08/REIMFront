@@ -18,7 +18,8 @@ export class BuqueComponent implements OnInit {
   navieras: Naviera[] = [];
   regForm: FormGroup;
   url: string;
-  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
+  urlSocket = URL_SOCKET_IO + '/buques';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   constructor(
     public _buqueService: BuqueService,

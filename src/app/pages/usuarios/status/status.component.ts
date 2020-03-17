@@ -21,8 +21,8 @@ export class StatusComponent implements OnInit {
   // displayedColumns = ['status', 'img', 'nombre', 'email', 'role', 'empresas'];
   displayedColumns = ['img', 'nombre', 'status'];
   dataSource: any;
-
-  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
+  urlSocket = URL_SOCKET_IO + '/users';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
