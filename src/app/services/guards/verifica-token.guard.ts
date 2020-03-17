@@ -10,7 +10,7 @@ declare var swal: any;
 
 @Injectable()
 export class VerificaTokenGuard implements CanActivateChild {
-  socket = io(URL_SOCKET_IO);
+  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
   constructor(
     public _usuarioService: UsuarioService,
     public router: Router

@@ -17,8 +17,8 @@ export class BuquesComponent implements OnInit {
 
   displayedColumns = ['actions', 'nombre', 'razonSocial', 'fAlta'];
   dataSource: any;
-
-  socket = io(URL_SOCKET_IO);
+  urlSocket = URL_SOCKET_IO + '/buques';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
