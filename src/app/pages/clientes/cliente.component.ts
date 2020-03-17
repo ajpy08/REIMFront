@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteService, SubirArchivoService, UsuarioService } from '../../services/service.index';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { AgenciaService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
 import { Usuario } from '../usuarios/usuario.model';
 import { Location } from '@angular/common';
 import { ROLES } from 'src/app/config/config';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-cliente',
@@ -55,6 +56,10 @@ export class ClienteComponent implements OnInit {
     }
 
     this.url = '/clientes';
+
+    if(this.correoF){
+      this.correoF.removeAt(0);
+    }
   }
 
   role(role: string) {
@@ -85,13 +90,53 @@ export class ClienteComponent implements OnInit {
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
       formatoR1: [''],
-      correo: ['', Validators.email],
+      correo: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
+      correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
+
       correoFac: ['', Validators.email],
       credito: [false, [Validators.required]],
       img: [''],
       empresas: [''],
       _id: ['']
     });
+  }
+
+  
+  agregarArray(correoO: String): FormGroup {
+    return this.fb.group({
+      correoO: [correoO]
+    })
+  }
+  
+  addContenedor(correoO: string): void {
+    let error = false;
+    if (correoO === '') {
+      this.correo.disable({ emitEvent: true })
+      swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
+    } else if (this.correoF.controls.length == 0) {
+      this.correoF.push(this.agregarArray(correoO));
+    } else {
+      if (this.correoF.controls) {
+        this.correoF.controls.forEach(c => {
+          if (this.correotem.value == c.value.correoO) {
+            if (error == false) {
+              swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+              error = true;
+              return false;
+            }
+          }
+        });
+        if (!error) {
+          this.correoF.push(this.agregarArray(correoO));
+        } 
+      }
+    }
+
+  }
+
+  quitar(indice: number) {
+    this.correoF.removeAt(indice);
   }
 
   get razonSocial() {
@@ -133,6 +178,14 @@ export class ClienteComponent implements OnInit {
   get correo() {
     return this.regForm.get('correo');
   }
+
+  get correoF() {
+    return this.regForm.get('correoF') as FormArray;
+  }
+  get correotem(){
+    return this.regForm.get('correotem')
+  }
+
   get correoFac() {
     return this.regForm.get('correoFac');
   }
@@ -164,7 +217,14 @@ export class ClienteComponent implements OnInit {
         this.regForm.controls['estado'].setValue(res.estado);
         this.regForm.controls['cp'].setValue(res.cp);
         this.regForm.controls['formatoR1'].setValue(res.formatoR1);
-        this.regForm.controls['correo'].setValue(res.correo);
+
+        
+        var correoArray = res.correo.split(",")
+        correoArray.forEach(c => {
+          this.addContenedor(c)
+        });
+
+        // this.regForm.controls['correo'].setValue(res.correo);
         this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
@@ -175,6 +235,16 @@ export class ClienteComponent implements OnInit {
 
   guardarCliente() {
     if (this.regForm.valid) {
+
+      var correos = '';
+      this.regForm.controls.correoF.value.forEach(correo => {
+        correos += correo.correoO + ',';
+      });
+      correos = correos.slice(0,-1);
+  
+    this.correotem.setValue('');
+    this.correo.setValue(correos)
+    
       // console.log (this.regForm.value);
       this._clienteService.guardarCliente(this.regForm.value)
         .subscribe(res => {

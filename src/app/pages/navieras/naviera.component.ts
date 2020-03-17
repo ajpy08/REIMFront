@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavieraService, SubirArchivoService } from 'src/app/services/service.index';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Location } from '@angular/common';
+import swal from 'sweetalert';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class NavieraComponent implements OnInit {
   fileTemporal = false;
   edicion = false;
   url: string;
+  correod;
 
   constructor(public _navieraService: NavieraService,
     public router: Router,
@@ -38,6 +40,10 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['noExterior'].setValue(undefined);
     }
     this.url = '/navieras';
+
+    if (this.correo) {
+      this.correo.removeAt(0);
+    }
   }
 
   createFormGroup() {
@@ -54,7 +60,9 @@ export class NavieraComponent implements OnInit {
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
       formatoR1: ['', [Validators.required]],
-      correo: ['', [Validators.email]],
+      correosF: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
+      correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correo: this.fb.array([this.agregarArray('')], { validators: Validators.required }),
       correoFac: ['', [Validators.email]],
       credito: [false, Validators.required],
       img: [''],
@@ -62,6 +70,44 @@ export class NavieraComponent implements OnInit {
       nombreComercial: [''],
       _id: ['']
     });
+  }
+
+
+  agregarArray(correoO: String): FormGroup {
+    return this.fb.group({
+      correoO: [correoO]
+    })
+  }
+
+  addContenedor(correoO: string): void {
+    let error = false;
+
+    if (correoO === '') {
+      this.correo.disable({ emitEvent: true })
+      swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
+    } else if (this.correo.controls.length == 0) {
+      this.correo.push(this.agregarArray(correoO));
+    } else {
+      if (this.correo.controls) {
+        this.correo.controls.forEach(c => {
+          if (this.correotem.value == c.value.correoO) {
+            if (error == false) {
+              swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+              error = true;
+              return false;
+            }
+          }
+        });
+        if (!error) {
+          this.correo.push(this.agregarArray(correoO));
+        } 
+      }
+    }
+  }
+
+
+  quitar(indice: number) {
+    this.correo.removeAt(indice);
   }
 
   get razonSocial() {
@@ -98,10 +144,16 @@ export class NavieraComponent implements OnInit {
     return this.regForm.get('formatoR1');
   }
   get correo() {
-    return this.regForm.get('correo');
+    return this.regForm.get('correo') as FormArray;
+  }
+  get correotem() {
+    return this.regForm.get('correotem')
   }
   get correoFac() {
     return this.regForm.get('correoFac');
+  }
+  get correosF() {
+    return this.regForm.get('correosF')
   }
   get credito() {
     return this.regForm.get('credito');
@@ -132,7 +184,12 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['estado'].setValue(naviera.estado);
       this.regForm.controls['cp'].setValue(naviera.cp);
       this.regForm.controls['formatoR1'].setValue(naviera.formatoR1);
-      this.regForm.controls['correo'].setValue(naviera.correo);
+
+      var correoArray = naviera.correo.split(",")
+      correoArray.forEach(c => {
+        this.addContenedor(c)
+      });
+      // this.regForm.controls['correosF'].setValue(naviera.correo);
       this.regForm.controls['correoFac'].setValue(naviera.correoFac);
       this.regForm.controls['credito'].setValue(naviera.credito);
       this.regForm.controls['img'].setValue(naviera.img);
@@ -144,6 +201,16 @@ export class NavieraComponent implements OnInit {
 
   guardarNaviera() {
     if (this.regForm.valid) {
+
+      var correos = '';
+      this.regForm.controls.correo.value.forEach(correo => {
+        correos += correo.correoO + ',';
+      });
+      correos = correos.slice(0, -1);
+
+      this.correotem.setValue('');
+      this.correosF.setValue(correos)
+
       this._navieraService.guardarNaviera(this.regForm.value)
         .subscribe(res => {
           this.fileImg = null;

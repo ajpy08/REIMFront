@@ -7,7 +7,8 @@
           <form [formGroup]="regForm" (ngSubmit)="guardarCliente()" novalidate>
             <div class="my-container">
               <mat-form-field>
-                <input matInput formControlName="razonSocial" type="text" class="form-control" placeholder="Razón Social *">
+                <input matInput formControlName="razonSocial" type="text" class="form-control"
+                  placeholder="Razón Social *">
                 <mat-error *ngIf="razonSocial.touched && razonSocial.invalid && !razonSocial.errors?.minlength">
                   <sup>*</sup>Por Favor Ingrese la razonSocial
                 </mat-error>
@@ -25,22 +26,26 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="nombreComercial" type="text" class="form-control" placeholder="Nombre Comercial">
+                <input matInput formControlName="nombreComercial" type="text" class="form-control"
+                  placeholder="Nombre Comercial">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="calle" type="text" class="form-control" placeholder="Calle">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="noExterior" type="text" class="form-control" placeholder="Numero Exterior">
+                <input matInput formControlName="noExterior" type="text" class="form-control"
+                  placeholder="Numero Exterior">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="noInterior" type="text" class="form-control" placeholder="Numero Interior">
+                <input matInput formControlName="noInterior" type="text" class="form-control"
+                  placeholder="Numero Interior">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="colonia" type="text" class="form-control" placeholder="Colonia">
               </mat-form-field>
               <mat-form-field>
-                <input matInput formControlName="municipio" type="text" class="form-control" placeholder="Municipio/Delegacion">
+                <input matInput formControlName="municipio" type="text" class="form-control"
+                  placeholder="Municipio/Delegacion">
               </mat-form-field>
               <mat-form-field>
                 <input matInput formControlName="ciudad" type="text" class="form-control" placeholder="Ciudad">
@@ -57,11 +62,61 @@
                   <sup>*</sup>Por Favor Ingrese el CP
                 </mat-error>
               </mat-form-field>
-              <mat-form-field>
+
+              <!-- CORREO OPERATIVO -->
+              <ng-template matStepLabel> Correo Operativo </ng-template>
+              <div class="alert alert-danger">
+                PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
+              </div>
+              <table class="table  table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">
+                      <div *ngIf="regForm.get('correotem')">
+                        <button type="button" class="btn btn-success" regForm.dirty [disabled]=" !correotem.valid "
+                          (click)="addContenedor(correoO.value ); correoO.value=''">
+                          +
+                        </button>
+                      </div>
+                    </th>
+                    <th scope="col"> <input formControlName="correotem" class="form-control" #correoO
+                        placeholder="Correo Operativo" size="20"> </th>
+                    <mat-error *ngIf="correotem.invalid">
+                      <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
+                    </mat-error>
+                  </tr>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"></th>
+                    <th scope="col">Correo Operativo</th>
+
+                  </tr>
+                </thead>
+                <tbody formArrayName="correoF" *ngFor="let itemw of correoF.controls; let item = index;">
+                  <tr [formGroupName]="item">
+                    <td scope="row">{{item+1}}</td>
+                    <td>
+                      <button type="button" (click)="quitar( item )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </td>
+                    <td *ngIf="itemw.get('correoO').value">
+                      {{itemw.get('correoO').value}}
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- FIN CORREO OPERATIVO -->
+
+              <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Operativo">
-              </mat-form-field>
+              </mat-form-field> -->
               <mat-form-field>
-                <input matInput formControlName="correoFac" type="text" class="form-control" placeholder="Correo De facturación">
+                <input matInput formControlName="correoFac" type="text" class="form-control"
+                  placeholder="Correo De facturación">
               </mat-form-field>
               <mat-checkbox *ngIf="soyAdmin()" formControlName="credito" class="form-control " placeholder="Credito">
                 Credito
@@ -79,7 +134,8 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.invalid">
               <i class="fa fa-save"></i>
               Guardar
             </button>
@@ -96,12 +152,14 @@
       <div class="card-header">Logo</div>
       <div class="card-body">
         <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
-          <img (click)="file.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+          <img (click)="file.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo
+          Temporal, debe guardar el registro del usuario para confirmar!
         </p>
         <ng-template #notShow>
           <img (click)="file.click()" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
         </ng-template>
-        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*" #file>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*"
+          #file>
         <br>
         <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'img'"><i
             class="fa fa-file"></i> Cambiar foto</button>
@@ -122,7 +180,8 @@
         </ng-template>
         <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
         <br>
-        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
+        <button class="btn btn-info waves-effect waves-light" type="button"
+          (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
           R1</button>
         <mat-error *ngIf="formatoR1.invalid">
           <br><sup>*</sup>El Formato R1 es obligatorio
