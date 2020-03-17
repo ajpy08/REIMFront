@@ -5,7 +5,7 @@ import { Usuario } from '../pages/usuarios/usuario.model';
 import { UsuarioService } from '../pages/usuarios/usuario.service';
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO } from 'src/environments/environment';
-import { URL_SERVICIOS } from '../../environments/environment.prod';
+import { URL_SERVICIOS } from 'src/environments/environment';
 import * as Bowser from 'bowser';
 declare var swal: any;
 
@@ -23,7 +23,8 @@ export class LoginComponent implements OnInit {
 
   urlWithoutLogin: string;
   ruta: string;
-  socket = io(URL_SOCKET_IO);
+  urlSocket = URL_SOCKET_IO + '/users';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   constructor(public router: Router, public _usuarioService: UsuarioService) { }
 

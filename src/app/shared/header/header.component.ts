@@ -14,7 +14,8 @@ export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
   ultimos = [];
-  socket = io(URL_SOCKET_IO);
+  urlSocket = URL_SOCKET_IO + '/users';
+  socket = io(this.urlSocket, {transports: ['websocket']});
 
   constructor(public _usuarioService: UsuarioService,
     public router: Router) { }
