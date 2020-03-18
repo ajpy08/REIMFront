@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Buque } from './buques.models';
 import { BuqueService, ExcelService } from '../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { URL_SOCKET_IO } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 
 declare var swal: any;
@@ -17,8 +17,7 @@ export class BuquesComponent implements OnInit {
 
   displayedColumns = ['actions', 'nombre', 'razonSocial', 'fAlta'];
   dataSource: any;
-  urlSocket = URL_SOCKET_IO + '/buques';
-  socket = io(this.urlSocket, {transports: ['websocket']});
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -32,17 +31,17 @@ export class BuquesComponent implements OnInit {
     localStorage.removeItem('historyArray');
     this.cargarBuques();
 
-    this.socket.on('new-data', function(data: any) {
+    this.socket.on('new-buque', function(data: any) {
         this.cargarBuques();
     }.bind(this));
 
-    this.socket.on('update-data', function(data: any) {
+    this.socket.on('update-buque', function(data: any) {
       if (data.data._id) {
         this.cargarBuques();
       }
     }.bind(this));
 
-    this.socket.on('delete-data', function(data: any) {
+    this.socket.on('delete-buque', function(data: any) {
       this.cargarBuques();
     }.bind(this));
   }
@@ -80,7 +79,7 @@ export class BuquesComponent implements OnInit {
       if (borrar) {
         this._buqueService
           .borrarBuque(buque._id).subscribe((res) => {
-            this.socket.emit('deletedata', res);
+            this.socket.emit('deletebuque', res);
           });
           // .subscribe(() => this.cargarBuques());
       }

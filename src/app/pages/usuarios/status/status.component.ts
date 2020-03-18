@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator, MatSortable } from '@angular/material';
-import { URL_SOCKET_IO } from '../../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ROLES_ARRAY } from 'src/app/config/config';
 
@@ -21,8 +21,7 @@ export class StatusComponent implements OnInit {
   // displayedColumns = ['status', 'img', 'nombre', 'email', 'role', 'empresas'];
   displayedColumns = ['img', 'nombre', 'status'];
   dataSource: any;
-  urlSocket = URL_SOCKET_IO + '/users';
-  socket = io(this.urlSocket, {transports: ['websocket']});
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

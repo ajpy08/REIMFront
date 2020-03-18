@@ -3,14 +3,14 @@ import { UsuarioService } from '../../pages/usuarios/usuario.service';
 // import { Router } from '@angular/router';
 import { CanActivateChild } from '@angular/router/src/interfaces';
 import * as io from 'socket.io-client';
-import { URL_SOCKET_IO } from 'src/environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 import { Router } from '@angular/router';
 
 declare var swal: any;
 
 @Injectable()
 export class VerificaTokenGuard implements CanActivateChild {
-  socket = io(URL_SOCKET_IO, {transports: ['websocket']});
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
   constructor(
     public _usuarioService: UsuarioService,
     public router: Router
