@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/service.index';
 import { Usuario } from '../../pages/usuarios/usuario.model';
 import { Router } from '@angular/router';
-import { URL_SOCKET_IO } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -14,8 +14,7 @@ export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
   ultimos = [];
-  urlSocket = URL_SOCKET_IO + '/users';
-  socket = io(this.urlSocket, {transports: ['websocket']});
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _usuarioService: UsuarioService,
     public router: Router) { }
@@ -23,16 +22,16 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.usuario = this._usuarioService.usuario;
 
-    this.socket.on('new-data', function(data: any) {
-      this.ultimos.push(data.data);
-  }.bind(this));
+    // this.socket.on('new-alert', function (data: any) {
+    //   this.ultimos.push(data.data);
+    // }.bind(this));
   }
 
-  buscar( termino: string ) {
-    this.router.navigate(['/busqueda', termino ]);
+  buscar(termino: string) {
+    this.router.navigate(['/busqueda', termino]);
   }
 
-  calculaFechas(fAlta){
+  calculaFechas(fAlta) {
     const today = new Date();
     console.log(fAlta);
     console.log(today);
