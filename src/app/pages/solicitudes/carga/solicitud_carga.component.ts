@@ -1,3 +1,4 @@
+import { url } from 'inspector';
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray, FormGroupDirective, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +13,8 @@ import swal from 'sweetalert';
 import { Location } from '@angular/common';
 import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
 import { Naviera } from '../../navieras/navieras.models';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 
 
 @Component({
@@ -41,6 +44,7 @@ export class SolicitudCargaComponent implements OnInit {
   navieraMSC = true;
   url: string;
   agenciaCargaSelected;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
 
   constructor(
@@ -91,6 +95,34 @@ export class SolicitudCargaComponent implements OnInit {
     } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
       this.url = '/solicitudes';
     }
+
+    this.socket.on('update-solicitud', function (data: any) {
+      if (data.data._id) {
+        this.createFormGroup();
+        this.contenedores.removeAt(0);
+        this.cargarSolicitud(data.data._id);
+      }
+      // } else {
+      //   this.cargarBuque(id);
+      // }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.router.navigate(['/solicitudes']);
+      }
+    }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.router.navigate(['/solicitudes']);
+      }
+    }.bind(this));
+
   }
 
   createFormGroup() {
@@ -156,6 +188,7 @@ export class SolicitudCargaComponent implements OnInit {
     this.regForm.markAsDirty();
   }
 
+  /* #region  Prametros */
   get _id() {
     return this.regForm.get('_id');
   }
@@ -253,6 +286,7 @@ export class SolicitudCargaComponent implements OnInit {
     return this.regForm.get('patioTemp');
   }
 
+  /* #endregion */
 
   cargarSolicitud(id: string) {
     this._SolicitudService.cargarSolicitud(id).subscribe(solicitud => {
@@ -266,7 +300,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['cliente'].setValue(solicitud.cliente);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
       this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
-      // this.regForm.controls['correo'].setValue(solicitud.correo);
+      this.regForm.controls['correo'].setValue(solicitud.correo);
       this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
       this.regForm.controls['rfc'].setValue(solicitud.rfc);
       this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
@@ -315,14 +349,15 @@ export class SolicitudCargaComponent implements OnInit {
 
 
     const reg = this.agencias.find(x => x._id === event.value);
-    if (reg) { 
-      if(reg.correo == ''){
-        swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+    if (reg) {
+      if (reg.correo === '') {
+        swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
         this.agencia.setValue('');
         this.correo.setValue('');
-      }else{
-        this.correo.setValue(reg.correo); }
+      } else {
+        this.correo.setValue(reg.correo);
       }
+    }
   }
 
   agregarContenedor() {
@@ -370,6 +405,7 @@ export class SolicitudCargaComponent implements OnInit {
     }
   }
 
+  /* #region  facturar */
   onChangeFacturarA(event) {
     switch (event.value) {
       case 'Cliente':
@@ -389,8 +425,8 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          if (reg.correo == '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+          if (reg.correo === '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
             this.cliente.setValue('');
             this.correo.setValue('');
           } else {
@@ -425,8 +461,8 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          if (reg.correo == '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+          if (reg.correo === '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
             this.agencia.setValue('');
             this.correo.setValue('');
           } else {
@@ -461,8 +497,8 @@ export class SolicitudCargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
-          if (reg.correo == '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio','error');
+          if (reg.correo === '') {
+            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
             this.naviera.setValue('');
             this.correo.setValue('');
           } else {
@@ -481,6 +517,7 @@ export class SolicitudCargaComponent implements OnInit {
         }
     }
   }
+  /* #endregion */
 
   onFilePDFComprobanteSelected(event) {
     this.fileComprobante = <File>event.target.files[0];
@@ -506,8 +543,11 @@ export class SolicitudCargaComponent implements OnInit {
         this.temporalComprobante = false;
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
+          this.socket.emit('newsolicitud', res);
           this.edicion = true;
           this.router.navigate(['/solicitudes/solicitud_carga', this.regForm.get('_id').value]);
+        } else {
+          this.socket.emit('updatesolicitud', res);
         }
         this.regForm.markAsPristine();
       });

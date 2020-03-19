@@ -80,10 +80,11 @@
                       class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
-                    <button matTooltip="Eliminar Solicitudes Descarga" *ngIf="(row.estatus!='NA') && (row.estatus!='ESPERA')" (click)="borrarSolicitudDescarga( row )"
-                     class="btn btn-danger m-r-5">
-                  <i class="fa fa-trash-o"></i>
-                </button>
+                    <button matTooltip="Eliminar Solicitudes Descarga"
+                      *ngIf="(row.estatus!='NA') && (row.estatus!='ESPERA')" (click)="borrarSolicitudDescarga( row )"
+                      class="btn btn-danger m-r-5">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
                   </mat-cell>
                 </ng-container>
 
@@ -199,7 +200,7 @@
               <mat-table class="mat-table-medium" [dataSource]="dtCargas" #sortCargas="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                  <mat-cell *matCellDef="let row">
+                  <mat-cell *matCellDef = "let row">
                     <button matTooltip="Aprobar Solicitud" *ngIf="row.estatus==='NA' && row.tipo==='C'"
                       [routerLink]="['/solicitudes/aprobaciones/aprobar_carga', row._id ]"
                       class="btn btn-primary m-r-5">
@@ -215,10 +216,10 @@
                       <i class="fa fa-trash-o"></i>
                     </button>
 
-                    <button matTooltip="Eliminar Solicitudes" *ngIf="(row.estatus!='NA') && (row.estatus!='ESPERA')" (click)="borrarSolicitudDescarga( row )"
-                     class="btn btn-danger m-r-5">
-                  <i class="fa fa-trash-o"></i>
-                </button>
+                    <button matTooltip="Eliminar Solicitudes" *ngIf="(row.estatus!='NA') && (row.estatus!='ESPERA')"
+                      (click)="borrarSolicitudDescarga( row )" class="btn btn-danger m-r-5">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
                   </mat-cell>
                 </ng-container>
 

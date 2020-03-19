@@ -1,26 +1,26 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { Maniobra } from "../../models/maniobra.models";
-import { ManiobraService, ViajeService } from "../../services/service.index";
-import { ExcelService } from "../../services/service.index";
-import * as jspdf from "jspdf";
-import html2canvas from "html2canvas";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Maniobra } from '../../models/maniobra.models';
+import { ManiobraService, ViajeService } from '../../services/service.index';
+import { ExcelService } from '../../services/service.index';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE
-} from "@angular/material/core";
+} from '@angular/material/core';
 
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
-import * as _moment from "moment";
+import * as _moment from 'moment';
 // tslint:disable-next-line:no-duplicate-imports
 // import * as Moment from 'moment';
-import swal from "sweetalert";
-import { Viaje } from "../viajes/viaje.models";
+import swal from 'sweetalert';
+import { Viaje } from '../viajes/viaje.models';
 import {
   MatPaginator,
   MatSort,
@@ -29,10 +29,10 @@ import {
   MatDialogConfig,
   MatTabChangeEvent,
   MatTabGroup
-} from "@angular/material";
-import { SelectionModel } from "@angular/cdk/collections";
-import { AsignarFacturaComponent } from "./asignar-factura/asignar-factura.component";
-import { Router } from "@angular/router";
+} from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
+import { Router } from '@angular/router';
 
 const moment = _moment;
 
@@ -40,19 +40,19 @@ const moment = _moment;
 // https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
   parse: {
-    dateInput: "YYYY-MM-DD"
+    dateInput: 'YYYY-MM-DD'
   },
   display: {
-    dateInput: "YYYY-MM-DD",
-    monthYearLabel: "YYYY MMM DD",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "YYYY MMMM DD"
+    dateInput: 'YYYY-MM-DD',
+    monthYearLabel: 'YYYY MMM DD',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY MMMM DD'
   }
 };
 
 @Component({
-  selector: "app-vacios",
-  templateUrl: "./vacios.component.html",
+  selector: 'app-vacios',
+  templateUrl: './vacios.component.html',
   styles: [],
   providers: [
     {
@@ -65,8 +65,8 @@ export const MY_FORMATS = {
 })
 export class VaciosComponent implements OnInit {
   date = new FormControl(moment());
-  //maniobras: any[] = [];
-  //maniobrasSeleccionadas: string[] = [];
+  // maniobras: any[] = [];
+  // maniobrasSeleccionadas: string[] = [];
   maniobrasSinFacturaVacios: any[] = [];
   maniobrasSinFacturaLavadoVacios: any[] = [];
   maniobrasSinFacturaReparacionVacios: any[] = [];
@@ -78,82 +78,82 @@ export class VaciosComponent implements OnInit {
   ManiobrasVaciosExcel = [];
   ManiobrasVaciosLavadoExcel = [];
   ManiobrasVaciosReparacionExcel = [];
-  data: any = { fechaCreado: "" };
+  data: any = { fechaCreado: '' };
   cargando = true;
   totalRegistrosVacios = 0;
   totalRegistrosLavadoVacios = 0;
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = [
-    "select",
-    "actions",
-    "cargaDescarga",
-    "contenedor",
-    "tipo",
-    "lavado",
-    "grado",
-    "fLlegada",
-    "operador",
-    "placa",
-    "transportista",
-    "reparaciones",
-    "facturaManiobra",
-    "viaje",
-    "buque",
-    "peso",
-    "cliente",
-    "agencia",
-    "estatus",
-    "hDescarga",
-    "hFinLavado"
+    'select',
+    'actions',
+    'cargaDescarga',
+    'contenedor',
+    'tipo',
+    'lavado',
+    'grado',
+    'fLlegada',
+    'operador',
+    'placa',
+    'transportista',
+    'reparaciones',
+    'facturaManiobra',
+    'viaje',
+    'buque',
+    'peso',
+    'cliente',
+    'agencia',
+    'estatus',
+    'hDescarga',
+    'hFinLavado'
   ];
 
   displayedColumnsLavado = [
-    "select",
-    "actions",
-    "cargaDescarga",
-    "contenedor",
-    "tipo",
-    "lavado",
-    "grado",
-    "fLlegada",
-    "operador",
-    "placa",
-    "transportista",
-    "reparaciones",
-    "facturaManiobra",
-    "viaje",
-    "buque",
-    "peso",
-    "cliente",
-    "agencia",
-    "estatus",
-    "hDescarga",
-    "hFinLavado"
+    'select',
+    'actions',
+    'cargaDescarga',
+    'contenedor',
+    'tipo',
+    'lavado',
+    'grado',
+    'fLlegada',
+    'operador',
+    'placa',
+    'transportista',
+    'reparaciones',
+    'facturaManiobra',
+    'viaje',
+    'buque',
+    'peso',
+    'cliente',
+    'agencia',
+    'estatus',
+    'hDescarga',
+    'hFinLavado'
   ];
 
   displayedColumnsReparacion = [
-    "select",
-    "actions",
-    "cargaDescarga",
-    "contenedor",
-    "tipo",
-    "lavado",
-    "grado",
-    "fLlegada",
-    "operador",
-    "placa",
-    "transportista",
-    "reparaciones",
-    "facturaManiobra",
-    "viaje",
-    "buque",
-    "peso",
-    "cliente",
-    "agencia",
-    "estatus",
-    "hDescarga",
-    "hFinLavado"
+    'select',
+    'actions',
+    'cargaDescarga',
+    'contenedor',
+    'tipo',
+    'lavado',
+    'grado',
+    'fLlegada',
+    'operador',
+    'placa',
+    'transportista',
+    'reparaciones',
+    'facturaManiobra',
+    'viaje',
+    'buque',
+    'peso',
+    'cliente',
+    'agencia',
+    'estatus',
+    'hDescarga',
+    'hFinLavado'
   ];
 
   dataSourceVacios: any;
@@ -165,13 +165,13 @@ export class VaciosComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("MatPaginatorLavado", { read: MatPaginator })
+  @ViewChild('MatPaginatorLavado', { read: MatPaginator })
   MatPaginatorLavado: MatPaginator;
-  @ViewChild("MatSortLavado") MatSortLavado: MatSort;
+  @ViewChild('MatSortLavado') MatSortLavado: MatSort;
 
-  @ViewChild("MatPaginatorReparacion", { read: MatPaginator })
+  @ViewChild('MatPaginatorReparacion', { read: MatPaginator })
   MatPaginatorReparacion: MatPaginator;
-  @ViewChild("MatSortReparacion") MatSortReparacion: MatSort;
+  @ViewChild('MatSortReparacion') MatSortReparacion: MatSort;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -197,7 +197,7 @@ export class VaciosComponent implements OnInit {
   viajeLavado: string = undefined;
   viajeReparacion: string = undefined;
   CD: string = undefined;
-  //filtrarCD = new FormControl(false);
+  // filtrarCD = new FormControl(false);
   // animal: string;
   // name: string;
 
@@ -207,15 +207,16 @@ export class VaciosComponent implements OnInit {
     public _excelService: ExcelService,
     public matDialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.cargarViajes(new Date().toString());
 
     this.consulta();
 
-    let indexTAB = localStorage.getItem("VacioTabs");
+    const indexTAB = localStorage.getItem('VacioTabs');
     if (indexTAB) {
+      // tslint:disable-next-line: radix
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
   }
@@ -229,12 +230,12 @@ export class VaciosComponent implements OnInit {
   }
 
   consultaManiobrasDescargaVacios() {
-    let cargaDescarga = "D";
+    const cargaDescarga = 'D';
     this._maniobraService
       .getManiobrasVacios(
         cargaDescarga,
         this.viaje,
-        "VACIO",
+        'VACIO',
         false,
         null,
         this.checkedVacios,
@@ -250,12 +251,12 @@ export class VaciosComponent implements OnInit {
   }
 
   consultaManiobrasDescargaVaciosLavado() {
-    let cargaDescarga = "D";
+    const cargaDescarga = 'D';
     this._maniobraService
       .getManiobrasVacios(
         cargaDescarga,
         this.viaje,
-        "VACIO",
+        'VACIO',
         true,
         this.checkedConReparacion,
         this.checkedLavadoVacios,
@@ -273,12 +274,12 @@ export class VaciosComponent implements OnInit {
   }
 
   consultaManiobrasDescargaVaciosReparacion() {
-    let cargaDescarga = "D";
+    const cargaDescarga = 'D';
     this._maniobraService
       .getManiobrasVacios(
         cargaDescarga,
         this.viaje,
-        "VACIO",
+        'VACIO',
         false,
         true,
         this.checkedReparacionVacios,
@@ -303,7 +304,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios.filter = filterValue;
       this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Vacios");
+      console.error('Error al filtrar el dataSource de Vacios');
     }
 
     // this.dataSourceVacios.filter = filterValue;
@@ -321,7 +322,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceLavadoVacios.filter = filterValue;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Lavado Vacios");
+      console.error('Error al filtrar el dataSource de Lavado Vacios');
     }
 
     // this.dataSourceLavadoVacios.filter = filterValue;
@@ -336,7 +337,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceReparacionVacios.filter = filterValue;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Reparaciones Vacios");
+      console.error('Error al filtrar el dataSource de Reparaciones Vacios');
     }
 
     // this.dataSourceReparacionVacios.filter = filterValue;
@@ -352,82 +353,82 @@ export class VaciosComponent implements OnInit {
   }
 
   public exportpdf() {
-    const data = document.getElementById("contentToConvert");
+    const data = document.getElementById('contentToConvert');
     html2canvas(data).then(canvas => {
       const imgWidth = 208;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const contentDataURL = canvas.toDataURL("image/png");
-      const pdf = new jspdf("p", "mm", "a4"); // A4 size page of PDF
+      const contentDataURL = canvas.toDataURL('image/png');
+      const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       const position = 0;
-      pdf.addImage(contentDataURL, "PNG", 0, position, imgWidth, imgHeight);
-      pdf.save("MYPdf.pdf"); // Generated PDF
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('MYPdf.pdf'); // Generated PDF
     });
   }
 
   CreaDatosVaciosExcel(datos, tipo) {
     datos.forEach(m => {
-      var reparaciones = "";
+      let reparaciones = '';
 
       m.reparaciones.forEach(r => {
-        reparaciones += r.reparacion + ", ";
+        reparaciones += r.reparacion + ', ';
       });
       reparaciones = reparaciones.substring(0, reparaciones.length - 2);
 
-      var maniobra = {
+      const maniobra = {
         cargaDescarga: m.cargaDescarga,
         contenedor: m.contenedor,
         tipo: m.tipo,
         lavado: m.lavado,
         lavadoObservacion: m.lavadoObservacion,
         grado: m.grado,
-        fLlegada: m.fLlegada != undefined ? m.fLlegada.substring(0, 10) : "",
+        fLlegada: m.fLlegada !== undefined ? m.fLlegada.substring(0, 10) : '',
         Operador:
           m.operador &&
-          m.operador.nombre &&
-          m.operador.nombre != undefined &&
-          m.operador.nombre &&
-          m.operador.nombre != ""
+            m.operador.nombre &&
+            m.operador.nombre !== undefined &&
+            m.operador.nombre &&
+            m.operador.nombre !== ''
             ? m.operador.nombre
-            : "" && m.operador.nombre,
-        placa: m.camion != undefined ? m.camion.placa : "",
+            : '' && m.operador.nombre,
+        placa: m.camion !== undefined ? m.camion.placa : '',
         Transportista:
           m.transportista &&
-          m.transportista.nombreComercial &&
-          m.transportista.nombreComercial != undefined &&
-          m.transportista.nombreComercial != ""
+            m.transportista.nombreComercial &&
+            m.transportista.nombreComercial !== undefined &&
+            m.transportista.nombreComercial !== ''
             ? m.transportista.nombreComercial
-            : "" && m.transportista.nombreComercial,
+            : '' && m.transportista.nombreComercial,
         reparaciones: reparaciones,
         reparacionesObservacion: m.reparacionesObservacion,
         facturaManiobra: m.facturaManiobra,
         Viaje:
           m.viaje &&
-          m.viaje.viaje &&
-          m.viaje.viaje != undefined &&
-          m.viaje.viaje != ""
+            m.viaje.viaje &&
+            m.viaje.viaje !== undefined &&
+            m.viaje.viaje !== ''
             ? m.viaje.viaje
-            : "" && m.viaje.viaje,
+            : '' && m.viaje.viaje,
         Buque:
           m.viaje &&
-          m.viaje != undefined &&
-          m.viaje.buque &&
-          m.viaje.buque &&
-          m.viaje.buque != undefined &&
-          m.viaje.buque.nombre != ""
+            m.viaje !== undefined &&
+            m.viaje.buque &&
+            m.viaje.buque &&
+            m.viaje.buque !== undefined &&
+            m.viaje.buque.nombre !== ''
             ? m.viaje.buque.nombre
-            : "" && m.viaje.buque.nombre,
+            : '' && m.viaje.buque.nombre,
         peso: m.peso,
         Cliente:
           m.cliente &&
           m.cliente.nombreComercial &&
-          m.cliente.nombreComercial != undefined &&
-          m.cliente.nombreComercial != "" &&
+          m.cliente.nombreComercial !== undefined &&
+          m.cliente.nombreComercial !== '' &&
           m.cliente.nombreComercial,
         Agencia:
           m.agencia &&
           m.agencia.nombreComercial &&
-          m.agencia.nombreComercial != undefined &&
-          m.agencia.nombreComercial != "" &&
+          m.agencia.nombreComercial !== undefined &&
+          m.agencia.nombreComercial !== '' &&
           m.agencia.nombreComercial,
         estatus: m.estatus,
         hDescarga: m.hDescarga,
@@ -455,13 +456,13 @@ export class VaciosComponent implements OnInit {
         // usuarioAlta: m.usuarioAlta,
       };
 
-      if (tipo === "Vacios") {
+      if (tipo === 'Vacios') {
         this.ManiobrasVaciosExcel.push(maniobra);
       } else {
-        if (tipo === "VaciosLavado") {
+        if (tipo === 'VaciosLavado') {
           this.ManiobrasVaciosLavadoExcel.push(maniobra);
         } else {
-          if (tipo === "VaciosReparacion") {
+          if (tipo === 'VaciosReparacion') {
             this.ManiobrasVaciosReparacionExcel.push(maniobra);
           }
         }
@@ -470,41 +471,41 @@ export class VaciosComponent implements OnInit {
   }
 
   exportAsXLSXVacios(): void {
-    this.CreaDatosVaciosExcel(this.dataSourceVacios.data, "Vacios");
+    this.CreaDatosVaciosExcel(this.dataSourceVacios.data, 'Vacios');
     if (this.ManiobrasVaciosExcel) {
       this._excelService.exportAsExcelFile(
         this.ManiobrasVaciosExcel,
-        "Maniobras de Vacios Descarga"
+        'Maniobras de Vacios Descarga'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
   exportAsXLSXVaciosLavado(): void {
-    this.CreaDatosVaciosExcel(this.dataSourceLavadoVacios.data, "VaciosLavado");
+    this.CreaDatosVaciosExcel(this.dataSourceLavadoVacios.data, 'VaciosLavado');
     if (this.ManiobrasVaciosLavadoExcel) {
       this._excelService.exportAsExcelFile(
         this.ManiobrasVaciosLavadoExcel,
-        "Maniobras de Vacios Lavado"
+        'Maniobras de Vacios Lavado'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
   exportAsXLSXVaciosReparacion(): void {
     this.CreaDatosVaciosExcel(
       this.dataSourceReparacionVacios.data,
-      "VaciosReparacion"
+      'VaciosReparacion'
     );
     if (this.ManiobrasVaciosReparacionExcel) {
       this._excelService.exportAsExcelFile(
         this.ManiobrasVaciosReparacionExcel,
-        "Maniobras de Vacios Reparación"
+        'Maniobras de Vacios Reparación'
       );
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
@@ -512,7 +513,7 @@ export class VaciosComponent implements OnInit {
   isAllSelectedVacios() {
     const numSelected = this.selectionVacios.selected.length;
     const numRows = this.dataSourceVacios.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -520,14 +521,14 @@ export class VaciosComponent implements OnInit {
     this.isAllSelectedVacios()
       ? this.selectionVacios.clear()
       : this.dataSourceVacios.data.forEach(row =>
-          this.selectionVacios.select(row)
-        );
+        this.selectionVacios.select(row)
+      );
   }
 
   isAllSelectedLavadoVacios() {
     const numSelected = this.selectionLavadoVacios.selected.length;
     const numRows = this.dataSourceLavadoVacios.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -535,14 +536,14 @@ export class VaciosComponent implements OnInit {
     this.isAllSelectedLavadoVacios()
       ? this.selectionLavadoVacios.clear()
       : this.dataSourceLavadoVacios.data.forEach(row =>
-          this.selectionLavadoVacios.select(row)
-        );
+        this.selectionLavadoVacios.select(row)
+      );
   }
 
   isAllSelectedReparacionVacios() {
     const numSelected = this.selectionReparacionVacios.selected.length;
     const numRows = this.dataSourceReparacionVacios.data.length;
-    return numSelected == numRows;
+    return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -550,21 +551,21 @@ export class VaciosComponent implements OnInit {
     this.isAllSelectedReparacionVacios()
       ? this.selectionReparacionVacios.clear()
       : this.dataSourceReparacionVacios.data.forEach(row =>
-          this.selectionReparacionVacios.select(row)
-        );
+        this.selectionReparacionVacios.select(row)
+      );
   }
 
   openDialogVacios() {
-    //console.log("Entre")
+    // console.log("Entre")
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionVacios;
-    let dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
+    const dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedVacios) {
         this.selectionVacios = new SelectionModel<Maniobra>(true, []);
-        //this.filtraManiobrasDescargaVacios(this.checkedVacios);
+        // this.filtraManiobrasDescargaVacios(this.checkedVacios);
         // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
         // }
@@ -574,16 +575,16 @@ export class VaciosComponent implements OnInit {
   }
 
   openDialogVaciosLavado() {
-    //console.log("Entre Lavado")
+    // console.log("Entre Lavado")
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionLavadoVacios;
-    let dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
+    const dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedLavadoVacios) {
         this.selectionLavadoVacios = new SelectionModel<Maniobra>(true, []);
-        //this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
+        // this.filtraManiobrasDescargaVaciosLavado(this.checkedLavadoVacios);
         // if (this.checkedHDescagaL && this.dataSourceLavadoVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosLavados(this.checkedHDescagaL);
         // }
@@ -593,16 +594,16 @@ export class VaciosComponent implements OnInit {
   }
 
   openDialogVaciosReparacion() {
-    //console.log("Entre Reparacion")
+    // console.log("Entre Reparacion")
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionReparacionVacios;
-    let dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
+    const dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedReparacionVacios) {
         this.selectionReparacionVacios = new SelectionModel<Maniobra>(true, []);
-        //this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
+        // this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
         // }
@@ -611,7 +612,7 @@ export class VaciosComponent implements OnInit {
     });
   }
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("VacioTabs", event.index.toString());
+    localStorage.setItem('VacioTabs', event.index.toString());
   }
   corregirContenedor(id) {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {
@@ -626,25 +627,26 @@ export class VaciosComponent implements OnInit {
   // }
 
   open(id: string) {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo
-    if (localStorage.getItem("historyArray")) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
-      history = JSON.parse(localStorage.getItem("historyArray"));
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta al array
-    array.push("/vacios");
+    // Agrego mi nueva ruta al array
+    array.push('/vacios');
 
-    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
-    localStorage.setItem("historyArray", JSON.stringify(array));
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
-    this.router.navigate(["/maniobras/maniobra/" + id + "/detalle"]);
+    // Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 }
