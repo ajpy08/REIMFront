@@ -20,7 +20,8 @@ import {
   MAT_DIALOG_DATA
 } from '@angular/material/dialog';
 import { InfoDialogComponent } from 'src/app/dialogs/info-dialog/info-dialog.component';
-
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 
 
 declare var swal: any;
@@ -38,8 +39,7 @@ export class AprobarDescargaComponent implements OnInit {
   buques: Buque[] = [];
   viajes: Viaje[] = [];
   url: string;
-
-
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   constructor(public _usuarioService: UsuarioService,
     public _SolicitudService: SolicitudService,
@@ -61,6 +61,21 @@ export class AprobarDescargaComponent implements OnInit {
     this.cargarSolicitud(id);
     this.url = '/solicitudes/aprobaciones';
     this.contenedores.removeAt(0);
+
+    this.socket.on('update-solicitud', function (data: any) {
+      if (data.data._id) {
+        this.createFormGroup();
+        this.contenedores.removeAt(0);
+        this.cargarSolicitud(data.data._id);
+      }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      this.router.navigate(['/solicitudes/aprobaciones']);
+    }.bind(this));
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      this.router.navigate(['/solicitudes/aprobaciones']);
+    }.bind(this));
   }
 
   createFormGroup() {
@@ -122,6 +137,7 @@ export class AprobarDescargaComponent implements OnInit {
   }
 
 
+  /* #region  Properties */
   get _id() {
     return this.regForm.get('_id');
   }
@@ -226,6 +242,7 @@ export class AprobarDescargaComponent implements OnInit {
   get correoFac() {
     return this.regForm.get('correoFac');
   }
+  /* #endregion */
 
   cargarSolicitud(id: string) {
     this._SolicitudService.getSolicitudIncludes(id).subscribe(solicitud => {
@@ -363,7 +380,10 @@ export class AprobarDescargaComponent implements OnInit {
   apruebaSolicitud() {
     if (this.solicitudCorrecta) {
       this._SolicitudService.apruebaSolicitudDescarga(this.regForm.value).subscribe(resp => {
+        // tslint:disable-next-line: no-shadowed-variable
         this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
+          this.socket.emit('aprobarsolicitud', resp);
+          this.socket.emit('updatesolicitud', resp);
           this.router.navigate([this.url]);
         });
       });
@@ -381,16 +401,16 @@ export class AprobarDescargaComponent implements OnInit {
   // cambioEstado(SolicitudD: Solicitud) {
   //   this._SolicitudDService.cambioEstado(SolicitudD)
   //   .subscribe(resp => {
-  //    // this.cargarSolicitudes();
+
   //   });
   // }
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 
@@ -423,7 +443,8 @@ export class AprobarDescargaComponent implements OnInit {
             this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value)
               .subscribe(res => {
                 if (res) {
-                  this.contenedores.controls[idManiobra].get("contenedor").value
+                  // tslint:disable-next-line: no-unused-expression
+                  this.contenedores.controls[idManiobra].get('contenedor').value;
 
                 }
 
@@ -431,7 +452,7 @@ export class AprobarDescargaComponent implements OnInit {
             this._SolicitudService.removeConte(this._id.value, idManiobra).subscribe(res => {
               this.contenedores.removeAt(indice);
               this.regForm.markAsDirty();
-            })
+            });
           }
         }
       });
@@ -448,45 +469,37 @@ export class AprobarDescargaComponent implements OnInit {
           this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
 
             swal({
-              title: "ELIMINADO",
-              text: "Borrado",
-              icon: "success",
+              title: 'ELIMINADO',
+              text: 'Borrado',
+              icon: 'success',
             }).then(ok => {
               if (ok) {
-                this.router.navigate(["/solicitudes/aprobaciones"]);
+                this.router.navigate(['/solicitudes/aprobaciones']);
               }
-            })
-          })
+            });
+          });
         }
-      })
+      });
     }
 
   }
 
   openDialog(obj): void {
+    // tslint:disable-next-line: prefer-const
     let maniobra;
+    // tslint:disable-next-line: no-shadowed-variable
     this._ManiobraService.getManiobra(obj.value.maniobra).subscribe((maniobra) => {
       maniobra = maniobra.maniobra;
       const dialogRef = this.dialog.open(InfoDialogComponent, {
         width: '800px',
-        
         data: { data: maniobra },
         // data: { maniobra: maniobra },
-
-
         hasBackdrop: false,
         panelClass: 'filter.popup'
       });
       dialogRef.afterClosed().subscribe(result => {
 
-      })
-    })
-
+      });
+    });
   }
-
 }
-
-
-
-
-
