@@ -5,7 +5,7 @@ import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from 'src/app/pages/navieras/navieras.models';
 import { Location } from '@angular/common';
-import { URL_SOCKET_IO } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Component({
@@ -18,8 +18,7 @@ export class BuqueComponent implements OnInit {
   navieras: Naviera[] = [];
   regForm: FormGroup;
   url: string;
-  urlSocket = URL_SOCKET_IO + '/buques';
-  socket = io(this.urlSocket, {transports: ['websocket']});
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   constructor(
     public _buqueService: BuqueService,
@@ -47,7 +46,7 @@ export class BuqueComponent implements OnInit {
     }
     this.url = '/buques';
 
-    this.socket.on('update-data', function(data: any) {
+    this.socket.on('update-buque', function(data: any) {
       if (data.data._id) {
         this.cargarBuque(data.data._id);
       }
@@ -56,7 +55,7 @@ export class BuqueComponent implements OnInit {
       // }
     }.bind(this));
 
-    this.socket.on('delete-data', function(data: any) {
+    this.socket.on('delete-buque', function(data: any) {
       this.router.navigate(['/buques']);
     }.bind(this));
 
@@ -97,10 +96,10 @@ export class BuqueComponent implements OnInit {
       this._buqueService.guardarBuque(this.regForm.value).subscribe(res => {
         if ( this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined ) {
           this.regForm.get('_id').setValue(res._id);
-          this.socket.emit('newdata', res);
+          this.socket.emit('newbuque', res);
           this.router.navigate(['/buques/buque', this.regForm.get('_id').value]);
         } else {
-          this.socket.emit('updatedata', res);
+          this.socket.emit('updatebuque', res);
         }
         this.regForm.markAsPristine();
       });
