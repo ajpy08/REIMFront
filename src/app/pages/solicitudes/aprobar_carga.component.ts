@@ -68,9 +68,10 @@ export class AprobarCargaComponent implements OnInit {
     this.socket.on('delete-solicitud', function (data: any) {
       this.router.navigate(['/solicitudes/aprobaciones']);
     }.bind(this));
-    this.socket.on('aprobar-solicitud', function (data: any) {
-      this.router.navigate(['/solicitudes/aprobaciones']);
-    }.bind(this));
+
+    // this.socket.on('aprobar-solicitud', function (data: any) {
+    //   this.router.navigate(['/solicitudes/aprobaciones']);
+    // }.bind(this));
   }
 
   createFormGroup() {
@@ -325,7 +326,7 @@ export class AprobarCargaComponent implements OnInit {
           .subscribe(resp => {
             this.cargarSolicitud(this._id.value);
             this.socket.emit('aprobarsolicitud', res);
-            this.socket.emit('updatesolicitud', res);
+            // this.socket.emit('updatesolicitud', res);
           });
       });
   }

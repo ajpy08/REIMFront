@@ -15,6 +15,8 @@ import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contene
 import { Naviera } from '../../navieras/navieras.models';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import * as alertify from 'alertify.js';
 
 
 @Component({
@@ -44,7 +46,7 @@ export class SolicitudCargaComponent implements OnInit {
   navieraMSC = true;
   url: string;
   agenciaCargaSelected;
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
 
   constructor(
@@ -97,20 +99,25 @@ export class SolicitudCargaComponent implements OnInit {
     }
 
     this.socket.on('update-solicitud', function (data: any) {
-      if (data.data._id) {
-        this.createFormGroup();
-        this.contenedores.removeAt(0);
-        this.cargarSolicitud(data.data._id);
+      if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        if (data.data._id) {
+          this.createFormGroup();
+          this.contenedores.removeAt(0);
+          this.cargarSolicitud(data.data._id);
+        }
+        // } else {
+        //   this.cargarBuque(id);
+        // }
       }
-      // } else {
-      //   this.cargarBuque(id);
-      // }
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
       if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        alertify.error('SE ELIMINO LA SOLICICTUD', 'bottom-right');
         this.router.navigate(['/solicitudes/aprobaciones']);
-      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        console.log('actualice a: ' + this.usuarioLogueado.nombre);
+        alertify.error('SE ELIMINO LA SOLICICTUD', 'bottom-right');
         this.router.navigate(['/solicitudes']);
       }
     }.bind(this));

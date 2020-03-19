@@ -1,3 +1,4 @@
+import { Agencia } from './../agencias/agencia.models';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Solicitud } from './solicitud.models';
 import {
@@ -24,6 +25,7 @@ import { balancePreviousStylesIntoKeyframes } from '@angular/animations/browser/
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
+import * as alertify from 'alertify.js';
 
 declare var swal: any;
 
@@ -103,13 +105,13 @@ export class SolicitudesComponent implements OnInit {
   usuarioLogueado: any;
 
 
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _solicitudService: SolicitudService,
     private _usuarioService: UsuarioService,
     private excelService: ExcelService
-  ) {}
+  ) { }
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarSolicitudes('D');
@@ -121,22 +123,48 @@ export class SolicitudesComponent implements OnInit {
     }
 
     this.socket.on('new-solicitud', function (data: any) {
-      this.cargarSolicitudes(data.data.tipo);
-    }.bind(this));
-
-    this.socket.on('update-solicitud', function (data: any) {
-      if (data.data._id) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.cargarSolicitudes(data.data.tipo);
+      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
         this.cargarSolicitudes(data.data.tipo);
       }
     }.bind(this));
 
-    this.socket.on('delete-solicitud', function(data: any) {
-      this.cargarSolicitudes(data.data.tipo);
 
+    this.socket.on('update-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueadp === ROLES.PATIOADMIN_ROLE) {
+         if (data.data._id) {
+          this.cargarSolicitudes(data.data.tipo);
+        }
+      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        if (data.data._id) {
+          this.cargarSolicitudes(data.data.tipo);
+        }
+      }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE
+        || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.cargarSolicitudes(data.data.tipo);
+      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.cargarSolicitudes(data.data.tipo);
+      }
+
+    }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE
+        || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+       this.cargarSolicitudes(data.data.tipo);
+      } else if (data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.cargarSolicitudes(data.data.tipo);
+      }
     }.bind(this));
   }
   cargarSolicitudes(CD: string) {
-    console.log(this.usuarioLogueado.nombre);
+    console.log( 'CARGUE A:' + this.usuarioLogueado.nombre);
     this.cargando = true;
     if (
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
@@ -288,16 +316,16 @@ export class SolicitudesComponent implements OnInit {
           d.cliente.nombreComercial,
         Viaje:
           d.viaje &&
-          d.viaje.viaje &&
-          d.viaje.viaje !== undefined &&
-          d.viaje.viaje !== ''
+            d.viaje.viaje &&
+            d.viaje.viaje !== undefined &&
+            d.viaje.viaje !== ''
             ? d.viaje.viaje
             : '' && d.viaje.viaje,
         Nombre_Buque:
           d.buque &&
-          d.buque.nombre &&
-          d.buque.nombre !== undefined &&
-          d.buque.nombre !== ''
+            d.buque.nombre &&
+            d.buque.nombre !== undefined &&
+            d.buque.nombre !== ''
             ? d.buque.nombre
             : '' && d.buque.nombre,
         Observaciones: d.observaciones,
