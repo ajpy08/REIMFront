@@ -188,7 +188,7 @@ export class SolicitudService {
     );
   }
 
-  //ESTE SERVICIO SIRVE PARA ELIMINAR TODAS LAS MANIOS BRAS DE LA SOLICITUD DE CARGA (BOTON DE ELIMINAR DE TABLA CARGAS)/////
+  // ! ESTE SERVICIO SIRVE PARA ELIMINAR TODAS LAS MANIOS BRAS DE LA SOLICITUD DE CARGA (BOTON DE ELIMINAR DE TABLA CARGAS)/////
   boorarSolicitudes(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/' + id;
     url += '?token=' + this._usuarioService.token;
@@ -201,7 +201,7 @@ export class SolicitudService {
       );
   }
 
-  //ESTE SERVICIO SIRVE PARA ELIMINAR SOLAMENTE EL CAMPO DE SOLICITUD DE LA MANIOBRA (BOTON DE ELIMINAR DE TABLA DESCARGAS)////
+  // ! ESTE SERVICIO SIRVE PARA ELIMINAR SOLAMENTE EL CAMPO DE SOLICITUD DE LA MANIOBRA (BOTON DE ELIMINAR DE TABLA DESCARGAS)////
   borrarSolicitudDescarga(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/descarga/' + id;
     url += '?token=' + this._usuarioService.token;
@@ -214,7 +214,7 @@ export class SolicitudService {
       );
   }
 
-  //ESTE SERVICIO SERVIRA PARA CARGAS/////////
+  // ! ESTE SERVICIO SERVIRA PARA CARGAS
   borrarManiobra(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/eliminarManiobra/Solicitud/' + id;
     url += '?token=' + this._usuarioService.token;
@@ -231,7 +231,7 @@ export class SolicitudService {
     );
   }
 
-  //ESTE SERVICIO SIRVE PARA DESCARGAS/////////////
+  // ! ESTE SERVICIO SIRVE PARA DESCARGAS
   borrarSolicitudManiobra(id: string, solicitud: string): Observable<any> {
     let url =
       URL_SERVICIOS +
@@ -251,7 +251,7 @@ export class SolicitudService {
     );
   }
 
-  ///ESTE SERVICIO SIRVE PARA ELIMINAR TODA LA SOLICITUD Y EN MANIOBRAS SOLO ELIMINARA EL CAMPO SOLICITUD(DESCARGAS)
+  // ! ESTE SERVICIO SIRVE PARA ELIMINAR TODA LA SOLICITUD Y EN MANIOBRAS SOLO ELIMINARA EL CAMPO SOLICITUD(DESCARGAS)
   borrarSolicitudManiobraCampo(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/descarga/' + id;
     url += '?token=' + this._usuarioService.token;
@@ -270,7 +270,7 @@ export class SolicitudService {
     );
   }
 
-  //ESTE SERVICIO ES GENERAR PARA ELIMINAR DEL ARRAY EL CONTENEDOR (C/D)
+  // ! ESTE SERVICIO ES GENERAR PARA ELIMINAR DEL ARRAY EL CONTENEDOR (C/D)
   removeConte(id: string, maniobra: string): Observable<any> {
     let url =
       URL_SERVICIOS + '/solicitud/soli/Contenedor/' + id + '&' + maniobra;

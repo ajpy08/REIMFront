@@ -20,13 +20,16 @@ import { ViajeService } from '../../../services/service.index';
 import { SolicitudService } from '../../../services/service.index';
 import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI,ID_MSC, ROLES } from '../../../config/config';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, ID_MELFI, ID_MSC, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 
 
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'app-solicitud_descarga',
   templateUrl: './solicitud_descarga.component.html',
   styleUrls: ['./solicitud_descarga.component.css']
@@ -43,8 +46,6 @@ export class SolicitudDescargaComponent implements OnInit {
   aprobada = false;
   usuarioLogueado: any;
   navieraMELFI = true;
-
-
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
   buques: Buque[] = [];
@@ -53,15 +54,13 @@ export class SolicitudDescargaComponent implements OnInit {
   clientes: Cliente[] = [];
   contenedoresXViaje: Maniobra[] = [];
   agenciaDescargaSelected;
-
   listaFacturarA: string[] = ['Agencia Aduanal', 'Cliente'];
   //  tiposContenedor: string[] = ['20\' DC', '20\' HC', '40\' DC', '40\' HC'];
   estadosContenedor = ESTADOS_CONTENEDOR_ARRAY;
-
   patios = PATIOS_ARRAY;
-
   formasPago: string[] = ['', ''];
   url: string;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -107,11 +106,38 @@ export class SolicitudDescargaComponent implements OnInit {
     }
     this.contenedores.removeAt(0);
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.url = '/solicitudes/aprobaciones';
-    } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
+    } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
       this.url = '/solicitudes';
     }
+
+    this.socket.on('update-solicitud', function (data: any) {
+      if (data.data._id) {
+        this.createFormGroup();
+        this.contenedores.removeAt(0);
+        this.cargarSolicitud(data.data._id);
+      }
+      // } else {
+      //   this.cargarBuque(id);
+      // }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.router.navigate(['/solicitudes']);
+      }
+    }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+        this.router.navigate(['/solicitudes']);
+      }
+    }.bind(this));
 
   }
 
@@ -148,7 +174,7 @@ export class SolicitudDescargaComponent implements OnInit {
       tipoTemp: [''],
       estadoTemp: [ESTADOS_CONTENEDOR.VACIO_IMPORT],
       patioTemp: [PATIOS.POLIGONO],
-      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '','','')], {validators: Validators.required}),
+      contenedores: this.fb.array([this.creaContenedor('', '', '', '', '', '', '', '', '')], { validators: Validators.required }),
       _id: [''],
       tipo: ['D'],
       estatus: ['']
@@ -183,6 +209,7 @@ export class SolicitudDescargaComponent implements OnInit {
     this.regForm.markAsDirty();
   }
 
+  /* #region  Parametros */
   get _id() {
     return this.regForm.get('_id');
   }
@@ -289,6 +316,7 @@ export class SolicitudDescargaComponent implements OnInit {
   get correoFac() {
     return this.regForm.get('correoFac');
   }
+  /* #endregion */
 
   cargarSolicitud(id: string) {
     this._SolicitudDService.cargarSolicitud(id).subscribe(solicitud => {
@@ -361,16 +389,18 @@ export class SolicitudDescargaComponent implements OnInit {
   cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
       .subscribe(cliente => this.clientes = cliente.clientes);
+      
 
-    const reg = this.agencias.find(x => x._id == event.value);
-    if (reg) { 
-      if(reg.correo == ''){
-        swal('ERROR', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio','error');
+    const reg = this.agencias.find(x => x._id === event.value);
+    if (reg) {
+      if (reg.correo === '') {
+        swal('ERROR', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
         this.agencia.setValue('');
         this.correo.setValue('');
-      }else{
-        this.correo.setValue(reg.correo); }
+      } else {
+        this.correo.setValue(reg.correo);
       }
+    }
   }
 
   cargarContenedores(event) {
@@ -400,7 +430,7 @@ export class SolicitudDescargaComponent implements OnInit {
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.clientes.find(x => x._id == this.cliente.value);
+          const reg = this.clientes.find(x => x._id === this.cliente.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -429,7 +459,7 @@ export class SolicitudDescargaComponent implements OnInit {
           this.facturarA.setValue(null);
           return;
         } else {
-          const reg = this.agencias.find(x => x._id == this.agencia.value);
+          const reg = this.agencias.find(x => x._id === this.agencia.value);
           this.rfc.setValue(reg.rfc);
           this.razonSocial.setValue(reg.razonSocial);
           this.calle.setValue(reg.calle);
@@ -558,8 +588,11 @@ export class SolicitudDescargaComponent implements OnInit {
         this.temporalBL = false;
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
+          this.socket.emit('newsolicitud', res);
           this.edicion = true;
           this.router.navigate(['/solicitudes/solicitud_descarga', this.regForm.get('_id').value]);
+        } else {
+          this.socket.emit('updatesolicitud', res)
         }
         this.regForm.markAsPristine();
       });
@@ -568,10 +601,10 @@ export class SolicitudDescargaComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 

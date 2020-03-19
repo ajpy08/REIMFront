@@ -8,6 +8,8 @@ import { UsuarioService } from '../../services/service.index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ROLES } from 'src/app/config/config';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 import {
   MatDialog,
   MatDialogRef,
@@ -32,6 +34,7 @@ export class AprobarCargaComponent implements OnInit {
   url: string;
   usuarioLogueado = new Usuario();
   blBookingChange: string;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -43,7 +46,7 @@ export class AprobarCargaComponent implements OnInit {
     private location: Location,
     private usuarioService: UsuarioService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -53,6 +56,22 @@ export class AprobarCargaComponent implements OnInit {
     this.cargarSolicitud(id);
 
     this.url = '/solicitudes/aprobaciones';
+
+    this.socket.on('update-solicitud', function (data: any) {
+      if (data.data._id) {
+        this.createFormGroup();
+        this.contenedores.removeAt(0);
+        this.cargarSolicitud(data.data._id);
+      }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      this.router.navigate(['/solicitudes/aprobaciones']);
+    }.bind(this));
+
+    // this.socket.on('aprobar-solicitud', function (data: any) {
+    //   this.router.navigate(['/solicitudes/aprobaciones']);
+    // }.bind(this));
   }
 
   createFormGroup() {
@@ -100,6 +119,7 @@ export class AprobarCargaComponent implements OnInit {
     }
   }
 
+  /* #region  Parametros */
   get tipo() {
     return this.regForm.get('tipo');
   }
@@ -194,6 +214,7 @@ export class AprobarCargaComponent implements OnInit {
   get contenedores() {
     return this.regForm.get('contenedores') as FormArray;
   }
+  /* #endregion */
 
   creaContenedor(
     cont: string,
@@ -299,10 +320,13 @@ export class AprobarCargaComponent implements OnInit {
     this._SolicitudService
       .apruebaSolicitudCarga(this.regForm.value)
       .subscribe(res => {
+        console.log('correo enviado');
         this._SolicitudService
           .enviaCorreoAprobacionSolicitud(this.regForm.value)
           .subscribe(resp => {
             this.cargarSolicitud(this._id.value);
+            this.socket.emit('aprobarsolicitud', res);
+            // this.socket.emit('updatesolicitud', res);
           });
       });
   }
@@ -317,7 +341,7 @@ export class AprobarCargaComponent implements OnInit {
   }
 
   enviacorreo(maniobra) {
-    this._ManiobraService.enviaCorreo(maniobra).subscribe(() => {});
+    this._ManiobraService.enviaCorreo(maniobra).subscribe(() => { });
   }
 
   removeContenedor(index: number) {
@@ -340,6 +364,7 @@ export class AprobarCargaComponent implements OnInit {
           if (idManiobra) {
             this._SolicitudService.borrarManiobra(idManiobra).subscribe(res => {
               if (res) {
+                // tslint:disable-next-line: no-unused-expression
                 this.contenedores.controls[idManiobra].get('contenedor').value;
                 this.contenedores.removeAt(indice);
                 this.regForm.markAsDirty();
@@ -383,6 +408,7 @@ export class AprobarCargaComponent implements OnInit {
 
   openDialog(): void {
     this.blBookingChange = '';
+    // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(BLBookingDialog, {
       width: '300px',
       data: { blBooking: this.blBooking.value, blBookingChange: this.blBookingChange },
@@ -392,49 +418,49 @@ export class AprobarCargaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       // if (result) {
-        this.blBookingChange = result;
-        if (this.blBooking.value !== this.blBookingChange && this.blBookingChange !== '' && this.blBookingChange !== undefined) {
-          this._SolicitudService.actualizaBLBooking(this._id.value, result).subscribe(() => {
-            this.cargarSolicitud(this._id.value);
-          });
-        }
+      this.blBookingChange = result;
+      if (this.blBooking.value !== this.blBookingChange && this.blBookingChange !== '' && this.blBookingChange !== undefined) {
+        this._SolicitudService.actualizaBLBooking(this._id.value, result).subscribe((res) => {
+          this.socket.emit('updatesolicitud', res );
+          this.cargarSolicitud(this._id.value);
+        });
+      }
       // }
     });
   }
 
   openDialogC(obj): void {
+    // tslint:disable-next-line: prefer-const
     let maniobra;
+    // tslint:disable-next-line: no-shadowed-variable
     this._ManiobraService.getManiobra(obj.value.maniobra._id).subscribe((maniobra) => {
       maniobra = maniobra.maniobra;
-      console.log(maniobra)
+      console.log(maniobra);
       const dialogRef = this.dialog.open(InfoDialogComponent, {
         width: '800px',
-        
         data: { data: maniobra },
         // data: { maniobra: maniobra },
-
-
         hasBackdrop: false,
         panelClass: 'filter.popup'
       });
       dialogRef.afterClosed().subscribe(result => {
 
-      })
-    })
-
+      });
+    });
   }
-
 }
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'dialog-overview-example-dialog',
   templateUrl: '../../dialogs/bl-booking-dialog.html'
 })
+// tslint:disable-next-line: component-class-suffix
 export class BLBookingDialog {
   constructor(
     public dialogRef: MatDialogRef<BLBookingDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  ) { }
 
   onNoClick(): void {
     this.dialogRef.close();

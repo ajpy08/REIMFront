@@ -26,6 +26,8 @@
     "@angular/service-worker": "^7.1.1",
     "@sentry/browser": "^5.12.1",
     "@types/socket.io-client": "^1.4.32",
+    "alertify.js": "^1.0.12",
+    "alertifyjs": "^1.13.1",
     "blueimp-canvas-to-blob": "^3.16.0",
     "bowser": "^2.9.0",
     "core-js": "^2.6.0",
