@@ -56,6 +56,19 @@ export class HeaderComponent implements OnInit {
         });
       }
     }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+        this.notifications = [];
+        this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+          this.doSolicitudesNotifications(resp.solicitudes);
+        });
+
+        this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
+          this.doSolicitudesNotifications(resp.solicitudes);
+        });
+      }
+    }.bind(this));
   }
 
   buscar(termino: string) {
