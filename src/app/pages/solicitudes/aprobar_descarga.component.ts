@@ -22,6 +22,7 @@ import {
 import { InfoDialogComponent } from 'src/app/dialogs/info-dialog/info-dialog.component';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
+import { ROLES } from 'src/app/config/config';
 
 
 declare var swal: any;
@@ -63,19 +64,46 @@ export class AprobarDescargaComponent implements OnInit {
     this.contenedores.removeAt(0);
 
     this.socket.on('update-solicitud', function (data: any) {
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       if (data.data._id) {
         this.createFormGroup();
         this.contenedores.removeAt(0);
         this.cargarSolicitud(data.data._id);
       }
+    }
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.router.navigate(['/solicitudes/aprobaciones']);
+      swal({
+        title: 'Eliminado',
+        text: 'Se elimino esta solicitud por otro usuario',
+        icon: 'warning'
+      });
+    }
     }.bind(this));
+
     this.socket.on('aprobar-solicitud', function (data: any) {
-      this.router.navigate(['/solicitudes/aprobaciones']);
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      swal ({
+        title: 'Aprobada',
+        text: 'Se aprobo esta solicitud por otro Administrador',
+        icon: 'warning'
+      });
+      }
     }.bind(this));
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('update-solicitud');
+    this.socket.removeListener('aprobar-solicitud');
   }
 
   createFormGroup() {
@@ -383,7 +411,6 @@ export class AprobarDescargaComponent implements OnInit {
         // tslint:disable-next-line: no-shadowed-variable
         this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
           this.socket.emit('aprobarsolicitud', resp);
-          this.socket.emit('updatesolicitud', resp);
           this.router.navigate([this.url]);
         });
       });

@@ -25,8 +25,6 @@ import { balancePreviousStylesIntoKeyframes } from '@angular/animations/browser/
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
-import * as alertify from 'alertify.js';
-
 declare var swal: any;
 
 const moment = _moment;
@@ -110,7 +108,7 @@ export class SolicitudesComponent implements OnInit {
   constructor(
     public _solicitudService: SolicitudService,
     private _usuarioService: UsuarioService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
   ) { }
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
@@ -123,20 +121,16 @@ export class SolicitudesComponent implements OnInit {
     }
 
     this.socket.on('new-solicitud', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        this.cargarSolicitudes(data.data.tipo);
-      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.cargarSolicitudes(data.data.tipo);
       }
     }.bind(this));
 
 
     this.socket.on('update-solicitud', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueadp === ROLES.PATIOADMIN_ROLE) {
-         if (data.data._id) {
-          this.cargarSolicitudes(data.data.tipo);
-        }
-      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         if (data.data._id) {
           this.cargarSolicitudes(data.data.tipo);
         }
@@ -144,27 +138,32 @@ export class SolicitudesComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
-
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE
-        || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        this.cargarSolicitudes(data.data.tipo);
-      } else if (data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.cargarSolicitudes(data.data.tipo);
       }
-
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE
-        || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-       this.cargarSolicitudes(data.data.tipo);
-      } else if (data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) {
+       if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.cargarSolicitudes(data.data.tipo);
       }
     }.bind(this));
+
+
   }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('aprobar-solicitud');
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('update-solicitud');
+    this.socket.removeListener('new-solicitud');
+  }
+
   cargarSolicitudes(CD: string) {
-    console.log( 'CARGUE A:' + this.usuarioLogueado.nombre);
+    console.log('CARGUE A:' + this.usuarioLogueado.nombre);
     this.cargando = true;
     if (
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
