@@ -1,3 +1,4 @@
+import { AgenciaService } from './../../pages/agencias/agencia.service';
 import { Notification } from './../../models/notification.models';
 import { SolicitudService } from './../../pages/solicitudes/solicitud.service';
 import { Component, OnInit } from '@angular/core';
@@ -17,19 +18,41 @@ export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
   notifications: Notification[] = [];
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET, PARAM_SOCKET);
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _usuarioService: UsuarioService,
-    public solicitudesService: SolicitudService,
+    private solicitudesService: SolicitudService,
+    private agenciaService: AgenciaService,
     public router: Router) { }
 
   ngOnInit() {
     this.usuario = this._usuarioService.usuario;
 
+    this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+      this.doSolicitudesNotifications(resp.solicitudes);
+    });
+
+    this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
+      this.doSolicitudesNotifications(resp.solicitudes);
+    });
+
     this.socket.on('new-solicitud', function (data: any) {
       if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+        const tempArray: Notification[] = [];
+        tempArray.push(data.data);
+        this.doSolicitudesNotifications(tempArray);
+      }
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+        this.notifications = [];
+        this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+          this.doSolicitudesNotifications(resp.solicitudes);
+        });
+
         this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
-          this.notifications = this.doSolicitudesNotifications(resp.solicitudes);
+          this.doSolicitudesNotifications(resp.solicitudes);
         });
       }
     }.bind(this));
@@ -48,18 +71,39 @@ export class HeaderComponent implements OnInit {
   }
 
   doSolicitudesNotifications(solicitudes) {
-    const notificationsTemp: Notification[] = [];
     solicitudes.forEach(solicitud => {
-      const notify = new Notification;
-      const tipo = solicitud.tipo === 'D' ? 'Descarga' : solicitud.tipo === 'C' ? 'Carga' : 'TIPO';
-      notify.name = solicitud.agencia;
-      notify.description = `Solicitud de ${tipo} (${solicitud.contenedores.length} contenedores)`;
-      notify.fAlta = solicitud.fAlta;
-      notify._id = solicitud._id;
+      let nombreAgencia = '';
+      let promesa;
+      if (!solicitud.agencia.razonSocial) {
+        // tslint:disable-next-line: no-unused-expression
+        promesa = new Promise((resolve, reject) => {
+          this.agenciaService.getAgencia(solicitud.agencia).subscribe((agencia) => {
+            nombreAgencia = agencia.razonSocial;
+            resolve(true);
+          });
+        });
+      } else {
+        promesa = new Promise((resolve, reject) => {
+          nombreAgencia = solicitud.agencia.razonSocial;
+          resolve(true);
+        });
+      }
 
-      notificationsTemp.push(notify);
+      promesa.then((value: boolean) => {
+        if (value) {
+          const notify = new Notification;
+          const tipo = solicitud.tipo === 'D' ? 'Descarga' : solicitud.tipo === 'C' ? 'Carga' : 'TIPO';
+          const contenedor = solicitud.contenedores.length > 1 ? 'contenedores' : 'contenedor';
+          notify.name = nombreAgencia;
+          notify.description = 'Solicitud de ' + tipo + '(' + solicitud.contenedores.length + ' ' + contenedor + ')';
+          notify.fAlta = solicitud.fAlta;
+          notify._id = solicitud._id;
+          notify.url = `http://localhost:4200/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
+
+          this.notifications.push(notify);
+        }
+      });
     });
-    return notificationsTemp;
   }
 
   logout() {

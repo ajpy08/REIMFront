@@ -52,9 +52,12 @@
                 <!-- ============================================================== -->
                 <!-- Messages -->
                 <!-- ============================================================== -->
-                <li class="nav-item dropdown">
+                <li *ngIf="notifications.length > 0" class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"> <i class="fas fa-envelope"></i>
+                        aria-haspopup="true" aria-expanded="false"> 
+                        <!-- <i class="fas fa-comment-alt"> -->
+                            <span class="label label-rouded label-notify"> {{notifications.length}}</span>
+                        <!-- </i> -->
                         <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                     </a>
                     <div class="dropdown-menu mailbox dropdown-menu-right animated fadeIn" aria-labelledby="2">
@@ -64,7 +67,7 @@
                             </li>
                             <li>
                                 <div class="message-center">
-                                    <a *ngFor="let n of notifications" href="http://localhost:4200/#/buques/buque/{{n._id}}">
+                                    <a *ngFor="let n of notifications" href="{{n.url}}">
                                         <div class="user-img">
                                             <img src="../../../assets/notifications/solicitud.png" alt="user"
                                                 class="img-circle">
@@ -73,11 +76,12 @@
                                         <div class="mail-contnet">
                                             <h5>{{n.name}}</h5>
                                             <span class="mail-desc">{{n.description}}</span>
-                                            <span *ngIf="calculaFechas(n.fAlta);else otroDia"
+                                            <span class="time">{{n.fAlta | date:'dd/MMM/yyyy h:mm a'}}</span>
+                                            <!-- <span *ngIf="calculaFechas(n.fAlta);else otroDia"
                                                 class="time">{{calculaFechas()}}</span>
                                             <ng-template #otroDia>
                                                 <span class="time">{{n.fAlta | date:'dd/MMM/yyyy h:mm a'}}</span>
-                                            </ng-template>
+                                            </ng-template> -->
                                         </div>
                                     </a>
 
@@ -122,8 +126,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>Ver todos los
-                                        e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
+                                <!-- <a class="nav-link text-center" href="javascript:void(0);"> <strong>Ver todos los
+                                        e-Mails</strong> <i class="fa fa-angle-right"></i> </a> -->
                             </li>
                         </ul>
                     </div>

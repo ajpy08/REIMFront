@@ -837,6 +837,13 @@ Labels
     font-weight: 900;
 }
 
+.label-notify {
+    background-color: rgba(186, 231, 62, 0.993);
+    /* color: #313388; */
+    color: #002C77;
+    font-weight: 900;
+}
+
 .label-light-danger {
     background-color: #f9e7eb;
     color: #ef5350;
@@ -1650,6 +1657,42 @@ Notify
     right: 6px;
     top: -10px;
 }
+
+/* .notify {
+    position: relative;
+    top: -28px;
+    right: -7px;
+}
+
+.notify .heartbit {
+    position: absolute;
+    top: -20px;
+    right: -4px;
+    height: 25px;
+    width: 25px;
+    z-index: 10;
+    border: 5px solid #ef5350;
+    border-radius: 70px;
+    -moz-animation: heartbit 1s ease-out;
+    -moz-animation-iteration-count: infinite;
+    -o-animation: heartbit 1s ease-out;
+    -o-animation-iteration-count: infinite;
+    -webkit-animation: heartbit 1s ease-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+} */
+
+/* .notify .point {
+    width: 6px;
+    height: 6px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background-color: #ef5350;
+    position: absolute;
+    right: 6px;
+    top: -10px;
+} */
 
 .notify2 {
     position: relative;
@@ -6320,7 +6363,7 @@ File: scss
 }
 
 .mailbox .message-center a:hover {
-    background: #e9edf2;
+    background: #a3aff5bd;
 }
 
 .mailbox .message-center a div {
@@ -6328,7 +6371,7 @@ File: scss
 }
 
 .mailbox .message-center a .user-img {
-    width: 40px;
+    width: 35px;
     position: relative;
     display: inline-block;
     margin: 0 10px 15px 0;
