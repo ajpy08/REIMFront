@@ -59,7 +59,7 @@ export class AprobacionesComponent implements OnInit {
   fFin = moment()
     .local()
     .startOf('day');
-    socket = io(URL_SOCKET_IO, PARAM_SOCKET );
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
@@ -129,6 +129,13 @@ export class AprobacionesComponent implements OnInit {
     this.socket.on('delete-solicitud', function (data: any) {
       this.cargaSolicitudes(data.data.tipo);
     }.bind(this));
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('update-solicitud');
+    this.socket.removeListener('new-solicitud');
   }
 
   cargaSolicitudes(CD: string) {
@@ -336,7 +343,7 @@ export class AprobacionesComponent implements OnInit {
     }
   }
 
-
+  // ! BORRAR SOLICICTUD DE DESCARGA
   borrarSolicitudDescarga(solicitud: Solicitud) {
     swal({
       title: '¿Estas Seguro?',
@@ -353,6 +360,7 @@ export class AprobacionesComponent implements OnInit {
     });
   }
 
+  // ! BORRAR SOLICICTUD DE CARGA
   borrarSolicitudes(solicitud: Solicitud) {
     swal({
       title: '¿Estas seguro?',

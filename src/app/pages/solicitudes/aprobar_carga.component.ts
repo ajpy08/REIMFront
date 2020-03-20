@@ -1,3 +1,4 @@
+import { Title } from '@angular/platform-browser';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Solicitud } from './solicitud.models';
@@ -34,7 +35,7 @@ export class AprobarCargaComponent implements OnInit {
   url: string;
   usuarioLogueado = new Usuario();
   blBookingChange: string;
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -58,22 +59,48 @@ export class AprobarCargaComponent implements OnInit {
     this.url = '/solicitudes/aprobaciones';
 
     this.socket.on('update-solicitud', function (data: any) {
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       if (data.data._id) {
         this.createFormGroup();
         this.contenedores.removeAt(0);
         this.cargarSolicitud(data.data._id);
       }
+    }
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.router.navigate(['/solicitudes/aprobaciones']);
+      swal({
+          title: 'Eliminado',
+          text: 'Se elimino esta solicitud por otro usuario',
+          icon: 'warning'
+        });
+      }
     }.bind(this));
 
-    // this.socket.on('aprobar-solicitud', function (data: any) {
-    //   this.router.navigate(['/solicitudes/aprobaciones']);
-    // }.bind(this));
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/solicitudes/aprobaciones']);
+      swal ({
+        title: 'Aprobada',
+        text: 'Se aprobo esta solicitud por otro Administrador',
+        icon: 'warning'
+      });
+      }
+    }.bind(this));
+
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('update-solicitud');
+    this.socket.removeListener('aprobar-solicitud');
+  }
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [{ value: '', disabled: false }],
@@ -320,13 +347,12 @@ export class AprobarCargaComponent implements OnInit {
     this._SolicitudService
       .apruebaSolicitudCarga(this.regForm.value)
       .subscribe(res => {
-        console.log('correo enviado');
         this._SolicitudService
           .enviaCorreoAprobacionSolicitud(this.regForm.value)
           .subscribe(resp => {
             this.cargarSolicitud(this._id.value);
             this.socket.emit('aprobarsolicitud', res);
-            // this.socket.emit('updatesolicitud', res);
+            this.router.navigate([this.url]);
           });
       });
   }
@@ -421,7 +447,7 @@ export class AprobarCargaComponent implements OnInit {
       this.blBookingChange = result;
       if (this.blBooking.value !== this.blBookingChange && this.blBookingChange !== '' && this.blBookingChange !== undefined) {
         this._SolicitudService.actualizaBLBooking(this._id.value, result).subscribe((res) => {
-          this.socket.emit('updatesolicitud', res );
+          this.socket.emit('updatesolicitud', res);
           this.cargarSolicitud(this._id.value);
         });
       }

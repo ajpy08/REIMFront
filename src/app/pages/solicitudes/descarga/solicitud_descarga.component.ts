@@ -111,34 +111,53 @@ export class SolicitudDescargaComponent implements OnInit {
     } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
       this.url = '/solicitudes';
     }
-
     this.socket.on('update-solicitud', function (data: any) {
-      if (data.data._id) {
-        this.createFormGroup();
-        this.contenedores.removeAt(0);
-        this.cargarSolicitud(data.data._id);
+      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        if (data.data._id) {
+          this.createFormGroup();
+          this.contenedores.removeAt(0);
+          this.cargarSolicitud(data.data._id);
+          swal({
+            title: 'Actualizado',
+            text: 'Otro usuario ha actualizado esta solicitud',
+            icon: 'info'
+          });
+        }
       }
-      // } else {
-      //   this.cargarBuque(id);
-      // }
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        this.router.navigate(['/solicitudes/aprobaciones']);
-      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/solicitudes']);
+        swal({
+          title: 'Eliminado',
+          text: 'Se elimino esta solicitud por otro usuario',
+          icon: 'warning'
+        });
       }
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        this.router.navigate(['/solicitudes/aprobaciones']);
-      } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/solicitudes']);
+        swal({
+          title: 'Aprobada',
+          text: 'Se ha aprobado esta solicitud ',
+          icon: 'success'
+        });
       }
     }.bind(this));
+  }
 
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('aprobar-solicitud');
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('update-solicitud');
+    this.socket.removeListener('new-solicitud');
   }
 
   createFormGroup() {
@@ -389,7 +408,7 @@ export class SolicitudDescargaComponent implements OnInit {
   cargaClientes(event) {
     this._clienteService.getClientesEmpresa(event.value)
       .subscribe(cliente => this.clientes = cliente.clientes);
-      
+
 
     const reg = this.agencias.find(x => x._id === event.value);
     if (reg) {
@@ -592,7 +611,7 @@ export class SolicitudDescargaComponent implements OnInit {
           this.edicion = true;
           this.router.navigate(['/solicitudes/solicitud_descarga', this.regForm.get('_id').value]);
         } else {
-          this.socket.emit('updatesolicitud', res)
+          this.socket.emit('updatesolicitud', res);
         }
         this.regForm.markAsPristine();
       });
