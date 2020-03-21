@@ -129,6 +129,10 @@ export class AprobacionesComponent implements OnInit {
     this.socket.on('delete-solicitud', function (data: any) {
       this.cargaSolicitudes(data.data.tipo);
     }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      this.cargaSolicitudes(data.data.tipo);
+    }.bind(this));
   }
 
   // tslint:disable-next-line: use-life-cycle-interface
@@ -136,6 +140,7 @@ export class AprobacionesComponent implements OnInit {
     this.socket.removeListener('delete-solicitud');
     this.socket.removeListener('update-solicitud');
     this.socket.removeListener('new-solicitud');
+    this.socket.removeListener('aprobar-solicitud');
   }
 
   cargaSolicitudes(CD: string) {
