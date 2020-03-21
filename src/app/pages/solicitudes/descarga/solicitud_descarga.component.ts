@@ -462,6 +462,7 @@ export class SolicitudDescargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          this.correo.setValue(reg.correo);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -491,6 +492,7 @@ export class SolicitudDescargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          this.correo.setValue(reg.correo);
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
