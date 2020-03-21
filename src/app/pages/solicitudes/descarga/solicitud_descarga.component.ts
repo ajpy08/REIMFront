@@ -462,6 +462,11 @@ export class SolicitudDescargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          if (reg.correo === '') {
+            swal('Error', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
+          } else {
+            this.correo.setValue(reg.correo);
+          }
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
@@ -491,6 +496,11 @@ export class SolicitudDescargaComponent implements OnInit {
           this.ciudad.setValue(reg.ciudad);
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
+          if (reg.correo === '') {
+            swal('Error', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
+          } else {
+            this.correo.setValue(reg.correo);
+          }
           this.correoFac.setValue(reg.correoFac);
           if (reg.credito) {
             this.credito.enable({ onlySelf: true });
