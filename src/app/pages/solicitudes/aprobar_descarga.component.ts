@@ -64,8 +64,8 @@ export class AprobarDescargaComponent implements OnInit {
     this.contenedores.removeAt(0);
 
     this.socket.on('update-solicitud', function (data: any) {
-      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
-        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      if (data.data.usuarioAprobo !== this.usuario._id && this.usuario.role === ROLES.ADMIN_ROLE ||
+        this.usuario.role === ROLES.PATIOADMIN_ROLE) {
       if (data.data._id) {
         this.createFormGroup();
         this.contenedores.removeAt(0);
@@ -75,8 +75,8 @@ export class AprobarDescargaComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
-      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
-        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      if (data.data.usuarioAprobo !== this.usuario._id && this.usuario.role === ROLES.ADMIN_ROLE ||
+        this.usuario.role === ROLES.PATIOADMIN_ROLE) {
       this.router.navigate(['/solicitudes/aprobaciones']);
       swal({
         title: 'Eliminado',
@@ -87,8 +87,8 @@ export class AprobarDescargaComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-      if (data.data.usuarioAprobo !== this.usuarioLogueado._id && this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
-        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      if (data.data.usuarioAprobo !== this.usuario._id && this.usuario.role === ROLES.ADMIN_ROLE ||
+        this.usuario.role === ROLES.PATIOADMIN_ROLE) {
         this.router.navigate(['/solicitudes/aprobaciones']);
       swal ({
         title: 'Aprobada',

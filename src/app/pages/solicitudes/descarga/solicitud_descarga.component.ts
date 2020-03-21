@@ -118,11 +118,13 @@ export class SolicitudDescargaComponent implements OnInit {
           this.createFormGroup();
           this.contenedores.removeAt(0);
           this.cargarSolicitud(data.data._id);
-          swal({
-            title: 'Actualizado',
-            text: 'Otro usuario ha actualizado esta solicitud',
-            icon: 'info'
-          });
+          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+            swal({
+              title: 'Actualizado',
+              text: 'Otro usuario ha actualizado esta solicitud',
+              icon: 'info'
+            });
+          }
         }
       }
     }.bind(this));
@@ -140,7 +142,7 @@ export class SolicitudDescargaComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
         (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/solicitudes']);
         swal({
