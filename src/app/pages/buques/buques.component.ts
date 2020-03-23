@@ -46,6 +46,11 @@ export class BuquesComponent implements OnInit {
     }.bind(this));
   }
 
+  ngOnDestroy() {
+    this.socket.removeListener('delete-buque');
+    this.socket.removeListener('update-buque');
+    this.socket.removeListener('new-buque');
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
