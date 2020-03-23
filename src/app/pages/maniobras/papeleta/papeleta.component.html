@@ -1,14 +1,16 @@
 <!-- <p>Form value {{ regForm.value | json }} </p>
 <p>Form value {{ regForm.status | json }} </p> -->
 <button class="btn btn-info m-r-5" [disabled]="regForm.invalid" printSectionId="print-section"
-  [printStyle]="{table : { 'font-family': 'Arial', 'font-size': '12'}}" ngxPrint>
+[printStyle] = "{table : { 'font-family': 'Arial', 'font-size': '12'}}" ngxPrint>
   <i class="fa fa-print"></i>Imprimir</button>
 <button (click)="asignaFecha()" type="button" class="btn btn-info waves-effect waves-light m-r-5">
   <i class="fa fa-calendar-plus-o"></i>
   Asignar Fecha
 </button> 
+<!-- <button class="btn btn-info m-r-5" [disabled]="regForm.invalid">
+  <i class="far fa-file-pdf"></i>Descargar PDF</button> -->
 <font color="ff0000" *ngIf="!this.fExpiracionPapeleta.valid">  <--- La fecha de Expiración esta vencida...(ASIGNA FECHA VALIDA) </font> <br><br>
-<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos.</h3>
+<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos. (Revisa si ya asignaste camion y operador)</h3>
 <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button><br><br>
 <div id="print-section">
   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
