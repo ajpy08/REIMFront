@@ -120,7 +120,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this._usuarioService.updateStatusUser().subscribe((usuario) => {
+    this._usuarioService.updateStatusUser(this._usuarioService.usuario).subscribe((usuario) => {
       this._usuarioService.logout();
       this.socket.emit('logoutuser', usuario);
     });
