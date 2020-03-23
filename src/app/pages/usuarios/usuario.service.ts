@@ -99,12 +99,12 @@ export class UsuarioService {
     this.router.navigate(['/login']);
   }
 
-  updateStatusUser() {
-    if (this.usuario) {
-      let url = URL_SERVICIOS + '/usuarios/usuario/' + this.usuario._id + '/user/logout';
+  updateStatusUser(usuario) {
+    // if (this.usuario) {
+      let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/user/logout';
       url += '?token=' + this.token;
-      return this.http.put(url, this.usuario);
-    }
+      return this.http.put(url, usuario);
+    // }
   }
 
   login(usuario: Usuario, recordar: boolean = false, urlWithoutLogin: string): Observable<any> {
@@ -123,10 +123,7 @@ export class UsuarioService {
           this.guardarStorage(resp.id, resp.token, resp.usuario, resp.menu, urlWithoutLogin);
           return true;
         }));
-
   }
-
-
 
   // OBTIENE EL CATALOGO DE USUARIOS
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios
@@ -145,7 +142,6 @@ export class UsuarioService {
         }
       })));
   }
-
 
   // OBTIENE UN USUARIO DADO SU ID
   // POR MEDIO DEL SERVICIO http://xxx.xxx.xxx.xxx:xxx/usuarios/id

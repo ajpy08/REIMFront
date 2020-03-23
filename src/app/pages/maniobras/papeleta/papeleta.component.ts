@@ -34,7 +34,7 @@ export class PapeletaComponent implements OnInit {
 
     this.url = '/solicitudes_transportista';
 
-    if (this.maniobra == undefined) {
+    if (this.maniobra === undefined) {
       this.router.navigate([this.url]);
     }
 
@@ -47,7 +47,7 @@ export class PapeletaComponent implements OnInit {
       folio: ['', [Validators.required]],
       fAsignacionPapeleta: ['', [Validators.required]],
       fExpiracionPapeleta: ['', [Validators.required, this.validaFechaExpiracion('fExpiracionPapeleta')]],
-      //fExpiracionPapeleta: ['', [Validators.required]],
+      // fExpiracionPapeleta: ['', [Validators.required]],
       cargaDescarga: ['', [Validators.required]],
       peso: ['', [Validators.required]],
       grado: ['', [Validators.required]],
@@ -74,9 +74,9 @@ export class PapeletaComponent implements OnInit {
     return (control: AbstractControl): { [s: string]: boolean } => {
       // control.parent es el FormGroup
       if (this.regForm) { // en las primeras llamadas control.parent es undefined
-        if (control.value != undefined) {
-          var CurrentDate = moment().startOf('day').toISOString();
-          var fecha = moment(control.value).endOf('day').toISOString();
+        if (control.value !== undefined) {
+          const CurrentDate = moment().startOf('day').toISOString();
+          const fecha = moment(control.value).endOf('day').toISOString();
           if (fecha <= CurrentDate) {
             return {
               fechaInvalida: true
@@ -99,24 +99,29 @@ export class PapeletaComponent implements OnInit {
       });
       this.regForm.controls['_id'].setValue(maniobra.maniobra._id);
       this.regForm.controls['folio'].setValue(maniobra.maniobra.folio);
-      this.regForm.controls['fAsignacionPapeleta'].setValue(maniobra.maniobra.fAsignacionPapeleta);
+      if (maniobra.maniobra.fAsignacionPapeleta) {
+        this.regForm.controls['fAsignacionPapeleta'].setValue(maniobra.maniobra.fAsignacionPapeleta);
+      } else {
+        this.asignaFecha();
+      }
       this.regForm.controls['fExpiracionPapeleta'].setValue(maniobra.maniobra.fExpiracionPapeleta);
       this.regForm.controls['cargaDescarga'].setValue(maniobra.maniobra.cargaDescarga);
       this.regForm.controls['peso'].setValue(maniobra.maniobra.peso);
       this.regForm.controls['grado'].setValue(maniobra.maniobra.grado);
       this.regForm.controls['tipo'].setValue(maniobra.maniobra.tipo);
       this.regForm.controls['contenedor'].setValue(maniobra.maniobra.contenedor);
-      this.regForm.controls['buque'].setValue(maniobra.maniobra.viaje != undefined && maniobra.maniobra.viaje.buque.nombre != undefined ? maniobra.maniobra.viaje.buque.nombre : '');
-      this.regForm.controls['viaje'].setValue(maniobra.maniobra.viaje != undefined ? maniobra.maniobra.viaje.viaje : '');
-      this.regForm.controls['BL'].setValue(maniobra.maniobra.solicitud != undefined ? maniobra.maniobra.solicitud.blBooking: 'DEBE TENER BL/BOOKING');
+      this.regForm.controls['buque'].setValue(maniobra.maniobra.viaje !== undefined &&
+      maniobra.maniobra.viaje.buque.nombre !== undefined ? maniobra.maniobra.viaje.buque.nombre : '');
+      this.regForm.controls['viaje'].setValue(maniobra.maniobra.viaje !== undefined ? maniobra.maniobra.viaje.viaje : '');
+      this.regForm.controls['BL'].setValue(maniobra.maniobra.solicitud !== undefined ? maniobra.maniobra.solicitud.blBooking : 'DEBE TENER BL/BOOKING');
       this.regForm.controls['cliente'].setValue(maniobra.maniobra.cliente.nombreComercial);
       this.regForm.controls['patio'].setValue(maniobra.maniobra.patio);
       this.regForm.controls['agencia'].setValue(maniobra.maniobra.agencia.nombreComercial);
       this.regForm.controls['transportista'].setValue(maniobra.maniobra.transportista.nombreComercial);
-      this.regForm.controls['operador'].setValue(maniobra.maniobra.operador != undefined ? maniobra.maniobra.operador.nombre : '');
-      this.regForm.controls['placa'].setValue(maniobra.maniobra.camion != undefined ? maniobra.maniobra.camion.placa : '');
-      this.regForm.controls['licencia'].setValue(maniobra.maniobra.operador != undefined ? maniobra.maniobra.operador.licencia : '');
-      this.regForm.controls['noEconomico'].setValue(maniobra.maniobra.camion != undefined ? maniobra.maniobra.camion.noEconomico : '');
+      this.regForm.controls['operador'].setValue(maniobra.maniobra.operador !== undefined ? maniobra.maniobra.operador.nombre : '');
+      this.regForm.controls['placa'].setValue(maniobra.maniobra.camion !== undefined ? maniobra.maniobra.camion.placa : '');
+      this.regForm.controls['licencia'].setValue(maniobra.maniobra.operador !== undefined ? maniobra.maniobra.operador.licencia : '');
+      this.regForm.controls['noEconomico'].setValue(maniobra.maniobra.camion !== undefined ? maniobra.maniobra.camion.noEconomico : '');
 
       if (maniobra.maniobra.cargaDescarga === 'C') {
         this.regForm.controls['contenedor'].clearValidators();
@@ -141,10 +146,10 @@ export class PapeletaComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 

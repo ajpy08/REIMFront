@@ -41,7 +41,7 @@ export class ClienteComponent implements OnInit {
 
     this.usuarioLogueado = this.usuarioService.usuario;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this._clienteService.getClientesRole().subscribe((empresas) => {
         this.usuarioLogueado.empresas = empresas;
       });
@@ -57,13 +57,13 @@ export class ClienteComponent implements OnInit {
 
     this.url = '/clientes';
 
-    if(this.correoF){
+    if (this.correoF) {
       this.correoF.removeAt(0);
     }
   }
 
   role(role: string) {
-    var result = role.substr(0, role.indexOf('_'));
+    const result = role.substr(0, role.indexOf('_'));
     return result;
   }
 
@@ -102,26 +102,26 @@ export class ClienteComponent implements OnInit {
     });
   }
 
-  
+
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
-    })
+    });
   }
-  
+
   addContenedor(correoO: string): void {
     let error = false;
     if (correoO === '') {
-      this.correo.disable({ emitEvent: true })
+      this.correo.disable({ emitEvent: true });
       swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
-    } else if (this.correoF.controls.length == 0) {
+    } else if (this.correoF.controls.length === 0) {
       this.correoF.push(this.agregarArray(correoO));
     } else {
       if (this.correoF.controls) {
         this.correoF.controls.forEach(c => {
-          if (this.correotem.value == c.value.correoO) {
-            if (error == false) {
-              swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+          if (this.correotem.value === c.value.correoO) {
+            if (error === false) {
+              swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
               error = true;
               return false;
             }
@@ -129,7 +129,7 @@ export class ClienteComponent implements OnInit {
         });
         if (!error) {
           this.correoF.push(this.agregarArray(correoO));
-        } 
+        }
       }
     }
 
@@ -182,8 +182,8 @@ export class ClienteComponent implements OnInit {
   get correoF() {
     return this.regForm.get('correoF') as FormArray;
   }
-  get correotem(){
-    return this.regForm.get('correotem')
+  get correotem() {
+    return this.regForm.get('correotem');
   }
 
   get correoFac() {
@@ -218,10 +218,10 @@ export class ClienteComponent implements OnInit {
         this.regForm.controls['cp'].setValue(res.cp);
         this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-        
-        var correoArray = res.correo.split(",")
+
+        const correoArray = res.correo.split(',');
         correoArray.forEach(c => {
-          this.addContenedor(c)
+          this.addContenedor(c);
         });
 
         // this.regForm.controls['correo'].setValue(res.correo);
@@ -236,15 +236,15 @@ export class ClienteComponent implements OnInit {
   guardarCliente() {
     if (this.regForm.valid) {
 
-      var correos = '';
+      let correos = '';
       this.regForm.controls.correoF.value.forEach(correo => {
         correos += correo.correoO + ',';
       });
-      correos = correos.slice(0,-1);
-  
-    this.correotem.setValue('');
-    this.correo.setValue(correos)
-    
+      correos = correos.slice(0, -1);
+
+      this.correotem.setValue('');
+      this.correo.setValue(correos);
+
       // console.log (this.regForm.value);
       this._clienteService.guardarCliente(this.regForm.value)
         .subscribe(res => {
@@ -264,36 +264,36 @@ export class ClienteComponent implements OnInit {
   }
 
   onFileSelected(event) {
-    if (this.tipoFile == 'img') {
-      //console.log('Fue Foto');
-      if (event.target.files[0] != undefined) {
+    if (this.tipoFile === 'img') {
+      // console.log('Fue Foto');
+      if (event.target.files[0] !== undefined) {
         this.fileImg = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
-      if (this.tipoFile == 'formatoR1') {
-        //console.log('Fue R1');
-        if (event.target.files[0] != undefined) {
+      if (this.tipoFile === 'formatoR1') {
+        // console.log('Fue R1');
+        if (event.target.files[0] !== undefined) {
           this.file = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
       } else {
-        console.log('No conozco el tipo de archivo para subir')
+        console.log('No conozco el tipo de archivo para subir');
       }
     }
   }
 
   subirArchivo(tipo: string) {
     let file: File;
-    if (this.fileImg != null && tipo == 'img') {
+    if (this.fileImg !== null && tipo === 'img') {
       file = this.fileImg;
       this.fileImgTemporal = true;
-      //console.log('FileImgTemporal ' + this.fileImgTemporal)
+      // console.log('FileImgTemporal ' + this.fileImgTemporal)
     } else {
-      if (this.file != null && tipo == 'formatoR1') {
+      if (this.file !== null && tipo === 'formatoR1') {
         file = this.file;
         this.fileTemporal = true;
-        //console.log('FileTemporal ' + this.fileTemporal)
+        // console.log('FileTemporal ' + this.fileTemporal)
       }
     }
     this._subirArchivoService.subirArchivoBucketTemporal(file)
@@ -306,10 +306,10 @@ export class ClienteComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
+    localStorage.removeItem('history');
     // this.location.back();
   }
 }

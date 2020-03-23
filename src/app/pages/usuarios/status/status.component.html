@@ -37,7 +37,7 @@
                     <span class="green-point"></span>
                   </div>
                 </span>
-                <ng-template #offline>                  
+                <ng-template #offline>
                   <!-- <i class="fas fa-user"></i> -->
                   <div class="notify2">
                     <!-- <span class="red-heartbit"></span> -->
@@ -51,9 +51,8 @@
               <div class="mailbox">
                 <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
                 <div class="user-img">
-                  <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row"> <img [src]="row.img | imagen"
-                      class="img-50 img-circle pointer">
-
+                  <mat-cell class="bold" matTooltip="Foto de Usuario" *matCellDef="let row"> <img
+                      [src]="row.img | imagen" class="img-50 img-circle pointer">
                   </mat-cell>
                   <span class="profile-status online pull-right"></span>
                 </div>
@@ -67,7 +66,6 @@
                         <div class="user-img">
                           <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row">
                             <img [src]="row.img | imagen" class="img-50 img-circle pointer">
-                            <span class="profile-status online pull-right"></span>
                           </mat-cell>
                         </div>
                       </a>
@@ -79,31 +77,40 @@
 
             <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+              <mat-cell class="bold" *matCellDef="let row"> {{row.nombre}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="email">
+            <!-- <ng-container matColumnDef="email">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
-            </ng-container>
-
+            </ng-container> -->
 
             <ng-container matColumnDef="role">
-              <mat-header-cell *matHeaderCellDef>Role</mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-select disabled [(ngModel)]="row.role" name="role" class="form-control">
-                  <mat-option *ngFor="let role of roles" [value]="role._id">
-                    {{role.descripcion}}
-                  </mat-option>
-                </mat-select>
-              </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Role</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{role(row.role)}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="empresas">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-cell *ngFor="let empresa of row.empresas" class="m-r-5"> {{empresa.razonSocial}}
+                <mat-cell class="empresas" *ngFor="let empresa of row.empresas">
+                  {{empresa.razonSocial}}
                 </mat-cell>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fActivo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Activo desde</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fActivo | date:'dd/MM/yyyy h:mm a'}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <button matTooltip="Logout user" (click)="logout(row)"
+                  class="btn btn-danger m-r-5">
+                  <i class="fas fa-sign-out-alt"></i>
+                </button>
               </mat-cell>
             </ng-container>
 

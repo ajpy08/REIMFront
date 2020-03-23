@@ -18,8 +18,8 @@ export class StatusComponent implements OnInit {
   totalOnline = 0;
   roles = ROLES_ARRAY;
 
-  // displayedColumns = ['status', 'img', 'nombre', 'email', 'role', 'empresas'];
-  displayedColumns = ['img', 'nombre', 'status'];
+  // displayedColumns = ['img', 'nombre', 'status', 'role', 'empresas', 'fActivo'];
+  displayedColumns = ['status', 'img', 'nombre', 'role', 'empresas', 'fActivo', 'actions'];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
@@ -63,5 +63,17 @@ export class StatusComponent implements OnInit {
       this.totalOnline = usuarios.filter(u => u.status === true).length;
     });
     this.cargando = false;
+  }
+
+  role(role: string) {
+    const result = role.substr(0, role.indexOf('_'));
+    return result;
+  }
+
+  logout(user) {
+    this.usuarioService.updateStatusUser(user).subscribe((usuario) => {
+      this.usuarioService.logout();
+      this.socket.emit('logoutuser', usuario);
+    });
   }
 }
