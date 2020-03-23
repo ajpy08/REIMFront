@@ -111,7 +111,7 @@ export class HeaderComponent implements OnInit {
           notify.description = 'Solicitud de ' + tipo + '(' + solicitud.contenedores.length + ' ' + contenedor + ')';
           notify.fAlta = solicitud.fAlta;
           notify._id = solicitud._id;
-          notify.url = `http://localhost:4200/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
+          notify.url = `https://reimcontainerpark.com.mx/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
 
           this.notifications.push(notify);
         }
