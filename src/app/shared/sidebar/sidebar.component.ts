@@ -24,31 +24,31 @@ export class SidebarComponent implements OnInit {
   mostrarRole() {
     // console.log(this.usuario.role);
     // console.log(this.role);
-    if (this.usuario.role == ROLES.ADMIN_ROLE) {
+    if (this.usuario.role === ROLES.ADMIN_ROLE) {
       this.role = 'Administrador';
       return;
     }
-    if (this.usuario.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuario.role === ROLES.PATIOADMIN_ROLE) {
       this.role = 'Administrador Container Park';
       return;
     }
-    if (this.usuario.role == ROLES.PATIO_ROLE) {
+    if (this.usuario.role === ROLES.PATIO_ROLE) {
       this.role = 'Patio Container Park';
       return;
     }
-    if (this.usuario.role == ROLES.NAVIERA_ROLE) {
+    if (this.usuario.role === ROLES.NAVIERA_ROLE) {
       this.role = 'Naviera';
       return;
     }
-    if (this.usuario.role == ROLES.TRANSPORTISTA_ROLE) {
+    if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
       this.role = 'Transportista';
       return;
     }
-    if (this.usuario.role == ROLES.AA_ROLE) {
+    if (this.usuario.role === ROLES.AA_ROLE) {
       this.role = 'Agente Aduanal';
       return;
     }
-    if (this.usuario.role == ROLES.CLIENT_ROLE) {
+    if (this.usuario.role === ROLES.CLIENT_ROLE) {
       this.role = 'Cliente';
       return;
     }
