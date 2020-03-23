@@ -1,7 +1,7 @@
 <div class="row animated fadeIn">
   <div class="col-md-6">
     <div class="card card-body">
-      <h3 class="box-title m-b-0">Camion: {{ camion.noEconomico }}</h3><br>
+      <h3 class="box-title m-b-0">Camion: {{ this.noEconomico.value }}</h3><br>
       <div class="row">
         <div class="col-sm-12 col-xs-12">
           <form [formGroup]="regForm" (ngSubmit)="guardarCamion()" novalidate>

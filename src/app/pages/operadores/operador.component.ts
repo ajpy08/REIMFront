@@ -9,10 +9,12 @@ import { ModalUploadService } from '../../components/modal-upload/modal-upload.s
 import { ROLES } from 'src/app/config/config';
 import { Usuario } from '../usuarios/usuario.model';
 
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Location } from '@angular/common';
-
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
+import swal from 'sweetalert';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -33,9 +35,9 @@ export const MY_FORMATS = {
   selector: 'app-operador',
   templateUrl: './operador.component.html',
   styleUrls: ['./operador.component.css'],
-  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-              {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-              {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
+  providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+  { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 export class OperadorComponent implements OnInit {
   tipoFile = '';
@@ -48,6 +50,7 @@ export class OperadorComponent implements OnInit {
   operador: Operador = new Operador();
   usuarioLogueado: Usuario;
   url: string;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _operadorService: OperadorService,
@@ -68,6 +71,7 @@ export class OperadorComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarOperador(id);
     } else {
+      // tslint:disable-next-line: forin
       for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
@@ -83,19 +87,55 @@ export class OperadorComponent implements OnInit {
           this.transportistas = transportistas.transportistas;
         });
     } else {
-      if(this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+      if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
         this.transportistas = this.usuarioLogueado.empresas;
       }
     }
     this.url = '/operadores';
+
+    this.socket.on('update-operador', function (data: any) {
+      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+        (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+        if (data.data._id) {
+          this.createFormGroup();
+          this.cargarOperador(data.data._id);
+          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+            swal({
+              title: 'Actualizado',
+              text: 'Otro usuario ha actualizado este operador',
+              icon: 'info'
+            });
+          }
+        }
+      }
+    }.bind(this));
+
+    this.socket.on('delete-operador', function (data: any) {
+      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+        (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+        this.router.navigate(['/operadores']);
+        swal({
+          title: 'Eliminado',
+          text: 'Se elimino este operador por otro usuario',
+          icon: 'warning'
+        });
+
+      }
+    }.bind(this));
   }
+    // tslint:disable-next-line: use-life-cycle-interface
+    ngOnDestroy() {
+      this.socket.removeListener('delete-operador');
+      this.socket.removeListener('update-operador');
+    }
 
   cargarOperador(id: string) {
     this._operadorService.getOperador(id)
       .subscribe(res => {
-        for (var propiedad in this.operador) {
-          for (var control in this.regForm.controls) {
-            if (propiedad == control.toString()) {
+        // tslint:disable-next-line: forin
+        for (const propiedad in this.operador) {
+          for (const control in this.regForm.controls) {
+            if (propiedad === control.toString()) {
               this.regForm.controls[propiedad].setValue(res[propiedad]);
             }
           }
@@ -104,6 +144,7 @@ export class OperadorComponent implements OnInit {
   }
 
 
+  /* #region P */
   get transportista() {
     return this.regForm.get('transportista');
   }
@@ -135,6 +176,7 @@ export class OperadorComponent implements OnInit {
   get _id() {
     return this.regForm.get('_id');
   }
+  /* #endregion */
 
   createFormGroup() {
     this.regForm = this.fb.group({
@@ -160,7 +202,10 @@ export class OperadorComponent implements OnInit {
           this.fileLicenciaTemporal = false;
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
+            this.socket.emit('newoperador', res);
             this.router.navigate(['/operadores/operador', this.regForm.get('_id').value]);
+          } else {
+            this.socket.emit('updateoperador', res);
           }
           this.regForm.markAsPristine();
         });
@@ -209,7 +254,6 @@ export class OperadorComponent implements OnInit {
       this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    //this.location.back();
+    localStorage.removeItem('history');
   }
 }

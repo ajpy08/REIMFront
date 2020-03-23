@@ -7,7 +7,8 @@ import { Naviera } from 'src/app/pages/navieras/navieras.models';
 import { Location } from '@angular/common';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
-
+import { ROLES } from 'src/app/config/config';
+import swal from 'sweetalert';
 @Component({
   selector: 'app-buque',
   templateUrl: './buque.component.html',
@@ -47,18 +48,39 @@ export class BuqueComponent implements OnInit {
     this.url = '/buques';
 
     this.socket.on('update-buque', function(data: any) {
+      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
       if (data.data._id) {
+        this.createFormGroup();
         this.cargarBuque(data.data._id);
+        if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+          swal({
+            title: 'Actualizado',
+            text: 'Otro usuario ha actualizado este buque',
+            icon: 'info'
+          });
+        }
       }
       // } else {
       //   this.cargarBuque(id);
-      // }
+       }
     }.bind(this));
 
     this.socket.on('delete-buque', function(data: any) {
+      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
       this.router.navigate(['/buques']);
+      swal({
+        title: 'Eliminado',
+        text: 'Se elimino este buque por otro usuario',
+        icon: 'warning'
+      });
+      }
     }.bind(this));
 
+  }
+  ngOnDestroy() {
+    this.socket.removeListener('delete-buque');
+    this.socket.removeListener('update-buque');
+    this.socket.removeListener('new-buque');
   }
 
   cargarBuque(id: string) {
