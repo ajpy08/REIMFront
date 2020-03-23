@@ -1,58 +1,58 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   MatPaginator,
   MatSort,
   MatTableDataSource,
   MatTabChangeEvent,
   MatTabGroup
-} from "@angular/material";
-import { ManiobraService } from "../maniobra.service";
-import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from "../../../config/config";
-import { Maniobra } from "src/app/models/maniobra.models";
+} from '@angular/material';
+import { ManiobraService } from '../maniobra.service';
+import { ESTADOS_CONTENEDOR, ETAPAS_MANIOBRA } from '../../../config/config';
+import { Maniobra } from 'src/app/models/maniobra.models';
 import {
   UsuarioService,
   ExcelService,
   NavieraService
-} from "src/app/services/service.index";
-import { ROLES } from "src/app/config/config";
-import { Usuario } from "../../usuarios/usuario.model";
-import { Router } from "@angular/router";
-import { Naviera } from "../../navieras/navieras.models";
+} from 'src/app/services/service.index';
+import { ROLES } from 'src/app/config/config';
+import { Usuario } from '../../usuarios/usuario.model';
+import { Router } from '@angular/router';
+import { Naviera } from '../../navieras/navieras.models';
 declare var swal: any;
 
 @Component({
-  selector: "app-inventario",
-  templateUrl: "./inventario.component.html",
-  styleUrls: ["./inventario.component.css"]
+  selector: 'app-inventario',
+  templateUrl: './inventario.component.html',
+  styleUrls: ['./inventario.component.css']
 })
 export class InventarioComponent implements OnInit {
   usuarioLogueado: Usuario;
   cargando = true;
-  totalRegistros: number = 0;
-  totalRegistrosLR: number = 0;
+  totalRegistros = 0;
+  totalRegistrosLR = 0;
   displayedColumns = [
-    "fLlegada",
-    "viaje",
-    "nombre",
-    "nombreComercial",
-    "fVigenciaTemporal",
-    "pdfTemporal",
-    "contenedor",
-    "tipo",
-    "peso",
-    "grado"
+    'fLlegada',
+    'viaje',
+    'nombre',
+    'nombreComercial',
+    'fVigenciaTemporal',
+    'pdfTemporal',
+    'contenedor',
+    'tipo',
+    'peso',
+    'grado'
   ];
   displayedColumnsGroups = [
-    "fLlegada",
-    "viaje",
-    "nombre",
+    'fLlegada',
+    'viaje',
+    'nombre',
     // "nombreComercial",
-    "fVigenciaTemporal",
-    "pdfTemporal",
-    "contenedor",
-    "tipo",
-    "peso",
-    "grado"
+    'fVigenciaTemporal',
+    'pdfTemporal',
+    'contenedor',
+    'tipo',
+    'peso',
+    'grado'
   ];
   displayedColumnsLR;
 
@@ -63,8 +63,8 @@ export class InventarioComponent implements OnInit {
   groupedDisponibles20: any;
   groupedDisponibles40: any;
   datosExcel = [];
-  totalInventario: number = 0;
-  totalReparaciones: number = 0;
+  totalInventario = 0;
+  totalReparaciones = 0;
   maniobras: Maniobra[] = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
@@ -72,10 +72,10 @@ export class InventarioComponent implements OnInit {
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild("MatPaginatorLR", { read: MatPaginator })
+  @ViewChild('MatPaginatorLR', { read: MatPaginator })
   MatPaginatorLR: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("MatSort2") MatSort2: MatSort;
+  @ViewChild('MatSort2') MatSort2: MatSort;
   constructor(
     public maniobraService: ManiobraService,
     private usuarioService: UsuarioService,
@@ -86,43 +86,44 @@ export class InventarioComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarNavieras();    
+    this.cargarNavieras();
 
     if (
-      this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
-      this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE
+      this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
     ) {
       this.displayedColumnsLR = [
-        "actions",
-        "fLlegada",
-        "viaje",
-        "nombre",
-        "nombreComercial",
-        "contenedor",
-        "tipo",
-        "peso",
-        "grado",
-        "lavado",
-        "reparaciones"
+        'actions',
+        'fLlegada',
+        'viaje',
+        'nombre',
+        'nombreComercial',
+        'contenedor',
+        'tipo',
+        'peso',
+        'grado',
+        'lavado',
+        'reparaciones'
       ];
     } else {
       this.navieraSeleccionada = this.usuarioLogueado.empresas[0]._id;
       this.blockNaviera = true;
       this.displayedColumnsLR = [
-        "fLlegada",
-        "viaje",
-        "nombre",
-        "nombreComercial",
-        "contenedor",
-        "tipo",
-        "peso",
-        "grado",
-        "lavado",
-        "reparaciones"
+        'fLlegada',
+        'viaje',
+        'nombre',
+        'nombreComercial',
+        'contenedor',
+        'tipo',
+        'peso',
+        'grado',
+        'lavado',
+        'reparaciones'
       ];
     }
-    let indexTAB = localStorage.getItem("InventarioTabs");
+    const indexTAB = localStorage.getItem('InventarioTabs');
     if (indexTAB) {
+      // tslint:disable-next-line: radix
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
 
@@ -167,7 +168,7 @@ export class InventarioComponent implements OnInit {
   }
 
   agrupa20_40(maniobras) {
-    this.c20 = maniobras.filter(m => m.tipo.includes("20"));
+    this.c20 = maniobras.filter(m => m.tipo.includes('20'));
 
     const grouped20 = this.c20.reduce((curr, m) => {
       if (!curr[m.tipo]) {
@@ -190,7 +191,7 @@ export class InventarioComponent implements OnInit {
       });
     }
 
-    this.c40 = maniobras.filter(m => m.tipo.includes("40"));
+    this.c40 = maniobras.filter(m => m.tipo.includes('40'));
 
     const grouped40 = this.c40.reduce((curr, m) => {
       if (!curr[m.tipo]) {
@@ -220,7 +221,7 @@ export class InventarioComponent implements OnInit {
 
       this.maniobraService
         .getManiobras(
-          "D",
+          'D',
           ETAPAS_MANIOBRA.DISPONIBLE,
           null,
           null,
@@ -444,20 +445,35 @@ export class InventarioComponent implements OnInit {
   CreaDatosExcel(datos) {
     this.datosExcel = [];
     datos.forEach(d => {
+
+      let reparaciones = '';
+
+      d.reparaciones.forEach(r => {
+        reparaciones += r.reparacion + ', ';
+      });
+
+      if (reparaciones.length > 1) {
+        reparaciones = reparaciones.substring(0, reparaciones.length - 2);
+      }
+
+
       // console.log(d)
-      var dato = {
+      const dato = {
         EntradaPatio: d.fLlegada,
-        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje != undefined && d.viaje.viaje != '' ? d.viaje.viaje : '',
-        Buque: d.viaje && d.viaje.buque && d.viaje.buque != undefined && d.viaje.buque != null && d.viaje.buque.nombre && d.viaje.buque.nombre != undefined && d.viaje.buque.nombre != '' ? d.viaje.buque.nombre : '',
-        VigenciaTemporal: d.viaje && d.viaje.fVigenciaTemporal != undefined && d.viaje.fVigenciaTemporal != null && d.viaje.fVigenciaTemporal ? d.viaje.fVigenciaTemporal : '',
-        
-        
+        Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje !== undefined && d.viaje.viaje !== '' ? d.viaje.viaje : '',
+        Buque: d.viaje && d.viaje.buque && d.viaje.buque !== undefined && d.viaje.buque !== null &&
+        d.viaje.buque.nombre && d.viaje.buque.nombre !== undefined &&
+        d.viaje.buque.nombre !== '' ? d.viaje.buque.nombre : '',
+        VigenciaTemporal: d.viaje && d.viaje.fVigenciaTemporal !== undefined &&
+        d.viaje.fVigenciaTemporal !== null && d.viaje.fVigenciaTemporal ? d.viaje.fVigenciaTemporal : '',
         Contenedor: d.contenedor,
         Tipo: d.tipo,
         Estado: d.peso,
         Grado: d.grado,
         // operador: d.operador != undefined ? d.operador.nombre : '',
-        Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial != undefined && d.naviera.nombreComercial != '' ? d.naviera.nombreComercial : '',
+        Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial !== undefined &&
+        d.naviera.nombreComercial !== '' ? d.naviera.nombreComercial : '',
+        Reparaciones: reparaciones,
         FAlta: d.fAlta.substring(0, 10),
       };
       this.datosExcel.push(dato);
@@ -469,7 +485,7 @@ export class InventarioComponent implements OnInit {
     if (this.datosExcel) {
       this._excelService.exportAsExcelFile(this.datosExcel, nombre);
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
@@ -477,7 +493,7 @@ export class InventarioComponent implements OnInit {
     let count = 0;
     if (source) {
       source.forEach(d => {
-        if (d.grado == grado && d.estatus == estatus) {
+        if (d.grado === grado && d.estatus === estatus) {
           count++;
         }
       });
@@ -489,7 +505,7 @@ export class InventarioComponent implements OnInit {
     let count = 0;
     if (source) {
       source.forEach(d => {
-        if (d.grado == grado && d.tipo == tipo && d.reparaciones.length > 0) {
+        if (d.grado === grado && d.tipo === tipo && d.reparaciones.length > 0) {
           count++;
         }
       });
@@ -499,60 +515,60 @@ export class InventarioComponent implements OnInit {
 
   obtenTotales(tipo: string): number {
     let total = 0;
-    if (tipo.includes("20")) {
-      if (this.groupedDisponibles20 != undefined) {
+    if (tipo.includes('20')) {
+      if (this.groupedDisponibles20 !== undefined) {
         this.groupedDisponibles20.forEach(g20 => {
-          total += this.cuentaInventario("A", "DISPONIBLE", g20.maniobras);
-          total += this.cuentaInventario("B", "DISPONIBLE", g20.maniobras);
-          total += this.cuentaInventario("C", "DISPONIBLE", g20.maniobras);
-          if (this.dataSourceLR != undefined) {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
+          if (this.dataSourceLR !== undefined) {
             total += this.cuentaReparaciones(
-              "A",
+              'A',
               g20.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "B",
+              'B',
               g20.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "C",
+              'C',
               g20.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "PT",
+              'PT',
               g20.tipo,
               this.dataSourceLR.data
             );
           }
         });
       }
-    } else if (tipo.includes("40")) {
-      if (this.groupedDisponibles40 != undefined) {
+    } else if (tipo.includes('40')) {
+      if (this.groupedDisponibles40 !== undefined) {
         this.groupedDisponibles40.forEach(g40 => {
-          total += this.cuentaInventario("A", "DISPONIBLE", g40.maniobras);
-          total += this.cuentaInventario("B", "DISPONIBLE", g40.maniobras);
-          total += this.cuentaInventario("C", "DISPONIBLE", g40.maniobras);
-          if (this.dataSourceLR != undefined) {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
+          if (this.dataSourceLR !== undefined) {
             total += this.cuentaReparaciones(
-              "A",
+              'A',
               g40.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "B",
+              'B',
               g40.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "C",
+              'C',
               g40.tipo,
               this.dataSourceLR.data
             );
             total += this.cuentaReparaciones(
-              "PT",
+              'PT',
               g40.tipo,
               this.dataSourceLR.data
             );
@@ -566,103 +582,104 @@ export class InventarioComponent implements OnInit {
 
   obtenSubTotales(tipo: string, dataSource, dataSourceLR): number {
     let subTotal = 0;
-    if (tipo.includes("20")) {
-      if (dataSource != undefined) {
-        subTotal += this.cuentaInventario("A", "DISPONIBLE", dataSource);
-        subTotal += this.cuentaInventario("B", "DISPONIBLE", dataSource);
-        subTotal += this.cuentaInventario("C", "DISPONIBLE", dataSource);
+    if (tipo.includes('20')) {
+      if (dataSource !== undefined) {
+        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceLR != undefined) {
+        if (dataSourceLR !== undefined) {
           subTotal += this.cuentaReparaciones(
-            "A",
+            'A',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "B",
+            'B',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "C",
+            'C',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "PT",
+            'PT',
             tipo,
             this.dataSourceLR.data
           );
         }
-      } else if (dataSourceLR != undefined) {
-        subTotal += this.cuentaReparaciones("A", tipo, dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("B", tipo, dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("C", tipo, dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("PT", tipo, dataSourceLR.data);
+      } else if (dataSourceLR !== undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('B', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('C', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('PT', tipo, dataSourceLR.data);
       }
-    } else if (tipo.includes("40")) {
-      if (this.groupedDisponibles40 != undefined) {
-        subTotal += this.cuentaInventario("A", "DISPONIBLE", dataSource);
-        subTotal += this.cuentaInventario("B", "DISPONIBLE", dataSource);
-        subTotal += this.cuentaInventario("C", "DISPONIBLE", dataSource);
+    } else if (tipo.includes('40')) {
+      if (this.groupedDisponibles40 !== undefined) {
+        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceLR != undefined) {
+        if (dataSourceLR !== undefined) {
           subTotal += this.cuentaReparaciones(
-            "A",
+            'A',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "B",
+            'B',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "C",
+            'C',
             tipo,
             this.dataSourceLR.data
           );
           subTotal += this.cuentaReparaciones(
-            "PT",
+            'PT',
             tipo,
             this.dataSourceLR.data
           );
         }
-      } else if (dataSourceLR != undefined) {
-        subTotal += this.cuentaReparaciones("A", tipo, this.dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("B", tipo, this.dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("C", tipo, this.dataSourceLR.data);
-        subTotal += this.cuentaReparaciones("PT", tipo, this.dataSourceLR.data);
+      } else if (dataSourceLR !== undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data);
       }
     }
     return subTotal;
   }
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("InventarioTabs", event.index.toString());
+    localStorage.setItem('InventarioTabs', event.index.toString());
   }
 
   open(id: string) {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable historyArray lo obtengo
-    if (localStorage.getItem("historyArray")) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
-      history = JSON.parse(localStorage.getItem("historyArray"));
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable historyArray lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta a donde debo regresar al array
-    array.push("/inventario");
+    // Agrego mi nueva ruta a donde debo regresar al array
+    array.push('/inventario');
 
-    //sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
-    localStorage.setItem("historyArray", JSON.stringify(array));
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
+    // Voy a pagina.
     this.router.navigate([
-      "/maniobras/maniobra/" + id + "/termina_lavado_reparacion"
+      '/maniobras/maniobra/' + id + '/termina_lavado_reparacion'
     ]);
   }
 }

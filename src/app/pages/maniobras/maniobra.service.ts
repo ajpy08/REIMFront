@@ -155,7 +155,7 @@ export class ManiobraService {
     if (reparacion) {
       params = params.append(
         'reparacion',
-        reparacion == true ? 'true' : 'false'
+        reparacion === true ? 'true' : 'false'
       );
     }
 
@@ -206,7 +206,7 @@ export class ManiobraService {
     if (reparacion) {
       params = params.append(
         'reparacion',
-        reparacion == true ? 'true' : 'false'
+        reparacion === true ? 'true' : 'false'
       );
     }
 
@@ -384,8 +384,7 @@ export class ManiobraService {
   }
 
   corrigeContenedor(maniobra: Maniobra): Observable<any> {
-    let url =
-      URL_SERVICIOS + '/maniobra/' + maniobra._id + '/corrige_contenedor';
+    const url = URL_SERVICIOS + '/maniobra/' + maniobra._id + '/corrige_contenedor';
     return this.http.put(url, maniobra).pipe(
       map((resp: any) => {
         swal('Datos actualizados con éxito', '', 'success');
@@ -395,7 +394,7 @@ export class ManiobraService {
   }
 
   cargarManiobras(desde: number = 0): Observable<any> {
-    let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
+    const url = URL_SERVICIOS + '/maniobras?desde=' + desde;
     return this.http.get(url).pipe(
       map((resp: any) => {
         this.totalManiobras = resp.total;
@@ -450,12 +449,7 @@ export class ManiobraService {
   }
 
   buscarManiobraFecha(fechaIncio: string, fechaFin: string): Observable<any> {
-    let url =
-      URL_SERVICIOS +
-      '/maniobra/rangofecha?fechaInicio=' +
-      fechaIncio +
-      '&fechaFin=' +
-      fechaFin;
+    const url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
@@ -626,8 +620,8 @@ export class ManiobraService {
     return this.http.get(url, { params: params }).pipe(
       map((resp: any) => {
         if (
-          resp.mensaje != '' &&
-          resp.mensaje != undefined &&
+          resp.mensaje !== '' &&
+          resp.mensaje !== undefined &&
           resp.mensaje.length > 0
         ) {
           swal('ALERTA', resp.mensaje, 'success');
@@ -642,7 +636,7 @@ export class ManiobraService {
   DescargaZip(id: string, LR: string): Observable<any> {
     let url = URL_SERVICIOS + '/documentos/maniobra/' + id;
     url += '/zipLR/' + LR;
-    window.open(url)
-    return this.http.get(url, {responseType:'blob'});
+    window.open(url);
+    return this.http.get(url, {responseType: 'blob'});
   }
 }
