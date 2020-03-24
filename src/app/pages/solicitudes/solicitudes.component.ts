@@ -163,7 +163,6 @@ export class SolicitudesComponent implements OnInit {
   }
 
   cargarSolicitudes(CD: string) {
-    console.log('CARGUE A:' + this.usuarioLogueado.nombre);
     this.cargando = true;
     if (
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||

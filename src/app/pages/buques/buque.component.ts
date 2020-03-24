@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Buque } from './buques.models';
-import { BuqueService, NavieraService } from '../../services/service.index';
+import { BuqueService, NavieraService, UsuarioService } from '../../services/service.index';
 import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from 'src/app/pages/navieras/navieras.models';
@@ -27,6 +27,7 @@ export class BuqueComponent implements OnInit {
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
+    private usuarioService: UsuarioService,
     private location: Location
   ) {}
 
