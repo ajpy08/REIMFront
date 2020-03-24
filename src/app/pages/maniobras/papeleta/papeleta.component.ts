@@ -7,6 +7,13 @@ import { Location } from '@angular/common';
 
 import * as moment from 'moment';
 import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import swal from 'sweetalert';
+import * as io from 'socket.io-client';
+
+import { ROLES } from 'src/app/config/config';
+import { UsuarioService } from '../../../services/service.index';
+import { Usuario } from '../../usuarios/usuario.model';
 
 @Component({
   selector: 'app-papeleta',
@@ -19,16 +26,21 @@ export class PapeletaComponent implements OnInit {
   id: string;
   propiedades: [];
   url: string;
+  usuarioLogueado = new Usuario();
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
+
   constructor(private activateRoute: ActivatedRoute,
     public router: Router,
     private maniobraService: ManiobraService,
     private fb: FormBuilder,
     private location: Location,
     private tipoContenedorService: TiposContenedoresService,
-    ) {
+    private usuarioService: UsuarioService,
+  ) {
   }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.id = this.activateRoute.snapshot.paramMap.get('id');
     this.cargarManiobra(this.id);
 
@@ -39,8 +51,30 @@ export class PapeletaComponent implements OnInit {
     }
 
     this.createFormGroup();
+
+
+    this.socket.on('update-papeleta', function (data: any) {
+      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+        (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+        if (data.data._id) {
+          this.cargarManiobra(data.data._id);
+          if (data.data.usuarioModifico !== this.usuarioLogueado._id || data.data.usuarioModificado !== undefined) {
+          swal ({
+            title: 'Actualizado',
+            text: 'Esta papeleta fue actualizada por otro ususario',
+            icon: 'warning'
+          });
+        }
+      }
+      }
+    }.bind(this));
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('update-papeleta');
+
+  }
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
@@ -111,7 +145,7 @@ export class PapeletaComponent implements OnInit {
       this.regForm.controls['tipo'].setValue(maniobra.maniobra.tipo);
       this.regForm.controls['contenedor'].setValue(maniobra.maniobra.contenedor);
       this.regForm.controls['buque'].setValue(maniobra.maniobra.viaje !== undefined &&
-      maniobra.maniobra.viaje.buque.nombre !== undefined ? maniobra.maniobra.viaje.buque.nombre : '');
+        maniobra.maniobra.viaje.buque.nombre !== undefined ? maniobra.maniobra.viaje.buque.nombre : '');
       this.regForm.controls['viaje'].setValue(maniobra.maniobra.viaje !== undefined ? maniobra.maniobra.viaje.viaje : '');
       this.regForm.controls['BL'].setValue(maniobra.maniobra.solicitud !== undefined ? maniobra.maniobra.solicitud.blBooking : 'DEBE TENER BL/BOOKING');
       this.regForm.controls['cliente'].setValue(maniobra.maniobra.cliente.nombreComercial);

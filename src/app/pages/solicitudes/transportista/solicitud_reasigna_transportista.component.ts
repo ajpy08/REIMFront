@@ -36,7 +36,7 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra( id );
-    this.url = '/solicitudes_transportista';        
+    this.url = '/solicitudes_transportista';
   }
   createFormGroup() {
     this.regForm = this.fb.group({
