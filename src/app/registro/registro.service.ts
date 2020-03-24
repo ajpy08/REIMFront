@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { URL_SERVICIOS } from 'src/environments/environment';
 import swal from 'sweetalert';
@@ -21,12 +21,29 @@ export class RegistroServiceService {
 
 
   guardarRegistro(registro: Registro): Observable<any> {
-    let url = URL_SERVICIOS + '/registros/registro';
+    const url = URL_SERVICIOS + '/registros/registro';
     return this.http.post(url, registro)
     .pipe(
-              map((resp: any) => {
-              swal('Registro Guardado', 'Pronto nos pondremos en contacto usted !!' ,'success');
-              return resp.registro;
+              map((res: any) => {
+              // swal('Registro Guardado', 'Pronto nos pondremos en contacto usted !!' , 'success');
+              return res.registro;
           }));
+  }
+
+  envioCorreo(registro: Registro): Observable<any> {
+    let params = new HttpParams();
+    let url = URL_SERVICIOS + '/registros/registro';
+    url += '/' + registro._id + '/enviocorreo';
+    if (registro._id) {
+      params = params.append('_id', registro._id);
+    }
+    return this.http.get(url, { params: params }).pipe (
+      map((resp: any) => {
+        if (resp.mensaje !== '' && resp.mensaje !== undefined && resp.mensaje.length > 0) { 
+          swal('Registro Guardado', 'Se han enviado tus datos al departamento de TI, pronto nos pondremos en contacto con usted !!', 'success');
+        }
+        return resp.registro;
+      })
+    );
   }
 }
