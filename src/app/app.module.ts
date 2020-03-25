@@ -14,6 +14,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // temporal
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ExportAsModule } from 'ngx-export-as';
+
 // Componentes
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -107,6 +109,7 @@ export function getErrorHandler(): ErrorHandler {
     MatTableModule,
     MatStepperModule,
     MatButtonModule,
+    ExportAsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production
     })

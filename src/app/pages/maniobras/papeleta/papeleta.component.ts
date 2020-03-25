@@ -18,6 +18,8 @@ import { Usuario } from '../../usuarios/usuario.model';
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+
 declare global {
   interface Window {
     html2canvas;
@@ -38,6 +40,11 @@ export class PapeletaComponent implements OnInit {
   usuarioLogueado = new Usuario();
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
+  exportAsConfig: ExportAsConfig = {
+    type: 'pdf', // the type you want to download
+    elementId: 'print', // the id of html/table element
+  };
+
   constructor(private activateRoute: ActivatedRoute,
     public router: Router,
     private maniobraService: ManiobraService,
@@ -45,6 +52,7 @@ export class PapeletaComponent implements OnInit {
     private location: Location,
     private tipoContenedorService: TiposContenedoresService,
     private usuarioService: UsuarioService,
+    private exportAsService: ExportAsService
   ) {
   }
 
@@ -68,13 +76,13 @@ export class PapeletaComponent implements OnInit {
         if (data.data._id) {
           this.cargarManiobra(data.data._id);
           if (data.data.usuarioModifico !== this.usuarioLogueado._id || data.data.usuarioModificado !== undefined) {
-          swal ({
-            title: 'Actualizado',
-            text: 'Esta papeleta fue actualizada por otro ususario',
-            icon: 'warning'
-          });
+            swal({
+              title: 'Actualizado',
+              text: 'Esta papeleta fue actualizada por otro ususario',
+              icon: 'warning'
+            });
+          }
         }
-      }
       }
     }.bind(this));
   }
@@ -214,37 +222,37 @@ export class PapeletaComponent implements OnInit {
   }
 
   downloadPDF() {
+
     // window.html2canvas = html2canvas;
-    // const doc = new jsPDF(
-    //   'p', 'mm', 'a4'
-    // );
-    // doc.html(document.getElementById('print'), {
-    //   callback: function (pdf) {
-    //     pdf.save('cv-a4.pdf');
+    // const srcwidth = document.getElementById('print').scrollWidth;
+    // // console.log(srcwidth);
+    // const pdf = new jsPDF('p', 'pt', [620, 800]);
+    // pdf.setProperties({
+    //   title: 'Papeleta_' + new Date()
+    // });
+    // pdf.html(document.getElementById('print'), {
+    //   html2canvas: {
+    //     // scale: 612 / srcwidth,
+    //     // margin: 10
+    //     // 612 is the width of letter page. 'letter': [ 612, 792]
+    //   },
+    //   callback: function () {
+    //     window.open(pdf.output('bloburl'));
+    //     // pdf.save('papeleta.pdf');
     //   }
     // });
 
-    window.html2canvas = html2canvas;
-    const srcwidth = document.getElementById('print').scrollWidth;
-    // console.log(srcwidth);
-    const pdf = new jsPDF('p', 'pt', [620, 800]);
-    pdf.setProperties({
-      title: 'Papeleta_' + new Date()
+    // download the file using old school javascript method
+    this.exportAsService.save(this.exportAsConfig, `Papeleta_${new Date().getDate()}`).subscribe(() => {
+      // save started
     });
-    pdf.html(document.getElementById('print'), {
-      html2canvas: {
-         scale: 612 / srcwidth,
-        // margin: 10
-        // 612 is the width of letter page. 'letter': [ 612, 792]
-      },
-      callback: function () {
-        // window.open(pdf.output('bloburl'));
-        pdf.save('papeleta.pdf');
-      }
-    });
-
+    // get the data as base64 or json object for json type - this will be helpful in ionic or SSR
+    // this.exportAsService.get(this.exportAsConfig).subscribe(content => {
+    //   console.log(content);
+    // });
   }
 
+  /* #region  Properties */
   get _id() {
     return this.regForm.get('_id');
   }
@@ -311,4 +319,5 @@ export class PapeletaComponent implements OnInit {
   get noEconomico() {
     return this.regForm.get('noEconomico');
   }
+  /* #endregion */
 }
