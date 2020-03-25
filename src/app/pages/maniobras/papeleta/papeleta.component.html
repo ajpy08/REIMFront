@@ -1,8 +1,7 @@
 <!-- <p>Form value {{ regForm.value | json }} </p>
 <p>Form value {{ regForm.status | json }} </p> -->
 
-<button class="btn btn-success m-r-5" [disabled]="regForm.invalid" printSectionId="print"
-[printStyle] = "{table : { 'font-family': 'Arial', 'font-size': '12'}}" ngxPrint>
+<button class="btn btn-success m-r-5" [disabled]="regForm.invalid" printSectionId="print" ngxPrint>
   <i class="fa fa-print"></i> Imprimir</button>
 <button (click)="asignaFecha()" type="button" class="btn btn-warning waves-effect waves-light m-r-5">
   <i class="fa fa-calendar-plus-o"></i>
@@ -24,8 +23,8 @@
   </head>
 
   <body>
-    <!-- <table class="table" align="center" cellspacing="0" border="0" width= 90%> -->
-      <table  align="center" cellspacing="0" border="0" width= 90%>
+    <!-- <table class="table" align="center" cellspacing="0" border="0" width= 80%> -->
+      <table style="font-size: small;" align="center" cellspacing="0" border="0" width= 750px>
       <tr>
         <td colspan=2 rowspan=6><img src="../../../../assets/images/logo_reim_container_park.jpg" width=244 height=88>
         </td>
@@ -392,8 +391,7 @@
       </tr>
       <tr>
         <td colspan=8 height="20" align="left" valign=bottom>
-          <font color="#000000"><b>ESTE DOCUMENTO ES VALIDO UNICAMENTE EN LA FECHA QUE SE INDICA EN LA PARTE
-              SUPERIOR</b>
+          <font style="font-size: small;" color="#000000"><b>ESTE DOCUMENTO ES VALIDO UNICAMENTE EN LA FECHA QUE SE INDICA EN LA PARTE SUPERIOR</b>
           </font>
         </td>
       </tr>
