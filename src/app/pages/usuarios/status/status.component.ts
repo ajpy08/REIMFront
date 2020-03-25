@@ -72,7 +72,7 @@ export class StatusComponent implements OnInit {
 
   logout(user) {
     this.usuarioService.updateStatusUser(user).subscribe((usuario) => {
-      this.usuarioService.logout();
+      // this.usuarioService.logout();
       this.socket.emit('logoutuser', usuario);
     });
   }
