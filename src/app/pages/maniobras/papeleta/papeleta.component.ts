@@ -228,7 +228,7 @@ export class PapeletaComponent implements OnInit {
     // // console.log(srcwidth);
     // const pdf = new jsPDF('p', 'pt', [620, 800]);
     // pdf.setProperties({
-    //   title: 'Papeleta_' + new Date()
+    //   title: 'Papeleta_' + moment().format('DDMMYYYY')
     // });
     // pdf.html(document.getElementById('print'), {
     //   html2canvas: {
@@ -243,9 +243,10 @@ export class PapeletaComponent implements OnInit {
     // });
 
     // download the file using old school javascript method
-    this.exportAsService.save(this.exportAsConfig, `Papeleta_${new Date().getDate()}`).subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, `Papeleta_${moment().format('DDMMYYYY')}`).subscribe(() => {
       // save started
     });
+
     // get the data as base64 or json object for json type - this will be helpful in ionic or SSR
     // this.exportAsService.get(this.exportAsConfig).subscribe(content => {
     //   console.log(content);
