@@ -83,11 +83,11 @@
                   <mat-hint>Seleccione un cliente.</mat-hint>
                 </mat-form-field>
               </div>
-              <div class="sinpadding"> 
-                  <button class="user" matTooltip="Agregar Cliente" (click)="nuevoCliente()" class="btn btn-info btn-sm">
-                    <i class="fa fa-user"></i>
-                  </button>
-               </div>
+              <div class="sinpadding">
+                <button class="user" matTooltip="Agregar Cliente" (click)="nuevoCliente()" class="btn btn-info btn-sm">
+                  <i class="fa fa-user"></i>
+                </button>
+              </div>
               <div class="col-md-2">
                 <label class="control-label">Facturar a: </label>
                 <br>
@@ -303,56 +303,52 @@
               </div>
             </div>
             <!--/span-->
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <table matNativeControl class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Contenedor</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Estado</th>
-                        <th scope="col">Transportista</th>
-                        <th scope="col">Correo Transportista</th>
-                        <th scope="col">Patio</th>
-                      </tr>
-                    </thead>
-                    <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
-                      <tr [formGroupName]="i">
-                        <td scope="row">{{i+1}}</td>
-                        <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('peso').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('patio').value}}</td>
-                        <td>
-                          <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                          <!-- <button *ngIf="aprobada" [routerLink]="['/solicitudes/papeleta',  this.contenedores.controls[i].get('maniobra').value._id ]" class="btn btn-success">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Contenedor</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Transportista</th>
+                    <th scope="col">Correo Transportista</th>
+                    <th scope="col">Patio</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                  <tr [formGroupName]="i">
+                    <td scope="row">{{i+1}}</td>
+                    <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('peso').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                    <td>
+                      <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <!-- <button *ngIf="aprobada" [routerLink]="['/solicitudes/papeleta',  this.contenedores.controls[i].get('maniobra').value._id ]" class="btn btn-success">
 
                             <i class="fas fa-print"></i>
                           </button> -->
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="form-actions">
-            <!-- <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button> -->
-            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
-              [disabled]="regForm.pristine || regForm.invalid ">
-              <i class="fa fa-save "></i>
-              Guardar
-            </button>
-            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
-            <!-- <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button> -->
-          </div>
+              <div class="form-actions">
+                <!-- <button type="submit" class="btn btn-success"> <i class="fa fa-check"></i> Guardar</button> -->
+                <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
+                  [disabled]="regForm.pristine || regForm.invalid ">
+                  <i class="fa fa-save "></i>
+                  Guardar
+                </button>
+                <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+                <!-- <button type="button" routerLink="/solicitudes" class="btn btn-inverse">Regresar</button> -->
+              </div>
         </form>
         <!-- <p>Form value {{ regForm.getRawValue() | json }} </p> -->
       </div>
