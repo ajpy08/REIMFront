@@ -415,7 +415,7 @@ export class SolicitudDescargaComponent implements OnInit {
     const reg = this.agencias.find(x => x._id === event.value);
     if (reg) {
       if (reg.correo === '') {
-        swal('ERROR', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
+        swal('ERROR', 'La Agencia seleccionada no cuenta con correo Operativo', 'error');
         this.agencia.setValue('');
         this.correo.setValue('');
       } else {
@@ -463,7 +463,8 @@ export class SolicitudDescargaComponent implements OnInit {
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
           if (reg.correo === '') {
-            swal('Error', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
+            swal('ERROR', 'El Cliente seleccionado no cuenta con correo Operativo', 'error');
+            this.correo.setValue('');
           } else {
             this.correo.setValue(reg.correo);
           }
@@ -497,7 +498,8 @@ export class SolicitudDescargaComponent implements OnInit {
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
           if (reg.correo === '') {
-            swal('Error', 'El campo correo de la sección DETALLES DE LA DESCARGA no puede estar vacio', 'error');
+            swal('ERROR', 'La Agencia seleccionada no cuenta con correo Operativo', 'error');
+            this.correo.setValue('');
           } else {
             this.correo.setValue(reg.correo);
           }

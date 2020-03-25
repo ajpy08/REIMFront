@@ -1,12 +1,12 @@
 <!-- Row -->
 <div class="row">
-  <form [formGroup]="regForm" (submit)="apruebaSolicitud()">
-    <div class="col-lg-12">
-      <div class="card">
-        <div class="card-header bg-info">
-          <h4 class="m-b-0 text-white">Información de la solicitud</h4>
-        </div>
-        <div class="card-body">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bg-info">
+        <h4 class="m-b-0 text-white">Información de la solicitud</h4>
+      </div>
+      <div class="card-body">
+              <form [formGroup]="regForm" (submit)="apruebaSolicitud()">
           <div class="form-body">
             <h3 class="box-title">Datos generales</h3>
             <hr class="m-t-0 m-b-40">
@@ -183,88 +183,84 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <table matNativeControl class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Contenedor</th>
-                      <th scope="col">Tipo</th>
-                      <th scope="col">Estado</th>
-                      <th scope="col">Transportista</th>
-                      <th scope="col">Patio</th>
-                      <th scope="col">Encontrado</th>
-                      <th scope="col">Folio</th>
-                      <th scope="col">Validada</th>
-                      <th scope="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
-                    <tr [formGroupName]="i">
-                      <th scope="row">{{i+1}}</th>
-                      <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
-                      <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
-                      <td>{{this.contenedores.controls[i].get('peso').value}}</td>
-                      <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
-                      <td>{{this.contenedores.controls[i].get('patio').value}}</td>
-                      <td>
-                        <img *ngIf="contenedores.controls[i].get('maniobra').value"
-                          src="../../../assets/images/check_32x32.png">
-                        <img *ngIf="!contenedores.controls[i].get('maniobra').value"
-                          src="../../../assets/images/cancel_32x32.png">
-                        <button type="button" *ngIf="!contenedores.controls[i].get('maniobra').value"
-                          class="btn btn-primary btn-success" (click)="altaContenedor( this.contenedores.controls[i] )">
-                          <i class="fa fa-check"></i>
-                          Alta Contenedor
-                        </button>
-                      </td>
-                      <td>{{this.contenedores.controls[i].get('folio').value}}</td>
-                      <td><img *ngIf="contenedores.controls[i].get('solicitud').value"
-                          src="../../../assets/images/check_32x32.png"></td>
-                      <td>
 
-                        <button matTooltip="Eliminar Contenedor" type="button"
-                          class="btn btn-danger waves-effect waves-light m-r-10 m-l-10" (click)="borrarContenedor(i)">
-                          <i class="fa fa-trash-o"></i>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Contenedor</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Transportista</th>
+                  <th scope="col">Patio</th>
+                  <th scope="col">Encontrado</th>
+                  <th scope="col">Folio</th>
+                  <th scope="col">Validada</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                <tr [formGroupName]="i">
+                  <th scope="row">{{i+1}}</th>
+                  <td>{{this.contenedores.controls[i].get('contenedor').value}}</td>
+                  <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                  <td>{{this.contenedores.controls[i].get('peso').value}}</td>
+                  <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                  <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                  <td>
+                    <img *ngIf="contenedores.controls[i].get('maniobra').value"
+                      src="../../../assets/images/check_32x32.png">
+                    <img *ngIf="!contenedores.controls[i].get('maniobra').value"
+                      src="../../../assets/images/cancel_32x32.png">
+                    <button type="button" *ngIf="!contenedores.controls[i].get('maniobra').value"
+                      class="btn btn-primary btn-success" (click)="altaContenedor( this.contenedores.controls[i] )">
+                      <i class="fa fa-check"></i>
+                      Alta Contenedor
+                    </button>
+                  </td>
+                  <td>{{this.contenedores.controls[i].get('folio').value}}</td>
+                  <td><img *ngIf="contenedores.controls[i].get('solicitud').value"
+                      src="../../../assets/images/check_32x32.png"></td>
+                  <td>
 
-                        </button>
-                        <button *ngIf="estatus.value==='APROBADA'" matTooltip="Enviar Notificación" type="button"
-                          class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                          (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
-                          <i class="fas fa-envelope"></i>
-                        </button>
+                    <button matTooltip="Eliminar Contenedor" type="button"
+                      class="btn btn-danger waves-effect waves-light m-r-10 m-l-10" (click)="borrarContenedor(i)">
+                      <i class="fa fa-trash-o"></i>
+
+                    </button>
+                    <button *ngIf="estatus.value==='APROBADA'" matTooltip="Enviar Notificación" type="button"
+                      class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                      (click)="enviacorreo(contenedores.controls[i].get('maniobra').value)">
+                      <i class="fas fa-envelope"></i>
+                    </button>
 
 
-                        <button matTooltip="Ver informacion de Maniobra" type="button"
-                          class="btn btn-info waves-effect waves-light m-r-10 m-l-10" (click)="openDialog( this.contenedores.controls[i])">
-                          <i class="fas fa-info"></i>
-                        </button>
-                        <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    <button matTooltip="Ver informacion de Maniobra" type="button"
+                      class="btn btn-info waves-effect waves-light m-r-10 m-l-10"
+                      (click)="openDialog( this.contenedores.controls[i])">
+                      <i class="fas fa-info"></i>
+                    </button>
+                    <!-- <button type="button" *ngIf="estatus.value==='NA'" class="btn btn-primary btn-success" (click)="validaSolicitud( this.contenedores.controls[i] )" value="Validar"> <i class="fa fa-check"></i> Validar</button> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </div>
 
-          <div class="form-actions">
-            <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5"
-              [disabled]="regForm.invalid" (click)="validaSolicitudes()"> <i class="fa fa-check"></i> Validar</button>
-            <button *ngIf="estatus.value==='NA'" type="submit"
-              class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-              [disabled]="regForm.invalid || !solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>
-            <button type="button" class="btn btn-inverse" (click)="back()"> Regresar</button>
-          </div>
-
+        <div class="form-actions">
+          <button *ngIf="estatus.value==='NA'" type="button" class="btn btn-primary btn-success m-r-5"
+            [disabled]="regForm.invalid" (click)="validaSolicitudes()"> <i class="fa fa-check"></i> Validar</button>
+          <button *ngIf="estatus.value==='NA'" type="submit"
+            class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+            [disabled]="regForm.invalid || !solicitudCorrecta"> <i class="fa fa-check"></i> Aprobar</button>
+          <button type="button" class="btn btn-inverse" (click)="back()"> Regresar</button>
         </div>
+        
+      </form>
       </div>
     </div>
-  </form>
-  <!-- <p>Form value {{ regForm.value | json }} </p>
-  <p> Form status {{ regForm.status | json}} </p>
-  <p> Form status2 {{ regForm.pristine | json}} </p> -->
+  </div>
 </div>
 <!-- Row -->

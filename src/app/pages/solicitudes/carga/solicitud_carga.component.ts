@@ -376,7 +376,7 @@ export class SolicitudCargaComponent implements OnInit {
     const reg = this.agencias.find(x => x._id === event.value);
     if (reg) {
       if (reg.correo === '') {
-        swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
+        swal('ERROR', 'La Agencia seleccionada no cuenta con correo Operativo', 'error');
         this.agencia.setValue('');
         this.correo.setValue('');
       } else {
@@ -451,7 +451,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
           if (reg.correo === '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
+            swal('ERROR', 'El Cliente seleccionado no cuenta con correo Operativo', 'error');
             this.cliente.setValue('');
             this.correo.setValue('');
           } else {
@@ -487,7 +487,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
           if (reg.correo === '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
+            swal('ERROR', 'La Agencia seleccionada no cuenta con correo Operativo', 'error');
             this.agencia.setValue('');
             this.correo.setValue('');
           } else {
@@ -523,7 +523,7 @@ export class SolicitudCargaComponent implements OnInit {
           this.estado.setValue(reg.estado);
           this.cp.setValue(reg.cp);
           if (reg.correo === '') {
-            swal('ERROR', 'El campo correo de la sección DETALLES DE LA CARGA no puede estar vacio', 'error');
+            swal('ERROR', 'La Naviera seleccionada no cuenta con correo Operativo', 'error');
             this.naviera.setValue('');
             this.correo.setValue('');
           } else {
