@@ -15,6 +15,15 @@ import { ROLES } from 'src/app/config/config';
 import { UsuarioService } from '../../../services/service.index';
 import { Usuario } from '../../usuarios/usuario.model';
 
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
+declare global {
+  interface Window {
+    html2canvas;
+  }
+}
+
 @Component({
   selector: 'app-papeleta',
   templateUrl: './papeleta.component.html',
@@ -185,6 +194,55 @@ export class PapeletaComponent implements OnInit {
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
     // this.location.back();
+  }
+
+  captureScreen() {
+    // const data = document.getElementById('print');
+    // html2canvas(data).then(canvas => {
+    //   // Few necessary setting options
+    //   const imgWidth = 208;
+    //   const pageHeight = 295;
+    //   const imgHeight = canvas.height * imgWidth / canvas.width;
+    //   const heightLeft = imgHeight;
+
+    //   const contentDataURL = canvas.toDataURL('image/png');
+    //   const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
+    //   const position = 0;
+    // pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+    // pdf.save('MYPdf.pdf'); // Generated PDF
+    // });
+  }
+
+  downloadPDF() {
+    // window.html2canvas = html2canvas;
+    // const doc = new jsPDF(
+    //   'p', 'mm', 'a4'
+    // );
+    // doc.html(document.getElementById('print'), {
+    //   callback: function (pdf) {
+    //     pdf.save('cv-a4.pdf');
+    //   }
+    // });
+
+    window.html2canvas = html2canvas;
+    const srcwidth = document.getElementById('print').scrollWidth;
+    // console.log(srcwidth);
+    const pdf = new jsPDF('p', 'pt', [620, 800]);
+    pdf.setProperties({
+      title: 'Papeleta_' + new Date()
+    });
+    pdf.html(document.getElementById('print'), {
+      html2canvas: {
+         scale: 612 / srcwidth,
+        // margin: 10
+        // 612 is the width of letter page. 'letter': [ 612, 792]
+      },
+      callback: function () {
+        // window.open(pdf.output('bloburl'));
+        pdf.save('papeleta.pdf');
+      }
+    });
+
   }
 
   get _id() {

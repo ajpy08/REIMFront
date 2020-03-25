@@ -51,8 +51,8 @@
               <div class="mailbox">
                 <mat-header-cell *matHeaderCellDef>Foto</mat-header-cell>
                 <div class="user-img">
-                  <mat-cell class="bold" matTooltip="Foto de Usuario" *matCellDef="let row"> <img
-                      [src]="row.img | imagen" class="img-50 img-circle pointer">
+                  <mat-cell class="bold" matTooltip="Foto de Usuario" *matCellDef="let usuario"> <img
+                      [src]="usuario.img | imagen" class="img-50 img-circle pointer">
                   </mat-cell>
                   <span class="profile-status online pull-right"></span>
                 </div>
@@ -64,8 +64,8 @@
                     <div class="message-center">
                       <a href="#">
                         <div class="user-img">
-                          <mat-cell matTooltip="Foto de Usuario" *matCellDef="let row">
-                            <img [src]="row.img | imagen" class="img-50 img-circle pointer">
+                          <mat-cell matTooltip="Foto de Usuario" *matCellDef="let usuario">
+                            <img [src]="usuario.img | imagen" class="img-50 img-circle pointer">
                           </mat-cell>
                         </div>
                       </a>
@@ -77,23 +77,23 @@
 
             <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-              <mat-cell class="bold" *matCellDef="let row"> {{row.nombre}} </mat-cell>
+              <mat-cell class="bold" *matCellDef="let usuario"> {{usuario.nombre}} </mat-cell>
             </ng-container>
 
             <!-- <ng-container matColumnDef="email">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+              <mat-cell *matCellDef="let usuario"> {{usuario.email}} </mat-cell>
             </ng-container> -->
 
             <ng-container matColumnDef="role">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Role</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{role(row.role)}} </mat-cell>
+              <mat-cell *matCellDef="let usuario"> {{role(usuario.role)}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="empresas">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Empresas</mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-cell class="empresas" *ngFor="let empresa of row.empresas">
+              <mat-cell *matCellDef="let usuario">
+                <mat-cell class="empresas" *ngFor="let empresa of usuario.empresas">
                   {{empresa.razonSocial}}
                 </mat-cell>
               </mat-cell>
@@ -101,13 +101,13 @@
 
             <ng-container matColumnDef="fActivo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Activo desde</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.fActivo | date:'dd/MM/yyyy h:mm a'}} </mat-cell>
+              <mat-cell *matCellDef="let usuario"> {{usuario.fActivo | date:'dd/MM/yyyy h:mm a'}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <button matTooltip="Logout user" (click)="logout(row)"
+              <mat-cell *matCellDef="let usuario">
+                <button *ngIf="usuario.status === true" matTooltip="Logout user" (click)="logout(usuario)"
                   class="btn btn-danger m-r-5">
                   <i class="fas fa-sign-out-alt"></i>
                 </button>
@@ -115,7 +115,7 @@
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            <mat-row *matRowDef="let usuario; columns: displayedColumns;"></mat-row>
           </mat-table>
           <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
           </mat-paginator>
