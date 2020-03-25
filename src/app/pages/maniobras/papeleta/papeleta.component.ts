@@ -233,7 +233,7 @@ export class PapeletaComponent implements OnInit {
     });
     pdf.html(document.getElementById('print'), {
       html2canvas: {
-        scale: 612 / srcwidth,
+         scale: 612 / srcwidth,
         // margin: 10
         // 612 is the width of letter page. 'letter': [ 612, 792]
       },
