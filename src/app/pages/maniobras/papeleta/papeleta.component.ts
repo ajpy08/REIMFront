@@ -15,9 +15,6 @@ import { ROLES } from 'src/app/config/config';
 import { UsuarioService } from '../../../services/service.index';
 import { Usuario } from '../../usuarios/usuario.model';
 
-import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
 import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 
 declare global {
@@ -151,11 +148,18 @@ export class PapeletaComponent implements OnInit {
       this.regForm.controls['_id'].setValue(maniobra.maniobra._id);
       this.regForm.controls['folio'].setValue(maniobra.maniobra.folio);
       if (maniobra.maniobra.fAsignacionPapeleta) {
-        this.regForm.controls['fAsignacionPapeleta'].setValue(maniobra.maniobra.fAsignacionPapeleta);
+        const timeZone = moment().format('Z');
+        const fAsignacionPapeleta = moment(maniobra.maniobra.fAsignacionPapeleta).utcOffset(timeZone);
+        this.regForm.controls['fAsignacionPapeleta'].setValue(fAsignacionPapeleta);
       } else {
         this.asignaFecha();
       }
-      this.regForm.controls['fExpiracionPapeleta'].setValue(maniobra.maniobra.fExpiracionPapeleta);
+
+      if (maniobra.maniobra.fAsignacionPapeleta) {
+        const timeZone = moment().format('Z');
+        const fExpiracionPapeleta = moment(maniobra.maniobra.fExpiracionPapeleta).utcOffset(timeZone);
+        this.regForm.controls['fExpiracionPapeleta'].setValue(fExpiracionPapeleta);
+      }
       this.regForm.controls['cargaDescarga'].setValue(maniobra.maniobra.cargaDescarga);
       this.regForm.controls['peso'].setValue(maniobra.maniobra.peso);
       this.regForm.controls['grado'].setValue(maniobra.maniobra.grado);
@@ -202,23 +206,6 @@ export class PapeletaComponent implements OnInit {
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
     // this.location.back();
-  }
-
-  captureScreen() {
-    // const data = document.getElementById('print');
-    // html2canvas(data).then(canvas => {
-    //   // Few necessary setting options
-    //   const imgWidth = 208;
-    //   const pageHeight = 295;
-    //   const imgHeight = canvas.height * imgWidth / canvas.width;
-    //   const heightLeft = imgHeight;
-
-    //   const contentDataURL = canvas.toDataURL('image/png');
-    //   const pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
-    //   const position = 0;
-    // pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-    // pdf.save('MYPdf.pdf'); // Generated PDF
-    // });
   }
 
   downloadPDF() {
