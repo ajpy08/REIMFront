@@ -8,7 +8,8 @@ import { Usuario } from '../usuarios/usuario.model';
 import { Location } from '@angular/common';
 import { ROLES } from 'src/app/config/config';
 import swal from 'sweetalert';
-
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 @Component({
   selector: 'app-cliente',
   templateUrl: './cliente.component.html',
@@ -24,6 +25,7 @@ export class ClienteComponent implements OnInit {
   edicion = false;
   usuarioLogueado = new Usuario;
   url: string;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _clienteService: ClienteService,
     public _agenciaService: AgenciaService,
@@ -60,6 +62,35 @@ export class ClienteComponent implements OnInit {
     if (this.correoF) {
       this.correoF.removeAt(0);
     }
+
+    this.socket.on('update-cliente', function (data: any) {
+      if ((data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        if (data.data._id) {
+          this.createFormGroup();
+          this.cargarCliente(data.data._id);
+          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+            swal({
+              title: 'Actualizado',
+              text: 'Otro usuario ha actualizado este cliente',
+              icon: 'info'
+            });
+          }
+        }
+      }
+    }.bind(this));
+
+    this.socket.on('delete-cliente', function (data: any) {
+      if ((data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        this.router.navigate(['/clientes']);
+        swal({
+          title: 'Eliminado',
+          text: 'Se elimino este cliente por otro usuario',
+          icon: 'warning'
+        });
+      }
+    }.bind(this));
   }
 
   role(role: string) {
@@ -110,6 +141,8 @@ export class ClienteComponent implements OnInit {
   }
 
   addContenedor(correoO: string): void {
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+
     let error = false;
     if (correoO === '') {
       this.correo.disable({ emitEvent: true });
@@ -117,20 +150,21 @@ export class ClienteComponent implements OnInit {
     } else if (this.correoF.controls.length === 0) {
       this.correoF.push(this.agregarArray(correoO));
     } else {
-      if (this.correoF.controls) {
-        this.correoF.controls.forEach(c => {
-          if (this.correotem.value === c.value.correoO) {
-            if (error === false) {
-              swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
-              error = true;
-              return false;
+        if (this.correoF.controls) {
+          this.correoF.controls.forEach(c => {
+            if (this.correotem.value === c.value.correoO) {
+              if (error === false) {
+                swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
+                error = true;
+                return false;
+              }
             }
+          });
+          if (!error) {
+            this.correoF.push(this.agregarArray(correoO));
           }
-        });
-        if (!error) {
-          this.correoF.push(this.agregarArray(correoO));
         }
-      }
+      
     }
 
   }
@@ -255,8 +289,11 @@ export class ClienteComponent implements OnInit {
           // console.log (res);
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
-            this.router.navigate(['/cliente', this.regForm.get('_id').value]);
+            this.socket.emit('newcliente', res);
             this.edicion = true;
+            this.router.navigate(['/cliente', this.regForm.get('_id').value]);
+          } else {
+            this.socket.emit('updatecliente', res);
           }
           this.regForm.markAsPristine();
         });

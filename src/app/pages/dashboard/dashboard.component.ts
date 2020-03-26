@@ -9,6 +9,8 @@ import { Operador } from '../operadores/operador.models';
 import { ClienteService, SolicitudService, ManiobraService } from 'src/app/services/service.index';
 import { Cliente } from 'src/app/models/cliente.models';
 import { ThrowStmt } from '@angular/compiler';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,38 +21,40 @@ export class DashboardComponent implements OnInit {
 
   camiones: Camion[] = [];
   usuarioLogueado: Usuario;
-  totalCamiones: number = 0;
+  totalCamiones = 0;
 
   operadores: Operador[] = [];
-  totalOperadores: number = 0;
+  totalOperadores = 0;
 
   clientes: Cliente[] = [];
-  totalClientes: number = 0;
+  totalClientes = 0;
 
-  totalRegistrosDescargas: number = 0;
-  totalRegistrosCargas: number = 0;
-  totalSolicitudTransportistaD: number = 0;
-  totalSolicitudTransportistaC: number = 0;
+  totalRegistrosDescargas = 0;
+  totalRegistrosCargas = 0;
+  totalSolicitudTransportistaD = 0;
+  totalSolicitudTransportistaC = 0;
 
-  totalRegistrosInventario: number = 0;
+  totalRegistrosInventario = 0;
   c40: any;
   c20: any;
   groupedDisponibles20: any;
   groupedDisponibles40: any;
   dataSource: any;
   dataSourceLR: any;
-  totalRegistrosLR: number = 0;
+  totalRegistrosLR = 0;
 
-  totalLavado: number = 0;
-  totalReparacion: number = 0;
+  totalLavado = 0;
+  totalReparacion = 0;
 
-  totalTransito: number = 0;
-  totalEspera: number = 0;
-  totalRevision: number = 0;
-  totalLavadoReparacion: number = 0;
-  totalXCargar: number = 0;
+  totalTransito = 0;
+  totalEspera = 0;
+  totalRevision = 0;
+  totalLavadoReparacion = 0;
+  totalXCargar = 0;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
-  constructor(private camionService: CamionService, private usuarioService: UsuarioService, private operadoresServices: OperadorService, private clientesServices: ClienteService
+  constructor(private camionService: CamionService, private usuarioService: UsuarioService,
+    private operadoresServices: OperadorService, private clientesServices: ClienteService
     , private solicitudService: SolicitudService,
     private maniobraService: ManiobraService,
   ) { }
@@ -58,16 +62,31 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.cargarCamiones();
       this.cargarOperadores();
+      this.socket.on('new-camion', function (data: any) {
+        this.cargarCamiones();
+      }.bind(this));
+      this.socket.on('delete-camion', function (data: any) {
+        this.cargarCamiones();
+      }.bind(this));
+
+      this.socket.on('new-operador', function (data: any) {
+        this.cargarOperadores();
+      }.bind(this));
+      this.socket.on('delete-operador', function (data: any) {
+        this.cargarOperadores();
+      }.bind(this));
     }
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.AA_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.AA_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.cargarClientes();
       this.cargarSolicitudes('D');
       this.cargarSolicitudes('C');
     }
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.NAVIERA_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.NAVIERA_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
       this.cargarInventario();
       this.cargarLR();
       this.cargarLavadoOReparacion('L');
@@ -79,64 +98,14 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  // javi(){
-  //   this.cargarCamiones();
-  //     this.cargarOperadores();
-  //     this.cargarClientes();
-  //     this.cargarSolicitudes('D');
-  //     this.cargarSolicitudes('C');    
-  //     this.cargarInventario();
-  //     this.cargarLR();
-  //     this.cargarLavadoOReparacion('L');
-  //     this.cargarLavadoOReparacion('R');
-  //     this.cargarManiobras();
-
-
-  //     var text = "";
-  //     text += `Total De Camiones ${this.totalCamiones}
-  //     `
-  //     text += `Total De operadores ${this.totalOperadores}
-  //     `
-  //     text += `Total de Clientes ${this.totalClientes}
-  //     `
-  //     text += `Solicitudes de Descarga ${this.totalRegistrosDescargas}
-  //     `
-  //     text += `Solicitudes de Carga ${this.totalRegistrosCargas}
-  //     `
-  //     text += `Inventario ${this.totalRegistrosInventario}
-  //     `
-  //     this.groupedDisponibles20.forEach(g => {
-  //       text += `${g.tipo} : ( ${g.maniobras.length} )
-  //     `;
-  //     });
-
-  //     this.groupedDisponibles40.forEach(g => {
-  //       text += `${g.tipo} : ( ${g.maniobras.length} )
-  //     `;
-  //     });
-  //     text += `Lavado / Reparación ${this.totalRegistrosLR}
-  //     `
-  //     text += `Lavado ${this.totalLavado}
-  //     `
-  //     text += `Reparación ${this.totalReparacion}
-  //     `
-  //     text += `Maniobras Patio 
-  //     Transito ( ${this.totalTransito} ) 
-  //     Espera ( ${this.totalEspera} )
-  //     Revisión ( ${this.totalRevision} ) 
-  //     lavado / Reparación ( ${this.totalLavadoReparacion} )
-  //     X Cargar ( ${this.totalXCargar} )`
-
-  //     console.warn(text)
-  // }
 
   cargarCamiones() {
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.camionService.getCamiones().subscribe(camiones => {
         this.totalCamiones = camiones.camiones.length;
       });
-    } else if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+    } else if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
       this.camionService.getCamiones(this.usuarioLogueado.empresas[0]._id).subscribe(camiones => {
         this.totalCamiones = camiones.camiones.length;
       });
@@ -145,28 +114,28 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarOperadores() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.operadoresServices.getOperadores().subscribe(operadores => {
-        this.totalOperadores = operadores.operadores.length
+        this.totalOperadores = operadores.operadores.length;
       });
-    } else if (this.usuarioLogueado.role == ROLES.TRANSPORTISTA_ROLE) {
+    } else if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
       this.operadoresServices.getOperadores(this.usuarioLogueado.empresas[0]._id).subscribe(operadores => {
         this.totalOperadores = operadores.operadores.length;
-      })
+      });
     }
   }
 
   cargarClientes() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.clientesServices.getClientes().subscribe(clientes => {
-        this.totalClientes = clientes.clientes.length
+        this.totalClientes = clientes.clientes.length;
       });
-    } else if (this.usuarioLogueado.role == ROLES.AA_ROLE) {
-      var idsEmpresa = "";
+    } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
+      let idsEmpresa = '';
       if (this.usuarioLogueado.empresas.length > 0) {
         this.usuarioLogueado.empresas.forEach(empresa => {
           idsEmpresa += empresa._id + ',';
-        })
+        });
         idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length - 1);
         this.clientesServices.getClientesEmpresas(idsEmpresa).subscribe((clientes) => {
           this.totalClientes = clientes.clientes.length;
@@ -177,14 +146,14 @@ export class DashboardComponent implements OnInit {
 
 
   cargarSolicitudes(CD: string) {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
-      if (CD == 'D') {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      if (CD === 'D') {
         this.solicitudService.getSolicitudes('D')
           .subscribe(res => {
             this.totalRegistrosDescargas = res.total;
           });
 
-      } else if (CD == 'C') {
+      } else if (CD === 'C') {
         this.solicitudService.getSolicitudes('C')
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
@@ -196,13 +165,13 @@ export class DashboardComponent implements OnInit {
         agencias = agencias + emp._id + ',';
       });
       agencias = agencias.slice(0, -1);
-      if (CD == "D") {
-        this.solicitudService.getSolicitudes("D", null, null, null, agencias)
+      if (CD === 'D') {
+        this.solicitudService.getSolicitudes('D', null, null, null, agencias)
           .subscribe(res => {
             this.totalRegistrosDescargas = res.total;
           });
-      } else if (CD == "C") {
-        this.solicitudService.getSolicitudes("C", null, null, null, agencias)
+      } else if (CD === 'C') {
+        this.solicitudService.getSolicitudes('C', null, null, null, agencias)
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
           });
@@ -315,7 +284,7 @@ export class DashboardComponent implements OnInit {
 
 
   cargarLR() {
-    if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION, this.usuarioLogueado.empresas[0]._id)
         .subscribe(maniobras => {
 
@@ -323,7 +292,8 @@ export class DashboardComponent implements OnInit {
         });
 
     } else {
-      if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE) {
 
         this.maniobraService.getManiobrasNaviera(ETAPAS_MANIOBRA.LAVADO_REPARACION)
           .subscribe(maniobras => {
@@ -336,7 +306,7 @@ export class DashboardComponent implements OnInit {
   cuentaReparaciones(grado: string, tipo: string, source: any): number {
     let count = 0;
     source.forEach(d => {
-      if (d.grado == grado && d.tipo == tipo && d.reparaciones.length > 0) {
+      if (d.grado === grado && d.tipo === tipo && d.reparaciones.length > 0) {
         count++;
       }
       // } else if (grado == '' && d.tipo == tipo && d.reparaciones.length > 0) {
@@ -348,7 +318,7 @@ export class DashboardComponent implements OnInit {
   cuentaInventario(grado: string, estatus: string, source: any): number {
     let count = 0;
     source.forEach(d => {
-      if (d.grado == grado && d.estatus == estatus) {
+      if (d.grado === grado && d.estatus === estatus) {
         count++;
       }
     });
@@ -358,27 +328,27 @@ export class DashboardComponent implements OnInit {
   obtenTotales(tipo: string): number {
     let total = 0;
     if (tipo.includes('20')) {
-      if (this.groupedDisponibles20 != undefined) {
+      if (this.groupedDisponibles20 !== undefined) {
         this.groupedDisponibles20.forEach(g20 => {
           total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
           total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
-          total += this.cuentaReparaciones('A', g20.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('B', g20.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('C', g20.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('PT', g20.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('A', g20.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('B', g20.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('C', g20.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('PT', g20.tipo, this.dataSourceLR.data);
         });
       }
     } else if (tipo.includes('40')) {
-      if (this.groupedDisponibles40 != undefined) {
+      if (this.groupedDisponibles40 !== undefined) {
         this.groupedDisponibles40.forEach(g40 => {
           total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
           total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
-          total += this.cuentaReparaciones('A', g40.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('B', g40.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('C', g40.tipo, this.dataSourceLR.data)
-          total += this.cuentaReparaciones('PT', g40.tipo, this.dataSourceLR.data)
+          total += this.cuentaReparaciones('A', g40.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('B', g40.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('C', g40.tipo, this.dataSourceLR.data);
+          total += this.cuentaReparaciones('PT', g40.tipo, this.dataSourceLR.data);
         });
       }
     }
@@ -389,40 +359,40 @@ export class DashboardComponent implements OnInit {
   obtenSubTotales(tipo: string, dataSource, dataSourceLR): number {
     let subTotal = 0;
     if (tipo.includes('20')) {
-      if (dataSource != undefined) {
+      if (dataSource !== undefined) {
         subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceLR != undefined) {
-          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+        if (dataSourceLR !== undefined) {
+          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data);
         }
-      } else if (dataSourceLR != undefined) {
-        subTotal += this.cuentaReparaciones('A', tipo, dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('B', tipo, dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('C', tipo, dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('PT', tipo, dataSourceLR.data)
+      } else if (dataSourceLR !== undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('B', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('C', tipo, dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('PT', tipo, dataSourceLR.data);
       }
     } else if (tipo.includes('40')) {
-      if (this.groupedDisponibles40 != undefined) {
+      if (this.groupedDisponibles40 !== undefined) {
         subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceLR != undefined) {
-          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
-          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+        if (dataSourceLR !== undefined) {
+          subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data);
+          subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data);
         }
-      } else if (dataSourceLR != undefined) {
-        subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data)
-        subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data)
+      } else if (dataSourceLR !== undefined) {
+        subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceLR.data);
+        subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceLR.data);
       }
     }
     return subTotal;
@@ -430,11 +400,11 @@ export class DashboardComponent implements OnInit {
 
 
   cargarLavadoOReparacion(LR: string) {
-    if (this.usuarioLogueado.role == ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
+    if (this.usuarioLogueado.role === ROLES.NAVIERA_ROLE && this.usuarioLogueado.empresas.length > 0) {
       this.maniobraService.getManiobrasLavadoOReparacion(this.usuarioLogueado.empresas[0]._id, null, null, null, null, LR).subscribe(maniobras => {
         if (LR === 'L') {
           this.totalLavado = maniobras.maniobras.length;
-        } else if (LR == 'R') {
+        } else if (LR === 'R') {
           this.totalReparacion = maniobras.maniobras.length;
         }
       });
@@ -442,7 +412,7 @@ export class DashboardComponent implements OnInit {
       this.maniobraService.getManiobrasLavadoOReparacion(null, null, null, null, null, LR).subscribe(maniobras => {
         if (LR === 'L') {
           this.totalLavado = maniobras.maniobras.length;
-        } else if (LR == 'R') {
+        } else if (LR === 'R') {
           this.totalReparacion = maniobras.maniobras.length;
         }
       });
@@ -451,7 +421,8 @@ export class DashboardComponent implements OnInit {
   }
 
   cargarManiobras() {
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIO_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIO_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this.maniobraService.getManiobras(null, ETAPAS_MANIOBRA.TRANSITO).subscribe(maniobras => {
         this.totalTransito = maniobras.total;
       });
@@ -469,64 +440,64 @@ export class DashboardComponent implements OnInit {
 
       this.maniobraService.getManiobras(null, ETAPAS_MANIOBRA.XCARGAR).subscribe(maniobras => {
         this.totalXCargar = maniobras.total;
-      })
+      });
     }
 
   }
 
 
   cargarSolicitudesTransportista() {
-    if (this.usuarioLogueado.role === "TRANSPORTISTA_ROLE") {
+    if (this.usuarioLogueado.role === 'TRANSPORTISTA_ROLE') {
       this.maniobraService
         .getManiobras(
-          "D",
-          "TRANSITO",
+          'D',
+          'TRANSITO',
           this.usuarioLogueado.empresas[0]._id,
           null,
           null,
-          "VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT"
+          'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT'
         )
         .subscribe(maniobras => {
           this.totalSolicitudTransportistaD = maniobras.total;
         });
       this.maniobraService
         .getManiobras(
-          "C",
-          "TRANSITO",
+          'C',
+          'TRANSITO',
           this.usuarioLogueado.empresas[0]._id,
           null,
           null,
-          "VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT"
+          'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT'
         )
         .subscribe(maniobras => {
           this.totalSolicitudTransportistaC = maniobras.total;
         });
     } else
-      if (this.usuarioLogueado.role === "PATIOADMIN_ROLE" || "ADMIN_ROLE") {
+      if (this.usuarioLogueado.role === 'PATIOADMIN_ROLE' || 'ADMIN_ROLE') {
         this.maniobraService
-        .getManiobras(
-          "D",
-          "TRANSITO",
-         null,
-          null,
-          null,
-          "VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT"
-        )
-        .subscribe(maniobras => {
-          this.totalSolicitudTransportistaD = maniobras.total;
-        });
-      this.maniobraService
-        .getManiobras(
-          "C",
-          "TRANSITO",
-         null,
-          null,
-          null,
-          "VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT"
-        )
-        .subscribe(maniobras => {
-          this.totalSolicitudTransportistaC = maniobras.total;
-        });
+          .getManiobras(
+            'D',
+            'TRANSITO',
+            null,
+            null,
+            null,
+            'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT'
+          )
+          .subscribe(maniobras => {
+            this.totalSolicitudTransportistaD = maniobras.total;
+          });
+        this.maniobraService
+          .getManiobras(
+            'C',
+            'TRANSITO',
+            null,
+            null,
+            null,
+            'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT'
+          )
+          .subscribe(maniobras => {
+            this.totalSolicitudTransportistaC = maniobras.total;
+          });
       }
   }
 
