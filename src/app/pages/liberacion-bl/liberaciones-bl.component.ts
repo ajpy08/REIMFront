@@ -1,49 +1,49 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import {
   SolicitudService,
   ExcelService,
   UsuarioService
-} from "../../services/service.index";
+} from '../../services/service.index';
 import {
   MatTabGroup,
   MatTabChangeEvent,
   MatPaginator,
   MatSort,
   MatTableDataSource
-} from "@angular/material";
-import * as _moment from "moment";
-import { DatePipe } from "@angular/common";
-import { MomentDateAdapter } from "@angular/material-moment-adapter";
+} from '@angular/material';
+import * as _moment from 'moment';
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE
-} from "@angular/material/core";
-import { Liberacion } from "./liberacion.models";
-import { ROLES } from "src/app/config/config";
-import { LiberacionBLService } from "./liberacion-bl.service";
+} from '@angular/material/core';
+import { Liberacion } from './liberacion.models';
+import { ROLES } from 'src/app/config/config';
+import { LiberacionBLService } from './liberacion-bl.service';
 
-declare var swal: any;
+declare const swal: any;
 
 const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: ["l", "L"]
+    dateInput: ['l', 'L']
   },
   display: {
-    dateInput: "L",
-    monthYearLabel: "MMM YYYY",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "MMMM YYYY"
+    dateInput: 'L',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
   }
 };
 
 @Component({
-  selector: "app-liberaciones-bl",
-  templateUrl: "./liberaciones-bl.component.html",
-  styleUrls: ["./liberaciones-bl.component.css"],
+  selector: 'app-liberaciones-bl',
+  templateUrl: './liberaciones-bl.component.html',
+  styleUrls: ['./liberaciones-bl.component.css'],
   providers: [
     DatePipe,
     {
@@ -52,34 +52,34 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE]
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: "es-mx" }
+    { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }
   ]
 })
 export class LiberacionesBLComponent implements OnInit {
   fIni = moment()
     .local()
-    .startOf("day")
-    .subtract(1, "month");
+    .startOf('day')
+    .subtract(1, 'month');
   fFin = moment()
     .local()
-    .startOf("day");
+    .startOf('day');
   SolicitudesExcel = [];
-  @ViewChild(MatPaginator) paginator: MatPaginator; //descargas
-  @ViewChild(MatSort) sort: MatSort; //descargas
+  @ViewChild(MatPaginator) paginator: MatPaginator; // descargas
+  @ViewChild(MatSort) sort: MatSort; // descargas
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
-  @ViewChild("pagCargas", { read: MatPaginator }) pagCargas: MatPaginator; //cargas
-  @ViewChild("sortCargas") sortCargas: MatSort; //cargas
+  @ViewChild('pagCargas', { read: MatPaginator }) pagCargas: MatPaginator; // cargas
+  @ViewChild('sortCargas') sortCargas: MatSort; // cargas
 
   cargando = true;
   displayedColumnsCarga = [
-    "actions",
-    "blBooking",
-    "naviera.nombreComercial",
-    "cliente.nombreComercial",
-    "observaciones",
-    "solicitado",
-    "estatus",
-    "fAlta"
+    'actions',
+    'blBooking',
+    'naviera.nombreComercial',
+    'cliente.nombreComercial',
+    'observaciones',
+    'solicitado',
+    'estatus',
+    'fAlta'
   ];
 
   dtCargas: any;
@@ -95,9 +95,10 @@ export class LiberacionesBLComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
-    this.cargarSolicitudes("C");
-    let indexTAB = localStorage.getItem("AprobSolicitudes");
+    this.cargarSolicitudes('C');
+    const indexTAB = localStorage.getItem('AprobSolicitudes');
     if (indexTAB) {
+      // tslint:disable-next-line: radix
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
   }
@@ -108,13 +109,13 @@ export class LiberacionesBLComponent implements OnInit {
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
       this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
     ) {
-      if (CD == "C") {
+      if (CD === 'C') {
         this.liberacionService
           .getLiberacion(
-            "C",
+            'C',
             null,
-            this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
-            this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : "",
+            this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
+            this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '',
             null
           )
           .subscribe(res => {
@@ -126,17 +127,17 @@ export class LiberacionesBLComponent implements OnInit {
           });
       }
     } else {
-      let navieras = "";
+      let navieras = '';
       this.usuarioLogueado.empresas.forEach(emp => {
         navieras = navieras + emp._id;
       });
-      if (CD == "C") {
+      if (CD === 'C') {
         this.liberacionService
           .getLiberacion(
-            "C",
+            'C',
             null,
-            this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
-            this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : "",
+            this.fIni ? this.fIni.utc().format('DD-MM-YYYY') : '',
+            this.fFin ? this.fFin.utc().format('DD-MM-YYYY') : '',
             navieras
           )
           .subscribe(res => {
@@ -158,7 +159,7 @@ export class LiberacionesBLComponent implements OnInit {
       this.dtCargas.filter = filterValue;
       this.totalRegistrosCargas = this.dtCargas.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Cargas");
+      console.error('Error al filtrar el dataSource de Cargas');
     }
 
     // this.dtCargas.filter = filterValue;
@@ -173,14 +174,14 @@ export class LiberacionesBLComponent implements OnInit {
   // }
 
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("AprobSolicitudes", event.index.toString());
+    localStorage.setItem('AprobSolicitudes', event.index.toString());
   }
 
   borrarSolicitud(sol: Liberacion) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar la solicitud.",
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar la solicitud.',
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
@@ -195,40 +196,40 @@ export class LiberacionesBLComponent implements OnInit {
   cargarDatosExcelD(datos) {
     this.SolicitudesExcel = [];
     datos.forEach(d => {
-      var contenedoresDescarga = "";
+      let contenedoresDescarga = '';
 
       d.contenedores.forEach(x => {
         contenedoresDescarga +=
-          "Contenedor: " + x.contenedor + " Tipo:" + x.tipo + "\n ,";
+          'Contenedor: ' + x.contenedor + ' Tipo:' + x.tipo + '\n ,';
       });
-      var solicitudes = {
+      const solicitudes = {
         Fecha_Alta: d.fAlta.substring(0, 10),
         Agencia:
           d.agencia &&
           d.agencia.nombreComercial &&
-          d.agencia.nombreComercial != undefined &&
-          d.agencia.nombreComercial != "" &&
+          d.agencia.nombreComercial !== undefined &&
+          d.agencia.nombreComercial !== '' &&
           d.agencia.nombreComercial,
         Cliente:
           d.cliente &&
           d.cliente.nombreComercial &&
-          d.cliente.nombreComercial != undefined &&
-          d.cliente.nombreComercial != "" &&
+          d.cliente.nombreComercial !== undefined &&
+          d.cliente.nombreComercial !== '' &&
           d.cliente.nombreComercial,
         Viaje:
           d.viaje &&
           d.viaje.viaje &&
-          d.viaje.viaje != undefined &&
-          d.viaje.viaje != ""
+          d.viaje.viaje !== undefined &&
+          d.viaje.viaje !== ''
             ? d.viaje.viaje
-            : "" && d.viaje.viaje,
+            : '' && d.viaje.viaje,
         Nombre_Buque:
           d.buque &&
           d.buque.nombre &&
-          d.buque.nombre != undefined &&
-          d.buque.nombre != ""
+          d.buque.nombre !== undefined &&
+          d.buque.nombre !== ''
             ? d.buque.nombre
-            : "" && d.buque.nombre,
+            : '' && d.buque.nombre,
         Observaciones: d.observaciones,
         Contenedores: contenedoresDescarga,
         Estatus: d.estatus
@@ -242,32 +243,32 @@ export class LiberacionesBLComponent implements OnInit {
     if (this.SolicitudesExcel) {
       this.excelService.exportAsExcelFile(this.SolicitudesExcel, nombre);
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 
   cargarDatosExcelC(datos) {
     datos.forEach(d => {
-      var contendoresSolicitados = "";
+      let contendoresSolicitados = '';
 
       d.contenedores.forEach(c => {
         contendoresSolicitados +=
-          "Tipo: " + c.tipo + " Grado: " + c.grado + "\n";
+          'Tipo: ' + c.tipo + ' Grado: ' + c.grado + '\n';
       });
 
-      var solicitudes = {
+      const solicitudes = {
         Fecha_Alta: d.fAlta.substring(0, 10),
         Agencia:
           d.agencia &&
           d.agencia.nombreComercial &&
-          d.agencia.nombreComercial != undefined &&
-          d.agencia.nombreComercial != "" &&
+          d.agencia.nombreComercial !== undefined &&
+          d.agencia.nombreComercial !== '' &&
           d.agencia.nombreComercial,
         Cliente:
           d.cliente &&
           d.cliente.nombreComercial &&
-          d.cliente.nombreComercial != undefined &&
-          d.cliente.nombreComercial != "" &&
+          d.cliente.nombreComercial !== undefined &&
+          d.cliente.nombreComercial !== '' &&
           d.cliente.nombreComercial,
         Observaciones: d.observaciones,
         Solicitado: contendoresSolicitados,
@@ -282,7 +283,7 @@ export class LiberacionesBLComponent implements OnInit {
     if (this.SolicitudesExcel) {
       this.excelService.exportAsExcelFile(this.SolicitudesExcel, nombre);
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 }

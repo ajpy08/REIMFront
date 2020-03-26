@@ -1,16 +1,16 @@
 <!-- <p>Form value {{ regForm.value | json }} </p>
 <p>Form value {{ regForm.status | json }} </p> -->
 
-<button class="btn btn-success m-r-5" [disabled]="regForm.invalid" printSectionId="print" ngxPrint>
+<button class="btn btn-success m-r-5" *ngIf="this.regForm.valid"printSectionId="print" ngxPrint>
   <i class="fa fa-print"></i> Imprimir</button>
-<button (click)="asignaFecha()" type="button" class="btn btn-warning waves-effect waves-light m-r-5">
+<!-- <button (click)="asignaFecha()" type="button" class="btn btn-warning waves-effect waves-light m-r-5">
   <i class="fa fa-calendar-plus-o"></i>
   Asignar Fecha
-</button> 
-<button class="btn btn-primary m-r-5" [disabled]="regForm.invalid" (click)="downloadPDF()">
+</button>  -->
+<button class="btn btn-primary m-r-5" *ngIf="this.regForm.valid" (click)="downloadPDF()">
   <i class="far fa-file-pdf"></i> Descargar</button>
 <font color="ff0000" *ngIf="!this.fExpiracionPapeleta.valid">  <--- La fecha de Expiración esta vencida...(ASIGNA FECHA VALIDA) </font> <br><br>
-<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos. (Revisa si ya asignaste camion y operador)</h3>
+<h3 *ngIf="!this.regForm.valid">No puedes imprimir esta papeleta por que le faltan datos. (Revisa si ya asignaste camion y operador)</h3><br>
 <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button><br><br>
 
 <div id="print">
