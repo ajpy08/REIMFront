@@ -352,6 +352,7 @@ export class AprobarCargaComponent implements OnInit {
           .subscribe(resp => {
             this.cargarSolicitud(this._id.value);
             this.socket.emit('aprobarsolicitud', res);
+            this.socket.emit('cambiomaniobra', res);
             this.router.navigate([this.url]);
           });
       });

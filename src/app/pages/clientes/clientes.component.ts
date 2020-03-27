@@ -6,6 +6,8 @@ import { Usuario } from '../usuarios/usuario.model';
 import { Observable } from 'rxjs';
 import { stringify } from '@angular/core/src/render3/util';
 import { ROLES } from 'src/app/config/config';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import * as io from 'socket.io-client';
 declare var swal: any;
 @Component({
   selector: 'app-clientes',
@@ -14,11 +16,12 @@ declare var swal: any;
 })
 export class ClientesComponent implements OnInit {
   clientes: Cliente[] = [];
-  cargando: boolean = true;
-  totalRegistros: number = 0;
-  desde: number = 0;
+  cargando = true;
+  totalRegistros = 0;
+  desde = 0;
   usuarioLogueado = new Usuario;
   clientesExcel = [];
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   displayedColumns = ['actions', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
     'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'empresas'];
@@ -30,9 +33,35 @@ export class ClientesComponent implements OnInit {
   constructor(public _clienteService: ClienteService, private usuarioService: UsuarioService, private excelService: ExcelService) { }
 
   ngOnInit() {
-    localStorage.removeItem('historyArray')
+    localStorage.removeItem('historyArray');
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarClientes();
+
+    this.socket.on('new-cliente', function (data: any) {
+      if ( (data.data.empresas[0]=== this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        this.cargarClientes();
+      }
+    }.bind(this));
+    this.socket.on('update-cliente', function (data: any) {
+      if ( (data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        this.cargarClientes();
+      }
+    }.bind(this));
+    this.socket.on('delete-cliente', function (data: any) {
+      if ( (data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        this.cargarClientes();
+      }
+    }.bind(this));
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-cliente');
+    this.socket.removeListener('update-cliente');
+    this.socket.removeListener('new-cliente');
   }
 
   applyFilter(filterValue: string) {
@@ -49,7 +78,7 @@ export class ClientesComponent implements OnInit {
   cargarClientes() {
     this.cargando = true;
 
-    if (this.usuarioLogueado.role == ROLES.ADMIN_ROLE || this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE) {
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this._clienteService.getClientes(this.desde)
         .subscribe(clientes => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
@@ -60,14 +89,13 @@ export class ClientesComponent implements OnInit {
           // console.log(this.dataSource)
         });
     } else {
-      var idsEmpresa = "";
+      let idsEmpresa = '';
       if (this.usuarioLogueado.empresas.length > 0) {
         this.usuarioLogueado.empresas.forEach(empresa => {
           idsEmpresa += empresa._id + ',';
-        })
+        });
 
-        idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length - 1);;
-        //console.log(idsEmpresa)
+        idsEmpresa = idsEmpresa.substring(0, idsEmpresa.length - 1);
         this._clienteService.getClientesEmpresas(idsEmpresa).subscribe((clientes) => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
           this.dataSource.sort = this.sort;
@@ -119,7 +147,7 @@ export class ClientesComponent implements OnInit {
         if (borrar) {
           this._clienteService.borrarCliente(cliente._id)
             .subscribe(borrado => {
-              this.cargarClientes();
+              this.socket.emit('deletecliente', cliente);
             });
         }
       });
@@ -127,7 +155,7 @@ export class ClientesComponent implements OnInit {
 
   crearDatosExcel(datos) {
     datos.forEach(d => {
-      var clientes = {
+      const clientes = {
         RazonSocial: d.razonSocial,
         NombreComercial: d.nombreComercial,
         Rfc: d.rfc,
@@ -143,16 +171,16 @@ export class ClientesComponent implements OnInit {
         Correo_Facturación: d.correoFac,
         Credito: d.credito,
         Empresas: d.empresas
-      }
+      };
       this.clientesExcel.push(clientes);
     });
   }
 
   exportarXLSX(): void {
     this.crearDatosExcel(this.dataSource.filteredData);
-    if(this.clientesExcel){
+    if (this.clientesExcel) {
       this.excelService.exportAsExcelFile(this.clientesExcel, 'Clientes');
-    }else {
+    } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
   }

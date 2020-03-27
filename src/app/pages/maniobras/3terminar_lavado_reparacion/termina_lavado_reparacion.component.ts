@@ -30,6 +30,8 @@ import { Coordenada } from 'src/app/models/coordenada.models';
 import swal from 'sweetalert';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { renderComponent } from '@angular/core/src/render3';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -72,6 +74,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
   mensajeError = '';
   url: string;
   maniobraGuardadaEnCoordenada;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -256,8 +259,8 @@ export class TerminaLavadoReparacionComponent implements OnInit {
         );
       }
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
-      var blBooking =
-        maniob.maniobra.solicitud != undefined
+      const blBooking =
+        maniob.maniobra.solicitud !== undefined
           ? maniob.maniobra.solicitud.blBooking
           : '';
       this.regForm.controls['blBooking'].setValue(blBooking);
@@ -440,8 +443,9 @@ export class TerminaLavadoReparacionComponent implements OnInit {
     // }
 
     if (this.regForm.valid) {
-      //Elimino la maniobra que tenia guardada mi coordenada para despues agregar la maniobra actual
-      //a la ultima coordenada del array.
+      // Elimino la maniobra que tenia guardada mi coordenada para despues
+      // agregar la maniobra actual
+      // a la ultima coordenada del array.
 
       if (this.maniobraGuardadaEnCoordenada) {
         this.coordenadaService
@@ -452,8 +456,8 @@ export class TerminaLavadoReparacionComponent implements OnInit {
           .subscribe(c => {
             if (c && c.maniobras && c.maniobras.length > 0) {
               c.maniobras.forEach(m => {
-                if (m.maniobra._id == this.regForm.get('_id').value) {
-                  var indice = c.maniobras.indexOf(m); // obtenemos el indice
+                if (m.maniobra._id === this.regForm.get('_id').value) {
+                  const indice = c.maniobras.indexOf(m); // obtenemos el indice
                   c.maniobras.splice(indice, 1);
                 }
               });
@@ -466,13 +470,14 @@ export class TerminaLavadoReparacionComponent implements OnInit {
               );
             }
 
-            var ultima = this.historial.value[this.historial.value.length - 1];
+            // tslint:disable-next-line: no-shadowed-variable
+            const ultima = this.historial.value[this.historial.value.length - 1];
             if (ultima) {
               this.coordenadaService
                 .getCoordenada(ultima.bahia, ultima.posicion)
                 .subscribe(c => {
                   if (c) {
-                    var maniobra = (new Maniobra()._id = this.regForm.get(
+                    const maniobra = (new Maniobra()._id = this.regForm.get(
                       '_id'
                     ).value);
                     if (c.maniobras) {
@@ -495,6 +500,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
             }
           });
       } else {
+        // tslint:disable-next-line: prefer-const
         var ultima = this.historial.value[this.historial.value.length - 1];
         if (ultima) {
           this.coordenadaService
@@ -533,6 +539,7 @@ export class TerminaLavadoReparacionComponent implements OnInit {
             if (res.estatus !== ETAPAS_MANIOBRA.LAVADO_REPARACION) {
               this.router.navigate([this.url]);
             }
+            this.socket.emit('cambiomaniobra', res);
             this.estatus.setValue(res.estatus);
             this.ObtenCoordenadasDisponibles(this.regForm.get('_id').value);
           },
