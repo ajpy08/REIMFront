@@ -76,6 +76,24 @@ export class SolicitudesTransportistaComponent implements OnInit {
         }
       });
     }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      data.data.contenedores.forEach(t => {
+        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+          this.cargarManiobras(data.data.tipo);
+        }
+      });
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      data.data.contenedores.forEach(t => {
+        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+          this.cargarManiobras(data.data.tipo);
+        }
+      });
+    }.bind(this));
   }
 
   cargarManiobras(CD: string) {

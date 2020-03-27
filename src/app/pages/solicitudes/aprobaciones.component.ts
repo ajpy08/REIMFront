@@ -360,6 +360,7 @@ export class AprobacionesComponent implements OnInit {
       if (borrar) {
         this._solicitudesService.borrarSolicitudManiobraCampo(solicitud._id).subscribe(borrado => {
           this.socket.emit('deletesolicitud', solicitud);
+          this.socket.emit('cambiomaniobra', solicitud);
         });
       }
     });
@@ -379,6 +380,7 @@ export class AprobacionesComponent implements OnInit {
           .boorarSolicitudes(solicitud._id)
           .subscribe(borrado => {
             this.socket.emit('deletesolicitud', solicitud);
+            this.socket.emit('cambiomaniobra', solicitud);
             // this.cargaSolicitudes('D');
             // this.cargaSolicitudes('C');
 

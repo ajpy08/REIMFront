@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService, TransportistaService, AgenciaService, CamionService, OperadorService, ClienteService, SolicitudService } from '../../../services/service.index';
+import { ManiobraService, TransportistaService, AgenciaService, 
+  CamionService, OperadorService, ClienteService, SolicitudService } from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
@@ -15,6 +16,8 @@ import { ETAPAS_MANIOBRA } from '../../../config/config';
 import * as _moment from 'moment';
 const moment = _moment;
 import { Location } from '@angular/common';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 
 export const MY_FORMATS = {
   parse: {
@@ -49,6 +52,7 @@ export class LlegadaEntradaComponent implements OnInit {
   mensajeError = '';
   mensajeExito = '';
   url: string;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     private _maniobraService: ManiobraService,
@@ -151,7 +155,7 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
-      var blBooking = maniob.maniobra.solicitud != undefined ? maniob.maniobra.solicitud.blBooking : '';
+      var blBooking = maniob.maniobra.solicitud !== undefined ? maniob.maniobra.solicitud.blBooking : '';
       this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
       if (maniob.maniobra.transportista) {
@@ -207,9 +211,11 @@ export class LlegadaEntradaComponent implements OnInit {
       this.mensajeExito = '';
       this._maniobraService.registraLlegadaEntrada(this.regForm.value).subscribe(res => {
         this.regForm.markAsPristine();
-        this.mensajeExito = 'Cambios Realizados con éxito.'
+        this.mensajeExito = 'Cambios Realizados con éxito.';
         this.estatus.setValue(res.estatus);
+        this.socket.emit('cambiomaniobra', res);
         if (res.estatus === ETAPAS_MANIOBRA.REVISION) {
+          
           this.router.navigate([this.url]);
         }
       }, error => {

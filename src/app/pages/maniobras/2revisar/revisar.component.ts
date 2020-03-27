@@ -14,6 +14,8 @@ import { CoordenadaService } from '../coordenada.service';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ReparacionComponent } from '../../reparaciones/reparacion.component';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-revisar',
@@ -32,6 +34,7 @@ export class RevisarComponent implements OnInit {
   mensajeError = '';
   url: string;
   maniobraGuardadaEnCoordenada;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -336,11 +339,13 @@ export class RevisarComponent implements OnInit {
       this.maniobraGuardadaEnCoordenada = ultima;
 
       this._maniobraService.registraLavRepDescarga(this.regForm.value).subscribe(res => {
+        this.socket.emit('cambiomaniobra', res);
         this.regForm.markAsPristine();
         if (res.estatus !== ETAPAS_MANIOBRA.REVISION) {
           this.router.navigate([this.url]);
         }
         this.estatus.setValue(res.estatus);
+
         this.ObtenCoordenadasDisponibles(this.regForm.get('_id').value);
       }, error => {
         this.mensajeError = error.error.mensaje;
