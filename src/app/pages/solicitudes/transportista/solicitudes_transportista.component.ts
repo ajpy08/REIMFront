@@ -65,7 +65,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
   constructor(
     private _maniobraService: ManiobraService,
     private _usuarioService: UsuarioService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
@@ -77,13 +77,31 @@ export class SolicitudesTransportistaComponent implements OnInit {
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
 
-    this.socket.on('update-papeleta', function(data: any){
+    this.socket.on('update-papeleta', function (data: any) {
       if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
-      (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+        (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
         if (data.data._id) {
           this.cargarManiobras(data.data.cargaDescarga);
         }
       }
+    }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      data.data.contenedores.forEach(t => {
+        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+          this.cargarManiobras(data.data.tipo);
+        }
+      });
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      data.data.contenedores.forEach(t => {
+        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
+          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+          this.cargarManiobras(data.data.tipo);
+        }
+      });
     }.bind(this));
   }
 
