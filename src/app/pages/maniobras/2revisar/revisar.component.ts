@@ -315,7 +315,7 @@ export class RevisarComponent implements OnInit {
             }
           });
       } else {
-        var ultima = this.historial.value[this.historial.value.length - 1]
+        var ultima = this.historial.value[this.historial.value.length - 1];
         if (ultima) {
           this.coordenadaService.getCoordenada(ultima.bahia, ultima.posicion).subscribe(c => {
             if (c) {

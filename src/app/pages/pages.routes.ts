@@ -125,7 +125,7 @@ const pagesRoutes: Routes = [
         path: 'reparaciones/reparacion/:id',
         component: ReparacionComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'navieras',
@@ -427,7 +427,8 @@ const pagesRoutes: Routes = [
         path: 'contenedoresLR',
         component: ContenedoresLRComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Contenedores con Lavado / Reparacion (Naviera)', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE, ROLES.PATIO_ROLE] }
+        data: { titulo: 'Contenedores con Lavado / Reparacion (Naviera)', roles: [ROLES.ADMIN_ROLE,
+            ROLES.PATIOADMIN_ROLE, ROLES.NAVIERA_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'reportesRL',
