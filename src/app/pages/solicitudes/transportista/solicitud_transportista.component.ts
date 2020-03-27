@@ -49,7 +49,16 @@ export class SolicitudTransportistaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     this._agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
-    this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+    } else {
+      if (this.usuarioLogueado.empresas && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
+        this.transportistas = this.usuarioLogueado.empresas;
+        // this.usuarioLogueado.empresas.forEach(empresa => {
+        // });
+      }
+    }
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra(id);
@@ -87,7 +96,7 @@ export class SolicitudTransportistaComponent implements OnInit {
       tipo: [{ value: '', disabled: true }],
       cliente: [{ value: '', disabled: true }],
       agencia: [{ value: '', disabled: true }],
-      transportista: [{ value: '', disabled: false }],
+      transportista: [{ value: '', disabled: true }],
       camion: ['', [Validators.required]],
       operador: ['', [Validators.required]],
       folio: [{ value: '', disabled: true }],
@@ -169,10 +178,10 @@ export class SolicitudTransportistaComponent implements OnInit {
     });
   }
 
-  cargaOperadores(id: string) {
-    this._operadorService.getOperadores(id, true)
+  cargaOperadores(transportista: string) {
+    this._operadorService.getOperadores(transportista, true)
       .subscribe(resp => this.operadores = resp.operadores);
-    this.cargaCamiones(id);
+    this.cargaCamiones(transportista);
   }
 
   cargaCamiones(idTransportista: string) {

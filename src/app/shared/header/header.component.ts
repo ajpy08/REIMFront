@@ -1,3 +1,4 @@
+import { ManiobraService } from 'src/app/services/service.index';
 import { AgenciaService } from './../../pages/agencias/agencia.service';
 import { Notification } from './../../models/notification.models';
 import { SolicitudService } from './../../pages/solicitudes/solicitud.service';
@@ -17,12 +18,15 @@ import { ROLES } from 'src/app/config/config';
 export class HeaderComponent implements OnInit {
 
   usuario: Usuario;
+  maniobras: any[] = [];
+  maniobrasCarga: any[] = [];
   notifications: Notification[] = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _usuarioService: UsuarioService,
     private solicitudesService: SolicitudService,
     private agenciaService: AgenciaService,
+    private maniobraService: ManiobraService,
     public router: Router) { }
 
   ngOnInit() {
@@ -35,6 +39,34 @@ export class HeaderComponent implements OnInit {
     this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
       this.doSolicitudesNotifications(resp.solicitudes);
     });
+
+    if (this.usuario.role === 'TRANSPORTISTA_ROLE') {
+      this.usuario.empresas.forEach(empresa => {
+          this.maniobraService.getManiobras('D', 'TRANSITO', empresa._id, null, null, 'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            if (maniobras.maniobras.length > 0) {
+              maniobras.maniobras.forEach(m => {
+                this.maniobras.push(m);
+              });
+              this.maniobras.forEach(ma => {
+                this.doManiobraNotification(ma);
+              });
+              this.maniobras = [];
+            }
+          });
+
+          this.maniobraService.getManiobras('C', 'TRANSITO', empresa._id, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            if (maniobras.maniobras.length > 0) {
+              maniobras.maniobras.forEach(m => {
+                this.maniobrasCarga.push(m);
+              });
+              this.maniobrasCarga.forEach(ma => {
+                this.doManiobraNotification(ma);
+              });
+              this.maniobrasCarga = [];
+            }
+          });
+      });
+    }
 
     this.socket.on('new-solicitud', function (data: any) {
       if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
@@ -67,6 +99,18 @@ export class HeaderComponent implements OnInit {
         this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
           this.doSolicitudesNotifications(resp.solicitudes);
         });
+      } else {
+        if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
+          data.data.contenedores.forEach(c => {
+            this.usuario.empresas.forEach(empresa => {
+              if (c.transportista === empresa._id) {
+                this.maniobraService.getManiobraConIncludes(c.maniobra).subscribe(maniobra => {
+                  this.doManiobraNotification(maniobra.maniobra);
+                });
+              }
+            });
+          });
+        }
       }
     }.bind(this));
   }
@@ -117,6 +161,18 @@ export class HeaderComponent implements OnInit {
         }
       });
     });
+  }
+
+  doManiobraNotification(maniobra) {
+    const notify = new Notification;
+    const tipo = maniobra.cargaDescarga === 'D' ? 'Descarga' : maniobra.cargaDescarga === 'C' ? 'Carga' : 'TIPO';
+    notify.name = 'Maniobra de ' + tipo;
+    notify.description = ' Folio ' + maniobra.folio + ' (' + maniobra.agencia.razonSocial + ')';
+    notify.fAlta = maniobra.fAlta;
+    notify._id = maniobra._id;
+    notify.url = `https://reimcontainerpark.com.mx/#/solicitud_transportista/${notify._id}`;
+
+    this.notifications.push(notify);
   }
 
   logout() {
