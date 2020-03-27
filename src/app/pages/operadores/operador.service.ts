@@ -9,27 +9,27 @@ import swal from 'sweetalert';
 
 @Injectable()
 export class OperadorService {
-  totalOperadores: number = 0;
+  totalOperadores = 0;
 
   constructor(
     public http: HttpClient,
     public _usuarioService: UsuarioService
   ) { }
 
-  getOperadores(transportista? : string, activo? : boolean): Observable<any> {
-    let url = URL_SERVICIOS + '/operadores/';
+  getOperadores(transportista?: string, activo?: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/operadores/';
     let params = new HttpParams();
-    if (transportista)  {
+    if (transportista) {
       params = params.append('transportista', transportista);
     }
-    if (activo)  {
+    if (activo) {
       params = params.append('activo', 'true');
     }
-    return this.http.get(url, {params: params });
+    return this.http.get(url, { params: params });
   }
 
   getOperador(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/operadores/operador/' + id;
+    const url = URL_SERVICIOS + '/operadores/operador/' + id;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.operadores));
   }
@@ -56,14 +56,14 @@ export class OperadorService {
     }
   }
 
-  habilitaDeshabilitaOperador(operador: Operador, act: boolean) : Observable<any> {
+  habilitaDeshabilitaOperador(operador: Operador, act: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/operadores/operador/' + operador._id + '/habilita_deshabilita';
     url += '?token=' + this._usuarioService.token;
-    return this.http.put( url, {activo: act} )
-              .pipe(map( (resp: any) => {
-                      swal('Cambio de estado del operador realizado con éxito', resp.operador.nombre, 'success' );
-                      return true;
-                    }));
+    return this.http.put(url, { activo: act })
+      .pipe(map((resp: any) => {
+        swal('Cambio de estado del operador realizado con éxito', resp.operador.nombre, 'success');
+        return true;
+      }));
   }
 
   borrarOperador(id: string): Observable<any> {
