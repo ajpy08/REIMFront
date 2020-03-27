@@ -18,6 +18,8 @@ import { ETAPAS_MANIOBRA } from '../../../config/config';
 import { Location } from '@angular/common';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
+import * as io from 'socket.io-client';
 
 
 import * as _moment from 'moment';
@@ -56,7 +58,7 @@ export class CargaContenedorComponent implements OnInit {
   mensajeExito = '';
   mensajeError = '';
   url: string;
-
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
   contenedoresFiltrados: Observable<Maniobra[]>;
 
   constructor(
@@ -300,6 +302,7 @@ export class CargaContenedorComponent implements OnInit {
         this.mensajeError = '';
         this.contenedorTemp.setValue(null);
         if (res.estatus !== ETAPAS_MANIOBRA.XCARGAR) {
+          this.socket.emit('cambiomaniobra', res);
           this.router.navigate(['/maniobras']);
         }
       }, error => {

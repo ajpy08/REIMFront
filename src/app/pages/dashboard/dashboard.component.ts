@@ -81,7 +81,22 @@ export class DashboardComponent implements OnInit {
       }.bind(this));
     }
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.AA_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+      this.socket.on('new-cliente', function (data: any) {
+        this.cargarClientes();
+      }.bind(this));
+      this.socket.on('delete-cliente', function (data: any) {
+        this.cargarClientes();
+      }.bind(this));
+
       this.cargarClientes();
+      this.socket.on('new-solicitud', function (data: any) {
+        this.cargarSolicitudes(data.data.tipo);
+      }.bind(this));
+
+      this.socket.on('delete-solicitud', function (data: any) {
+        this.cargarSolicitudes(data.data.tipo);
+      }.bind(this));
+
       this.cargarSolicitudes('D');
       this.cargarSolicitudes('C');
     }
@@ -91,11 +106,41 @@ export class DashboardComponent implements OnInit {
       this.cargarLR();
       this.cargarLavadoOReparacion('L');
       this.cargarLavadoOReparacion('R');
+
       this.cargarManiobras();
     }
+    
+    this.socket.on('cambio-maniobra', function (data: any) {
+      this.cargarInventario(data.data.estatus);
+    }.bind(this));
+
+    this.socket.on('cambio-maniobra', function (data: any) {
+        this.cargarManiobras(data.data.estatus);
+    }.bind(this));
+
+    this.socket.on('aprobar-solicitud', function (data: any) {
+      this.cargarSolicitudesTransportista(data.data.tipo);
+    }.bind(this));
+
+    this.socket.on('delete-solicitud', function (data: any) {
+      this.cargarSolicitudesTransportista(data.data.tipo);
+    }.bind(this));
 
     this.cargarSolicitudesTransportista();
 
+  }
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('new-camion');
+    this.socket.removeListener('delete-camion');
+    this.socket.removeListener('new-operador');
+    this.socket.removeListener('delete-operador');
+    this.socket.removeListener('new-cliente');
+    this.socket.removeListener('delete-cliente');
+    this.socket.removeListener('new-solicitud');
+    this.socket.removeListener('delete-solicitud');
+    this.socket.removeListener('cambio-maniobra');
+    this.socket.removeListener('aprobar-solicitud');
   }
 
 

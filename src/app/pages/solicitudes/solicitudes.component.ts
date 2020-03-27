@@ -121,7 +121,7 @@ export class SolicitudesComponent implements OnInit {
     }
 
     this.socket.on('new-solicitud', function (data: any) {
-      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
       (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.cargarSolicitudes(data.data.tipo);
       }
@@ -129,7 +129,7 @@ export class SolicitudesComponent implements OnInit {
 
 
     this.socket.on('update-solicitud', function (data: any) {
-      if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+      if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
       (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         if (data.data._id) {
           this.cargarSolicitudes(data.data.tipo);
@@ -145,7 +145,7 @@ export class SolicitudesComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-       if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
+       if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
         (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.cargarSolicitudes(data.data.tipo);
       }

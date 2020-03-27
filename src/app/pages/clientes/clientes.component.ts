@@ -57,6 +57,13 @@ export class ClientesComponent implements OnInit {
     }.bind(this));
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-cliente');
+    this.socket.removeListener('update-cliente');
+    this.socket.removeListener('new-cliente');
+  }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches

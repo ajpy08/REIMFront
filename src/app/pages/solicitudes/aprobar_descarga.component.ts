@@ -411,6 +411,7 @@ export class AprobarDescargaComponent implements OnInit {
         // tslint:disable-next-line: no-shadowed-variable
         this._SolicitudService.enviaCorreoAprobacionSolicitud(this.regForm.value).subscribe((resp) => {
           this.socket.emit('aprobarsolicitud', resp);
+          this.socket.emit('cambiomaniobra', resp);
           this.router.navigate([this.url]);
         });
       });

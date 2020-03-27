@@ -185,9 +185,9 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls['cp'].setValue(res.cp);
       this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-      var correoArray = res.correo.split(",")
+      const correoArray = res.correo.split(',');
       correoArray.forEach(c => {
-        this.addContenedor(c)
+        this.addContenedor(c);
       });
       // this.regForm.controls['correo'].setValue(res.correo);
       this.regForm.controls['correoFac'].setValue(res.correoFac);
@@ -210,7 +210,7 @@ export class TransportistaComponent implements OnInit {
       correos = correos.slice(0,-1);
   
     this.correotem.setValue('');
-    this.correo.setValue(correos)
+    this.correo.setValue(correos);
     
       // console.log(this.regForm.value);
       this._transportistaService.guardarTransportista(this.regForm.value)

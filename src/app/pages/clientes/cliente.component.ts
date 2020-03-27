@@ -93,6 +93,11 @@ export class ClienteComponent implements OnInit {
     }.bind(this));
   }
 
+  ngOnDestroy() {
+    this.socket.removeListener('delete-cliente');
+    this.socket.removeListener('update-cliente');
+  }
+
   role(role: string) {
     const result = role.substr(0, role.indexOf('_'));
     return result;
@@ -141,8 +146,6 @@ export class ClienteComponent implements OnInit {
   }
 
   addContenedor(correoO: string): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-
     let error = false;
     if (correoO === '') {
       this.correo.disable({ emitEvent: true });
@@ -164,9 +167,7 @@ export class ClienteComponent implements OnInit {
             this.correoF.push(this.agregarArray(correoO));
           }
         }
-      
     }
-
   }
 
   quitar(indice: number) {
@@ -292,9 +293,10 @@ export class ClienteComponent implements OnInit {
             this.socket.emit('newcliente', res);
             this.edicion = true;
             this.router.navigate(['/cliente', this.regForm.get('_id').value]);
-          } else {
-            this.socket.emit('updatecliente', res);
           }
+          // else {
+          //   this.socket.emit('updatecliente', res);
+          // }
           this.regForm.markAsPristine();
         });
     }
