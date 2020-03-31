@@ -193,11 +193,11 @@ export class SolicitudService {
     let url = URL_SERVICIOS + '/solicitudes/solicitud/maniobra/' + id;
     url += '?token=' + this._usuarioService.token;
     return this.http
-      .delete(url)
-      .pipe(
-        map(resp =>
-          swal('Solicitud Borrada', 'Eliminado correctamente', 'success')
-        )
+      .delete(url).pipe(
+        map((resp: any) => {
+          swal('Solicitud Borrada', 'Eliminado correctamente', 'success');
+          return resp;
+        })
       );
   }
 
@@ -218,16 +218,17 @@ export class SolicitudService {
   borrarManiobra(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/eliminarManiobra/Solicitud/' + id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.delete(url).pipe(
-      map((resp: any) => resp.solicitud),
-      catchError(err => {
-        swal(
-          'ERROR',
-          'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
-          'error'
-        );
-        return throwError(err);
-      })
+    return this.http.delete(url).pipe(map((res: any) => {
+      return res.maniobra;
+    }),
+    catchError(err => {
+      swal(
+        'ERROR',
+        'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
+        'error'
+      );
+      return throwError(err);
+    })
     );
   }
 
@@ -243,6 +244,7 @@ export class SolicitudService {
     return this.http.put(url, id).pipe(
       map((resp: any) => {
         swal('Eliminado', 'Se elimino el contenedor correctamente', 'success');
+        return resp;
       }),
       catchError(err => {
         swal('Error', 'La maniobra no se elimino', 'error');

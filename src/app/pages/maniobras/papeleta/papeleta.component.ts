@@ -138,6 +138,7 @@ export class PapeletaComponent implements OnInit {
 
   cargarManiobra(id: string) {
     this.maniobraService.getManiobraConIncludes(id).subscribe((maniobra) => {
+      
       this.tipoContenedorService.getTipoContenedorXTipo(maniobra.maniobra.tipo).subscribe((t) => {
         // console.log(t[0]);
         if (t[0] !== undefined) {
@@ -194,8 +195,9 @@ export class PapeletaComponent implements OnInit {
   }
 
   asignaFecha() {
-    this.maniobraService.asignaFecha({ _id: this.id }).subscribe(() => {
+    this.maniobraService.asignaFecha({ _id: this.id }).subscribe((res) => {
       this.cargarManiobra(this.id);
+      this.socket.emit('updatepapeleta', res);
     });
   }
 
