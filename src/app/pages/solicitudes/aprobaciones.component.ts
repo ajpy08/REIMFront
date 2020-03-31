@@ -224,10 +224,12 @@ export class AprobacionesComponent implements OnInit {
     localStorage.setItem('AprobacionTabs', event.index.toString());
   }
 
+  // ! BORRAR SOLIICITUD C/D SIN APROBAR
+
   borrarSolicitud(sol: Solicitud) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar la solicitud.',
+      text: 'Esta apunto de borrar la solicitud sin aprobar de DESCARGA.',
       icon: 'warning',
       buttons: true,
       dangerMode: true
@@ -348,11 +350,11 @@ export class AprobacionesComponent implements OnInit {
     }
   }
 
-  // ! BORRAR SOLICICTUD DE DESCARGA
+  // ! BORRAR SOLICICTUD DE DESCARGA YA APROBADA
   borrarSolicitudDescarga(solicitud: Solicitud) {
     swal({
       title: '¿Estas Seguro?',
-      text: 'Estas por borrar toda la solicitud',
+      text: 'Estas por borrar toda la solicitud ya aprobada',
       icon: 'warning',
       buttons: true,
       dangerMode: true
@@ -366,26 +368,26 @@ export class AprobacionesComponent implements OnInit {
     });
   }
 
-  // ! BORRAR SOLICICTUD DE CARGA
-  borrarSolicitudes(solicitud: Solicitud) {
-    swal({
-      title: '¿Estas seguro?',
-      text: 'Estas apunto de borrar la solicitud ',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then(borrar => {
-      if (borrar) {
-        this._solicitudesService
-          .boorarSolicitudes(solicitud._id)
-          .subscribe(borrado => {
-            this.socket.emit('deletesolicitud', solicitud);
-            this.socket.emit('cambiomaniobra', solicitud);
-            // this.cargaSolicitudes('D');
-            // this.cargaSolicitudes('C');
+  // // ! BORRAR SOLICICTUD DE CARGA
+  // borrarSolicitudes(solicitud: Solicitud) {
+  //   swal({
+  //     title: '¿Estas seguro?',
+  //     text: 'Estas apunto de borrar la solicitud ',
+  //     icon: 'warning',
+  //     buttons: true,
+  //     dangerMode: true
+  //   }).then(borrar => {
+  //     if (borrar) {
+  //       this._solicitudesService
+  //         .boorarSolicitudes(solicitud._id)
+  //         .subscribe(borrado => {
+  //           this.socket.emit('deletesolicitud', solicitud);
+  //           this.socket.emit('cambiomaniobra', solicitud);
+  //           // this.cargaSolicitudes('D');
+  //           // this.cargaSolicitudes('C');
 
-          });
-      }
-    });
-  }
+  //         });
+  //     }
+  //   });
+  // }
 }

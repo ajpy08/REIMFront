@@ -181,6 +181,7 @@
             <mat-form-field>
               <label class="control-label"><b>Tipo Lavado :</b></label>
               <mat-select formControlName="lavado" tabindex="1">
+                <mat-option [value]="">-</mat-option>
                 <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
                   {{tipo.descripcion}}
                 </mat-option>

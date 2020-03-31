@@ -23,7 +23,6 @@ import swal from 'sweetalert';
 export class SolicitudesTransportistaComponent implements OnInit {
   maniobras: any[] = [];
   maniobrasCarga: any[] = [];
-  cargando = true;
   totalRegistros = 0;
   totalRegistrosCargas = 0;
   usuarioLogueado: any;
@@ -67,62 +66,115 @@ export class SolicitudesTransportistaComponent implements OnInit {
     }
 
     this.socket.on('update-papeleta', function (data: any) {
-      this.usuarioLogueado.empresas.forEach(empresa => {
-        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
-          (data.data.transportista === this.usuarioLogueado.empresa._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
-          if (data.data._id) {
-            this.cargarManiobras(data.data.cargaDescarga);
-          }
+
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data._id) {
+          this.cargarManiobrasAdmin(data.data.tipo);
         }
-      });
+      } else {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+          if ((empresa.transportista === this.usuarioLogueado.empresas._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+            if (data.data._id) {
+              this.cargarManiobras(data.data.cargaDescarga);
+            }
+          }
+        });
+      }
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
-      data.data.contenedores.forEach(t => {
-        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
-          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
-          this.cargarManiobras(data.data.tipo);
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data._id) {
+          this.cargarManiobrasAdmin(data.data.tipo);
         }
-      });
+      } else {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+          data.data.contenedores.forEach(t => {
+            if ((t.transportista === empresa._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+              this.cargarManiobras(data.data.tipo);
+            }
+          });
+        });
+      }
     }.bind(this));
 
     this.socket.on('delete-solicitud', function (data: any) {
-      data.data.contenedores.forEach(t => {
-        if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
-          (t.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
-          this.cargarManiobras(data.data.tipo);
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data._id) {
+          this.cargarManiobrasAdmin(data.data.tipo);
         }
-      });
+      } else {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+          data.data.contenedores.forEach(t => {
+            if ((t.transportista === empresa._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+              if (data.data._id) {
+                this.cargarManiobras(data.data.tipo);
+              }
+            }
+          });
+        });
+      }
+    }.bind(this));
+
+    this.socket.on('delete-maniobra-descarga', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data.maniobra._id) {
+          this.cargarManiobrasAdmin(data.data.maniobra.cargaDescarga);
+        }
+      } else {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+          if (empresa._id === data.data.maniobra.transportista && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
+            if (data.data.maniobra._id) {
+              this.cargarManiobras(data.data.maniobra.cargaDescarga);
+            }
+          }
+        });
+      }
+    }.bind(this));
+
+    this.socket.on('delete-maniobra', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data._id) {
+          this.cargarManiobrasAdmin(data.data.tipo);
+        }
+      } else {
+        this.usuarioLogueado.empresas.forEach(empresa => {
+            if ((data.data.transportista === empresa._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)) {
+              if (data.data._id) {
+                this.cargarManiobras(data.data.cargaDescarga);
+              }
+            }
+
+        });
+      }
     }.bind(this));
   }
 
   cargarManiobras(CD: string) {
-    this.cargando = true;
-    if (this.usuarioLogueado.role === 'TRANSPORTISTA_ROLE') {
-      this.usuarioLogueado.empresas.forEach(empresa => {
+       this.usuarioLogueado.empresas.forEach(empresa => {
         if (CD === 'D') {
           this._maniobraService.getManiobras('D', 'TRANSITO', empresa._id, null, null, 'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            this.maniobras = [];
             if (maniobras.maniobras.length > 0) {
               maniobras.maniobras.forEach(m => {
                 this.maniobras.push(m);
               });
-              this.agregaMatTable(CD);
             }
+            this.agregaMatTable(CD);
           });
         } else if (CD === 'C') {
           this._maniobraService.getManiobras('C', 'TRANSITO', empresa._id, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            this.maniobrasCarga = [];
             if (maniobras.maniobras.length > 0) {
               maniobras.maniobras.forEach(m => {
                 this.maniobrasCarga.push(m);
               });
-              this.agregaMatTable(CD);
             }
+            this.agregaMatTable(CD);
           });
         }
       });
-      this.cargando = false;
-    }
-  }
+     }
 
   cargarManiobrasAdmin(CD: string) {
     if (CD === 'D') {
@@ -163,19 +215,18 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceCargas.paginator = this.MatPaginatorCarga;
           this.totalRegistrosCargas = maniobras.total;
         });
-      this.cargando = false;
     }
   }
 
   agregaMatTable(CD: string) {
-    if (this.maniobras.length > 0 && CD === 'D') {
+    if (this.maniobras && CD === 'D') {
       this.dataSourceDescargas = new MatTableDataSource(this.maniobras);
       this.totalRegistros = this.dataSourceDescargas.data.length;
       this.dataSourceDescargas.sort = this.sort;
       this.dataSourceDescargas.paginator = this.paginator;
     }
 
-    if (this.maniobrasCarga.length > 0 && CD === 'C') {
+    if (this.maniobrasCarga && CD === 'C') {
       this.dataSourceCargas = new MatTableDataSource(this.maniobrasCarga);
       this.totalRegistrosCargas = this.dataSourceCargas.data.length;
       this.dataSourceCargas.sort = this.MatSortCarga;
