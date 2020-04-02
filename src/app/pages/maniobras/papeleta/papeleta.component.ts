@@ -197,7 +197,7 @@ export class PapeletaComponent implements OnInit {
   asignaFecha() {
     this.maniobraService.asignaFecha({ _id: this.id }).subscribe((res) => {
       this.cargarManiobra(this.id);
-      this.socket.emit('updatepapeleta', res);
+      this.socket.emit('asignacionpapeleta', res);
     });
   }
 
