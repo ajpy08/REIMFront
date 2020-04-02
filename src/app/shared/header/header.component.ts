@@ -258,33 +258,80 @@ export class HeaderComponent implements OnInit {
       }
     }.bind(this));
 
-    this.socket.on('update-papeleta', function (data: any) {
-      if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+    this.socket.on('asignacion-papeleta', function (data: any) {
+      if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
         this.notifications = [];
-        this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
-          this.doSolicitudesNotifications(resp.solicitudes);
-        });
-
-        this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
-          this.doSolicitudesNotifications(resp.solicitudes);
-        });
-      } else {
-        if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
-          this.notifications = [];
-          data.data.contenedores.forEach(c => {
-            this.usuario.empresas.forEach(empresa => {
-              if (c.transportista === empresa._id) {
-                this.maniobraService.getManiobraConIncludes(c.maniobra).subscribe(maniobra => {
-                  if (!maniobra.fAsignacionPapeleta) {
-                    this.doManiobraNotification(maniobra.maniobra);
-                  }
-                });
-              }
-            });
+        this.usuario.empresas.forEach(empresa => {
+          this.maniobraService.getManiobras('D', 'TRANSITO', empresa._id, null, null, 'VACIO_IMPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            if (maniobras.maniobras.length > 0) {
+              maniobras.maniobras.forEach(m => {
+                this.maniobras.push(m);
+              });
+              this.maniobras.forEach(ma => {
+                if (!ma.fAsignacionPapeleta) {
+                  this.doManiobraNotification(ma);
+                }
+              });
+              this.maniobras = [];
+            }
           });
-        }
+          this.maniobraService.getManiobras('C', 'TRANSITO', empresa._id, null, null, 'VACIO_EXPORT,LLENO_IMPORT,LLENO_EXPORT').subscribe(maniobras => {
+            if (maniobras.maniobras.length > 0) {
+              maniobras.maniobras.forEach(m => {
+                this.maniobrasCarga.push(m);
+              });
+              this.maniobrasCarga.forEach(ma => {
+                if (!ma.fAsignacionPapeleta) {
+                  this.doManiobraNotification(ma);
+                }
+              });
+              this.maniobrasCarga = [];
+            }
+          });
+        });
       }
+
     }.bind(this));
+
+    // this.socket.on('update-papeleta', function (data: any) {
+    //   if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+    //     this.notifications = [];
+    //     this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+    //       this.doSolicitudesNotifications(resp.solicitudes);
+    //     });
+
+    //     this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
+    //       this.doSolicitudesNotifications(resp.solicitudes);
+    //     });
+    //   } else {
+    //     if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
+    //       this.notifications = [];
+    //       if (data.data.contenedores === undefined) {
+    //         this.usuario.empresas.forEach(empresa => {
+    //           if (data.data.transportista === empresa._id) {
+    //             this.maniobraService.getManiobraConIncludes(data.data._id).suscribe(maniobra => {
+    //               if (!maniobra.fAsignacionPapeleta) {
+    //                 this.doManiobraNotification(maniobra.maniobra);
+    //               }
+    //             });
+    //           }
+    //         });
+    //       } else {
+    //         data.data.contenedores.forEach(c => {
+    //           this.usuario.empresas.forEach(empresa => {
+    //             if (c.transportista === empresa._id) {
+    //               this.maniobraService.getManiobraConIncludes(c.maniobra).subscribe(maniobra => {
+    //                 if (!maniobra.fAsignacionPapeleta) {
+    //                   this.doManiobraNotification(maniobra.maniobra);
+    //                 }
+    //               });
+    //             }
+    //           });
+    //         });
+    //       }
+    //     }
+    //   }
+    // }.bind(this));
 
   }
 
