@@ -83,6 +83,8 @@ import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component';
 import { AprobacionesBkComponent } from './liberacion-bl/aprobaciones-bk/aprobaciones-bk.component';
 import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobacion-tbk/aprobacion-tbk.component';
 import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
+import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-servicios/clave-productos-servicios.component';
+import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -322,6 +324,18 @@ const pagesRoutes: Routes = [
     {
         path: 'producto-servicio/:id',
         component: ProductoServicioComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'clave-productos-servicios',
+        component: ClaveProductosServiciosComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catalogo de Productos o Servicios', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'clave-producto-servicio/:id',
+        component: ClaveProductosServicioComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE] }
     },

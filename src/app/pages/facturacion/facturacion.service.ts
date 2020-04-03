@@ -18,6 +18,12 @@ export class FacturacionService {
   ) { }
 
   /* #region  Productos o Servicios */
+  getClaveproductosServicio(): Observable<any> {
+    const url = URL_SERVICIOS + '/clave-productos-servicios';
+    return this.http.get(url);
+  }
+
+
   getProductosServicios(): Observable<any> {
     const url = URL_SERVICIOS + '/productos-servicios';
     return this.http.get(url);
