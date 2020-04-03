@@ -89,8 +89,7 @@ export function getErrorHandler(): ErrorHandler {
     AppComponent,
     LoginComponent,
     PagesComponent,
-    RegistroComponent,
-
+    RegistroComponent
   ],
   imports: [
     BrowserModule,

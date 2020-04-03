@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Buque } from './buques.models';
 import { BuqueService, ExcelService } from '../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
@@ -10,7 +10,7 @@ declare var swal: any;
   selector: 'app-buques',
   templateUrl: './buques.component.html'
 })
-export class BuquesComponent implements OnInit {
+export class BuquesComponent implements OnInit, OnDestroy {
   buquesExcel = [];
   cargando = true;
   totalRegistros = 0;
@@ -51,6 +51,7 @@ export class BuquesComponent implements OnInit {
     this.socket.removeListener('update-buque');
     this.socket.removeListener('new-buque');
   }
+
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches

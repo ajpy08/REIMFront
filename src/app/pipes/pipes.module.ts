@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { ImagenPipe } from './imagen.pipe';
 import { FotosPipe } from './fotos.pipe';
 import { ZipPipePipe } from './zip-pipe.pipe';
+import { IvaPipe } from '../pages/facturacion/pipes/iva.pipe';
+import { DecimalRightPadPipe } from './../pages/facturacion/pipes/decimal-rightpad.pipe';
+import { NgCapitalizePipeModule } from 'angular-pipes';
 
 
 @NgModule({
@@ -9,11 +12,15 @@ import { ZipPipePipe } from './zip-pipe.pipe';
   declarations: [
     ImagenPipe,
     FotosPipe,
-    ZipPipePipe
+    ZipPipePipe,
+    IvaPipe,
+    DecimalRightPadPipe
   ],
   exports: [
     ImagenPipe,
-    FotosPipe
+    FotosPipe,
+    DecimalRightPadPipe,
+    NgCapitalizePipeModule
   ],
   providers: [
     FotosPipe
