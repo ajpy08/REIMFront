@@ -1,3 +1,5 @@
+import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
+import { ProductosServiciosComponent } from './facturacion/productos-servicios/productos-servicios.component';
 import { StatusComponent } from './usuarios/status/status.component';
 /* #region  IMPORTS */
 import { RouterModule, Routes } from '@angular/router';
@@ -310,6 +312,18 @@ const pagesRoutes: Routes = [
         component: FacturacionManiobrasComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Facturación de Maniobras', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'productos-servicios',
+        component: ProductosServiciosComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catalogo de Productos o Servicios', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'producto-servicio/:id',
+        component: ProductoServicioComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: 'maniobras_diario',

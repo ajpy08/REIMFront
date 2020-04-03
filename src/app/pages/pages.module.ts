@@ -136,6 +136,8 @@ import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobaci
 import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
 import { InfoDialogComponent } from '../dialogs/info-dialog/info-dialog.component';
 import { StatusComponent } from './usuarios/status/status.component';
+import { ProductosServiciosComponent } from './facturacion/productos-servicios/productos-servicios.component';
+import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
 
 @NgModule({
     declarations: [
@@ -205,8 +207,9 @@ import { StatusComponent } from './usuarios/status/status.component';
         AprobacionesBkComponent,
         AprobacionTBKComponent,
         AsignacionTransportistaComponent,
-        StatusComponent
-
+        StatusComponent,
+        ProductosServiciosComponent,
+        ProductoServicioComponent
     ],
     exports: [
         DashboardComponent

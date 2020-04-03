@@ -1,28 +1,28 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ManiobraService } from "../maniobras/maniobra.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ManiobraService } from '../maniobras/maniobra.service';
 import {
   MatPaginator,
   MatSort,
   MatTableDataSource,
   MatTabChangeEvent,
   MatTabGroup
-} from "@angular/material";
-import { Usuario } from "../usuarios/usuario.model";
-import { UsuarioService, ExcelService } from "src/app/services/service.index";
-import { ROLES } from "src/app/config/config";
-import { Maniobra } from "src/app/models/maniobra.models";
-import { NavigationExtras, Router } from "@angular/router";
-import swal from "sweetalert";
+} from '@angular/material';
+import { Usuario } from '../usuarios/usuario.model';
+import { UsuarioService, ExcelService } from 'src/app/services/service.index';
+import { ROLES } from 'src/app/config/config';
+import { Maniobra } from 'src/app/models/maniobra.models';
+import { NavigationExtras, Router } from '@angular/router';
+import swal from 'sweetalert';
 
 @Component({
-  selector: "app-contenedores-lr",
-  templateUrl: "./contenedores-lr.component.html",
-  styles: [""]
+  selector: 'app-contenedores-lr',
+  templateUrl: './contenedores-lr.component.html',
+  styles: ['']
 })
 export class ContenedoresLRComponent implements OnInit {
-  //date = new FormControl(moment());
+  // date = new FormControl(moment());
   maniobras: any[] = [];
-  data: any = { fechaCreado: "" };
+  data: any = { fechaCreado: '' };
   cargando = true;
   totalRegistrosLavados = 0;
   totalRegistrosReparaciones = 0;
@@ -35,30 +35,30 @@ export class ContenedoresLRComponent implements OnInit {
   fechaLlegadaFin: string;
 
   displayedColumnsLavado = [
-    "viaje.naviera.nombreComercial",
-    "contenedor",
-    "tipo",
-    "estado",
-    "cliente",
-    "aa",
-    "lavado",
-    "fotoslavado",
-    "reparaciones",
-    "fotosreparacion",
-    "grado"
+    'viaje.naviera.nombreComercial',
+    'contenedor',
+    'tipo',
+    'estado',
+    'cliente',
+    'aa',
+    'lavado',
+    'fotoslavado',
+    'reparaciones',
+    'fotosreparacion',
+    'grado'
   ];
   displayedColumnsReparacion = [
-    "viaje.naviera.nombreComercial",
-    "contenedor",
-    "tipo",
-    "estado",
-    "cliente",
-    "aa",
-    "lavado",
-    "fotoslavado",
-    "reparaciones",
-    "fotosreparacion",
-    "grado"
+    'viaje.naviera.nombreComercial',
+    'contenedor',
+    'tipo',
+    'estado',
+    'cliente',
+    'aa',
+    'lavado',
+    'fotoslavado',
+    'reparaciones',
+    'fotosreparacion',
+    'grado'
   ];
   dataSourceLavados: any;
   dataSourceReparaciones: any;
@@ -66,9 +66,9 @@ export class ContenedoresLRComponent implements OnInit {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild("MatPaginatorReparacion", { read: MatPaginator })
+  @ViewChild('MatPaginatorReparacion', { read: MatPaginator })
   MatPaginatorReparacion: MatPaginator;
-  @ViewChild("MatSortReparacion") MatSortReparacion: MatSort;
+  @ViewChild('MatSortReparacion') MatSortReparacion: MatSort;
 
   constructor(
     public maniobraService: ManiobraService,
@@ -81,76 +81,77 @@ export class ContenedoresLRComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
 
     if (
-      this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
-      this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE
+      this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
     ) {
       this.displayedColumnsLavado = [
-        "actions",
-        "viaje.naviera.nombreComercial",
-        "contenedor",
-        "tipo",
-        "estatus",
-        "cliente",
-        "aa",
-        "lavado",
-        "fotoslavado",
-        "reparaciones",
-        "fotosreparacion",
-        "grado"
+        'actions',
+        'viaje.naviera.nombreComercial',
+        'contenedor',
+        'tipo',
+        'estatus',
+        'cliente',
+        'aa',
+        'lavado',
+        'fotoslavado',
+        'reparaciones',
+        'fotosreparacion',
+        'grado'
       ];
       this.displayedColumnsReparacion = [
-        "actions",
-        "viaje.naviera.nombreComercial",
-        "contenedor",
-        "tipo",
-        "estatus",
-        "cliente",
-        "aa",
-        "lavado",
-        "fotoslavado",
-        "reparaciones",
-        "fotosreparacion",
-        "grado"
+        'actions',
+        'viaje.naviera.nombreComercial',
+        'contenedor',
+        'tipo',
+        'estatus',
+        'cliente',
+        'aa',
+        'lavado',
+        'fotoslavado',
+        'reparaciones',
+        'fotosreparacion',
+        'grado'
       ];
     } else {
       this.displayedColumnsLavado = [
-        "viaje.naviera.nombreComercial",
-        "contenedor",
-        "tipo",
-        "estatus",
-        "cliente",
-        "aa",
-        "lavado",
-        "fotoslavado",
-        "reparaciones",
-        "fotosreparacion",
-        "grado"
+        'viaje.naviera.nombreComercial',
+        'contenedor',
+        'tipo',
+        'estatus',
+        'cliente',
+        'aa',
+        'lavado',
+        'fotoslavado',
+        'reparaciones',
+        'fotosreparacion',
+        'grado'
       ];
       this.displayedColumnsReparacion = [
-        "viaje.naviera.nombreComercial",
-        "contenedor",
-        "tipo",
-        "estatus",
-        "cliente",
-        "aa",
-        "lavado",
-        "fotoslavado",
-        "reparaciones",
-        "fotosreparacion",
-        "grado"
+        'viaje.naviera.nombreComercial',
+        'contenedor',
+        'tipo',
+        'estatus',
+        'cliente',
+        'aa',
+        'lavado',
+        'fotoslavado',
+        'reparaciones',
+        'fotosreparacion',
+        'grado'
       ];
     }
-    let indexTAB = localStorage.getItem("L/R");
+    const indexTAB = localStorage.getItem('L/R');
     if (indexTAB) {
+      // tslint:disable-next-line: radix
       this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
     }
-    this.cargarManiobrasLavadoOReparacion("L");
-    this.cargarManiobrasLavadoOReparacion("R");
+    this.cargarManiobrasLavadoOReparacion('L');
+    this.cargarManiobrasLavadoOReparacion('R');
   }
 
   cargarManiobrasLavadoOReparacion(LR: string) {
     if (
-      this.usuarioLogueado.role == ROLES.NAVIERA_ROLE &&
+      this.usuarioLogueado.role === ROLES.NAVIERA_ROLE &&
       this.usuarioLogueado.empresas.length > 0
     ) {
       this.cargando = true;
@@ -165,14 +166,14 @@ export class ContenedoresLRComponent implements OnInit {
         )
         .subscribe(maniobras => {
           // console.log(maniobras.maniobras)
-          if (LR === "L") {
+          if (LR === 'L') {
             this.dataSourceLavados = new MatTableDataSource(
               maniobras.maniobras
             );
             this.dataSourceLavados.sort = this.sort;
             this.dataSourceLavados.paginator = this.paginator;
             this.totalRegistrosLavados = maniobras.maniobras.length;
-          } else if (LR === "R") {
+          } else if (LR === 'R') {
             this.dataSourceReparaciones = new MatTableDataSource(
               maniobras.maniobras
             );
@@ -184,9 +185,9 @@ export class ContenedoresLRComponent implements OnInit {
       this.cargando = false;
     } else {
       if (
-        this.usuarioLogueado.role == ROLES.ADMIN_ROLE ||
-        this.usuarioLogueado.role == ROLES.PATIOADMIN_ROLE ||
-        this.usuarioLogueado.role == ROLES.PATIO_ROLE
+        this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
+        this.usuarioLogueado.role === ROLES.PATIO_ROLE
       ) {
         this.cargando = true;
         this.maniobraService
@@ -199,14 +200,14 @@ export class ContenedoresLRComponent implements OnInit {
             LR
           )
           .subscribe(maniobras => {
-            if (LR === "L") {
+            if (LR === 'L') {
               this.dataSourceLavados = new MatTableDataSource(
                 maniobras.maniobras
               );
               this.dataSourceLavados.sort = this.sort;
               this.dataSourceLavados.paginator = this.paginator;
               this.totalRegistrosLavados = maniobras.maniobras.length;
-            } else if (LR === "R") {
+            } else if (LR === 'R') {
               this.dataSourceReparaciones = new MatTableDataSource(
                 maniobras.maniobras
               );
@@ -223,17 +224,17 @@ export class ContenedoresLRComponent implements OnInit {
   applyFilter(filterValue: string, LR: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    if (LR === "L") {
+    if (LR === 'L') {
       if (this.dataSourceLavados && this.dataSourceLavados.data.length > 0) {
         this.dataSourceLavados.filter = filterValue;
         this.totalRegistrosLavados = this.dataSourceLavados.filteredData.length;
       } else {
-        console.error("Error al filtrar el dataSource de Lavados");
+        console.error('Error al filtrar el dataSource de Lavados');
       }
 
       // this.dataSourceLavados.filter = filterValue;
       // this.totalRegistrosLavados = this.dataSourceLavados.filteredData.length;
-    } else if (LR === "R") {
+    } else if (LR === 'R') {
       if (
         this.dataSourceReparaciones &&
         this.dataSourceReparaciones.data.length > 0
@@ -241,7 +242,7 @@ export class ContenedoresLRComponent implements OnInit {
         this.dataSourceReparaciones.filter = filterValue;
         this.totalRegistrosReparaciones = this.dataSourceReparaciones.filteredData.length;
       } else {
-        console.error("Error al filtrar el dataSource de Reparaciones");
+        console.error('Error al filtrar el dataSource de Reparaciones');
       }
 
       // this.dataSourceReparaciones.filter = filterValue;
@@ -271,49 +272,50 @@ export class ContenedoresLRComponent implements OnInit {
   fotos(id: string, tipo: string) {
     // localStorage.setItem('history', '/contenedoresLR');
 
-    let navigationExtras: NavigationExtras = {
+    const navigationExtras: NavigationExtras = {
       queryParams: { opcion: tipo }
     };
 
-    this.router.navigate(["/fotos", id], navigationExtras);
+    this.router.navigate(['/fotos', id], navigationExtras);
   }
 
   onLinkClick(event: MatTabChangeEvent) {
-    localStorage.setItem("L/R", event.index.toString());
+    localStorage.setItem('L/R', event.index.toString());
   }
 
   open(id: string) {
-    var history;
-    var array = [];
-    //Si tengo algo en localStorage en la variable history lo obtengo
-    if (localStorage.getItem("historyArray")) {
-      //asigno a mi variable history lo que obtengo de localStorage (historyArray)
-      history = JSON.parse(localStorage.getItem("historyArray"));
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
 
-      //realizo este ciclo para asignar los valores del JSON al Array
-      for (var i in history) {
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
         array.push(history[i]);
       }
     }
-    //Agrego mi nueva ruta al array
-    array.push("/contenedoresLR");
+    // Agrego mi nueva ruta al array
+    array.push('/contenedoresLR');
 
-    ////sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
-    localStorage.setItem("historyArray", JSON.stringify(array));
+    //// sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
 
-    //Voy a pagina.
-    this.router.navigate(["/maniobras/maniobra/" + id + "/detalle"]);
+    // Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
   CreaDatosExcel(datos) {
     this.lavadoExcel = [];
     datos.forEach(b => {
-      var buque = {
+      const buque = {
         Naviera:
           b.naviera &&
           b.naviera.nombreComercial &&
-          b.naviera.nombreComercial != undefined &&
-          b.naviera.nombreComercial != "" &&
+          b.naviera.nombreComercial !== undefined &&
+          b.naviera.nombreComercial !== '' &&
           b.naviera.nombreComercial,
         Contenedor: b.contenedor,
         Tipo: b.tipo,
@@ -321,8 +323,8 @@ export class ContenedoresLRComponent implements OnInit {
         Cliente:
           b.cliente &&
           b.cliente.nombreComercial &&
-          b.cliente.nombreComercial != undefined &&
-          b.cliente.nombreComercial != "" &&
+          b.cliente.nombreComercial !== undefined &&
+          b.cliente.nombreComercial !== '' &&
           b.cliente.nombreComercial,
         A_A: b.aa,
         Lavado: b.lavado,
@@ -338,7 +340,7 @@ export class ContenedoresLRComponent implements OnInit {
     if (this.lavadoExcel) {
       this.excelService.exportAsExcelFile(this.lavadoExcel, nombre);
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
   exportAsXLSXR(dataSourceReparaciones, nombre: string): void {
@@ -346,7 +348,7 @@ export class ContenedoresLRComponent implements OnInit {
     if (this.lavadoExcel) {
       this.excelService.exportAsExcelFile(this.lavadoExcel, nombre);
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
 }
