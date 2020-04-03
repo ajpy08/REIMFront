@@ -77,7 +77,7 @@
 
             <ng-container matColumnDef="nombre">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-              <mat-cell class="bold" *matCellDef="let usuario"> {{usuario.nombre}} </mat-cell>
+              <mat-cell class="bold" *matCellDef="let usuario"> {{usuario.nombre | capitalize: true}}  </mat-cell>
             </ng-container>
 
             <!-- <ng-container matColumnDef="email">
