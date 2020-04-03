@@ -391,19 +391,20 @@ export class AprobarCargaComponent implements OnInit {
           if (idManiobra) {
             this._SolicitudService.borrarManiobra(idManiobra).subscribe(res => {
               if (res) {
+                this.socket.emit('deletemaniobra', res);
                 // tslint:disable-next-line: no-unused-expression
                 this.contenedores.controls[idManiobra].get('contenedor').value;
                 this.contenedores.removeAt(indice);
                 this.regForm.markAsDirty();
               }
             });
-            this._SolicitudService
-              .removeConte(this._id.value, idManiobra)
-              .subscribe(res => {
-                this.contenedores.removeAt(indice);
-                this.regForm.markAsDirty();
-              });
           }
+          this._SolicitudService
+            .removeConte(this._id.value, idManiobra)
+            .subscribe(res => {
+              this.contenedores.removeAt(indice);
+              this.regForm.markAsDirty();
+            });
         }
       });
     } else {
@@ -418,6 +419,7 @@ export class AprobarCargaComponent implements OnInit {
           this._SolicitudService
             .boorarSolicitudes(this._id.value)
             .subscribe(res => {
+              this.socket.emit('deletesolicitud', res.solicitud);
               swal({
                 title: 'ELIMINADO',
                 text: 'Borrado',

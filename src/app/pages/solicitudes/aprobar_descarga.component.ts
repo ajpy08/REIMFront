@@ -471,8 +471,9 @@ export class AprobarDescargaComponent implements OnInit {
             this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value)
               .subscribe(res => {
                 if (res) {
+                  this.socket.emit('deletemaniobradescarga', res);
                   // tslint:disable-next-line: no-unused-expression
-                  this.contenedores.controls[idManiobra].get('contenedor').value;
+                  // this.contenedores.controls[idManiobra].get('contenedor').value;
 
                 }
 
@@ -494,7 +495,9 @@ export class AprobarDescargaComponent implements OnInit {
         dangerMode: true,
       }).then(borrar => {
         if (borrar) {
-          this._SolicitudService.boorarSolicitudes(this._id.value).subscribe(res => {
+          const idManiobra = this.contenedores.controls[indice].value.maniobra;
+          this._SolicitudService.borrarSolicitudManiobra(idManiobra, this._id.value).subscribe(res => {
+            this.socket.emit('deletemaniobradescarga', res);
 
             swal({
               title: 'ELIMINADO',
