@@ -138,6 +138,7 @@ import { InfoDialogComponent } from '../dialogs/info-dialog/info-dialog.componen
 import { StatusComponent } from './usuarios/status/status.component';
 import { ProductosServiciosComponent } from './facturacion/productos-servicios/productos-servicios.component';
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
+import { ClaveProductosServicioComponent } from './clave-productos-servicio/clave-productos-servicio.component';
 
 @NgModule({
     declarations: [
@@ -209,7 +210,8 @@ import { ProductoServicioComponent } from './facturacion/productos-servicios/pro
         AsignacionTransportistaComponent,
         StatusComponent,
         ProductosServiciosComponent,
-        ProductoServicioComponent
+        ProductoServicioComponent,
+        ClaveProductosServicioComponent
     ],
     exports: [
         DashboardComponent
