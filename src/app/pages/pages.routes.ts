@@ -85,6 +85,8 @@ import { AprobacionTBKComponent } from './liberacion-bl/aprobaciones-bk/aprobaci
 import { AsignacionTransportistaComponent } from './liberacion-bl/aprobaciones-bk/asignacion-transportista/asignacion-transportista.component';
 import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-servicios/clave-productos-servicios.component';
 import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
+import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
+import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -331,11 +333,23 @@ const pagesRoutes: Routes = [
         path: 'clave-productos-servicios',
         component: ClaveProductosServiciosComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catalogo de Productos o Servicios', roles: [ROLES.ADMIN_ROLE] }
+        data: { titulo: 'Catalogo de Clave Productos Servicios', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: 'clave-producto-servicio/:id',
         component: ClaveProductosServicioComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'clave-unidades',
+        component: ClaveUnidadesComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catalogo de Clave Unidades', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'clave-unidad/:id',
+        component: ClaveUnidadComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE] }
     },

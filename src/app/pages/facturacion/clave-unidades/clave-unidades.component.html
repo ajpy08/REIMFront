@@ -18,7 +18,7 @@
           <button (click)="exportAsXLSX()" class="btn btn-success m-r-10">
             <i class="fas fa-file-excel"></i>
           </button>
-          <button matTooltip="Añadir nuevo  Clave-Producto-Servicio" mat-mini-fab class="btn btn-primary" [routerLink]="['/clave-producto-servicio/','nuevo']"
+          <button matTooltip="Añadir nuevo  Clave-Producto-Servicio" mat-mini-fab class="btn btn-primary" [routerLink]="['/clave-unidad/','nuevo']"
             type="button">
             <i class="fa fa-plus"></i>
           </button>
@@ -37,41 +37,35 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button matTooltip="Editar Clave-Producto-Servicio" [routerLink]="['/clave-producto-servicio/', row._id ]"
+                <button matTooltip="Editar Clave-Producto-Servicio" [routerLink]="['/clave-unidad/', row._id ]"
                   class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
-                <button matTooltip="Eliminar Clave-Producto-Servicio" (click)="borrarClaveProductosServicios( row )" class="btn btn-danger m-r-5">
+                <button matTooltip="Eliminar Clave-Producto-Servicio" (click)="borrarClaveUnidad( row )" class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
               </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="claveProdServ">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Clave Producto</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.claveProdServ}} </mat-cell>
+            <ng-container matColumnDef="claveUnidad">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Clave Unidad</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.claveUnidad}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.nombre | capitalize: true}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="descripcion">
-              <mat-header-cell *matHeaderCellDef>Descripcion</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.descripcion | capitalize: true}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="incluir_IVA_trasladado">
-              <mat-header-cell *matHeaderCellDef>IVA Translado</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.incluir_IVA_trasladado}} </mat-cell>
+            <ng-container matColumnDef="nota">
+              <mat-header-cell *matHeaderCellDef>Nota</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.nota | capitalize: true}} </mat-cell>
             </ng-container>
-
-            <ng-container matColumnDef="incluir_IEPS_trasladado">
-              <mat-header-cell *matHeaderCellDef>IEPS Traslado</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.incluir_IEPS_trasladado | capitalize: true}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="palabras_similares">
-              <mat-header-cell *matHeaderCellDef>Palabra Similar</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.palabras_similares | capitalize: true}} </mat-cell>
-            </ng-container>
-
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>

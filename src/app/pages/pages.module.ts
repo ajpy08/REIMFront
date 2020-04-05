@@ -140,6 +140,8 @@ import { ProductosServiciosComponent } from './facturacion/productos-servicios/p
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
 import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-servicios/clave-productos-servicios.component';
 import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
+import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
+import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
 
 @NgModule({
     declarations: [
@@ -213,7 +215,9 @@ import { ClaveProductosServicioComponent } from './facturacion/clave-productos-s
         ProductosServiciosComponent,
         ProductoServicioComponent,
         ClaveProductosServiciosComponent,
-        ClaveProductosServicioComponent
+        ClaveProductosServicioComponent,
+        ClaveUnidadComponent,
+        ClaveUnidadesComponent
     ],
     exports: [
         DashboardComponent

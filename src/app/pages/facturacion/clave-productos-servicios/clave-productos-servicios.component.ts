@@ -1,6 +1,7 @@
 import { ExcelService } from './../../../services/excel/excel.service';
 import { FacturacionService } from './../facturacion.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ClaveProductosServicio } from './clave-producto.servicio.models';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 
@@ -40,10 +41,10 @@ export class ClaveProductosServiciosComponent implements OnInit {
   cargarClaveProductosServicios() {
     this.cargando = true;
     this.facturacionService.getClaveproductosServicio().subscribe(objs => {
-      this.dataSource = new MatTableDataSource(objs.clave_productos_servicios);
+      this.dataSource = new MatTableDataSource(objs.ClaveProServicio);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.totalRegistros = objs.clave_productos_servicio.lenght;
+      this.totalRegistros = objs.ClaveProServicio.length;
     });
     this.cargando = false;
   }
@@ -72,8 +73,21 @@ export class ClaveProductosServiciosComponent implements OnInit {
     });
   }
 
- borrarClaveProductosServicios() {
-
+ borrarClaveProductosServicios(claveProductosServicio: ClaveProductosServicio ) {
+  swal({
+    title: '¿Esta seguro?',
+    text: 'Esta apunto de borrar a ' + claveProductosServicio.descripcion,
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true
+  }).then(borrar => {
+    if (borrar) {
+      this.facturacionService.borrarClaveProductoServicio(claveProductosServicio._id).subscribe((res) => {
+          // this.socket.emit('deletebuque', res);
+          this.cargarClaveProductosServicios();
+        });
+    }
+  });
  }
 
   exportAsXLSX(): void {

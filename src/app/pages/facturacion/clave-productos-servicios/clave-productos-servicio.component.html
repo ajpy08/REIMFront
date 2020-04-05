@@ -1,3 +1,60 @@
-<p>
-  clave-productos-servicio works!
-</p>
+<div class="row animated fadeIn">
+  <div class="col-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0"> Clave - Producto - Servicio: {{ ClaveProductosServicio.descripcion }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <form [formGroup]="regForm" (ngSubmit)="guardarClaveProductoServicio()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="claveProdServ" name="claveProdServ" type="text" class="form-control"
+                  placeholder="Clave Producto Servicio">
+                <mat-error *ngIf="claveProdServ.touched && claveProdServ.invalid">
+                  <sup>*</sup>Por Favor Ingrese Clave Producto  Servicio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
+                  placeholder="Descripcion">
+                <mat-error *ngIf="descripcion.touched && descripcion.invalid">
+                  <sup>*</sup>Por Favor Ingrese una descripcion de Clave Producto o Servicio
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="incluir_IVA_trasladado" name=" incluir_IVA_trasladado" type="text" class="form-control"
+                  placeholder="IVA Trasladado">
+                <mat-error *ngIf="incluir_IVA_trasladado.touched &&  incluir_IVA_trasladado.invalid">
+                  <sup>*</sup>Por Favor Ingrese IVA Trasladado
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="incluir_IEPS_trasladado" name="  incluir_IEPS_trasladado" type="text" class="form-control"
+                  placeholder="IEPS Trasladado">
+                <mat-error *ngIf="incluir_IEPS_trasladado.touched &&   incluir_IEPS_trasladado.invalid">
+                  <sup>*</sup>Por Favor Ingrese IEPS Trasladado
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="palabras_similares" name=" palabras_similares" type="text" class="form-control"
+                  placeholder="palabras_similares">
+
+              </mat-form-field>
+
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+            [disabled]="!regForm.dirty || regForm.invalid">
+            <i class="fa fa-save"></i>
+            Guardar
+          </button>
+          <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

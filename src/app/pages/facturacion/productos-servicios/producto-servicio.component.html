@@ -1,10 +1,10 @@
 <div class="row animated fadeIn">
-  <form [formGroup]="regForm" (ngSubmit)="guardarProductoServicio()" novalidate>
-    <div class="col-md-6">
-      <div class="card card-body">
-        <h3 class="box-title m-b-0">Producto - Servicio: {{ productoServicio.descripcion }}</h3><br>
-        <div class="row">
-          <div class="col-sm-12 col-xs-12">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Producto - Servicio: {{ productoServicio.descripcion }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarProductoServicio()" novalidate>
             <div class="my-container">
               <mat-form-field>
                 <input matInput formControlName="codigo" name="codigo" type="text" class="form-control"
@@ -78,95 +78,95 @@
                 </mat-error>
               </mat-form-field> -->
             </div>
-          </div>
+            <div class="row">
+              <div class="col-md">
+                <h4 class="alert alert-success text-center">Impuestos</h4>
+                <table class="table table-responsive mat-elevation-z8">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">
+                        <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('valor')">
+                          <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
+                  !regForm.get('impuesto').valid || !regForm.get('valor').valid"
+                            (click)="addImpuesto(TR.value, impuesto.value, valor.value); ">
+                            +
+                          </button>
+                        </div>
+                      </th>
+                      <th scope="col-md-2">
+                        <mat-form-field>
+                          <mat-label>TR</mat-label>
+                          <mat-select formControlName="TR">
+                            <mat-option *ngFor="let t of TRs" [value]="t">
+                              {{t}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
+                      <th scope="col-md-2">
+                        <mat-form-field>
+                          <mat-label>Impuesto</mat-label>
+                          <mat-select formControlName="impuesto">
+                            <mat-option *ngFor="let t of tipoImpuestos" [value]="t">
+                              {{t}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </th>
+                      <th scope="col-md-2">
+                        <mat-form-field>
+                          <mat-label>Valor</mat-label>
+                          <input matInput formControlName="valor" name="valor" type="number" class="form-control"
+                            placeholder="Valor">
+                          <mat-error *ngIf="valor.touched && valor.invalid">
+                            <sup>*</sup>Por Favor Ingrese un Valor
+                          </mat-error>
+                        </mat-form-field>
+                      </th>
+                    </tr>
+                    <tr class="info">
+                      <th scope="col"></th>
+                      <th scope="col">#</th>
+
+                      <th scope="col">TR</th>
+                      <th scope="col">Impuesto</th>
+                      <th scope="col">Valor</th>
+
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="impuestos" *ngFor="let item of impuestos.controls; let i = index;">
+                    <tr [formGroupName]="i">
+                      <td>
+                        <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </td>
+                      <td scope="row">{{i+1}}</td>
+                      <td>
+                        {{item.get('TR').value}}
+                      </td>
+                      <td>
+                        {{item.get('impuesto').value}}
+                      </td>
+                      <td>
+                        {{item.get('valor').value | decimalrightpad: 4}}
+                        <!-- {{item.get('valor').value | iva}} -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="!regForm.dirty || regForm.invalid">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+          </form>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md">
-        <h4 class="alert alert-success text-center">Impuestos</h4>
-        <table class="table table-responsive mat-elevation-z8">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">
-                <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('valor')">
-                  <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
-                      !regForm.get('impuesto').valid || !regForm.get('valor').valid"
-                    (click)="addImpuesto(TR.value, impuesto.value, valor.value); ">
-                    +
-                  </button>
-                </div>
-              </th>
-              <th scope="col-md-2">
-                <mat-form-field>
-                  <mat-label>TR</mat-label>
-                  <mat-select formControlName="TR">
-                    <mat-option *ngFor="let t of TRs" [value]="t">
-                      {{t}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </th>
-              <th scope="col-md-2">
-                <mat-form-field>
-                  <mat-label>Impuesto</mat-label>
-                  <mat-select formControlName="impuesto">
-                    <mat-option *ngFor="let t of tipoImpuestos" [value]="t">
-                      {{t}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </th>
-              <th scope="col-md-2">
-                <mat-form-field>
-                  <mat-label>Valor</mat-label>
-                  <input matInput formControlName="valor" name="valor" type="number" class="form-control"
-                    placeholder="Valor">
-                  <mat-error *ngIf="valor.touched && valor.invalid">
-                    <sup>*</sup>Por Favor Ingrese un Valor
-                  </mat-error>
-                </mat-form-field>
-              </th>
-            </tr>
-            <tr class="info">
-              <th scope="col"></th>
-              <th scope="col">#</th>
-
-              <th scope="col">TR</th>
-              <th scope="col">Impuesto</th>
-              <th scope="col">Valor</th>
-
-            </tr>
-          </thead>
-          <tbody formArrayName="impuestos" *ngFor="let item of impuestos.controls; let i = index;">
-            <tr [formGroupName]="i">
-              <td>
-                <button type="button" (click)="quitar( i )" class="btn btn-danger">
-                  <i class="fa fa-trash-o"></i>
-                </button>
-              </td>
-              <td scope="row">{{i+1}}</td>
-              <td>
-                {{item.get('TR').value}}
-              </td>
-              <td>
-                {{item.get('impuesto').value}}
-              </td>
-              <td>
-                {{item.get('valor').value | decimalrightpad: 4}}
-                <!-- {{item.get('valor').value | iva}} -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-      [disabled]="!regForm.dirty || regForm.invalid">
-      <i class="fa fa-save"></i>
-      Guardar
-    </button>
-    <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
-  </form>
+  </div>
 </div>
