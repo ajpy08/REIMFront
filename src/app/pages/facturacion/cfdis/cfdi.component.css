@@ -1,0 +1,413 @@
+.example-header {
+    min-height: 64px;
+    width: 650px;
+    padding: 8px 24px 0;
+}
+
+.example-header2 {
+    min-height: 64px;
+    width: 85%;
+    padding: 8px 24px 0;
+}
+
+.btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    top: 23px;
+    background-color: #002C77;
+}
+.container2 {
+    margin-top: 30px;
+    width: 1140px;
+    top: 60px;
+}
+
+.table-responsive {
+    border: 3px white solid;
+    box-shadow: 3px 2px 26px grey;
+
+} 
+
+.hiden {
+    background: #002C77;
+    color: white;
+    height: 31px;
+    width: 650px;
+}
+
+.hiden2 {
+    background: #002C77;
+    color: white;
+    height: 31px;
+    width: 650px;
+}
+
+.hiden3 {
+    background: #002C77;
+    color: white;
+    height: 31px;
+    width: auto;
+    position: relative;
+}
+
+.letra {
+    size: 10pt;
+    font-size: 21px;
+    top: 10px;
+    text-align: center;
+}
+
+.letra2 {
+    size: 10pt;
+    font-size: 21px;
+    top: 10px;
+    text-align: center;
+}
+
+.letra3 {
+    size: 10pt;
+    font-size: 21px;
+    top: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.es {
+    margin-top: 30px;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        /* max-width: 500px; */
+        width: 1140px;
+    }
+    .container2 {
+        margin-top: 30px;
+        width: 1140px;
+        top: 60px;
+    }
+}
+@media (max-width: 1024px) {
+    .example-header {
+        min-height: 64px;
+        width: 340px;
+        padding: 8px 24px 0;
+        top: 10px;
+    }
+    .hiden {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden2 {
+        margin-top: 10px;
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 341px;
+    }
+    .hiden3 {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        margin-left: -27px;
+        width: 708px;
+        position: relative;
+    }
+    .letra {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra2 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra3 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 76px;
+        margin-top: 20px;
+    }
+    .table-responsive {
+        border: 3px white solid;
+        box-shadow: 1px -10px 26px grey;
+        margin-left: -28px;
+        display: flex;
+        width: 710px;
+        overflow-x: auto;
+    }
+    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+        top: 23px;
+        background-color: #002C77;
+        width: 38px;
+        height: 0px;
+    }
+     .container2 {
+        margin-top: 30px;
+        width: 1140px;
+        top: 60px;
+    }
+}
+
+@media (max-width: 800px) {
+    .example-header {
+        min-height: 64px;
+        width: 340px;
+        padding: 8px 24px 0;
+        top: 10px;
+    }
+    .hiden {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden2 {
+        margin-top: 10px;
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 342px;
+    }
+    .hiden3 {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        margin-left: -27px;
+        width: 355px;
+        position: relative;
+    }
+    .letra {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra2 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra3 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 76px;
+        margin-top: 20px;
+    }
+    .table-responsive {
+        border: 3px white solid;
+        box-shadow: 1px -10px 26px grey;
+        margin-left: -28px;
+        display: flex;
+        width: 358px;
+        overflow-x: auto;
+    }
+    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+        top: 23px;
+        background-color: #002C77;
+        width: 38px;
+        height: 0px;
+    }
+    .container2 {
+        margin-top: 50px;
+        width: 561px;
+        top: 60px;
+    }
+}
+
+@media (max-width: 600px) {
+    .example-header {
+        min-height: 64px;
+        width: 340px;
+        padding: 8px 24px 0;
+        top: 10px;
+    }
+    .hiden {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden2 {
+        margin-top: 10px;
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden3 {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        margin-left: -27px;
+        width: 355px;
+        position: relative;
+    }
+    .letra {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra2 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra3 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 76px;
+        margin-top: 20px;
+    }
+    .table-responsive {
+        border: 3px white solid;
+        box-shadow: 1px -10px 26px grey;
+        margin-left: -28px;
+        display: flex;
+        width: 358px;
+        overflow-x: auto;
+    }
+    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+        top: 23px;
+        background-color: #002C77;
+        width: 38px;
+        height: 0px;
+    }
+    .container2 {
+        margin-top: 30px;
+        width: 1140px;
+        top: 60px;
+    }
+}
+
+@media (max-width: 400px) {
+    .example-header {
+        min-height: 64px;
+        width: 301px;
+        padding: 8px 24px 0;
+        top: 10px;
+    }
+    .hiden2 {
+        margin-top: 10px;
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden3 {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        margin-left: -27px;
+        width: 306px;
+        position: relative;
+    }
+    .letra {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra2 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra3 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 76px;
+        margin-top: 20px;
+    }
+    .table-responsive {
+        border: 3px white solid;
+        box-shadow: 1px -10px 26px grey;
+        margin-left: -28px;
+        display: flex;
+        width: 306px;
+        overflow-x: auto;
+    }
+    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+        top: 23px;
+        background-color: #002C77;
+        width: 38px;
+        height: 0px;
+    }
+    .container2 {
+        margin-top: 41px;
+        width: 240px;
+        top: 60px;
+    }
+}
+
+@media (max-width: 350px) {
+    .example-header {
+        min-height: 64px;
+        width: 258px;
+        padding: 8px 24px 0;
+        top: 10px;
+    }
+    .hiden2 {
+        margin-top: 10px;
+        background: #002C77;
+        color: white;
+        height: 31px;
+        width: 100%;
+    }
+    .hiden3 {
+        background: #002C77;
+        color: white;
+        height: 31px;
+        margin-left: -27px;
+        width: 256px;
+        position: relative;
+    }
+    .letra {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 50px;
+    }
+    .letra2 {
+        font-size: 15px;
+        top: 10px;
+        margin-left: 77px;
+    }
+    .letra3 {
+        size: 10pt;
+        font-size: 21px;
+        top: 10px;
+        margin-left: 44px;
+        margin-top: 20px;
+    }
+    .table-responsive {
+        border: 3px white solid;
+        box-shadow: 1px -10px 26px grey;
+        margin-left: -28px;
+        display: flex;
+        width: 259px;
+        overflow-x: auto;
+    }
+    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+        top: 23px;
+        background-color: #002C77;
+        width: 38px;
+        height: 0px;
+    }
+    .container2 {
+        margin-top: 30px;
+        width: 1140px;
+        top: 60px;
+    }
+}
