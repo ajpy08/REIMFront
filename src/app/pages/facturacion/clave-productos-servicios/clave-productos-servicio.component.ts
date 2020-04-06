@@ -21,7 +21,7 @@ export class ClaveProductosServicioComponent implements OnInit {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
-      this.cargarClaveProductoServicio(id);
+      this.cargarClaveProductoServicio(id); 
     }
 
 
