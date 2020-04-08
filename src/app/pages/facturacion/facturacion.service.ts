@@ -77,4 +77,26 @@ export class FacturacionService {
     return this.http.get(url);
   }
   /* #endregion */
+
+  /* #region  Series */
+  getSeries(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/series';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Formas de Pago */
+  getFormasPago(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/formas-pago';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Tipos de Comprobante */
+  getTiposComprobante(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/tipos-comprobante';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
 }
