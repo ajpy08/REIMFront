@@ -1,13 +1,51 @@
 import { FacturacionService } from './../facturacion.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Serie } from '../models/serie.models';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import * as _moment from 'moment';
+const moment = _moment;
+
+// export const MY_FORMATS = {
+//   parse: {
+//       datetime: ['DD.MM.YYYY HH:mm:ss', 'DD.MM.YYYY HH:mm'],
+//       date: 'DD.MM.YYYY',
+//       time: ['HH:mm:ss', 'HH:mm']
+//   },
+//   display: {
+//       datetime: 'DD.MM.YYYY HH:mm',
+//       date: 'DD.MM.YYYY',
+//       time: 'HH:mm',
+//       monthDayLabel: 'MMMM D',
+//       monthDayA11yLabel: 'MMMM D',
+//       monthYearLabel: 'MMMM YYYY',
+//       monthYearA11yLabel: 'MMMM YYYY',
+//       dateA11yLabel: 'LLLL',
+//       timeLabel: 'HH:mm'
+//   },
+// };
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: ['l', 'L'],
+  },
+  display: {
+    dateInput: 'L',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-cfdi',
   templateUrl: './cfdi.component.html',
-  styleUrls: ['./cfdi.component.css']
+  styleUrls: ['./cfdi.component.css'],
+  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+  {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 export class CFDIComponent implements OnInit {
   regForm: FormGroup;
@@ -15,6 +53,9 @@ export class CFDIComponent implements OnInit {
   series: Serie[] = [];
   formasPago = [];
   tiposComprobante = [];
+
+  @Input() IE = '';
+
   constructor(
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -27,20 +68,23 @@ export class CFDIComponent implements OnInit {
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
+      this.serie.setValue(this.series[0]);
     });
 
     this.facturacionService.getFormasPago().subscribe(formasPago => {
       this.formasPago = formasPago.formasPago;
+      this.formaPago.setValue(formasPago.formasPago[2]);
     });
 
     this.facturacionService.getTiposComprobante().subscribe(tiposComprobante => {
       this.tiposComprobante = tiposComprobante.tiposComprobante;
-      this.tipoComprobante.setValue('Ingreso');
+      this.tipoComprobante.setValue(this.facturacionService.IE);
     });
 
     if (id !== 'nuevo') {
       this.cargarCFDI(id);
     } else {
+      this.cargaValoresIniciales();
       // tslint:disable-next-line: forin
       // for (const control in this.regForm.controls) {
       //   this.regForm.controls[control.toString()].setValue(undefined);
@@ -49,6 +93,18 @@ export class CFDIComponent implements OnInit {
 
     // this.impuestos.removeAt(0);
     this.url = '/cfdis';
+  }
+
+  cargaValoresIniciales() {
+    // this.serie.setValue(this.series[0]);
+    // this.formaPago.setValue('03');
+    this.moneda.setValue('MXN');
+    // this.tipoComprobante.setValue('Ingreso');
+
+    const timeZone = moment().format('Z');
+    const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
+
+    this.fecha.setValue(fecha);
   }
 
   createFormGroup() {
@@ -62,6 +118,7 @@ export class CFDIComponent implements OnInit {
       tipoComprobante: ['', [Validators.required]],
       // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
       fecha: ['', [Validators.required]],
+      // fecha: [moment().local().startOf('day')],
       // Receptor
       receptor: ['', [Validators.required]],
       rfc: ['', [Validators.required]],

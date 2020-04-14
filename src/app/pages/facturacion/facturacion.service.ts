@@ -12,6 +12,8 @@ import swal from 'sweetalert';
 })
 export class FacturacionService {
 
+  IE = 'I';
+
   constructor(
     public http: HttpClient,
     public _usuarioService: UsuarioService

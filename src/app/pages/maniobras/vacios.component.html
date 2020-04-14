@@ -23,8 +23,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
-                      name="viaje">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viaje">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -43,8 +42,7 @@
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedHDescargaVacios" #DescargaVacios
-                      (change)="consultaManiobrasDescargaVacios()">Ya Descargados
+                    <mat-checkbox [(ngModel)]="checkedHDescargaVacios" #DescargaVacios (change)="consultaManiobrasDescargaVacios()">Ya Descargados
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
@@ -69,15 +67,11 @@
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleVacios() : null"
-                      [checked]="selectionVacios.hasValue() && isAllSelectedVacios()"
-                      [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleVacios() : null" [checked]="selectionVacios.hasValue() && isAllSelectedVacios()" [indeterminate]="selectionVacios.hasValue() && !isAllSelectedVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionVacios.toggle(row) : null"
-                      [checked]="selectionVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionVacios.toggle(row) : null" [checked]="selectionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -88,9 +82,11 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button> -->
-                    <button matTooltip=" Ver Maniobras de Vacios Descarga" (click)="open(row._id)"
-                      class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip=" Ver Maniobras de Vacios Descarga" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
+                    </button>
+                    <button matTooltip="Facturar Seleccionados" (click)="facturar(row._id)" class="btn btn-sm btn-success m-r-5">
+                      <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                     </button>
                     <!-- <button class="btn btn-outline-danger btn-sm m-r-5" (click)="corregirContenedor(row)">
                       <i class="fa fa-edit" aria-hidden="true">Corregir</i>
@@ -176,8 +172,7 @@
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones"
-                      name="reparacio">
+                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio">
                       <mat-option *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
                         {{rep.reparacion}}
                       </mat-option>
@@ -185,7 +180,7 @@
                   </mat-cell>
                 </ng-container>
 
-                
+
                 <ng-container matColumnDef="cargaDescarga">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Carga - Descarga</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
@@ -214,8 +209,7 @@
                     <input [(ngModel)]="facturaVacios" matInput name="facturaVacios" type="text" class="form-control"
                       placeholder="Factura de Maniobra de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10"
-                    (click)="openDialogVacios()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10" (click)="openDialogVacios()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
@@ -247,8 +241,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
-                      name="viajeLavado">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viajeLavado">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -262,23 +255,19 @@
                 </div>
                 <div class="col-sm">
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedLavadoVacios" #sinFactL
-                      (change)="consultaManiobrasDescargaVaciosLavado()">Por Facturar
+                    <mat-checkbox [(ngModel)]="checkedLavadoVacios" #sinFactL (change)="consultaManiobrasDescargaVaciosLavado()">Por Facturar
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedHDescagaL" #DescargaVaciosLavado
-                      (change)="consultaManiobrasDescargaVaciosLavado()">Ya Descargados
+                    <mat-checkbox [(ngModel)]="checkedHDescagaL" #DescargaVaciosLavado (change)="consultaManiobrasDescargaVaciosLavado()">Ya Descargados
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedYaLavadosL" #hFinLavadoVaciosR
-                      (change)="consultaManiobrasDescargaVaciosLavado()">Ya Lavados
+                    <mat-checkbox [(ngModel)]="checkedYaLavadosL" #hFinLavadoVaciosR (change)="consultaManiobrasDescargaVaciosLavado()">Ya Lavados
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedConReparacion" #conReparacionR
-                      (change)="consultaManiobrasDescargaVaciosLavado()">Con Reparacion
+                    <mat-checkbox [(ngModel)]="checkedConReparacion" #conReparacionR (change)="consultaManiobrasDescargaVaciosLavado()">Con Reparacion
                     </mat-checkbox>
                   </div>
                 </div>
@@ -294,20 +283,15 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-extra-big" [dataSource]="dataSourceLavadoVacios" #MatSortLavado="matSort"
-                matSort>
+              <mat-table class="mat-table-extra-big" [dataSource]="dataSourceLavadoVacios" #MatSortLavado="matSort" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null"
-                      [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()"
-                      [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleLavadoVacios() : null" [checked]="selectionLavadoVacios.hasValue() && isAllSelectedLavadoVacios()" [indeterminate]="selectionLavadoVacios.hasValue() && !isAllSelectedLavadoVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionLavadoVacios.toggle(row) : null"
-                      [checked]="selectionLavadoVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionLavadoVacios.toggle(row) : null" [checked]="selectionLavadoVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -318,8 +302,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button> -->
-                    <button matTooltip="Ver Maniobras de Lavado Vacios" (click)="open(row._id)"
-                      class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip="Ver Maniobras de Lavado Vacios" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <!-- <button class="btn btn-outline-danger btn-sm m-r-5" (click)="corregirContenedor(row)">
@@ -406,8 +389,7 @@
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones"
-                      name="reparacio">
+                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio">
                       <mat-option *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
                         {{rep.reparacion}}
                       </mat-option>
@@ -433,8 +415,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavado" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavado;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorLavado [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorLavado [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div><br><br>
             <div class="container">
@@ -444,8 +425,7 @@
                     <input [(ngModel)]="facturaLavadoVacios" matInput name="facturaLavadoVacios" type="text"
                       class="form-control" placeholder="Factura de Lavado de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="openDialogVaciosLavado()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="openDialogVaciosLavado()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
@@ -477,8 +457,7 @@
               <div class="row">
                 <div class="col-sm">
                   <mat-form-field>
-                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
-                      name="viajeReparacion">
+                    <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje" name="viajeReparacion">
                       <mat-option>--- NINGUNO ---</mat-option>
                       <mat-option *ngFor="let viaje of viajes" [value]="viaje._id">
                         {{ viaje.viaje + ' | ' + viaje.buque.nombre }}
@@ -492,19 +471,15 @@
                 </div>
                 <div class="col-sm">
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedReparacionVacios" #sinFactR
-                      (change)="consultaManiobrasDescargaVaciosReparacion()">Por Facturar
+                    <mat-checkbox [(ngModel)]="checkedReparacionVacios" #sinFactR (change)="consultaManiobrasDescargaVaciosReparacion()">Por Facturar
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedHDescagaR" #hDescargaVaciosReparacion
-                      (change)="consultaManiobrasDescargaVaciosReparacion()">Ya
-                      Descargados
+                    <mat-checkbox [(ngModel)]="checkedHDescagaR" #hDescargaVaciosReparacion (change)="consultaManiobrasDescargaVaciosReparacion()">Ya Descargados
                     </mat-checkbox>
                   </div>
                   <div class="col-sm">
-                    <mat-checkbox [(ngModel)]="checkedYaLavadosR" #hFinLavadoVaciosR
-                      (change)="consultaManiobrasDescargaVaciosReparacion()">Ya Lavados
+                    <mat-checkbox [(ngModel)]="checkedYaLavadosR" #hFinLavadoVaciosR (change)="consultaManiobrasDescargaVaciosReparacion()">Ya Lavados
                     </mat-checkbox>
                   </div>
                 </div>
@@ -521,20 +496,15 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-extra-big" [dataSource]="dataSourceReparacionVacios"
-                #MatSortReparacion="matSort" matSort>
+              <mat-table class="mat-table-extra-big" [dataSource]="dataSourceReparacionVacios" #MatSortReparacion="matSort" matSort>
 
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null"
-                      [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()"
-                      [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
+                    <mat-checkbox (change)="$event ? masterToggleReparacionVacios() : null" [checked]="selectionReparacionVacios.hasValue() && isAllSelectedReparacionVacios()" [indeterminate]="selectionReparacionVacios.hasValue() && !isAllSelectedReparacionVacios()">
                     </mat-checkbox>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()"
-                      (change)="$event ? selectionReparacionVacios.toggle(row) : null"
-                      [checked]="selectionReparacionVacios.isSelected(row)">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selectionReparacionVacios.toggle(row) : null" [checked]="selectionReparacionVacios.isSelected(row)">
                     </mat-checkbox>
                   </mat-cell>
                 </ng-container>
@@ -545,8 +515,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-info btn-sm m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button> -->
-                    <button matTooltip="Ver Maniobras de Reparacion Vacios" (click)="open(row._id)"
-                      class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip="Ver Maniobras de Reparacion Vacios" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <!-- <button class="btn btn-outline-danger btn-sm m-r-5" (click)="corregirContenedor(row)">
@@ -635,8 +604,7 @@
                 <ng-container matColumnDef="reparaciones">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones"
-                      name="reparacio">
+                    <mat-select *ngIf="row.reparaciones.length > 0" class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio">
                       <mat-option *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
                         {{rep.reparacion}}
                       </mat-option>
@@ -662,8 +630,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorReparacion [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
-                [showFirstLastButtons]>
+              <mat-paginator #MatPaginatorReparacion [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
               </mat-paginator>
             </div><br><br>
             <div class="container">
@@ -673,13 +640,11 @@
                     <input [(ngModel)]="facturaReparacionVacios" matInput name="facturaReparacionVacios" type="text"
                       class="form-control" placeholder="Factura de Reparacion de Vacio">
                   </mat-form-field> -->
-                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-                    (click)="openDialogVaciosReparacion()">
+                  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="openDialogVaciosReparacion()">
                     <i class="fa fa-save"></i>
                     Asignar Factura
                   </button>
-                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosReparacion()"
-                    class="btn btn-success m-r-5">
+                  <button value="Exportar a excel" (click)="exportAsXLSXVaciosReparacion()" class="btn btn-success m-r-5">
                     <i class="fas fa-file-excel"></i> Exportar Excel
                   </button>
                 </div>

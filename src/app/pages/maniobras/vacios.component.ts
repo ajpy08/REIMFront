@@ -33,6 +33,7 @@ import {
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
 import { Router } from '@angular/router';
+import { FacturacionService } from '../facturacion/facturacion.service';
 
 const moment = _moment;
 
@@ -206,7 +207,8 @@ export class VaciosComponent implements OnInit {
     public _viajeService: ViajeService,
     public _excelService: ExcelService,
     public matDialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private facturacionService: FacturacionService
   ) { }
 
   ngOnInit() {
@@ -648,5 +650,10 @@ export class VaciosComponent implements OnInit {
 
     // Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
+  }
+
+  facturar () {
+    this.facturacionService.IE = 'E';
+    this.router.navigate(['/cfdi/nuevo']);
   }
 }
