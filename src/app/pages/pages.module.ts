@@ -140,6 +140,10 @@ import { ProductosServiciosComponent } from './facturacion/productos-servicios/p
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
 import { CFDISComponent } from './facturacion/cfdis/cfdis.component';
 import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
+import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-servicios/clave-productos-servicios.component';
+import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
+import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
+import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
 
 @NgModule({
     declarations: [
@@ -214,7 +218,11 @@ import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
         ProductoServicioComponent,
         CFDIComponent,
         CFDISComponent,
-        CFDIComponent
+        CFDIComponent,
+        ClaveProductosServiciosComponent,
+        ClaveProductosServicioComponent,
+        ClaveUnidadComponent,
+        ClaveUnidadesComponent
     ],
     exports: [
         DashboardComponent
