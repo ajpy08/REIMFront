@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { ProductoServicio } from './productos-servicios/producto-servicio.models';
+import { ProductoServicio } from './models/producto-servicio.models';
 import { ClaveProductosServicio } from './clave-productos-servicios/clave-producto.servicio.models';
 
 import { Observable, throwError } from 'rxjs';

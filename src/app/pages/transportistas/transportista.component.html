@@ -116,9 +116,19 @@
 
 
 
-                <!-- FIN CORREO OPERATIVO  -->
+              <!-- FIN CORREO OPERATIVO  -->
 
-
+              <mat-form-field>
+                <mat-select placeholder="USOS CFDI" formControlName="usoCFDI" name="usoCFDI">
+                  <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI._id">
+                    {{ usoCFDI.usoCFDI + ' - ' + usoCFDI.descripcion }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="usoCFDI.touched && usoCFDI.invalid">
+                  <sup>*</sup>Por Favor Ingrese un uso de CFDI
+                </mat-error>
+              </mat-form-field>
+              
               <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" class="form-control"
                   placeholder="Correo Operativo">
