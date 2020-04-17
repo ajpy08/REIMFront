@@ -1,3 +1,5 @@
+import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
+import { CFDISComponent } from './facturacion/cfdis/cfdis.component';
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
 import { ProductosServiciosComponent } from './facturacion/productos-servicios/productos-servicios.component';
 import { StatusComponent } from './usuarios/status/status.component';
@@ -505,6 +507,19 @@ const pagesRoutes: Routes = [
         component: MisclientesComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    // FACTURACION
+    {
+        path: 'cfdis',
+        component: CFDISComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catalogo de CFDIS', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'cfdi/:id',
+        component: CFDIComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de CFDI', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: '',

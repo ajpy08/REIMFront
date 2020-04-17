@@ -100,7 +100,6 @@ export class RevisarComponent implements OnInit {
   get peso() {
     return this.regForm.get('peso');
   }
-
   get sello() {
     return this.regForm.get('sello');
   }

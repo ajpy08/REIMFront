@@ -1,6 +1,6 @@
 import { Impuesto } from './../models/impuesto.models';
 import { Component, OnInit } from '@angular/core';
-import { ProductoServicio } from './producto-servicio.models';
+import { ProductoServicio } from '../models/producto-servicio.models';
 import { FacturacionService } from '../../../services/service.index';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';

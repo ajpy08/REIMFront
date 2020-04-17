@@ -138,6 +138,8 @@ import { InfoDialogComponent } from '../dialogs/info-dialog/info-dialog.componen
 import { StatusComponent } from './usuarios/status/status.component';
 import { ProductosServiciosComponent } from './facturacion/productos-servicios/productos-servicios.component';
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
+import { CFDISComponent } from './facturacion/cfdis/cfdis.component';
+import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
 import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-servicios/clave-productos-servicios.component';
 import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
 import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
@@ -215,6 +217,9 @@ import { ReportesComponent } from './reportes/reportes.component';
         StatusComponent,
         ProductosServiciosComponent,
         ProductoServicioComponent,
+        CFDIComponent,
+        CFDISComponent,
+        CFDIComponent,
         ClaveProductosServiciosComponent,
         ClaveProductosServicioComponent,
         ClaveUnidadComponent,

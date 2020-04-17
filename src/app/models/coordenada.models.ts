@@ -1,4 +1,4 @@
-import { Maniobra } from "./maniobra.models";
+import { Maniobra } from './maniobra.models';
 
 export class Coordenada {
     constructor(
@@ -8,5 +8,5 @@ export class Coordenada {
         public activo?: boolean,
         public maniobras?: Maniobra[],
         public _id?: string
-    ) {} 
+    ) {}
 }
