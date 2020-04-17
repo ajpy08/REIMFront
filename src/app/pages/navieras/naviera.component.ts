@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavieraService, SubirArchivoService } from 'src/app/services/service.index';
+import { NavieraService, SubirArchivoService, FacturacionService } from 'src/app/services/service.index';
 import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import swal from 'sweetalert';
@@ -21,9 +21,11 @@ export class NavieraComponent implements OnInit {
   edicion = false;
   url: string;
   correod;
+  usosCFDI = [];
 
   constructor(public _navieraService: NavieraService,
     public router: Router,
+    public facturacionService: FacturacionService,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
@@ -31,6 +33,9 @@ export class NavieraComponent implements OnInit {
 
   ngOnInit() {
     this.createFormGroup();
+    this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
+      this.usosCFDI = usosCFDI.usosCFDI;
+    });
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.edicion = true;
@@ -66,6 +71,7 @@ export class NavieraComponent implements OnInit {
       correoFac: ['', [Validators.email]],
       credito: [false, Validators.required],
       img: [''],
+      usoCFDI: ['', [Validators.required]],
       caat: ['', [Validators.required]],
       nombreComercial: [''],
       _id: ['']
@@ -76,23 +82,24 @@ export class NavieraComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
-    })
+    });
   }
 
   addContenedor(correoO: string): void {
     let error = false;
 
     if (correoO === '') {
-      this.correo.disable({ emitEvent: true })
+      this.correo.disable({ emitEvent: true });
       swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
-    } else if (this.correo.controls.length == 0) {
+    } else if (this.correo.controls.length === 0) {
       this.correo.push(this.agregarArray(correoO));
     } else {
       if (this.correo.controls) {
         this.correo.controls.forEach(c => {
-          if (this.correotem.value == c.value.correoO) {
-            if (error == false) {
-              swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+          if (this.correotem.value === c.value.correoO) {
+            if (error === false) {
+              swal('Error al agregar', 'El correo ' + this.correotem.value  +
+               ' ya se encuentra registrado en la lista', 'error');
               error = true;
               return false;
             }
@@ -100,7 +107,7 @@ export class NavieraComponent implements OnInit {
         });
         if (!error) {
           this.correo.push(this.agregarArray(correoO));
-        } 
+        }
       }
     }
   }
@@ -146,14 +153,17 @@ export class NavieraComponent implements OnInit {
   get correo() {
     return this.regForm.get('correo') as FormArray;
   }
+  get usoCFDI() {
+    return this.regForm.get('usoCFDI');
+  }
   get correotem() {
-    return this.regForm.get('correotem')
+    return this.regForm.get('correotem');
   }
   get correoFac() {
     return this.regForm.get('correoFac');
   }
   get correosF() {
-    return this.regForm.get('correosF')
+    return this.regForm.get('correosF');
   }
   get credito() {
     return this.regForm.get('credito');
@@ -185,13 +195,14 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['cp'].setValue(naviera.cp);
       this.regForm.controls['formatoR1'].setValue(naviera.formatoR1);
 
-      var correoArray = naviera.correo.split(",")
+      const correoArray = naviera.correo.split(',');
       correoArray.forEach(c => {
-        this.addContenedor(c)
+        this.addContenedor(c);
       });
       // this.regForm.controls['correosF'].setValue(naviera.correo);
       this.regForm.controls['correoFac'].setValue(naviera.correoFac);
       this.regForm.controls['credito'].setValue(naviera.credito);
+      this.regForm.controls['usoCFDI'].setValue(naviera.usoCFDI);
       this.regForm.controls['img'].setValue(naviera.img);
       this.regForm.controls['caat'].setValue(naviera.caat);
       this.regForm.controls['nombreComercial'].setValue(naviera.nombreComercial);
@@ -202,14 +213,14 @@ export class NavieraComponent implements OnInit {
   guardarNaviera() {
     if (this.regForm.valid) {
 
-      var correos = '';
+      let correos = '';
       this.regForm.controls.correo.value.forEach(correo => {
         correos += correo.correoO + ',';
       });
       correos = correos.slice(0, -1);
 
       this.correotem.setValue('');
-      this.correosF.setValue(correos)
+      this.correosF.setValue(correos);
 
       this._navieraService.guardarNaviera(this.regForm.value)
         .subscribe(res => {
@@ -266,10 +277,10 @@ export class NavieraComponent implements OnInit {
 
   back() {
     if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history')
+      this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    //this.location.back();
+    localStorage.removeItem('history');
+
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TransportistaService, SubirArchivoService} from '../../services/service.index';
-import { FormGroup, FormBuilder, Validators, FormArray ,AbstractControl } from '@angular/forms';
+import { TransportistaService, SubirArchivoService, FacturacionService} from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators, FormArray , AbstractControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import swal from 'sweetalert';
 
@@ -16,12 +16,14 @@ export class TransportistaComponent implements OnInit {
   fileImg: File = null;
   fileImgTemporal = false;
   file: File = null;
+  usosCFDI = [];
   fileTemporal = false;
   edicion = false;
   url: string;
 
   constructor(public _transportistaService: TransportistaService,
     public router: Router,
+    public facturacionService: FacturacionService,
     public activatedRoute: ActivatedRoute,
     public _subirArchivoService: SubirArchivoService,
     private fb: FormBuilder,
@@ -29,6 +31,9 @@ export class TransportistaComponent implements OnInit {
 
   ngOnInit() {
     this.createFormGroup();
+    this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
+      this.usosCFDI = usosCFDI.usosCFDI;
+    });
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
       this.edicion = true;
@@ -40,7 +45,7 @@ export class TransportistaComponent implements OnInit {
 
     this.url = '/transportistas';
 
-    if(this.correoF){
+    if (this.correoF) {
       this.correoF.removeAt(0);
     }
   }
@@ -65,6 +70,7 @@ export class TransportistaComponent implements OnInit {
       correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
       correoFac: ['', [Validators.email]],
       credito: [false, [Validators.required]],
+      usoCFDI: ['', [Validators.required]],
       img: [''],
       caat: ['', [Validators.required]],
       _id: ['']
@@ -74,21 +80,21 @@ export class TransportistaComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
-    })
+    });
   }
-  
+
   addContenedor(correoO: string): void {
     let error = false;
     if (correoO === '') {
-      this.correo.disable({ emitEvent: true })
+      this.correo.disable({ emitEvent: true });
       swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
-    } else if (this.correoF.controls.length == 0) {
+    } else if (this.correoF.controls.length === 0) {
       this.correoF.push(this.agregarArray(correoO));
     } else {
       if (this.correoF.controls) {
         this.correoF.controls.forEach(c => {
-          if (this.correotem.value == c.value.correoO) {
-            if (error == false) {
+          if (this.correotem.value === c.value.correoO) {
+            if (error === false) {
               swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
               error = true;
               return false;
@@ -97,7 +103,7 @@ export class TransportistaComponent implements OnInit {
         });
         if (!error) {
           this.correoF.push(this.agregarArray(correoO));
-        } 
+        }
       }
     }
   }
@@ -147,8 +153,11 @@ export class TransportistaComponent implements OnInit {
   get correoF() {
     return this.regForm.get('correoF') as FormArray;
   }
-  get correotem(){
-    return this.regForm.get('correotem')
+  get correotem() {
+    return this.regForm.get('correotem');
+  }
+  get usoCFDI() {
+    return this.regForm.get('usoCFDI');
   }
 
   get correoFac() {
@@ -194,6 +203,7 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls['credito'].setValue(res.credito);
       this.regForm.controls['img'].setValue(res.img);
       this.regForm.controls['caat'].setValue(res.caat);
+      this.regForm.controls['usoCFDI'].setValue(res.usoCFDI);
       this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
       this.regForm.controls['_id'].setValue(res._id);
     });
@@ -202,16 +212,15 @@ export class TransportistaComponent implements OnInit {
   guardarTransportista() {
     if (this.regForm.valid) {
 
-      
-      var correos = '';
+      let correos = '';
       this.regForm.controls.correoF.value.forEach(correo => {
         correos += correo.correoO + ',';
       });
-      correos = correos.slice(0,-1);
-  
+      correos = correos.slice(0 , -1);
+
     this.correotem.setValue('');
     this.correo.setValue(correos);
-    
+
       // console.log(this.regForm.value);
       this._transportistaService.guardarTransportista(this.regForm.value)
         .subscribe(res => {
@@ -233,18 +242,18 @@ export class TransportistaComponent implements OnInit {
   onFileSelected(event) {
     if (this.tipoFile === 'img') {
       // console.log('Fue Foto');
-      if(event.target.files[0] != undefined) {
+      if (event.target.files[0] !== undefined) {
         this.fileImg = <File>event.target.files[0];
         this.subirArchivo(this.tipoFile);
       }
     } else {
-      if (this.tipoFile == 'formatoR1') {
-        if(event.target.files[0] != undefined) {
+      if (this.tipoFile === 'formatoR1') {
+        if (event.target.files[0] !== undefined) {
           this.file = <File>event.target.files[0];
           this.subirArchivo(this.tipoFile);
         }
       } else {
-        console.log('No conozco el tipo de archivo para subir')
+        console.log('No conozco el tipo de archivo para subir');
       }
     }
   }
@@ -269,11 +278,11 @@ export class TransportistaComponent implements OnInit {
   }
 
   back() {
-    if (localStorage.getItem('history')){
+    if (localStorage.getItem('history')) {
       this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    //this.location.back();
+    localStorage.removeItem('history');
+    // this.location.back();
   }
 }
