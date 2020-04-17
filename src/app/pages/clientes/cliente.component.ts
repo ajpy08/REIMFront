@@ -1,3 +1,4 @@
+import { FacturacionService } from './../facturacion/facturacion.service';
 import { Component, OnInit } from '@angular/core';
 import { ClienteService, SubirArchivoService, UsuarioService } from '../../services/service.index';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -22,12 +23,14 @@ export class ClienteComponent implements OnInit {
   fileImgTemporal = false;
   file: File = null;
   fileTemporal = false;
+  usosCFDI = [];
   edicion = false;
   usuarioLogueado = new Usuario;
   url: string;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _clienteService: ClienteService,
+    public facturacionService: FacturacionService,
     public _agenciaService: AgenciaService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -38,10 +41,15 @@ export class ClienteComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
+
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.usuarioLogueado = this.usuarioService.usuario;
+
+    this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
+      this.usosCFDI = usosCFDI.usosCFDI;
+    });
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this._clienteService.getClientesRole().subscribe((empresas) => {
@@ -134,6 +142,7 @@ export class ClienteComponent implements OnInit {
       credito: [false, [Validators.required]],
       img: [''],
       empresas: [''],
+      usoCFDI: ['', [Validators.required]],
       _id: ['']
     });
   }
@@ -233,6 +242,10 @@ export class ClienteComponent implements OnInit {
   get empresas() {
     return this.regForm.get('empresas');
   }
+
+  get usoCFDI() {
+    return this.regForm.get('usoCFDI');
+  }
   get _id() {
     return this.regForm.get('_id');
   }
@@ -263,6 +276,7 @@ export class ClienteComponent implements OnInit {
         this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
+        this.regForm.controls['usoCFDI'].setValue(res.usoCFDI);
         this.regForm.controls['empresas'].setValue(res.empresas);
         this.regForm.controls['_id'].setValue(res._id);
       });
