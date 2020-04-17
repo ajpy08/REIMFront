@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { ProductoServicio } from './productos-servicios/producto-servicio.models';
+import { ProductoServicio } from './models/producto-servicio.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
@@ -12,7 +12,12 @@ import swal from 'sweetalert';
 })
 export class FacturacionService {
 
-  IE = 'I';
+  IE = '';
+  usoCFDI = '';
+  tipo = '';
+  receptor;
+  productoServ = '';
+  maniobras = [];
 
   constructor(
     public http: HttpClient,
@@ -97,6 +102,13 @@ export class FacturacionService {
   /* #region  Tipos de Comprobante */
   getTiposComprobante(): Observable<any> {
     const url = URL_SERVICIOS + '/facturacion/tipos-comprobante';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region Usos de CFDI */
+  getUsosCFDI(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/usos-CFDI';
     return this.http.get(url);
   }
   /* #endregion */

@@ -52,6 +52,10 @@
                   </div>
                 </div>
                 <div class="col-sm">
+                  <button matTooltip="Facturar Seleccionados" (click)="facturar()" class="btn btn-sm btn-success m-r-5">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
                 </div>
               </div>
             </div> <br>
@@ -84,9 +88,6 @@
                     </button> -->
                     <button matTooltip=" Ver Maniobras de Vacios Descarga" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
-                    </button>
-                    <button matTooltip="Facturar Seleccionados" (click)="facturar(row._id)" class="btn btn-sm btn-success m-r-5">
-                      <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                     </button>
                     <!-- <button class="btn btn-outline-danger btn-sm m-r-5" (click)="corregirContenedor(row)">
                       <i class="fa fa-edit" aria-hidden="true">Corregir</i>

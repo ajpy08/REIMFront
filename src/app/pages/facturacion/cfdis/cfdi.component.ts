@@ -1,11 +1,13 @@
 import { FacturacionService } from './../facturacion.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Serie } from '../models/serie.models';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
+import { Concepto } from '../models/concepto.models';
+import { NavieraService } from '../../navieras/naviera.service';
 const moment = _moment;
 
 // export const MY_FORMATS = {
@@ -43,9 +45,9 @@ export const MY_FORMATS = {
   selector: 'app-cfdi',
   templateUrl: './cfdi.component.html',
   styleUrls: ['./cfdi.component.css'],
-  providers: [{provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-  {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  {provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
+  providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+  { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 export class CFDIComponent implements OnInit {
   regForm: FormGroup;
@@ -53,22 +55,24 @@ export class CFDIComponent implements OnInit {
   series: Serie[] = [];
   formasPago = [];
   tiposComprobante = [];
-
-  @Input() IE = '';
+  usosCFDI = [];
 
   constructor(
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private facturacionService: FacturacionService) { }
+    private facturacionService: FacturacionService,
+    private navieraService: NavieraService) { }
 
   ngOnInit() {
     this.createFormGroup();
+
     const id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
       this.serie.setValue(this.series[0]);
+      this.folio.setValue(this.series[0].folio);
     });
 
     this.facturacionService.getFormasPago().subscribe(formasPago => {
@@ -80,6 +84,13 @@ export class CFDIComponent implements OnInit {
       this.tiposComprobante = tiposComprobante.tiposComprobante;
       this.tipoComprobante.setValue(this.facturacionService.IE);
     });
+
+    this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
+      this.usosCFDI = usosCFDI.usosCFDI;
+      this.usoCFDI.setValue('P01');
+    });
+
+    this.conceptos.removeAt(0);
 
     if (id !== 'nuevo') {
       this.cargarCFDI(id);
@@ -99,17 +110,72 @@ export class CFDIComponent implements OnInit {
     // this.serie.setValue(this.series[0]);
     // this.formaPago.setValue('03');
     this.moneda.setValue('MXN');
-    // this.tipoComprobante.setValue('Ingreso');
+    this.tipoComprobante.setValue('Ingreso');
 
+    /////////////////////////////////// FECHA /////////////////////////////////////
     const timeZone = moment().format('Z');
     const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
-
     this.fecha.setValue(fecha);
+    /////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////////// RECEPTOR /////////////////////////////////////
+    if (this.facturacionService.receptor) {
+      if (this.facturacionService.tipo === 'Descarga') {
+        this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
+          this.rfc.setValue(naviera.rfc);
+          this.nombre.setValue(naviera.razonSocial);
+          let direccion = '';
+          direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
+          direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
+          direccion += naviera.colonia !== undefined && naviera.colonia !== '' ? ' ' +  naviera.colonia : '';
+          direccion += naviera.municipio !== undefined && naviera.municipio !== '' ? ' ' +  naviera.municipio : '';
+          direccion += naviera.ciudad !== undefined && naviera.ciudad !== '' ? ' ' +  naviera.ciudad : '';
+          direccion += naviera.estado !== undefined && naviera.estado !== '' ? ' ' +  naviera.estado : '';
+          direccion += naviera.cp !== undefined && naviera.cp !== '' ? ' ' +  naviera.cp : '';
+          this.direccion.setValue(direccion.trim());
+          this.correo.setValue(naviera.correoFac);
+        });
+      }
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
+    if (this.facturacionService.maniobras.length > 0) {
+      const concepto = new Concepto();
+
+      if (this.facturacionService.tipo === 'Descarga') {
+        this.facturacionService.getProductoServicio(this.facturacionService.productoServ).subscribe((prodServ) => {
+          concepto.productoServicio = prodServ;
+
+          concepto.unidad = '';
+          concepto.cantidad = this.facturacionService.maniobras.length;
+          concepto.valorUnitario = concepto.productoServicio !== undefined ? concepto.productoServicio.valorUnitario : 0;
+          if (concepto.productoServicio) {
+            concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
+            concepto.productoServicio.impuestos.forEach(impuesto => {
+              if (impuesto.impuesto === 'IVA') {
+                concepto.impuestos = concepto.importe * (impuesto.valor / 100);
+              }
+            });
+          }
+          concepto.maniobras = this.facturacionService.maniobras;
+
+          this.subtotal.setValue(concepto.importe);
+          this.totalImpuestos.setValue(concepto.impuestos);
+          this.total.setValue(concepto.importe + concepto.impuestos);
+
+          this.conceptos.push(this.agregarArray(concepto));
+        });
+      }
+
+      this.maniobras.setValue(this.facturacionService.maniobras);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      // Generales
+      // GENERALES
       serie: [''],
       folio: [{ value: '', disabled: true }, [Validators.required]],
       sucursal: [''],
@@ -119,32 +185,45 @@ export class CFDIComponent implements OnInit {
       // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
       fecha: ['', [Validators.required]],
       // fecha: [moment().local().startOf('day')],
-      // Receptor
-      receptor: ['', [Validators.required]],
+      // RECEPTOR
+      // receptor: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
       usoCFDI: ['', [Validators.required]],
       direccion: ['', [Validators.required]],
       correo: ['', [Validators.required]],
-      // Conceptos
-      // conceptos: ['', [Validators.required]],
-      // maniobras: ['', [Validators.required]],
-      // CFDIs Relacionados
+      // CONCEPTOS
+      conceptos: this.fb.array([this.agregarArray(new Concepto)]),
+      maniobras: ['', [Validators.required]],
+      // CFDIS RELACIONADOS
       // cfdiRelacionados: ['', [Validators.required]],
-      // Totales
+      // TOTALES
       subtotal: ['', [Validators.required]],
       totalImpuestos: ['', [Validators.required]],
       total: ['', [Validators.required]],
-      // TR: [''],
-      // impuesto: [''],
-      // valor: [16.0000],
-      // impuestos: this.fb.array([this.agregarArray(new Impuesto)]),
       _id: ['']
     });
   }
 
-  cargarCFDI(id: string) {
+  agregarArray(concepto: Concepto): FormGroup {
+    return this.fb.group({
+      consecutivo: [concepto.consecutivo],
+      productoServicio: [concepto.productoServicio],
+      unidad: [concepto.unidad],
+      cantidad: [concepto.cantidad],
+      valorUnitario: [concepto.valorUnitario],
+      impuestos: [concepto.impuestos],
+      importe: [concepto.importe],
+      descuento: [concepto.descuento],
+      maniobras: [concepto.maniobras]
+    });
+  }
 
+  quitar(indice: number) {
+    this.conceptos.removeAt(indice);
+  }
+
+  cargarCFDI(id: string) {
   }
 
   guardarCFDI() {
@@ -225,6 +304,14 @@ export class CFDIComponent implements OnInit {
 
   get correo() {
     return this.regForm.get('correo');
+  }
+
+  get conceptos() {
+    return this.regForm.get('conceptos') as FormArray;
+  }
+
+  get maniobras() {
+    return this.regForm.get('maniobras');
   }
 
   get subtotal() {

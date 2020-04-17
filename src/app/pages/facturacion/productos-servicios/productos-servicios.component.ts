@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { ProductoServicio } from './producto-servicio.models';
+import { ProductoServicio } from '../models/producto-servicio.models';
 import { FacturacionService, ExcelService } from '../../../services/service.index';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';

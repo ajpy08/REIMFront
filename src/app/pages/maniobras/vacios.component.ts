@@ -558,20 +558,13 @@ export class VaciosComponent implements OnInit {
   }
 
   openDialogVacios() {
-    // console.log("Entre")
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionVacios;
     const dialogRef = this.matDialog.open(AsignarFacturaComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // if (this.checkedVacios) {
         this.selectionVacios = new SelectionModel<Maniobra>(true, []);
-        // this.filtraManiobrasDescargaVacios(this.checkedVacios);
-        // if (this.checkedHDescargaVacios && this.dataSourceVacios.data.length > 0) {
-        //   this.cargarManiobrasDescargadosVacios(this.checkedHDescargaVacios);
-        // }
-        // }
       }
     });
   }
@@ -653,7 +646,13 @@ export class VaciosComponent implements OnInit {
   }
 
   facturar () {
-    this.facturacionService.IE = 'E';
+    this.facturacionService.IE = 'I';
+    this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
+    this.facturacionService.maniobras = this.selectionVacios.selected;
+    this.facturacionService.receptor = this.selectionVacios.selected[0].naviera;
+
+    this.facturacionService.tipo = 'Descarga';
+
     this.router.navigate(['/cfdi/nuevo']);
   }
 }

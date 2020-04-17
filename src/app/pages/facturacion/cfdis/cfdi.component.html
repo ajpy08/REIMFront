@@ -110,12 +110,12 @@
               </div>
               <div class="example-header mat-elevation-z8">
                 <div class="my-container">
-                  <div class="col-md-12">
+                  <!-- <div class="col-md-12">
                     <mat-form-field>
                       <mat-label><b>Receptor</b></mat-label>
                       <input matInput formControlName="receptor" type="text">
                     </mat-form-field>
-                  </div>
+                  </div> -->
 
                   <div class="col-md-12">
                     <mat-form-field>
@@ -132,11 +132,16 @@
                   </div>
 
                   <div class="col-md-12">
+                    <!--========Combombox Usos CFDI=========-->
                     <mat-form-field>
-                      <mat-label><b>USO CFDI</b></mat-label>
-                      <mat-select formControlName="usoCFDI" aria-placeholder="MONEDA">
-                        <mat-option value="">-</mat-option>
+                      <mat-select placeholder="USOS CFDI" formControlName="usoCFDI" name="usoCFDI">
+                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI.usoCFDI">
+                          {{ usoCFDI.usoCFDI + ' - ' + usoCFDI.descripcion }}
+                        </mat-option>
                       </mat-select>
+                      <mat-error *ngIf="usoCFDI.touched && usoCFDI.invalid">
+                        <sup>*</sup>Por Favor Ingrese un uso de CFDI
+                      </mat-error>
                     </mat-form-field>
                   </div>
 
@@ -173,18 +178,48 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">ID</th>
+                        <th scope="col">Consecutivo</th>
                         <th scope="col">Concepto</th>
                         <th scope="col">Unidad </th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">Valor Unitario</th>
-                        <th scope="col">Impuesto</th>
+                        <th scope="col">Impuestos</th>
                         <th scope="col">Descuento</th>
                         <th scope="col">Importe</th>
                         <th scope="col"></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody formArrayName="conceptos" *ngFor="let concepto of conceptos.value; let item = index;">
+                      <tr [formGroupName]="item">
+                        <td scope="row">{{item+1}}</td>
+                        <!-- <td>
+                          <button type="button" (click)="quitar( item )" class="btn btn-danger">
+                            <i class="fa fa-trash-o"></i>
+                          </button>
+                        </td> -->
+                        <td>
+                          {{concepto.productoServicio.descripcion}}
+                        </td>
+                        <td>
+                          {{concepto.unidad}}
+                        </td>
+                        <td>
+                          {{concepto.cantidad}}
+                        </td>
+                        <td>
+                          <!-- {{concepto.valorUnitario | decimalrightpad: 4}} -->
+                          {{concepto.valorUnitario | currency}}
+                        </td>
+                        <td>
+                          {{concepto.impuestos | currency}}
+                        </td>
+                        <td>
+                          {{concepto.descuento | currency}}
+                        </td>
+                        <td>
+                          {{concepto.importe | currency}}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -192,11 +227,11 @@
             </div>
           </div>
 
-          <div class="text-right">
+          <!-- <div class="text-right">
             <button matTooltip="Añadir nuevo Concepto" mat-mini-fab class="btn btn-primary" [routerLink]="['/agencias/agencia','nuevo']" type="button">
               <i class="fa fa-plus"></i>
             </button>
-          </div>
+          </div> -->
 
           <!--INICIO SUBTOTAL-->
           <div class="es">
@@ -207,20 +242,20 @@
                     <div class="col-md-12">
                       <mat-form-field>
                         <mat-label><b>SUBTOTAL</b></mat-label>
-                        <input matInput formControlName="subtotal" type="text">
+                        <input matInput formControlName="subtotal" type="text" [value]="regForm.get('subtotal').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">
 
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
-                        <input matInput formControlName="totalImpuestos" type="text">
+                        <input matInput formControlName="totalImpuestos" type="text" [value]="regForm.get('totalImpuestos').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">
                       <mat-form-field>
                         <mat-label><b>TOTAL</b></mat-label>
-                        <input matInput formControlName="total" type="text">
+                        <input matInput formControlName="total" type="text" [value]="regForm.get('total').value | currency">
                       </mat-form-field>
                     </div>
                   </div>
