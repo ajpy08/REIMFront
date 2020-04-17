@@ -87,6 +87,7 @@ import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-
 import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
 import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
 import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
+import { ReportesComponent } from './reportes/reportes.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -418,6 +419,15 @@ const pagesRoutes: Routes = [
         component: AprobarCargaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Aprobar Carga', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+
+
+    // REPORTES
+    {
+        path: 'reportes',
+        component: ReportesComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Reportes', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE]}
     },
 
     // SOLICITUDES TRANSPORTISTA

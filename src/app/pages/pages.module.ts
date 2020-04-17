@@ -142,6 +142,7 @@ import { ClaveProductosServiciosComponent } from './facturacion/clave-productos-
 import { ClaveProductosServicioComponent } from './facturacion/clave-productos-servicios/clave-productos-servicio.component';
 import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
 import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
+import { ReportesComponent } from './reportes/reportes.component';
 
 @NgModule({
     declarations: [
@@ -217,7 +218,8 @@ import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unida
         ClaveProductosServiciosComponent,
         ClaveProductosServicioComponent,
         ClaveUnidadComponent,
-        ClaveUnidadesComponent
+        ClaveUnidadesComponent,
+        ReportesComponent
     ],
     exports: [
         DashboardComponent
