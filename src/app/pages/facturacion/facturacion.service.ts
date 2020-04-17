@@ -4,6 +4,7 @@ import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { ProductoServicio } from './productos-servicios/producto-servicio.models';
 import { ClaveProductosServicio } from './clave-productos-servicios/clave-producto.servicio.models';
+
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
@@ -13,6 +14,13 @@ import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.model
   providedIn: 'root'
 })
 export class FacturacionService {
+
+  IE = '';
+  usoCFDI = '';
+  tipo = '';
+  receptor;
+  productoServ = '';
+  maniobras = [];
 
   constructor(
     public http: HttpClient,
@@ -172,4 +180,33 @@ export class FacturacionService {
     return this.http.get(url);
   }
   /* #endregion */
+
+  /* #region  Series */
+  getSeries(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/series';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Formas de Pago */
+  getFormasPago(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/formas-pago';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Tipos de Comprobante */
+  getTiposComprobante(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/tipos-comprobante';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region Usos de CFDI */
+  getUsosCFDI(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/usos-CFDI';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
 }

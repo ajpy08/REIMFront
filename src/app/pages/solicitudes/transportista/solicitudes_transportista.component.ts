@@ -21,6 +21,7 @@ import swal from 'sweetalert';
   providers: []
 })
 export class SolicitudesTransportistaComponent implements OnInit {
+  cargando = false;
   maniobras: any[] = [];
   maniobrasCarga: any[] = [];
   totalRegistros = 0;

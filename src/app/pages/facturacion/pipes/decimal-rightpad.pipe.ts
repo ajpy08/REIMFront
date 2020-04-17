@@ -9,17 +9,22 @@ export class DecimalRightPadPipe implements PipeTransform {
     let entero = '';
     let decimales = '';
 
-    entero = (value.toString() + '').split('.')[0];
-    if (value.toString().indexOf('.') > 0) {
-      decimales = (value.toString() + '').split('.')[1];
-    }
+    if (value !== undefined && value !== null) {
+      entero = (value.toString() + '').split('.')[0];
+      if (value.toString().indexOf('.') > 0) {
+        decimales = (value.toString() + '').split('.')[1];
+      }
 
-    if (decimales.length > length) {
-      decimales = decimales.substr(0, length);
+      if (decimales.length > length) {
+        decimales = decimales.substr(0, length);
+      } else {
+        decimales = decimales.padEnd(length, '0');
+      }
+
+      return entero + '.' + decimales;
     } else {
-      decimales = decimales.padEnd(length, '0');
+      return '--';
     }
 
-    return entero + '.' + decimales;
   }
 }

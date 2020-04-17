@@ -1,4 +1,4 @@
-import { Impuesto } from '../models/impuesto.models';
+import { Impuesto } from './impuesto.models';
 
 export class ProductoServicio {
     constructor(
@@ -8,8 +8,8 @@ export class ProductoServicio {
         public valorUnitario?: number,
         public claveSAT?: string,
         public unidadSAT?: string,
-        // public impuestos?: Impuesto[],
-        public impuestos?: string[],
+        public impuestos?: Impuesto[],
+        // public impuestos?: string[],
         public fAlta?: string,
         public _id?: string
     ) {}
