@@ -1,0 +1,632 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-12">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
+
+  <mat-tab label="tiempo_Lavado">
+    <ng-template mat-tab-label>
+      Lavados  ( <small>{{totalRegistros}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+
+                <div class="col-sm-2">
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="contenedor" [disabled]="this.bool.checked === false"
+                      placeholder="Escriba contenedor">
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada"
+                      placeholder="Fecha Llegada Inicial" [disabled]="this.bool.checked === true">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFinLlegada"
+                      placeholder="Fecha Llegada Final" [disabled]="this.bool.checked === true">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedContenedor" #bool (vale)="bool.checked"
+                    [disabled]="this.tipo20.checked === true ||  this.tipo40.checked === true">Contenedor
+                  </mat-checkbox>
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedTipo20" #tipo20 (vale)="tipo20.checked"
+                    [disabled]="this.tipo40.checked === true || this.bool.checked === true">Tipo 20</mat-checkbox>
+                </div>
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedTipo40" #tipo40 (vale)="tipo40.checked"
+                    [disabled]="this.tipo20.checked === true || this.bool.checked === true">Tipo 40</mat-checkbox>
+                </div>
+
+                <div class="col-3" *ngIf="this.tipo20.checked === true || this.tipo40.checked   === true">
+                  <span class="parpadea text"><strong> <i class="fas fa-arrow-up"></i> &nbsp; SELECCIONA UNA FECHA </strong></span>
+                </div>
+
+                <div class="col-sm">
+                  <div class="text-right">
+                    <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                      (click)="filtrar(bool.checked, tipo20.checked, tipo40.checked)">
+                      <i class="fas fa-filter"></i>
+                      Filtrar
+                    </button>
+                  </div>
+                  <!-- <button type="reset" class="btn btn-success waves-effect">
+                      <i class="fa fa-filter "></i>
+                      Limpiar
+                   </button> -->
+                </div>
+              </div>
+            </div> <br>
+
+
+            <div class="text-right">
+              <button value="Exportar a excel" (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+            <h3 class="card-title">Lavados ( <small>{{totalRegistros}}</small> )</h3>
+            <div class="example-header mat-elevation-z8" *ngIf="this.totalRegistros > 0">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
+
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fIniLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Inicio Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fIniLavado | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="hIniLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Inicio Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hIniLavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="hFinLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Fin Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tiempoLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{time(row.hFinLavado, row.hIniLavado)}}
+                  </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+              <mat-paginator [pageSizeOptions]="[50, 100, 200, 500]" [pageSize]="50" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <br>
+    <mat-divider></mat-divider>
+    <h2 class="text-center" mat-header>TIEMPOS DE LAVADO GENERAL POR CONTENEDOR</h2>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <h3>CONTENEDORES TIPO 20: ({{ tiemposContenedoresLavado('20')}})</h3>
+          <div class="table-resposive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="color" scope="col">Contenedor</th>
+                  <th class="color" scope="col">tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">CONTENEDOR 20 DC</th>
+                  <td>({{tiemposContenedoresLavado('20 DC')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 HC/HQ</th>
+                 <td>({{tiemposContenedoresLavado('20 HC/HQ')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 RF</th>
+                 <td>({{tiemposContenedoresLavado('20 RF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 FR</th>
+                 <td>({{tiemposContenedoresLavado('20 FR')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 OT</th>
+                 <td>({{tiemposContenedoresLavado('20 OT')}})</td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h3>CONTENEDORES TIPO 40: ({{ tiemposContenedoresLavado('40')}}) </h3>
+          <div class="table-resposive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="color" scope="col">Contenedor</th>
+                  <th class="color" scope="col">tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">CONTENEDOR 40 DC</th>
+                  <td>({{tiemposContenedoresLavado('40 DC')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 HC/HQ</th>
+                 <td>({{tiemposContenedoresLavado('40 HC/HQ')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 RF</th>
+                 <td>({{tiemposContenedoresLavado('40 RF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 HRF</th>
+                 <td>({{tiemposContenedoresLavado('40 HRF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 OT</th>
+                 <td>({{tiemposContenedoresLavado('40 OT')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FB</th>
+                 <td>({{tiemposContenedoresLavado('40 FB')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FS</th>
+                 <td>({{tiemposContenedoresLavado('40 FS')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FR</th>
+                 <td>({{tiemposContenedoresLavado('40 FR')}})</td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <!--=================================================LAVADO====================================================-->
+
+  <!--=================================================PENDIENTES POR LAVAR======================================-->
+
+  <mat-tab label="Pendientes_x_Lavar">
+    <ng-template mat-tab-label>
+      Pendientes X Lavar ( <small>{{totalPenLavar}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+
+              <button (click)="exportAsXLSXPenLavar(dtxLavar, 'PendientesXLavar')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+            <h3 class="card-title">Pendientes por Lavar ( <small>{{totalRegistros}}</small> )</h3>
+            <br>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterXlavar($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table" [dataSource]="dtxLavar" #sortXLavar= "matSort" matSort>
+                <ng-container matColumnDef="fAlta">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Alta</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}} </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsXLavar" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsXLavar;"></mat-row>
+              </mat-table>
+                  <mat-paginator #pagXLavar [pageSizeOptions]="[50, 100, 200, 500]" [pageSize]="10" [showFirstLastButtons]>
+                  </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+
+
+  <!-- ================================================== REPARACIONES ========================================================-->
+  <mat-tab label="tiempo_Reparaciones ">
+    <ng-template mat-tab-label>
+      Reparaciones ( <small>{{totalReparacion}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+
+                <div class="col-sm-2">
+                  <mat-form-field>
+                    <input matInput [(ngModel)]="contenedor" [disabled]="this.reparaciones.checked === false"
+                      placeholder="Escriba contenedor">
+                  </mat-form-field>
+
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker" type="text" [(ngModel)]="fIniLlegada"
+                      placeholder="Fecha Llegada Inicial" [disabled]="this.reparaciones.checked === true">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFinLlegada"
+                      placeholder="Fecha Llegada Final" [disabled]="this.reparaciones.checked === true">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedContenedor" #reparaciones (vale)="reparaciones.checked"
+                    [disabled]="this.tipo20.checked === true ||  this.tipo40.checked === true">Contenedor
+                  </mat-checkbox>
+                </div>
+
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedTipo20" #tipo20 (vale)="tipo20.checked"
+                    [disabled]="this.tipo40.checked === true || this.reparaciones.checked === true">Tipo 20</mat-checkbox>
+                </div>
+                <div class="col-sm-2">
+                  <mat-checkbox [checked]="checkedTipo40" #tipo40 (vale)="tipo40.checked"
+                    [disabled]="this.tipo20.checked === true || this.reparaciones.checked === true">Tipo 40</mat-checkbox>
+                </div>
+
+                <div class="col-3" *ngIf="this.tipo20.checked === true || this.tipo40.checked   === true">
+                  <span class="parpadea text"><strong> <i class="fas fa-arrow-up"></i> &nbsp; SELECCIONA UNA FECHA </strong></span>
+                </div>
+
+                <div class="col-sm">
+                  <div class="text-right">
+                    <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+                      (click)="filtrarReparaciones(reparaciones.checked, tipo20.checked, tipo40.checked)">
+                      <i class="fas fa-filter"></i>
+                      Filtrar
+                    </button>
+                  </div>
+                  <!-- <button type="reset" class="btn btn-success waves-effect">
+                      <i class="fa fa-filter "></i>
+                      Limpiar
+                   </button> -->
+                </div>
+              </div>
+            </div> <br>
+
+
+            <div class="text-right">
+              <button value="Exportar a excel" (click)="exportAsXLSXReparaciones()" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+            <h3 class="card-title">Reparaciones ( <small>{{totalReparacion}}</small> )</h3>
+            <div class="example-header mat-elevation-z8" *ngIf="this.totalReparacion > 0">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterReparaciones($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table" #table [dataSource]="dtReparacion" matSort>
+
+                <ng-container matColumnDef="buque">
+                  <mat-header-cell *matHeaderCellDef mat-mat-sort-header> Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{row.viaje?.buque?.nombre}}</mat-cell>
+                </ng-container>
+                
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fIniReparacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Inicio Reparación</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fIniReparacion | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="hIniReparacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Inicio Reparación</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hIniReparacion}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fFinReparacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Inicio Reparación</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fFinReparacion | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="hFinReparacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Hora Fin Reparación</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.hFinReparacion}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tiempoReparacion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{time(row.hIniReparacion, row.hFinReparacion)}}
+                  </mat-cell>
+                </ng-container>
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsReparaciones" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsReparaciones;"></mat-row>
+              </mat-table>
+              <mat-paginator #pagReparaciones [pageSizeOptions]="[50, 100, 200, 500]" [pageSize]="25" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <br>
+    <mat-divider></mat-divider>
+    <h2 class="text-center" mat-header>TIEMPOS DE REPARACION GENERAL POR CONTENEDOR</h2>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3">
+          <h3>CONTENEDORES TIPO 20: ({{ tiemposContenedores('20')}})</h3>
+          <div class="table-resposive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="color" scope="col">Contenedor</th>
+                  <th class="color" scope="col">tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">CONTENEDOR 20 DC</th>
+                  <td>({{tiemposContenedores('20 DC')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 HC/HQ</th>
+                 <td>({{tiemposContenedores('20 HC/HQ')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 RF</th>
+                 <td>({{tiemposContenedores('20 RF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 FR</th>
+                 <td>({{tiemposContenedores('20 FR')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 20 OT</th>
+                 <td>({{tiemposContenedores('20 OT')}})</td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <h3>CONTENEDORES TIPO 40: ({{ tiemposContenedores('40')}}) </h3>
+          <div class="table-resposive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th class="color" scope="col">Contenedor</th>
+                  <th class="color" scope="col">tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">CONTENEDOR 40 DC</th>
+                  <td>({{tiemposContenedores('40 DC')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 HC/HQ</th>
+                 <td>({{tiemposContenedores('40 HC/HQ')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 RF</th>
+                 <td>({{tiemposContenedores('40 RF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 HRF</th>
+                 <td>({{tiemposContenedores('40 HRF')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 OT</th>
+                 <td>({{tiemposContenedores('40 OT')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FB</th>
+                 <td>({{tiemposContenedores('40 FB')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FS</th>
+                 <td>({{tiemposContenedores('40 FS')}})</td>
+               </tr>
+               <tr>
+                <th scope="row">CONTENEDOR 40 FR</th>
+                 <td>({{tiemposContenedores('40 FR')}})</td>
+               </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+
+
+
+
+  <!--============================================ PENDIENTES POR REPARAR ===============================================================-->
+
+  <mat-tab label="Pendientes_x_Reparar">
+    <ng-template mat-tab-label>
+      Pendientes X Reparar ( <small>{{totalPenReparar}}</small> )
+    </ng-template>
+
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+
+              <button (click)="exportAsXLSXPenReparar(dtxReparar, 'PendientesXReparar')" class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+
+            <h3 class="card-title">Pendientes por Reparar ( <small>{{totalPenReparar}}</small> )</h3>
+            <br>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterXreparar($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+
+            <br>
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table" [dataSource]="dtxReparar" #sortXReparar= "matSort" matSort>
+
+                <ng-container matColumnDef="buque">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fAlta">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Alta</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fAlta | date:'dd/MM/yyyy' }} </mat-cell>
+                </ng-container>
+                
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                        {{rep.reparacion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-cell>
+                </ng-container>
+
+
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsPenXReparar" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsPenXReparar;"></mat-row>
+              </mat-table>
+                  <mat-paginator #pagXReparar [pageSizeOptions]="[50, 100, 200, 500]" [pageSize]="10" [showFirstLastButtons]>
+                  </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-tab>
+
+
+
+</mat-tab-group>

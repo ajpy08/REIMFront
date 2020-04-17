@@ -17,7 +17,7 @@ export class ManiobraService {
     public http: HttpClient,
     public _usuarioService: UsuarioService,
     public _subirArchivoService: SubirArchivoService
-  ) {}
+  ) { }
 
   getManiobra(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
@@ -69,6 +69,48 @@ export class ManiobraService {
     }
     return this.http.get(url, { params: params });
   }
+
+  /* #region  REPORTES */
+  getReporte(fIniLlegada?: string, fFinLlegada?: string, tipo?: string): Observable<any> {
+    const url = URL_SERVICIOS + '/reportes/lavado/';
+    let params = new HttpParams();
+    if (tipo) {
+      params = params.append('tipo', tipo);
+    }
+    if (fIniLlegada && fFinLlegada) {
+      params = params.append('finillegada', fIniLlegada);
+      params = params.append('ffinllegada', fFinLlegada);
+    }
+
+    return this.http.get(url, { params: params });
+
+  }
+  getReporteR(fIniLlegada?: string, fFinLlegada?: string, tipo?: string): Observable<any> {
+    const url = URL_SERVICIOS + '/reportes/reparacion/';
+    let params = new HttpParams();
+    if (tipo) {
+      params = params.append('tipo', tipo);
+    }
+    if (fIniLlegada && fFinLlegada) {
+      params = params.append('finillegada', fIniLlegada);
+      params = params.append('ffinllegada', fFinLlegada);
+    }
+
+    return this.http.get(url, { params: params });
+
+  }
+
+  getXLAvar(): Observable<any> {
+    const url = URL_SERVICIOS + '/reportes/';
+    return this.http.get(url);
+  }
+
+  getXReparar(): Observable<any> {
+    const url = URL_SERVICIOS + '/reportes/reparacionesPen/';
+    return this.http.get(url);
+  }
+
+  /* #endregion */
 
   getManiobrasNaviera(
     estatus?: string,
@@ -625,6 +667,6 @@ export class ManiobraService {
     let url = URL_SERVICIOS + '/documentos/maniobra/' + id;
     url += '/zipLR/' + LR;
     window.open(url);
-    return this.http.get(url, {responseType: 'blob'});
+    return this.http.get(url, { responseType: 'blob' });
   }
 }
