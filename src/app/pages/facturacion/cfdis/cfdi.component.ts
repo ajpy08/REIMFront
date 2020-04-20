@@ -149,6 +149,8 @@ export class CFDIComponent implements OnInit {
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
     if (this.facturacionService.maniobras.length > 0) {
       const concepto = new Concepto();
+      let impuestosRetenidos = 0;
+      let impuestosTrasladados = 0;
 
       if (this.facturacionService.tipo === 'Descarga') {
         this.facturacionService.getProductoServicio(this.facturacionService.productoServ).subscribe((prodServ) => {
@@ -161,15 +163,22 @@ export class CFDIComponent implements OnInit {
             concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
             concepto.productoServicio.impuestos.forEach(impuesto => {
               if (impuesto.impuesto === 'IVA') {
-                concepto.impuestos = concepto.importe * (impuesto.valor / 100);
+                if (impuesto.TR === 'RETENCION') {
+                  impuestosRetenidos += concepto.importe * (impuesto.valor / 100);
+                } else {
+                  if (impuesto.TR === 'TRASLADO') {
+                    impuestosTrasladados += concepto.importe * (impuesto.valor / 100);
+                  }
+                }
               }
             });
           }
           concepto.maniobras = this.facturacionService.maniobras;
 
           this.subtotal.setValue(concepto.importe);
-          this.totalImpuestos.setValue(concepto.impuestos);
-          this.total.setValue(concepto.importe + concepto.impuestos);
+          this.totalImpuestosRetenidos.setValue(impuestosRetenidos);
+          this.totalImpuestosTrasladados.setValue(impuestosTrasladados);
+          this.total.setValue(concepto.importe + impuestosTrasladados - impuestosRetenidos);
 
           this.conceptos.push(this.agregarArray(concepto));
         });
@@ -207,7 +216,8 @@ export class CFDIComponent implements OnInit {
       // cfdiRelacionados: ['', [Validators.required]],
       // TOTALES
       subtotal: ['', [Validators.required]],
-      totalImpuestos: ['', [Validators.required]],
+      totalImpuestosRetenidos: [''],
+      totalImpuestosTrasladados: [''],
       total: ['', [Validators.required]],
       _id: ['']
     });
@@ -215,12 +225,13 @@ export class CFDIComponent implements OnInit {
 
   agregarArray(concepto: Concepto): FormGroup {
     return this.fb.group({
-      consecutivo: [concepto.consecutivo],
+      // consecutivo: [concepto.consecutivo],
       productoServicio: [concepto.productoServicio],
       unidad: [concepto.unidad],
       cantidad: [concepto.cantidad],
       valorUnitario: [concepto.valorUnitario],
-      impuestos: [concepto.impuestos],
+      impuestosRetenidos: [concepto.impuestosRetenidos],
+      impuestosTrasladados: [concepto.impuestosTrasladados],
       importe: [concepto.importe],
       descuento: [concepto.descuento],
       maniobras: [concepto.maniobras]
@@ -330,8 +341,12 @@ export class CFDIComponent implements OnInit {
     return this.regForm.get('subtotal');
   }
 
-  get totalImpuestos() {
-    return this.regForm.get('totalImpuestos');
+  get totalImpuestosRetenidos() {
+    return this.regForm.get('totalImpuestosRetenidos');
+  }
+
+  get totalImpuestosTrasladados() {
+    return this.regForm.get('totalImpuestosTrasladados');
   }
 
   get total() {

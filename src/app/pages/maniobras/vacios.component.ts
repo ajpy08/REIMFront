@@ -663,7 +663,8 @@ export class VaciosComponent implements OnInit {
     /////////////////////////////////////////////////
 
     /////////////////// CONCEPTOS ///////////////////
-    this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
+    // this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
+    this.facturacionService.productoServ = '5e876b2396bb521c1429f765';
     this.facturacionService.maniobras = this.selectionVacios.selected;
     /////////////////////////////////////////////////
 
@@ -676,7 +677,7 @@ export class VaciosComponent implements OnInit {
   validaClienteViaje(maniobras) {
     let naviera;
     let viaje;
-    let ok = false;
+    let ok = true;
     maniobras.forEach(m => {
       if (naviera === undefined) {
         naviera = m.naviera;
@@ -687,14 +688,13 @@ export class VaciosComponent implements OnInit {
       }
 
       if (viaje === undefined) {
-        viaje = m.viaje;
+        viaje = m.viaje._id;
       } else {
         if (viaje !== m.viaje._id) {
           ok = false;
         }
       }
     });
-    ok = true;
     return ok;
   }
 }
