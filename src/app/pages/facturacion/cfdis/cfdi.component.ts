@@ -54,6 +54,7 @@ export class CFDIComponent implements OnInit {
   url: string;
   series: Serie[] = [];
   formasPago = [];
+  metodosPago = [];
   tiposComprobante = [];
   usosCFDI = [];
 
@@ -71,13 +72,20 @@ export class CFDIComponent implements OnInit {
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
-      this.serie.setValue(this.series[0]);
-      this.folio.setValue(this.series[0].folio);
+      if (this.facturacionService.IE === 'I') {
+        this.serie.setValue(this.series[0]);
+        this.folio.setValue(this.series[0].folio);
+      }
     });
 
     this.facturacionService.getFormasPago().subscribe(formasPago => {
       this.formasPago = formasPago.formasPago;
       this.formaPago.setValue(formasPago.formasPago[2]);
+    });
+
+    this.facturacionService.getMetodosPago().subscribe(metodosPago => {
+      this.metodosPago = metodosPago.metodosPago;
+      this.metodoPago.setValue(metodosPago.metodosPago[1]);
     });
 
     this.facturacionService.getTiposComprobante().subscribe(tiposComprobante => {
@@ -87,7 +95,6 @@ export class CFDIComponent implements OnInit {
 
     this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
       this.usosCFDI = usosCFDI.usosCFDI;
-      this.usoCFDI.setValue('P01');
     });
 
     this.conceptos.removeAt(0);
@@ -110,7 +117,6 @@ export class CFDIComponent implements OnInit {
     // this.serie.setValue(this.series[0]);
     // this.formaPago.setValue('03');
     this.moneda.setValue('MXN');
-    this.tipoComprobante.setValue('Ingreso');
 
     /////////////////////////////////// FECHA /////////////////////////////////////
     const timeZone = moment().format('Z');
@@ -124,6 +130,7 @@ export class CFDIComponent implements OnInit {
         this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
           this.rfc.setValue(naviera.rfc);
           this.nombre.setValue(naviera.razonSocial);
+          this.usoCFDI.setValue(naviera.usoCFDI);
           let direccion = '';
           direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
           direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
@@ -176,13 +183,14 @@ export class CFDIComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
-      serie: [''],
+      serie: ['', [Validators.required]],
       folio: [{ value: '', disabled: true }, [Validators.required]],
       sucursal: [''],
       formaPago: ['', [Validators.required]],
+      metodoPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
-      tipoComprobante: ['', [Validators.required]],
-      // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
+      // tipoComprobante: ['', [Validators.required]],
+      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
       fecha: ['', [Validators.required]],
       // fecha: [moment().local().startOf('day')],
       // RECEPTOR
@@ -268,6 +276,10 @@ export class CFDIComponent implements OnInit {
 
   get formaPago() {
     return this.regForm.get('formaPago');
+  }
+
+  get metodoPago() {
+    return this.regForm.get('metodoPago');
   }
 
   get moneda() {

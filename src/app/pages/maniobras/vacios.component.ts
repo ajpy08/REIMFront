@@ -645,14 +645,56 @@ export class VaciosComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
-  facturar () {
+  facturar() {
+    if (this.validaClienteViaje(this.selectionVacios.selected)) {
+      //////////////// DATOS GENERALES ////////////////
+    // Serie (default)
+    // Folio (default)
+    // Sucursal (default)
+    // Forma de Pago (default)
+    // Moneda (default)
     this.facturacionService.IE = 'I';
+    // Fecha (default)
+    /////////////////////////////////////////////////
+
+    /////////////////// RECEPTOR ////////////////////
+    this.facturacionService.receptor = this.selectionVacios.selected[0].naviera;
+    this.facturacionService.tipo = 'Descarga';
+    /////////////////////////////////////////////////
+
+    /////////////////// CONCEPTOS ///////////////////
     this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
     this.facturacionService.maniobras = this.selectionVacios.selected;
-    this.facturacionService.receptor = this.selectionVacios.selected[0].naviera;
-
-    this.facturacionService.tipo = 'Descarga';
+    /////////////////////////////////////////////////
 
     this.router.navigate(['/cfdi/nuevo']);
+    } else {
+      swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+    }
+  }
+
+  validaClienteViaje(maniobras) {
+    let naviera;
+    let viaje;
+    let ok = false;
+    maniobras.forEach(m => {
+      if (naviera === undefined) {
+        naviera = m.naviera;
+      } else {
+        if (naviera !== m.naviera) {
+          ok = false;
+        }
+      }
+
+      if (viaje === undefined) {
+        viaje = m.viaje;
+      } else {
+        if (viaje !== m.viaje._id) {
+          ok = false;
+        }
+      }
+    });
+    ok = true;
+    return ok;
   }
 }

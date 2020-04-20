@@ -15,10 +15,10 @@ import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.model
 })
 export class FacturacionService {
 
+  // serie = 'A';
   IE = '';
-  usoCFDI = '';
-  tipo = '';
   receptor;
+  tipo = '';
   productoServ = '';
   maniobras = [];
 
@@ -191,6 +191,13 @@ export class FacturacionService {
   /* #region  Formas de Pago */
   getFormasPago(): Observable<any> {
     const url = URL_SERVICIOS + '/facturacion/formas-pago';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Metodos de Pago */
+  getMetodosPago(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/metodos-pago';
     return this.http.get(url);
   }
   /* #endregion */
