@@ -11,7 +11,7 @@
               <mat-form-field>
                 <mat-select formControlName="transportista" placeholder="Seleccione un Transportista *" name="transportista">
                   <mat-option *ngFor="let transportista of transportistas" [value]="transportista._id">
-                    {{ transportista.nombreComercial }}
+                    {{ transportista?.nombreComercial }}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="transportista.touched && transportista.invalid">

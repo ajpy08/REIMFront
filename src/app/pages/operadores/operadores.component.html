@@ -57,7 +57,7 @@
 
             <ng-container matColumnDef="transportista.nombreComercial">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.transportista.nombreComercial}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="nombre">

@@ -148,6 +148,7 @@ export class ClientesComponent implements OnInit {
           this._clienteService.borrarCliente(cliente._id)
             .subscribe(borrado => {
               this.socket.emit('deletecliente', cliente);
+              this.cargarClientes();
             });
         }
       });

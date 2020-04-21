@@ -30,7 +30,8 @@ export class CamionesComponent implements OnInit {
     'noEconomico',
     'placa',
     'vigenciaSeguro',
-    'pdfSeguro'
+    'pdfSeguro',
+    'activo'
   ];
   dataSource: any;
 
@@ -160,5 +161,42 @@ export class CamionesComponent implements OnInit {
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
+  }
+
+  habilitarDesabilitarCamion(camion, event) {
+    if (event.checked === false) {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de deshabilitar al camion con placa ' + camion.placa,
+        icon:'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._camionService.habilitaDeshabilitaCamion(camion, event.checked).subscribe(borado => {
+            this.cargarCamiones();
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    } else {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de habilitar al camion con placa ' + camion.placa,
+        icon:'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._camionService.habilitaDeshabilitaCamion(camion, event.checked).subscribe(borado => {
+            this.cargarCamiones();
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    }
+
   }
 }

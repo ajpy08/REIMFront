@@ -60,4 +60,13 @@ export class CamionService {
       .pipe(map(resp => swal('Camion Borrado', 'Eliminado correctamente', 'success')));
   }
 
+  habilitaDeshabilitaCamion(camion: Camion, act: boolean): Observable<any> {
+  let url = URL_SERVICIOS + '/camiones/camionDes/' + camion._id;
+  url += '?token=' + this._usuarioService.token;
+  return this.http.put(url, {activo: act}).pipe(map((resp: any) =>{
+    swal('Cambio de estado del camion realizado con exitoo', resp.camion.placa, 'success');
+    return true;
+  }))
+  }
+
 }

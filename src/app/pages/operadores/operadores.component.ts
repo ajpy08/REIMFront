@@ -37,6 +37,7 @@ export class OperadoresComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  
 
   constructor(
     public _operadorService: OperadorService,
@@ -80,7 +81,7 @@ export class OperadoresComponent implements OnInit {
     this.socket.removeListener('new-operador');
   }
 
-  cargarOperadores() {
+   cargarOperadores() {
     this.cargando = true;
 
     if (
@@ -109,23 +110,43 @@ export class OperadoresComponent implements OnInit {
   }
 
   habilitaDeshabilitaOperador(operador, event) {
-    swal({
-      title: '¿Esta seguro?',
-      text: 'Esta apunto de deshabilitar a ' + operador.nombre,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then(borrar => {
-      if (borrar) {
-        this._operadorService
-          .habilitaDeshabilitaOperador(operador, event.checked)
-          .subscribe(borrado => {
-            this.cargarOperadores();
-          });
-      } else {
-        event.source.checked = !event.checked;
-      }
-    });
+    if (event.checked === false) {
+      swal({
+        title: '¿Esta seguro?',
+        text: 'Esta apunto de deshabilitar a ' + operador.nombre,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._operadorService
+            .habilitaDeshabilitaOperador(operador, event.checked)
+            .subscribe(borrado => {
+              this.cargarOperadores();
+            });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    } else {
+      swal({
+        title: '¿Esta seguro?',
+        text: 'Esta apunto de habilitar a ' + operador.nombre,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._operadorService
+            .habilitaDeshabilitaOperador(operador, event.checked)
+            .subscribe(borrado => {
+              this.cargarOperadores();
+            });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    }
   }
 
   borrarOperador(operador: Operador) {
