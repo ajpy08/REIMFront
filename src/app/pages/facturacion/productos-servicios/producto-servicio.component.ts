@@ -44,6 +44,7 @@ export class ProductoServicioComponent implements OnInit {
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
+      this.impuestos.removeAt(0);
       this.cargarProductoServicio(id);
     } else {
       // tslint:disable-next-line: forin
@@ -51,8 +52,6 @@ export class ProductoServicioComponent implements OnInit {
       //   this.regForm.controls[control.toString()].setValue(undefined);
       // }
     }
-
-    this.impuestos.removeAt(0);
     this.url = '/productos-servicios';
   }
 
@@ -88,8 +87,8 @@ export class ProductoServicioComponent implements OnInit {
       unidadSAT: ['', [Validators.required]],
       TR: [''],
       impuesto: [''],
-      valor: [16.0000],
-      impuestos: this.fb.array([this.agregarArray(new Impuesto)]),
+      valor: [],
+      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 'IVA', 16.00))], { validators: Validators.required }),
       _id: ['']
     });
   }

@@ -18,7 +18,7 @@
                       <!--========Combombox Series=========-->
                       <mat-form-field>
                         <mat-select placeholder="SERIE" formControlName="serie" (selectionChange)="cambioSerie( $event.value )" name="serie">
-                          <mat-option *ngFor="let serie of series" [value]="serie">
+                          <mat-option *ngFor="let serie of series" [value]="serie.serie">
                             {{ serie.serie }}
                           </mat-option>
                         </mat-select>
@@ -48,8 +48,9 @@
                     <!--========Combombox Formas de Pago=========-->
                     <mat-form-field>
                       <mat-select placeholder="FORMA DE PAGO" formControlName="formaPago" name="formaPago">
-                        <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago">
-                          {{ formaPago.formaPago + ' - ' + formaPago.descripcion }}
+                        <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.formaPago">
+                          {{ formaPago.formaPago.toString() | leftpad: 2: '0' }}
+                          <!-- {{ (formaPago.formaPago | leftpad: 5: 'b') + ' - ' + formaPago.descripcion }} -->
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="formaPago.touched && formaPago.invalid">
@@ -86,8 +87,8 @@
                     <!--========Combombox Metodo de Pago =========-->
                     <mat-form-field>
                       <mat-select placeholder="METODO DE PAGO" formControlName="metodoPago" name="metodoPago">
-                        <mat-option *ngFor="let metodoPago of metodosPago" [value]="metodoPago">
-                          {{ metodoPago.descripcion }}
+                        <mat-option *ngFor="let metodoPago of metodosPago" [value]="metodoPago.metodoPago">
+                          {{ metodoPago.metodoPago + ' - ' + metodoPago.descripcion }}
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="metodoPago.touched && metodoPago.invalid">
@@ -149,7 +150,7 @@
                     <!--========Combombox Usos CFDI=========-->
                     <mat-form-field>
                       <mat-select placeholder="USOS CFDI" formControlName="usoCFDI" name="usoCFDI">
-                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI._id">
+                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI.usoCFDI">
                           {{ usoCFDI.usoCFDI + ' - ' + usoCFDI.descripcion }}
                         </mat-option>
                       </mat-select>
@@ -225,7 +226,7 @@
                           {{concepto.valorUnitario | currency}}
                         </td>
                         <td>
-                          {{concepto.impuestos | currency}}
+                          {{concepto.impuestosTrasladados - concepto.impuestosRetenidos | currency}}
                         </td>
                         <td>
                           {{concepto.descuento | currency}}
