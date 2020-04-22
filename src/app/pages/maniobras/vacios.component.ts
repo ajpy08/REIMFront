@@ -665,7 +665,10 @@ export class VaciosComponent implements OnInit {
     /////////////////// CONCEPTOS ///////////////////
     // this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
     this.facturacionService.productoServ = '5e876b2396bb521c1429f765';
-    this.facturacionService.maniobras = this.selectionVacios.selected;
+    this.selectionVacios.selected.forEach(m => {
+      this.facturacionService.maniobras.push(m._id);
+    });
+    // this.facturacionService.maniobras = this.selectionVacios.selected;
     /////////////////////////////////////////////////
 
     this.router.navigate(['/cfdi/nuevo']);

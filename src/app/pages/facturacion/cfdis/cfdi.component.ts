@@ -104,11 +104,13 @@ export class CFDIComponent implements OnInit {
     if (id !== 'nuevo') {
       this.cargarCFDI(id);
     } else {
-      this.cargaValoresIniciales();
       // tslint:disable-next-line: forin
-      // for (const control in this.regForm.controls) {
-      //   this.regForm.controls[control.toString()].setValue(undefined);
-      // }
+      for (const control in this.regForm.controls) {
+        if (control.toString() !== 'conceptos') {
+          this.regForm.controls[control.toString()].setValue(undefined);
+        }
+      }
+      this.cargaValoresIniciales();
     }
 
     // this.impuestos.removeAt(0);
@@ -151,19 +153,21 @@ export class CFDIComponent implements OnInit {
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
     if (this.facturacionService.maniobras.length > 0) {
       const concepto = new Concepto();
+      concepto.descuento = undefined;
+      concepto.unidad = undefined;
+
       let impuestosRetenidos = 0;
       let impuestosTrasladados = 0;
 
       if (this.facturacionService.tipo === 'Descarga') {
         this.facturacionService.getProductoServicio(this.facturacionService.productoServ).subscribe((prodServ) => {
-          concepto.productoServicio = prodServ;
-
           concepto.unidad = '';
           concepto.cantidad = this.facturacionService.maniobras.length;
-          concepto.valorUnitario = concepto.productoServicio !== undefined ? concepto.productoServicio.valorUnitario : 0;
-          if (concepto.productoServicio) {
+          concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
+          if (prodServ) {
+            concepto.descripcion = prodServ.descripcion;
             concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
-            concepto.productoServicio.impuestos.forEach(impuesto => {
+            prodServ.impuestos.forEach(impuesto => {
               if (impuesto.impuesto === 'IVA') {
                 if (impuesto.TR === 'RETENCION') {
                   impuestosRetenidos += concepto.importe * (impuesto.valor / 100);
@@ -177,6 +181,7 @@ export class CFDIComponent implements OnInit {
             concepto.impuestosRetenidos = impuestosRetenidos;
             concepto.impuestosTrasladados = impuestosTrasladados;
           }
+
           concepto.maniobras = this.facturacionService.maniobras;
 
           this.subtotal.setValue(concepto.importe);
@@ -231,7 +236,7 @@ export class CFDIComponent implements OnInit {
   agregarArray(concepto: Concepto): FormGroup {
     return this.fb.group({
       // consecutivo: [concepto.consecutivo],
-      productoServicio: [concepto.productoServicio],
+      descripcion: [concepto.descripcion],
       unidad: [concepto.unidad],
       cantidad: [concepto.cantidad],
       valorUnitario: [concepto.valorUnitario],
@@ -263,7 +268,7 @@ export class CFDIComponent implements OnInit {
       if (res.conceptos.length > 0) {
         res.conceptos.forEach(element => {
           this.conceptos.push(this.agregarArray(new Concepto(
-            element.productoServicio,
+            element.descripcion,
             element.unidad,
             element.cantidad,
             element.valorUnitario,

@@ -49,7 +49,7 @@
                     <mat-form-field>
                       <mat-select placeholder="FORMA DE PAGO" formControlName="formaPago" name="formaPago">
                         <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.formaPago">
-                          {{ formaPago.formaPago.toString() | leftpad: 2: '0' }}
+                          {{ formaPago.formaPago + ' - ' + formaPago.descripcion }}
                           <!-- {{ (formaPago.formaPago | leftpad: 5: 'b') + ' - ' + formaPago.descripcion }} -->
                         </mat-option>
                       </mat-select>
@@ -213,7 +213,7 @@
                           </button>
                         </td> -->
                         <td>
-                          {{concepto.productoServicio.descripcion}}
+                          {{concepto.descripcion}}
                         </td>
                         <td>
                           {{concepto.unidad}}

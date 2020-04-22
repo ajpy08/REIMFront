@@ -13,7 +13,7 @@ export class CFDI {
         public usoCFDI?: string,
         public direccion?: string,
         public correo?: string,
-        public conceptos?: [],
+        public conceptos?: any[],
         public usuarioAlta?: string,
         public fAlta?: Date,
         public usuarioMod?: string,

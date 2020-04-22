@@ -4,7 +4,7 @@ import { ProductoServicio } from './producto-servicio.models';
 export class Concepto {
     constructor(
         // public consecutivo?: string,
-        public productoServicio?: ProductoServicio,
+        public descripcion?: string,
         public unidad?: string,
         public cantidad?: number,
         public valorUnitario?: number,
@@ -12,7 +12,7 @@ export class Concepto {
         public impuestosTrasladados?: number,
         public descuento?: number,
         public importe?: number,
-        public maniobras?: Maniobra[],
+        public maniobras?: any[],
         public _id?: string
     ) {}
 }
