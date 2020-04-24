@@ -2,7 +2,7 @@
   <div class="col-lg-8">
     <div class="card">
 
-        <h3 class="box-title m-b-0">Producto - Servicio: {{ productoServicio.descripcion }}</h3><br>
+      <h3 class="box-title m-b-0">Producto - Servicio: {{ productoServicio.descripcion }}</h3><br>
       <div class="card-body">
         <form [formGroup]="regForm" (ngSubmit)="guardarProductoServicio()" novalidate>
           <div class="form-body">
@@ -93,8 +93,8 @@
                           <th scope="col">
                             <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('valor')">
                               <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
-                    !regForm.get('impuesto').valid || !regForm.get('valor').valid"
-                                (click)="addImpuesto(TR.value, impuesto.value, valor.value); ">
+                    !regForm.get('cveImpuesto').valid || !regForm.get('impuesto').valid || !regForm.get('valor').valid"
+                                (click)="addImpuesto(TR.value, impuesto.value, cveImpuesto.value, valor.value); ">
                                 +
                               </button>
                             </div>
@@ -112,13 +112,23 @@
                           <th scope="col-md-2">
                             <mat-form-field>
                               <mat-label>Impuesto</mat-label>
-                              <mat-select formControlName="impuesto">
+                              <mat-select formControlName="impuesto" (selectionChange)="cambioImpuesto( $event.value )">
                                 <mat-option *ngFor="let t of tipoImpuestos" [value]="t">
                                   {{t}}
                                 </mat-option>
                               </mat-select>
                             </mat-form-field>
                           </th>
+                          <!-- <th scope="col-md-2">
+                            <mat-form-field>
+                              <mat-label><b>Cve. Impuesto</b></mat-label>
+                              <mat-select formControlName="cveImpuesto" aria-placeholder="Cve. Impuesto">
+                                <mat-option value="001">001</mat-option>
+                                <mat-option value="002">002</mat-option>
+                                <mat-option value="003">003</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </th> -->
                           <th scope="col-md-2">
                             <mat-form-field>
                               <mat-label>Valor</mat-label>
@@ -155,7 +165,8 @@
                             {{item.get('impuesto').value}}
                           </td>
                           <td>
-                            {{item.get('valor').value | decimalrightpad: 4}}
+                            <!-- {{item.get('valor').value | decimalrightpad: 4}} -->
+                            {{item.get('valor').value}}
                             <!-- {{item.get('valor').value | iva}} -->
                           </td>
                         </tr>

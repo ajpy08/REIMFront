@@ -1,7 +1,7 @@
 export class CFDI {
     constructor(
         public serie?: string,
-        public folio?: string,
+        public folio?: number,
         public sucursal?: string,
         public formaPago?: string,
         public metodoPago?: string,

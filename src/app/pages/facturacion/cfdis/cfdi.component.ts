@@ -1,5 +1,5 @@
 import { FacturacionService } from './../facturacion.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Serie } from '../models/serie.models';
@@ -50,7 +50,7 @@ export const MY_FORMATS = {
   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
-export class CFDIComponent implements OnInit {
+export class CFDIComponent implements OnInit, OnDestroy {
   regForm: FormGroup;
   url: string;
   series: Serie[] = [];
@@ -117,6 +117,14 @@ export class CFDIComponent implements OnInit {
     this.url = '/cfdis';
   }
 
+  ngOnDestroy(): void {
+    this.facturacionService.IE = '';
+    this.facturacionService.receptor;
+    this.facturacionService.tipo = '';
+    this.facturacionService.productoServ = '';
+    this.facturacionService.maniobras = [];
+  }
+
   cargaValoresIniciales() {
     // this.serie.setValue(this.series[0]);
     // this.formaPago.setValue('03');
@@ -161,12 +169,16 @@ export class CFDIComponent implements OnInit {
 
       if (this.facturacionService.tipo === 'Descarga') {
         this.facturacionService.getProductoServicio(this.facturacionService.productoServ).subscribe((prodServ) => {
-          concepto.unidad = '';
+          concepto._id = prodServ._id;
           concepto.cantidad = this.facturacionService.maniobras.length;
-          concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
+          concepto.unidad = '';
           if (prodServ) {
+            concepto.claveProdServ = prodServ.claveSAT;
+            concepto.claveUnidad = prodServ.unidadSAT;
             concepto.descripcion = prodServ.descripcion;
+            concepto.noIdentificacion = prodServ.codigo;
             concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
+            concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
             prodServ.impuestos.forEach(impuesto => {
               if (impuesto.impuesto === 'IVA') {
                 if (impuesto.TR === 'RETENCION') {
@@ -236,6 +248,7 @@ export class CFDIComponent implements OnInit {
   agregarArray(concepto: Concepto): FormGroup {
     return this.fb.group({
       // consecutivo: [concepto.consecutivo],
+      _id: [concepto._id],
       descripcion: [concepto.descripcion],
       unidad: [concepto.unidad],
       cantidad: [concepto.cantidad],
@@ -268,6 +281,7 @@ export class CFDIComponent implements OnInit {
       if (res.conceptos.length > 0) {
         res.conceptos.forEach(element => {
           this.conceptos.push(this.agregarArray(new Concepto(
+            element._id,
             element.descripcion,
             element.unidad,
             element.cantidad,

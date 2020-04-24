@@ -86,76 +86,19 @@ export class VaciosComponent implements OnInit {
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones',  'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsLavado = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque',  'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsReparacion = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa',  'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
@@ -670,7 +613,6 @@ export class VaciosComponent implements OnInit {
     });
     // this.facturacionService.maniobras = this.selectionVacios.selected;
     /////////////////////////////////////////////////
-
     this.router.navigate(['/cfdi/nuevo']);
     } else {
       swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');

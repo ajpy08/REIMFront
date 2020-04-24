@@ -69,7 +69,7 @@ export class ProductoServicioComponent implements OnInit {
 
       if (res.impuestos.length > 0) {
         res.impuestos.forEach(element => {
-          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.impuesto, element.valor)));
+          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.impuesto, element.cveImpuesto, element.valor)));
         });
       } else {
         this.regForm.controls['impuestos'].setValue(undefined);
@@ -87,8 +87,9 @@ export class ProductoServicioComponent implements OnInit {
       unidadSAT: ['', [Validators.required]],
       TR: [''],
       impuesto: [''],
+      cveImpuesto: [''],
       valor: [],
-      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 'IVA', 16.00))], { validators: Validators.required }),
+      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 'IVA', '002', 16.00))], { validators: Validators.required }),
       _id: ['']
     });
   }
@@ -109,38 +110,48 @@ export class ProductoServicioComponent implements OnInit {
     return this.fb.group({
       TR: [impuesto.TR],
       impuesto: [impuesto.impuesto],
+      cveImpuesto: [impuesto.cveImpuesto],
       valor: [impuesto.valor]
     });
   }
 
-  addImpuesto(TR: string, impuesto: string, valor: number): void {
-    const impuestoObj = new Impuesto(TR, impuesto, valor);
-    const tmp = this.impuestos.value.filter(i => i.TR === TR && i.impuesto === impuesto && i.valor === valor);
+  addImpuesto(TR: string, impuesto: string, cveImpuesto: string, valor: number): void {
+    const impuestoObj = new Impuesto(TR, impuesto, cveImpuesto, valor);
+    const tmp = this.impuestos.value.filter(i => i.TR === TR && i.impuesto === impuesto && i.cveImpuesto === cveImpuesto && i.valor === valor);
 
     if (tmp.length > 0) {
       swal('No puedes agregar este impuesto por que ya existe', '', 'error');
     } else {
-      if (TR === '' || impuesto === '' || valor === 0) {
+      if (TR === '' || impuesto === '' || cveImpuesto === '' || valor === 0) {
         swal('Error al Agregar', 'No puede estar vacio ningun campo', 'error');
       } else {
         this.impuestos.push(this.agregarArray(impuestoObj));
 
         this.TR.setValue('');
         this.impuesto.setValue('');
+        this.cveImpuesto.setValue('');
         this.valor.setValue(0);
       }
     }
   }
 
-  // quit(control: AbstractControl) {
-  //   if (!control.valid) {
-  //     control.setValue('');
-  //   }
-  // }
-
   quitar(indice: number) {
     this.regForm.markAsDirty();
     this.impuestos.removeAt(indice);
+  }
+
+  cambioImpuesto(impuesto: string) {
+    if (impuesto === 'ISR') {
+      this.cveImpuesto.setValue('001');
+    } else {
+      if (impuesto === 'IVA') {
+        this.cveImpuesto.setValue('002');
+      } else {
+        if (impuesto === 'IEPS') {
+          this.cveImpuesto.setValue('003');
+        } else {}
+      }
+    }
   }
 
   back() {
@@ -186,6 +197,10 @@ export class ProductoServicioComponent implements OnInit {
 
   get impuesto() {
     return this.regForm.get('impuesto');
+  }
+
+  get cveImpuesto() {
+    return this.regForm.get('cveImpuesto');
   }
 
   get valor() {
