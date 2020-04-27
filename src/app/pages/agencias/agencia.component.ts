@@ -19,6 +19,7 @@ export class AgenciaComponent implements OnInit {
   fileImgTemporal = false;
   file: File = null;
   fileTemporal = false;
+  act = true;
   url: string;
 
 
@@ -67,6 +68,7 @@ export class AgenciaComponent implements OnInit {
       correoFac: ['', Validators.email],
       credito: [false, [Validators.required]],
       img: [''],
+      activo: [true, [Validators.required]],
       patente: ['', [Validators.required]],
       _id: ['']
     });
@@ -75,21 +77,21 @@ export class AgenciaComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
-    })
+    });
   }
 
   addContenedor(correoO: string): void {
 
     let error = false;
     if (correoO === '') {
-      this.correo.disable({ emitEvent: true })
+      this.correo.disable({ emitEvent: true });
       swal('Error al Agregar', 'El campo Correo Operativo no puede estar Vacio', 'error');
-    } else if (this.correoF.controls.length == 0) {
+    } else if (this.correoF.controls.length === 0) {
       this.correoF.push(this.agregarArray(correoO));
     } else if (this.correoF.controls) {
       this.correoF.controls.forEach(c => {
-        if (this.correotem.value == c.value.correoO) {
-          if (error == false) {
+        if (this.correotem.value === c.value.correoO) {
+          if (error === false) {
             swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
             error = true;
             return false;
@@ -150,7 +152,7 @@ export class AgenciaComponent implements OnInit {
     return this.regForm.get('correoF') as FormArray;
   }
   get correotem() {
-    return this.regForm.get('correotem')
+    return this.regForm.get('correotem');
   }
   get correoFac() {
     return this.regForm.get('correoFac');
@@ -163,6 +165,9 @@ export class AgenciaComponent implements OnInit {
   }
   get patente() {
     return this.regForm.get('patente');
+  }
+  get activo() {
+    return this.regForm.get('activo');
   }
   get _id() {
     return this.regForm.get('_id');
@@ -184,15 +189,16 @@ export class AgenciaComponent implements OnInit {
         this.regForm.controls['cp'].setValue(res.cp);
         this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-        var correoArray = res.correo.split(",")
+        const correoArray = res.correo.split(',');
         correoArray.forEach(c => {
-          this.addContenedor(c)
+          this.addContenedor(c);
         });
         // this.regForm.controls['correo'].setValue(res.correo);
         this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
         this.regForm.controls['patente'].setValue(res.patente);
+        this.regForm.controls['activo'].setValue(res.activo);
         this.regForm.controls['_id'].setValue(res._id);
       });
   }
@@ -200,14 +206,14 @@ export class AgenciaComponent implements OnInit {
   guardarAgencia() {
     if (this.regForm.valid) {
 
-      var correos = '';
+      let correos = '';
       this.regForm.controls.correoF.value.forEach(correo => {
         correos += correo.correoO + ',';
       });
       correos = correos.slice(0, -1);
 
       this.correotem.setValue('');
-      this.correo.setValue(correos)
+      this.correo.setValue(correos);
 
       // console.log (this.regForm.value);
       this._agenciaService.guardarAgencia(this.regForm.value)
@@ -267,7 +273,7 @@ export class AgenciaComponent implements OnInit {
       this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history')
-    //this.location.back();
+    localStorage.removeItem('history');
+    // this.location.back();
   }
 }

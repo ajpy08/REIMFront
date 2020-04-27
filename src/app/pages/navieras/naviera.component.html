@@ -62,49 +62,49 @@
               <!-- CORREO OPERATIVO  -->
 
               <ng-template matStepLabel> Correo Operativo </ng-template>
-                <div class="alert alert-danger">
-                    PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
-                </div>
-                <table class="table  table-responsive">
-                  <thead>
-                    <tr>
-                      <th scope="col"></th>
-                      <th scope="col">
-                        <div *ngIf="regForm.get('correotem')">
-                          <button type="button" class="btn btn-success" [disabled]=" !correotem.valid "
-                            (click)="addContenedor(correoO.value ); correoO.value=''">
-                            +
-                          </button>
-                        </div>
-                      </th>
-                      <th scope="col"> <input formControlName="correotem"  class="form-control"  #correoO
-                          placeholder="Correo Operativo" size="20"> </th>
-                          <mat-error *ngIf="correotem.invalid">
-                            <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
-                          </mat-error>
-                    </tr>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col"></th>
-                      <th scope="col">Correo Operativo</th>
-          
-                    </tr>
-                  </thead>
-                  <tbody formArrayName="correo" *ngFor="let itemw of correo.controls; let item = index;">
-                    <tr [formGroupName]="item">
-                      <td scope="row">{{item+1}}</td>
-                      <td>
-                          <button type="button" (click)="quitar( item )" class="btn btn-danger">
-                            <i class="fa fa-trash-o"></i>
-                          </button>
-                      </td>
-                      <td *ngIf="itemw.get('correoO').value">
-                        {{itemw.get('correoO').value}}
-                      </td>
-          
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="alert alert-danger">
+                PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
+              </div>
+              <table class="table  table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">
+                      <div *ngIf="regForm.get('correotem')">
+                        <button type="button" class="btn btn-success" [disabled]=" !correotem.valid "
+                          (click)="addContenedor(correoO.value ); correoO.value=''">
+                          +
+                        </button>
+                      </div>
+                    </th>
+                    <th scope="col"> <input formControlName="correotem" class="form-control" #correoO
+                        placeholder="Correo Operativo" size="20"> </th>
+                    <mat-error *ngIf="correotem.invalid">
+                      <sup>*</sup> Por Favor Ingresar correctamente Correo Operativo
+                    </mat-error>
+                  </tr>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"></th>
+                    <th scope="col">Correo Operativo</th>
+
+                  </tr>
+                </thead>
+                <tbody formArrayName="correo" *ngFor="let itemw of correo.controls; let item = index;">
+                  <tr [formGroupName]="item">
+                    <td scope="row">{{item+1}}</td>
+                    <td>
+                      <button type="button" (click)="quitar( item )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </td>
+                    <td *ngIf="itemw.get('correoO').value">
+                      {{itemw.get('correoO').value}}
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
               <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" placeholder="Correo Operativo">
               </mat-form-field> -->
@@ -121,13 +121,21 @@
                   <sup>*</sup>Por Favor Ingrese un uso de CFDI
                 </mat-error>
               </mat-form-field>
-              
+
               <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" placeholder="Correo De facturación">
               </mat-form-field>
-              <mat-checkbox formControlName="credito" placeholder="Credito">
-                Credito
-              </mat-checkbox>
+              <div class="row">
+                <div class="col-ms-6">
+                  <mat-checkbox formControlName="activo" [(ngModel)]="act" class="form-control" name="activo" placeholder="Activo">
+                    Activo
+                  </mat-checkbox>
+
+                  <mat-checkbox formControlName="credito" placeholder="Credito">
+                    Credito
+                  </mat-checkbox>
+                </div>
+              </div>
 
               <mat-form-field>
                 <input matInput formControlName="caat" type="text " placeholder="CAAT *">
@@ -136,7 +144,8 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 " [disabled]="regForm.invalid ">
+            <button type="submit " class="btn btn-primary btn-success waves-effect waves-light m-r-10 "
+              [disabled]="regForm.invalid ">
               <i class="fa fa-save "></i>
               Guardar
             </button>
@@ -155,12 +164,15 @@
       <div class="card-header">Logo</div>
       <div class="card-body">
         <p *ngIf="fileImgTemporal; else notShow" class="text-danger">
-          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'temp'"
+            class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
         </p>
         <ng-template #notShow>
-          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'cliente'" class="w150 img-circle pointer">
+          <img (click)="file.click(); tipoFile = 'img'" [src]="img.value | imagen:'cliente'"
+            class="w150 img-circle pointer">
         </ng-template>
-        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*" #file>
+        <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="image/*"
+          #file>
         <br>
         <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'img'"><i
             class="fa fa-file"></i> Cambiar foto</button>
@@ -179,14 +191,17 @@
             <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
           </a>
         </ng-template>
+
         <input (change)="onFileSelected($event)" type="file" style="display:none" name="file" #tipo accept="pdf" #file>
         <br>
-        <button class="btn btn-info waves-effect waves-light" type="button" (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
+        <button class="btn btn-info waves-effect waves-light" type="button"
+          (click)="file.click(); tipoFile = 'formatoR1'"><i class="fa fa-file"></i> Cambiar Formato
           R1</button>
         <mat-error *ngIf="formatoR1.invalid">
           <br><sup>*</sup>El Formato R1 es obligatorio
         </mat-error>
       </div>
     </div>
+    <br>
   </div>
 </div>

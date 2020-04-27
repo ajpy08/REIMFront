@@ -128,7 +128,7 @@
                   <sup>*</sup>Por Favor Ingrese un uso de CFDI
                 </mat-error>
               </mat-form-field>
-              
+
               <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" class="form-control"
                   placeholder="Correo Operativo">
@@ -137,9 +137,17 @@
                 <input matInput formControlName="correoFac" type="text" class="form-control"
                   placeholder="Correo De facturación">
               </mat-form-field>
-              <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
-                Credito
-              </mat-checkbox>
+              <div class="row">
+                <div class="col-ms-6">
+                  <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
+                    Credito
+                  </mat-checkbox>
+                  <mat-checkbox formControlName="activo" class="form-control" name="activo" placeholder="Activo">
+                    Activo
+                  </mat-checkbox>
+
+                </div>
+              </div>
               <mat-form-field>
                 <input matInput formControlName="caat" type="text " class="form-control " placeholder="CAAT *">
                 <mat-error *ngIf="caat.touched && caat.invalid">

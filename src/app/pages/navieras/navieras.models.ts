@@ -19,6 +19,7 @@ export class Naviera {
         public caat?: string,
         public nombreComercial?: string,
         public usuario?: string,
+        public activo?: boolean,
         public _id?: string
 
     ) {}

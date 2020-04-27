@@ -19,6 +19,7 @@ export class BuqueComponent implements OnInit, OnDestroy {
   navieras: Naviera[] = [];
   regForm: FormGroup;
   url: string;
+  act = true;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET );
 
   constructor(
@@ -33,7 +34,7 @@ export class BuqueComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.createFormGroup();
-    this._navieraService.getNavieras().subscribe(navieras => {
+    this._navieraService.getNavieras(true).subscribe(navieras => {
       this.navieras = navieras.navieras;
     });
 
@@ -105,11 +106,15 @@ export class BuqueComponent implements OnInit, OnDestroy {
   get nombre() {
     return this.regForm.get('nombre');
   }
+  get activo() {
+    return this.regForm.get('activo');
+  }
 
   createFormGroup() {
     this.regForm = this.fb.group({
       naviera: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
+      activo: [true, [Validators.required]],
       _id: ['']
     });
   }

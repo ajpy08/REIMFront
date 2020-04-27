@@ -31,8 +31,8 @@ export class SolicitudReasignaTransportistaComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._agenciaService.getAgencias().subscribe( resp => this.agencias = resp.agencias );
-    this._transportistaService.getTransportistas().subscribe( resp => this.transportistas = resp.transportistas );
+    this._agenciaService.getAgencias(true).subscribe( resp => this.agencias = resp.agencias );
+    this._transportistaService.getTransportistas(true).subscribe( resp => this.transportistas = resp.transportistas );
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra( id );

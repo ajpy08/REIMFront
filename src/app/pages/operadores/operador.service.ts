@@ -1,3 +1,4 @@
+import { TransportistaService } from 'src/app/services/service.index';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
@@ -5,15 +6,18 @@ import { UsuarioService } from '../usuarios/usuario.service';
 import { Operador } from './operador.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import swal from 'sweetalert';
+import { Router } from '@angular/router';
+declare var swal: any;
 
 @Injectable()
 export class OperadorService {
   totalOperadores = 0;
-
   constructor(
     public http: HttpClient,
-    public _usuarioService: UsuarioService
+    public router: Router,
+    public _usuarioService: UsuarioService,
+    public transportistaService: TransportistaService,
+
   ) { }
 
   getOperadores(transportista?: string, activo?: boolean): Observable<any> {
@@ -22,8 +26,9 @@ export class OperadorService {
     if (transportista) {
       params = params.append('transportista', transportista);
     }
-    if (activo) {
-      params = params.append('activo', 'true');
+    if (activo === true || activo === false) {
+      const tf = activo.toString();
+      params = params.append('activo', tf);
     }
     return this.http.get(url, { params: params });
   }
@@ -66,11 +71,12 @@ export class OperadorService {
       }));
   }
 
-  borrarOperador(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/operadores/operador/' + id;
+  borrarOperador(operador: Operador): Observable<any> {
+    let url = URL_SERVICIOS + '/operadores/operador/' + operador._id;
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
-      .pipe(map(resp => swal('Operador Borrado', 'Eliminado correctamente', 'success')));
-
+      .pipe(map(resp => swal('Operador Borrado', 'Eliminado correctamente', 'success')),
+      );
   }
+
 }

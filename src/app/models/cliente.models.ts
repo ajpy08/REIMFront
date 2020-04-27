@@ -21,6 +21,7 @@ export class Cliente {
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,
+        public activo?: boolean,
         public fMod?: string,
         public _id?: string
     ) {}

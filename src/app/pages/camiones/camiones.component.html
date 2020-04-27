@@ -23,6 +23,9 @@
           </button>
         </div>
         <h3 class="card-title">Camiones: ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
+        </div>
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -33,6 +36,7 @@
         </div>
         <div class="catalogo-container mat-elevation-z8">
           <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let camion">
@@ -46,9 +50,19 @@
               </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="activo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+
+                  <mat-slide-toggle [checked]="row.activo" (change)="habilitarDesabilitarCamion(row, $event)">
+                  </mat-slide-toggle>
+
+                </mat-cell>
+              </ng-container>
+
             <ng-container matColumnDef="transportista.nombreComercial">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.transportista.nombreComercial}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="noEconomico">
@@ -65,6 +79,7 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header>Vigencia Del Seguro</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.vigenciaSeguro | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
+
 
 
             <ng-container matColumnDef="pdfSeguro">

@@ -1,38 +1,41 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Agencia } from "./agencia.models";
-import { AgenciaService, ExcelService } from "../../services/service.index";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Agencia } from './agencia.models';
+import { AgenciaService, ExcelService } from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 @Component({
-  selector: "app-agencias",
-  templateUrl: "./agencias.component.html",
+  selector: 'app-agencias',
+  templateUrl: './agencias.component.html',
   styles: []
 })
 export class AgenciasComponent implements OnInit {
   agencias: Agencia[] = [];
   agenciasExcel = [];
   cargando = true;
+  activo = false;
+  acttrue = false;
   totalRegistros = 0;
 
   displayedColumns = [
-    "actions",
-    "img",
-    "rfc",
-    "razonSocial",
-    "nombreComercial",
-    "calle",
-    "noExterior",
-    "noInterior",
-    "colonia",
-    "municipio",
-    "ciudad",
-    "estado",
-    "cp",
-    "formatoR1",
-    "correo",
-    "correoFac",
-    "credito",
-    "patente"
+    'actions',
+    'activo',
+    'img',
+    'rfc',
+    'razonSocial',
+    'nombreComercial',
+    'calle',
+    'noExterior',
+    'noInterior',
+    'colonia',
+    'municipio',
+    'ciudad',
+    'estado',
+    'cp',
+    'formatoR1',
+    'correo',
+    'correoFac',
+    'credito',
+    'patente'
   ];
   dataSource: any;
 
@@ -45,8 +48,20 @@ export class AgenciasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    localStorage.removeItem("historyArray");
-    this.cargarAgencias();
+    localStorage.removeItem('historyArray');
+    this.filtrado(this.activo);
+  }
+
+
+  filtrado(bool: boolean) {
+    if (bool === false) {
+      bool = true;
+        this.cargarAgencias(bool);
+    } else if (bool === true) {
+      bool = false;
+      this.cargarAgencias(bool);
+    }
+
   }
 
   applyFilter(filterValue: string) {
@@ -56,13 +71,13 @@ export class AgenciasComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.log('Error al filtrar el dataSource de Agencias')
+      console.log('Error al filtrar el dataSource de Agencias');
     }
   }
 
-  cargarAgencias() {
+  cargarAgencias(bool: boolean) {
     this.cargando = true;
-    this._agenciaService.getAgencias().subscribe(agencias => {
+    this._agenciaService.getAgencias(bool).subscribe(agencias => {
       this.dataSource = new MatTableDataSource(agencias.agencias);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -73,22 +88,39 @@ export class AgenciasComponent implements OnInit {
 
   borrarAgencia(agencia: Agencia) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar a " + agencia.nombreComercial,
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + agencia.nombreComercial,
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
       if (borrar) {
         this._agenciaService.borrarAgencia(agencia._id).subscribe(borrado => {
-          this.cargarAgencias();
+          this.filtrado(this.acttrue);
+        }, (error) => {
+          swal({
+            title: 'No se permite eliminar a la Agencia ',
+            text: 'La Agencia ' + agencia.nombreComercial + ' cuenta con historial de regisro en el sistema.' +
+            ' La acción permitida es DESACTIVAR, ¿ DESEA CONTINUAR ?',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+          }).then(act => {
+            if (act) {
+              this._agenciaService.habilitarDeshabilitarAgencia(agencia, false).subscribe(() => {
+                swal ('Correcto', 'Cambio de estatus de la Agencia ' + agencia.nombreComercial + ' realizado con exito', 'success');
+                this.filtrado(this.acttrue);
+              });
+            }
+          });
         });
       }
     });
   }
+
   crearDatosExcel(datos) {
     datos.forEach(d => {
-      var agencias = {
+      const agencias = {
         Rfc: d.rfc,
         RazonSocial: d.razonSocial,
         NombreComercial: d.nombreComercial,
@@ -111,9 +143,47 @@ export class AgenciasComponent implements OnInit {
   exportarXLSX(): void {
     this.crearDatosExcel(this.dataSource.filteredData);
     if (this.agenciasExcel) {
-      this.excelService.exportAsExcelFile(this.agenciasExcel, "Agencia");
+      this.excelService.exportAsExcelFile(this.agenciasExcel, 'Agencia');
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
+  habilitarDeshabilitarAgencia(agencia, event) {
+    if (event.checked === false) {
+      swal ({
+        title: '¿ Estas Seguro ?',
+        text: 'Estas apunto de deshabilitar a la Agencia ' + agencia.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrado => {
+        if (borrado) {
+          this._agenciaService.habilitarDeshabilitarAgencia(agencia, event.checked).subscribe(act => {
+          this.acttrue = true;
+          this.filtrado(this.acttrue);
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    } else {
+      swal({
+        title: '¿ Estas Seguro ?',
+        text: 'Estas apunto de habilitar a la Agencia ' + agencia.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrado => {
+        if (borrado) {
+          this._agenciaService.habilitarDeshabilitarAgencia(agencia, event.checked).subscribe(act => {
+            this.acttrue = false;
+            this.filtrado(this.acttrue);
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
     }
   }
 }

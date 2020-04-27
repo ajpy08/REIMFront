@@ -70,9 +70,10 @@ export class CamionComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.createFormGroup();
+    
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._transportistaService.getTransportistas()
+      this._transportistaService.getTransportistas(true)
         .subscribe((transportistas) => {
           this.transportistas = transportistas.transportistas;
         });
@@ -90,6 +91,7 @@ export class CamionComponent implements OnInit {
       for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
+      this.activo.setValue(true);
       if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
         this.transportista.setValue(this.usuarioLogueado.empresas[0]._id);
         this.serviceOperadores.getOperadores(this.usuarioLogueado.empresas[0]._id, true).subscribe((operadores) => {
@@ -177,6 +179,9 @@ export class CamionComponent implements OnInit {
   get operador() {
     return this.regForm.get('operador');
   }
+  get activo() {
+    return this.regForm.get('activo');
+  }
 
   get noEconomico() {
     return this.regForm.get('noEconomico');
@@ -202,6 +207,7 @@ export class CamionComponent implements OnInit {
       placa: ['', [Validators.required, Validators.minLength(6)]],
       noEconomico: ['', [Validators.required, Validators.minLength(2)]],
       vigenciaSeguro: ['', [Validators.required]],
+      activo: ['', [Validators.required]],
       pdfSeguro: [''],
       _id: ['']
     });

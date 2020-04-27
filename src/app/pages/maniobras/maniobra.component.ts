@@ -86,11 +86,11 @@ export class ManiobraComponent implements OnInit {
           .subscribe( camiones => this.camiones = camiones );
     /* this._contenedorService.cargarContenedores()
           .subscribe( contenedores => this.contenedores = contenedores );*/
-    this._clienteService.getClientes()
+    this._clienteService.getClientes(null, true)
           .subscribe( clientes => this.clientes = clientes );
-    this._agenciaService.getAgencias()
+    this._agenciaService.getAgencias(true)
           .subscribe( agencias => this.agencias = agencias );
-    this._transportistaService.getTransportistas()
+    this._transportistaService.getTransportistas(true)
           .subscribe( transportistas => this.transportistas = transportistas );
     this._viajeService.getViajes()
           .subscribe( viajes => this.viajes = viajes );

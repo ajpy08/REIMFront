@@ -151,7 +151,7 @@ export class DashboardComponent implements OnInit {
         this.totalCamiones = camiones.camiones.length;
       });
     } else if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
-      this.camionService.getCamiones(this.usuarioLogueado.empresas[0]._id).subscribe(camiones => {
+      this.camionService.getCamiones(true, this.usuarioLogueado.empresas[0]._id).subscribe(camiones => {
         this.totalCamiones = camiones.camiones.length;
       });
     }
@@ -172,7 +172,7 @@ export class DashboardComponent implements OnInit {
 
   cargarClientes() {
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this.clientesServices.getClientes().subscribe(clientes => {
+      this.clientesServices.getClientes(null, true).subscribe(clientes => {
         this.totalClientes = clientes.clientes.length;
       });
     } else if (this.usuarioLogueado.role === ROLES.AA_ROLE) {
