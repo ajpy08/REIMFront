@@ -177,8 +177,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.claveUnidad = prodServ.unidadSAT;
             concepto.descripcion = prodServ.descripcion;
             concepto.noIdentificacion = prodServ.codigo;
-            concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
             concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
+            concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
             prodServ.impuestos.forEach(impuesto => {
               if (impuesto.impuesto === 'IVA') {
                 if (impuesto.TR === 'RETENCION') {
