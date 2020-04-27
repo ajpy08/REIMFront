@@ -1,19 +1,23 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, Input } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../../pages/usuarios/usuario.service';
 import { Cliente } from '../../models/cliente.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import swal from 'sweetalert';
+import { Router } from '@angular/router';
+// import swal from 'sweetalert';
+declare var swal: any;
 
 @Injectable()
 export class ClienteService {
   // tslint:disable-next-line:no-inferrable-types
   totalClientes: number = 0;
+  @Input() acttrue = false;
 
   constructor(
     public http: HttpClient,
+    public router: Router,
     public _usuarioService: UsuarioService
   ) { }
 
@@ -34,9 +38,14 @@ export class ClienteService {
     return this.http.get(url);
   }
 
-  getClientes(desde: number = 0): Observable<any> {
+  getClientes(desde: number = 0, act: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/clientes?desde=' + desde;
-    return this.http.get(url);
+    let params = new HttpParams();
+    if (act === true || act === false) {
+      const tf = act.toString();
+      params = params.append('act', tf);
+    }
+    return this.http.get(url, { params: params });
   }
 
   getCliente(id: string): Observable<any> {
@@ -45,11 +54,12 @@ export class ClienteService {
       .pipe(map((resp: any) => resp.cliente));
   }
 
-  borrarCliente(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/clientes/' + id;
+  borrarCliente(cliente: Cliente): Observable<any> {
+    let url = URL_SERVICIOS + '/clientes/' + cliente._id;
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
-      .pipe(map(resp => swal('Cliente Borrado', 'Eliminado correctamente', 'success')));
+      .pipe(map(resp => swal('Cliente Borrado', 'Eliminado correctamente', 'success')),
+      );
   }
 
   guardarCliente(cliente: Cliente): Observable<any> {
@@ -78,5 +88,12 @@ export class ClienteService {
     }
   }
 
-
+  habilitaDeshabilitaCliente(cliente: Cliente, act: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/clientes/clienteDes/' + cliente._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, { activo: act }).pipe(map((resp: any) => {
+      swal('Cambio de estado del cliente realizado con exitoo', resp.cliente.nombreComercial, 'success');
+      return true;
+    }));
+  }
 }

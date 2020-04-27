@@ -23,6 +23,9 @@
                   <sup>*</sup>Por Favor Ingrese un Nombre de Buque
                 </mat-error>
               </mat-form-field>
+              <mat-checkbox formControlName="activo"  [(ngModel)]="act" class="form-control" name="activo" placeholder="Activo">
+                Activo
+              </mat-checkbox>
             </div>
             <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
               <i class="fa fa-save"></i>

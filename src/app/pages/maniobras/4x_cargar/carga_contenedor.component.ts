@@ -73,8 +73,8 @@ export class CargaContenedorComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
-    this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+    this._agenciaService.getAgencias(true).subscribe(resp => this.agencias = resp.agencias);
+    this._transportistaService.getTransportistas(true).subscribe(resp => this.transportistas = resp.transportistas);
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.maniobra = new Maniobra('', '', '', '', null, '', '', '', '', '', '', '', '', '', null, '', '', '', null, null, '', null, '');
     this.createFormGroup();
@@ -261,7 +261,7 @@ export class CargaContenedorComponent implements OnInit {
   }
 
   cargaCamiones(idTransportista: string) {
-    this._camionService.getCamiones(idTransportista)
+    this._camionService.getCamiones(true, idTransportista)
       .subscribe(resp => this.camiones = resp.camiones);
   }
 

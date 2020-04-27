@@ -1,35 +1,38 @@
-import { OnInit, ViewChild, Component } from "@angular/core";
-import { Naviera } from "./navieras.models";
-import { NavieraService, ExcelService } from "../../services/service.index";
-import { MatPaginator, MatSort, MatTableDataSource } from "@angular/material";
+import { OnInit, ViewChild, Component } from '@angular/core';
+import { Naviera } from './navieras.models';
+import { NavieraService, ExcelService } from '../../services/service.index';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 declare var swal: any;
 @Component({
-  selector: "app-navieras",
-  templateUrl: "./navieras.component.html"
+  selector: 'app-navieras',
+  templateUrl: './navieras.component.html'
 })
 export class NavierasComponent implements OnInit {
   navieras: Naviera[] = [];
   cargando = true;
+  activo = false;
+  acttrue = false;
   totalRegistros = 0;
   navieraExcel = [];
 
   displayedColumns = [
-    "actions",
-    "img",
-    "rfc",
-    "razonSocial",
-    "calle",
-    "noExterior",
-    "colonia",
-    "municipio",
-    "ciudad",
-    "estado",
-    "cp",
-    "formatoR1",
-    "correo",
-    "correoFac",
-    "credito",
-    "caat"
+    'actions',
+    'activo',
+    'img',
+    'rfc',
+    'razonSocial',
+    'calle',
+    'noExterior',
+    'colonia',
+    'municipio',
+    'ciudad',
+    'estado',
+    'cp',
+    'formatoR1',
+    'correo',
+    'correoFac',
+    'credito',
+    'caat'
   ];
 
   // displayedColumns = ['actions', 'img', 'razonSocial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
@@ -45,9 +48,19 @@ export class NavierasComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cargarNavieras();
+    this.filtrado(this.activo);
   }
 
+  filtrado(bool: boolean) {
+    if (bool === false) {
+      bool = true;
+        this.cargarNavieras(bool);
+    } else if (bool === true) {
+      bool = false;
+      this.cargarNavieras(bool);
+    }
+
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -55,13 +68,13 @@ export class NavierasComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error("Error al filtrar el dataSource de Navieras");
+      console.error('Error al filtrar el dataSource de Navieras');
     }
   }
 
-  cargarNavieras() {
+  cargarNavieras(bool: boolean) {
     this.cargando = true;
-    this._navieraService.getNavieras().subscribe(navieras => {
+    this._navieraService.getNavieras(bool).subscribe(navieras => {
       this.dataSource = new MatTableDataSource(navieras.navieras);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
@@ -72,15 +85,31 @@ export class NavierasComponent implements OnInit {
 
   borrarNaviera(naviera: Naviera) {
     swal({
-      title: "¿Esta seguro?",
-      text: "Esta apunto de borrar a " + naviera.nombreComercial,
-      icon: "warning",
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de borrar a ' + naviera.nombreComercial,
+      icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
       if (borrar) {
-        this._navieraService.borrarNaviera(naviera._id).subscribe(borrado => {
-          this.cargarNavieras();
+        this._navieraService.borrarNaviera(naviera).subscribe(borrado => {
+          this.filtrado(this.activo);
+        }, (error) => {
+          swal({
+            title: 'No se permite eliminar Naviera',
+            text: 'La naviera  ' + naviera.nombreComercial + ' cuenta con historial de registro en el sistema. ' +
+              ' La acción permitida es DESACTIVAR,  ¿ DESEA CONTINUAR?',
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true
+          }).then(act => {
+            if (act) {
+              this._navieraService.habilitaDeshabilitaNaviera(naviera, false).subscribe(() => {
+                swal('Correcto', 'Cambio de estado de la Naviera ' + naviera.nombreComercial + 'realizado con exito', 'success');
+                this.filtrado(this.acttrue);
+              });
+            }
+          });
         });
       }
     });
@@ -110,9 +139,50 @@ export class NavierasComponent implements OnInit {
   exportarXLSX(): void {
     this.crearDatosExcel(this.dataSource.filteredData);
     if (this.navieraExcel) {
-      this.excelService.exportAsExcelFile(this.navieraExcel, "Naviera");
+      this.excelService.exportAsExcelFile(this.navieraExcel, 'Naviera');
     } else {
-      swal("No se puede exportar un excel vacio", "", "error");
+      swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
+
+  habilitarDesabilitarNaviera(naviera, event) {
+    if (event.checked === false) {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de deshabilitar a la naviera ' + naviera.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._navieraService.habilitaDeshabilitaNaviera(naviera, event.checked).subscribe(borado => {
+            this.acttrue = true;
+            this.filtrado(this.acttrue);
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    } else {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de habilitar a la naviera con placa ' + naviera.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._navieraService.habilitaDeshabilitaNaviera(naviera, event.checked).subscribe(borado => {
+            this.acttrue = false;
+            this.filtrado(this.acttrue);
+            
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    }
+
+  }
 }
+

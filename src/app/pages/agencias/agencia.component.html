@@ -121,9 +121,17 @@
                 <input matInput formControlName="correoFac" type="text" class="form-control"
                   placeholder="Correo De facturación">
               </mat-form-field>
-              <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
-                Credito
-              </mat-checkbox>
+              <div class="row">
+                <div class="col-ms-6">
+                  <mat-checkbox formControlName="activo"  [(ngModel)]="act" class="form-control" name="activo" placeholder="Activo">
+                    Activo
+                  </mat-checkbox>
+                  &nbsp;&nbsp;
+                  <mat-checkbox formControlName="credito" class="form-control " placeholder="Credito">
+                    Credito
+                  </mat-checkbox>
+                </div>
+              </div>
               <mat-form-field>
                 <input matInput formControlName="patente" type="text " class="form-control " placeholder="Patente *">
                 <mat-error *ngIf="patente.touched && patente.invalid">

@@ -20,6 +20,7 @@ export class NavieraComponent implements OnInit {
   fileTemporal = false;
   edicion = false;
   url: string;
+  act = true;
   correod;
   usosCFDI = [];
 
@@ -73,6 +74,7 @@ export class NavieraComponent implements OnInit {
       img: [''],
       usoCFDI: ['', [Validators.required]],
       caat: ['', [Validators.required]],
+      activo: [true, [Validators.required]],
       nombreComercial: [''],
       _id: ['']
     });
@@ -174,6 +176,9 @@ export class NavieraComponent implements OnInit {
   get caat() {
     return this.regForm.get('caat');
   }
+  get activo() {
+    return this.regForm.get('activo');
+  }
   get nombreComercial() {
     return this.regForm.get('nombreComercial');
   }
@@ -205,6 +210,7 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['usoCFDI'].setValue(naviera.usoCFDI);
       this.regForm.controls['img'].setValue(naviera.img);
       this.regForm.controls['caat'].setValue(naviera.caat);
+      this.regForm.controls['activo'].setValue(naviera.activo);
       this.regForm.controls['nombreComercial'].setValue(naviera.nombreComercial);
       this.regForm.controls['_id'].setValue(naviera._id);
     });

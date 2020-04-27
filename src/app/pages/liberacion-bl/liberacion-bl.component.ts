@@ -54,7 +54,7 @@ export class LiberacionBLComponent implements OnInit {
     this.usuarioLogueado = this._usuarioService.usuario;
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._navieraService.getNavieras().subscribe(ag => { this.navieras = ag.navieras; this.navieraCargaSelected = this.navieras[0]; });
+      this._navieraService.getNavieras(true).subscribe(ag => { this.navieras = ag.navieras; this.navieraCargaSelected = this.navieras[0]; });
     } else {
       if (this.usuarioLogueado.empresas) {
         this.usuarioLogueado.empresas.forEach(empresa => {
@@ -65,7 +65,7 @@ export class LiberacionBLComponent implements OnInit {
       }
     }
     // this._navieraService.getNavieras().subscribe(navieras => { this.navieras = navieras.navieras; });
-    this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    this._transportistaService.getTransportistas(true).subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this._tipoContenedorService.getTiposContenedor().subscribe(tipos => this.tiposContenedor = tipos.tiposContenedor);
     this.createFormGroup();
     this.usuarioLogueado = this._usuarioService.usuario;

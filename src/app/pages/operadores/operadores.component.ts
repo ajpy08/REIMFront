@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Operador } from './operador.models';
 import {
@@ -10,6 +11,7 @@ import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
+import { throwError } from 'rxjs';
 declare var swal: any;
 @Component({
   selector: 'app-operadores',
@@ -19,18 +21,20 @@ declare var swal: any;
 export class OperadoresComponent implements OnInit {
   operadores: Operador[] = [];
   cargando = true;
+  activo = false;
+  acttrue = false;
   totalRegistros = 0;
   usuarioLogueado: Usuario;
   operadoresExcel = [];
 
   displayedColumns = [
     'actions',
+    'activo',
     'foto',
     'transportista.nombreComercial',
     'nombre',
     'vigenciaLicencia',
-    'licencia',
-    'activo'
+    'licencia'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
@@ -47,19 +51,20 @@ export class OperadoresComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarOperadores();
+    this.filtrado(this.activo);
+
     this.socket.on('new-operador', function (data: any) {
-      this.cargarOperadores();
+      this.filtrado(this.activo);
     }.bind(this));
 
     this.socket.on('update-operador', function (data: any) {
       if (data.data._id) {
-        this.cargarOperadores();
+        this.filtrado(this.activo);
       }
     }.bind(this));
 
     this.socket.on('delete-operador', function (data: any) {
-      this.cargarOperadores();
+      this.filtrado(this.activo);
     }.bind(this));
   }
 
@@ -73,6 +78,16 @@ export class OperadoresComponent implements OnInit {
       console.error('Error al filtrar el dataSource de Operadores');
     }
   }
+  filtrado(bool: boolean) {
+    if (bool === false) {
+      bool = true;
+        this.cargarOperadores(bool);
+    } else if (bool === true) {
+      bool = false;
+      this.cargarOperadores(bool);
+    }
+
+  }
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
@@ -81,14 +96,14 @@ export class OperadoresComponent implements OnInit {
     this.socket.removeListener('new-operador');
   }
 
-   cargarOperadores() {
+   cargarOperadores(bool: boolean) {
     this.cargando = true;
 
     if (
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
       this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
     ) {
-      this._operadorService.getOperadores().subscribe(operadores => {
+      this._operadorService.getOperadores(null, bool).subscribe(operadores => {
         this.dataSource = new MatTableDataSource(operadores.operadores);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -97,7 +112,7 @@ export class OperadoresComponent implements OnInit {
     } else {
       if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
         this._operadorService
-          .getOperadores(this.usuarioLogueado.empresas[0]._id)
+          .getOperadores(this.usuarioLogueado.empresas[0]._id, bool)
           .subscribe(operadores => {
             this.dataSource = new MatTableDataSource(operadores.operadores);
             this.dataSource.sort = this.sort;
@@ -122,7 +137,7 @@ export class OperadoresComponent implements OnInit {
           this._operadorService
             .habilitaDeshabilitaOperador(operador, event.checked)
             .subscribe(borrado => {
-              this.cargarOperadores();
+              this.cargarOperadores(true);
             });
         } else {
           event.source.checked = !event.checked;
@@ -140,7 +155,8 @@ export class OperadoresComponent implements OnInit {
           this._operadorService
             .habilitaDeshabilitaOperador(operador, event.checked)
             .subscribe(borrado => {
-              this.cargarOperadores();
+              this.acttrue = false;
+              this.cargarOperadores(true);
             });
         } else {
           event.source.checked = !event.checked;
@@ -159,10 +175,25 @@ export class OperadoresComponent implements OnInit {
     }).then(borrar => {
       if (borrar) {
         this._operadorService
-          .borrarOperador(operador._id)
+          .borrarOperador(operador)
           .subscribe(borrado => {
             this.socket.emit('deleteoperador', operador);
-          });
+          }, (error) => {
+            swal({
+              title: 'No se puede eliminar al Operador',
+              text: 'El operador  ' + operador.nombre + '  cuenta con historial en el sistema. ' +
+              'La acción permitida es DESACTIVAR, \n¿ DESEA CONTINUAR ?',
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true
+            }).then(borrado => {
+              if (borrado) {
+                this._operadorService.habilitaDeshabilitaOperador(operador, false).subscribe(() => {
+                  this.filtrado(this.acttrue);
+                });
+              }
+            });
+        });
       }
     });
   }

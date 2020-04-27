@@ -82,7 +82,7 @@ export class SolicitudDescargaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+      this._agenciaService.getAgencias(true).subscribe(ag => { this.agencias = ag.agencias; });
     } else {
       if (this.usuarioLogueado.empresas) {
         this.usuarioLogueado.empresas.forEach(empresa => {
@@ -94,8 +94,8 @@ export class SolicitudDescargaComponent implements OnInit {
         this.cargaClientes({ value: this.agenciaDescargaSelected });
       }
     }
-    this._navieraService.getNavieras().subscribe(navieras => { this.navieras = navieras.navieras; });
-    this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    this._navieraService.getNavieras(true).subscribe(navieras => { this.navieras = navieras.navieras; });
+    this._transportistaService.getTransportistas(true).subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {

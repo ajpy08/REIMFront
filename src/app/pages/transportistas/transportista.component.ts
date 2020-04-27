@@ -72,6 +72,7 @@ export class TransportistaComponent implements OnInit {
       credito: [false, [Validators.required]],
       usoCFDI: ['', [Validators.required]],
       img: [''],
+      activo: [true, [Validators.required]],
       caat: ['', [Validators.required]],
       _id: ['']
     });
@@ -149,6 +150,9 @@ export class TransportistaComponent implements OnInit {
   get correo() {
     return this.regForm.get('correo');
   }
+  get activo() {
+    return this.regForm.get('activo');
+  }
 
   get correoF() {
     return this.regForm.get('correoF') as FormArray;
@@ -205,6 +209,7 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls['caat'].setValue(res.caat);
       this.regForm.controls['usoCFDI'].setValue(res.usoCFDI);
       this.regForm.controls['nombreComercial'].setValue(res.nombreComercial);
+      this.regForm.controls['activo'].setValue(res.activo);
       this.regForm.controls['_id'].setValue(res._id);
     });
   }

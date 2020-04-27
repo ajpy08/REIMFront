@@ -19,11 +19,13 @@ export class ClientesComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
   desde = 0;
+  activo = false;
+  acttrue = false;
   usuarioLogueado = new Usuario;
   clientesExcel = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
-  displayedColumns = ['actions', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
+  displayedColumns = ['actions',  'activo', 'razonSocial', 'nombreComercial', 'rfc', 'calle', 'noExterior', 'noInterior', 'colonia', 'municipio',
     'ciudad', 'estado', 'cp', 'formatoR1', 'correo', 'correoFac', 'credito', 'empresas'];
   dataSource: any;
 
@@ -35,28 +37,38 @@ export class ClientesComponent implements OnInit {
   ngOnInit() {
     localStorage.removeItem('historyArray');
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarClientes();
+    this.filtrado(this.activo);
 
     this.socket.on('new-cliente', function (data: any) {
       if ( (data.data.empresas[0]=== this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
       (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
-        this.cargarClientes();
+        this.filtrado(this.activo);
       }
     }.bind(this));
     this.socket.on('update-cliente', function (data: any) {
       if ( (data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
       (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
-        this.cargarClientes();
+        this.filtrado(this.activo);
       }
     }.bind(this));
     this.socket.on('delete-cliente', function (data: any) {
       if ( (data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
       (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
-        this.cargarClientes();
+        this.filtrado(this.activo);
       }
     }.bind(this));
   }
 
+  filtrado(bool: boolean) {
+    if (bool === false) {
+      bool = true;
+        this.cargarClientes(bool);
+    } else if (bool === true) {
+      bool = false;
+      this.cargarClientes(bool);
+    }
+
+  }
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.socket.removeListener('delete-cliente');
@@ -64,6 +76,11 @@ export class ClientesComponent implements OnInit {
     this.socket.removeListener('new-cliente');
   }
 
+  cambioa(mensaje) {
+    if (mensaje === true) {
+      this.filtrado(false);
+    }
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -75,11 +92,11 @@ export class ClientesComponent implements OnInit {
     }
   }
 
-  cargarClientes() {
+  cargarClientes(bool) {
     this.cargando = true;
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._clienteService.getClientes(this.desde)
+      this._clienteService.getClientes(this.desde, bool)
         .subscribe(clientes => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
           this.dataSource.sort = this.sort;
@@ -145,10 +162,28 @@ export class ClientesComponent implements OnInit {
     })
       .then(borrar => {
         if (borrar) {
-          this._clienteService.borrarCliente(cliente._id)
+          this._clienteService.borrarCliente(cliente)
             .subscribe(borrado => {
               this.socket.emit('deletecliente', cliente);
-              this.cargarClientes();
+              this.acttrue = false;
+              this.filtrado(this.acttrue);
+            }, (error) => {
+              swal({
+                title: 'No se permite eliminar el Cliente',
+                text: 'El Cliente ' + cliente.nombreComercial + ' cuenta con historial de registro en el sistema. ' +
+                  ' La accion permitida es DESACTIVAR, ¿ DESEA CONTINUAR ?',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true
+              }).then(borrado => {
+                if (borrado) {
+                  this._clienteService.habilitaDeshabilitaCliente(cliente, false).subscribe(() => {
+                    swal('Correcto', 'Cambio de estado del Cliente ' + cliente.nombreComercial + ' realizado correctamente', 'success');
+                    this.filtrado(this.acttrue);
+
+                  });
+                }
+              });
             });
         }
       });
@@ -184,5 +219,45 @@ export class ClientesComponent implements OnInit {
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
+  }
+
+
+  habilitarDesabilitarCliente(cliente, event) {
+    if (event.checked === false) {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de deshabilitar al cliente  ' + cliente.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._clienteService.habilitaDeshabilitaCliente(cliente, event.checked).subscribe(borado => {
+            this.acttrue = true;
+            this.filtrado(this.acttrue);
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    } else {
+      swal({
+        title: '¿Estas Seguro?',
+        text: 'Estas apunto de habilitar al cliente ' + cliente.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._clienteService.habilitaDeshabilitaCliente(cliente, event.checked).subscribe(borado => {
+            this.acttrue = false;
+            this.filtrado(this.acttrue);
+          });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      })
+    }
+
   }
 }

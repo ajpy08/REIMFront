@@ -6,6 +6,7 @@ import { UsuarioService } from '../usuarios/usuario.service';
 import { Operador } from './operador.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 declare var swal: any;
 
 @Injectable()
@@ -13,6 +14,7 @@ export class OperadorService {
   totalOperadores = 0;
   constructor(
     public http: HttpClient,
+    public router: Router,
     public _usuarioService: UsuarioService,
     public transportistaService: TransportistaService,
 
@@ -24,8 +26,9 @@ export class OperadorService {
     if (transportista) {
       params = params.append('transportista', transportista);
     }
-    if (activo) {
-      params = params.append('activo', 'true');
+    if (activo === true || activo === false) {
+      const tf = activo.toString();
+      params = params.append('activo', tf);
     }
     return this.http.get(url, { params: params });
   }
@@ -68,42 +71,11 @@ export class OperadorService {
       }));
   }
 
-  borrarOperador(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/operadores/operador/' + id;
+  borrarOperador(operador: Operador): Observable<any> {
+    let url = URL_SERVICIOS + '/operadores/operador/' + operador._id;
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Operador Borrado', 'Eliminado correctamente', 'success')),
-        catchError(err => {
-          if (err.error.errorCamion.length > 0) {
-            let placa = '';
-            let idC = '';
-            err.error.errorCamion.forEach(c => {
-              placa += c.placa;
-            });
-            swal({
-              title: 'Error',
-              text: 'Existe(n) ( ' + err.error.errorCamion.length + ' ) Camion(es), para eliminar al Operador es necesario desactivar a ' +
-                'los camion(es) con placa ' + placa + ' ¿QUIERES DESACTIVARLOS?',
-              icon: 'warning',
-              buttons: true,
-              dangerMode: true
-            }).then(borrado => {
-              if (borrado) {
-                err.error.errorCamion.forEach(c => {
-                  idC = c._id;
-                  this.transportistaService.desactivar(idC, 'camion').subscribe(act => {
-                    this.borrarOperador(id).subscribe(() => {
-                      swal('Borrado', 'Se ha borrado el Operador', 'success');
-
-                    });
-                  });
-                });
-
-              }
-            })
-          }
-          return throwError(err);
-        })
       );
   }
 

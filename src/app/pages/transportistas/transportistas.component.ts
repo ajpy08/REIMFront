@@ -51,31 +51,10 @@ export class TransportistasComponent implements OnInit {
   constructor(
     public _transportistaService: TransportistaService,
     private excelService: ExcelService, private usuarioService: UsuarioService
-  ) {}
+  ) { }
   ngOnInit() {
-  this.usuarioLogueado = this.usuarioService.usuario;
-  if (this.usuarioLogueado.role !== 'ADMIN_ROLE') {
-    this.displayedColumns = [
-      'actions',
-      'img',
-      'rfc',
-      'razonSocial',
-      'nombreComercial',
-      'calle',
-      'noExterior',
-      'noInterior',
-      'colonia',
-      'municipio',
-      'ciudad',
-      'estado',
-      'cp',
-      'formatoR1',
-      'correo',
-      'correoFac',
-      'credito',
-      'caat'
-    ];
-  }
+    this.usuarioLogueado = this.usuarioService.usuario;
+
     this.filtrado(this.activo);
   }
 
@@ -102,13 +81,13 @@ export class TransportistasComponent implements OnInit {
 
   cargarTransportistas(bool: boolean) {
     this.cargando = true;
-      this._transportistaService.getTransportistas(bool).subscribe(transportistas => {
-        this.dataSource = new MatTableDataSource(transportistas.transportistas);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = transportistas.transportistas.length;
-      });
-      this.cargando = false;
+    this._transportistaService.getTransportistas(bool).subscribe(transportistas => {
+      this.dataSource = new MatTableDataSource(transportistas.transportistas);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = transportistas.transportistas.length;
+    });
+    this.cargando = false;
   }
 
 
@@ -122,9 +101,26 @@ export class TransportistasComponent implements OnInit {
     }).then(borrar => {
       if (borrar) {
         this._transportistaService
-          .borrarTransportista(transportista._id)
+          .borrarTransportista(transportista)
           .subscribe(borrado => {
-            this.cargarTransportistas();
+            this.activo = false;
+            this.cargarTransportistas(true);
+          }, (error) => {
+            swal({
+              title: 'No se puede eliminar el Transportista',
+              text: 'El tranpostista  ' + transportista.nombreComercial + '  cuenta con historial de registro en el sistema. ' +
+                ' La acción permitida es DESACTIVAR,   ¿ DESEA CONTINUAR ?',
+              icon: 'warning',
+              buttons: true,
+              dangerMode: true
+            }).then(borrado => {
+              if (borrado) {
+                this._transportistaService.desactivarTransportista(transportista, false).subscribe(() => {
+                  swal('Correcto', 'Cambio de estado del Transportista' + transportista.nombreComercial + '  realizado con exito', 'success');
+                  this.filtrado(this.activo);
+                });
+              }
+            });
           });
       }
     });
@@ -165,7 +161,25 @@ export class TransportistasComponent implements OnInit {
   }
 
   habilitaDeshabilitaTransportista(transportista, event) {
-    if (event.checked === false) {
+    if (event.checked === undefined) {
+      swal({
+        title: '¿Esta seguro?',
+        text: 'Esta apunto de deshabilitar a ' + transportista.nombreComercial,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._transportistaService
+            .desactivarTransportista(transportista, false)
+            .subscribe(borrado => {
+              this.filtrado(event.checked);
+            });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    } else if (event.checked === false) {
       swal({
         title: '¿Esta seguro?',
         text: 'Esta apunto de deshabilitar a ' + transportista.nombreComercial,
@@ -176,7 +190,7 @@ export class TransportistasComponent implements OnInit {
         if (borrar) {
           this._transportistaService.desactivarTransportista(transportista, event.checked)
             .subscribe(borrado => {
-              this.filtrado(this.activo);
+              this.filtrado(event.checked);
             });
         } else {
           event.source.checked = !event.checked;
@@ -194,6 +208,7 @@ export class TransportistasComponent implements OnInit {
           this._transportistaService
             .desactivarTransportista(transportista, event.checked)
             .subscribe(borrado => {
+              this.activo = false;
               this.filtrado(this.activo);
             });
         } else {
