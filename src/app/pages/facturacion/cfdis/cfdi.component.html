@@ -18,7 +18,7 @@
                       <!--========Combombox Series=========-->
                       <mat-form-field>
                         <mat-select placeholder="SERIE" formControlName="serie" (selectionChange)="cambioSerie( $event.value )" name="serie">
-                          <mat-option *ngFor="let serie of series" [value]="serie">
+                          <mat-option *ngFor="let serie of series" [value]="serie.serie">
                             {{ serie.serie }}
                           </mat-option>
                         </mat-select>
@@ -48,8 +48,9 @@
                     <!--========Combombox Formas de Pago=========-->
                     <mat-form-field>
                       <mat-select placeholder="FORMA DE PAGO" formControlName="formaPago" name="formaPago">
-                        <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago">
+                        <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.formaPago">
                           {{ formaPago.formaPago + ' - ' + formaPago.descripcion }}
+                          <!-- {{ (formaPago.formaPago | leftpad: 5: 'b') + ' - ' + formaPago.descripcion }} -->
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="formaPago.touched && formaPago.invalid">
@@ -78,6 +79,20 @@
                       </mat-select>
                       <mat-error *ngIf="tipoComprobante.touched && tipoComprobante.invalid">
                         <sup>*</sup>Por Favor Ingrese un Tipo Comprobante
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-md-12">
+                    <!--========Combombox Metodo de Pago =========-->
+                    <mat-form-field>
+                      <mat-select placeholder="METODO DE PAGO" formControlName="metodoPago" name="metodoPago">
+                        <mat-option *ngFor="let metodoPago of metodosPago" [value]="metodoPago.metodoPago">
+                          {{ metodoPago.metodoPago + ' - ' + metodoPago.descripcion }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="metodoPago.touched && metodoPago.invalid">
+                        <sup>*</sup>Por Favor Ingrese un Metodo de Pago
                       </mat-error>
                     </mat-form-field>
                   </div>
@@ -198,7 +213,7 @@
                           </button>
                         </td> -->
                         <td>
-                          {{concepto.productoServicio.descripcion}}
+                          {{concepto.descripcion}}
                         </td>
                         <td>
                           {{concepto.unidad}}
@@ -211,7 +226,7 @@
                           {{concepto.valorUnitario | currency}}
                         </td>
                         <td>
-                          {{concepto.impuestos | currency}}
+                          {{concepto.impuestosTrasladados - concepto.impuestosRetenidos | currency}}
                         </td>
                         <td>
                           {{concepto.descuento | currency}}
@@ -245,11 +260,16 @@
                         <input matInput formControlName="subtotal" type="text" [value]="regForm.get('subtotal').value | currency">
                       </mat-form-field>
                     </div>
+                    <div class="col-md-12" *ngIf="regForm.get('totalImpuestosRetenidos').value > 0">
+                      <mat-form-field>
+                        <mat-label><b>TOTAL DE IMPUESTOS RETENIDOS</b></mat-label>
+                        <input matInput formControlName="totalImpuestosRetenidos" type="text" [value]="regForm.get('totalImpuestosRetenidos').value | currency">
+                      </mat-form-field>
+                    </div>
                     <div class="col-md-12">
-
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
-                        <input matInput formControlName="totalImpuestos" type="text" [value]="regForm.get('totalImpuestos').value | currency">
+                        <input matInput formControlName="totalImpuestosTrasladados" type="text" [value]="regForm.get('totalImpuestosTrasladados').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">

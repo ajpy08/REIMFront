@@ -5,6 +5,8 @@ import { ZipPipePipe } from './zip-pipe.pipe';
 import { IvaPipe } from '../pages/facturacion/pipes/iva.pipe';
 import { DecimalRightPadPipe } from './../pages/facturacion/pipes/decimal-rightpad.pipe';
 import { NgCapitalizePipeModule } from 'angular-pipes';
+import { NgAbsPipeModule } from 'angular-pipes';
+import { NgLeftPadPipeModule } from 'angular-pipes';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { NgCapitalizePipeModule } from 'angular-pipes';
     ImagenPipe,
     FotosPipe,
     DecimalRightPadPipe,
-    NgCapitalizePipeModule
+    NgCapitalizePipeModule,
+    NgAbsPipeModule,
+    NgLeftPadPipeModule
   ],
   providers: [
     FotosPipe

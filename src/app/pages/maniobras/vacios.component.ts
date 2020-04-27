@@ -86,76 +86,19 @@ export class VaciosComponent implements OnInit {
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones',  'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsLavado = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque',  'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsReparacion = [
-    'select',
-    'actions',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa',  'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
@@ -645,14 +588,58 @@ export class VaciosComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
-  facturar () {
+  facturar() {
+    if (this.validaClienteViaje(this.selectionVacios.selected)) {
+      //////////////// DATOS GENERALES ////////////////
+    // Serie (default)
+    // Folio (default)
+    // Sucursal (default)
+    // Forma de Pago (default)
+    // Moneda (default)
     this.facturacionService.IE = 'I';
-    this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
-    this.facturacionService.maniobras = this.selectionVacios.selected;
+    // Fecha (default)
+    /////////////////////////////////////////////////
+
+    /////////////////// RECEPTOR ////////////////////
     this.facturacionService.receptor = this.selectionVacios.selected[0].naviera;
-
     this.facturacionService.tipo = 'Descarga';
+    /////////////////////////////////////////////////
 
+    /////////////////// CONCEPTOS ///////////////////
+    // this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
+    this.facturacionService.productoServ = '5e876b2396bb521c1429f765';
+    this.selectionVacios.selected.forEach(m => {
+      this.facturacionService.maniobras.push(m._id);
+    });
+    // this.facturacionService.maniobras = this.selectionVacios.selected;
+    /////////////////////////////////////////////////
     this.router.navigate(['/cfdi/nuevo']);
+    } else {
+      swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+    }
+  }
+
+  validaClienteViaje(maniobras) {
+    let naviera;
+    let viaje;
+    let ok = true;
+    maniobras.forEach(m => {
+      if (naviera === undefined) {
+        naviera = m.naviera;
+      } else {
+        if (naviera !== m.naviera) {
+          ok = false;
+        }
+      }
+
+      if (viaje === undefined) {
+        viaje = m.viaje._id;
+      } else {
+        if (viaje !== m.viaje._id) {
+          ok = false;
+        }
+      }
+    });
+    return ok;
   }
 }

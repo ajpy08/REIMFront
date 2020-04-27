@@ -1,3 +1,4 @@
+import { CFDI } from './models/cfdi.models';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
@@ -15,10 +16,10 @@ import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.model
 })
 export class FacturacionService {
 
+  // serie = 'A';
   IE = '';
-  usoCFDI = '';
-  tipo = '';
   receptor;
+  tipo = '';
   productoServ = '';
   maniobras = [];
 
@@ -26,6 +27,48 @@ export class FacturacionService {
     public http: HttpClient,
     public _usuarioService: UsuarioService
   ) { }
+
+  /* #region  CFDIS */
+  getCFDI(id: string): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
+  }
+
+  guardarCFDI(cfdi: CFDI): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/cfdi';
+    if (cfdi._id) {
+      // actualizando
+      url += '/' + cfdi._id;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, cfdi).pipe(
+        map((resp: any) => {
+          swal('CFDI Actualizado', cfdi.serie + ' - ' + cfdi.folio, 'success');
+          return resp.cfdi;
+        })
+      );
+    } else {
+      // creando
+      url += '?token=' + this._usuarioService.token;
+      return this.http.post(url, cfdi).pipe(
+        map((resp: any) => {
+          swal('CFDI Creado', cfdi.serie + ' - ' + cfdi.folio, 'success');
+          // console.log(resp)
+          return resp.cfdi;
+        })
+      );
+    }
+  }
+
+  borrarCFDI(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http
+      .delete(url)
+      .pipe(
+        map(resp => swal('CFDI Borrado', 'Eliminado correctamente', 'success'))
+      );
+  }
+  /* #endregion */
 
   /* #region  CLAVE PRODUCTOS SERVICIO */
   getClaveproductosServicio(): Observable<any> {
@@ -71,8 +114,6 @@ export class FacturacionService {
   /* #endregion */
 
   /* #region  Productos o Servicios */
-
-
   getProductosServicios(): Observable<any> {
     const url = URL_SERVICIOS + '/productos-servicios';
     return this.http.get(url);
@@ -119,7 +160,6 @@ export class FacturacionService {
   }
 
   /* #endregion */
-
 
   /* #region  CLAVE UNIDAD */
   getClaveUnidades(): Observable<any> {
@@ -186,11 +226,23 @@ export class FacturacionService {
     const url = URL_SERVICIOS + '/facturacion/series';
     return this.http.get(url);
   }
+
+  getSerieXSerie(serie: string): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/series/' + serie;
+    return this.http.get(url).pipe(map((resp: any) => resp.serie));
+  }
   /* #endregion */
 
   /* #region  Formas de Pago */
   getFormasPago(): Observable<any> {
     const url = URL_SERVICIOS + '/facturacion/formas-pago';
+    return this.http.get(url);
+  }
+  /* #endregion */
+
+  /* #region  Metodos de Pago */
+  getMetodosPago(): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/metodos-pago';
     return this.http.get(url);
   }
   /* #endregion */
