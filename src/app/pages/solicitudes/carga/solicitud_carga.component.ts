@@ -15,22 +15,24 @@ import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contene
 import { Naviera } from '../../navieras/navieras.models';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 
 
 @Component({
   selector: 'app-solicitud-carga',
   templateUrl: './solicitud_carga.component.html',
-  styleUrls: []
+  styleUrls: ['./solicitud_carga.component.css']
 })
 
 export class SolicitudCargaComponent implements OnInit {
   regForm: FormGroup;
-
+  cargando = false;
+  cargando1 = false;
   fileComprobante: File = null;
   temporalComprobante = false;
   edicion = false;
+  fileBL: File = null;
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
   transportistas: Transportista[] = [];
@@ -44,6 +46,7 @@ export class SolicitudCargaComponent implements OnInit {
   usuarioLogueado: any;
   navieraMELFI = true;
   navieraMSC = true;
+  temporalBL = false;
   url: string;
   agenciaCargaSelected;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
@@ -101,7 +104,7 @@ export class SolicitudCargaComponent implements OnInit {
 
     this.socket.on('update-solicitud', function (data: any) {
       if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
-      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         if (data.data._id) {
           this.createFormGroup();
           this.contenedores.removeAt(0);
@@ -119,7 +122,7 @@ export class SolicitudCargaComponent implements OnInit {
 
     this.socket.on('delete-solicitud', function (data: any) {
       if ((data.data.agencia._id === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
-      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/solicitudes']);
         swal({
           title: 'Eliminado',
@@ -131,7 +134,7 @@ export class SolicitudCargaComponent implements OnInit {
 
     this.socket.on('aprobar-solicitud', function (data: any) {
       if ((data.data.agencia === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
-      (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+        (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/solicitudes']);
         swal({
           title: 'Aprobada',
@@ -160,6 +163,7 @@ export class SolicitudCargaComponent implements OnInit {
       observaciones: [''],
       rutaComprobante: [''],
       correo: [''],
+      rutaBooking: [''],
       facturarA: ['', [Validators.required]],
       rfc: [{ value: '', disabled: true }],
       razonSocial: [{ value: '', disabled: true }],
@@ -292,8 +296,9 @@ export class SolicitudCargaComponent implements OnInit {
   get cantidad() {
     return this.regForm.get('cantidad');
   }
-
-
+  get rutaBooking() {
+    return this.regForm.get('rutaBooking');
+  }
   get contenedorTemp() {
     return this.regForm.get('contenedorTemp');
   }
@@ -337,6 +342,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.controls['ciudad'].setValue(solicitud.ciudad);
       this.regForm.controls['estado'].setValue(solicitud.estado);
       this.regForm.controls['cp'].setValue(solicitud.cp);
+      this.regForm.controls['rutaBooking'].setValue(solicitud.rutaBooking);
       this.regForm.controls['correoFac'].setValue(solicitud.correoFac);
       this.regForm.controls['estatus'].setValue(solicitud.estatus);
       this.onChangeCredito({ checked: this.credito });
@@ -546,6 +552,7 @@ export class SolicitudCargaComponent implements OnInit {
 
   onFilePDFComprobanteSelected(event) {
     this.fileComprobante = <File>event.target.files[0];
+    this.cargando1 = true;
     this.subirComprobante();
   }
 
@@ -554,6 +561,7 @@ export class SolicitudCargaComponent implements OnInit {
       this.regForm.get('rutaComprobante').setValue(nombreArchivo);
       this.regForm.get('rutaComprobante').markAsDirty();
       this.temporalComprobante = true;
+      this.cargando1 = false;
       this.guardarSolicitud();
     });
   }
@@ -586,5 +594,20 @@ export class SolicitudCargaComponent implements OnInit {
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
     // this.location.back();
+  }
+
+  onFilePDFBLSelected(event) {
+    this.cargando = true;
+    this.fileBL = <File>event.target.files[0];
+    this.subirBL();
+  }
+  subirBL() {
+    this._subirArchivoService.subirArchivoBucketTemporal(this.fileBL).subscribe(nombreArchivo => {
+      this.regForm.get('rutaBooking').setValue(nombreArchivo);
+      this.regForm.get('rutaBooking').markAsDirty();
+      this.temporalBL = true;
+      this.cargando = false;
+      this.guardarSolicitud();
+    });
   }
 }

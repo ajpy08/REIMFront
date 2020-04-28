@@ -46,6 +46,8 @@ export class SolicitudDescargaComponent implements OnInit {
   aprobada = false;
   usuarioLogueado: any;
   navieraMELFI = true;
+  cargando1 = false;
+  cargando = false;
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
   buques: Buque[] = [];
@@ -519,6 +521,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   onFilePDFBLSelected(event) {
+    this.cargando = true;
     this.fileBL = <File>event.target.files[0];
     this.subirBL();
   }
@@ -528,12 +531,14 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.get('rutaBL').setValue(nombreArchivo);
       this.regForm.get('rutaBL').markAsDirty();
       this.temporalBL = true;
+      this.cargando = false;
       this.guardarSolicitud();
     });
   }
 
   onFilePDFComprobanteSelected(event) {
     this.fileComprobante = <File>event.target.files[0];
+    this.cargando1 = true;
     this.subirComprobante();
   }
   ver() {
@@ -545,6 +550,7 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.get('rutaComprobante').setValue(nombreArchivo);
       this.regForm.get('rutaComprobante').markAsDirty();
       this.temporalComprobante = true;
+      this.cargando1 = false;
       this.guardarSolicitud();
     });
   }
