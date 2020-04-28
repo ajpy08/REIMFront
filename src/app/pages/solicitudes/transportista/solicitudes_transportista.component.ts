@@ -25,6 +25,8 @@ export class SolicitudesTransportistaComponent implements OnInit {
   maniobras: any[] = [];
   maniobrasCarga: any[] = [];
   totalRegistros = 0;
+  tablaCargarD = false;
+  tablaCargarC = false;
   totalRegistrosCargas = 0;
   usuarioLogueado: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
@@ -194,6 +196,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
           this.dataSourceDescargas = new MatTableDataSource(
             maniobras.maniobras
           );
+          if (maniobras.maniobras.length === 0 ) {
+            this.tablaCargarD = true;
+          } else {
+            this.tablaCargarD = false;
+          }
           this.dataSourceDescargas.sort = this.sort;
           this.dataSourceDescargas.paginator = this.paginator;
           this.totalRegistros = maniobras.total;
@@ -212,6 +219,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
           // this.totalRegistrosCargas = maniobras.total;
           // this.maniobrasCarga = maniobras.maniobras;
           this.dataSourceCargas = new MatTableDataSource(maniobras.maniobras);
+          if (maniobras.maniobras.length === 0 ) {
+            this.tablaCargarC = true;
+          } else {
+            this.tablaCargarC = false;
+          }
           this.dataSourceCargas.sort = this.MatSortCarga;
           this.dataSourceCargas.paginator = this.MatPaginatorCarga;
           this.totalRegistrosCargas = maniobras.total;
@@ -223,12 +235,22 @@ export class SolicitudesTransportistaComponent implements OnInit {
     if (this.maniobras && CD === 'D') {
       this.dataSourceDescargas = new MatTableDataSource(this.maniobras);
       this.totalRegistros = this.dataSourceDescargas.data.length;
+      if (this.dataSourceDescargas.data.length === 0 ) {
+        this.tablaCargarD = true;
+      } else {
+        this.tablaCargarD = false;
+      }
       this.dataSourceDescargas.sort = this.sort;
       this.dataSourceDescargas.paginator = this.paginator;
     }
 
     if (this.maniobrasCarga && CD === 'C') {
       this.dataSourceCargas = new MatTableDataSource(this.maniobrasCarga);
+      if (this.dataSourceCargas.data.length === 0 ) {
+        this.tablaCargarC = true;
+      } else {
+        this.tablaCargarC = false;
+      }
       this.totalRegistrosCargas = this.dataSourceCargas.data.length;
       this.dataSourceCargas.sort = this.MatSortCarga;
       this.dataSourceCargas.paginator = this.MatPaginatorCarga;
@@ -242,6 +264,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
     if (this.dataSourceDescargas && this.dataSourceDescargas.data.length > 0) {
       this.dataSourceDescargas.filter = filterValue;
       this.totalRegistros = this.dataSourceDescargas.filteredData.length;
+      if (this.dataSourceDescargas.filteredData.length === 0) {
+        this.tablaCargarD = true;
+      } else {
+        this.tablaCargarD = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Solicitudes Transportista Descargas');
     }
@@ -261,6 +288,11 @@ export class SolicitudesTransportistaComponent implements OnInit {
     if (this.dataSourceCargas && this.dataSourceCargas.data.length > 0) {
       this.dataSourceCargas.filter = filterValue;
       this.totalRegistrosCargas = this.dataSourceCargas.filteredData.length;
+      if (this.dataSourceCargas.filteredData.length === 0) {
+        this.tablaCargarC = true;
+      } else {
+        this.tablaCargarC = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Solicitudes Transportista Cargas');
     }

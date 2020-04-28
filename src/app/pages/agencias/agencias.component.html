@@ -9,6 +9,9 @@
     </div>
   </div>
 </div>
+
+
+
 <div class="row animated fadeIn" *ngIf="!cargando">
   <div class="col-12">
     <div class="card">
@@ -31,6 +34,11 @@
           </mat-form-field>
         </div>
         <br>
+        <div class="contenedorPar">
+          <span class="parpa tex" *ngIf="this.tablaCargar === true">
+            <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+          </span>
+        </div>
         <div class="example-container mat-elevation-z8">
         </div>
         <div class="catalogo-container mat-elevation-z8">
@@ -156,9 +164,9 @@
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-          </mat-paginator>
         </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+            </mat-paginator>
       </div>
     </div>
   </div>

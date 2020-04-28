@@ -23,6 +23,7 @@ export class CamionesComponent implements OnInit {
   activo = false;
   acttrue = false;
   totalRegistros = 0;
+  tablaCargar = false;
   camionesExcel = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
@@ -89,6 +90,11 @@ export class CamionesComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Camiones');
     }
@@ -111,6 +117,11 @@ export class CamionesComponent implements OnInit {
           return item[property];
         };
 
+        if (camiones.camiones.length === 0) {
+          this.tablaCargar = true;
+        } else {
+          this.tablaCargar = false;
+        }
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.totalRegistros = camiones.camiones.length;

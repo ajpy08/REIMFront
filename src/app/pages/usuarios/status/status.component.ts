@@ -15,6 +15,7 @@ declare var swal: any;
 })
 export class StatusComponent implements OnInit {
   cargando = true;
+  tablaCargar = false;
   totalOnline = 0;
   roles = ROLES_ARRAY;
 
@@ -49,6 +50,11 @@ export class StatusComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalOnline = this.dataSource.filteredData.length;
+      if ( this.dataSource.filteredData.length === 0) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Status');
     }
@@ -58,6 +64,11 @@ export class StatusComponent implements OnInit {
     this.cargando = true;
     this.usuarioService.getUserStatus().subscribe((usuarios: any) => {
       this.dataSource = new MatTableDataSource(usuarios);
+      if (usuarios.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalOnline = usuarios.filter(u => u.status === true).length;

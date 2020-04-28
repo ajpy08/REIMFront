@@ -101,6 +101,8 @@ export class AprobacionesComponent implements OnInit {
 
   dtCargas: any;
   dtDescargas: any;
+  tablaCargarD = false;
+  tablaCargarC = false;
   totalRegistrosDescargas = 0;
   totalRegistrosCargas = 0;
 
@@ -134,7 +136,6 @@ export class AprobacionesComponent implements OnInit {
       this.cargaSolicitudes(data.data.tipo);
     }.bind(this));
   }
-
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.socket.removeListener('delete-solicitud');
@@ -155,6 +156,11 @@ export class AprobacionesComponent implements OnInit {
         )
         .subscribe(resp => {
           this.dtDescargas = new MatTableDataSource(resp.solicitudes);
+          if (resp.solicitudes.length === 0 ) {
+            this.tablaCargarD = true;
+          } else {
+            this.tablaCargarD = false;
+          }
           // this.dtDescargas.sortingDataAccessor = (item, property) => {
           //   if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           //   return item[property];
@@ -176,6 +182,11 @@ export class AprobacionesComponent implements OnInit {
         .subscribe(resp => {
           // this.dtCargas = resp.solicitudes;
           this.dtCargas = new MatTableDataSource(resp.solicitudes);
+          if (resp.solicitudes.length === 0 ) {
+            this.tablaCargarC = true;
+          } else {
+            this.tablaCargarC = false;
+          }
           // this.dtCargas.sortingDataAccessor = (item, property) => {
           //   if (property.includes('.')) return property.split('.').reduce((o, i) => o ? o[i] : undefined, item)
           //   return item[property];
@@ -196,6 +207,11 @@ export class AprobacionesComponent implements OnInit {
     if (this.dtCargas && this.dtCargas.data.length > 0) {
       this.dtCargas.filter = filterValue;
       this.totalRegistrosCargas = this.dtCargas.filteredData.length;
+      if (this.dtCargas.filteredData.length === 0 ) {
+        this.tablaCargarC = true;
+      } else {
+        this.tablaCargarC = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Aprobaciones Cargas');
     }
@@ -211,6 +227,11 @@ export class AprobacionesComponent implements OnInit {
     if (this.dtDescargas && this.dtDescargas.data.length > 0) {
       this.dtDescargas.filter = filterValue;
       this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+      if (this.dtDescargas.filteredData.length === 0 ) {
+        this.tablaCargarD = true;
+      } else {
+        this.tablaCargarD = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Aprobaciones Descargas');
     }

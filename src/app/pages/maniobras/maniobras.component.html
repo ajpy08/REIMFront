@@ -32,15 +32,19 @@
                 placeholder="Escriba algo para filtrar">
             </mat-form-field>
           </div>
-          <br>
+          
           <!-- <div class="text-right">
 
             <button (click)="exportAsXLSX(dtTransito, 'Transito')" class="btn btn-success m-r-5">
               <i class="fas fa-file-excel"></i>
             </button>
           </div> -->
-
-          <br>
+          <div class="contenedorParD">
+            <span class="parpa tex" *ngIf="this.tablaCargarD === true">
+              <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+            </span>
+          </div>
+          
           <div class="example-container mat-elevation-z8">
             <mat-table class="mat-table-big" [dataSource]="dtXAprobar" #sortXAprobar="matSort" matSort>
               <ng-container matColumnDef="actions">
@@ -117,9 +121,9 @@
               <mat-header-row *matHeaderRowDef="displayedColumnsXAprobar" class="encabezado"></mat-header-row>
               <mat-row *matRowDef="let row; columns: displayedColumnsXAprobar;"></mat-row>
             </mat-table>
-            <mat-paginator #pagXAprobar  [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-            </mat-paginator>
           </div>
+              <mat-paginator #pagXAprobar  [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+              </mat-paginator>
         </div>
       </div>
     </div>
@@ -152,7 +156,11 @@
                 <i class="fas fa-file-excel"></i>
               </button>
             </div>
-
+            <div class="contenedorPar">
+              <span class="parpa tex" *ngIf="this.tablaCargarT === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
             <br>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-big" [dataSource]="dtTransito" #sortTransito="matSort" matSort>
@@ -230,9 +238,9 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsTransito" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsTransito;"></mat-row>
               </mat-table>
-              <mat-paginator #pagTransito [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+                <mat-paginator #pagTransito [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+                </mat-paginator>
           </div>
         </div>
       </div>
@@ -264,6 +272,11 @@
               </button>
             </div>
             <br>
+            <div class="contenedorPar">
+              <span class="parpa tex" *ngIf="this.tablaCargarE === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-medium" [dataSource]="dtEspera" #sortEspera="matSort" matSort>
                 <ng-container matColumnDef="actions">
@@ -339,9 +352,9 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsEspera" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsEspera;"></mat-row>
               </mat-table>
-              <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+                <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+                </mat-paginator>
           </div>
         </div>
       </div>
@@ -372,6 +385,11 @@
               </button>
             </div>
             <br>
+            <div class="contenedorPar">
+              <span class="parpa tex" *ngIf="this.tablaCargarR === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-big" [dataSource]="dtRevision" #sortRevision="matSort" matSort>
                 <ng-container matColumnDef="actions">
@@ -478,10 +496,10 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsRevision" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
-              <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
-                [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+            <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+              [showFirstLastButtons]>
+            </mat-paginator>
           </div>
         </div>
       </div>
@@ -512,6 +530,11 @@
               </button>
             </div>
             <br>
+            <div class="contenedorPar">
+              <span class="parpa tex" *ngIf="this.tablaCargarLR === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-big" [dataSource]="dtLavadoReparacion" #sortLR="matSort" matSort>
                 <ng-container matColumnDef="actions">
@@ -603,9 +626,9 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavadoReparacion" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavadoReparacion;"></mat-row>
               </mat-table>
-              <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+                <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+                </mat-paginator>
           </div>
         </div>
       </div>
@@ -637,6 +660,11 @@
               </button>
             </div>
             <br>
+            <div class="contenedorPar">
+              <span class="parpa tex" *ngIf="this.tablaCargarX === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
             <div class="example-container mat-elevation-z8">
               <mat-table class="mat-table-medium" [dataSource]="dtXCargar" #sortXCargar="matSort" matSort>
                 <ng-container matColumnDef="actions">
@@ -698,10 +726,10 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsXCargar" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
-              <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
-                [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+            <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+              [showFirstLastButtons]>
+            </mat-paginator>
           </div>
         </div>
       </div>

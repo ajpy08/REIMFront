@@ -12,6 +12,7 @@ export class NavierasComponent implements OnInit {
   cargando = true;
   activo = false;
   acttrue = false;
+  tablaCargar = false;
   totalRegistros = 0;
   navieraExcel = [];
 
@@ -67,6 +68,11 @@ export class NavierasComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Navieras');
     }
@@ -76,6 +82,11 @@ export class NavierasComponent implements OnInit {
     this.cargando = true;
     this._navieraService.getNavieras(bool).subscribe(navieras => {
       this.dataSource = new MatTableDataSource(navieras.navieras);
+      if (navieras.navieras.length === 0) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalRegistros = navieras.navieras.length;
