@@ -98,6 +98,8 @@ export class SolicitudesComponent implements OnInit {
 
   dtCargas: any;
   dtDescargas: any;
+  tablaCargarD = false;
+  tablaCargarC = false;
   totalRegistrosDescargas = 0;
   totalRegistrosCargas = 0;
   usuarioLogueado: any;
@@ -179,6 +181,11 @@ export class SolicitudesComponent implements OnInit {
           .subscribe(res => {
             this.totalRegistrosDescargas = res.total;
             this.dtDescargas = new MatTableDataSource(res.solicitudes);
+            if (res.solicitudes.length === 0 ) {
+              this.tablaCargarD = true;
+            } else {
+              this.tablaCargarD = false;
+            }
             this.dtDescargas.sort = this.sort;
             this.dtDescargas.paginator = this.paginator;
           });
@@ -193,6 +200,11 @@ export class SolicitudesComponent implements OnInit {
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
             this.dtCargas = new MatTableDataSource(res.solicitudes);
+            if (res.solicitudes.length === 0 ) {
+              this.tablaCargarC = true;
+            } else {
+              this.tablaCargarC = false;
+            }
             this.dtCargas.sort = this.sortCargas;
             this.dtCargas.paginator = this.pagCargas;
             this.cargando = false;
@@ -216,6 +228,11 @@ export class SolicitudesComponent implements OnInit {
           .subscribe(res => {
             this.totalRegistrosDescargas = res.total;
             this.dtDescargas = new MatTableDataSource(res.solicitudes);
+            if (res.solicitudes.length === 0 ) {
+              this.tablaCargarD = true;
+            } else {
+              this.tablaCargarD = false;
+            }
             this.dtDescargas.sort = this.sort;
             this.dtDescargas.paginator = this.paginator;
           });
@@ -231,6 +248,11 @@ export class SolicitudesComponent implements OnInit {
           .subscribe(res => {
             this.totalRegistrosCargas = res.total;
             this.dtCargas = new MatTableDataSource(res.solicitudes);
+            if (res.solicitudes.length === 0 ) {
+              this.tablaCargarC = true;
+            } else {
+              this.tablaCargarC = false;
+            }
             this.dtCargas.sort = this.sortCargas;
             this.dtCargas.paginator = this.pagCargas;
             this.cargando = false;
@@ -246,6 +268,11 @@ export class SolicitudesComponent implements OnInit {
     if (this.dtCargas && this.dtCargas.data.length > 0) {
       this.dtCargas.filter = filterValue;
       this.totalRegistrosCargas = this.dtCargas.filteredData.length;
+      if (this.dtCargas.filteredData.length === 0 ) {
+        this.tablaCargarC = true;
+      } else {
+        this.tablaCargarC = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Aprobaciones Cargas');
     }
@@ -261,6 +288,11 @@ export class SolicitudesComponent implements OnInit {
     if (this.dtDescargas && this.dtDescargas.data.length > 0) {
       this.dtDescargas.filter = filterValue;
       this.totalRegistrosDescargas = this.dtDescargas.filteredData.length;
+      if (this.dtDescargas.filteredData.length === 0 ) {
+        this.tablaCargarD = true;
+      } else {
+        this.tablaCargarD = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Aprobaciones Descargas');
     }

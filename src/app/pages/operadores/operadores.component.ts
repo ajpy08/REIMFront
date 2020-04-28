@@ -23,6 +23,7 @@ export class OperadoresComponent implements OnInit {
   cargando = true;
   activo = false;
   acttrue = false;
+  tablaCargar = false;
   totalRegistros = 0;
   usuarioLogueado: Usuario;
   operadoresExcel = [];
@@ -74,6 +75,11 @@ export class OperadoresComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Operadores');
     }
@@ -105,6 +111,11 @@ export class OperadoresComponent implements OnInit {
     ) {
       this._operadorService.getOperadores(null, bool).subscribe(operadores => {
         this.dataSource = new MatTableDataSource(operadores.operadores);
+        if (operadores.operadores.length === 0) {
+          this.tablaCargar = true;
+        } else {
+          this.tablaCargar = false;
+        }
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.totalRegistros = operadores.operadores.length;

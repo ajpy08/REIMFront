@@ -13,6 +13,7 @@ export class AgenciasComponent implements OnInit {
   agenciasExcel = [];
   cargando = true;
   activo = false;
+  tablaCargar = false;
   acttrue = false;
   totalRegistros = 0;
 
@@ -70,6 +71,11 @@ export class AgenciasComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.log('Error al filtrar el dataSource de Agencias');
     }
@@ -79,6 +85,11 @@ export class AgenciasComponent implements OnInit {
     this.cargando = true;
     this._agenciaService.getAgencias(bool).subscribe(agencias => {
       this.dataSource = new MatTableDataSource(agencias.agencias);
+      if (agencias.agencias.length === 0) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalRegistros = agencias.agencias.length;

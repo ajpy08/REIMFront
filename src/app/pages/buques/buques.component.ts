@@ -8,13 +8,14 @@ import * as io from 'socket.io-client';
 declare var swal: any;
 @Component({
   selector: 'app-buques',
-  templateUrl: './buques.component.html'
+  templateUrl: './buques.component.html',
 })
 export class BuquesComponent implements OnInit, OnDestroy {
   buquesExcel = [];
   cargando = true;
   totalRegistros = 0;
   activo = false;
+  tablaCargar = false;
   acttrue = false;
   displayedColumns = ['actions', 'activo', 'nombre', 'razonSocial', 'fAlta'];
   dataSource: any;
@@ -69,6 +70,11 @@ export class BuquesComponent implements OnInit, OnDestroy {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Buques');
     }
@@ -102,7 +108,7 @@ export class BuquesComponent implements OnInit, OnDestroy {
         if (borrar) {
           this._buqueService.habilitaDeshabilitaBuque(buque, event.checked).subscribe(borado => {
             this.acttrue = false;
-           this.filtrado(this.acttrue);
+            this.filtrado(this.acttrue);
           });
         } else {
           event.source.checked = !event.checked;
@@ -115,6 +121,11 @@ export class BuquesComponent implements OnInit, OnDestroy {
     this.cargando = true;
     this._buqueService.getBuques(bool).subscribe(buques => {
       this.dataSource = new MatTableDataSource(buques.buques);
+      if (buques.buques.length === 0) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalRegistros = buques.buques.length;
@@ -139,14 +150,14 @@ export class BuquesComponent implements OnInit, OnDestroy {
             swal({
               title: 'No se permite eliminar el Buque',
               text: 'El Buque  ' + buque.nombre + '  cuenta con historial de registro en el sistema.' +
-              '  La acción permitida es DESACTIVAR,  ¿  DESEA CONTINUAR ?',
+                '  La acción permitida es DESACTIVAR,  ¿  DESEA CONTINUAR ?',
               icon: 'warning',
               buttons: true,
               dangerMode: true
             }).then(borrado => {
               if (borrado) {
                 this._buqueService.habilitaDeshabilitaBuque(buque, false).subscribe(() => {
-                  swal ('Correcto', 'Cambio de estado del Buque ' + buque.nombre + 'realizado con exito', 'success');
+                  swal('Correcto', 'Cambio de estado del Buque ' + buque.nombre + 'realizado con exito', 'success');
                   this.filtrado(this.acttrue);
                 });
               }

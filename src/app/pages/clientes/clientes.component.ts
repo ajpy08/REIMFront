@@ -20,6 +20,7 @@ export class ClientesComponent implements OnInit {
   totalRegistros = 0;
   desde = 0;
   activo = false;
+  tablaCargar = false;
   acttrue = false;
   usuarioLogueado = new Usuario;
   clientesExcel = [];
@@ -87,6 +88,11 @@ export class ClientesComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
+      if (this.dataSource.filteredData.length === 0 ) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Clientes');
     }
@@ -99,6 +105,11 @@ export class ClientesComponent implements OnInit {
       this._clienteService.getClientes(this.desde, bool)
         .subscribe(clientes => {
           this.dataSource = new MatTableDataSource(clientes.clientes);
+          if (clientes.clientes.length === 0) {
+            this.tablaCargar = true;
+          } else {
+            this.tablaCargar = false;
+          }
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = clientes.clientes.length;
