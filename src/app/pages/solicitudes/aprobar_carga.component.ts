@@ -35,6 +35,7 @@ export class AprobarCargaComponent implements OnInit {
   url: string;
   usuarioLogueado = new Usuario();
   blBookingChange: string;
+  solicitudCorrecta = false;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
@@ -114,6 +115,7 @@ export class AprobarCargaComponent implements OnInit {
       credito: [{ value: '', disabled: true }],
       observaciones: [{ value: '', disabled: true }],
       rutaBL: [{ value: '', disabled: true }],
+      rutaBooking: [{ value: '', disabled: true }],
       rutaComprobante: [{ value: '', disabled: true }],
       correo: [{ value: '', disabled: true }],
       facturarA: [{ value: '', disabled: true }],
@@ -180,6 +182,11 @@ export class AprobarCargaComponent implements OnInit {
   get rutaBL() {
     return this.regForm.get('rutaBL');
   }
+  get rutaBooking() {
+    return this.regForm.get('rutaBooking');
+  }
+
+
   get rutaComprobante() {
     return this.regForm.get('rutaComprobante');
   }
@@ -310,14 +317,14 @@ export class AprobarCargaComponent implements OnInit {
       );
       this.regForm.controls['idcliente'].setValue(solicitud.cliente._id);
       this.regForm.controls['observaciones'].setValue(solicitud.observaciones);
-      this.regForm.controls['rutaComprobante'].setValue(
-        solicitud.rutaComprobante
-      );
+      this.regForm.controls['rutaComprobante'].setValue(solicitud.rutaComprobante);
       this.regForm.controls['correo'].setValue(solicitud.correo);
       this.regForm.controls['facturarA'].setValue(solicitud.facturarA);
       this.regForm.controls['rfc'].setValue(solicitud.rfc);
       this.regForm.controls['razonSocial'].setValue(solicitud.razonSocial);
       this.regForm.controls['calle'].setValue(solicitud.calle);
+      this.regForm.controls['rutaBooking'].setValue(solicitud.rutaBooking);
+      this.regForm.controls['rutaBL'].setValue(solicitud.rutatBL);
       this.regForm.controls['noExterior'].setValue(solicitud.noExterior);
       this.regForm.controls['noInterior'].setValue(solicitud.noInterior);
       this.regForm.controls['colonia'].setValue(solicitud.colonia);
