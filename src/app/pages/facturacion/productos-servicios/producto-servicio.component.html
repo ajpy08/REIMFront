@@ -11,32 +11,28 @@
 
                 <div class="my-container">
                   <mat-form-field>
-                    <input matInput formControlName="codigo" name="codigo" type="text" class="form-control"
-                      placeholder="Codigo">
+                    <input matInput formControlName="codigo" name="codigo" type="text" class="form-control" placeholder="Codigo">
                     <mat-error *ngIf="codigo.touched && codigo.invalid">
                       <sup>*</sup>Por Favor Ingrese un codigo de Producto o Servicio
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="unidad" name="unidad" type="text" class="form-control"
-                      placeholder="Unidad">
+                    <input matInput formControlName="unidad" name="unidad" type="text" class="form-control" placeholder="Unidad">
                     <mat-error *ngIf="unidad.touched && unidad.invalid">
                       <sup>*</sup>Por Favor Ingrese una Unidad de Producto o Servicio
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
-                      placeholder="Descripcion">
+                    <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control" placeholder="Descripcion">
                     <mat-error *ngIf="descripcion.touched && descripcion.invalid">
                       <sup>*</sup>Por Favor Ingrese una descripcion de Producto o Servicio
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field>
-                    <input matInput formControlName="valorUnitario" name="valorUnitario" type="text"
-                      class="form-control" placeholder="Valor Unitario">
+                    <input matInput formControlName="valorUnitario" name="valorUnitario" type="text" class="form-control" placeholder="Valor Unitario">
                     <mat-error *ngIf="valorUnitario.touched && valorUnitario.invalid">
                       <sup>*</sup>Por Favor Ingrese un Valor Unitario
                     </mat-error>
@@ -91,10 +87,9 @@
                         <tr>
                           <th scope="col"></th>
                           <th scope="col">
-                            <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('valor')">
+                            <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('tasaCuota')">
                               <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
-                    !regForm.get('cveImpuesto').valid || !regForm.get('impuesto').valid || !regForm.get('valor').valid"
-                                (click)="addImpuesto(TR.value, impuesto.value, cveImpuesto.value, valor.value); ">
+                    !regForm.get('impuesto').valid || !regForm.get('tasaCuota').valid" (click)="addImpuesto(TR.value, impuesto.value, tasaCuota.value, 'TASA'); ">
                                 +
                               </button>
                             </div>
@@ -112,7 +107,7 @@
                           <th scope="col-md-2">
                             <mat-form-field>
                               <mat-label>Impuesto</mat-label>
-                              <mat-select formControlName="impuesto" (selectionChange)="cambioImpuesto( $event.value )">
+                              <mat-select (selectionChange)="cambioImpuesto( $event.value )">
                                 <mat-option *ngFor="let t of tipoImpuestos" [value]="t">
                                   {{t}}
                                 </mat-option>
@@ -131,11 +126,10 @@
                           </th> -->
                           <th scope="col-md-2">
                             <mat-form-field>
-                              <mat-label>Valor</mat-label>
-                              <input matInput formControlName="valor" name="valor" type="number" class="form-control"
-                                placeholder="Valor">
-                              <mat-error *ngIf="valor.touched && valor.invalid">
-                                <sup>*</sup>Por Favor Ingrese un Valor
+                              <mat-label>TasaCuota</mat-label>
+                              <input matInput formControlName="tasaCuota" name="tasaCuota" type="number" class="form-control" placeholder="tasaCuota">
+                              <mat-error *ngIf="tasaCuota.touched && tasaCuota.invalid">
+                                <sup>*</sup>Por Favor Ingrese una Tasa o Cuota
                               </mat-error>
                             </mat-form-field>
                           </th>
@@ -166,7 +160,7 @@
                           </td>
                           <td>
                             <!-- {{item.get('valor').value | decimalrightpad: 4}} -->
-                            {{item.get('valor').value}}
+                            {{item.get('tasaCuota').value}}
                             <!-- {{item.get('valor').value | iva}} -->
                           </td>
                         </tr>
@@ -178,8 +172,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-            [disabled]="!regForm.dirty || regForm.invalid">
+          <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="!regForm.dirty || regForm.invalid">
             <i class="fa fa-save"></i>
             Guardar
           </button>

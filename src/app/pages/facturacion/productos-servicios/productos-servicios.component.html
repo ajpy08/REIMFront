@@ -17,8 +17,7 @@
           <button (click)="exportAsXLSX()" class="btn btn-success m-r-10">
             <i class="fas fa-file-excel"></i>
           </button>
-          <button matTooltip="Añadir nuevo Producto-Servicio" mat-mini-fab class="btn btn-primary" [routerLink]="['/producto-servicio/','nuevo']"
-            type="button">
+          <button matTooltip="Añadir nuevo Producto-Servicio" mat-mini-fab class="btn btn-primary" [routerLink]="['/producto-servicio/','nuevo']" type="button">
             <i class="fa fa-plus"></i>
           </button>
         </div>
@@ -32,12 +31,11 @@
         <div class="example-container mat-elevation-z8">
         </div>
         <div class="catalogo-container mat-elevation-z8">
-          <mat-table  class="mat-table-medium" #table [dataSource]="dataSource" matSort>
+          <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button matTooltip="Editar Producto-Servicio" [routerLink]="['/producto-servicio/', row._id ]"
-                  class="btn btn-primary m-r-5">
+                <button matTooltip="Editar Producto-Servicio" [routerLink]="['/producto-servicio/', row._id ]" class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
                 <button matTooltip="Eliminar Producto-Servicio" (click)="borrarProductoServicio( row )" class="btn btn-danger m-r-5">
@@ -63,7 +61,7 @@
 
             <ng-container matColumnDef="valorUnitario">
               <mat-header-cell *matHeaderCellDef>Valor Unitario</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.valorUnitario |  currency:'CAD':'$'}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.valorUnitario | currency:'CAD':'$'}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="claveSAT">
@@ -77,11 +75,11 @@
             </ng-container>
 
             <ng-container matColumnDef="impuestos">
-              <mat-header-cell *matHeaderCellDef mat-sort-header >Impuestos</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Impuestos</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-select *ngIf="row.impuestos.length > 0 " class="form-control" [(ngModel)]="row.impuestos" name="impuestos" >
-                  <mat-option  *ngFor="let i of row.impuestos" [value]="row.impuestos">
-                    {{i.impuesto + ' ' + i.valor}}%
+                <mat-select *ngIf="row.impuestos.length > 0 " class="form-control" [(ngModel)]="row.impuestos" name="impuestos">
+                  <mat-option *ngFor="let i of row.impuestos" [value]="row.impuestos">
+                    {{nombreImpuesto(i.impuesto) + ' ' + i.tasaCuota}}%
                   </mat-option>
                 </mat-select>
               </mat-cell>

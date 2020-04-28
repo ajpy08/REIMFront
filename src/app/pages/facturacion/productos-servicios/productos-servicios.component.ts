@@ -70,6 +70,20 @@ export class ProductosServiciosComponent implements OnInit {
     });
   }
 
+  nombreImpuesto(impuesto: string) {
+    if (impuesto === '001') {
+      return 'ISR';
+    } else {
+      if (impuesto === '002') {
+        return 'IVA';
+      } else {
+        if (impuesto === '003') {
+          return 'IEPS';
+        } else {}
+      }
+    }
+  }
+
   CreaDatosExcel(datos) {
     datos.forEach(p => {
       let impuestos = '';
