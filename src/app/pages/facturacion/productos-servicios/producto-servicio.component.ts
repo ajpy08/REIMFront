@@ -69,7 +69,7 @@ export class ProductoServicioComponent implements OnInit {
 
       if (res.impuestos.length > 0) {
         res.impuestos.forEach(element => {
-          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.impuesto, element.cveImpuesto, element.valor)));
+          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.impuesto, element.tasaCuota, element.tipoFactor)));
         });
       } else {
         this.regForm.controls['impuestos'].setValue(undefined);
@@ -87,9 +87,9 @@ export class ProductoServicioComponent implements OnInit {
       unidadSAT: ['', [Validators.required]],
       TR: [''],
       impuesto: [''],
-      cveImpuesto: [''],
-      valor: [],
-      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 'IVA', '002', 16.00))], { validators: Validators.required }),
+      tasaCuota: [''],
+      tipoFactor: [''],
+      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 0, '002', 16.00, 'TASA'))], { validators: Validators.required }),
       _id: ['']
     });
   }
@@ -110,27 +110,28 @@ export class ProductoServicioComponent implements OnInit {
     return this.fb.group({
       TR: [impuesto.TR],
       impuesto: [impuesto.impuesto],
-      cveImpuesto: [impuesto.cveImpuesto],
-      valor: [impuesto.valor]
+      tasaCuota: [impuesto.tasaCuota],
+      tipoFactor: [impuesto.tipoFactor]
     });
   }
 
-  addImpuesto(TR: string, impuesto: string, cveImpuesto: string, valor: number): void {
-    const impuestoObj = new Impuesto(TR, impuesto, cveImpuesto, valor);
-    const tmp = this.impuestos.value.filter(i => i.TR === TR && i.impuesto === impuesto && i.cveImpuesto === cveImpuesto && i.valor === valor);
+  addImpuesto(TR: string, impuesto: string, tasaCuota: number, tipoFactor: string): void {
+    const impuestoObj = new Impuesto(TR, 0, impuesto, tasaCuota, tipoFactor);
+    const tmp = this.impuestos.value.filter(i => i.TR === TR && i.impuesto === impuesto &&
+      i.tasaCuota === tasaCuota);
 
     if (tmp.length > 0) {
       swal('No puedes agregar este impuesto por que ya existe', '', 'error');
     } else {
-      if (TR === '' || impuesto === '' || cveImpuesto === '' || valor === 0) {
+      if (TR === '' || impuesto === '' || tasaCuota === 0 || tipoFactor === '') {
         swal('Error al Agregar', 'No puede estar vacio ningun campo', 'error');
       } else {
         this.impuestos.push(this.agregarArray(impuestoObj));
 
         this.TR.setValue('');
-        this.impuesto.setValue('');
-        this.cveImpuesto.setValue('');
-        this.valor.setValue(0);
+        // this.impuesto.setValue('');
+        this.tasaCuota.setValue(0);
+        this.tipoFactor.setValue('');
       }
     }
   }
@@ -142,13 +143,13 @@ export class ProductoServicioComponent implements OnInit {
 
   cambioImpuesto(impuesto: string) {
     if (impuesto === 'ISR') {
-      this.cveImpuesto.setValue('001');
+      this.impuesto.setValue('001');
     } else {
       if (impuesto === 'IVA') {
-        this.cveImpuesto.setValue('002');
+        this.impuesto.setValue('002');
       } else {
         if (impuesto === 'IEPS') {
-          this.cveImpuesto.setValue('003');
+          this.impuesto.setValue('003');
         } else {}
       }
     }
@@ -199,12 +200,12 @@ export class ProductoServicioComponent implements OnInit {
     return this.regForm.get('impuesto');
   }
 
-  get cveImpuesto() {
-    return this.regForm.get('cveImpuesto');
+  get tasaCuota() {
+    return this.regForm.get('tasaCuota');
   }
 
-  get valor() {
-    return this.regForm.get('valor');
+  get tipoFactor() {
+    return this.regForm.get('tipoFactor');
   }
 
   get impuestos() {
