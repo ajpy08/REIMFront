@@ -226,7 +226,7 @@
                           {{concepto.valorUnitario | currency}}
                         </td>
                         <td>
-                          {{concepto.impuestosTrasladados - concepto.impuestosRetenidos | currency}}
+                          {{this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value | currency}}
                         </td>
                         <td>
                           {{concepto.descuento | currency}}

@@ -9,6 +9,7 @@ import * as _moment from 'moment';
 import { Concepto } from '../models/concepto.models';
 import { CFDI } from '../models/cfdi.models';
 import { NavieraService } from '../../navieras/naviera.service';
+import { Impuesto } from '../models/impuesto.models';
 const moment = _moment;
 
 // export const MY_FORMATS = {
@@ -161,8 +162,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
     if (this.facturacionService.maniobras.length > 0) {
       const concepto = new Concepto();
-      concepto.descuento = undefined;
-      concepto.unidad = undefined;
 
       let impuestosRetenidos = 0;
       let impuestosTrasladados = 0;
@@ -172,23 +171,26 @@ export class CFDIComponent implements OnInit, OnDestroy {
           concepto._id = prodServ._id;
           concepto.cantidad = this.facturacionService.maniobras.length;
           if (prodServ) {
-            concepto.claveProdServ = prodServ.claveSAT;
-            concepto.claveUnidad = prodServ.unidadSAT;
+            concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
+            concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
             concepto.descripcion = prodServ.descripcion;
             concepto.noIdentificacion = prodServ.codigo;
             concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
             concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
             prodServ.impuestos.forEach(impuesto => {
-              if (impuesto.impuesto === 'IVA') {
-                if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += concepto.importe * (impuesto.valor / 100);
-                } else {
-                  if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += concepto.importe * (impuesto.valor / 100);
-                  }
+              impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
+              // if (impuesto.impuesto === 'IVA') {
+              if (impuesto.TR === 'RETENCION') {
+                impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+              } else {
+                if (impuesto.TR === 'TRASLADO') {
+                  impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
                 }
               }
+              // }
             });
+
+            concepto.impuestos = prodServ.impuestos;
           }
 
           concepto.unidad = undefined;
