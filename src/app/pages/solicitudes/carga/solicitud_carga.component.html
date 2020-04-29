@@ -153,8 +153,21 @@
                   <mat-label>Anexar Comprobante de pago</mat-label>
                   <mat-form-field>
                     <input matInput formControlName="rutaComprobante">
+                    <div class="col-ms-2" *ngIf="this.cargando1 === true">
+                      <div id="preloader_1">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
                   </mat-form-field>
-                  <input *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
+                  <label class="label"> <i class="fa fa-cloud-upload fa_custom fa-2x" aria-hidden="true"></i> Seleccione
+                    un Archivo
+                  <input  class="labels" name="ruta" *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
+                  </label>
+
                   <p *ngIf="temporalComprobante; else notShow" class="text-danger">
                     <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -189,12 +202,45 @@
                   <textarea matInput formControlName="observaciones" rows="3" cols="40"></textarea>
                 </mat-form-field>
               </div>
-              <div class="col-md-3 ">
+              <div class="col-md-4 ">
                 <mat-form-field>
                   <mat-label>* Booking </mat-label>
                   <input matInput formControlName="blBooking">
                 </mat-form-field>
                 <mat-error *ngIf="blBooking.hasError('required')">El Booking es Necesario.</mat-error>
+
+                <br><br><br>
+                <mat-label>Anexar Booking</mat-label> <br>
+                <label class="label"> <i class="fa fa-cloud-upload fa_custom fa-2x" aria-hidden="true"></i> Seleccione
+                  un Archivo
+                  <input class="labels" *ngIf="!aprobada" name="booking"(change)="onFilePDFBLSelected($event)" type="file"
+                    accept=".pdf" size="60">
+                </label>
+                <mat-form-field>
+                  <input matInput formControlName="rutaBooking">
+                  <div class="col-ms-2" *ngIf="this.cargando === true">
+
+                    <div id="preloader_1">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </mat-form-field>
+
+
+                <p *ngIf="temporalBL; else notShow" class="text-danger">
+                  <a [href]="rutaBooking.value | imagen:'solicitud'" target="_blank">
+                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                  </a><br> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                </p>
+                <ng-template #notShow>
+                  <a *ngIf="rutaBooking.value" [href]="rutaBooking.value | imagen:'solicitud'" target="_blank">
+                    <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
+                  </a>
+                </ng-template>
               </div>
             </div>
 
@@ -270,40 +316,40 @@
             </div>
 
             <div class="table-responsive">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Estado </th>
-                        <th scope="col">Grado</th>
-                        <th scope="col">Transportista</th>
-                        <th scope="col">Correo Transportista</th>
-                        <th scope="col">Patio</th>
-                      </tr>
-                    </thead>
-                    <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
-                      <tr [formGroupName]="i">
-                        <th scope="row">{{i+1}}</th>
-                        <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('peso').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('grado').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
-                        <td>{{this.contenedores.controls[i].get('patio').value}}</td>
-                        <td>
-                          <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                          <!-- <button *ngIf="aprobada" [routerLink]="['/papeleta',  this.contenedores.controls[i].get('maniobra').value ]" class="btn btn-success">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Estado </th>
+                    <th scope="col">Grado</th>
+                    <th scope="col">Transportista</th>
+                    <th scope="col">Correo Transportista</th>
+                    <th scope="col">Patio</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="contenedores" *ngFor="let item of contenedores.controls; let i = index;">
+                  <tr [formGroupName]="i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{this.contenedores.controls[i].get('tipo').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('peso').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('grado').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('transportista2').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('correoTransportista').value}}</td>
+                    <td>{{this.contenedores.controls[i].get('patio').value}}</td>
+                    <td>
+                      <button *ngIf="!aprobada" (click)="removeContenedor( i )" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <!-- <button *ngIf="aprobada" [routerLink]="['/papeleta',  this.contenedores.controls[i].get('maniobra').value ]" class="btn btn-success">
                             <i class="fas fa-print"></i>
                           </button>                           -->
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-  
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10 "

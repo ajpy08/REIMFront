@@ -32,7 +32,17 @@
             <i class="fa fa-plus"></i>
           </button>
         </div>
+
+        <div class="contenedorPar">
+          <span class="parpa tex" *ngIf="this.tablaCargar === true">
+            <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+          </span>
+        </div>
+        
         <h3 class="card-title">Clientes ( <small>{{totalRegistros}}</small> )</h3>
+                <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue"  #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
+        </div>
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -55,6 +65,16 @@
                 </button>
               </mat-cell>
             </ng-container>
+
+            <ng-container matColumnDef="activo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+
+                  <mat-slide-toggle [checked]="row.activo" (change)="habilitarDesabilitarCliente(row, $event)">
+                  </mat-slide-toggle>
+
+                </mat-cell>
+              </ng-container>
 
             <ng-container matColumnDef="razonSocial">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
@@ -147,9 +167,9 @@
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-          </mat-paginator>
         </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+            </mat-paginator>
 
         <!-- <div class="table-responsive">
                     <table class="table table-hover table-responsive">

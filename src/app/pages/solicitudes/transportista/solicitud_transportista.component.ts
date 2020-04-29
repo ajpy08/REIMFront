@@ -48,10 +48,10 @@ export class SolicitudTransportistaComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this._agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
+    this._agenciaService.getAgencias(true).subscribe(resp => this.agencias = resp.agencias);
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+      this._transportistaService.getTransportistas(true).subscribe(resp => this.transportistas = resp.transportistas);
     } else {
       if (this.usuarioLogueado.empresas && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
         this.transportistas = this.usuarioLogueado.empresas;
@@ -185,7 +185,7 @@ export class SolicitudTransportistaComponent implements OnInit {
   }
 
   cargaCamiones(idTransportista: string) {
-    this._camionService.getCamiones(idTransportista)
+    this._camionService.getCamiones(true, idTransportista)
       .subscribe(resp => this.camiones = resp.camiones);
   }
 

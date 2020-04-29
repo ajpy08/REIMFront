@@ -17,8 +17,8 @@ export class AgenciaService {
     public _usuarioService: UsuarioService
   ) { }
 
-  getAgencias(): Observable<any> {
-    let url = URL_SERVICIOS + '/agencias';
+  getAgencias(tf: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/agencias/' + tf;
     return this.http.get(url);
   }
 
@@ -54,6 +54,16 @@ export class AgenciaService {
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Agencia Borrada', 'Eliminado correctamente', 'success')));
+  }
+
+
+  habilitarDeshabilitarAgencia(agencia: Agencia, act: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/agencias/agenciaDes/' + agencia._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, {activo: act}).pipe(map((resp: any) => {
+      swal('Correcto', 'Cambio de estado de  la Agencia ' + agencia.nombreComercial + 'realizado con exito', 'success');
+      return true;
+    }));
   }
 
 }

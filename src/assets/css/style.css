@@ -8178,3 +8178,72 @@ File: scss
         overflow: hidden;
     }
 }
+
+
+.tex {
+    font-size:15px;
+    font-family:helvetica;
+    font-weight:bold;
+    color:#a5a8a1;
+    text-transform:uppercase;
+  }
+  .parpa {
+    
+    animation-name: parpadeo;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  
+    -webkit-animation-name:parpadeo;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+  }
+  
+  @-moz-keyframes parpadeo{  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+  }
+  
+  @-webkit-keyframes parpadeo {  
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+  }
+  
+  @keyframes parpadeo {  
+    0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+  }
+
+  .contenedorPar {
+    top: 458px;
+    position: fixed;
+    margin-left: 24px;
+}
+  .contenedorParD {
+    top: 366px;
+    position: fixed;
+    margin-left: 24px;
+  }
+  .contenedorParSol {
+    top: 535px;
+    position: fixed;
+    margin-left: 24px;
+  }
+  .contenedorParSolTrasn {
+    top: 384px;
+    position: fixed;
+    margin-left: 24px;
+  }
+  .contenedorParSolA {
+    top: 557px;
+    position: fixed;
+    margin-left: 24px;
+  }
+
+.fa_customX {
+    color: red;
+    }

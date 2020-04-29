@@ -46,6 +46,8 @@ export class SolicitudDescargaComponent implements OnInit {
   aprobada = false;
   usuarioLogueado: any;
   navieraMELFI = true;
+  cargando1 = false;
+  cargando = false;
   agencias: Agencia[] = [];
   navieras: Naviera[] = [];
   buques: Buque[] = [];
@@ -82,7 +84,7 @@ export class SolicitudDescargaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this._usuarioService.usuario;
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-      this._agenciaService.getAgencias().subscribe(ag => { this.agencias = ag.agencias; });
+      this._agenciaService.getAgencias(true).subscribe(ag => { this.agencias = ag.agencias; });
     } else {
       if (this.usuarioLogueado.empresas) {
         this.usuarioLogueado.empresas.forEach(empresa => {
@@ -94,8 +96,8 @@ export class SolicitudDescargaComponent implements OnInit {
         this.cargaClientes({ value: this.agenciaDescargaSelected });
       }
     }
-    this._navieraService.getNavieras().subscribe(navieras => { this.navieras = navieras.navieras; });
-    this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    this._navieraService.getNavieras(true).subscribe(navieras => { this.navieras = navieras.navieras; });
+    this._transportistaService.getTransportistas(true).subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this.createFormGroup();
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
@@ -519,6 +521,7 @@ export class SolicitudDescargaComponent implements OnInit {
   }
 
   onFilePDFBLSelected(event) {
+    this.cargando = true;
     this.fileBL = <File>event.target.files[0];
     this.subirBL();
   }
@@ -528,12 +531,14 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.get('rutaBL').setValue(nombreArchivo);
       this.regForm.get('rutaBL').markAsDirty();
       this.temporalBL = true;
+      this.cargando = false;
       this.guardarSolicitud();
     });
   }
 
   onFilePDFComprobanteSelected(event) {
     this.fileComprobante = <File>event.target.files[0];
+    this.cargando1 = true;
     this.subirComprobante();
   }
   ver() {
@@ -545,6 +550,7 @@ export class SolicitudDescargaComponent implements OnInit {
       this.regForm.get('rutaComprobante').setValue(nombreArchivo);
       this.regForm.get('rutaComprobante').markAsDirty();
       this.temporalComprobante = true;
+      this.cargando1 = false;
       this.guardarSolicitud();
     });
   }

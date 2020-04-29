@@ -40,7 +40,7 @@ export class AsignacionTransportistaComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     const id = this.activateRoute.snapshot.paramMap.get('id');
-    this._transportistaService.getTransportistas().subscribe(transportistas => this.transportistas = transportistas.transportistas);
+    this._transportistaService.getTransportistas(true).subscribe(transportistas => this.transportistas = transportistas.transportistas);
     this.createFormGroup();
     this.contenedores.removeAt(0);
     this.cargarSolicitud(id);

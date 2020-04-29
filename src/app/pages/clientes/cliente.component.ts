@@ -134,6 +134,7 @@ export class ClienteComponent implements OnInit {
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
       formatoR1: [''],
+      activo:[true, [Validators.required]],
       correo: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
@@ -246,6 +247,9 @@ export class ClienteComponent implements OnInit {
   get usoCFDI() {
     return this.regForm.get('usoCFDI');
   }
+  get activo() {
+    return this.activo.get('activo');
+  }
   get _id() {
     return this.regForm.get('_id');
   }
@@ -278,6 +282,7 @@ export class ClienteComponent implements OnInit {
         this.regForm.controls['img'].setValue(res.img);
         this.regForm.controls['usoCFDI'].setValue(res.usoCFDI);
         this.regForm.controls['empresas'].setValue(res.empresas);
+        this.regForm.controls['activo'].setValue(res.activo);
         this.regForm.controls['_id'].setValue(res._id);
       });
   }

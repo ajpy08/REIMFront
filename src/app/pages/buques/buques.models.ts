@@ -8,6 +8,7 @@ export class Buque {
         public fAlta?: string,
         public usuarioMod?: string,
         public fMod?: string,
+        public activo?: boolean,
         public _id?: string
     ) {}
 }

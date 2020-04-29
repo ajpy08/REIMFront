@@ -190,8 +190,22 @@
                   <mat-label>Anexar Comprobante de pago</mat-label>
                   <mat-form-field>
                     <input matInput formControlName="rutaComprobante">
+                    <div class="col-ms-2" *ngIf="this.cargando1 === true">
+                      <div id="preloader_1">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
                   </mat-form-field>
-                  <input *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
+                  <label class="label"> <i class="fa fa-cloud-upload fa_custom fa-2x" aria-hidden="true"></i> Seleccione
+                    un Archivo
+                  <input  class="labels" name="ruta" *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf">
+                  </label>
+                  <!-- <input *ngIf="!aprobada" (change)="onFilePDFComprobanteSelected($event)" type="file" accept=".pdf"> -->
+
                   <p *ngIf="temporalComprobante; else notShow" class="text-danger">
                     <a [href]="rutaComprobante.value | imagen:'solicitud'" target="_blank">
                       <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">
@@ -227,8 +241,24 @@
                 </mat-form-field>
               </div>
               <div class="col-md-4">
-                <mat-label>Anexar BL</mat-label>
-                <input *ngIf="!aprobada" (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf">
+                <mat-label>Anexar BL: </mat-label>
+                <mat-form-field>
+                  <input matInput formControlName="rutaBL">
+                  <div class="col-ms-2" *ngIf="this.cargando === true">
+                    <div id="preloader_1">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                </mat-form-field>
+                <label class="label"> <i class="fa fa-cloud-upload fa_custom fa-2x" aria-hidden="true"></i> Seleccione
+                  un Archivo
+                <input class="labels" *ngIf="!aprobada" (change)="onFilePDFBLSelected($event)" type="file" accept=".pdf">
+                </label>
+
                 <p *ngIf="temporalBL; else notShow" class="text-danger">
                   <a [href]="rutaBL.value | imagen:'solicitud'" target="_blank">
                     <img src="\assets\images\icon\pdf.png" class="w70 img-circle pointer">

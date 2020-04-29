@@ -27,6 +27,13 @@
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
               </div>
+
+              <div class="contenedorParSolA">
+                <span class="parpa tex" *ngIf="this.tablaCargarD === true">
+                  <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+                </span>
+              </div>
+
               <div class="col-sm-3">
                 <mat-form-field>
                   <input matInput [matDatepicker]="picker2" type="text" [(ngModel)]="fFin"
@@ -136,9 +143,9 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsDescarga" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsDescarga;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+                </mat-paginator>
           </div>
         </div>
       </div>
@@ -177,6 +184,14 @@
                 </button>
               </div>
             </div>
+
+            <div class="contenedorParSolA">
+              <span class="parpa tex" *ngIf="this.tablaCargarC === true">
+                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+              </span>
+            </div>
+
+
             <br>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
@@ -261,9 +276,9 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsCarga" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsCarga;"></mat-row>
               </mat-table>
-              <mat-paginator #pagCargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
             </div>
+                <mat-paginator #pagCargas [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+                </mat-paginator>
           </div>
         </div>
       </div>

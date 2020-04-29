@@ -25,6 +25,13 @@
         <br>
         <div class="example-container mat-elevation-z8">
         </div>
+
+        <div class="contenedorParD">
+          <span class="parpa tex" *ngIf="this.tablaCargar === true">
+            <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+          </span>
+        </div>
+
         <div class="example-container mat-elevation-z8">
           <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
             <ng-container matColumnDef="status">
@@ -117,9 +124,9 @@
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let usuario; columns: displayedColumns;"></mat-row>
           </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
-          </mat-paginator>
         </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
+            </mat-paginator>
       </div>
     </div>
   </div>

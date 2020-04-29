@@ -149,7 +149,7 @@ export class InventarioComponent implements OnInit {
     ) {
       this.navieras = this.usuarioLogueado.empresas;
     } else {
-      this.navieraService.getNavieras().subscribe(navieras => {
+      this.navieraService.getNavieras(true).subscribe(navieras => {
         this.navieras = navieras.navieras;
       });
     }

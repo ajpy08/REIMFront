@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService, TransportistaService, AgenciaService, 
-  CamionService, OperadorService, ClienteService, SolicitudService } from '../../../services/service.index';
+import {
+  ManiobraService, TransportistaService, AgenciaService,
+  CamionService, OperadorService, ClienteService, SolicitudService
+} from '../../../services/service.index';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
@@ -69,8 +71,8 @@ export class LlegadaEntradaComponent implements OnInit {
     private location: Location) { }
 
   ngOnInit() {
-    this._agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
-    this._transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+    this._agenciaService.getAgencias(true).subscribe(resp => this.agencias = resp.agencias);
+    this._transportistaService.getTransportistas(true).subscribe(resp => this.transportistas = resp.transportistas);
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.cargarManiobra(id);
@@ -155,7 +157,12 @@ export class LlegadaEntradaComponent implements OnInit {
       this.regForm.controls['contenedor'].setValue(maniob.maniobra.contenedor);
       this.regForm.controls['tipo'].setValue(maniob.maniobra.tipo);
       this.regForm.controls['cliente'].setValue(maniob.maniobra.cliente);
-      var blBooking = maniob.maniobra.solicitud !== undefined ? maniob.maniobra.solicitud.blBooking : '';
+
+      if (maniob.maniobra.solicitud === null || maniob.maniobra.solicitud === undefined) {
+        var blBooking = '';
+      } else {
+        blBooking = maniob.maniobra.solicitud !== undefined || maniob.maniobra.solicitud !== null ? maniob.maniobra.solicitud.blBooking : '';
+      }
       this.regForm.controls['blBooking'].setValue(blBooking);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
       if (maniob.maniobra.transportista) {
@@ -188,14 +195,14 @@ export class LlegadaEntradaComponent implements OnInit {
     });
   }
 
-  cargaOperadores(id: string) {
-    this._operadorService.getOperadores(id, true)
+  cargaOperadores(transportista: string) {
+    this._operadorService.getOperadores(transportista, true)
       .subscribe(resp => this.operadores = resp.operadores);
-    this.cargaCamiones(id);
+    this.cargaCamiones(transportista);
   }
 
-  cargaCamiones(idTransportista: string) {
-    this._camionService.getCamiones(idTransportista)
+  cargaCamiones(transportista: string) {
+    this._camionService.getCamiones(true, transportista)
       .subscribe(resp => this.camiones = resp.camiones);
   }
 
@@ -215,7 +222,7 @@ export class LlegadaEntradaComponent implements OnInit {
         this.estatus.setValue(res.estatus);
         this.socket.emit('cambiomaniobra', res);
         if (res.estatus === ETAPAS_MANIOBRA.REVISION) {
-          
+
           this.router.navigate([this.url]);
         }
       }, error => {

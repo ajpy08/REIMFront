@@ -23,12 +23,21 @@
           </button>
         </div>
         <h3 class="card-title">Navieras ( <small>{{totalRegistros}}</small> )</h3>
+        <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
+        </div>
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
           </mat-form-field>
         </div>
         <br>
+        
+        <div class="contenedorPar">
+          <span class="parpa tex" *ngIf="this.tablaCargar === true">
+            <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+          </span>
+        </div>
 
         <div class="catalogo-container mat-elevation-z8">
           <table mat-table [dataSource]="dataSource" class="catalogo-table catalogo-table-big" matSort>
@@ -43,6 +52,14 @@
                 </button>
               </td>
             </ng-container>
+
+            <ng-container matColumnDef="activo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Activo</th>
+              <td *matCellDef="let row">
+                  <mat-slide-toggle [checked]="row.activo"  (change)="habilitarDesabilitarNaviera(row, $event)">
+                  </mat-slide-toggle>
+                </td>
+              </ng-container>
 
             <ng-container matColumnDef="img">
               <th mat-header-cell *matHeaderCellDef></th>
@@ -142,10 +159,9 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
         </div>
-
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+        </mat-paginator>
       </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-      </mat-paginator>
     </div>
   </div>
 </div>

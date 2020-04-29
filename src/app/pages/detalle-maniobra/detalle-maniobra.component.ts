@@ -81,8 +81,8 @@ export class DetalleManiobraComponent implements OnInit {
       }
     }
     this.cargarTiposReparaciones();
-    this.agenciaService.getAgencias().subscribe(resp => this.agencias = resp.agencias);
-    this.transportistaService.getTransportistas().subscribe(resp => this.transportistas = resp.transportistas);
+    this.agenciaService.getAgencias(true).subscribe(resp => this.agencias = resp.agencias);
+    this.transportistaService.getTransportistas(true).subscribe(resp => this.transportistas = resp.transportistas);
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.createFormGroup();
     this.reparaciones.removeAt(0);
@@ -275,7 +275,7 @@ export class DetalleManiobraComponent implements OnInit {
   }
 
   cargaCamiones(idTransportista: string) {
-    this.camionService.getCamiones(idTransportista)
+    this.camionService.getCamiones(true, idTransportista)
       .subscribe(resp => this.camiones = resp.camiones);
   }
 

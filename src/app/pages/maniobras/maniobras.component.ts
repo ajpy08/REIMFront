@@ -27,6 +27,12 @@ export class ManiobrasComponent implements OnInit {
   totalTransito = 0;
   totalEspera = 0;
   totalRevision = 0;
+  tablaCargarD = false;
+  tablaCargarT = false;
+  tablaCargarE = false;
+  tablaCargarR = false;
+  tablaCargarLR = false;
+  tablaCargarX = false;
   totalLavadoReparacion = 0;
   totalXCargar = 0;
   totalXAprobar = 0;
@@ -224,6 +230,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtTransito && this.dtTransito.data.length > 0) {
       this.dtTransito.filter = filterValue;
       this.totalTransito = this.dtTransito.filteredData.length;
+      if (this.dtTransito.filteredData.length === 0 ) {
+        this.tablaCargarT = true;
+      } else {
+        this.tablaCargarT = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Transito');
     }
@@ -239,6 +250,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtEspera && this.dtEspera.data.length > 0) {
       this.dtEspera.filter = filterValue;
       this.totalEspera = this.dtEspera.filteredData.length;
+      if (this.dtEspera.filteredData.length === 0 ) {
+        this.tablaCargarE = true;
+      } else {
+        this.tablaCargarE = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Espera');
     }
@@ -254,6 +270,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtRevision && this.dtRevision.data.length > 0) {
       this.dtRevision.filter = filterValue;
       this.totalRevision = this.dtRevision.filteredData.length;
+      if (this.dtRevision.filteredData.length === 0 ) {
+        this.tablaCargarR = true;
+      } else {
+        this.tablaCargarR = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Revision');
     }
@@ -269,6 +290,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtLavadoReparacion && this.dtLavadoReparacion.data.length > 0) {
       this.dtLavadoReparacion.filter = filterValue;
       this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
+      if (this.dtLavadoReparacion.filteredData.length === 0 ) {
+        this.tablaCargarLR = true;
+      } else {
+        this.tablaCargarLR = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de Lavado Reparacion');
     }
@@ -284,6 +310,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtXCargar && this.dtXCargar.data.length > 0) {
       this.dtXCargar.filter = filterValue;
       this.totalXCargar = this.dtXCargar.filteredData.length;
+      if (this.dtXCargar.filteredData.length === 0 ) {
+        this.tablaCargarX = true;
+      } else {
+        this.tablaCargarX = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de XCargar');
     }
@@ -298,6 +329,11 @@ export class ManiobrasComponent implements OnInit {
     if (this.dtXAprobar && this.dtXAprobar.data.length > 0) {
       this.dtXAprobar.filter = filterValue;
       this.totalXAprobar = this.dtXAprobar.filteredData.length;
+      if (this.dtXAprobar.filteredData.length === 0 ) {
+        this.tablaCargarD = true;
+      } else {
+        this.tablaCargarD = false;
+      }
     } else {
       console.error('Error al filtrar el dataSource de XAprobar');
     }
@@ -323,6 +359,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarT = true;
+        } else {
+          this.tablaCargarT = false;
+        }
         this.dtTransito.sort = this.sortTransito;
         this.dtTransito.paginator = this.pagTransito;
         this.totalTransito = maniobras.total;
@@ -341,6 +382,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarE = true;
+        } else {
+          this.tablaCargarE = false;
+        }
         this.dtEspera.sort = this.sortEspera;
         this.dtEspera.paginator = this.pagEspera;
         this.totalEspera = maniobras.total;
@@ -359,6 +405,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarR = true;
+        } else {
+          this.tablaCargarR = false;
+        }
         this.dtRevision.sort = this.sortRevision;
         this.dtRevision.paginator = this.pagRevision;
         this.totalRevision = maniobras.total;
@@ -378,7 +429,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
-
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarLR = true;
+        } else {
+          this.tablaCargarLR = false;
+        }
         this.dtLavadoReparacion.sort = this.sortLR;
         this.dtLavadoReparacion.paginator = this.pagLR;
         this.totalLavadoReparacion = maniobras.total;
@@ -397,6 +452,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarX = true;
+        } else {
+          this.tablaCargarX = false;
+        }
         this.dtXCargar.sort = this.sortXCargar;
         this.dtXCargar.paginator = this.pagXCargar;
         this.totalXCargar = maniobras.total;
@@ -415,6 +475,11 @@ export class ManiobrasComponent implements OnInit {
           }
           return item[property];
         };
+        if (maniobras.maniobras.length === 0) {
+          this.tablaCargarD = true;
+        } else {
+          this.tablaCargarD = false;
+        }
         this.dtXAprobar.sort = this.sortXAprobar;
         this.dtXAprobar.paginator = this.pagXAprobar;
         this.totalXAprobar = maniobras.total;

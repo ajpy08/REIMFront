@@ -5,7 +5,8 @@ import { UsuarioService } from '../usuarios/usuario.service';
 import { Buque } from './buques.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import swal from 'sweetalert';
+import { Router } from '@angular/router';
+declare var swal: any;
 
 @Injectable()
 export class BuqueService {
@@ -14,11 +15,12 @@ export class BuqueService {
 
   constructor(
     public http: HttpClient,
+    public router: Router,
     public _usuarioService: UsuarioService
   ) {}
 
-  getBuques(): Observable<any> {
-    const url = URL_SERVICIOS + '/buques';
+  getBuques(tf: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/buques/' + tf;
     return this.http.get(url);
   }
 
@@ -58,13 +60,21 @@ export class BuqueService {
     }
   }
 
-  borrarBuque(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/buques/buque/' + id;
+  borrarBuque(buque: Buque): Observable<any> {
+    let url = URL_SERVICIOS + '/buques/buque/' + buque._id;
     url += '?token=' + this._usuarioService.token;
     return this.http
       .delete(url)
-      .pipe(
-        map(resp => swal('Buque Borrado', 'Eliminado correctamente', 'success'))
+      .pipe(map(resp => swal('Buque Borrado', 'Eliminado correctamente', 'success')),
       );
+  }
+
+  habilitaDeshabilitaBuque(buque: Buque, act: boolean): Observable<any> {
+    let url = URL_SERVICIOS + '/buques/buquedes/' + buque._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, {action: act}).pipe(map((resp: any) => {
+      swal('Correcto', 'Cambio de estado del Buque ' + resp.buque.nombre + ' realizado con exito', 'success');
+      return true;
+    }));
   }
 }

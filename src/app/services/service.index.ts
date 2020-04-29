@@ -26,4 +26,5 @@ export { VerificaTokenGuard } from './guards/verifica-token.guard';
 export { REIMGuard } from './guards/reim.guard';
 // Interceptors
 export { RefreshTokenInterceptor } from './interceptors/token-interceptor.service';
+// export { TransportistasComponent } from './../pages/transportistas/transportistas.component';
 

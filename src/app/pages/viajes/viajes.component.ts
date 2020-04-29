@@ -35,7 +35,7 @@ declare var swal: any;
 
 export class ViajesComponent implements OnInit {
   viajes: any[] = [];
-  cargando: boolean = true;
+  cargando = true;
   totalRegistros = 0;
   regForm: FormGroup;
   pdfTemporal = false;
@@ -53,11 +53,11 @@ export class ViajesComponent implements OnInit {
 
     this.createFormGroup();
     if (this.viaje) {
-      this.viaje.setValue('');      
+      this.viaje.setValue('');
     }
 
     if (this.buque) {
-      this.buque.setValue('');      
+      this.buque.setValue('');
     }
 
     this.cargarViajes();
@@ -92,7 +92,7 @@ export class ViajesComponent implements OnInit {
     return this.regForm.get('anio');
   }
 
-  get _id(){
+  get _id() {
     return this.regForm.get('_id');
   }
 
@@ -107,10 +107,10 @@ export class ViajesComponent implements OnInit {
 
     // console.log(x);
 
-    this._viajeService.getViajes(  
+    this._viajeService.getViajes(
       this.fIniArribo.value ? this.fIniArribo.value.utc().format('DD-MM-YYYY') : '',
       this.fFinArribo.value ? this.fFinArribo.value.utc().format('DD-MM-YYYY') : '',
-      //fecha2 ? fecha2.local().endOf('day') : '' ,
+      // fecha2 ? fecha2.local().endOf('day') : '' ,
       this.viaje.value,
       this.buque.value)
     .subscribe(res => {
@@ -148,13 +148,12 @@ export class ViajesComponent implements OnInit {
   }
   CreaDatosExcelC(datos) {
     datos.forEach(b => {
-      var buque = {
+      const buque = {
         Viaje: b.viaje,
-        Nombre_Buque: b.viaje && b.buque.nombre && b.buque.nombre != undefined && b.buque.nombre != '' ? b.buque.nombre : '' && b.buque.nombre,
+        Nombre_Buque: b.viaje && b.buque.nombre && b.buque.nombre !== undefined && b.buque.nombre !== '' ? b.buque.nombre : '' && b.buque.nombre,
         Fecha_Arribo: b.fArribo.substring(0, 10),
         Vijencia_Temporal: b.fVigenciaTemporal.substring(0, 10),
         Año: b.anio
-        
       };
       this.viajeExcel.push(buque);
     });
