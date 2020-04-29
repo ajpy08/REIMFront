@@ -120,7 +120,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.facturacionService.IE = '';
-    this.facturacionService.receptor;
+    this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
     this.facturacionService.productoServ = '';
     this.facturacionService.maniobras = [];
@@ -193,8 +193,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.impuestos = prodServ.impuestos;
           }
 
-          concepto.unidad = undefined;
-          concepto.descuento = undefined;
+          concepto.unidad = '0';
+          concepto.descuento = 0.00;
           concepto.maniobras = this.facturacionService.maniobras;
 
           this.subtotal.setValue(concepto.importe);
@@ -233,8 +233,18 @@ export class CFDIComponent implements OnInit, OnDestroy {
       direccion: ['', [Validators.required]],
       correo: ['', [Validators.required]],
       // CONCEPTOS
+      cantidad: [''],
+      claveProdServ: [''],
+      claveUnidad: [''],
+      descripcion: [''],
+      noIdentificacion: [''],
+      valorUnitario: [''],
+      importe: [''],
+      impuestos: [''],
+      unidad: [''],
+      descuento: [''],
+      maniobras: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)]),
-      maniobras: ['', [Validators.required]],
       // CFDIS RELACIONADOS
       // cfdiRelacionados: ['', [Validators.required]],
       // IMPUESTOS
@@ -383,13 +393,53 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('correo');
   }
 
-  get conceptos() {
-    return this.regForm.get('conceptos') as FormArray;
+  get cantidad() {
+    return this.regForm.get('cantidad');
+  }
+
+  get claveProdServ() {
+    return this.regForm.get('claveProdServ');
+  }
+
+  get claveUnidad() {
+    return this.regForm.get('claveUnidad');
+  }
+
+  get descripcion() {
+    return this.regForm.get('descripcion');
+  }
+
+  get noIdentificacion() {
+    return this.regForm.get('noIdentificacion');
+  }
+
+  get valorUnitario() {
+    return this.regForm.get('valorUnitario');
+  }
+
+  get importe() {
+    return this.regForm.get('importe');
+  }
+
+  get impuestos() {
+    return this.regForm.get('impuestos');
+  }
+
+  get unidad() {
+    return this.regForm.get('unidad');
+  }
+
+  get descuento() {
+    return this.regForm.get('descuento');
   }
 
   get maniobras() {
     return this.regForm.get('maniobras');
   }
+
+  get conceptos() {
+    return this.regForm.get('conceptos') as FormArray;
+  }  
 
   get subtotal() {
     return this.regForm.get('subtotal');
