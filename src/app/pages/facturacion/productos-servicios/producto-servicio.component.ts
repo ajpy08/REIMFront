@@ -87,9 +87,9 @@ export class ProductoServicioComponent implements OnInit {
       unidadSAT: ['', [Validators.required]],
       TR: [''],
       impuesto: [''],
-      tasaCuota: [],
+      tasaCuota: [''],
       tipoFactor: [''],
-      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', '002', 16.00, 'TASA'))], { validators: Validators.required }),
+      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 0, '002', 16.00, 'TASA'))], { validators: Validators.required }),
       _id: ['']
     });
   }
@@ -116,7 +116,7 @@ export class ProductoServicioComponent implements OnInit {
   }
 
   addImpuesto(TR: string, impuesto: string, tasaCuota: number, tipoFactor: string): void {
-    const impuestoObj = new Impuesto(TR, impuesto, tasaCuota, tipoFactor);
+    const impuestoObj = new Impuesto(TR, 0, impuesto, tasaCuota, tipoFactor);
     const tmp = this.impuestos.value.filter(i => i.TR === TR && i.impuesto === impuesto &&
       i.tasaCuota === tasaCuota);
 
