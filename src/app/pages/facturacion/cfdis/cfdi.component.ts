@@ -216,16 +216,16 @@ export class CFDIComponent implements OnInit, OnDestroy {
       // GENERALES
       fecha: ['', [Validators.required]],
       // fecha: [moment().local().startOf('day')],
-      folio: ['', [Validators.required]],
-      // folio: [{ value: '', disabled: true }, [Validators.required]],
+      // folio: ['', [Validators.required]],
+      folio: [{value: '', disabled : true}, [Validators.required]],
       formaPago: ['', [Validators.required]],
       metodoPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
       serie: ['', [Validators.required]],
-      subtotal: ['', [Validators.required]],
-      tipoComprobante: ['', [Validators.required]],
+      subtotal: [{value: '', disabled : true}, [Validators.required]],
+      tipoComprobante: [{value: '', disabled : true}, [Validators.required]],
       // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      total: ['', [Validators.required]],
+      total: [{value: '', disabled : true}, [Validators.required]],
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
@@ -248,9 +248,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
       // CFDIS RELACIONADOS
       // cfdiRelacionados: ['', [Validators.required]],
       // IMPUESTOS
-      totalImpuestosRetenidos: [''],
-      totalImpuestosTrasladados: [''],
-      sucursal: [''],
+      totalImpuestosRetenidos: [{value: '', disabled : true}, [Validators.required]],
+      totalImpuestosTrasladados: [{value: '', disabled : true}, [Validators.required]],
+      sucursal: [{value: '', disabled : true}],
       _id: ['']
     });
   }
@@ -293,14 +293,18 @@ export class CFDIComponent implements OnInit, OnDestroy {
       if (res.conceptos.length > 0) {
         res.conceptos.forEach(element => {
           this.conceptos.push(this.agregarArray(new Concepto(
-            element._id,
-            element.descripcion,
-            element.unidad,
             element.cantidad,
+            element.claveProdServ,
+            element.claveUnidad,
+            element.descripcion,
+            element.noIdentificacion,
             element.valorUnitario,
-            element.descuento,
             element.importe,
-            element.maniobras)));
+            element.impuestos,
+            element.unidad,
+            element.descuento,
+            element.maniobras,
+            element._id)));
         });
       } else {
         this.regForm.controls['conceptos'].setValue(undefined);
@@ -310,7 +314,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   guardarCFDI() {
     if (this.regForm.valid) {
-      this.facturacionService.guardarCFDI(this.regForm.value).subscribe(res => {
+      this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
         if (this.regForm.get('_id').value === '' ||
           this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
@@ -439,7 +443,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   get conceptos() {
     return this.regForm.get('conceptos') as FormArray;
-  }  
+  }
 
   get subtotal() {
     return this.regForm.get('subtotal');

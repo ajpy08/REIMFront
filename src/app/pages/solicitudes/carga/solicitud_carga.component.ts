@@ -1,23 +1,18 @@
-import { url } from 'inspector';
-import { Component, OnInit, EventEmitter } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators, FormArray, FormGroupDirective, NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Agencia } from '../../agencias/agencia.models';
-import { Usuario } from '../../usuarios/usuario.model';
 import { Transportista } from '../../transportistas/transportista.models';
 import { Cliente } from '../../../models/cliente.models';
 import { AgenciaService, UsuarioService, TransportistaService, ClienteService, SolicitudService, NavieraService } from '../../../services/service.index';
 import { SubirArchivoService } from '../../../services/subirArchivo/subir-archivo.service';
-import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, ESTADOS_CONTENEDOR_ARRAY, GRADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY, ROLES } from '../../../config/config';
+import { PATIOS_ARRAY, PATIOS, ESTADOS_CONTENEDOR, GRADOS_CONTENEDOR_ARRAY, ROLES } from '../../../config/config';
 import swal from 'sweetalert';
 import { Location } from '@angular/common';
 import { TiposContenedoresService } from '../../tipos-contenedores/tipos-contenedores.service';
 import { Naviera } from '../../navieras/navieras.models';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-
-
-
 
 @Component({
   selector: 'app-solicitud-carga',
@@ -62,8 +57,7 @@ export class SolicitudCargaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private _subirArchivoService: SubirArchivoService,
-    private location: Location) { }
+    private _subirArchivoService: SubirArchivoService) { }
 
   ngOnInit() {
 
@@ -227,7 +221,6 @@ export class SolicitudCargaComponent implements OnInit {
   get naviera() {
     return this.regForm.get('naviera');
   }
-
   get cliente() {
     return this.regForm.get('cliente');
   }
@@ -240,7 +233,6 @@ export class SolicitudCargaComponent implements OnInit {
   get credito() {
     return this.regForm.get('credito');
   }
-
   get rutaComprobante() {
     return this.regForm.get('rutaComprobante');
   }
@@ -289,7 +281,6 @@ export class SolicitudCargaComponent implements OnInit {
   get maniobraTemp() {
     return this.regForm.get('maniobraTemp');
   }
-
   get transportistaTemp() {
     return this.regForm.get('transportistaTemp');
   }
@@ -311,7 +302,6 @@ export class SolicitudCargaComponent implements OnInit {
   get estadoTemp() {
     return this.regForm.get('estadoTemp');
   }
-
   get patioTemp() {
     return this.regForm.get('patioTemp');
   }
