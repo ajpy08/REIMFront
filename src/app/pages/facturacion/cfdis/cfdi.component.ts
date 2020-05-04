@@ -120,7 +120,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.facturacionService.IE = '';
-    this.facturacionService.receptor;
+    this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
     this.facturacionService.productoServ = '';
     this.facturacionService.maniobras = [];
@@ -193,8 +193,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.impuestos = prodServ.impuestos;
           }
 
-          concepto.unidad = undefined;
-          concepto.descuento = undefined;
+          concepto.unidad = '0';
+          concepto.descuento = 0.00;
           concepto.maniobras = this.facturacionService.maniobras;
 
           this.subtotal.setValue(concepto.importe);
@@ -216,16 +216,16 @@ export class CFDIComponent implements OnInit, OnDestroy {
       // GENERALES
       fecha: ['', [Validators.required]],
       // fecha: [moment().local().startOf('day')],
-      folio: ['', [Validators.required]],
-      // folio: [{ value: '', disabled: true }, [Validators.required]],
+      // folio: ['', [Validators.required]],
+      folio: [{value: '', disabled : true}, [Validators.required]],
       formaPago: ['', [Validators.required]],
       metodoPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
       serie: ['', [Validators.required]],
-      subtotal: ['', [Validators.required]],
-      tipoComprobante: ['', [Validators.required]],
+      subtotal: [{value: '', disabled : true}, [Validators.required]],
+      tipoComprobante: [{value: '', disabled : true}, [Validators.required]],
       // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      total: ['', [Validators.required]],
+      total: [{value: '', disabled : true}, [Validators.required]],
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
@@ -233,14 +233,24 @@ export class CFDIComponent implements OnInit, OnDestroy {
       direccion: ['', [Validators.required]],
       correo: ['', [Validators.required]],
       // CONCEPTOS
+      cantidad: [''],
+      claveProdServ: [''],
+      claveUnidad: [''],
+      descripcion: [''],
+      noIdentificacion: [''],
+      valorUnitario: [''],
+      importe: [''],
+      impuestos: [''],
+      unidad: [''],
+      descuento: [''],
+      maniobras: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)]),
-      maniobras: ['', [Validators.required]],
       // CFDIS RELACIONADOS
       // cfdiRelacionados: ['', [Validators.required]],
       // IMPUESTOS
-      totalImpuestosRetenidos: [''],
-      totalImpuestosTrasladados: [''],
-      sucursal: [''],
+      totalImpuestosRetenidos: [{value: '', disabled : true}, [Validators.required]],
+      totalImpuestosTrasladados: [{value: '', disabled : true}, [Validators.required]],
+      sucursal: [{value: '', disabled : true}],
       _id: ['']
     });
   }
@@ -283,14 +293,18 @@ export class CFDIComponent implements OnInit, OnDestroy {
       if (res.conceptos.length > 0) {
         res.conceptos.forEach(element => {
           this.conceptos.push(this.agregarArray(new Concepto(
-            element._id,
-            element.descripcion,
-            element.unidad,
             element.cantidad,
+            element.claveProdServ,
+            element.claveUnidad,
+            element.descripcion,
+            element.noIdentificacion,
             element.valorUnitario,
-            element.descuento,
             element.importe,
-            element.maniobras)));
+            element.impuestos,
+            element.unidad,
+            element.descuento,
+            element.maniobras,
+            element._id)));
         });
       } else {
         this.regForm.controls['conceptos'].setValue(undefined);
@@ -300,7 +314,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   guardarCFDI() {
     if (this.regForm.valid) {
-      this.facturacionService.guardarCFDI(this.regForm.value).subscribe(res => {
+      this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
         if (this.regForm.get('_id').value === '' ||
           this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
@@ -383,12 +397,52 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('correo');
   }
 
-  get conceptos() {
-    return this.regForm.get('conceptos') as FormArray;
+  get cantidad() {
+    return this.regForm.get('cantidad');
+  }
+
+  get claveProdServ() {
+    return this.regForm.get('claveProdServ');
+  }
+
+  get claveUnidad() {
+    return this.regForm.get('claveUnidad');
+  }
+
+  get descripcion() {
+    return this.regForm.get('descripcion');
+  }
+
+  get noIdentificacion() {
+    return this.regForm.get('noIdentificacion');
+  }
+
+  get valorUnitario() {
+    return this.regForm.get('valorUnitario');
+  }
+
+  get importe() {
+    return this.regForm.get('importe');
+  }
+
+  get impuestos() {
+    return this.regForm.get('impuestos');
+  }
+
+  get unidad() {
+    return this.regForm.get('unidad');
+  }
+
+  get descuento() {
+    return this.regForm.get('descuento');
   }
 
   get maniobras() {
     return this.regForm.get('maniobras');
+  }
+
+  get conceptos() {
+    return this.regForm.get('conceptos') as FormArray;
   }
 
   get subtotal() {

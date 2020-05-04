@@ -1,4 +1,4 @@
-import { TransportistaService } from 'src/app/services/service.index';
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
@@ -7,6 +7,7 @@ import { Operador } from './operador.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+
 declare var swal: any;
 
 @Injectable()
@@ -16,7 +17,7 @@ export class OperadorService {
     public http: HttpClient,
     public router: Router,
     public _usuarioService: UsuarioService,
-    public transportistaService: TransportistaService,
+
 
   ) { }
 
