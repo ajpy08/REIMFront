@@ -5,7 +5,6 @@ import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { ProductoServicio } from './models/producto-servicio.models';
 import { ClaveProductosServicio } from './clave-productos-servicios/clave-producto.servicio.models';
-
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
@@ -29,6 +28,12 @@ export class FacturacionService {
   ) { }
 
   /* #region  CFDIS */
+
+  getCFDIS(): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/';
+    return this.http.get(url);
+  }
+
   getCFDI(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
@@ -67,6 +72,12 @@ export class FacturacionService {
       .pipe(
         map(resp => swal('CFDI Borrado', 'Eliminado correctamente', 'success'))
       );
+  }
+
+  xmlCFDI(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/cfdi/' + id + '/xml/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
   }
   /* #endregion */
 
