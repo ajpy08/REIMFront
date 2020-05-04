@@ -69,7 +69,7 @@ export class ProductoServicioComponent implements OnInit {
 
       if (res.impuestos.length > 0) {
         res.impuestos.forEach(element => {
-          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.impuesto, element.tasaCuota, element.tipoFactor)));
+          this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.importe, element.impuesto, element.tasaCuota, element.tipoFactor)));
         });
       } else {
         this.regForm.controls['impuestos'].setValue(undefined);
@@ -89,7 +89,7 @@ export class ProductoServicioComponent implements OnInit {
       impuesto: [''],
       tasaCuota: [''],
       tipoFactor: [''],
-      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 0, '002', 16.00, 'TASA'))], { validators: Validators.required }),
+      impuestos: this.fb.array([this.agregarArray(new Impuesto('TRASLADO', 0, '002', 16.00, 'Tasa'))], { validators: Validators.required }),
       _id: ['']
     });
   }
