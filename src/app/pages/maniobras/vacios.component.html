@@ -32,7 +32,7 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-                <div class="col-sm">                  
+                <div class="col-sm">
                   <div class="col-sm">
                     <mat-checkbox [(ngModel)]="checkedVacios" #sinFactura (change)="consultaManiobrasDescargaVacios()">
                       Por Facturar
@@ -51,32 +51,27 @@
                   </div>
                 </div>
                 <div class="col-sm-5">
-                  <button matTooltip="Facturar Seleccionados" (click)="facturar()"
-                    class="btn btn-sm btn-success m-r-5">
+                  <button [disabled]="this.facturacionService.aFacturar.length <= 0" 
+                    matTooltip="Facturar Seleccionados" (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturar.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
                     <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                     Facturar
                   </button>
-                  <a *ngIf="this.selectionVacios.selected.length > 0 && soyAdmin()" (click)="agregarFacturas(this.selectionVacios.selected, idProdServ)" class="float">
+                  <a *ngIf="this.selectionVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionVacios.selected, idProdServ)" class="float">
                     <i class="fa fa-plus my-float"></i>
-                  </a>
-                  <mat-select [(ngModel)]="idProdServ" placeholder="Seleccione un Producto o Servicio" name="prodServ">
-                    <!-- <mat-option>--- NINGUNO ---</mat-option> -->
-                    <mat-option *ngFor="let producto of productos" [value]="producto._id">
-                      {{ producto.codigo + ' | ' + producto.descripcion }}
-                    </mat-option>
-                  </mat-select>
-                </div>
-                <!-- <div class="col-sm">
+                  </a> <br><br>
                   <mat-form-field>
-                    <mat-select [(ngModel)]="idProdServ"
-                      placeholder="Seleccione un Producto o Servicio" name="prodServ">
-                      <mat-option>--- NINGUNO ---</mat-option>
+                    <mat-select [(ngModel)]="idProdServ" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
                       <mat-option *ngFor="let producto of productos" [value]="producto._id">
-                        {{ producto.descripcion }}
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div> -->
+                </div>
               </div>
             </div> <br>
             <h3 class="card-title">Maniobras de Vacios Descarga ( <small>{{totalRegistrosVacios}}</small> )</h3>
