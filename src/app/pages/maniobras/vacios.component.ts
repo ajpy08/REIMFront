@@ -1,3 +1,5 @@
+import { UsuarioService } from 'src/app/services/service.index';
+import { filter } from 'rxjs/operators';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Maniobra } from '../../models/maniobra.models';
@@ -6,11 +8,7 @@ import { ExcelService } from '../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
-} from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
@@ -22,18 +20,15 @@ import * as _moment from 'moment';
 import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
 import {
-  MatPaginator,
-  MatSort,
-  MatTableDataSource,
-  MatDialog,
-  MatDialogConfig,
-  MatTabChangeEvent,
-  MatTabGroup
+  MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig,
+  MatTabChangeEvent, MatTabGroup
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
 import { Router } from '@angular/router';
 import { FacturacionService } from '../facturacion/facturacion.service';
+import { Usuario } from '../usuarios/usuario.model';
+import { ROLES } from 'src/app/config/config';
 
 const moment = _moment;
 
@@ -54,7 +49,7 @@ export const MY_FORMATS = {
 @Component({
   selector: 'app-vacios',
   templateUrl: './vacios.component.html',
-  styles: [],
+  styleUrls: ['./vacios.component.css'],
   providers: [
     {
       provide: DateAdapter,
@@ -87,17 +82,17 @@ export class VaciosComponent implements OnInit {
 
   displayedColumns = [
     'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
-    'placa', 'transportista', 'reparaciones',  'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
     'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsLavado = [
     'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
-    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque',  'peso', 'cliente',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
     'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   displayedColumnsReparacion = [
     'select', 'actions', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
-    'placa',  'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
     'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
 
   dataSourceVacios: any;
@@ -144,6 +139,9 @@ export class VaciosComponent implements OnInit {
   // filtrarCD = new FormControl(false);
   // animal: string;
   // name: string;
+  productos = [];
+  idProdServ = '5e876ada96bb521c1429f763';
+  usuarioLogueado = new Usuario();
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -151,13 +149,16 @@ export class VaciosComponent implements OnInit {
     public _excelService: ExcelService,
     public matDialog: MatDialog,
     private router: Router,
-    private facturacionService: FacturacionService
+    public facturacionService: FacturacionService,
+    private usuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarViajes(new Date().toString());
 
     this.consulta();
+    this.consultaProdServ();
 
     const indexTAB = localStorage.getItem('VacioTabs');
     if (indexTAB) {
@@ -588,58 +589,151 @@ export class VaciosComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
-  facturar() {
-    if (this.validaClienteViaje(this.selectionVacios.selected)) {
-      //////////////// DATOS GENERALES ////////////////
-    // Serie (default)
-    // Folio (default)
-    // Sucursal (default)
-    // Forma de Pago (default)
-    // Moneda (default)
-    this.facturacionService.IE = 'I';
-    // Fecha (default)
-    /////////////////////////////////////////////////
+  agregarFacturas(maniobras, idProdServ) {
+    let aAgregar = [];
+    if (maniobras.length > 0) {
+      if (idProdServ !== undefined) {
+        maniobras.forEach(ma => {
+          if (this.facturacionService.aFacturar.length > 0) {
+            const res = this.facturacionService.aFacturar.filter(function (concept) {
+              return concept.idProdServ === idProdServ;
+            });
 
-    /////////////////// RECEPTOR ////////////////////
-    this.facturacionService.receptor = this.selectionVacios.selected[0].naviera;
-    this.facturacionService.tipo = 'Descarga';
-    /////////////////////////////////////////////////
+            if (res.length > 0) {
+              res.forEach(r => {
+                // r.maniobras.forEach(m => {
 
-    /////////////////// CONCEPTOS ///////////////////
-    // this.facturacionService.productoServ = '5e876ada96bb521c1429f763';
-    this.facturacionService.productoServ = '5e876b2396bb521c1429f765';
-    this.selectionVacios.selected.forEach(m => {
-      this.facturacionService.maniobras.push(m._id);
-    });
-    // this.facturacionService.maniobras = this.selectionVacios.selected;
-    /////////////////////////////////////////////////
-    this.router.navigate(['/cfdi/nuevo']);
+                const resM = r.maniobras.filter(function (man) {
+                  return man._id === ma._id;
+                });
+
+                if (resM.length > 0) {
+                  aAgregar = [];
+                  swal('El contenedor ' + ma.contenedor + ' ya se agrego con este concepto', '', 'error');
+                } else {
+                  aAgregar.push(ma);
+                }
+                // });
+              });
+            } else {
+              aAgregar.push(ma);
+            }
+          } else {
+            aAgregar.push(ma);
+          }
+        });
+      } else {
+        aAgregar = [];
+        swal('Debes seleccionar un Producto o Servicio!', '', 'error');
+      }
     } else {
-      swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+      aAgregar = [];
+      swal('Debes seleccionar por lo menos una maniobra!', '', 'error');
+    }
+
+    if (aAgregar.length > 0) {
+
+      const c = this.facturacionService.aFacturar.filter(function (concept) {
+        return concept.idProdServ === idProdServ;
+      });
+
+      if (c.length > 0) {
+        aAgregar.forEach(x => {
+          const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === idProdServ);
+          this.facturacionService.aFacturar[pos].maniobras.push(x);
+          aAgregar = [];
+        });
+      } else {
+
+        const concepto = {
+          idProdServ: idProdServ,
+          maniobras: aAgregar
+        };
+
+        this.facturacionService.aFacturar.push(concepto);
+        aAgregar = [];
+      }
+    }
+    console.log(this.facturacionService.aFacturar);
+  }
+
+  facturar() {
+    if (this.facturacionService.aFacturar.length > 0) {
+      if (this.validaClienteViaje(this.facturacionService.aFacturar)) {
+        //////////////// DATOS GENERALES ////////////////
+        // Serie (default)
+        // Folio (default)
+        // Sucursal (default)
+        // Forma de Pago (default)
+        // Moneda (default)
+        this.facturacionService.IE = 'I';
+        // Fecha (default)
+        /////////////////////////////////////////////////
+
+        /////////////////// RECEPTOR ////////////////////
+        this.facturacionService.receptor = this.facturacionService.aFacturar[0].maniobras[0].naviera;
+        this.facturacionService.tipo = 'Descarga';
+        /////////////////////////////////////////////////
+
+        /////////////////// CONCEPTOS ///////////////////
+        // Producto Servicio (por cada concepto en array aFacturar)
+        this.facturacionService.aFacturar.forEach(c => {
+          c.maniobras.forEach(m => {
+            this.facturacionService.maniobras.push(m._id);
+          });
+        });
+        // this.facturacionService.maniobras = this.selectionVacios.selected;
+        /////////////////////////////////////////////////
+        this.router.navigate(['/cfdi/nuevo']);
+      } else {
+        swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+      }
+    } else {
+      swal('Debes tener alguna maniobra seleccionada para facturar', '', 'error');
     }
   }
 
-  validaClienteViaje(maniobras) {
+  validaClienteViaje(conceptos) {
     let naviera;
     let viaje;
     let ok = true;
-    maniobras.forEach(m => {
-      if (naviera === undefined) {
-        naviera = m.naviera;
-      } else {
-        if (naviera !== m.naviera) {
-          ok = false;
-        }
-      }
 
-      if (viaje === undefined) {
-        viaje = m.viaje._id;
-      } else {
-        if (viaje !== m.viaje._id) {
-          ok = false;
+    conceptos.forEach(c => {
+      c.maniobras.forEach(m => {
+        if (naviera === undefined) {
+          naviera = m.naviera;
+        } else {
+          if (naviera !== m.naviera) {
+            ok = false;
+          }
         }
-      }
+
+        if (viaje === undefined) {
+          viaje = m.viaje._id;
+        } else {
+          if (viaje !== m.viaje._id) {
+            ok = false;
+          }
+        }
+      });
     });
     return ok;
+  }
+
+  consultaProdServ() {
+    this.facturacionService.getProductosServicios().subscribe(productos => {
+      this.productos = productos.productos_servicios;
+    });
+  }
+
+  soyAdmin() {
+    if (
+      this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

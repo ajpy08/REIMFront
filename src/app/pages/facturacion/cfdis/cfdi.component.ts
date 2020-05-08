@@ -12,25 +12,6 @@ import { NavieraService } from '../../navieras/naviera.service';
 import { Impuesto } from '../models/impuesto.models';
 const moment = _moment;
 
-// export const MY_FORMATS = {
-//   parse: {
-//       datetime: ['DD.MM.YYYY HH:mm:ss', 'DD.MM.YYYY HH:mm'],
-//       date: 'DD.MM.YYYY',
-//       time: ['HH:mm:ss', 'HH:mm']
-//   },
-//   display: {
-//       datetime: 'DD.MM.YYYY HH:mm',
-//       date: 'DD.MM.YYYY',
-//       time: 'HH:mm',
-//       monthDayLabel: 'MMMM D',
-//       monthDayA11yLabel: 'MMMM D',
-//       monthYearLabel: 'MMMM YYYY',
-//       monthYearA11yLabel: 'MMMM YYYY',
-//       dateA11yLabel: 'LLLL',
-//       timeLabel: 'HH:mm'
-//   },
-// };
-
 export const MY_FORMATS = {
   parse: {
     dateInput: ['l', 'L'],
@@ -122,7 +103,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.facturacionService.IE = '';
     this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
-    this.facturacionService.productoServ = '';
     this.facturacionService.maniobras = [];
   }
 
@@ -161,48 +141,55 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
     if (this.facturacionService.maniobras.length > 0) {
-      const concepto = new Concepto();
-
-      let impuestosRetenidos = 0;
-      let impuestosTrasladados = 0;
+      let totalImpuestosRetenidos = 0;
+      let totalImpuestosTrasladados = 0;
+      let subTotal = 0;
 
       if (this.facturacionService.tipo === 'Descarga') {
-        this.facturacionService.getProductoServicio(this.facturacionService.productoServ).subscribe((prodServ) => {
-          concepto._id = prodServ._id;
-          concepto.cantidad = this.facturacionService.maniobras.length;
-          if (prodServ) {
-            concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
-            concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
-            concepto.descripcion = prodServ.descripcion;
-            concepto.noIdentificacion = prodServ.codigo;
-            concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
-            concepto.importe = concepto.valorUnitario * this.facturacionService.maniobras.length;
-            prodServ.impuestos.forEach(impuesto => {
-              impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
-              // if (impuesto.impuesto === 'IVA') {
-              if (impuesto.TR === 'RETENCION') {
-                impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
-              } else {
-                if (impuesto.TR === 'TRASLADO') {
-                  impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+
+        this.facturacionService.aFacturar.forEach(c => {
+          let impuestosRetenidos = 0;
+          let impuestosTrasladados = 0;
+          const concepto = new Concepto();
+          this.facturacionService.getProductoServicio(c.idProdServ).subscribe((prodServ) => {
+            concepto._id = prodServ._id;
+            concepto.cantidad = c.maniobras.length;
+            if (prodServ) {
+              concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
+              concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
+              concepto.descripcion = prodServ.descripcion;
+              concepto.noIdentificacion = prodServ.codigo;
+              concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
+              concepto.importe = concepto.valorUnitario * c.maniobras.length;
+              subTotal += concepto.importe;
+              prodServ.impuestos.forEach(impuesto => {
+                impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
+                if (impuesto.TR === 'RETENCION') {
+                  impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+                  totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+                } else {
+                  if (impuesto.TR === 'TRASLADO') {
+                    impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+                    totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+                  }
                 }
-              }
-              // }
-            });
+              });
+              concepto.impuestosRetenidos = impuestosRetenidos;
+              concepto.impuestosTrasladados = impuestosTrasladados;
+              concepto.impuestos = prodServ.impuestos;
+            }
 
-            concepto.impuestos = prodServ.impuestos;
-          }
+            concepto.unidad = '0';
+            concepto.descuento = 0.00;
+            concepto.maniobras = c.maniobras;
 
-          concepto.unidad = '0';
-          concepto.descuento = 0.00;
-          concepto.maniobras = this.facturacionService.maniobras;
+            this.subtotal.setValue(subTotal);
+            this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+            this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+            this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
 
-          this.subtotal.setValue(concepto.importe);
-          this.totalImpuestosRetenidos.setValue(impuestosRetenidos);
-          this.totalImpuestosTrasladados.setValue(impuestosTrasladados);
-          this.total.setValue(concepto.importe + impuestosTrasladados - impuestosRetenidos);
-
-          this.conceptos.push(this.agregarArray(concepto));
+            this.conceptos.push(this.agregarArray(concepto));
+          });
         });
       }
 
@@ -217,15 +204,15 @@ export class CFDIComponent implements OnInit, OnDestroy {
       fecha: ['', [Validators.required]],
       // fecha: [moment().local().startOf('day')],
       // folio: ['', [Validators.required]],
-      folio: [{value: '', disabled : true}, [Validators.required]],
+      folio: [{ value: '', disabled: true }, [Validators.required]],
       formaPago: ['', [Validators.required]],
       metodoPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
       serie: ['', [Validators.required]],
-      subtotal: [{value: '', disabled : true}, [Validators.required]],
-      tipoComprobante: [{value: '', disabled : true}, [Validators.required]],
+      subtotal: [{ value: '', disabled: true }, [Validators.required]],
+      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
       // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      total: [{value: '', disabled : true}, [Validators.required]],
+      total: [{ value: '', disabled: true }, [Validators.required]],
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
@@ -244,13 +231,15 @@ export class CFDIComponent implements OnInit, OnDestroy {
       unidad: [''],
       descuento: [''],
       maniobras: [''],
+      impuestosRetenidos: [''],
+      impuestosTrasladados: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)]),
       // CFDIS RELACIONADOS
       // cfdiRelacionados: ['', [Validators.required]],
       // IMPUESTOS
-      totalImpuestosRetenidos: [{value: '', disabled : true}, [Validators.required]],
-      totalImpuestosTrasladados: [{value: '', disabled : true}, [Validators.required]],
-      sucursal: [{value: '', disabled : true}],
+      totalImpuestosRetenidos: [{ value: '', disabled: true }, [Validators.required]],
+      totalImpuestosTrasladados: [{ value: '', disabled: true }, [Validators.required]],
+      sucursal: [{ value: '', disabled: true }],
       _id: ['']
     });
   }
@@ -269,7 +258,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
       impuestos: [concepto.impuestos],
       unidad: [concepto.unidad],
       descuento: [concepto.descuento],
-      maniobras: [concepto.maniobras]
+      maniobras: [concepto.maniobras],
+      impuestosRetenidos: [concepto.impuestosRetenidos],
+      impuestosTrasladados: [concepto.impuestosTrasladados]
     });
   }
 
@@ -304,6 +295,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
             element.unidad,
             element.descuento,
             element.maniobras,
+            element.impuestosRetenidos,
+            element.impuestosTrasladados,
             element._id)));
         });
       } else {
@@ -320,6 +313,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
           this.regForm.get('_id').setValue(res._id);
           this.router.navigate(['/cfdi/', this.regForm.get('_id').value]);
         }
+        this.facturacionService.aFacturar = [];
         this.regForm.markAsPristine();
       });
     }
@@ -439,6 +433,14 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   get maniobras() {
     return this.regForm.get('maniobras');
+  }
+
+  get impuestosRetenidos() {
+    return this.regForm.get('impuestosRetenidos');
+  }
+
+  get impuestosTrasladados() {
+    return this.regForm.get('impuestosTrasladados');
   }
 
   get conceptos() {

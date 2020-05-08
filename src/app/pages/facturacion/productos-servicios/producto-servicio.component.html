@@ -89,7 +89,7 @@
                           <th scope="col">
                             <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('tasaCuota')">
                               <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
-                    !regForm.get('impuesto').valid || !regForm.get('tasaCuota').valid" (click)="addImpuesto(TR.value, impuesto.value, tasaCuota.value, 'TASA'); ">
+                    !regForm.get('impuesto').valid || !regForm.get('tasaCuota').valid" (click)="addImpuesto(TR.value, impuesto.value, tasaCuota.value, 'Tasa'); ">
                                 +
                               </button>
                             </div>

@@ -14,6 +14,8 @@ export class Concepto {
         public unidad?: string,
         public descuento?: number,
         public maniobras?: any[],
+        public impuestosRetenidos?: number,
+        public impuestosTrasladados?: number,
         public _id?: string
     ) {}
 }
