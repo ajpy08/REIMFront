@@ -21,7 +21,7 @@ import swal from 'sweetalert';
 import { Viaje } from '../viajes/viaje.models';
 import {
   MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig,
-  MatTabChangeEvent, MatTabGroup
+  MatTabChangeEvent, MatTabGroup, MatSnackBar
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
@@ -150,7 +150,8 @@ export class VaciosComponent implements OnInit {
     public matDialog: MatDialog,
     private router: Router,
     public facturacionService: FacturacionService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -592,39 +593,44 @@ export class VaciosComponent implements OnInit {
   agregarFacturas(maniobras, idProdServ) {
     let aAgregar = [];
     if (maniobras.length > 0) {
-      if (idProdServ !== undefined) {
-        maniobras.forEach(ma => {
-          if (this.facturacionService.aFacturar.length > 0) {
-            const res = this.facturacionService.aFacturar.filter(function (concept) {
-              return concept.idProdServ === idProdServ;
-            });
-
-            if (res.length > 0) {
-              res.forEach(r => {
-                // r.maniobras.forEach(m => {
-
-                const resM = r.maniobras.filter(function (man) {
-                  return man._id === ma._id;
-                });
-
-                if (resM.length > 0) {
-                  aAgregar = [];
-                  swal('El contenedor ' + ma.contenedor + ' ya se agrego con este concepto', '', 'error');
-                } else {
-                  aAgregar.push(ma);
-                }
-                // });
+      if (this.validaClienteViajeXManiobras(maniobras)) {
+        if (idProdServ !== undefined) {
+          maniobras.forEach(ma => {
+            if (this.facturacionService.aFacturar.length > 0) {
+              const res = this.facturacionService.aFacturar.filter(function (concept) {
+                return concept.idProdServ === idProdServ;
               });
+
+              if (res.length > 0) {
+                res.forEach(r => {
+                  // r.maniobras.forEach(m => {
+
+                  const resM = r.maniobras.filter(function (man) {
+                    return man._id === ma._id;
+                  });
+
+                  if (resM.length > 0) {
+                    aAgregar = [];
+                    swal('El contenedor ' + ma.contenedor + ' ya se agrego con este concepto', '', 'error');
+                  } else {
+                    aAgregar.push(ma);
+                  }
+                  // });
+                });
+              } else {
+                aAgregar.push(ma);
+              }
             } else {
               aAgregar.push(ma);
             }
-          } else {
-            aAgregar.push(ma);
-          }
-        });
+          });
+        } else {
+          aAgregar = [];
+          swal('Debes seleccionar un Producto o Servicio!', '', 'error');
+        }
       } else {
         aAgregar = [];
-        swal('Debes seleccionar un Producto o Servicio!', '', 'error');
+        swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
       }
     } else {
       aAgregar = [];
@@ -632,26 +638,26 @@ export class VaciosComponent implements OnInit {
     }
 
     if (aAgregar.length > 0) {
-
       const c = this.facturacionService.aFacturar.filter(function (concept) {
         return concept.idProdServ === idProdServ;
       });
-
       if (c.length > 0) {
         aAgregar.forEach(x => {
           const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === idProdServ);
           this.facturacionService.aFacturar[pos].maniobras.push(x);
           aAgregar = [];
+          this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
+          // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturar.length + ' concepto (s) por facturar', 'success');
         });
       } else {
-
         const concepto = {
           idProdServ: idProdServ,
           maniobras: aAgregar
         };
-
         this.facturacionService.aFacturar.push(concepto);
         aAgregar = [];
+        this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
+        // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturar.length + ' concepto (s) por facturar', 'success');
       }
     }
     console.log(this.facturacionService.aFacturar);
@@ -659,7 +665,7 @@ export class VaciosComponent implements OnInit {
 
   facturar() {
     if (this.facturacionService.aFacturar.length > 0) {
-      if (this.validaClienteViaje(this.facturacionService.aFacturar)) {
+      if (this.validaClienteViajeXConceptos(this.facturacionService.aFacturar)) {
         //////////////// DATOS GENERALES ////////////////
         // Serie (default)
         // Folio (default)
@@ -693,7 +699,7 @@ export class VaciosComponent implements OnInit {
     }
   }
 
-  validaClienteViaje(conceptos) {
+  validaClienteViajeXConceptos(conceptos) {
     let naviera;
     let viaje;
     let ok = true;
@@ -720,6 +726,31 @@ export class VaciosComponent implements OnInit {
     return ok;
   }
 
+  validaClienteViajeXManiobras(maniobras) {
+    let naviera;
+    let viaje;
+    let ok = true;
+
+    maniobras.forEach(m => {
+      if (naviera === undefined) {
+        naviera = m.naviera;
+      } else {
+        if (naviera !== m.naviera) {
+          ok = false;
+        }
+      }
+
+      if (viaje === undefined) {
+        viaje = m.viaje._id;
+      } else {
+        if (viaje !== m.viaje._id) {
+          ok = false;
+        }
+      }
+    });
+    return ok;
+  }
+
   consultaProdServ() {
     this.facturacionService.getProductosServicios().subscribe(productos => {
       this.productos = productos.productos_servicios;
@@ -735,5 +766,24 @@ export class VaciosComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  openSnackBar(message: string, action: string) {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 3500,
+    });
+
+    snackBarRef.afterDismissed().subscribe(facturar => {
+      if (facturar.dismissedByAction === true) {
+        this.facturar();
+      }
+    });
+
+    // snackBarRef.onAction().subscribe(() => {
+    //   console.log('action was explicitly clicked');
+    // });
+    // snackBarRef.afterDismissed().subscribe(() => {
+    //   console.log('regardless of how the snackbar has been dismissed');
+    // });
   }
 }

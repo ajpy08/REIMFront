@@ -1,5 +1,5 @@
 import { Maniobra } from 'src/app/models/maniobra.models';
-import { ManiobraService } from 'src/app/services/service.index';
+import { ManiobraService, FacturacionService } from 'src/app/services/service.index';
 import { AgenciaService } from './../../pages/agencias/agencia.service';
 import { Notification } from './../../models/notification.models';
 import { SolicitudService } from './../../pages/solicitudes/solicitud.service';
@@ -29,9 +29,11 @@ export class HeaderComponent implements OnInit {
     private solicitudesService: SolicitudService,
     private agenciaService: AgenciaService,
     private maniobraService: ManiobraService,
-    public router: Router) { }
+    public router: Router,
+    public facturacionService: FacturacionService) { }
 
   ngOnInit() {
+
     this.usuario = this._usuarioService.usuario;
 
     this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
