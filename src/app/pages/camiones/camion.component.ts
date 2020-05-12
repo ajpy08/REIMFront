@@ -70,7 +70,6 @@ export class CamionComponent implements OnInit {
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.createFormGroup();
-    
 
     if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
       this._transportistaService.getTransportistas(true)
@@ -104,7 +103,7 @@ export class CamionComponent implements OnInit {
 
     this.socket.on('update-camion', function (data: any) {
       if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) ||
-      (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) 
+      (data.data.transportista === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE)
        ) {
       if (data.data._id) {
         this.createFormGroup();

@@ -35,7 +35,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
   MatInputModule,
   MatSelectModule,
-  MatTableModule
+  MatTableModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { HttpClientModule } from '@angular/common/http';
@@ -108,6 +109,7 @@ export function getErrorHandler(): ErrorHandler {
     MatTableModule,
     MatStepperModule,
     MatButtonModule,
+    MatSnackBarModule,
     ExportAsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production
