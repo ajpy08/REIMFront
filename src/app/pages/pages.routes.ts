@@ -90,6 +90,7 @@ import { ClaveProductosServicioComponent } from './facturacion/clave-productos-s
 import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unidades.component';
 import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
 import { ReportesComponent } from './reportes/reportes.component';
+import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -165,6 +166,13 @@ const pagesRoutes: Routes = [
         component: TransportistasComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Mantenimiento de transportistas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+
+        path: 'maniobras_reporte',
+        component: ManiobrasTrasportistaComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'Maniobras', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE, ROLES.CLIENT_ROLE, ROLES.NAVIERA_ROLE]}
     },
     {
         path: 'transportistas/transportista/:id',
