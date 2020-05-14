@@ -1,6 +1,6 @@
 import { CFDI } from './models/cfdi.models';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { ProductoServicio } from './models/producto-servicio.models';
@@ -79,6 +79,11 @@ export class FacturacionService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
+
+  timbrarXML(nombre: string, id: string): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id +'/';
+     return this.http.get(url);
+  } 
   /* #endregion */
 
   /* #region  CLAVE PRODUCTOS SERVICIO */

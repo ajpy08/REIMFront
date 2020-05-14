@@ -94,7 +94,13 @@ export class CFDISComponent implements OnInit {
     }).then(timbrar => {
       if (timbrar) {
         this.facturacionService.xmlCFDI(cfdis._id).subscribe((res) => {
-          swal('Correcto', 'Se ha timbrado con exito', 'success');
+          if (res.ok === true) {
+            this.facturacionService.timbrarXML(res.NombreArchivo, cfdis._id).subscribe((restim) => {
+              console.log(restim);
+              // swal('Correcto', 'Se ha Timbrado el XML', 'success');
+            });
+          }
+          // swal('Correcto', 'Se ha timbrado con exito', 'success');
         }, (err) => {
           return err;
         });
