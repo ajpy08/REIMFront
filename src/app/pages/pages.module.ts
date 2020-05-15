@@ -125,7 +125,8 @@ import {
     MatTooltipModule
 } from '@angular/material';
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
-import { AsignarFacturaComponent } from './maniobras/asignar-factura/asignar-factura.component';
+import { AsignarFacturaComponent } from '../dialogs/asignar-factura/asignar-factura.component';
+import { ImpuestosCFDIComponent } from './../dialogs/impuestos-cfdi/impuestos-cfdi.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
@@ -204,6 +205,7 @@ import { ReportesComponent } from './reportes/reportes.component';
         AsignarFacturaComponent,
         BLBookingDialog,
         InfoDialogComponent,
+        ImpuestosCFDIComponent,
         FacturacionManiobrasComponent,
         ManiobrasDiarioComponent,
         TiposContenedoresComponent,
@@ -262,7 +264,7 @@ import { ReportesComponent } from './reportes/reportes.component';
         MatTooltipModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent]
 })
 
 export class PagesModules { }
