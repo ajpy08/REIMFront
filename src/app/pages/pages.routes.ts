@@ -437,7 +437,7 @@ const pagesRoutes: Routes = [
         path: 'reportes',
         component: ReportesComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Reportes', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE]}
+        data: { titulo: 'Reportes', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE]}
     },
 
     // SOLICITUDES TRANSPORTISTA
