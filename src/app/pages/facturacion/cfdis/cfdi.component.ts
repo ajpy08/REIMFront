@@ -267,7 +267,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
               concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
               concepto.importe = concepto.valorUnitario * c.maniobras.length;
               subTotal += concepto.importe;
-              if (prodServ._id === conceptoCalcular.idProdServ) {
+              if (conceptoCalcular && prodServ._id === conceptoCalcular.idProdServ) {
                 conceptoCalcular.impuestos.forEach(impuesto => {
                   if (impuesto.TR === 'RETENCION') {
                     impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
