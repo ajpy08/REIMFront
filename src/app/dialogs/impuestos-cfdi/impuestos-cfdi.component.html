@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>Impuestos</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="regForm" (ngSubmit)="asignarImpuestos()" novalidate>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">
+              <div *ngIf="regForm.get('TR') && regForm.get('impuesto') && regForm.get('tasaCuota')">
+                <button type="button" class="btn btn-success" [disabled]="!regForm.get('TR').valid ||
+                !regForm.get('impuesto').valid || !regForm.get('tasaCuota').valid"
+                  (click)="addImpuesto(TR.value, impuesto.value, tasaCuota.value, 'Tasa'); ">
+                  +
+                </button>
+              </div>
+            </th>
+            <th scope="col-md-2">
+              <mat-form-field>
+                <mat-label>TR</mat-label>
+                <mat-select formControlName="TR">
+                  <mat-option *ngFor="let t of TRs" [value]="t">
+                    {{t}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
+            <th scope="col-md-2">
+              <mat-form-field>
+                <mat-label>Impuesto</mat-label>
+                <mat-select (selectionChange)="cambioImpuesto( $event.value )">
+                  <mat-option *ngFor="let t of tipoImpuestos" [value]="t">
+                    {{t}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
+            <th scope="col-md-2">
+              <mat-form-field>
+                <mat-label>TasaCuota</mat-label>
+                <input matInput formControlName="tasaCuota" name="tasaCuota" type="number" class="form-control"
+                  placeholder="tasaCuota">
+                <mat-error *ngIf="tasaCuota.touched && tasaCuota.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Tasa o Cuota
+                </mat-error>
+              </mat-form-field>
+            </th>
+          </tr>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">#</th>
+
+            <th scope="col">TR</th>
+            <th scope="col">Impuesto</th>
+            <th scope="col">Valor</th>
+
+          </tr>
+        </thead>
+        <tbody formArrayName="impuestos" *ngFor="let item of impuestos.controls; let i = index;">
+          <tr [formGroupName]="i">
+            <td>
+              <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+            <td scope="row">{{i+1}}</td>
+            <td>
+              {{item.get('TR').value}}
+            </td>
+            <td>
+              {{item.get('impuesto').value}}
+            </td>
+            <td>
+              {{item.get('tasaCuota').value}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="btn btn-danger waves-effect waves-light" (click)="close('')">Close</button>
+  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="asignarImpuestos()">
+    <i class="fa fa-save"></i>
+    Asignar
+  </button>
+</mat-dialog-actions>
