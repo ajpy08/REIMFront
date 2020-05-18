@@ -451,7 +451,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   openDialogImpuestos(concepto) {
     // console.log(concepto[0].impuestos);
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = concepto[0];
+    dialogConfig.data = concepto;
     const dialogRef = this.matDialog.open(ImpuestosCFDIComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
