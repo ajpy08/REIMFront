@@ -36,7 +36,8 @@ import {
   MatInputModule,
   MatSelectModule,
   MatTableModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatDialogModule
 } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { HttpClientModule } from '@angular/common/http';
@@ -47,8 +48,6 @@ import { ErrorHandler, Injectable } from '@angular/core';
 import * as Sentry from '@sentry/browser';
 import { Id_sentry } from '../app/config/config';
 import { Usuario } from './pages/usuarios/usuario.model';
-
-
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -110,6 +109,7 @@ export function getErrorHandler(): ErrorHandler {
     MatStepperModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatDialogModule,
     ExportAsModule,
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production

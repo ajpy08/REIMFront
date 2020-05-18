@@ -32,7 +32,7 @@ import {
   MatTabChangeEvent
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AsignarFacturaComponent } from '../asignar-factura/asignar-factura.component';
+import { AsignarFacturaComponent } from '../../../dialogs/asignar-factura/asignar-factura.component';
 import { Router, UrlHandlingStrategy } from '@angular/router';
 
 const moment = _moment;

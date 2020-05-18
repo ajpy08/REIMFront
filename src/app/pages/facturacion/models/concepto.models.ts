@@ -1,3 +1,4 @@
+import { Impuesto } from 'src/app/pages/facturacion/models/impuesto.models';
 import { Maniobra } from '../../../models/maniobra.models';
 import { ProductoServicio } from './producto-servicio.models';
 
@@ -10,7 +11,7 @@ export class Concepto {
         public noIdentificacion?: string,
         public valorUnitario?: number,
         public importe?: number,
-        public impuestos?: [],
+        public impuestos?: Impuesto[],
         public unidad?: string,
         public descuento?: number,
         public maniobras?: any[],

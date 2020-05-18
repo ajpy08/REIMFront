@@ -2,12 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Maniobra } from 'src/app/models/maniobra.models';
-import { ManiobraService } from '../maniobra.service';
+import { ManiobraService } from '../../pages/maniobras/maniobra.service';
 import swal from 'sweetalert';
 
 import {
   MAT_DIALOG_DATA
-} from "@angular/material/dialog";
+} from '@angular/material/dialog';
 
 
 @Component({
@@ -19,7 +19,7 @@ import {
 export class AsignarFacturaComponent implements OnInit {
 
   facturaVacios: string;
-  ok : boolean = false;
+  ok = false;
   // facturaLavadoVacios: string;
   // facturaReparacionVacios: string;
   selectionVacios = new SelectionModel<Maniobra>(true, []);
@@ -43,7 +43,7 @@ export class AsignarFacturaComponent implements OnInit {
             maniobra.facturaManiobra = this.facturaVacios;
           });
         });
-        //this.facturaVacios = "";
+        // this.facturaVacios = "";
         this.close(this.facturaVacios);
       } else {
         swal('No puedes asignar una factura vacía', '', 'error');
