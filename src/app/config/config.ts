@@ -1,3 +1,5 @@
+import { Lavado } from '../models/lavado.models';
+
 export const ID_MELFI = '5c49e55b6b427b166466c9b3';
 
 export const ID_MSC = '5e279f5f18e40063e7539339';
@@ -90,6 +92,8 @@ export const PERMISOS = [
   { _id: 'ASIGNACION_EQUIPO', descripcion: 'ASIGANCION_EQUIPO' },
   { _id: 'ASIGNACION_TRANSPORTISTA', descripcion: 'ASIGNACION_TRANSPORTISTA' }
 ];
+
+export const TIPOS_LAVADO_ARRAY = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial'), new Lavado('A', 'Acondicionado')];
 
 /* #region  FACTURACION */
 export const TR_ARRAY = ['TRASLADO', 'RETENCION'];

@@ -1,3 +1,4 @@
+import { TIPOS_LAVADO_ARRAY } from './../../config/config';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -54,7 +55,7 @@ export class DetalleManiobraComponent implements OnInit {
   transportistas: Transportista[] = [];
   operadores: Operador[] = [];
   camiones: Camion[] = [];
-  tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
+  tiposLavado = TIPOS_LAVADO_ARRAY;
   grados = GRADOS_CONTENEDOR_ARRAY;
   etapas = ETAPAS_MANIOBRA_ARRAY;
   tiposReparaciones: Reparacion[] = [];

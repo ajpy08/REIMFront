@@ -1,3 +1,4 @@
+import { TIPOS_LAVADO_ARRAY } from './../../../config/config';
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Lavado } from '../../../models/lavado.models';
@@ -62,10 +63,7 @@ export const MY_FORMATS = {
 })
 export class TerminaLavadoReparacionComponent implements OnInit {
   regForm: FormGroup;
-  tiposLavado: Lavado[] = [
-    new Lavado('B', 'Basico'),
-    new Lavado('E', 'Especial')
-  ];
+  tiposLavado = TIPOS_LAVADO_ARRAY;
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   coordenadasDisponibles;
