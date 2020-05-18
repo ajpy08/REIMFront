@@ -208,38 +208,38 @@
                         <th></th>
                       </tr>
                     </thead>
-                    <tbody formArrayName="conceptos" *ngFor="let item of conceptos.value; let i = index;">
+                    <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
-                          <button matTooltip="Ver Impuestos" (click)="openDialogImpuestos(item)"
+                          <button type="button" matTooltip="Ver Impuestos" (click)="openDialogImpuestos(item.value)"
                             class="btn btn-primary m-r-5">
                             <i class="fa fa-edit"></i>
                           </button>
-                          <button type="button" (click)="quitar(i)" class="btn btn-danger">
+                          <button type="button" matTooltip="Borrar Impuestos" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button>
                         </td>
                         <td scope="row">{{i+1}}</td>
                         <td>
-                          {{item.descripcion}}
+                          {{item.get('descripcion').value}}
                         </td>
                         <td>
-                          {{item.unidad}}
+                          {{item.get('unidad').value}}
                         </td>
                         <td>
-                          {{item.cantidad}}
+                          {{item.get('cantidad').value}}
                         </td>
                         <td>
-                          {{item.valorUnitario | currency}}
+                          {{item.get('valorUnitario').value | currency}}
                         </td>
                         <td>
-                          {{item.impuestosTrasladados - item.impuestosRetenidos | currency}}
+                          {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value | currency}}
                         </td>
                         <td>
-                          {{item.descuento | currency}}
+                          {{item.get('descuento').value | currency}}
                         </td>
                         <td>
-                          {{item.importe | currency}}
+                          {{item.get('importe').value | currency}}
                         </td>
                         <!-- <td>
                           {{item.get('descripcion').value}}
