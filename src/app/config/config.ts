@@ -16,6 +16,14 @@ export const ETAPAS_MANIOBRA = {
   CARGADO: 'CARGADO'
 };
 
+export const DATOS_TIMBRADO = {
+  LugarExpedicion : '97320',
+  Emisor_Nombre: 'TRANSPORTE Y LOGISTICA REIM, SA DE CV',
+  Emisor_RegimenFiscal: '601',
+  Emisor_RFC: 'TLR1308235K8',
+  NoCertificado: '00001000000407584910'
+};
+
 export const ETAPAS_MANIOBRA_ARRAY = [
   'APROBACION',
   'APROBADO',

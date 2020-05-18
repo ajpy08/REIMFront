@@ -1,8 +1,10 @@
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FacturacionService } from '../facturacion.service';
 import { ExcelService } from 'src/app/services/service.index';
 import { CFDI } from '../models/cfdi.models';
+import { DATOS_TIMBRADO } from 'src/app/config/config';
+import { PdfFacturacionComponent } from 'src/app/pages/facturacion/pdf-facturacion/pdf-facturacion.component';
 declare var swal: any;
 @Component({
   selector: 'app-cfdis',
@@ -14,8 +16,10 @@ export class CFDISComponent implements OnInit {
   totalRegistros = 0;
   cargando = true;
   tablaCargar = false;
+  count = 0;
   displayedColumns = [
     'actions',
+    // 'timbrado',
     'fecha',
     'serie',
     'folio',
@@ -30,7 +34,7 @@ export class CFDISComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private facturacionService: FacturacionService, private _excelService: ExcelService) { }
+  constructor(private facturacionService: FacturacionService, private _excelService: ExcelService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.cargarCFDIS();
@@ -85,7 +89,7 @@ export class CFDISComponent implements OnInit {
   });
   }
   xmlCFDIS(cfdis: CFDI) {
-    swal({
+     swal({
       title: '¿ Estas seguro?',
       text: 'Se mandara a timbrar CFDI ' + cfdis.serie + '-' + cfdis.folio,
       icon: 'warning',
@@ -93,20 +97,90 @@ export class CFDISComponent implements OnInit {
       dangerMode: true
     }).then(timbrar => {
       if (timbrar) {
-        this.facturacionService.xmlCFDI(cfdis._id).subscribe((res) => {
+        this.facturacionService.xmlCFDI(cfdis._id).subscribe((res) => { // generar XML
           if (res.ok === true) {
-            this.facturacionService.timbrarXML(res.NombreArchivo, cfdis._id).subscribe((restim) => {
-              console.log(restim);
+            this.facturacionService.timbrarXML(res.NombreArchivo, cfdis._id).subscribe((restim) => { // timvbrar XML
+              if (restim.ok === true) {
+                let uuid = '';
+                let sello = '';
+                let selloCortadp = '';
+
+                Object.getOwnPropertyNames(restim.Timbre).forEach(function(val) {
+                  uuid = restim.Timbre[val].UUID;
+                });
+                Object.getOwnPropertyNames(res.cfdiXMLsinTimbrar).forEach(function(val) {
+                  sello = res.cfdiXMLsinTimbrar[val].Sello;
+                  selloCortadp = sello.substr(-8);
+                });
+
+
+                this.facturacionService.codeQR(uuid, DATOS_TIMBRADO.Emisor_RFC , restim.cfdi.rfc, restim.cfdi.total,
+                  selloCortadp).subscribe((QR) => { // GENERAR CODIGO QR
+                  console.log(QR);
+                });
+              }
+              // console.log(restim);
               // swal('Correcto', 'Se ha Timbrado el XML', 'success');
+            }, (error) => {
+              this.count++;
+              if (this.count < 2 ) {
+                if (error) {
+                  swal({
+                    title: 'Se produjo un error de timbrado ',
+                    text: ' En el proceso de timbrado se produjo un error , ¿ Desea repetir la operación?',
+                    icon: 'warning',
+                    buttons: true,
+                    dangerMode: true
+                  }). then(reintento => {
+                    if (reintento) {
+                      this.xmlCFDIS(cfdis);
+                    }
+                  });
+                }
+              } else  {
+                swal('Error', 'Se excedió el número de intentos', 'error');
+                this.count = 0;
+              }
             });
           }
-          // swal('Correcto', 'Se ha timbrado con exito', 'success');
         }, (err) => {
-          return err;
+          this.count++;
+          if (this.count < 2 ) {
+            if (err) {
+              swal({
+                title: 'Error',
+                text: 'Se produjo un error al crear el archivo XML, ¿ Desea repetir la operación ?',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true
+              }).then(reintento => {
+                if (reintento) {
+                  this.xmlCFDIS(cfdis);
+                }
+              });
+            }
+          } else {
+            swal('Error', 'Se excedió el número de intentos', 'error');
+            this.count = 0;
+          }
         });
       }
     });
   }
+
+  pdf(cfdi: CFDI): void {
+    this.facturacionService.getCFDI(cfdi._id).subscribe((res) => {
+      const cfdiPdf = res.cfdis;
+      const dialogPDF = this.dialog.open(PdfFacturacionComponent, {
+        width: '800px',
+        data: { data: cfdiPdf },
+        hasBackdrop: false,
+        panelClass: 'filter.popup'
+      });
+
+    });
+  }
+
 
   CreaDatosExcel(datos) {
     datos.forEach(b => {

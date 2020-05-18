@@ -58,8 +58,16 @@
                 <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( cfdis )" class="btn btn-warning m-r-5">
                   <i class="fa  fa-bell-o"></i>
                 </button>
+                <button matTooltip="PRE Visualizar PDF" (click)="pdf( cfdis )" class="btn btn-warning m-r-5">
+                  <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                </button>
               </mat-cell>
             </ng-container>
+
+            <!-- <ng-container matColumnDef="timbrado">
+
+              
+            </ng-container> -->
 
             <ng-container matColumnDef="fecha">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>

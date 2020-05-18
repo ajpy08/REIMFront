@@ -81,9 +81,22 @@ export class FacturacionService {
   }
 
   timbrarXML(nombre: string, id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id +'/';
+    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '/';
      return this.http.get(url);
-  } 
+   }
+
+   codeQR(uuid: string, rfc_emisor: string, rfc_receptor: string, total: string, sello: string): Observable<any> {
+    let selloMod = '';
+    const sus = sello.indexOf('/');
+    if (sus !== -1) {
+      selloMod = sello.replace('/', '@');
+    } else {
+      selloMod = sello;
+    }
+     const url =  URL_SERVICIOS + '/cfdis/code/' + uuid  + '&' + rfc_emisor + '&' + rfc_receptor + '&' + total + '&' + selloMod + '/';
+     return this.http.get(url);
+   }
+
   /* #endregion */
 
   /* #region  CLAVE PRODUCTOS SERVICIO */
