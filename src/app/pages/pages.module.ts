@@ -266,7 +266,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         MatTooltipModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, PdfFacturacionComponent]
 })
 
 export class PagesModules { }

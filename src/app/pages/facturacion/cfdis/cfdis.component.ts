@@ -173,11 +173,15 @@ export class CFDISComponent implements OnInit {
       const cfdiPdf = res.cfdis;
       const dialogPDF = this.dialog.open(PdfFacturacionComponent, {
         width: '800px',
+        height: '1000px',
         data: { data: cfdiPdf },
         hasBackdrop: false,
         panelClass: 'filter.popup'
       });
 
+      dialogPDF.afterClosed().subscribe(result => {
+
+      });
     });
   }
 

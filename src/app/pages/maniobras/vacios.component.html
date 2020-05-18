@@ -301,6 +301,30 @@
                 </div>
                 <div class="col-sm">
                 </div>
+                <div class="col-sm-5">
+                  <button [disabled]="this.facturacionService.aFacturar.length <= 0" 
+                    matTooltip="Facturar Seleccionados" (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturar.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
+                  <a *ngIf="this.selectionLavadoVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionLavadoVacios.selected, idProdServL)" class="float">
+                    <i class="fa fa-plus my-float"></i>
+                  </a> <br><br>
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="idProdServL" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
+                      <mat-option *ngFor="let producto of productos" [value]="producto._id">
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+
               </div>
             </div><br>
             <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
@@ -526,6 +550,29 @@
                   </div>
                 </div>
                 <div class="col-sm">
+                </div>
+
+                <div class="col-sm-5">
+                  <button [disabled]="this.facturacionService.aFacturar.length <= 0" 
+                    matTooltip="Facturar Seleccionados" (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturar.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
+                  <a *ngIf="this.selectionReparacionVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionReparacionVacios.selected, idProdServR)" class="float">
+                    <i class="fa fa-plus my-float"></i>
+                  </a> <br><br>
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="idProdServR" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
+                      <mat-option *ngFor="let producto of productos" [value]="producto._id">
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div><br>
