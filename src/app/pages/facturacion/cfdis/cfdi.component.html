@@ -181,7 +181,7 @@
 
               </div>
             </div>
-          </div>          
+          </div>
           <!--INICIO DE CONCEPTO-->
           <div class="example-header2">
             <div class="my-container">
@@ -215,7 +215,8 @@
                             class="btn btn-primary m-r-5">
                             <i class="fa fa-edit"></i>
                           </button>
-                          <button type="button" matTooltip="Borrar Impuestos" (click)="quitar(i)" class="btn btn-danger">
+                          <button type="button" matTooltip="Borrar Impuestos" (click)="quitar(i)"
+                            class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button>
                         </td>
@@ -325,18 +326,11 @@
             </div>
           </div>
           <div class="col-md">
-            <div class="text-right">
-              <button type="button" (click)="quitar(0)" class="btn btn-danger">
-                <i class="fa fa-trash-o"></i>
-              </button>
-              <button type="button" matTooltip="Ver Impuestos" (click)="openDialogImpuestos(conceptos.value)" class="btn btn-primary m-r-5">
-                <i class="fa fa-edit"></i>
-              </button>
-            </div>
+
           </div>
         </div>
       </form>
-      
+
       <div class="output">
         <!-- <p>Form Data: {{regForm.value | json}}</p> -->
         <p>Is Valid: {{regForm.valid}}</p>

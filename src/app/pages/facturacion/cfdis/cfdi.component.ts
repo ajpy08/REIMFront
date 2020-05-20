@@ -1,6 +1,7 @@
+import { ManiobraService } from 'src/app/services/service.index';
 import { ImpuestosCFDIComponent } from './../../../dialogs/impuestos-cfdi/impuestos-cfdi.component';
 import { FacturacionService } from './../facturacion.service';
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Serie } from '../models/serie.models';
@@ -8,9 +9,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
 import { Concepto } from '../models/concepto.models';
-import { CFDI } from '../models/cfdi.models';
 import { NavieraService } from '../../navieras/naviera.service';
-import { Impuesto } from '../models/impuesto.models';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 const moment = _moment;
 
@@ -43,6 +42,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   tiposComprobante = [];
   usosCFDI = [];
   cfdi;
+  id;
 
   constructor(
     public router: Router,
@@ -50,12 +50,13 @@ export class CFDIComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private facturacionService: FacturacionService,
     private navieraService: NavieraService,
-    public matDialog: MatDialog) { }
+    public matDialog: MatDialog,
+    public maniobraService: ManiobraService) { }
 
   ngOnInit() {
     this.createFormGroup();
 
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
@@ -86,8 +87,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     this.conceptos.removeAt(0);
 
-    if (id !== 'nuevo') {
-      this.cargarCFDI(id);
+    if (this.id !== 'nuevo') {
+      this.cargarCFDI(this.id);
     } else {
       // tslint:disable-next-line: forin
       for (const control in this.regForm.controls) {
@@ -106,7 +107,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.facturacionService.IE = '';
     this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
-    this.facturacionService.maniobras = [];
+    // this.facturacionService.maniobras = [];
   }
 
   // cargaValoresIniciales() {
@@ -201,14 +202,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
   //   /////////////////////////////////////////////////////////////////////////////////////////
   // }
 
-  cargaValoresIniciales(idProdServ) {
+  cargaValoresIniciales(concept) {
     this.conceptos.controls = [];
     let conceptoCalcular;
-    if (idProdServ !== undefined) {
-      const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === idProdServ);
-      conceptoCalcular = this.facturacionService.aFacturar[pos];
+    if (concept !== undefined) {
+      conceptoCalcular = concept;
     }
-
 
     ////////////////////////////////////////////////////////////////////////////////
     // this.serie.setValue(this.series[0]);
@@ -245,11 +244,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
     /////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
-    if (this.facturacionService.maniobras.length > 0) {
-      let totalImpuestosRetenidos = 0;
-      let totalImpuestosTrasladados = 0;
-      let subTotal = 0;
+    let totalImpuestosRetenidos = 0;
+    let totalImpuestosTrasladados = 0;
+    let subTotal = 0;
 
+    if (this.facturacionService.aFacturar.length > 0) {
       if (this.facturacionService.tipo === 'Descarga') {
 
         this.facturacionService.aFacturar.forEach(c => {
@@ -267,7 +266,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
               concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
               concepto.importe = concepto.valorUnitario * c.maniobras.length;
               subTotal += concepto.importe;
-              if (conceptoCalcular && prodServ._id === conceptoCalcular.idProdServ) {
+              if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
                 conceptoCalcular.impuestos.forEach(impuesto => {
                   if (impuesto.TR === 'RETENCION') {
                     impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
@@ -313,8 +312,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
           });
         });
       }
-
-      this.maniobras.setValue(this.facturacionService.maniobras);
+      // this.maniobras.setValue(this.facturacionService.maniobras);
+    } else {
+      this.subtotal.setValue(subTotal);
+      this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+      this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+      this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
     }
     /////////////////////////////////////////////////////////////////////////////////////////
   }
@@ -351,7 +354,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       impuestos: [''],
       unidad: [''],
       descuento: [''],
-      maniobras: [''],
+      // maniobras: [''],
       impuestosRetenidos: [''],
       impuestosTrasladados: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)], { validators: Validators.required }),
@@ -379,13 +382,21 @@ export class CFDIComponent implements OnInit, OnDestroy {
       impuestos: [concepto.impuestos],
       unidad: [concepto.unidad],
       descuento: [concepto.descuento],
-      maniobras: [concepto.maniobras],
+      // maniobras: [concepto.maniobras],
       impuestosRetenidos: [concepto.impuestosRetenidos],
       impuestosTrasladados: [concepto.impuestosTrasladados]
     });
   }
 
   quitar(indice: number) {
+    const id = this.conceptos.value[indice]._id;
+    const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === id);
+    this.facturacionService.aFacturar.splice(pos, 1);
+    if (this.id === 'nuevo' || this.id === undefined) {
+      this.cargaValoresIniciales(undefined);
+    } else {
+
+    }
     this.conceptos.removeAt(indice);
     // console.log(this.conceptos);
   }
@@ -416,7 +427,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
             element.impuestos,
             element.unidad,
             element.descuento,
-            element.maniobras,
+            // element.maniobras,
             element.impuestosRetenidos,
             element.impuestosTrasladados,
             element._id)));
@@ -456,7 +467,29 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.cargaValoresIniciales(dialogConfig.data._id);
+        if (this.id === 'nuevo' || this.id === undefined) {
+          this.cargaValoresIniciales(dialogConfig.data);
+        } else {
+        }
+        // this.conceptos.value.forEach(c => {
+        //   if (c._id === concepto._id) {
+        //     c = result;
+        //   }
+        // });
+
+        // this.maniobraService.getManiobra(result.maniobras[0]).subscribe(maniob => {
+        //   this.facturacionService.receptor = maniob.maniobra.naviera._id;
+        //   this.facturacionService.tipo = 'Descarga';
+        //   this.cargaValoresIniciales(concepto);
+        // });
+
+        // const pos = this.conceptos.value.findIndex(a => a.idProdServ === concepto._id);
+        // if (pos >= 0) {
+        //   this.conceptos.value[pos] = result;
+        //   this.cargaValoresIniciales(dialogConfig.data._id);
+        // } else {
+        //   console.log(this.conceptos.value);
+        // }
       }
     });
   }
@@ -566,9 +599,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('descuento');
   }
 
-  get maniobras() {
-    return this.regForm.get('maniobras');
-  }
+  // get maniobras() {
+  //   return this.regForm.get('maniobras');
+  // }
 
   get impuestosRetenidos() {
     return this.regForm.get('impuestosRetenidos');
