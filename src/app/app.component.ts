@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from './services/service.index';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { interval } from 'rxjs';
 
 @Component({
@@ -17,8 +17,9 @@ export class AppComponent implements OnInit {
     // this.sw.checkForUpdates();
 
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe(() => {
+      this.swUpdate.available.subscribe((event: UpdateAvailableEvent) => {
         if (confirm('Nueva Version Disponible. Cargar Nueva Version?')) {
+         this.swUpdate.checkForUpdate();
           window.location.reload();
         }
       });

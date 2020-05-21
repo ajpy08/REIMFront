@@ -141,6 +141,8 @@ export class VaciosComponent implements OnInit {
   // name: string;
   productos = [];
   idProdServ = '5e876ada96bb521c1429f763';
+  idProdServL = '5e876b0396bb521c1429f764';
+  idProdServR = '5e876b4496bb521c1429f766';
   usuarioLogueado = new Usuario();
 
   constructor(
