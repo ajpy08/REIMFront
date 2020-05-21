@@ -220,7 +220,7 @@ export class CamionesComponent implements OnInit {
         } else {
           event.source.checked = !event.checked;
         }
-      })
+      });
     } else {
       swal({
         title: '¿Estas Seguro?',
@@ -236,7 +236,7 @@ export class CamionesComponent implements OnInit {
         } else {
           event.source.checked = !event.checked;
         }
-      })
+      });
     }
 
   }
