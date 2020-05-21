@@ -843,7 +843,14 @@ export class ReportesComponent implements OnInit {
 
 
       const maniobra = {
-        Nombre_Buque: m.viaje.buque && m.viaje.buque !== undefined && m.viaje.buque.nombre !== '' ? m.viaje.buque.nombre : '' && m.viaje.buque.nombre,
+        Nombre_Buque:           m.viaje &&
+        m.viaje !== undefined &&
+        m.viaje.buque &&
+        m.viaje.buque &&
+        m.viaje.buque !== undefined &&
+        m.viaje.buque.nombre !== ''
+        ? m.viaje.buque.nombre
+        : '' && m.viaje.buque.nombre,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
         Fecha_Alta: m.fAlta !== undefined ? m.fLlegada.substring(0, 10) : '',

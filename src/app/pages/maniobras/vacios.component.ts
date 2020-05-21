@@ -24,7 +24,7 @@ import {
   MatTabChangeEvent, MatTabGroup, MatSnackBar
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { AsignarFacturaComponent } from './asignar-factura/asignar-factura.component';
+import { AsignarFacturaComponent } from '../../dialogs/asignar-factura/asignar-factura.component';
 import { Router } from '@angular/router';
 import { FacturacionService } from '../facturacion/facturacion.service';
 import { Usuario } from '../usuarios/usuario.model';
@@ -662,7 +662,7 @@ export class VaciosComponent implements OnInit {
         // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturar.length + ' concepto (s) por facturar', 'success');
       }
     }
-    console.log(this.facturacionService.aFacturar);
+    // console.log(this.facturacionService.aFacturar);
   }
 
   facturar() {

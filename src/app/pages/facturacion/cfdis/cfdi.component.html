@@ -17,7 +17,8 @@
                     <div class="col-md-6">
                       <!--========Combombox Series=========-->
                       <mat-form-field>
-                        <mat-select placeholder="SERIE" formControlName="serie" (selectionChange)="cambioSerie( $event.value )" name="serie">
+                        <mat-select placeholder="SERIE" formControlName="serie"
+                          (selectionChange)="cambioSerie( $event.value )" name="serie">
                           <mat-option *ngFor="let serie of series" [value]="serie.serie">
                             {{ serie.serie }}
                           </mat-option>
@@ -72,8 +73,10 @@
                   <div class="col-md-12">
                     <!--========Combombox Tipo de comprobante=========-->
                     <mat-form-field>
-                      <mat-select placeholder="TIPO DE COMPROBANTE" formControlName="tipoComprobante" name="tipoComprobante">
-                        <mat-option *ngFor="let tipoComprobante of tiposComprobante" [value]="tipoComprobante.tipoComprobante">
+                      <mat-select placeholder="TIPO DE COMPROBANTE" formControlName="tipoComprobante"
+                        name="tipoComprobante">
+                        <mat-option *ngFor="let tipoComprobante of tiposComprobante"
+                          [value]="tipoComprobante.tipoComprobante">
                           {{ tipoComprobante.descripcion }}
                         </mat-option>
                       </mat-select>
@@ -105,7 +108,8 @@
                       <mat-datepicker #dp3 disabled="false"></mat-datepicker>
                     </mat-form-field> -->
                     <mat-form-field>
-                      <input matInput formControlName="fecha" [matDatepicker]="fecha" type="text" placeholder="Fecha Factura">
+                      <input matInput formControlName="fecha" [matDatepicker]="fecha" type="text"
+                        placeholder="Fecha Factura">
                       <mat-datepicker-toggle matSuffix [for]="fecha"></mat-datepicker-toggle>
                       <mat-datepicker #fecha></mat-datepicker>
                     </mat-form-field>
@@ -177,8 +181,7 @@
 
               </div>
             </div>
-          </div>
-
+          </div>          
           <!--INICIO DE CONCEPTO-->
           <div class="example-header2">
             <div class="my-container">
@@ -193,6 +196,7 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
+                        <th scope="col"></th>
                         <th scope="col">Consecutivo</th>
                         <th scope="col">Concepto</th>
                         <th scope="col">Unidad </th>
@@ -201,39 +205,63 @@
                         <th scope="col">Impuestos</th>
                         <th scope="col">Descuento</th>
                         <th scope="col">Importe</th>
-                        <th scope="col"></th>
+                        <th></th>
                       </tr>
                     </thead>
-                    <tbody formArrayName="conceptos" *ngFor="let concepto of conceptos.value; let item = index;">
-                      <tr [formGroupName]="item">
-                        <td scope="row">{{item+1}}</td>
-                        <!-- <td>
-                          <button type="button" (click)="quitar( item )" class="btn btn-danger">
+                    <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
+                      <tr [formGroupName]="i">
+                        <td>
+                          <button type="button" matTooltip="Ver Impuestos" (click)="openDialogImpuestos(item.value)"
+                            class="btn btn-primary m-r-5">
+                            <i class="fa fa-edit"></i>
+                          </button>
+                          <button type="button" matTooltip="Borrar Impuestos" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button>
+                        </td>
+                        <td scope="row">{{i+1}}</td>
+                        <td>
+                          {{item.get('descripcion').value}}
+                        </td>
+                        <td>
+                          {{item.get('unidad').value}}
+                        </td>
+                        <td>
+                          {{item.get('cantidad').value}}
+                        </td>
+                        <td>
+                          {{item.get('valorUnitario').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('descuento').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('importe').value | currency}}
+                        </td>
+                        <!-- <td>
+                          {{item.get('descripcion').value}}
+                        </td>
+                        <td>
+                          {{item.get('unidad').value}}
+                        </td>
+                        <td>
+                          {{item.get('cantidad').value}}
+                        </td>
+                        <td>
+                          {{item.get('valorUnitario').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('descuento').value | currency}}
+                        </td>
+                        <td>
+                          {{item.get('importe').value | currency}}
                         </td> -->
-                        <td>
-                          {{concepto.descripcion}}
-                        </td>
-                        <td>
-                          {{concepto.unidad}}
-                        </td>
-                        <td>
-                          {{concepto.cantidad}}
-                        </td>
-                        <td>
-                          <!-- {{concepto.valorUnitario | decimalrightpad: 4}} -->
-                          {{concepto.valorUnitario | currency}}
-                        </td>
-                        <td>
-                          {{concepto.impuestosTrasladados - concepto.impuestosRetenidos | currency}}
-                        </td>
-                        <td>
-                          {{concepto.descuento | currency}}
-                        </td>
-                        <td>
-                          {{concepto.importe | currency}}
-                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -257,25 +285,29 @@
                     <div class="col-md-12">
                       <mat-form-field>
                         <mat-label><b>SUBTOTAL</b></mat-label>
-                        <input matInput formControlName="subtotal" type="text" [value]="regForm.get('subtotal').value | currency">
+                        <input matInput formControlName="subtotal" type="text"
+                          [value]="regForm.get('subtotal').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12" *ngIf="regForm.get('totalImpuestosRetenidos').value > 0">
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS RETENIDOS</b></mat-label>
-                        <input matInput formControlName="totalImpuestosRetenidos" type="text" [value]="regForm.get('totalImpuestosRetenidos').value | currency">
+                        <input matInput formControlName="totalImpuestosRetenidos" type="text"
+                          [value]="regForm.get('totalImpuestosRetenidos').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
-                        <input matInput formControlName="totalImpuestosTrasladados" type="text" [value]="regForm.get('totalImpuestosTrasladados').value | currency">
+                        <input matInput formControlName="totalImpuestosTrasladados" type="text"
+                          [value]="regForm.get('totalImpuestosTrasladados').value | currency">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">
                       <mat-form-field>
                         <mat-label><b>TOTAL</b></mat-label>
-                        <input matInput formControlName="total" type="text" [value]="regForm.get('total').value | currency">
+                        <input matInput formControlName="total" type="text"
+                          [value]="regForm.get('total').value | currency">
                       </mat-form-field>
                     </div>
                   </div>
@@ -287,12 +319,28 @@
         <div class="es">
           <div class="col-md-10">
             <div class="text-left">
-              <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10 ">GUARDAR</button>
+              <button type="submit"
+                class="btn btn-primary btn-success waves-effect waves-light m-r-10 ">GUARDAR</button>
               <button type="button" class="btn btn-danger  m-r-10" (click)="back()"> Regresar</button>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="text-right">
+              <button type="button" (click)="quitar(0)" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+              <button type="button" matTooltip="Ver Impuestos" (click)="openDialogImpuestos(conceptos.value)" class="btn btn-primary m-r-5">
+                <i class="fa fa-edit"></i>
+              </button>
             </div>
           </div>
         </div>
       </form>
+      
+      <div class="output">
+        <!-- <p>Form Data: {{regForm.value | json}}</p> -->
+        <p>Is Valid: {{regForm.valid}}</p>
+      </div>
     </div>
   </div>
 </div>

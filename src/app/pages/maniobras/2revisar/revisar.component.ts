@@ -1,3 +1,4 @@
+import { TIPOS_LAVADO_ARRAY } from './../../../config/config';
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
@@ -25,7 +26,7 @@ import * as io from 'socket.io-client';
 
 export class RevisarComponent implements OnInit {
   regForm: FormGroup;
-  tiposLavado: Lavado[] = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
+  tiposLavado = TIPOS_LAVADO_ARRAY;
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   coordenadasDisponibles;
