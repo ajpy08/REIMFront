@@ -110,98 +110,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     // this.facturacionService.maniobras = [];
   }
 
-  // cargaValoresIniciales() {
-  //   // this.serie.setValue(this.series[0]);
-  //   // this.formaPago.setValue('03');
-  //   this.moneda.setValue('MXN');
-
-  //   /////////////////////////////////// FECHA /////////////////////////////////////
-  //   const timeZone = moment().format('Z');
-  //   const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
-  //   this.fecha.setValue(fecha);
-  //   /////////////////////////////////////////////////////////////////////////////
-
-  //   /////////////////////////////////// RECEPTOR /////////////////////////////////////
-  //   if (this.facturacionService.receptor) {
-  //     if (this.facturacionService.tipo === 'Descarga') {
-  //       this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
-  //         this.rfc.setValue(naviera.rfc);
-  //         this.nombre.setValue(naviera.razonSocial);
-  //         this.usoCFDI.setValue(naviera.usoCFDI.usoCFDI);
-  //         let direccion = '';
-  //         direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
-  //         direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
-  //         direccion += naviera.colonia !== undefined && naviera.colonia !== '' ? ' ' + naviera.colonia : '';
-  //         direccion += naviera.municipio !== undefined && naviera.municipio !== '' ? ' ' + naviera.municipio : '';
-  //         direccion += naviera.ciudad !== undefined && naviera.ciudad !== '' ? ' ' + naviera.ciudad : '';
-  //         direccion += naviera.estado !== undefined && naviera.estado !== '' ? ' ' + naviera.estado : '';
-  //         direccion += naviera.cp !== undefined && naviera.cp !== '' ? ' ' + naviera.cp : '';
-  //         this.direccion.setValue(direccion.trim());
-  //         this.correo.setValue(naviera.correoFac);
-  //       });
-  //     }
-  //   }
-  //   /////////////////////////////////////////////////////////////////////////////
-
-  //   ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
-  //   if (this.facturacionService.maniobras.length > 0) {
-  //     let totalImpuestosRetenidos = 0;
-  //     let totalImpuestosTrasladados = 0;
-  //     let subTotal = 0;
-
-  //     if (this.facturacionService.tipo === 'Descarga') {
-
-  //       this.facturacionService.aFacturar.forEach(c => {
-  //         let impuestosRetenidos = 0;
-  //         let impuestosTrasladados = 0;
-  //         const concepto = new Concepto();
-  //         this.facturacionService.getProductoServicio(c.idProdServ).subscribe((prodServ) => {
-  //           concepto._id = prodServ._id;
-  //           concepto.cantidad = c.maniobras.length;
-  //           if (prodServ) {
-  //             concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
-  //             concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
-  //             concepto.descripcion = prodServ.descripcion;
-  //             concepto.noIdentificacion = prodServ.codigo;
-  //             concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
-  //             concepto.importe = concepto.valorUnitario * c.maniobras.length;
-  //             subTotal += concepto.importe;
-  //             prodServ.impuestos.forEach(impuesto => {
-  //               impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
-  //               if (impuesto.TR === 'RETENCION') {
-  //                 impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
-  //                 totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
-  //               } else {
-  //                 if (impuesto.TR === 'TRASLADO') {
-  //                   impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
-  //                   totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
-  //                 }
-  //               }
-  //             });
-  //             concepto.impuestosRetenidos = impuestosRetenidos;
-  //             concepto.impuestosTrasladados = impuestosTrasladados;
-  //             concepto.impuestos = prodServ.impuestos;
-  //           }
-
-  //           concepto.unidad = '0';
-  //           concepto.descuento = 0.00;
-  //           concepto.maniobras = c.maniobras;
-
-  //           this.subtotal.setValue(subTotal);
-  //           this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-  //           this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-  //           this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
-
-  //           this.conceptos.push(this.agregarArray(concepto));
-  //         });
-  //       });
-  //     }
-
-  //     this.maniobras.setValue(this.facturacionService.maniobras);
-  //   }
-  //   /////////////////////////////////////////////////////////////////////////////////////////
-  // }
-
   cargaValoresIniciales(concept) {
     this.conceptos.controls = [];
     let conceptoCalcular;
@@ -322,6 +230,111 @@ export class CFDIComponent implements OnInit, OnDestroy {
     /////////////////////////////////////////////////////////////////////////////////////////
   }
 
+  recargaValoresIniciales(cfdi) {
+    // this.conceptos.controls = [];
+    // let conceptoCalcular;
+    // if (cfdi !== undefined) {
+    //   conceptoCalcular = cfdi;
+    // }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // this.serie.setValue(this.series[0]);
+    // this.formaPago.setValue('03');
+    this.moneda.setValue('MXN');
+    ////////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////////// FECHA /////////////////////////////////////
+    const timeZone = moment().format('Z');
+    const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
+    this.fecha.setValue(fecha);
+    ///////////////////////////////////////////////////////////////////////////////
+
+    /////////////////////////////////// RECEPTOR /////////////////////////////////////
+    if (this.cfdi.receptor) {
+        this.direccion.setValue(this.cfdi.direccion.trim());
+        this.correo.setValue(this.cfdi.correo);
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
+    let totalImpuestosRetenidos = 0;
+    let totalImpuestosTrasladados = 0;
+    let subTotal = 0;
+
+    if (this.cfdi.conceptos.length > 0) {
+      // if (this.facturacionService.tipo === 'Descarga') {
+
+        this.cfdi.conceptos.forEach(c => {
+          let impuestosRetenidos = 0;
+          let impuestosTrasladados = 0;
+          const concepto = new Concepto();
+          // this.facturacionService.getProductoServicio(c.idProdServ).subscribe((prodServ) => {
+            concepto._id = c._id;
+            concepto.cantidad = c.maniobras.length;
+            // if (c) {
+              concepto.claveProdServ = c.claveProdServ;
+              concepto.claveUnidad = c.claveUnidad;
+              concepto.descripcion = c.descripcion;
+              concepto.noIdentificacion = c.noIdentificacion;
+              concepto.valorUnitario = c.valorUnitario;
+              concepto.importe = concepto.valorUnitario * c.maniobras.length;
+              subTotal += concepto.importe;
+              // if (conceptoCalcular && c._id === conceptoCalcular._id) {
+              //   conceptoCalcular.impuestos.forEach(impuesto => {
+              //     if (impuesto.TR === 'RETENCION') {
+              //       impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+              //       totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+              //     } else {
+              //       if (impuesto.TR === 'TRASLADO') {
+              //         impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+              //         totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+              //       }
+              //     }
+              //   });
+              //   concepto.impuestos = conceptoCalcular.impuestos;
+              // } else {
+                c.impuestos.forEach(impuesto => {
+                  impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
+                  if (impuesto.TR === 'RETENCION') {
+                    impuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+                    totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+                  } else {
+                    if (impuesto.TR === 'TRASLADO') {
+                      impuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+                      totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+                    }
+                  }
+                });
+                concepto.impuestos = c.impuestos;
+              // }
+              concepto.impuestosRetenidos = impuestosRetenidos;
+              concepto.impuestosTrasladados = impuestosTrasladados;
+              // concepto.impuestos = c.impuestos;
+            // }
+
+            concepto.unidad = '0';
+            concepto.descuento = 0.00;
+            concepto.maniobras = c.maniobras;
+
+            this.subtotal.setValue(subTotal);
+            this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+            this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+            this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+
+            this.conceptos.push(this.agregarArray(concepto));
+          // });
+        });
+      // }
+      // this.maniobras.setValue(this.facturacionService.maniobras);
+    } else {
+      this.subtotal.setValue(subTotal);
+      this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+      this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+      this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////
+  }
+
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
@@ -382,7 +395,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       impuestos: [concepto.impuestos],
       unidad: [concepto.unidad],
       descuento: [concepto.descuento],
-      // maniobras: [concepto.maniobras],
+      maniobras: [concepto.maniobras],
       impuestosRetenidos: [concepto.impuestosRetenidos],
       impuestosTrasladados: [concepto.impuestosTrasladados]
     });
@@ -415,22 +428,40 @@ export class CFDIComponent implements OnInit, OnDestroy {
       }
 
       if (res.conceptos.length > 0) {
-        res.conceptos.forEach(element => {
+        let subTotal = 0;
+        if (res.conceptos[0].maniobras.length > 0) {
+          this.maniobraService.getManiobra(res.conceptos[0].maniobras[0]).subscribe(m => {
+            this.facturacionService.receptor = m.maniobra.naviera._id;
+          });
+        }
+        res.conceptos.forEach(concepto => {
+          let impuestosRetenidos = 0;
+          let impuestosTrasladados = 0;
+          subTotal += concepto.importe;
+          concepto.impuestos.forEach(impuesto => {
+            if (impuesto.TR === 'RETENCION') {
+              impuestosRetenidos += impuesto.importe;
+            } else {
+              if (impuesto.TR === 'TRASLADO') {
+                impuestosTrasladados += impuesto.importe;
+              }
+            }
+          });
           this.conceptos.push(this.agregarArray(new Concepto(
-            element.cantidad,
-            element.claveProdServ,
-            element.claveUnidad,
-            element.descripcion,
-            element.noIdentificacion,
-            element.valorUnitario,
-            element.importe,
-            element.impuestos,
-            element.unidad,
-            element.descuento,
-            // element.maniobras,
-            element.impuestosRetenidos,
-            element.impuestosTrasladados,
-            element._id)));
+            concepto.cantidad,
+            concepto.claveProdServ,
+            concepto.claveUnidad,
+            concepto.descripcion,
+            concepto.noIdentificacion,
+            concepto.valorUnitario,
+            concepto.importe,
+            concepto.impuestos,
+            concepto.unidad,
+            concepto.descuento,
+            concepto.maniobras,
+            impuestosRetenidos,
+            impuestosTrasladados,
+            concepto._id)));
         });
       } else {
         this.regForm.controls['conceptos'].setValue(undefined);
@@ -460,6 +491,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   openDialogImpuestos(concepto) {
+    let cfdi;
+    cfdi = this.cfdi;
     // console.log(concepto[0].impuestos);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = concepto;
@@ -467,9 +500,16 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.cfdi = cfdi;
         if (this.id === 'nuevo' || this.id === undefined) {
           this.cargaValoresIniciales(dialogConfig.data);
         } else {
+          this.cargarCFDI(this.id);
+          const pos = cfdi.conceptos.findIndex(a => a._id === result._id);
+        if (pos >= 0) {
+          this.cfdi.conceptos[pos] = result;
+        }
+          this.recargaValoresIniciales(cfdi);
         }
         // this.conceptos.value.forEach(c => {
         //   if (c._id === concepto._id) {
@@ -482,14 +522,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
         //   this.facturacionService.tipo = 'Descarga';
         //   this.cargaValoresIniciales(concepto);
         // });
-
-        // const pos = this.conceptos.value.findIndex(a => a.idProdServ === concepto._id);
-        // if (pos >= 0) {
-        //   this.conceptos.value[pos] = result;
-        //   this.cargaValoresIniciales(dialogConfig.data._id);
-        // } else {
-        //   console.log(this.conceptos.value);
-        // }
       }
     });
   }

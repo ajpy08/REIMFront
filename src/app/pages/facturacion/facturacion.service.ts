@@ -17,7 +17,7 @@ export class FacturacionService {
   IE = '';
   receptor;
   tipo = '';
-  // maniobras = [];
+  maniobras = [];
   aFacturar = [];
 
   constructor(
