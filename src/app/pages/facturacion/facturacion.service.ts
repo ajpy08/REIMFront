@@ -14,8 +14,6 @@ import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.model
   providedIn: 'root'
 })
 export class FacturacionService {
-
-  // serie = 'A';
   IE = '';
   receptor;
   tipo = '';

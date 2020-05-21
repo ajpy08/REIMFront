@@ -683,11 +683,11 @@ export class VaciosComponent implements OnInit {
 
         /////////////////// CONCEPTOS ///////////////////
         // Producto Servicio (por cada concepto en array aFacturar)
-        this.facturacionService.aFacturar.forEach(c => {
-          c.maniobras.forEach(m => {
-            this.facturacionService.maniobras.push(m._id);
-          });
-        });
+        // this.facturacionService.aFacturar.forEach(c => {
+        //   c.maniobras.forEach(m => {
+        //     this.facturacionService.maniobras.push(m._id);
+        //   });
+        // });
         // this.facturacionService.maniobras = this.selectionVacios.selected;
         /////////////////////////////////////////////////
         this.router.navigate(['/cfdi/nuevo']);
