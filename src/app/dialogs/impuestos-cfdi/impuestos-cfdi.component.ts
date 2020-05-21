@@ -30,7 +30,7 @@ export class ImpuestosCFDIComponent implements OnInit {
     private facturacionService: FacturacionService) { }
 
   ngOnInit() {
-    this.impuestosIniciales = this.data.impuestos;
+    // this.impuestosIniciales = this.data.impuestos;
     this.createFormGroup();
     this.impuestos.removeAt(0);
     this.cargarImpuestos(this.data.impuestos);
@@ -105,22 +105,24 @@ export class ImpuestosCFDIComponent implements OnInit {
     }
   }
 
-  close(ok) {
-    this.dialogRef.close(ok);
+  close(concepto) {
+    this.dialogRef.close(concepto);
   }
 
-  asignarImpuestos() {
-    if (this.impuestos.value) {
-      if (this.impuestosIniciales !== this.impuestos.value) {
-        const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === this.data._id);
-        this.facturacionService.aFacturar[pos].impuestos = this.impuestos.value;
-        this.close(true);
-      } else {
-        this.close(false);
-      }
-    } else {
-      swal('Este concepto no tiene impuestos', '', 'error');
-    }
+  asignarImpuestos(concepto) {
+    concepto.impuestos = this.impuestos.value;
+    this.close(concepto);
+    // if (this.impuestos.value) {
+    // if (this.impuestosIniciales !== this.impuestos.value) {
+    // const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === this.data._id);
+    // this.facturacionService.aFacturar[pos].impuestos = this.impuestos.value;
+    //   this.close(true);
+    // } else {
+    //   this.close(false);
+    // }
+    // } else {
+    //   swal('Este concepto no tiene impuestos', '', 'error');
+    // }
   }
 
   /* #region  Properties */
