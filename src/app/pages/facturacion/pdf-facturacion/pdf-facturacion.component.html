@@ -1,1 +1,78 @@
-{{generatePdf()}}
+<div id="contenido">
+    <div class="img">
+        <img src="../../../../assets/images/logo_reim_container_park.jpg">
+    </div>
+    <div class="text">
+        <strong>
+            <p>TRANSPORTE Y LOGISTICA REIM, SA DE CV</p>
+        </strong>
+        <p>R.F.C. TLR1308235K8</p>
+        <p>Régimen fiscal: General de Ley Personas Morales</p>
+        <p>Domicilio Fiscal: 27 76, 68 Y 70, CENTRO, PROGRESO, Yucatán</p>
+    </div>
+    <hr>
+    <div class="exp">
+        <p><strong>LUGAR DE EXPEDICIÓN 97320 - Yucatán</strong> </p>
+    </div>
+
+    <p class="peso"> Moneda: {{data.data.moneda}} - {{moneda}}</p>
+
+    <table>
+        <thead>
+            <th>FOLIO FISCAL (UUID)</th>
+            <th>N. SERIE CSD DEL EMISOR <br>N. SERIE CSD DEL SAT</th>
+            <th>METODO DE PAGO</th>
+            <th>FECHA DE EMISIÓN <br>FECHA DE CERTIFICACIÓN</th>
+            <th>SERIE - FOLIO <br>TIPO DE COMPROBANTE</th>
+        </thead>
+        <tbody>
+            <td>FFFFFFFF-F0E8-4622-B6A1-8C0B1AC534DF</td>
+            <td>00001000000407584910 <br>00001000000407584910</td>
+            <td>Pago en parcialidades o diferido <br> Por definir</td>
+            <td>2020-05-20T11:29:15 <br>2020-05-20T11:29:15</td>
+            <td class='folio'>{{data.data.serie}} - {{data.data.folio}} <br> <strong class="comprobante">{{comprobante}}
+                </strong></td>
+        </tbody>
+    </table><br>
+
+    <table class="receptor">
+        <thead>
+            <th class='receptorC'>Receptor</th>
+        </thead>
+        <tbody>
+            <td class="receptorTD">
+                R.F.C: {{data.data.rfc}}<br>
+                Nombre: {{data.data.nombre}}<br>
+                Dirección: {{data.data.direccion}}
+                <p class="uso">
+                    USO CFDI: {{usoCFDI}}
+                </p>
+            </td>
+        </tbody>
+    </table><br>
+
+    <table>
+        <thead>
+            <th>CÒDIGO</th>
+            <th>CANTIDAD</th>
+            <th>UNIDAD</th>
+            <th>DESCRIPCIÒN</th>
+            <th>IMPUESTOS</th>
+            <th>IMPORTE</th>
+        </thead>
+        <tbody *ngFor="let item of data.data.conceptos">
+            <td>{{item.noIdentificacion}}</td>
+            <td>{{item.cantidad}}</td>
+            <td>{{item.claveUnidad}}</td>
+            <td>{{item.descripcion}}</td>
+            <td></td>
+            <td></td>
+            <td>{{item.valorUnitario}}</td>
+            <td>{{item.importe}}</td>
+
+
+        </tbody>
+    </table>
+
+</div>
+<button type="button" (click)='pdf()'>PDF</button>

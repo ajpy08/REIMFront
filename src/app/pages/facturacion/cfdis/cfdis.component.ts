@@ -170,7 +170,7 @@ export class CFDISComponent implements OnInit {
 
   pdf(cfdi: CFDI): void {
     this.facturacionService.getCFDI(cfdi._id).subscribe((res) => {
-      const cfdiPdf = res.cfdis;
+      const cfdiPdf = res;
       const dialogPDF = this.dialog.open(PdfFacturacionComponent, {
         width: '800px',
         height: '1000px',
