@@ -228,7 +228,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         'VACIO',
         false,
         true,
-        this.checkedVacios,
+        this.checkedReparacionVacios,
         this.checkedHDescagaR,
         this.checkedYaLavadosR
       )
