@@ -11,6 +11,7 @@ import * as _moment from 'moment';
 import { Concepto } from '../models/concepto.models';
 import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
+declare var swal: any;
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -467,6 +468,39 @@ export class CFDIComponent implements OnInit, OnDestroy {
         this.regForm.controls['conceptos'].setValue(undefined);
       }
     });
+  }
+
+  consultarManiobraConcepto() {
+    // let promesas;
+    let ok = true;
+
+    this.regForm.value.conceptos.forEach(c => {
+      const promesas = c.maniobras.map((m) => {
+        return new Promise(resolve => {
+          this.facturacionService.getManiobrasConceptos(m._id, c._id).subscribe(resM => {
+            if (resM.maniobrasConceptos.length > 0) {
+              resolve(false);
+            } else {
+              resolve(true);
+            }
+          });
+        });
+      });
+      Promise.all(promesas).then(result => {
+        result.forEach(r => {
+          if (r === false) {
+            ok = false;
+          }
+        });
+
+        if (ok) {
+          this.guardarCFDI();
+        } else {
+          swal('Error', 'Existe(n) Maniobra(s) con ese mismo concepto', 'error');
+        }
+      });
+    });
+
   }
 
   guardarCFDI() {
