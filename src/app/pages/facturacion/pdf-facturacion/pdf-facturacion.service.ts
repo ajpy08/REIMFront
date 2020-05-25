@@ -23,4 +23,14 @@ export class PdfFacturacionService {
     const url = URL_SERVICIOS + '/pdfFacturacion/uso/' + uso;
     return this.http.get(url, {params: params});
   }
+
+  getCLAVE(clave?: string): Observable<any> {
+    let params = new HttpParams();
+    if (clave) {
+      params = params.append('clave', clave);
+    }
+    const url = URL_SERVICIOS + '/pdfFacturacion/clave/unidad/' + clave;
+    return this.http.get(url, {params: params});
+  }
 }
+

@@ -62,15 +62,13 @@
         </thead>
         <tbody *ngFor="let item of data.data.conceptos">
             <td>{{item.noIdentificacion}}</td>
-            <td>{{item.cantidad}}</td>
-            <td>{{item.claveUnidad}}</td>
+            <td>{{item.cantidad}}.00</td>
+            <td>{{item.claveUnidad}} - {{claveUnidad}}</td>
             <td>{{item.descripcion}}</td>
-            <td *ngFor="let c of item.impuestos">
-                {{traslado(c)}} |
-                {{c.impuesto}} | {{tasaCuota(c)}} | {{importe(c)}}
-            </td>
-            <td></td>
-            <td>{{item.valorUnitario}}</td>
+            <div *ngFor="let c of item.impuestos">
+                <td>({{traslado(c)}}) | {{c.impuesto}} | {{tasaCuota(c)}} | {{importe(c)}}</td>
+            </div>
+             <!-- <td>{{item.valorUnitario}}</td> -->
             <td>{{item.importe}}</td>
 
 

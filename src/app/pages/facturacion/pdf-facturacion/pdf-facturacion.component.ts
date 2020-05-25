@@ -19,6 +19,7 @@ export class PdfFacturacionComponent implements OnInit {
   comprobante = '';
   usoCFDI = '';
   moneda = '';
+  claveUnidad = '';
   tasa = [];
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
@@ -39,6 +40,7 @@ export class PdfFacturacionComponent implements OnInit {
       this.moneda = 'Dolar Americano';
     }
     this.uso();
+    this.clave();
 
   }
 
@@ -72,14 +74,19 @@ export class PdfFacturacionComponent implements OnInit {
     }
     return tasaCuota;
   }
-  importe(importes) { // ESTA MAL ESTA PARTE CORREGIR
-    let importe = '';
-    const sep = importes.importe.substr().indexOf('.');
+  importe(importes) {
+    let result = '';
+    const sep = importes.importe.toString().indexOf('.');
     if (sep !== -1) {
-      
-    }
-    if (importes.importe) {
+      result = importes.importe.toString().split('.');
+      if (result[1].length > 2) {
 
+        return result = result[0] + '.' + result[1] + '0';
+      } else {
+        return importes.importe + '0';
+      }
+    } else {
+      return importes.importe + '.00';
     }
   }
 
@@ -90,6 +97,18 @@ export class PdfFacturacionComponent implements OnInit {
       });
     });
 
+  }
+
+  clave() {
+    this.data.data.conceptos.forEach(c => {
+      this.claveUnidad = c.claveUnidad;
+    });
+    this.pdfFacturacionService.getCLAVE(this.claveUnidad).subscribe((res) => {
+      res.claveUnidad.forEach(c_u => {
+        this.claveUnidad = c_u.nombre;
+        
+      });
+    });
   }
 
 
