@@ -211,11 +211,15 @@
                     <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
-                          <button type="button" matTooltip="Ver Impuestos" (click)="openDialogImpuestos(item.value)"
+                          <button type="button" matTooltip="Modificar Impuestos" (click)="openDialogImpuestos(item.value)"
                             class="btn btn-primary m-r-5">
-                            <i class="fa fa-edit"></i>
+                            <i class="fas fa-dollar-sign"></i>
                           </button>
-                          <button type="button" matTooltip="Borrar Impuestos" (click)="quitar(i)"
+                          <button type="button" matTooltip="Modificar Maniobras" (click)="openDialogManiobras(item.value)"
+                            class="btn btn-success m-r-5">
+                            <i class="fas fa-boxes"></i>
+                          </button>
+                          <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)"
                             class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button>
@@ -332,7 +336,7 @@
       </form>
 
       <div class="output">
-        <!-- <p>Form Data: {{regForm.value | json}}</p> -->
+        <p>Form Data: {{regForm.value | json}}</p>
         <p>Is Valid: {{regForm.valid}}</p>
       </div>
     </div>
