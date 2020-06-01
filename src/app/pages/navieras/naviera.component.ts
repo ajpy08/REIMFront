@@ -100,8 +100,8 @@ export class NavieraComponent implements OnInit {
         this.correo.controls.forEach(c => {
           if (this.correotem.value === c.value.correoO) {
             if (error === false) {
-              swal('Error al agregar', 'El correo ' + this.correotem.value  +
-               ' ya se encuentra registrado en la lista', 'error');
+              swal('Error al agregar', 'El correo ' + this.correotem.value +
+                ' ya se encuentra registrado en la lista', 'error');
               error = true;
               return false;
             }
@@ -200,10 +200,12 @@ export class NavieraComponent implements OnInit {
       this.regForm.controls['cp'].setValue(naviera.cp);
       this.regForm.controls['formatoR1'].setValue(naviera.formatoR1);
 
-      const correoArray = naviera.correo.split(',');
-      correoArray.forEach(c => {
-        this.addContenedor(c);
-      });
+      if (naviera.correo !== '' && naviera.correo !== undefined && naviera.correo !== null) {
+        const correoArray = naviera.correo.split(',');
+        correoArray.forEach(c => {
+          this.addContenedor(c);
+        });
+      }
       // this.regForm.controls['correosF'].setValue(naviera.correo);
       this.regForm.controls['correoFac'].setValue(naviera.correoFac);
       this.regForm.controls['credito'].setValue(naviera.credito);
