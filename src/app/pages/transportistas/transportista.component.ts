@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { TransportistaService, SubirArchivoService, FacturacionService} from '../../services/service.index';
-import { FormGroup, FormBuilder, Validators, FormArray , AbstractControl } from '@angular/forms';
+import { TransportistaService, SubirArchivoService, FacturacionService } from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Location } from '@angular/common';
 import swal from 'sweetalert';
 
@@ -96,7 +96,7 @@ export class TransportistaComponent implements OnInit {
         this.correoF.controls.forEach(c => {
           if (this.correotem.value === c.value.correoO) {
             if (error === false) {
-              swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+              swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
               error = true;
               return false;
             }
@@ -198,10 +198,12 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls['cp'].setValue(res.cp);
       this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-      const correoArray = res.correo.split(',');
-      correoArray.forEach(c => {
-        this.addContenedor(c);
-      });
+      if (res.correo !== '' && res.correo !== undefined && res.correo !== null) {
+        const correoArray = res.correo.split(',');
+        correoArray.forEach(c => {
+          this.addContenedor(c);
+        });
+      }
       // this.regForm.controls['correo'].setValue(res.correo);
       this.regForm.controls['correoFac'].setValue(res.correoFac);
       this.regForm.controls['credito'].setValue(res.credito);
@@ -221,10 +223,10 @@ export class TransportistaComponent implements OnInit {
       this.regForm.controls.correoF.value.forEach(correo => {
         correos += correo.correoO + ',';
       });
-      correos = correos.slice(0 , -1);
+      correos = correos.slice(0, -1);
 
-    this.correotem.setValue('');
-    this.correo.setValue(correos);
+      this.correotem.setValue('');
+      this.correo.setValue(correos);
 
       // console.log(this.regForm.value);
       this._transportistaService.guardarTransportista(this.regForm.value)
