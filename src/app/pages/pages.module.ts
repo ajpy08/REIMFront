@@ -99,7 +99,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PaginatorEspañol } from './buques/paginator-español';
 import { NgxPrintModule } from 'ngx-print';
 import { NgxGalleryModule } from 'ngx-gallery';
-
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 import {
     MatDatepickerModule,
     MatButtonModule,
@@ -148,6 +148,7 @@ import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unida
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-facturacion.component';
+
 
 @NgModule({
     declarations: [
@@ -230,8 +231,8 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         ClaveUnidadesComponent,
         ReportesComponent,
         ManiobrasTrasportistaComponent,
-        PdfFacturacionComponent
-    ],
+        PdfFacturacionComponent,
+     ],
     exports: [
         DashboardComponent
     ],
@@ -265,7 +266,8 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         NgxGalleryModule,
         MatListModule,
         MatBadgeModule,
-        MatTooltipModule
+        MatTooltipModule,
+        NgxQRCodeModule,
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, PdfFacturacionComponent ]

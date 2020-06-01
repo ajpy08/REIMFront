@@ -1,3 +1,7 @@
+<div class="loader" *ngIf="cargandoTimbre === true">
+    <div class="mensajeTimbre" *ngIf="cargandoTimbre === true"> {{mensaje}} </div>
+</div>
+
 <div id="contenido">
     <div class="img">
         <img src="../../../../assets/images/logo_reim_container_park.jpg">
@@ -15,35 +19,37 @@
         <p><strong>LUGAR DE EXPEDICIÓN 97320 - Yucatán</strong> </p>
     </div>
 
-    <p class="peso"> Moneda: {{data.data.moneda}} - {{moneda}}</p>
+    <p class="peso"> Moneda: {{data.data.cfdi.moneda}} - {{moneda}}</p>
 
     <table>
         <thead>
-            <th>FOLIO FISCAL (UUID)</th>
+            <th class="uuid">FOLIO FISCAL (UUID)</th>
             <th>N. SERIE CSD DEL EMISOR <br>N. SERIE CSD DEL SAT</th>
-            <th>METODO DE PAGO</th>
-            <th>FECHA DE EMISIÓN <br>FECHA DE CERTIFICACIÓN</th>
-            <th>SERIE - FOLIO <br>TIPO DE COMPROBANTE</th>
+            <th class="metodos">METODO DE PAGO</th>
+            <th class="fechas">FECHA DE EMISIÓN <br>FECHA DE CERTIFICACIÓN</th>
+            <th>SERIE - FOLIO <br>TIPO COMPR.</th>
         </thead>
         <tbody>
-            <td>FFFFFFFF-F0E8-4622-B6A1-8C0B1AC534DF</td>
-            <td>00001000000407584910 <br>00001000000407584910</td>
-            <td>Pago en parcialidades o diferido <br> Por definir</td>
-            <td>2020-05-20T11:29:15 <br>2020-05-20T11:29:15</td>
-            <td class='folio'>{{data.data.serie}} - {{data.data.folio}} <br> <strong class="comprobante">{{comprobante}}
+            <td>{{data.data.cfdi.uuid}}</td>
+            <td>{{data.data.NoCertificadoEmisor}} <br>{{data.data.cfdi.NoSerieSat}}</td>
+            <td class="metodo">{{metodoPago}} <br> {{usoCFDI}}</td>
+            <td class="fecha">{{data.data.cfdi.fechaEmision}}
+                <br>{{obtenerFechaCert(data.data.cfdi.fechaCertificacion)}}</td>
+            <td class='folio'>{{data.data.cfdi.serie}} - {{data.data.cfdi.folio}} <br> <strong
+                    class="comprobante">{{comprobante}}
                 </strong></td>
         </tbody>
-    </table><br>
+    </table>
 
     <table class="receptor">
         <thead>
-            <th class='receptorC'>Receptor</th>
+            <th class='receptorC'>RECEPTOR</th>
         </thead>
         <tbody>
             <td class="receptorTD">
-                R.F.C: {{data.data.rfc}}<br>
-                Nombre: {{data.data.nombre}}<br>
-                Dirección: {{data.data.direccion}}
+                R.F.C: {{data.data.cfdi.rfc}}<br>
+                Nombre: {{data.data.cfdi.nombre}}<br>
+                Dirección: {{data.data.cfdi.direccion}}
                 <p class="uso">
                     USO CFDI: {{usoCFDI}}
                 </p>
@@ -51,29 +57,97 @@
         </tbody>
     </table><br>
 
-    <table>
+    <table class="conceptos">
         <thead>
-            <th>CÒDIGO</th>
-            <th>CANTIDAD</th>
-            <th>UNIDAD</th>
+            <th class="codcantidad">CÒDIGO</th>
+            <th class="codcantidad">CANTIDAD</th>
+            <th class="unidad">UNIDAD</th>
             <th>DESCRIPCIÒN</th>
-            <th>IMPUESTOS</th>
-            <th>IMPORTE</th>
+            <th class="imp">IMPUESTOS</th>
+            <th class="codcantidad">IMPORTE</th>
+
         </thead>
-        <tbody *ngFor="let item of data.data.conceptos">
+        <tbody *ngFor="let item of data.data.cfdi.conceptos">
+
             <td>{{item.noIdentificacion}}</td>
             <td>{{item.cantidad}}.00</td>
             <td>{{item.claveUnidad}} - {{claveUnidad}}</td>
             <td>{{item.descripcion}}</td>
             <div *ngFor="let c of item.impuestos">
-                <td>({{traslado(c)}}) | {{c.impuesto}} | {{tasaCuota(c)}} | {{importe(c)}}</td>
+                <td>({{traslado(c)}}) | {{c.impuesto}} | {{tasaCuota(c)}} | ${{importe(c) | coma}}</td>
             </div>
-             <!-- <td>{{item.valorUnitario}}</td> -->
-            <td>{{item.importe}}</td>
-
-
+            <!-- <td>{{item.valorUnitario}}</td> -->
+            <td>$ {{item.importe | coma}}</td>
+            <tr>
+                <hr class="linea">
+            </tr>
         </tbody>
-    </table>
+
+        <div class="tablatotales">
+            <strong>SUBTOTAL: &nbsp;$ &nbsp;</strong>{{subtotal | coma}}<br>
+            <strong>TOTAL IMPORTES RETENIDOS: &nbsp;$ &nbsp; &nbsp; </strong> {{totalRetenidos | coma}}<br>
+            <strong>TOTAL IMPORTES TRASLADADOS: &nbsp;$ &nbsp; &nbsp; </strong>{{totalTrasladados | coma}}<br>
+            <strong>TOTAL: &nbsp;$&nbsp; &nbsp;</strong>{{total | coma }}
+        </div>
+    </table><br>
+
+    <table>
+        <thead>
+            <th class="letras">IMPORTE CON LETRAS</th>
+        </thead>
+        <tbody>
+            <td>{{letrasTotal}}</td>
+        </tbody>
+    </table><br>
+
+
+    <div class="cadena">CADENA ORIGINAL DEL COMPLEMENTO DE CERTIFICACIÓN DIGITAL DEL SAT</div>
+    <div class="cadenaOriginal">
+        {{cadenaOriginal()}}
+        <!-- {{data.data.cfdi.cadenaOriginalSat}} -->
+    </div>
+
+    <div class="qrcon">
+        <ngx-qrcode [elementType]="elementType" [value]=value style="position: static; background-attachment: static;"
+            width=160 errorCorrectionLevel="M"></ngx-qrcode>
+    </div>
+
+    <div class="selloEmisor"> SELLO DIGITAL DEL EMISOR
+    </div>
+
+    <div class="textEmisor">
+        {{data.data.cfdi.selloEmisor}}
+    </div>
+
+    <div class="selloSat">
+        SELLO DIGITAL DEL SAT
+    </div>
+    <div class="textoSat">
+        {{data.data.cfdi.selloSat}}
+    </div>
+    <div class="rfcProv">
+        RFC PROVEDOR CERTIFICADO
+    </div>
+    <div class="textrfcProv">
+        {{data.data.cfdi.rfcProvCer}}
+    </div>
+
+    <div class="pie">
+        ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI VERSION 3.3
+    </div>
 
 </div>
-<button type="button" (click)='pdf()'>PDF</button>
+
+<div *ngIf="data.data.cfdi.uuid">
+    <button type="button" matTooltip="Descargar PDF" class="btn btn-info m-r-5" (click)='pdf()'>
+        <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+</div>
+<div *ngIf="!data.data.cfdi.uuid">
+    <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( data.data.cfdi._id )" class="btn btn-warning m-r-5">
+        <i class="fa  fa-bell-o"></i>
+    </button>
+</div>
+<div class="butoncenter">
+    <button type="button" matTooltip="Cerrar PDF" class="btn btn-danger btn-circle" (click)="closepdf()">
+        <i class="fa fa-times" aria-hidden="true"></i></button>
+</div>

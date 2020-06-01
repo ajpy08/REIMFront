@@ -2,32 +2,44 @@
     display: inline-block;
     vertical-align: top;
 }
-img{
+
+img {
     width: 285px;
     height: 76px;
+    margin-top: 0x;
 }
+
 .text {
     margin-top: -64px;
     text-align: right;
 }
 
 p {
-    font-size: small;
+    font-size: 10px;
     margin-top: -16px;
     margin-bottom: 1rem;
     color: black;
+    font-weight: bold;
 }
+
 hr {
-  height: 2px;
-  background-color:#ffca28;
+    height: 2px;
+    background-color: #ffca28;
 }
 
 /* table,td, th { border: 1px solid black;
 } */
 
-table { border-collapse: collapse; margin: auto; width: 100%; margin-top:-14px;}
+table {
+    border-collapse: collapse;
+    margin: auto;
+    width: 100%;
+    margin-top: -14px;
+    table-layout: fixed;
+}
 
 /* td { width: 100%; height: 10px; } */
+
 th {
     text-align: center;
     font-size: 9px;
@@ -36,19 +48,179 @@ th {
     font-weight: bold;
     background-color: #b2b4b5;
 }
+
 td {
     font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
+    text-align: left;
     font-size: 10px;
     color: black;
+    font-weight: bold;
+}
+
+td.fecha {
+    width: 100px;
+    text-align: right;
+}
+
+td.metodo {
+    text-align: center;
+}
+
+tr {
+    margin-top: 0;
+}
+
+th.metodos {
+    width: 170px;
+}
+
+th.codcantidad {
+    width: 50px;
+}
+
+th.unidad {
+    width: 135px;
+}
+
+th.imp {
+    width: 153px;
+}
+
+th.letras {
+    text-align: left;
+}
+
+th.uuid {
+    width: 219px;
+}
+
+th.fechas {
+    width: 121px;
+}
+
+.cadena {
+    width: 736px;
+    text-align: left;
+    background-color: #b2b4b5;
+    font-size: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: black;
+    margin-top: -19px;
+}
+.selloEmisor
+ {
+  margin-left: 22%;
+  background-color: #b2b4b5;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: black;
+  margin-top: -152px;
+  position: relative;
+ }
+
+ div.textEmisor {
+    margin-left: 25%;
+    text-align: justify;
+    font-size: 9px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: black;
+    width: 544px;
+    height: 64px;
+    word-wrap: break-word;
+
+ }
+.selloSat
+ {
+  margin-left: 22%;
+  background-color: #b2b4b5;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: black;
+  position: relative;
+ }
+.rfcProv {
+  margin-left: 22%;
+  background-color: #b2b4b5;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: black;
+  position: relative;
+  margin-top: 3px;
+}
+div.textrfcProv {
+  margin-left: 25%;
+  text-align: justify;
+  font-size: 9px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: black;
+  width: 563px;
+  margin-top: 5px;
+  word-wrap: break-word;
+ }
+
+ div.textoSat {
+  margin-left: 25%;
+  text-align: justify;
+  font-size: 9px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color: black;
+  width: 544px;
+  height: 64px;
+  margin-top: 5px;
+  word-wrap: break-word;
+ }
+ div.textRFC {
+    margin-left: 25%;
+    text-align: justify;
+    font-size: 9px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: black;
+    width: 563px;
+    height: 5px;
+    word-wrap: break-word;
+
+ }
+ .qrcon {
+     position: static;
+     background-attachment: fixed;
+    
+ }
+
+ hr.linea {
+    background-color: #b2b4b5;
+    width: 728px;
+    height: 15%;
+    margin-left: 1px;
+    margin-top: 1px;
+}
+
+/* .cadenaOriginal {
+    width: 300px;
+} */
+
+.cadenaOriginal {
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    word-wrap: break-word;
     font-weight: bold;
 }
 .folio {
     font-family: Arial, Helvetica, sans-serif;
     color: black;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
+    text-align: center;
 }
+
 .comprobante {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
@@ -60,29 +232,146 @@ p.peso {
     font-size: 12px;
     margin-top: -33px;
 }
+
 p.uso {
     font-family: Arial, Helvetica, sans-serif;
     text-align: right;
-    font-size:11px;
+    font-size: 11px;
     margin-right: 10px;
 }
-.receptor{
+
+.conceptos {
+    margin-top: -31px;
+    ;
+}
+
+.receptor {
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 9px;
-    
+    margin-top: 2px;
 }
-.receptorTD{
+
+.receptorTD {
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: black;
 }
+
 .receptorC {
     text-align: left;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
     color: black;
     background-color: #b2b4b5;
-
 }
+
+.tablatotales {
+    position: relative;
+    text-align: right;
+    font-size: 10px;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    left: 447px;
+    margin-top: -4px;
+    width: 252px;
+}
+
+.pie {
+    font-size: 10px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    margin-top: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+
+.butoncenter {
+    position: fixed;
+    margin-left: 19%;
+    ;
+}
+
+/*  CARGANDO TIMBRE */
+
+.loader {
+    font-size: 20px;
+    /* margin: 9%; */
+    width: 19px;
+    height: 10px;
+    border-radius: 50%;
+    position: fixed;
+    text-indent: 0;
+    -webkit-animation: load4 1.3s infinite linear;
+    animation: load4 1.3s infinite linear;
+  }
+  @-webkit-keyframes load4 {
+    0%,
+    100% {
+      box-shadow: 0em -3em 0em 0.2em #4d2dc2, 2em -2em 0 0em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 0em #4d2dc2;
+    }
+    12.5% {
+      box-shadow: 0em -3em 0em 0em #4d2dc2, 2em -2em 0 0.2em #4d2dc2, 3em 0em 0 0em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    25% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 0em #4d2dc2, 3em 0em 0 0.2em #4d2dc2, 2em 2em 0 0em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    37.5% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 0em #4d2dc2, 2em 2em 0 0.2em #4d2dc2, 0em 3em 0 0em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    50% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 0em #4d2dc2, 0em 3em 0 0.2em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    62.5% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 0em #4d2dc2, -2em 2em 0 0.2em #4d2dc2, -3em 0em 0 0em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    75% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 0.2em #4d2dc2, -2em -2em 0 0em #4d2dc2;
+    }
+    87.5% {
+      box-shadow: 0em -3em 0em 0em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 0em #4d2dc2, -2em -2em 0 0.2em #4d2dc2;
+    }
+  }
+  @keyframes load4 {
+    0%,
+    100% {
+      box-shadow: 0em -3em 0em 0.2em #4d2dc2, 2em -2em 0 0em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 0em #4d2dc2;
+    }
+    12.5% {
+      box-shadow: 0em -3em 0em 0em #4d2dc2, 2em -2em 0 0.2em #4d2dc2, 3em 0em 0 0em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    25% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 0em #4d2dc2, 3em 0em 0 0.2em #4d2dc2, 2em 2em 0 0em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    37.5% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 0em #4d2dc2, 2em 2em 0 0.2em #4d2dc2, 0em 3em 0 0em #4d2dc2, -2em 2em 0 -0.5em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    50% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 0em #4d2dc2, 0em 3em 0 0.2em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 -0.5em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    62.5% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 0em #4d2dc2, -2em 2em 0 0.2em #4d2dc2, -3em 0em 0 0em #4d2dc2, -2em -2em 0 -0.5em #4d2dc2;
+    }
+    75% {
+      box-shadow: 0em -3em 0em -0.5em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 0.2em #4d2dc2, -2em -2em 0 0em #4d2dc2;
+    }
+    87.5% {
+      box-shadow: 0em -3em 0em 0em #4d2dc2, 2em -2em 0 -0.5em #4d2dc2, 3em 0em 0 -0.5em #4d2dc2, 2em 2em 0 -0.5em #4d2dc2, 0em 3em 0 -0.5em #4d2dc2, -2em 2em 0 0em #4d2dc2, -3em 0em 0 0em #4d2dc2, -2em -2em 0 0.2em #4d2dc2;
+    }
+  }
+
+
+  .mensajeTimbre {
+    width: 307px;
+    position: fixed;
+    margin-top: 60px;
+    font-size: 25px;
+    margin-left: -531%;
+    /* color: rgb(78, 78, 78); */
+    font-weight: 500;
+  }
+
+
+

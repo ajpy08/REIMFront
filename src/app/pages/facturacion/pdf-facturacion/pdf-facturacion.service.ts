@@ -23,6 +23,14 @@ export class PdfFacturacionService {
     const url = URL_SERVICIOS + '/pdfFacturacion/uso/' + uso;
     return this.http.get(url, {params: params});
   }
+  getMetodoPago(metodoPago?: string): Observable<any> {
+    let params = new HttpParams();
+    if (metodoPago) {
+      params = params.append('metodoPago', metodoPago);
+    }
+    const url = URL_SERVICIOS + '/pdfFacturacion/metodoPago/' + metodoPago;
+    return this.http.get(url, {params: params});
+  }
 
   getCLAVE(clave?: string): Observable<any> {
     let params = new HttpParams();
@@ -31,6 +39,11 @@ export class PdfFacturacionService {
     }
     const url = URL_SERVICIOS + '/pdfFacturacion/clave/unidad/' + clave;
     return this.http.get(url, {params: params});
+  }
+
+  getNumeroAletras(total: Float64ArrayConstructor): Observable<any> {
+    const url = URL_SERVICIOS +  '/pdfFacturacion/numerosLetras/' + total;
+    return this.http.get(url);
   }
 }
 

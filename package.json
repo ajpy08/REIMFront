@@ -41,6 +41,7 @@
     "ngx-export-as": "^1.4.0",
     "ngx-gallery": "^5.10.0",
     "ngx-print": "^1.2.0-beta.2",
+    "ngx-qrcode2": "^9.0.0",
     "pdfmake": "^0.1.65",
     "rxjs": "^6.3.3",
     "sweetalert": "^2.1.2",
