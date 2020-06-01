@@ -7,6 +7,7 @@ import { DecimalRightPadPipe } from './../pages/facturacion/pipes/decimal-rightp
 import { NgCapitalizePipeModule } from 'angular-pipes';
 import { NgAbsPipeModule } from 'angular-pipes';
 import { NgLeftPadPipeModule } from 'angular-pipes';
+import { ComaPipe } from '../pages/facturacion/pipes/coma.pipe';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { NgLeftPadPipeModule } from 'angular-pipes';
     FotosPipe,
     ZipPipePipe,
     IvaPipe,
-    DecimalRightPadPipe
+    DecimalRightPadPipe,
+    ComaPipe
   ],
   exports: [
     ImagenPipe,
@@ -24,7 +26,8 @@ import { NgLeftPadPipeModule } from 'angular-pipes';
     DecimalRightPadPipe,
     NgCapitalizePipeModule,
     NgAbsPipeModule,
-    NgLeftPadPipeModule
+    NgLeftPadPipeModule,
+    ComaPipe
   ],
   providers: [
     FotosPipe
