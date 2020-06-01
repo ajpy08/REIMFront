@@ -134,7 +134,7 @@ export class ClienteComponent implements OnInit {
       estado: ['', [Validators.required]],
       cp: ['', [Validators.required]],
       formatoR1: [''],
-      activo:[true, [Validators.required]],
+      activo: [true, [Validators.required]],
       correo: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
@@ -163,20 +163,20 @@ export class ClienteComponent implements OnInit {
     } else if (this.correoF.controls.length === 0) {
       this.correoF.push(this.agregarArray(correoO));
     } else {
-        if (this.correoF.controls) {
-          this.correoF.controls.forEach(c => {
-            if (this.correotem.value === c.value.correoO) {
-              if (error === false) {
-                swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
-                error = true;
-                return false;
-              }
+      if (this.correoF.controls) {
+        this.correoF.controls.forEach(c => {
+          if (this.correotem.value === c.value.correoO) {
+            if (error === false) {
+              swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
+              error = true;
+              return false;
             }
-          });
-          if (!error) {
-            this.correoF.push(this.agregarArray(correoO));
           }
+        });
+        if (!error) {
+          this.correoF.push(this.agregarArray(correoO));
         }
+      }
     }
   }
 
@@ -184,6 +184,7 @@ export class ClienteComponent implements OnInit {
     this.correoF.removeAt(indice);
   }
 
+  /* #region  Properties */
   get razonSocial() {
     return this.regForm.get('razonSocial');
   }
@@ -253,6 +254,7 @@ export class ClienteComponent implements OnInit {
   get _id() {
     return this.regForm.get('_id');
   }
+  /* #endregion */
 
   cargarCliente(id: string) {
     this._clienteService.getCliente(id)
@@ -270,11 +272,12 @@ export class ClienteComponent implements OnInit {
         this.regForm.controls['cp'].setValue(res.cp);
         this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-
-        const correoArray = res.correo.split(',');
-        correoArray.forEach(c => {
-          this.addContenedor(c);
-        });
+        if (res.correo !== '' && res.correo !== undefined && res.correo !== null) {
+          const correoArray = res.correo.split(',');
+          correoArray.forEach(c => {
+            this.addContenedor(c);
+          });
+        }
 
         // this.regForm.controls['correo'].setValue(res.correo);
         this.regForm.controls['correoFac'].setValue(res.correoFac);

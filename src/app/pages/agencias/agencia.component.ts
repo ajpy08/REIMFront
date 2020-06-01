@@ -92,7 +92,7 @@ export class AgenciaComponent implements OnInit {
       this.correoF.controls.forEach(c => {
         if (this.correotem.value === c.value.correoO) {
           if (error === false) {
-            swal('Error al agregar', 'El correo ' + this.correotem.value  + ' ya se encuentra registrado en la lista', 'error');
+            swal('Error al agregar', 'El correo ' + this.correotem.value + ' ya se encuentra registrado en la lista', 'error');
             error = true;
             return false;
           }
@@ -189,10 +189,12 @@ export class AgenciaComponent implements OnInit {
         this.regForm.controls['cp'].setValue(res.cp);
         this.regForm.controls['formatoR1'].setValue(res.formatoR1);
 
-        const correoArray = res.correo.split(',');
-        correoArray.forEach(c => {
-          this.addContenedor(c);
-        });
+        if (res.correo !== '' && res.correo !== undefined && res.correo !== null) {
+          const correoArray = res.correo.split(',');
+          correoArray.forEach(c => {
+            this.addContenedor(c);
+          });
+        }
         // this.regForm.controls['correo'].setValue(res.correo);
         this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
