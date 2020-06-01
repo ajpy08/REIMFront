@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Maniobras</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="regForm" (ngSubmit)="asignarManiobras()" novalidate>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">#</th>
+
+            <th scope="col">C/D</th>
+            <th scope="col">Folio</th>
+            <th scope="col">Contenedor</th>
+            <th scope="col">Tipo</th>
+
+          </tr>
+        </thead>
+        <tbody formArrayName="maniobras" *ngFor="let item of maniobras.controls; let i = index;">
+          <tr [formGroupName]="i">
+            <td>
+              <button type="button" (click)="quitar( i )" class="btn btn-danger">
+                <i class="fa fa-trash-o"></i>
+              </button>
+            </td>
+            <td scope="row">{{i+1}}</td>
+            <td>
+              {{item.get('cargaDescarga').value}}
+            </td>
+            <td>
+              {{item.get('folio').value}}
+            </td>
+            <td>
+              {{item.get('contenedor').value}}
+            </td>
+            <td>
+              {{item.get('tipo').value}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button class="btn btn-danger waves-effect waves-light" (click)="close('')">Close</button>
+  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" (click)="asignarManiobras(this.data)">
+    <i class="fa fa-save"></i>
+    Asignar
+  </button>
+</mat-dialog-actions>

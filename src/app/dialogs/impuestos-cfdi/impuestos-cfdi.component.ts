@@ -1,14 +1,9 @@
-import { FacturacionService } from 'src/app/services/service.index';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { SelectionModel } from '@angular/cdk/collections';
 import swal from 'sweetalert';
 
-import {
-  MAT_DIALOG_DATA
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Impuesto } from 'src/app/pages/facturacion/models/impuesto.models';
-import { DialogData } from '../info-dialog/info-dialog.component';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { TR_ARRAY, IMPUESTOS_ARRAY } from 'src/app/config/config';
 
@@ -21,16 +16,13 @@ export class ImpuestosCFDIComponent implements OnInit {
 
   TRs = TR_ARRAY;
   tipoImpuestos = IMPUESTOS_ARRAY;
-  impuestosIniciales;
   regForm: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<ImpuestosCFDIComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder,
-    private facturacionService: FacturacionService) { }
+    private fb: FormBuilder) { }
 
   ngOnInit() {
-    // this.impuestosIniciales = this.data.impuestos;
     this.createFormGroup();
     this.impuestos.removeAt(0);
     this.cargarImpuestos(this.data.impuestos);
@@ -112,17 +104,6 @@ export class ImpuestosCFDIComponent implements OnInit {
   asignarImpuestos(concepto) {
     concepto.impuestos = this.impuestos.value;
     this.close(concepto);
-    // if (this.impuestos.value) {
-    // if (this.impuestosIniciales !== this.impuestos.value) {
-    // const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === this.data._id);
-    // this.facturacionService.aFacturar[pos].impuestos = this.impuestos.value;
-    //   this.close(true);
-    // } else {
-    //   this.close(false);
-    // }
-    // } else {
-    //   swal('Este concepto no tiene impuestos', '', 'error');
-    // }
   }
 
   /* #region  Properties */

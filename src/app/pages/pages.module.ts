@@ -127,6 +127,7 @@ import {
 import { DetalleManiobraComponent } from './detalle-maniobra/detalle-maniobra.component';
 import { AsignarFacturaComponent } from '../dialogs/asignar-factura/asignar-factura.component';
 import { ImpuestosCFDIComponent } from './../dialogs/impuestos-cfdi/impuestos-cfdi.component';
+import { ManiobrasCFDIComponent } from './../dialogs/maniobras-cfdi/maniobras-cfdi.component';
 import { FacturacionManiobrasComponent } from './maniobras/facturacion-maniobras/facturacion-maniobras.component';
 import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras-diario.component';
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
@@ -208,6 +209,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         BLBookingDialog,
         InfoDialogComponent,
         ImpuestosCFDIComponent,
+        ManiobrasCFDIComponent,
         FacturacionManiobrasComponent,
         ManiobrasDiarioComponent,
         TiposContenedoresComponent,
@@ -268,7 +270,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         MatTooltipModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, PdfFacturacionComponent ]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent ]
 })
 
 export class PagesModules { }
