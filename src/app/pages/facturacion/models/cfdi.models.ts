@@ -10,6 +10,13 @@ export class CFDI {
     public subTotal?: number,
     public tipoComprobante?: string,
     public total?: number,
+    public uuid?: string,
+    public NoSerieSat?: string,
+    public fechaCer?: Date,
+    public cadenaOriginal?: string,
+    public selloSat?: string,
+    public rfcProvCer?: string,
+    public selloEmisro?: string,
     // public version?: string, // FALTA
     // public noCertificado?: string, // FALTA
     // public sello?: string, // FALTA

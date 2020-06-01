@@ -36,6 +36,10 @@ export class FacturacionService {
     const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
   }
+  getCFDIPDF(id: string): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    return this.http.get(url);
+  }
 
   guardarCFDI(cfdi: CFDI): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cfdi';
@@ -72,6 +76,12 @@ export class FacturacionService {
       );
   }
 
+  getManiobrasConceptos(maniobra_ID: string, concepto_ID: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/cfdis/Maniobra/Concepto/' + maniobra_ID + '&' + concepto_ID + '/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   xmlCFDI(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cfdi/' + id + '/xml/';
     url += '?token=' + this._usuarioService.token;
@@ -81,6 +91,15 @@ export class FacturacionService {
   timbrarXML(nombre: string, id: string): Observable<any> {
     const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '/';
      return this.http.get(url);
+   }
+
+   actualizarDatosTimbre(cfdi: CFDI): Observable<any> {
+      let url = URL_SERVICIOS + '/cfdis/datosTimbrado/' + cfdi._id + '/';
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, cfdi).pipe(map((resp: any) => {
+        swal('Correcto', 'Se ha timbrado correctamente', 'success');
+        return resp.cfdiTimbradoAct;
+      }));
    }
 
    codeQR(uuid: string, rfc_emisor: string, rfc_receptor: string, total: string, sello: string): Observable<any> {

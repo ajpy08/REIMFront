@@ -5,6 +5,7 @@ export const ID_MELFI = '5c49e55b6b427b166466c9b3';
 export const ID_MSC = '5e279f5f18e40063e7539339';
 
 export let Id_sentry = 'https://2199e7fcc6ee44ec9dbb6ea6e2ff54a3@sentry.io/2275987';
+export let RFCEMISOR = 'TLR1308235K8';
 
 export const ETAPAS_MANIOBRA = {
   APROBACION: 'APROBACION',
