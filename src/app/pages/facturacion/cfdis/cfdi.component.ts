@@ -447,9 +447,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
   consultarManiobraConcepto() {
     // let promesas;
     let ok = true;
-
+    let promesas;
     this.regForm.value.conceptos.forEach(c => {
-      const promesas = c.maniobras.map((m) => {
+      promesas = c.maniobras.map((m) => {
         return new Promise(resolve => {
           this.facturacionService.getManiobrasConceptos(m._id, c._id).subscribe(resM => {
             if (resM.maniobrasConceptos.length > 0) {
@@ -460,19 +460,19 @@ export class CFDIComponent implements OnInit, OnDestroy {
           });
         });
       });
-      Promise.all(promesas).then(result => {
-        result.forEach(r => {
-          if (r === false) {
-            ok = false;
-          }
-        });
-
-        if (ok) {
-          this.guardarCFDI();
-        } else {
-          swal('Error', 'Existe(n) Maniobra(s) con ese mismo concepto', 'error');
+    });
+    Promise.all(promesas).then(result => {
+      result.forEach(r => {
+        if (r === false) {
+          ok = false;
         }
       });
+
+      if (ok) {
+        this.guardarCFDI();
+      } else {
+        swal('Error', 'Existe(n) Maniobra(s) con ese mismo concepto', 'error');
+      }
     });
 
   }
