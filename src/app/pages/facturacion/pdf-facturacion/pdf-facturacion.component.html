@@ -2,6 +2,27 @@
     <div class="mensajeTimbre" *ngIf="cargandoTimbre === true"> {{mensaje}} </div>
 </div>
 
+
+<div class="dropdown">
+    <button class="dropbtn btn btn-warning btn-circle"><i class="fas fa-exclamation-triangle"></i></button>
+    <div class="dropdown-content">
+        <button type="button" matTooltip="Cerrar PDF" class="btn btn-danger btn-circle" (click)="closepdf()">
+            <i class="fa fa-times" aria-hidden="true"></i></button><br>
+            <div class="sep"></div>
+        <div *ngIf="data.data.cfdi.uuid">
+            <button type="button" matTooltip="Descargar PDF" class=" dropdown-item btn btn-info  btn-circle"
+                (click)='pdf()'>
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+        </div>
+        <div class="sep"></div>
+        <div *ngIf="!data.data.cfdi.uuid">
+            <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( data.data.cfdi._id )"
+                class=" dropdown-item  btn btn-warning m-r-5">
+                <i class="fa  fa-bell-o"></i>
+            </button>
+        </div>
+    </div>
+</div>
 <div id="contenido">
     <div class="img">
         <img src="../../../../assets/images/logo_reim_container_park.jpg">
@@ -107,47 +128,57 @@
         <!-- {{data.data.cfdi.cadenaOriginalSat}} -->
     </div>
 
-    <div class="qrcon">
-        <ngx-qrcode [elementType]="elementType" [value]=value style="position: static; background-attachment: static;"
-            width=160 errorCorrectionLevel="M"></ngx-qrcode>
-    </div>
+    <div *ngIf="this.data.data.cfdi.uuid">
+        <div class="qrcon"><br>
+            <qrcode [qrdata]="this.value" [size]="150"
+                style="position: static; width: 100px; background-attachment: static;" errorCorrectionLevel="'M'">
+            </qrcode>
 
-    <div class="selloEmisor"> SELLO DIGITAL DEL EMISOR
-    </div>
+        </div>
+        <div class="selloEmisor"> SELLO DIGITAL DEL EMISOR
+        </div>
 
-    <div class="textEmisor">
-        {{data.data.cfdi.selloEmisor}}
-    </div>
+        <div class="textEmisor">
+            {{data.data.cfdi.selloEmisor}}
+        </div>
 
-    <div class="selloSat">
-        SELLO DIGITAL DEL SAT
+        <div class="selloSat">
+            SELLO DIGITAL DEL SAT
+        </div>
+        <div class="textoSat">
+            {{data.data.cfdi.selloSat}}
+        </div>
+        <div class="rfcProv">
+            RFC PROVEDOR CERTIFICADO
+        </div>
+        <div class="textrfcProv">
+            {{data.data.cfdi.rfcProvCer}}
+        </div>
     </div>
-    <div class="textoSat">
-        {{data.data.cfdi.selloSat}}
-    </div>
-    <div class="rfcProv">
-        RFC PROVEDOR CERTIFICADO
-    </div>
-    <div class="textrfcProv">
-        {{data.data.cfdi.rfcProvCer}}
+    <div *ngIf="!this.data.data.cfdi.uuid">
+        <div class="selloEmisorS"> SELLO DIGITAL DEL EMISOR
+        </div>
+
+        <div class="textEmisor">
+            {{data.data.cfdi.selloEmisor}}
+        </div>
+
+        <div class="selloSat">
+            SELLO DIGITAL DEL SAT
+        </div>
+        <div class="textoSat">
+            {{data.data.cfdi.selloSat}}
+        </div>
+        <div class="rfcProv">
+            RFC PROVEDOR CERTIFICADO
+        </div>
+        <div class="textrfcProv">
+            {{data.data.cfdi.rfcProvCer}}
+        </div>
     </div>
 
     <div class="pie">
         ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI VERSION 3.3
     </div>
 
-</div>
-
-<div *ngIf="data.data.cfdi.uuid">
-    <button type="button" matTooltip="Descargar PDF" class="btn btn-info m-r-5" (click)='pdf()'>
-        <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-</div>
-<div *ngIf="!data.data.cfdi.uuid">
-    <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( data.data.cfdi._id )" class="btn btn-warning m-r-5">
-        <i class="fa  fa-bell-o"></i>
-    </button>
-</div>
-<div class="butoncenter">
-    <button type="button" matTooltip="Cerrar PDF" class="btn btn-danger btn-circle" (click)="closepdf()">
-        <i class="fa fa-times" aria-hidden="true"></i></button>
 </div>
