@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Impuestos</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="regForm" (ngSubmit)="asignarImpuestos()" novalidate>
+  <form [formGroup]="regForm" (ngSubmit)="asignarImpuestos(this.data)" novalidate>
     <div class="table-responsive">
       <table class="table">
         <thead>

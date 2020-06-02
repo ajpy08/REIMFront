@@ -128,11 +128,13 @@
         <!-- {{data.data.cfdi.cadenaOriginalSat}} -->
     </div>
 
+
     <div *ngIf="this.data.data.cfdi.uuid">
         <div class="qrcon"><br>
             <qrcode [qrdata]="this.value" [size]="150"
                 style="position: static; width: 100px; background-attachment: static;" errorCorrectionLevel="'M'">
             </qrcode>
+
 
         </div>
         <div class="selloEmisor"> SELLO DIGITAL DEL EMISOR
