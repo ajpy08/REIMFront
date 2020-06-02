@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Maniobras</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="regForm" (ngSubmit)="asignarManiobras()" novalidate>
+  <form [formGroup]="regForm" (ngSubmit)="asignarManiobras(this.data)" novalidate>
     <div class="table-responsive">
       <table class="table">
         <thead>

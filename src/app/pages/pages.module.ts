@@ -99,7 +99,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PaginatorEspañol } from './buques/paginator-español';
 import { NgxPrintModule } from 'ngx-print';
 import { NgxGalleryModule } from 'ngx-gallery';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
+// import { NgxQRCodeModule } from 'ngx-qrcode2';
 import {
     MatDatepickerModule,
     MatButtonModule,
@@ -269,7 +269,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         MatListModule,
         MatBadgeModule,
         MatTooltipModule,
-        NgxQRCodeModule,
+        // NgxQRCodeModule,
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent ]
