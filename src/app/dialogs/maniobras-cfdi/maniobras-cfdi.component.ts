@@ -30,9 +30,9 @@ export class ManiobrasCFDIComponent implements OnInit {
     if (maniobras.length > 0) {
       maniobras.forEach(element => {
         if (element.cargaDescarga) {
-          this.maniobras.push(this.agregarArray(
-            new Maniobra(element.cargaDescarga, element.folio, '', '', new Naviera(), '', '', '', '', element.contenedor,
-              element.tipo)));
+          this.maniobras.push(this.agregarArray(element));
+            // new Maniobra(element.cargaDescarga, element.folio, '', '', new Naviera(), '', '', '', '', element.contenedor,
+            //   element.tipo)
         } else {
           this.maniobraService.getManiobra(element).subscribe((maniobra) => {
             this.maniobras.push(this.agregarArray(
@@ -81,7 +81,7 @@ export class ManiobrasCFDIComponent implements OnInit {
   asignarManiobras(concepto) {
     concepto.maniobras = [];
     this.maniobras.value.forEach(m => {
-      concepto.maniobras.push(m._id);
+      concepto.maniobras.push(m);
     });
     this.close(concepto);
   }
