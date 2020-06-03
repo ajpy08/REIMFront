@@ -444,6 +444,14 @@ export class CFDIComponent implements OnInit, OnDestroy {
     });
   }
 
+  guardar() {
+    if (this.id === 'nuevo') {
+      this.consultarManiobraConcepto();
+    } else {
+      this.guardarCFDI();
+    }
+  }
+
   consultarManiobraConcepto() {
     // let promesas;
     let ok = true;
