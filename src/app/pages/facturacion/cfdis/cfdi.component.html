@@ -201,7 +201,7 @@
                         <th scope="col">Concepto</th>
                         <th scope="col">Unidad </th>
                         <th scope="col">Cantidad</th>
-                        <th scope="col">Valor Unitario</th>
+                        <th scope="col">ValorUnitario</th>
                         <th scope="col">Impuestos</th>
                         <th scope="col">Descuento</th>
                         <th scope="col">Importe</th>
@@ -211,16 +211,15 @@
                     <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
-                          <button type="button" matTooltip="Modificar Impuestos" (click)="openDialogImpuestos(item.value)"
-                            class="btn btn-primary m-r-5">
+                          <button type="button" matTooltip="Modificar Impuestos"
+                            (click)="openDialogImpuestos(item.value)" class="btn btn-primary m-r-5">
                             <i class="fas fa-dollar-sign"></i>
                           </button>
-                          <button type="button" matTooltip="Modificar Maniobras" (click)="openDialogManiobras(item.value)"
-                            class="btn btn-success m-r-5">
+                          <button type="button" matTooltip="Modificar Maniobras"
+                            (click)="openDialogManiobras(item.value)" class="btn btn-success m-r-5">
                             <i class="fas fa-boxes"></i>
                           </button>
-                          <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)"
-                            class="btn btn-danger">
+                          <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button>
                         </td>
@@ -235,13 +234,25 @@
                           {{item.get('cantidad').value}}
                         </td>
                         <td>
-                          {{item.get('valorUnitario').value | currency}}
+                          <div class="col-md-6">
+                            <mat-form-field>
+                              <input matInput [value]="item.get('valorUnitario').value" formControlName="valorUnitario"
+                                type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
+                              <!-- {{item.get('valorUnitario').value | currency}} -->
+                            </mat-form-field>
+                          </div>
                         </td>
                         <td>
                           {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value | currency}}
                         </td>
                         <td>
-                          {{item.get('descuento').value | currency}}
+                          <div class="col-md-5">
+                            <mat-form-field>
+                              <input matInput [value]="item.get('descuento').value" formControlName="descuento"
+                                type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
+                            </mat-form-field>
+                          </div>
+                          <!-- {{item.get('descuento').value | currency}} -->
                         </td>
                         <td>
                           {{item.get('importe').value | currency}}

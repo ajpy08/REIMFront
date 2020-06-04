@@ -157,6 +157,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
     let totalImpuestosRetenidos = 0;
     let totalImpuestosTrasladados = 0;
+    // let totalDescuentos = 0;
     let subTotal = 0;
 
     if (this.facturacionService.aFacturar.length > 0) {
@@ -171,18 +172,22 @@ export class CFDIComponent implements OnInit, OnDestroy {
             if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
               concepto.cantidad = conceptoCalcular.maniobras.length;
               concepto.maniobras = conceptoCalcular.maniobras;
+              concepto.valorUnitario = conceptoCalcular.valorUnitario;
+              concepto.descuento = conceptoCalcular.descuento;
             } else {
               concepto.cantidad = c.maniobras.length;
               concepto.maniobras = c.maniobras;
+              concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
+              concepto.descuento = 0.00;
             }
             if (prodServ && concepto.maniobras.length > 0) {
               concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
               concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
               concepto.descripcion = prodServ.descripcion;
               concepto.noIdentificacion = prodServ.codigo;
-              concepto.valorUnitario = prodServ !== undefined ? prodServ.valorUnitario : 0;
-              concepto.importe = concepto.valorUnitario * concepto.cantidad;
+              concepto.importe = concepto.valorUnitario * concepto.cantidad - concepto.descuento;
               subTotal += concepto.importe;
+              // totalDescuentos += concepto.descuento;
               if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
                 conceptoCalcular.impuestos.forEach(impuesto => {
                   if (impuesto.TR === 'RETENCION') {
@@ -216,16 +221,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
               // concepto.impuestos = prodServ.impuestos;
 
               concepto.unidad = '0';
-              concepto.descuento = 0.00;
               this.conceptos.push(this.agregarArray(concepto));
             }
-
-
             this.subtotal.setValue(subTotal);
             this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
             this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
             this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
-
           });
         });
       }
@@ -241,6 +242,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   recargaValoresCFDI() {
     let totalImpuestosRetenidos = 0;
     let totalImpuestosTrasladados = 0;
+    // let totalDescuentos = 0;
     let subTotal = 0;
     this.createFormGroup();
     this.conceptos.removeAt(0);
@@ -260,8 +262,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
           let impuestosRetenidos = 0;
           let impuestosTrasladados = 0;
           concepto.cantidad = concepto.maniobras.length;
-          concepto.importe = concepto.valorUnitario * concepto.cantidad;
+          concepto.importe = concepto.valorUnitario * concepto.cantidad - concepto.descuento;
           subTotal += concepto.importe;
+          // totalDescuentos += concepto.descuento;
           concepto.impuestos.forEach(impuesto => {
             impuesto.importe = concepto.importe * (impuesto.tasaCuota / 100);
             if (impuesto.TR === 'RETENCION') {
@@ -570,6 +573,18 @@ export class CFDIComponent implements OnInit, OnDestroy {
     }
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
+  }
+
+  asignaValores(concepto) {
+    if (this.id === 'nuevo' || this.id === undefined) {
+      this.cargaValoresIniciales(concepto);
+    } else {
+      const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
+      if (pos >= 0) {
+        this.cfdi.conceptos[pos] = concepto;
+      }
+      this.recargaValoresCFDI();
+    }
   }
 
   /* #region  Properties */
