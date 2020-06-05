@@ -1,3 +1,4 @@
+import { Impuesto } from './../models/impuesto.models';
 import { ManiobrasCFDIComponent } from './../../../dialogs/maniobras-cfdi/maniobras-cfdi.component';
 import { ManiobraService } from 'src/app/services/service.index';
 import { ImpuestosCFDIComponent } from './../../../dialogs/impuestos-cfdi/impuestos-cfdi.component';
@@ -12,6 +13,7 @@ import * as _moment from 'moment';
 import { Concepto } from '../models/concepto.models';
 import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
+import { CFDI } from '../models/cfdi.models';
 declare var swal: any;
 const moment = _moment;
 
@@ -45,6 +47,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   usosCFDI = [];
   cfdi;
   id;
+  checkedAgrupar = true;
 
   constructor(
     public router: Router,
@@ -583,6 +586,30 @@ export class CFDIComponent implements OnInit, OnDestroy {
       if (pos >= 0) {
         this.cfdi.conceptos[pos] = concepto;
       }
+      this.recargaValoresCFDI();
+    }
+  }
+
+  agruparDesagruparConcepto(agrupar, concepto) {
+    this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+    if (agrupar) {
+      console.log(this.conceptos.value);
+    } else {
+      concepto.maniobras.forEach(m => {
+        const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+        con.cantidad = 1;
+        con.maniobras.push(m);
+        con.valorUnitario = concepto.valorUnitario;
+        con.descuento = 0.0;
+        con.claveProdServ = concepto.claveProdServ;
+        con.claveUnidad = concepto.claveUnidad;
+        con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
+        con.noIdentificacion = concepto.noIdentificacion;
+        // con.importe = con.cantidad * con.valorUnitario;
+        con.impuestos = concepto.impuestos;
+
+        this.cfdi.conceptos.push(con);
+      });
       this.recargaValoresCFDI();
     }
   }

@@ -199,6 +199,7 @@
                         <th scope="col"></th>
                         <th scope="col">Consecutivo</th>
                         <th scope="col">Concepto</th>
+                        <th scope="col"></th>
                         <th scope="col">Unidad </th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">ValorUnitario</th>
@@ -226,6 +227,12 @@
                         <td scope="row">{{i+1}}</td>
                         <td>
                           {{item.get('descripcion').value}}
+                        </td>
+                        <td>
+                          <mat-checkbox [(ngModel)]="checkedAgrupar" [ngModelOptions]="{standalone: true}"
+                            (change)="agruparDesagruparConcepto(checkedAgrupar, item.value)"
+                            matTooltip="Agrupar/Desagrupar Concepto">
+                          </mat-checkbox>
                         </td>
                         <td>
                           {{item.get('unidad').value}}
