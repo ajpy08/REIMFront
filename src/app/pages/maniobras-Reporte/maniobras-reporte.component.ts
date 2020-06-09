@@ -330,7 +330,7 @@ filtraManiobrasVacios(vacios: boolean) {
   this.cargando = true;
   this.maniobrasVacios = [];
   this.checkedVacios = vacios;
-  if (vacios) {
+  if (vacios && this.dataSource) {
     this.dataSource.data.forEach(m => {
       if (m.peso === 'VACIO') {
         this.maniobrasVacios.push(m);

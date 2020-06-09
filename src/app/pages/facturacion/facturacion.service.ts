@@ -88,8 +88,8 @@ export class FacturacionService {
     return this.http.get(url);
   }
 
-  timbrarXML(nombre: string, id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '/';
+  timbrarXML(nombre: string, id: string, direccion: string, info: string): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id +  '&' + direccion +  '&' + info +  '/' ;
      return this.http.get(url);
    }
 

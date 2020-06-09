@@ -60,6 +60,15 @@
     <!--Custom JavaScript -->
     <script src="assets/js/custom.js"></script>
     <!-- <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script> -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("form").keypress(function (e) {
+                if (e.which == 13) {
+                    return false;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
