@@ -47,7 +47,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   usosCFDI = [];
   cfdi;
   id;
-  checkedAgrupar = true;
+  selected = -1;
 
   constructor(
     public router: Router,
@@ -113,6 +113,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
     // this.facturacionService.maniobras = [];
+  }
+
+  /*checkbox change event*/
+  onChange(event) {
+    console.log(event);
   }
 
   cargaValoresIniciales(concept) {
@@ -392,7 +397,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
       // programar edicion
     }
     this.conceptos.removeAt(indice);
-    // console.log(this.conceptos);
   }
 
   cargarCFDI(id: string) {
@@ -515,7 +519,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
   openDialogImpuestos(concepto) {
     let cfdi;
     cfdi = this.cfdi;
-    // console.log(concepto[0].impuestos);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = concepto;
     const dialogRef = this.matDialog.open(ImpuestosCFDIComponent, dialogConfig);
@@ -580,7 +583,16 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   asignaValores(concepto) {
     if (this.id === 'nuevo' || this.id === undefined) {
-      this.cargaValoresIniciales(concepto);
+      if (!this.cfdi) {
+        this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+        this.cfdi.conceptos = this.conceptos.value;
+      }
+      const pos = this.conceptos.value.findIndex(a => a._id === concepto._id);
+      if (pos >= 0) {
+        this.cfdi.conceptos[pos] = concepto;
+      }
+      this.recargaValoresCFDI();
+      // this.cargaValoresIniciales(concepto);
     } else {
       const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
       if (pos >= 0) {
@@ -591,28 +603,223 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   agruparDesagruparConcepto(agrupar, concepto) {
-    this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+    if (!this.cfdi) {
+      this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+      this.cfdi.fecha = this.fecha.value;
+      this.cfdi.folio = this.folio.value;
+      this.cfdi.formaPago = this.formaPago.value;
+      this.cfdi.metodoPago = this.metodoPago.value;
+      this.cfdi.moneda = this.moneda.value;
+      this.cfdi.serie = this.serie.value;
+      // subtotal
+      this.cfdi.tipoComprobante = this.tipoComprobante.value;
+      // total
+      this.cfdi.nombre = this.nombre.value;
+      this.cfdi.rfc = this.rfc.value;
+      this.cfdi.usoCFDI = this.usoCFDI.value;
+      this.cfdi.direccion = this.direccion.value;
+      this.cfdi.correo = this.correo.value;
+    }
     if (agrupar) {
-      console.log(this.conceptos.value);
-    } else {
-      concepto.maniobras.forEach(m => {
+      const res = this.cfdi.conceptos.filter(function (concept) {
+        return concept._id === concepto._id;
+      });
+
+      if (res.length > 1) {
+
         const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+        res.forEach(c => {
+          const pos = this.cfdi.conceptos.findIndex(a => a._id === c._id);
+
+          if (pos >= 0) {
+            this.cfdi.conceptos.splice(pos, res.length);
+          }
+
+          c.maniobras.forEach(mm => {
+            con.maniobras.push(mm);
+          });
+        });
+        con._id = concepto._id;
+        con.cantidad = con.maniobras.length;
+        con.unidad = '0';
+        con.valorUnitario = concepto.valorUnitario;
+        con.descuento = 0.0;
+        con.claveProdServ = concepto.claveProdServ;
+        con.claveUnidad = concepto.claveUnidad;
+        con.descripcion = concepto.descripcion.substring(0, concepto.descripcion.lastIndexOf(' '));
+        con.noIdentificacion = concepto.noIdentificacion;
+        con.impuestos = concepto.impuestos;
+
+        this.cfdi.conceptos.unshift(con);
+
+        this.recargaValoresCFDI();
+      }
+    } else {
+      this.cfdi.fecha = this.fecha.value;
+      this.cfdi.folio = this.folio.value;
+      this.cfdi.formaPago = this.formaPago.value;
+      this.cfdi.metodoPago = this.metodoPago.value;
+      this.cfdi.moneda = this.moneda.value;
+      this.cfdi.serie = this.serie.value;
+      // subtotal
+      this.cfdi.tipoComprobante = this.tipoComprobante.value;
+      // total
+      this.cfdi.nombre = this.nombre.value;
+      this.cfdi.rfc = this.rfc.value;
+      this.cfdi.usoCFDI = this.usoCFDI.value;
+      this.cfdi.direccion = this.direccion.value;
+      this.cfdi.correo = this.correo.value;
+      this.cfdi.conceptos = this.conceptos.value;
+
+      const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
+
+      if (pos >= 0) {
+        this.cfdi.conceptos.splice(pos, 1);
+      }
+
+      concepto.maniobras.forEach(async m => {
+        const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+        con._id = concepto._id;
         con.cantidad = 1;
+        con.unidad = '0';
         con.maniobras.push(m);
         con.valorUnitario = concepto.valorUnitario;
         con.descuento = 0.0;
         con.claveProdServ = concepto.claveProdServ;
         con.claveUnidad = concepto.claveUnidad;
-        con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
+
+        if (m.contenedor) {
+          con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
+        } else {
+          con.descripcion = `${concepto.descripcion} CONTENEDORX`;
+          // await this.maniobraService.getManiobraJavi(m).then(maniobra => {
+          //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
+          // }).catch(error => {
+          //   console.log(error);
+          // });
+          // this.maniobraService.getManiobra(m).subscribe((maniobra) => {
+          //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
+          // });
+        }
         con.noIdentificacion = concepto.noIdentificacion;
-        // con.importe = con.cantidad * con.valorUnitario;
         con.impuestos = concepto.impuestos;
 
-        this.cfdi.conceptos.push(con);
+        this.cfdi.conceptos.unshift(con);
       });
       this.recargaValoresCFDI();
     }
   }
+
+  // async agruparDesagruparConcepto(agrupar, concepto) {
+  //   await this.llenaGenerales();
+  //   if (agrupar) {
+  //     const res = this.cfdi.conceptos.filter(function (concept) {
+  //       return concept._id === concepto._id;
+  //     });
+
+  //     if (res.length > 1) {
+
+  //       const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+  //       res.forEach(c => {
+  //         const pos = this.cfdi.conceptos.findIndex(a => a._id === c._id);
+
+  //         if (pos >= 0) {
+  //           this.cfdi.conceptos.splice(pos, res.length);
+  //         }
+
+  //         c.maniobras.forEach(mm => {
+  //           con.maniobras.push(mm);
+  //         });
+  //       });
+  //       con._id = concepto._id;
+  //       con.cantidad = con.maniobras.length;
+  //       con.valorUnitario = concepto.valorUnitario;
+  //       con.descuento = 0.0;
+  //       con.claveProdServ = concepto.claveProdServ;
+  //       con.claveUnidad = concepto.claveUnidad;
+  //       con.descripcion = concepto.descripcion.substring(0, concepto.descripcion.lastIndexOf(' '));
+  //       con.noIdentificacion = concepto.noIdentificacion;
+  //       con.impuestos = concepto.impuestos;
+
+  //       this.cfdi.conceptos.unshift(con);
+
+  //       this.recargaValoresCFDI();
+  //     }
+  //   } else {
+  //     this.llena(concepto).then(() => {
+  //       this.recargaValoresCFDI();
+  //     }).catch((error) => {
+  //       console.log(error);
+  //     });
+  //   }
+  // }
+
+  // async llena(concepto) {
+  //   const generales = await this.llenaGenerales();
+  //   const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
+
+  //   if (pos >= 0) {
+  //     this.cfdi.conceptos.splice(pos, 1);
+  //   }
+
+  //   const con = await this.llenaConcepto(concepto);
+  // }
+
+  // async llenaGenerales() {
+  //   if (!this.cfdi) {
+  //     this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+  //   }
+  //   this.cfdi.fecha = this.fecha.value;
+  //   this.cfdi.folio = this.folio.value;
+  //   this.cfdi.formaPago = this.formaPago.value;
+  //   this.cfdi.metodoPago = this.metodoPago.value;
+  //   this.cfdi.moneda = this.moneda.value;
+  //   this.cfdi.serie = this.serie.value;
+  //   // subtotal
+  //   this.cfdi.tipoComprobante = this.tipoComprobante.value;
+  //   // total
+  //   this.cfdi.nombre = this.nombre.value;
+  //   this.cfdi.rfc = this.rfc.value;
+  //   this.cfdi.usoCFDI = this.usoCFDI.value;
+  //   this.cfdi.direccion = this.direccion.value;
+  //   this.cfdi.correo = this.correo.value;
+  //   this.cfdi.conceptos = this.conceptos.value;
+
+  //   return this.cfdi;
+  // }
+
+  // async llenaConcepto(concepto) {
+  //   concepto.maniobras.forEach(async m => {
+  //     const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+  //     con._id = concepto._id;
+  //     con.cantidad = 1;
+  //     con.unidad = '0';
+  //     con.maniobras.push(m);
+  //     con.valorUnitario = concepto.valorUnitario;
+  //     con.descuento = 0.0;
+  //     con.claveProdServ = concepto.claveProdServ;
+  //     con.claveUnidad = concepto.claveUnidad;
+
+  //     if (m.contenedor) {
+  //       con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
+  //     } else {
+  //       const mani = await this.maniobraService.getManiobraJavi(m);
+  //       mani.then(maniobra => {
+  //         con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
+  //       }).catch(error => {
+  //         console.log(error);
+  //       });
+  //       // this.maniobraService.getManiobra(m).subscribe((maniobra) => {
+  //       //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
+  //       // });
+  //     }
+  //     con.noIdentificacion = concepto.noIdentificacion;
+  //     con.impuestos = concepto.impuestos;
+  //     this.cfdi.conceptos.unshift(con);
+  //   });
+
+  //   return this.cfdi;
+  // }
 
   /* #region  Properties */
 
