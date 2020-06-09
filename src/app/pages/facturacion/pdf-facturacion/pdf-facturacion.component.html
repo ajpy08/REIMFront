@@ -3,27 +3,8 @@
 </div>
 
 
-<div class="dropdown">
-    <button class="dropbtn btn btn-warning btn-circle"><i class="fas fa-exclamation-triangle"></i></button>
-    <div class="dropdown-content">
-        <button type="button" matTooltip="Cerrar PDF" class="btn btn-danger btn-circle" (click)="closepdf()">
-            <i class="fa fa-times" aria-hidden="true"></i></button><br>
-            <div class="sep"></div>
-        <div *ngIf="data.data.cfdi.uuid">
-            <button type="button" matTooltip="Descargar PDF" class=" dropdown-item btn btn-info  btn-circle"
-                (click)='pdf()'>
-                <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
-        </div>
-        <div class="sep"></div>
-        <div *ngIf="!data.data.cfdi.uuid">
-            <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( data.data.cfdi._id )"
-                class=" dropdown-item  btn btn-warning m-r-5">
-                <i class="fa  fa-bell-o"></i>
-            </button>
-        </div>
-    </div>
-</div>
-<div id="contenido">
+<div id="contenido" #contenido>
+
     <div class="img">
         <img src="../../../../assets/images/logo_reim_container_park.jpg">
     </div>
@@ -80,14 +61,16 @@
 
     <table class="conceptos">
         <thead>
-            <th class="codcantidad">CÒDIGO</th>
-            <th class="codcantidad">CANTIDAD</th>
-            <th class="unidad">UNIDAD</th>
-            <th>DESCRIPCIÒN</th>
-            <th class="imp">IMPUESTOS</th>
-            <th class="codcantidad">IMPORTE</th>
 
-        </thead>
+                <th class="codcantidad">CÒDIGO</th>
+                <th class="codcantidad">CANTIDAD</th>
+                <th class="unidad">UNIDAD</th>
+                <th>DESCRIPCIÒN</th>
+                <th class="imp">IMPUESTOS</th>
+                <th class="codcantidad">IMPORTE</th>
+
+                
+            </thead>
         <tbody *ngFor="let item of data.data.cfdi.conceptos">
 
             <td>{{item.noIdentificacion}}</td>
@@ -100,15 +83,32 @@
             <!-- <td>{{item.valorUnitario}}</td> -->
             <td>$ {{item.importe | coma}}</td>
             <tr>
-                <hr class="linea">
+                <td>
+                    <hr class="linea">
+                </td>
+                <td>
+                    <hr class="linea">
+                </td>
+                <td>
+                    <hr class="linea">
+                </td>
+                <td>
+                    <hr class="linea">
+                </td>
+                <td>
+                    <hr class="linea">
+                </td>
+                <td>
+                    <hr class="linea">
+                </td>
             </tr>
         </tbody>
 
         <div class="tablatotales">
-            <strong>SUBTOTAL: &nbsp;$ &nbsp;</strong>{{subtotal | coma}}<br>
-            <strong>TOTAL IMPORTES RETENIDOS: &nbsp;$ &nbsp; &nbsp; </strong> {{totalRetenidos | coma}}<br>
-            <strong>TOTAL IMPORTES TRASLADADOS: &nbsp;$ &nbsp; &nbsp; </strong>{{totalTrasladados | coma}}<br>
-            <strong>TOTAL: &nbsp;$&nbsp; &nbsp;</strong>{{total | coma }}
+            <strong>SUBTOTAL: &nbsp;$ &nbsp;</strong> <span class="totales">{{subtotal | coma}}<br></span> 
+            <strong>TOTAL IMPORTES RETENIDOS: &nbsp;$ &nbsp; &nbsp; </strong> <span class="totales"> {{totalRetenidos | coma}}<br></span>
+            <strong>TOTAL IMPORTES TRASLADADOS: &nbsp;$ &nbsp; &nbsp; </strong> <span class="totales">{{totalTrasladados | coma}}<br></span>
+            <strong>TOTAL: &nbsp;$&nbsp; &nbsp;</strong> <span class="totales">{{total | coma }}</span>
         </div>
     </table><br>
 
@@ -182,5 +182,33 @@
     <div class="pie">
         ESTE DOCUMENTO ES UNA REPRESENTACIÓN IMPRESA DE UN CFDI VERSION 3.3
     </div>
+
+</div>
+
+<div class="conta">
+    <label for="checkbox">
+        <i class="fa fa-bars"></i>
+    </label>
+    <input id="checkbox" type="checkbox" />
+    <ul>
+        <div *ngIf="data.data.cfdi.uuid">
+            <button type="button" matTooltip="Descargar PDF" class="botonD btn btn-info  btn-circle" (click)='pdf()'>
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+
+            <a matTooltip="Descargar XML" class="botonX btn btn-success btn-circle" [href]="url | imagen: 'xml'"
+                download="Xml" target="_blank">
+                <i class="fa fa-file-archive-o"></i>
+            </a>
+        </div>
+        <div *ngIf="!data.data.cfdi.uuid">
+
+            <button matTooltip="Timbrar CFDIS" (click)="xmlCFDIS( data.data.cfdi._id )"
+                class="botonT btn btn-warning btn-circle">
+                <i class="fa  fa-bell-o"></i>
+            </button>
+        </div>
+        <button type="button" matTooltip="Cerrar PDF" class="botonC btn btn-danger btn-circle" (click)="closepdf()">
+            <i class="fa fa-times" aria-hidden="true"></i></button>
+    </ul>
 
 </div>

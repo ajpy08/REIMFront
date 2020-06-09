@@ -90,7 +90,8 @@ export class InventarioComponent implements OnInit {
 
     if (
       this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
-      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIO_ROLE
     ) {
       this.displayedColumnsLR = [
         'actions',

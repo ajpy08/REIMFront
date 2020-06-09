@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:REIM="https://reimcontainerpark.com.mx" targetNamespace="https://reimcontainerpark.com.mx" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Adicionales">
+		<xs:annotation>
+			<xs:documentation>Datos adicionales de REIM</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Concepto" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Datos adicionales</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Indice"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Retenciones" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Datos adicionales de retenciones</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Retencion" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="Tipo" type="xs:string" use="optional"/>
+									<xs:attribute name="Importe" type="xs:double" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Version" type="xs:string" use="optional"/>
+			<xs:attribute name="InformacionAdicional" type="xs:string" use="optional"/>
+			<xs:attribute name="ReceptorDireccion" type="xs:string" use="optional"/>
+			<xs:attribute name="EmisorDireccion" type="xs:string" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

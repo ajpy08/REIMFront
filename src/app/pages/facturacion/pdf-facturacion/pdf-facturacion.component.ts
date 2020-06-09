@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Concepto } from './../models/concepto.models';
+import { Component, OnInit, Inject, ViewChild, ElementRef, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTabGroup, MatSort } from '@angular/material';
 import * as jsPDF from 'jspdf';
+import * as html2pdf from 'html2pdf.js';
 import html2canvas from 'html2canvas';
 import { PdfFacturacionService } from './pdf-facturacion.service';
 import { FacturacionService } from '../facturacion.service';
@@ -20,6 +22,9 @@ export interface DialogData {
   styleUrls: ['./pdf-facturacion.component.css']
 })
 export class PdfFacturacionComponent implements OnInit {
+
+  @ViewChild('contenido') contenido: ElementRef;
+
   cargandoTimbre = false;
   mensaje = 'TIMBRADO';
   elementType = 'img';
@@ -31,6 +36,7 @@ export class PdfFacturacionComponent implements OnInit {
   subtotal = 0;
   comprobante = '';
   usoCFDI = '';
+  url = `T-${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.xml`;
   moneda = '';
   claveUnidad = '';
   tasa = [];
@@ -70,22 +76,44 @@ export class PdfFacturacionComponent implements OnInit {
     this.totales();
     this.getmetodoPago();
     this.generarQR(this.ObjetoQR);
-    // this.obtenerFechaCert(this.data.data.cfdi.fechaCertificacion);
-
-
   }
-
-  pdf() {
-    const datapdf = document.getElementById(('contenido'));
-    html2canvas(datapdf).then(canvas => {
-      datapdf.style.margin = 'auto';
-      const contentDataURL = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 7, 3);
-      pdf.save(`${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}.pdf`);
-    });
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.ngOnInit();
   }
+  
+
+  pdf(): void {
+    let opt = {};
+
+    if (this.data.data.cfdi.conceptos.length >= 10) {
+      opt = {
+        margin: 3,
+        filename: `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: {},
+        pagebreak: { before: '.qrcon', after: ['#after1', '#after2'], avoid: 'img' }
+      };
+    } else {
+      opt = {
+        margin: 3,
+        filename: `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: {},
+      };
+    }
+
+
+
+    const datapdf = document.getElementById('contenido');
+
+    html2pdf()
+      .from(datapdf)
+      .set(opt)
+      .save();
+      }
 
   traslado(tr) {
     let TR = '';
@@ -180,7 +208,6 @@ export class PdfFacturacionComponent implements OnInit {
       dangerMode: true
     }).then(timbrar => {
       if (timbrar) {
-
         this.cargandoTimbre = true;
         this.mensaje = 'Validando Datos';
 
@@ -189,7 +216,8 @@ export class PdfFacturacionComponent implements OnInit {
             this.mensaje = 'Generando XML';
           }, 3000);
           if (res.ok === true) {
-            this.facturacionService.timbrarXML(res.NombreArchivo, id).subscribe((restim) => { // timbrar XML
+            this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.InformacionAdicional)
+            .subscribe((restim) => { // timbrar XML
               if (restim.ok === true) {
                 setTimeout(() => {
                   this.mensaje = 'XML Timbrado correctamente';
@@ -215,8 +243,6 @@ export class PdfFacturacionComponent implements OnInit {
                       selloEmisor = element.$.Sello;
                     }
                   }
-
-
                   const ObjetoTimbre = {
                     _id: id,
                     uuid: uuid, NoCerieSat: NoCertificadoSat, fechaCer: fechaCert, selloEmisor: selloEmisor,
@@ -228,50 +254,13 @@ export class PdfFacturacionComponent implements OnInit {
               }
             }, (error) => {
               this.cargandoTimbre = false;
-              this.count++;
-              if (this.count < 2) {
-                if (error) {
-                  swal({
-                    title: 'Se produjo un error de timbrado ',
-                    text: ' En el proceso de timbrado se produjo un error , ¿ Desea repetir la operación?',
-                    icon: 'warning',
-                    buttons: true,
-                    dangerMode: true
-                  }).then(reintento => {
-                    if (reintento) {
-                      this.xmlCFDIS(this.data.data._id);
-                    }
-                  });
-                }
-              } else {
-                this.cargandoTimbre = false;
-                swal('Error', 'Se excedió el número de intentos', 'error');
-                this.count = 0;
-              }
+              swal('Error', `${error.error.mensaje}`, 'error');
             });
           }
         }, (err) => {
           this.cargandoTimbre = false;
-          this.count++;
-          if (this.count < 2) {
-            if (err) {
-              swal({
-                title: 'Error',
-                text: 'Se produjo un error al crear el archivo XML, ¿ Desea repetir la operación ?',
-                icon: 'warning',
-                buttons: true,
-                dangerMode: true
-              }).then(reintento => {
-                if (reintento) {
-                  this.xmlCFDIS(this.data.data.cfdi._id);
-                }
-              });
-            }
-          } else {
-            this.cargandoTimbre = false;
-            swal('Error', 'Se excedió el número de intentos', 'error');
-            this.count = 0;
-          }
+          swal('Error', `${err.error.mensaje}`, 'error');
+          this.count = 0;
         });
       }
     });
@@ -284,7 +273,7 @@ export class PdfFacturacionComponent implements OnInit {
         this.cargandoTimbre = false;
         this.dialigRef.close();
       });
-      }, 5000);
+    }, 5000);
   }
   cadenaOriginal() {
     if (this.data.data.cfdi.cadenaOriginalSat) {
