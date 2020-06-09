@@ -24,6 +24,11 @@ export class ManiobraService {
     return this.http.get(url);
   }
 
+  async getManiobraJavi(id: string) {
+    const maniobra = await this.getManiobra(id).toPromise();
+    return maniobra.maniobra;
+  }
+
   getManiobraConIncludes(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/maniobras/maniobra/' + id + '/includes';
     return this.http.get(url);

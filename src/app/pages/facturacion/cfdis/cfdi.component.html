@@ -229,10 +229,12 @@
                           {{item.get('descripcion').value}}
                         </td>
                         <td>
-                          <mat-checkbox [(ngModel)]="checkedAgrupar" [ngModelOptions]="{standalone: true}"
-                            (change)="agruparDesagruparConcepto(checkedAgrupar, item.value)"
-                            matTooltip="Agrupar/Desagrupar Concepto">
+                          <mat-checkbox (change)="agruparDesagruparConcepto($event.checked, item.value)">
+                            <!-- {{topping}} -->
                           </mat-checkbox>
+                          <!-- <mat-checkbox [checked]= true (change)="agruparDesagruparConcepto($event.checked, item.value)"
+                            matTooltip="Agrupar/Desagrupar Concepto">
+                          </mat-checkbox> -->
                         </td>
                         <td>
                           {{item.get('unidad').value}}
@@ -353,10 +355,10 @@
         </div>
       </form>
 
-      <div class="output">
+      <!-- <div class="output">
         <p>Form Data: {{regForm.value | json}}</p>
         <p>Is Valid: {{regForm.valid}}</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
