@@ -16,22 +16,25 @@ export class ImagenPipe implements PipeTransform {
     }
     switch (tipo) {
       case 'usuario':
-      url += '/usuarios/' + img;
-      break;
+        url += '/usuarios/' + img;
+        break;
       case 'cliente':
-      url += '/clientes/' + img;
-      break;
+        url += '/clientes/' + img;
+        break;
       case 'operador':
-      url += '/operadores/' + img;
-      break;
+        url += '/operadores/' + img;
+        break;
       case 'camion':
-      url += '/camiones/' + img;
-      break;
+        url += '/camiones/' + img;
+        break;
       case 'viaje':
         url += '/viajes/' + img;
         break;
       case 'solicitud':
         url += '/solicitudes/' + img;
+        break;
+      case 'xml':
+        url += '/cfdi/' + img;
         break;
       case 'temp':
         url += '/temp/' + img;

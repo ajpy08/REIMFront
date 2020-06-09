@@ -96,7 +96,8 @@ export class CFDISComponent implements OnInit {
         width: '800px',
         height: '1000px',
         data: { data: cfdiPdf },
-        hasBackdrop: false,
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
         panelClass: 'filter.popup'
       });
 
