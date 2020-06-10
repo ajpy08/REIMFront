@@ -50,6 +50,9 @@ export class NavieraComponent implements OnInit {
     if (this.correo) {
       this.correo.removeAt(0);
     }
+    if (this.correoFacturacion) {
+      this.correoFacturacion.removeAt(0);
+    }
   }
 
   createFormGroup() {
@@ -67,9 +70,11 @@ export class NavieraComponent implements OnInit {
       cp: ['', [Validators.required]],
       formatoR1: ['', [Validators.required]],
       correosF: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
+      correoFac: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotempFac: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correo: this.fb.array([this.agregarArray('')], { validators: Validators.required }),
-      correoFac: ['', [Validators.email]],
+      correoFacturacion: this.fb.array([this.agregarFArray('')], { validators: Validators.required }),
       credito: [false, Validators.required],
       img: [''],
       usoCFDI: ['', [Validators.required]],
@@ -84,6 +89,11 @@ export class NavieraComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
+    });
+  }
+  agregarFArray(correoFa: String): FormGroup {
+    return this.fb.group({
+      correoFa: [correoFa]
     });
   }
 
@@ -114,9 +124,39 @@ export class NavieraComponent implements OnInit {
     }
   }
 
+  addCorreoFac(correoFa: string): void {
+    let error = false;
+
+    if (correoFa === '') {
+      this.correoFacturacion.disable({ emitEvent: true });
+      swal('Error al Agregar', 'El campo Correo Facturacion no puede estar Vacio', 'error');
+    } else if (this.correoFacturacion.controls.length === 0) {
+      this.correoFacturacion.push(this.agregarFArray(correoFa));
+    } else {
+      if (this.correoFacturacion.controls) {
+        this.correoFacturacion.controls.forEach(c => {
+          if (this.correotempFac.value === c.value.correoFa) {
+            if (error === false) {
+              swal('Error al agregar', 'El correo Facturacion' + this.correotempFac.value +
+                ' ya se encuentra registrado en la lista', 'error');
+              error = true;
+              return false;
+            }
+          }
+        });
+        if (!error) {
+          this.correoFacturacion.push(this.agregarFArray(correoFa));
+        }
+      }
+    }
+  }
+
 
   quitar(indice: number) {
     this.correo.removeAt(indice);
+  }
+  quitarFac(indice: number) {
+    this.correoFacturacion.removeAt(indice);
   }
 
   get razonSocial() {
@@ -155,11 +195,17 @@ export class NavieraComponent implements OnInit {
   get correo() {
     return this.regForm.get('correo') as FormArray;
   }
+  get correoFacturacion() {
+    return this.regForm.get('correoFacturacion') as FormArray;
+  }
   get usoCFDI() {
     return this.regForm.get('usoCFDI');
   }
   get correotem() {
     return this.regForm.get('correotem');
+  }
+  get correotempFac() {
+    return this.regForm.get('correotempFac');
   }
   get correoFac() {
     return this.regForm.get('correoFac');
@@ -206,8 +252,15 @@ export class NavieraComponent implements OnInit {
           this.addContenedor(c);
         });
       }
+
+      if (naviera.correoFac !== '' && naviera.correoFac !== undefined && naviera.correoFac !== null) {
+        const correoFArray = naviera.correoFac.split(',');
+        correoFArray.forEach(c => {
+          this.addCorreoFac(c);
+        });
+      }
       // this.regForm.controls['correosF'].setValue(naviera.correo);
-      this.regForm.controls['correoFac'].setValue(naviera.correoFac);
+      // this.regForm.controls['correoFac'].setValue(naviera.correoFac);
       this.regForm.controls['credito'].setValue(naviera.credito);
       this.regForm.controls['usoCFDI'].setValue(naviera.usoCFDI);
       this.regForm.controls['img'].setValue(naviera.img);
@@ -229,6 +282,14 @@ export class NavieraComponent implements OnInit {
 
       this.correotem.setValue('');
       this.correosF.setValue(correos);
+
+      let correoFact = '';
+      this.regForm.controls.correoFacturacion.value.forEach(cf => {
+        correoFact += cf.correoFa + ',';
+      });
+      correoFact = correoFact.slice(0, -1);
+      this.correoFac.setValue(correoFact);
+      this.correotempFac.setValue('');
 
       this._navieraService.guardarNaviera(this.regForm.value)
         .subscribe(res => {

@@ -1,6 +1,6 @@
 import { Impuesto } from './../models/impuesto.models';
 import { ManiobrasCFDIComponent } from './../../../dialogs/maniobras-cfdi/maniobras-cfdi.component';
-import { ManiobraService } from 'src/app/services/service.index';
+import { ManiobraService, UsuarioService } from 'src/app/services/service.index';
 import { ImpuestosCFDIComponent } from './../../../dialogs/impuestos-cfdi/impuestos-cfdi.component';
 import { FacturacionService } from './../facturacion.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -14,6 +14,10 @@ import { Concepto } from '../models/concepto.models';
 import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CFDI } from '../models/cfdi.models';
+import * as io from 'socket.io-client';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
+import { ROLES } from 'src/app/config/config';
+import { Usuario } from '../../usuarios/usuario.model';
 declare var swal: any;
 const moment = _moment;
 
@@ -46,8 +50,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
   tiposComprobante = [];
   usosCFDI = [];
   cfdi;
+  usuarioLogueado = new Usuario;
   id;
   selected = -1;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
     public router: Router,
@@ -56,11 +62,39 @@ export class CFDIComponent implements OnInit, OnDestroy {
     public facturacionService: FacturacionService,
     private navieraService: NavieraService,
     public matDialog: MatDialog,
+    private usuarioService: UsuarioService,
     public maniobraService: ManiobraService) { }
 
   ngOnInit() {
     this.createFormGroup();
+    this.usuarioLogueado = this.usuarioService.usuario;
 
+    this.socket.on('update-cfdi', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        if (data.data._id) {
+          this.createFormGroup();
+          this.cargarCFDI(data.data._id);
+          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+            swal({
+              title: 'Actualizado',
+              text: 'Otro usuario ha actualizado este cfdi',
+              icon: 'info'
+            });
+          }
+        }
+      }
+    }.bind(this));
+
+    this.socket.on('delete-cfdi', function (data: any) {
+      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+        this.router.navigate(['/cfdis']);
+        swal({
+          title: 'Eliminado',
+          text: 'Se elimino este CFDI por otro usuario',
+          icon: 'warning'
+        });
+      }
+    }.bind(this));
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.facturacionService.getSeries().subscribe(series => {
@@ -112,6 +146,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.facturacionService.IE = '';
     this.facturacionService.receptor = undefined;
     this.facturacionService.tipo = '';
+    this.socket.removeListener('update-cfdi');
+    this.socket.removeListener('delete-cfdi');
+    this.socket.removeListener('new-cfdi');
     // this.facturacionService.maniobras = [];
   }
 
@@ -498,10 +535,14 @@ export class CFDIComponent implements OnInit, OnDestroy {
   guardarCFDI() {
     if (this.regForm.valid) {
       this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
-        if (this.regForm.get('_id').value === '' ||
-          this.regForm.get('_id').value === undefined) {
+        if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
-          this.router.navigate(['/cfdi/', this.regForm.get('_id').value]);
+          this.id = res._id;
+          this.socket.emit('newcfdi', res);
+          this.router.navigate(['/cfdis']);
+          // this.router.navigate(['/cfdi/', this.regForm.get('_id').value]);
+        } else {
+          this.socket.emit('updatecfdi', res);
         }
         this.facturacionService.aFacturar = [];
         this.regForm.markAsPristine();
