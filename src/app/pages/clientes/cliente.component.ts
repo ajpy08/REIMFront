@@ -70,6 +70,9 @@ export class ClienteComponent implements OnInit {
     if (this.correoF) {
       this.correoF.removeAt(0);
     }
+    if (this.correoFacturacion) {
+      this.correoFacturacion.removeAt(0);
+    }
 
     this.socket.on('update-cliente', function (data: any) {
       if ((data.data.empresas[0] === this.usuarioLogueado.empresas[0]._id && this.usuarioLogueado.role === ROLES.AA_ROLE) ||
@@ -137,7 +140,9 @@ export class ClienteComponent implements OnInit {
       activo: [true, [Validators.required]],
       correo: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotemFac: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
+      correoFacturacion: this.fb.array([this.agregarFArray('')], { validators: Validators.required, updateOn: 'blur' }),
 
       correoFac: ['', Validators.email],
       credito: [false, [Validators.required]],
@@ -152,6 +157,11 @@ export class ClienteComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
+    });
+  }
+  agregarFArray(correoFact: String): FormGroup {
+    return this.fb.group({
+      correoFact: [correoFact]
     });
   }
 
@@ -179,9 +189,36 @@ export class ClienteComponent implements OnInit {
       }
     }
   }
+  addFContenedor(correoFact: string): void {
+    let error = false;
+    if (correoFact === '') {
+      this.correo.disable({ emitEvent: true });
+      swal('Error al Agregar', 'El campo Correo Facturación no puede estar Vacio', 'error');
+    } else if (this.correoFacturacion.controls.length === 0) {
+      this.correoFacturacion.push(this.agregarFArray(correoFact));
+    } else {
+      if (this.correoFacturacion.controls) {
+        this.correoFacturacion.controls.forEach(c => {
+          if (this.correotemFac.value === c.value.correoFact) {
+            if (error === false) {
+              swal('Error al agregar', 'El correo ' + this.correotemFac.value + ' ya se encuentra registrado en la lista', 'error');
+              error = true;
+              return false;
+            }
+          }
+        });
+        if (!error) {
+          this.correoFacturacion.push(this.agregarFArray(correoFact));
+        }
+      }
+    }
+  }
 
   quitar(indice: number) {
     this.correoF.removeAt(indice);
+  }
+  quitarF(indice: number) {
+    this.correoFacturacion.removeAt(indice);
   }
 
   /* #region  Properties */
@@ -228,8 +265,14 @@ export class ClienteComponent implements OnInit {
   get correoF() {
     return this.regForm.get('correoF') as FormArray;
   }
+  get correoFacturacion() {
+    return this.regForm.get('correoFacturacion') as FormArray;
+  }
   get correotem() {
     return this.regForm.get('correotem');
+  }
+  get correotemFac() {
+    return this.regForm.get('correotemFac');
   }
 
   get correoFac() {
@@ -278,9 +321,15 @@ export class ClienteComponent implements OnInit {
             this.addContenedor(c);
           });
         }
+        if (res.correoFac !== '' && res.correoFac !== undefined && res.correoFac !== null) {
+          const correoFArray = res.correoFac.split(',');
+          correoFArray.forEach(c => {
+            this.addFContenedor(c);
+          });
+        }
 
         // this.regForm.controls['correo'].setValue(res.correo);
-        this.regForm.controls['correoFac'].setValue(res.correoFac);
+        // this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
         this.regForm.controls['usoCFDI'].setValue(res.usoCFDI);
@@ -301,6 +350,14 @@ export class ClienteComponent implements OnInit {
 
       this.correotem.setValue('');
       this.correo.setValue(correos);
+
+      let correosFac = '';
+      this.regForm.controls.correoFacturacion.value.forEach(cf  => {
+        correosFac += cf.correoFact + ',';
+      });
+      correosFac = correosFac.slice(0, -1);
+      this.correotemFac.setValue('');
+      this.correoFac.setValue(correosFac);
 
       // console.log (this.regForm.value);
       this._clienteService.guardarCliente(this.regForm.value)

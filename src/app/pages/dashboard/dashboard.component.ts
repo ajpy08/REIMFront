@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import { CamionService } from '../camiones/camion.service';
 import { UsuarioService } from '../usuarios/usuario.service';
@@ -6,7 +7,7 @@ import { Camion } from '../camiones/camion.models';
 import { ROLES, ETAPAS_MANIOBRA } from 'src/app/config/config';
 import { OperadorService } from '../operadores/operador.service';
 import { Operador } from '../operadores/operador.models';
-import { ClienteService, SolicitudService, ManiobraService } from 'src/app/services/service.index';
+import { ClienteService, SolicitudService, ManiobraService, FacturacionService } from 'src/app/services/service.index';
 import { Cliente } from 'src/app/models/cliente.models';
 import { ThrowStmt } from '@angular/compiler';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
@@ -46,6 +47,10 @@ export class DashboardComponent implements OnInit {
   totalLavado = 0;
   totalReparacion = 0;
 
+  cfdiTimbrados = 0;
+  cfdiSinTimbrar = 0;
+  cfdiTotal = 0;
+
   totalTransito = 0;
   totalEspera = 0;
   totalRevision = 0;
@@ -56,7 +61,7 @@ export class DashboardComponent implements OnInit {
   constructor(private camionService: CamionService, private usuarioService: UsuarioService,
     private operadoresServices: OperadorService, private clientesServices: ClienteService
     , private solicitudService: SolicitudService,
-    private maniobraService: ManiobraService,
+    private maniobraService: ManiobraService, private facturacionService: FacturacionService,
   ) { }
 
 
@@ -109,13 +114,13 @@ export class DashboardComponent implements OnInit {
 
       this.cargarManiobras();
     }
-    
+
     this.socket.on('cambio-maniobra', function (data: any) {
       this.cargarInventario(data.data.estatus);
     }.bind(this));
 
     this.socket.on('cambio-maniobra', function (data: any) {
-        this.cargarManiobras(data.data.estatus);
+      this.cargarManiobras(data.data.estatus);
     }.bind(this));
 
     this.socket.on('aprobar-solicitud', function (data: any) {
@@ -126,7 +131,17 @@ export class DashboardComponent implements OnInit {
       this.cargarSolicitudesTransportista(data.data.tipo);
     }.bind(this));
 
+    this.socket.on('new-cfdi', function (data: any) {
+      this.cargarCFDI();
+    }.bind(this));
+
+    this.socket.on('delete-cfdi', function (data: any) {
+      this.cargarCFDI();
+    }.bind(this));
+
+
     this.cargarSolicitudesTransportista();
+    this.cargarCFDI();
 
   }
   // tslint:disable-next-line: use-life-cycle-interface
@@ -141,6 +156,8 @@ export class DashboardComponent implements OnInit {
     this.socket.removeListener('delete-solicitud');
     this.socket.removeListener('cambio-maniobra');
     this.socket.removeListener('aprobar-solicitud');
+    this.socket.removeListener('new-cfdi');
+    this.socket.removeListener('delete-cfdi');
   }
 
 
@@ -156,6 +173,25 @@ export class DashboardComponent implements OnInit {
       });
     }
 
+  }
+  cargarCFDI() {
+    this.facturacionService.getCFDIS().subscribe(cfdis => {
+      this.cfdiTotal = cfdis.total;
+    });
+
+    const T = async () => {
+      await this.facturacionService.getCFDIS_T_sT(true).subscribe(cfdisT => {
+        this.cfdiTimbrados = cfdisT.total;
+      });
+    };
+    T();
+
+    const ST = async () => {
+      await this.facturacionService.getCFDIS_T_sT(false).subscribe(cfdissT => {
+          this.cfdiSinTimbrar = cfdissT.total;
+        });
+    };
+    ST();
   }
 
   cargarOperadores() {

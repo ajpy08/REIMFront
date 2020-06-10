@@ -111,6 +111,54 @@
 
               <!-- FIN CORREO OPERATIVO -->
 
+              <!--CORREO FACTURACION-->
+              <ng-template matStepLabel> Correo Facturación </ng-template>
+              <div class="alert alert-danger">
+                PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS FACTURACIÓN
+              </div>
+              <table class="table  table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">
+                      <div *ngIf="regForm.get('correotemFac')">
+                        <button type="button" class="btn btn-success" regForm.dirty [disabled]=" !correotemFac.valid "
+                          (click)="addFContenedor(correoFact.value ); correoFact.value=''">
+                          +
+                        </button>
+                      </div>
+                    </th>
+                    <th scope="col"> <input formControlName="correotemFac" class="form-control" #correoFact
+                        placeholder="Correo Facturación" size="20"> </th>
+                    <mat-error *ngIf="correotemFac.invalid">
+                      <sup>*</sup> Por Favor Ingresar correctamente Correo Facturación
+                    </mat-error>
+                  </tr>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col"></th>
+                    <th scope="col">Correo Facturación</th>
+
+                  </tr>
+                </thead>
+                <tbody formArrayName="correoFacturacion" *ngFor="let itemF of correoFacturacion.controls; let item = index;">
+                  <tr [formGroupName]="item">
+                    <td scope="row">{{item+1}}</td>
+                    <td>
+                      <button type="button" (click)="quitarF( item )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </td>
+                    <td *ngIf="itemF.get('correoFact').value">
+                      {{itemF.get('correoFact').value}}
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- FIN CORREO FACTURACION -->
+
               <!-- <mat-form-field>
                 <input matInput formControlName="correo" type="text" class="form-control" placeholder="Correo Operativo">
               </mat-form-field> -->
@@ -125,10 +173,10 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field>
+              <!-- <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" class="form-control"
                   placeholder="Correo De facturación">
-              </mat-form-field>
+              </mat-form-field> -->
               <div class="row">
                 <div class="col-sm-6">
                   <mat-checkbox formControlName="activo" class="form-control" name="activo" placeholder="Activo">
