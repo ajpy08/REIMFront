@@ -4,6 +4,9 @@ import { FacturacionService } from '../facturacion.service';
 import { ExcelService } from 'src/app/services/service.index';
 import { CFDI } from '../models/cfdi.models';
 import { PdfFacturacionComponent } from 'src/app/pages/facturacion/pdf-facturacion/pdf-facturacion.component';
+import * as io from 'socket.io-client';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
+import { Usuario } from '../../usuarios/usuario.model';
 declare var swal: any;
 @Component({
   selector: 'app-cfdis',
@@ -12,9 +15,11 @@ declare var swal: any;
 })
 export class CFDISComponent implements OnInit {
   cfdisExcel = [];
+  usuarioLogueado: Usuario;
   totalRegistros = 0;
   cargando = true;
   tablaCargar = false;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   displayedColumns = [
     'actions',
@@ -37,6 +42,15 @@ export class CFDISComponent implements OnInit {
 
   ngOnInit() {
     this.cargarCFDIS();
+    this.socket.on('new-cfdi', function (data: any) {
+      this.cargarCFDIS();
+    }.bind(this));
+    this.socket.on('update-cfdi', function (data: any) {
+      this.cargarCFDIS();
+    }.bind(this));
+    this.socket.on('delete-cfdi', function (data: any) {
+      this.cargarCFDIS();
+    }.bind(this));
   }
 
   applyFilter(filterValue: string) {
@@ -82,6 +96,7 @@ export class CFDISComponent implements OnInit {
       if (borrado) {
         this.facturacionService.borrarCFDI(cfdis._id).subscribe((res) => {
           this.cargarCFDIS();
+          this.socket.emit('deletecfdi', cfdis);
           swal('Correcto', ' Se ha borrado el CFDI ' + cfdis.serie + '-' + cfdis.folio, 'success');
         });
       }
@@ -108,25 +123,25 @@ export class CFDISComponent implements OnInit {
   }
 
 
-  CreaDatosExcel(datos) {
-    datos.forEach(b => {
-      const buque = {
-        // Id: b._id,
-        Buque: b.nombre,
-        Naviera: b.naviera.nombreComercial,
-        UsuarioAlta: b.usuarioAlta.nombre,
-        FAlta: b.fAlta.substring(0, 10)
-      };
-      this.cfdisExcel.push(buque);
-    });
-  }
+  // CreaDatosExcel(datos) {
+  //   datos.forEach(b => {
+  //     const buque = {
+  //       // Id: b._id,
+  //       Buque: b.nombre,
+  //       Naviera: b.naviera.nombreComercial,
+  //       UsuarioAlta: b.usuarioAlta.nombre,
+  //       FAlta: b.fAlta.substring(0, 10)
+  //     };
+  //     this.cfdisExcel.push(buque);
+  //   });
+  // }
 
-  exportarXLSX(): void {
-    this.CreaDatosExcel(this.dataSource.filteredData);
-    if (this.cfdisExcel) {
-      this._excelService.exportAsExcelFile(this.cfdisExcel, 'Buques');
-    } else {
-      swal('No se puede exportar un excel vacio', '', 'error');
-    }
-  }
+  // exportarXLSX(): void {
+  //   this.CreaDatosExcel(this.dataSource.filteredData);
+  //   if (this.cfdisExcel) {
+  //     this._excelService.exportAsExcelFile(this.cfdisExcel, 'Buques');
+  //   } else {
+  //     swal('No se puede exportar un excel vacio', '', 'error');
+  //   }
+  // }
 }

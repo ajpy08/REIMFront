@@ -32,6 +32,16 @@ export class FacturacionService {
     return this.http.get(url);
   }
 
+  getCFDIS_T_sT(timbre: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/cfdis/T_ST/' + timbre;
+    let params = new HttpParams();
+    if (timbre) {
+      const timbres = timbre.toString();
+      params = params.append('timbre', timbres);
+    }
+    return this.http.get(url, {params: params});
+  }
+
   getCFDI(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));

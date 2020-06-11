@@ -45,6 +45,9 @@ export class AgenciaComponent implements OnInit {
     if (this.correoF) {
       this.correoF.removeAt(0);
     }
+    if (this.correoFacturacion) {
+      this.correoFacturacion.removeAt(0);
+    }
   }
 
   createFormGroup() {
@@ -64,7 +67,9 @@ export class AgenciaComponent implements OnInit {
       formatoR1: [''],
       correo: ['', Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')],
       correotem: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
+      correotemFac: ['', [Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')]],
       correoF: this.fb.array([this.agregarArray('')], { validators: Validators.required, updateOn: 'blur' }),
+      correoFacturacion: this.fb.array([this.agregarFArray('')], { validators: Validators.required, updateOn: 'blur' }),
       correoFac: ['', Validators.email],
       credito: [false, [Validators.required]],
       img: [''],
@@ -77,6 +82,11 @@ export class AgenciaComponent implements OnInit {
   agregarArray(correoO: String): FormGroup {
     return this.fb.group({
       correoO: [correoO]
+    });
+  }
+  agregarFArray(correoFact: String): FormGroup {
+    return this.fb.group({
+      correoFact: [correoFact]
     });
   }
 
@@ -104,8 +114,35 @@ export class AgenciaComponent implements OnInit {
     }
   }
 
+  addFContenedor(correoFact: string): void {
+
+    let error = false;
+    if (correoFact === '') {
+      this.correo.disable({ emitEvent: true });
+      swal('Error al Agregar', 'El campo Correo Facturacion no puede estar Vacio', 'error');
+    } else if (this.correoFacturacion.controls.length === 0) {
+      this.correoFacturacion.push(this.agregarFArray(correoFact));
+    } else if (this.correoFacturacion.controls) {
+      this.correoFacturacion.controls.forEach(c => {
+        if (this.correotemFac.value === c.value.correoFact) {
+          if (error === false) {
+            swal('Error al agregar', 'El correo ' + this.correotemFac.value + ' ya se encuentra registrado en la lista', 'error');
+            error = true;
+            return false;
+          }
+        }
+      });
+      if (!error) {
+        this.correoFacturacion.push(this.agregarFArray(correoFact));
+      }
+    }
+  }
+
   quitar(indice: number) {
     this.correoF.removeAt(indice);
+  }
+  quitarF(indice: number) {
+    this.correoFacturacion.removeAt(indice);
   }
 
 
@@ -151,8 +188,14 @@ export class AgenciaComponent implements OnInit {
   get correoF() {
     return this.regForm.get('correoF') as FormArray;
   }
+  get correoFacturacion() {
+    return this.regForm.get('correoFacturacion') as FormArray;
+  }
   get correotem() {
     return this.regForm.get('correotem');
+  }
+  get correotemFac() {
+    return this.regForm.get('correotemFac');
   }
   get correoFac() {
     return this.regForm.get('correoFac');
@@ -195,8 +238,14 @@ export class AgenciaComponent implements OnInit {
             this.addContenedor(c);
           });
         }
+        if (res.correoFac !== '' && res.correoFac !== undefined && res.correoFac !== null) {
+          const correoFArray = res.correoFac.split(',');
+          correoFArray.forEach(c => {
+            this.addFContenedor(c);
+          });
+        }
         // this.regForm.controls['correo'].setValue(res.correo);
-        this.regForm.controls['correoFac'].setValue(res.correoFac);
+        // this.regForm.controls['correoFac'].setValue(res.correoFac);
         this.regForm.controls['credito'].setValue(res.credito);
         this.regForm.controls['img'].setValue(res.img);
         this.regForm.controls['patente'].setValue(res.patente);
@@ -217,6 +266,15 @@ export class AgenciaComponent implements OnInit {
       this.correotem.setValue('');
       this.correo.setValue(correos);
 
+      let correoFactu = '';
+      this.regForm.controls.correoFacturacion.value.forEach(cf => {
+        correoFactu += cf.correoFact + ',';
+      });
+
+      correoFactu = correoFactu.slice(0, -1);
+      this.correotemFac.setValue('');
+      this.correoFac.setValue(correoFactu);
+      
       // console.log (this.regForm.value);
       this._agenciaService.guardarAgencia(this.regForm.value)
         .subscribe(res => {

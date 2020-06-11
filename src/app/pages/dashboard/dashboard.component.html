@@ -86,7 +86,7 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex no-block">
-                <div class="m-r-20 align-self-center"><span class="listick m-r-20"></span>
+                <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span>
                     <img src="assets/images/solicitud_transportista.jpg" width="65px" height="65px" alt="Solicitud Transportista">
                 </div>
                 <div class="align-self-center">
@@ -170,7 +170,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex no-block">
-                    <div class="m-r-1 align-self-center"><span class="lstick m-r-1"></span><img
+                    <div class="m-r-20 align-self-center"><span class="lstick m-r-20"></span><img
                             src="assets/images/maniobra.png" width="65px" height="70px" alt="Reparación" /></div>
                     <div class="align-self-center">
                         <h6>Maniobras Patio</h6>
@@ -184,8 +184,30 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+    <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' || usuarioLogueado.role === 'NAVIERA_ROLE' || usuarioLogueado.role === 'PATIO_ROLE' || usuarioLogueado.role === 'AA_ROLE'
+     || usuarioLogueado.role === 'CLIENT_ROLE'" class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex no-block">
+                    <div class="m-r-20 aling-self-center">
+                        <span class="lstick m-r-20"></span>
+                        <img src="assets/images/cfdi.png" width="65px" height="70px" alt="cdkAutofill" />
+                    </div>
+                    <div class="aling-self-center">
+                        <h6>CFDI</h6>
+                        <div class="cols-12">
+                            <h6 class="text-muted">Total CFDI ( {{cfdiTotal}} )<br>
+                                Timbrados ( {{cfdiTimbrados}} ) <br>
+                                Sin Timbrar ( {{cfdiSinTimbrar}} )
+                            </h6> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- <div class="col-lg-3">
         <div class="card">

@@ -122,9 +122,55 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field>
+              <ng-template matStepLabel>Correo Facturación</ng-template>
+              <div class="alert alert-danger">
+                PRESIONE [+] PARA AGREGAR A LA LISTA DE CORREOS OPERATIVOS
+              </div>
+              <table class="table table-responsive">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">
+                      <div *ngIf="regForm.get('correotempFac')">
+                        <button type="button" class="btn btn-success" [disabled]="!correotempFac.valid"
+                        (click)="addCorreoFac(correoFa.value); correoFa.value=''">
+                      +
+                      </button>
+                      </div>
+                    </th>
+                    <th scope="col">
+                      <input formControlName="correotempFac" class="form-control" #correoFa
+                      placeholder="Correo Facturacion" size="20">
+                    </th>
+                      <mat-error *ngIf="correotempFac.invalid">
+                        <sub>*</sub> Por favor Ingrese correctamente Correo Facturación
+                      </mat-error>
+                  </tr>
+                  <tr>
+                    <th scope="col">*</th>
+                    <th scope="col"></th>
+                    <th scope="col">Correo Facturación</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="correoFacturacion" *ngFor="let itemF of correoFacturacion.controls; let item = index">
+
+                  <tr [formGroupName]='item'>
+                    <td scope="row">{{item+1}}</td>
+                    <td>
+                      <button type="button" (click)="quitarFac( item )" class="btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </td>
+                    <td *ngIf="itemF.get('correoFa').value">
+                      {{itemF.get('correoFa').value}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- <mat-form-field>
                 <input matInput formControlName="correoFac" type="text" placeholder="Correo De facturación">
-              </mat-form-field>
+              </mat-form-field> -->
               <div class="row">
                 <div class="col-ms-6">
                   <mat-checkbox formControlName="activo" [(ngModel)]="act" class="form-control" name="activo" placeholder="Activo">
