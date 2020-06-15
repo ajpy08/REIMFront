@@ -52,7 +52,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   cfdi;
   usuarioLogueado = new Usuario;
   id;
-  selected = -1;
+  agrupado = true;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(
@@ -137,10 +137,30 @@ export class CFDIComponent implements OnInit, OnDestroy {
       }
       this.cargaValoresIniciales(undefined);
     }
-
     // this.impuestos.removeAt(0);
     this.url = '/cfdis';
   }
+
+  // async javi(conceptos) {
+
+  //   console.log('javi1');
+
+  //   // const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
+
+  //   const start = async () => {
+  //     await this.asyncForEach(conceptos, async (c) => {
+  //       // await waitFor(200);
+  //       console.log(c.descripcion);
+  //       await this.asyncForEach(c.maniobras, async (m) => {
+  //         // await waitFor(200);
+  //         const maniobra: any = await this.maniobraService.getManiobraAsync(m);
+  //         console.log(maniobra.maniobra);
+  //       });
+  //     });
+  //     console.log('Done');
+  //   };
+  //   start();
+  // }
 
   ngOnDestroy(): void {
     this.facturacionService.IE = '';
@@ -296,10 +316,17 @@ export class CFDIComponent implements OnInit, OnDestroy {
     for (const propiedad in this.cfdi) {
       for (const control in this.regForm.controls) {
         if (propiedad === control.toString() && propiedad !== 'conceptos') {
-          this.regForm.controls[propiedad].setValue(this.cfdi[propiedad]);
+          // if (this.cfdi[propiedad].$numberDecimal) {
+          //   this.regForm.controls[propiedad].setValue(this.cfdi[propiedad].$numberDecimal);
+          // } else {
+            this.regForm.controls[propiedad].setValue(this.cfdi[propiedad]);
+          // }
         }
       }
     }
+
+    // this.regForm.controls['subtotal'].setValue(this.cfdi['subtotal'].$numberDecimal);
+    // this.regForm.controls['total'].setValue(this.cfdi['total'].$numberDecimal);
 
     if (this.cfdi.conceptos.length > 0) {
       this.cfdi.conceptos.forEach(concepto => {
@@ -439,15 +466,37 @@ export class CFDIComponent implements OnInit, OnDestroy {
   cargarCFDI(id: string) {
     this.facturacionService.getCFDI(id).subscribe(res => {
       this.cfdi = res;
+      console.log(res);
 
       // tslint:disable-next-line: forin
       for (const propiedad in this.cfdi) {
         for (const control in this.regForm.controls) {
           if (propiedad === control.toString() && propiedad !== 'conceptos') {
-            this.regForm.controls[propiedad].setValue(res[propiedad]);
+            // if (res[propiedad].$numberDecimal) {
+            //   this.regForm.controls[propiedad].setValue(res[propiedad].$numberDecimal);
+            // } else {
+              this.regForm.controls[propiedad].setValue(res[propiedad]);
+            // }
           }
         }
       }
+
+      // tslint:disable-next-line: forin
+      // for (const propiedad in this.cfdi) {
+      //   if (this.cfdi[propiedad].$numberDecimal) {
+      //     this.cfdi[propiedad] = res[propiedad].$numberDecimal;
+      //   }
+      // }
+
+      // Object.getOwnPropertyNames(res).forEach(p => {
+      //   console.log(p);
+      //   console.log(res[p]);
+      //   console.log(typeof (res[p]));
+      // });
+
+
+      // this.regForm.controls['subtotal'].setValue(res['subtotal'].$numberDecimal);
+      // this.regForm.controls['total'].setValue(res['total'].$numberDecimal);
 
       if (res.conceptos.length > 0) {
         let subTotal = 0;
@@ -456,16 +505,23 @@ export class CFDIComponent implements OnInit, OnDestroy {
             this.facturacionService.receptor = m.maniobra.naviera._id;
           });
         }
+
+        if (res.conceptos[0].maniobras === 1) {
+          this.agrupado = false;
+        } else {
+          this.agrupado = true;
+        }
+
         res.conceptos.forEach(concepto => {
           let impuestosRetenidos = 0;
           let impuestosTrasladados = 0;
-          subTotal += concepto.importe;
+          subTotal += parseFloat(concepto.importe.$numberDecimal);
           concepto.impuestos.forEach(impuesto => {
             if (impuesto.TR === 'RETENCION') {
-              impuestosRetenidos += impuesto.importe;
+              impuestosRetenidos += parseFloat(impuesto.importe.$numberDecimal);
             } else {
               if (impuesto.TR === 'TRASLADO') {
-                impuestosTrasladados += impuesto.importe;
+                impuestosTrasladados += parseFloat(impuesto.importe.$numberDecimal);
               }
             }
           });
@@ -476,10 +532,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.descripcion,
             concepto.noIdentificacion,
             concepto.valorUnitario,
-            concepto.importe,
+            parseFloat(concepto.importe.$numberDecimal),
             concepto.impuestos,
             concepto.unidad,
-            concepto.descuento,
+            parseFloat(concepto.descuento.$numberDecimal),
             concepto.maniobras,
             impuestosRetenidos,
             impuestosTrasladados,
@@ -559,7 +615,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   openDialogImpuestos(concepto) {
     let cfdi;
-    cfdi = this.cfdi;
+    cfdi = this.regForm.value;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = concepto;
     const dialogRef = this.matDialog.open(ImpuestosCFDIComponent, dialogConfig);
@@ -571,23 +627,13 @@ export class CFDIComponent implements OnInit, OnDestroy {
           this.cargaValoresIniciales(dialogConfig.data);
         } else {
           // this.cargarCFDI(this.id);
+          this.cfdi = cfdi;
           const pos = cfdi.conceptos.findIndex(a => a._id === result._id);
           if (pos >= 0) {
             this.cfdi.conceptos[pos] = result;
           }
           this.recargaValoresCFDI();
         }
-        // this.conceptos.value.forEach(c => {
-        //   if (c._id === concepto._id) {
-        //     c = result;
-        //   }
-        // });
-
-        // this.maniobraService.getManiobra(result.maniobras[0]).subscribe(maniob => {
-        //   this.facturacionService.receptor = maniob.maniobra.naviera._id;
-        //   this.facturacionService.tipo = 'Descarga';
-        //   this.cargaValoresIniciales(concepto);
-        // });
       }
     });
   }
@@ -643,7 +689,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     }
   }
 
-  agruparDesagruparConcepto(agrupar, concepto) {
+  agruparDesagruparConcepto(agrupar) {
     if (!this.cfdi) {
       this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
       this.cfdi.fecha = this.fecha.value;
@@ -660,41 +706,38 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.cfdi.usoCFDI = this.usoCFDI.value;
       this.cfdi.direccion = this.direccion.value;
       this.cfdi.correo = this.correo.value;
+      this.cfdi.conceptos = this.conceptos.value;
     }
+
+    this.cfdi.conceptos = [];
+
     if (agrupar) {
-      const res = this.cfdi.conceptos.filter(function (concept) {
-        return concept._id === concepto._id;
-      });
-
-      if (res.length > 1) {
-
+      const groups = this.groupArray(this.conceptos.value, '_id');
+      // tslint:disable-next-line: forin
+      for (const g in groups) {
         const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
-        res.forEach(c => {
-          const pos = this.cfdi.conceptos.findIndex(a => a._id === c._id);
-
-          if (pos >= 0) {
-            this.cfdi.conceptos.splice(pos, res.length);
-          }
-
-          c.maniobras.forEach(mm => {
-            con.maniobras.push(mm);
+        // tslint:disable-next-line: forin
+        groups[g].forEach(c => {
+          c.maniobras.forEach(m => {
+            con.maniobras.push(m);
           });
         });
-        con._id = concepto._id;
+
+        con._id = groups[g][0]._id;
         con.cantidad = con.maniobras.length;
         con.unidad = '0';
-        con.valorUnitario = concepto.valorUnitario;
+        con.valorUnitario = groups[g][0].valorUnitario;
         con.descuento = 0.0;
-        con.claveProdServ = concepto.claveProdServ;
-        con.claveUnidad = concepto.claveUnidad;
-        con.descripcion = concepto.descripcion.substring(0, concepto.descripcion.lastIndexOf(' '));
-        con.noIdentificacion = concepto.noIdentificacion;
-        con.impuestos = concepto.impuestos;
+        con.claveProdServ = groups[g][0].claveProdServ;
+        con.claveUnidad = groups[g][0].claveUnidad;
+        con.descripcion = groups[g][0].descripcion.substring(0, groups[g][0].descripcion.lastIndexOf(' '));
+        con.noIdentificacion = groups[g][0].noIdentificacion;
+        con.impuestos = groups[g][0].impuestos;
 
         this.cfdi.conceptos.unshift(con);
-
-        this.recargaValoresCFDI();
       }
+
+      this.recargaValoresCFDI();
     } else {
       this.cfdi.fecha = this.fecha.value;
       this.cfdi.folio = this.folio.value;
@@ -710,157 +753,55 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.cfdi.usoCFDI = this.usoCFDI.value;
       this.cfdi.direccion = this.direccion.value;
       this.cfdi.correo = this.correo.value;
-      this.cfdi.conceptos = this.conceptos.value;
+      this.cfdi.conceptos = [];
 
-      const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
 
-      if (pos >= 0) {
-        this.cfdi.conceptos.splice(pos, 1);
-      }
+      const start = async () => {
+        await this.asyncForEach(this.conceptos.value, async (c) => {
+          // await waitFor(200);
+          await this.asyncForEach(c.maniobras, async (m) => {
+            // await waitFor(200);
 
-      concepto.maniobras.forEach(async m => {
-        const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
-        con._id = concepto._id;
-        con.cantidad = 1;
-        con.unidad = '0';
-        con.maniobras.push(m);
-        con.valorUnitario = concepto.valorUnitario;
-        con.descuento = 0.0;
-        con.claveProdServ = concepto.claveProdServ;
-        con.claveUnidad = concepto.claveUnidad;
+            const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+            con._id = c._id;
+            con.cantidad = 1;
+            con.unidad = '0';
+            con.maniobras.push(m);
+            con.valorUnitario = c.valorUnitario;
+            con.descuento = 0.0;
+            con.claveProdServ = c.claveProdServ;
+            con.claveUnidad = c.claveUnidad;
 
-        if (m.contenedor) {
-          con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
-        } else {
-          con.descripcion = `${concepto.descripcion} CONTENEDORX`;
-          // await this.maniobraService.getManiobraJavi(m).then(maniobra => {
-          //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
-          // }).catch(error => {
-          //   console.log(error);
-          // });
-          // this.maniobraService.getManiobra(m).subscribe((maniobra) => {
-          //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
-          // });
-        }
-        con.noIdentificacion = concepto.noIdentificacion;
-        con.impuestos = concepto.impuestos;
-
-        this.cfdi.conceptos.unshift(con);
-      });
-      this.recargaValoresCFDI();
+            if (m.contenedor) {
+              con.descripcion = `${c.descripcion} ${m.contenedor}`;
+            } else {
+              const maniobra: any = await this.maniobraService.getManiobraAsync(m);
+              con.descripcion = `${c.descripcion} ${maniobra.maniobra.contenedor}`;
+            }
+            con.noIdentificacion = c.noIdentificacion;
+            con.impuestos = c.impuestos;
+            this.cfdi.conceptos.unshift(con);
+          });
+        });
+        this.recargaValoresCFDI();
+      };
+      start();
     }
   }
 
-  // async agruparDesagruparConcepto(agrupar, concepto) {
-  //   await this.llenaGenerales();
-  //   if (agrupar) {
-  //     const res = this.cfdi.conceptos.filter(function (concept) {
-  //       return concept._id === concepto._id;
-  //     });
+  groupArray(dataSource, field) {
+    return dataSource.reduce(function (groups, x) {
+      (groups[x[field]] = groups[x[field]] || []).push(x);
+      return groups;
+    }, {});
+  }
 
-  //     if (res.length > 1) {
-
-  //       const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
-  //       res.forEach(c => {
-  //         const pos = this.cfdi.conceptos.findIndex(a => a._id === c._id);
-
-  //         if (pos >= 0) {
-  //           this.cfdi.conceptos.splice(pos, res.length);
-  //         }
-
-  //         c.maniobras.forEach(mm => {
-  //           con.maniobras.push(mm);
-  //         });
-  //       });
-  //       con._id = concepto._id;
-  //       con.cantidad = con.maniobras.length;
-  //       con.valorUnitario = concepto.valorUnitario;
-  //       con.descuento = 0.0;
-  //       con.claveProdServ = concepto.claveProdServ;
-  //       con.claveUnidad = concepto.claveUnidad;
-  //       con.descripcion = concepto.descripcion.substring(0, concepto.descripcion.lastIndexOf(' '));
-  //       con.noIdentificacion = concepto.noIdentificacion;
-  //       con.impuestos = concepto.impuestos;
-
-  //       this.cfdi.conceptos.unshift(con);
-
-  //       this.recargaValoresCFDI();
-  //     }
-  //   } else {
-  //     this.llena(concepto).then(() => {
-  //       this.recargaValoresCFDI();
-  //     }).catch((error) => {
-  //       console.log(error);
-  //     });
-  //   }
-  // }
-
-  // async llena(concepto) {
-  //   const generales = await this.llenaGenerales();
-  //   const pos = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
-
-  //   if (pos >= 0) {
-  //     this.cfdi.conceptos.splice(pos, 1);
-  //   }
-
-  //   const con = await this.llenaConcepto(concepto);
-  // }
-
-  // async llenaGenerales() {
-  //   if (!this.cfdi) {
-  //     this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
-  //   }
-  //   this.cfdi.fecha = this.fecha.value;
-  //   this.cfdi.folio = this.folio.value;
-  //   this.cfdi.formaPago = this.formaPago.value;
-  //   this.cfdi.metodoPago = this.metodoPago.value;
-  //   this.cfdi.moneda = this.moneda.value;
-  //   this.cfdi.serie = this.serie.value;
-  //   // subtotal
-  //   this.cfdi.tipoComprobante = this.tipoComprobante.value;
-  //   // total
-  //   this.cfdi.nombre = this.nombre.value;
-  //   this.cfdi.rfc = this.rfc.value;
-  //   this.cfdi.usoCFDI = this.usoCFDI.value;
-  //   this.cfdi.direccion = this.direccion.value;
-  //   this.cfdi.correo = this.correo.value;
-  //   this.cfdi.conceptos = this.conceptos.value;
-
-  //   return this.cfdi;
-  // }
-
-  // async llenaConcepto(concepto) {
-  //   concepto.maniobras.forEach(async m => {
-  //     const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
-  //     con._id = concepto._id;
-  //     con.cantidad = 1;
-  //     con.unidad = '0';
-  //     con.maniobras.push(m);
-  //     con.valorUnitario = concepto.valorUnitario;
-  //     con.descuento = 0.0;
-  //     con.claveProdServ = concepto.claveProdServ;
-  //     con.claveUnidad = concepto.claveUnidad;
-
-  //     if (m.contenedor) {
-  //       con.descripcion = `${concepto.descripcion} ${m.contenedor}`;
-  //     } else {
-  //       const mani = await this.maniobraService.getManiobraJavi(m);
-  //       mani.then(maniobra => {
-  //         con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
-  //       }).catch(error => {
-  //         console.log(error);
-  //       });
-  //       // this.maniobraService.getManiobra(m).subscribe((maniobra) => {
-  //       //   con.descripcion = `${concepto.descripcion} ${maniobra.contenedor}`;
-  //       // });
-  //     }
-  //     con.noIdentificacion = concepto.noIdentificacion;
-  //     con.impuestos = concepto.impuestos;
-  //     this.cfdi.conceptos.unshift(con);
-  //   });
-
-  //   return this.cfdi;
-  // }
+  async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index]);
+      // await callback(array[index], index, array);
+    }
+  }
 
   /* #region  Properties */
 

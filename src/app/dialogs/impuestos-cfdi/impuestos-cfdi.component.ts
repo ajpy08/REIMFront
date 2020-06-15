@@ -41,7 +41,9 @@ export class ImpuestosCFDIComponent implements OnInit {
   cargarImpuestos(impuestos) {
     if (impuestos.length > 0) {
       impuestos.forEach(element => {
-        this.impuestos.push(this.agregarArray(new Impuesto(element.TR, element.importe, element.impuesto, element.tasaCuota, element.tipoFactor)));
+        this.impuestos.push(this.agregarArray(new Impuesto(
+          element.TR, parseFloat(element.importe.$numberDecimal), element.impuesto,
+          parseFloat(element.tasaCuota.$numberDecimal), element.tipoFactor)));
       });
     } else {
       this.regForm.controls['impuestos'].setValue(undefined);

@@ -24,9 +24,9 @@ export class ManiobraService {
     return this.http.get(url);
   }
 
-  async getManiobraJavi(id: string) {
-    const maniobra = await this.getManiobra(id).toPromise();
-    return maniobra.maniobra;
+  async getManiobraAsync(id: string) {
+    const url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
+    return await this.http.get(url).toPromise();
   }
 
   getManiobraConIncludes(id: string): Observable<any> {
