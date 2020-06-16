@@ -121,7 +121,7 @@ th.fechas {
   font-weight: bold;
   color: black;
   margin-top: -162px;
-  position: relative;
+  /* position: relative; */
 }
 
 .selloEmisorS {
@@ -132,7 +132,7 @@ th.fechas {
   font-weight: bold;
   color: black;
   margin-top: 10px;
-  position: relative;
+  /* position: relative; */
 }
 
 div.textEmisor {
@@ -154,7 +154,7 @@ div.textEmisor {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: black;
-  position: relative;
+  /* position: relative; */
 }
 
 .rfcProv {
@@ -164,7 +164,7 @@ div.textEmisor {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
   color: black;
-  position: relative;
+  /* position: relative; */
   margin-top: 3px;
 }
 
@@ -341,12 +341,21 @@ p.uso {
 /*  CARGANDO TIMBRE */
 
 .loader {
-  font-size: 20px;
-  /* margin: 9%; */
+  /* font-size: 20px;
+  /* margin: 9%; 
   width: 19px;
   height: 10px;
   border-radius: 50%;
   position: fixed;
+  text-indent: 0;
+  -webkit-animation: load4 1.3s infinite linear;
+  animation: load4 1.3s infinite linear; */
+
+  font-size: 20px;
+  width: 19px;
+  height: 10px;
+  top: 37%;
+  border-radius: 50%;
   text-indent: 0;
   -webkit-animation: load4 1.3s infinite linear;
   animation: load4 1.3s infinite linear;
@@ -406,14 +415,31 @@ p.uso {
   }
 }
 
+.pageloader {
+  width: 59%;
+  height: 100%;
+  background: rgba(0,0,0,.87);
+  position: fixed;
+  opacity: 0.7;
+}
+
 .mensajeTimbre {
-  width: 307px;
+  /* width: 307px;
   position: fixed;
   margin-top: 60px;
   font-size: 25px;
   margin-left: -531%;
-  /* color: rgb(78, 78, 78); */
-  font-weight: 500;
+  /* color: rgb(78, 78, 78);
+  font-weight: 500; */
+
+  width: 289px;
+  position: relative;
+  margin-top: 60px;
+  font-size: 32px;
+  margin-left: -678%;
+  font-weight: 650;
+  text-align: center;
+  color: white;
 }
 
 .dropbtn {
