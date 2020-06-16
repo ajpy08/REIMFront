@@ -271,18 +271,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
             this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
             this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
             this.total.setValue(this.round(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
-            // this.subtotal.setValue(Math.round(subTotal));
-            // this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 2));
-            // this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 2));
-            // this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
           });
         });
       }
     } else {
-      // this.subtotal.setValue(subTotal);
-      // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-      // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-      // this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
       this.subtotal.setValue(this.round(subTotal, 2));
       this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
       this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
@@ -303,17 +295,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
     for (const propiedad in this.cfdi) {
       for (const control in this.regForm.controls) {
         if (propiedad === control.toString() && propiedad !== 'conceptos') {
-          // if (this.cfdi[propiedad].$numberDecimal) {
-          //   this.regForm.controls[propiedad].setValue(this.cfdi[propiedad].$numberDecimal);
-          // } else {
           this.regForm.controls[propiedad].setValue(this.cfdi[propiedad]);
-          // }
         }
       }
     }
-
-    // this.regForm.controls['subtotal'].setValue(this.cfdi['subtotal'].$numberDecimal);
-    // this.regForm.controls['total'].setValue(this.cfdi['total'].$numberDecimal);
 
     if (this.cfdi.conceptos.length > 0) {
       this.cfdi.conceptos.forEach(concepto => {
@@ -358,10 +343,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
             impuestosTrasladados,
             concepto._id)));
         } else {
-          // this.subtotal.setValue(subTotal);
-          // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-          // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-          // this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
           this.subtotal.setValue(this.truncateDecimals(subTotal, 4));
           this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
           this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 4));
@@ -373,10 +354,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
       this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 4));
       this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 4));
-      // this.subtotal.setValue(subTotal);
-      // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-      // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-      // this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
     }
   }
 
@@ -459,64 +436,74 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   cargarCFDI(id: string) {
+    let concepts;
     this.facturacionService.getCFDI(id).subscribe(res => {
       this.cfdi = res;
-      console.log(res);
 
       // tslint:disable-next-line: forin
       for (const propiedad in this.cfdi) {
         for (const control in this.regForm.controls) {
           if (propiedad === control.toString() && propiedad !== 'conceptos') {
-            // if (res[propiedad].$numberDecimal) {
-            //   this.regForm.controls[propiedad].setValue(res[propiedad].$numberDecimal);
-            // } else {
-            this.regForm.controls[propiedad].setValue(res[propiedad]);
-            // }
+            if (res[propiedad].$numberDecimal) {
+              this.regForm.controls[propiedad].setValue(res[propiedad].$numberDecimal);
+            } else {
+              this.regForm.controls[propiedad].setValue(res[propiedad]);
+            }
+          } else {
+            if (propiedad === control.toString() && propiedad === 'conceptos') {
+              concepts = res[propiedad];
+
+              if (concepts !== undefined) {
+                concepts.forEach(co => {
+                  for (const prop in co) {
+                    if (co[prop].$numberDecimal) {
+                      co[prop] = parseFloat(co[prop].$numberDecimal);
+                    } else {
+                      if (prop === 'impuestos') {
+                        if (co[prop]) {
+                          co[prop].forEach(imp => {
+                            for (const i in imp) {
+                              if (imp[i].$numberDecimal) {
+                                imp[i] = parseFloat(imp[i].$numberDecimal);
+                              }
+                            }
+                          });
+                        }
+                      }
+                    }
+                  }
+                });
+                this.cfdi.conceptos = concepts;
+              }
+            }
           }
         }
       }
 
-      // tslint:disable-next-line: forin
-      // for (const propiedad in this.cfdi) {
-      //   if (this.cfdi[propiedad].$numberDecimal) {
-      //     this.cfdi[propiedad] = res[propiedad].$numberDecimal;
-      //   }
-      // }
-
-      // Object.getOwnPropertyNames(res).forEach(p => {
-      //   console.log(p);
-      //   console.log(res[p]);
-      //   console.log(typeof (res[p]));
-      // });
-
-
-      // this.regForm.controls['subtotal'].setValue(res['subtotal'].$numberDecimal);
-      // this.regForm.controls['total'].setValue(res['total'].$numberDecimal);
-
-      if (res.conceptos.length > 0) {
+      if (this.cfdi.conceptos.length > 0) {
         let subTotal = 0;
-        if (res.conceptos[0].maniobras.length > 0) {
-          this.maniobraService.getManiobra(res.conceptos[0].maniobras[0]).subscribe(m => {
+        if (this.cfdi.conceptos[0].maniobras.length > 0) {
+          this.maniobraService.getManiobra(this.cfdi.conceptos[0].maniobras[0]).subscribe(m => {
             this.facturacionService.receptor = m.maniobra.naviera._id;
           });
         }
 
-        if (res.conceptos[0].maniobras === 1) {
+        if (this.cfdi.conceptos[0].maniobras === 1) {
           this.agrupado = false;
         } else {
           this.agrupado = true;
         }
 
-        res.conceptos.forEach(concepto => {
+        this.cfdi.conceptos.forEach(concepto => {
           let impuestosRetenidos = 0;
           let impuestosTrasladados = 0;
-          subTotal += parseFloat(concepto.importe.$numberDecimal);
+          subTotal += concepto.importe;
           concepto.impuestos.forEach(impuesto => {
             if (impuesto.TR === 'RETENCION') {
-              impuestosRetenidos += parseFloat(impuesto.importe.$numberDecimal);
+              impuestosRetenidos += impuesto.importe;
             } else {
               if (impuesto.TR === 'TRASLADO') {
-                impuestosTrasladados += parseFloat(impuesto.importe.$numberDecimal);
+                impuestosTrasladados += impuesto.importe;
               }
             }
           });
@@ -527,10 +514,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.descripcion,
             concepto.noIdentificacion,
             concepto.valorUnitario,
-            parseFloat(concepto.importe.$numberDecimal),
+            concepto.importe,
             concepto.impuestos,
             concepto.unidad,
-            parseFloat(concepto.descuento.$numberDecimal),
+            concepto.descuento,
             concepto.maniobras,
             impuestosRetenidos,
             impuestosTrasladados,

@@ -25,7 +25,7 @@ export class PdfFacturacionComponent implements OnInit {
 
   @ViewChild('contenido') contenido: ElementRef;
 
-  cargandoTimbre = true;
+  cargandoTimbre = false;
   mensaje = 'TIMBRADO';
   elementType = 'img';
   qr = '';
