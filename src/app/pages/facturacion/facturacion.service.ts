@@ -107,7 +107,7 @@ export class FacturacionService {
       let url = URL_SERVICIOS + '/cfdis/datosTimbrado/' + cfdi._id + '/';
       url += '?token=' + this._usuarioService.token;
       return this.http.put(url, cfdi).pipe(map((resp: any) => {
-        swal('Correcto', 'Se ha timbrado correctamente', 'success');
+        // swal('Correcto', 'Se ha timbrado correctamente', 'success');
         return resp.cfdiTimbradoAct;
       }));
    }

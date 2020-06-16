@@ -81,7 +81,7 @@ export class PdfFacturacionComponent implements OnInit {
   ngOnDestroy() {
     this.ngOnInit();
   }
-  
+
 
   pdf(): void {
     let opt = {};
@@ -113,7 +113,7 @@ export class PdfFacturacionComponent implements OnInit {
       .from(datapdf)
       .set(opt)
       .save();
-      }
+  }
 
   traslado(tr) {
     let TR = '';
@@ -217,45 +217,45 @@ export class PdfFacturacionComponent implements OnInit {
           }, 3000);
           if (res.ok === true) {
             this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.InformacionAdicional)
-            .subscribe((restim) => { // timbrar XML
-              if (restim.ok === true) {
-                setTimeout(() => {
-                  this.mensaje = 'XML Timbrado correctamente';
-                  let uuid = '',
-                    selloEmisor = '',
-                    NoCertificadoSat = '',
-                    fechaCert = '',
-                    selloSAT = '',
-                    rfcProvCer = '',
-                    cadenaComplemento = '';
-                  const rfcEmisor = RFCEMISOR;
+              .subscribe((restim) => { // timbrar XML
+                if (restim.ok === true) {
+                  setTimeout(() => {
+                    this.mensaje = 'XML Timbrado correctamente';
+                    let uuid = '',
+                      selloEmisor = '',
+                      NoCertificadoSat = '',
+                      fechaCert = '',
+                      selloSAT = '',
+                      rfcProvCer = '',
+                      cadenaComplemento = '';
+                    const rfcEmisor = RFCEMISOR;
 
-                  uuid = restim.Timbre.$.UUID;
-                  selloSAT = restim.Timbre.$.SelloSAT;
-                  rfcProvCer = restim.Timbre.$.RfcProvCertif;
-                  NoCertificadoSat = restim.Timbre.$.NoCertificadoSAT;
-                  fechaCert = restim.Timbre.$.FechaTimbrado;
-                  cadenaComplemento = restim.CadenaComplemento;
+                    uuid = restim.Timbre.$.UUID;
+                    selloSAT = restim.Timbre.$.SelloSAT;
+                    rfcProvCer = restim.Timbre.$.RfcProvCertif;
+                    NoCertificadoSat = restim.Timbre.$.NoCertificadoSAT;
+                    fechaCert = restim.Timbre.$.FechaTimbrado;
+                    cadenaComplemento = restim.CadenaComplemento;
 
-                  for (const i in res.cfdiXMLsinTimbrar) {
-                    if (res.cfdiXMLsinTimbrar.hasOwnProperty(i)) {
-                      const element = res.cfdiXMLsinTimbrar[i];
-                      selloEmisor = element.$.Sello;
+                    for (const i in res.cfdiXMLsinTimbrar) {
+                      if (res.cfdiXMLsinTimbrar.hasOwnProperty(i)) {
+                        const element = res.cfdiXMLsinTimbrar[i];
+                        selloEmisor = element.$.Sello;
+                      }
                     }
-                  }
-                  const ObjetoTimbre = {
-                    _id: id,
-                    uuid: uuid, NoCerieSat: NoCertificadoSat, fechaCer: fechaCert, selloEmisor: selloEmisor,
-                    cadenaOriginal: restim.CadenaComplemento, selloSat: selloSAT, rfcProvSat: rfcProvCer, rfcEmisor: rfcEmisor, rfcReceptor: res.rfc,
-                    total: res.total
-                  };
-                  this.datosTimbre(ObjetoTimbre);
-                }, 3000);
-              }
-            }, (error) => {
-              this.cargandoTimbre = false;
-              swal('Error', `${error.error.mensaje}`, 'error');
-            });
+                    const ObjetoTimbre = {
+                      _id: id,
+                      uuid: uuid, NoCerieSat: NoCertificadoSat, fechaCer: fechaCert, selloEmisor: selloEmisor,
+                      cadenaOriginal: restim.CadenaComplemento, selloSat: selloSAT, rfcProvSat: rfcProvCer, rfcEmisor: rfcEmisor, rfcReceptor: res.rfc,
+                      total: res.total
+                    };
+                    this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio);
+                  }, 3000);
+                }
+              }, (error) => {
+                this.cargandoTimbre = false;
+                swal('Error', `${error.error.mensaje}`, 'error');
+              });
           }
         }, (err) => {
           this.cargandoTimbre = false;
@@ -266,14 +266,23 @@ export class PdfFacturacionComponent implements OnInit {
     });
   }
 
-  datosTimbre(ObjetoTimbrado) {
+  datosTimbre(ObjetoTimbrado, correo, serie, folio) {
     this.mensaje = 'Generando PDF un momento ...';
     setTimeout(() => {
       this.facturacionService.actualizarDatosTimbre(ObjetoTimbrado).subscribe(() => {
-        this.cargandoTimbre = false;
-        this.dialigRef.close();
+        setTimeout(() => {
+          this.mensaje = 'Enviando Correo a ' + correo;
+          this.pdfFacturacionService.pdfGenerate(ObjetoTimbrado._id).subscribe((res) => {
+            if (res) {
+              this.cargandoTimbre = false;
+              this.dialigRef.close();
+              swal('Correcto', 'Se ha timbrado correctamente el CFDI ' + serie + '-' + folio, 'success');
+            }
+          });
+        }, 3000);
       });
     }, 5000);
+
   }
   cadenaOriginal() {
     if (this.data.data.cfdi.cadenaOriginalSat) {
