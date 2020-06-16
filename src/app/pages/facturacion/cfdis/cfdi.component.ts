@@ -216,12 +216,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
             if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
               concepto.cantidad = conceptoCalcular.maniobras.length;
               concepto.maniobras = conceptoCalcular.maniobras;
-              concepto.valorUnitario = this.truncateDecimals(conceptoCalcular.valorUnitario, 2);
-              concepto.descuento = this.truncateDecimals(conceptoCalcular.descuento, 2);
+              concepto.valorUnitario = this.truncateDecimals(conceptoCalcular.valorUnitario, 4);
+              concepto.descuento = this.truncateDecimals(conceptoCalcular.descuento, 4);
             } else {
               concepto.cantidad = c.maniobras.length;
               concepto.maniobras = c.maniobras;
-              concepto.valorUnitario = prodServ !== undefined ? this.truncateDecimals(prodServ.valorUnitario, 2) : 0.00;
+              concepto.valorUnitario = prodServ !== undefined ? this.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
               concepto.descuento = 0.00;
             }
             if (prodServ && concepto.maniobras.length > 0) {
@@ -229,17 +229,17 @@ export class CFDIComponent implements OnInit, OnDestroy {
               concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
               concepto.descripcion = prodServ.descripcion;
               concepto.noIdentificacion = prodServ.codigo;
-              concepto.importe = this.truncateDecimals(concepto.valorUnitario * concepto.cantidad - concepto.descuento, 2);
+              concepto.importe = concepto.valorUnitario * concepto.cantidad - concepto.descuento;
               subTotal += concepto.importe;
               // totalDescuentos += concepto.descuento;
               if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
                 conceptoCalcular.impuestos.forEach(impuesto => {
                   if (impuesto.TR === 'RETENCION') {
-                    impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 2);
+                    impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosRetenidos += impuestosRetenidos;
                   } else {
                     if (impuesto.TR === 'TRASLADO') {
-                      impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 2);
+                      impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                       totalImpuestosTrasladados += impuestosTrasladados;
                     }
                   }
@@ -247,38 +247,46 @@ export class CFDIComponent implements OnInit, OnDestroy {
                 concepto.impuestos = conceptoCalcular.impuestos;
               } else {
                 prodServ.impuestos.forEach(impuesto => {
-                  impuesto.importe = this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 2);
+                  impuesto.importe = this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                   if (impuesto.TR === 'RETENCION') {
-                    impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 2);
+                    impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosRetenidos += impuestosRetenidos;
                   } else {
                     if (impuesto.TR === 'TRASLADO') {
-                      impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 2);
+                      impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                       totalImpuestosTrasladados += impuestosTrasladados;
                     }
                   }
                 });
                 concepto.impuestos = prodServ.impuestos;
               }
-              concepto.impuestosRetenidos = this.truncateDecimals(impuestosRetenidos, 2);
-              concepto.impuestosTrasladados = this.truncateDecimals(impuestosTrasladados, 2);
+              concepto.impuestosRetenidos = this.truncateDecimals(impuestosRetenidos, 4);
+              concepto.impuestosTrasladados = this.truncateDecimals(impuestosTrasladados, 4);
               // concepto.impuestos = prodServ.impuestos;
 
               concepto.unidad = '0';
               this.conceptos.push(this.agregarArray(concepto));
             }
-            this.subtotal.setValue(this.truncateDecimals(subTotal, 2));
-            this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 2));
-            this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 2));
-            this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+            this.subtotal.setValue(this.round(subTotal, 2));
+            this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
+            this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
+            this.total.setValue(this.round(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+            // this.subtotal.setValue(Math.round(subTotal));
+            // this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 2));
+            // this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 2));
+            // this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
           });
         });
       }
     } else {
-      this.subtotal.setValue(subTotal);
-      this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-      this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-      this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+      // this.subtotal.setValue(subTotal);
+      // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+      // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+      // this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+      this.subtotal.setValue(this.round(subTotal, 2));
+      this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
+      this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
+      this.total.setValue(this.round(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
     }
     /////////////////////////////////////////////////////////////////////////////////////////
   }
@@ -350,17 +358,21 @@ export class CFDIComponent implements OnInit, OnDestroy {
             impuestosTrasladados,
             concepto._id)));
         } else {
-          this.subtotal.setValue(subTotal);
-          this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
-          this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
-          this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+          // this.subtotal.setValue(subTotal);
+          // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
+          // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
+          // this.total.setValue(subTotal + totalImpuestosTrasladados - totalImpuestosRetenidos);
+          this.subtotal.setValue(this.truncateDecimals(subTotal, 4));
+          this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
+          this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 4));
+          this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 4));
         }
       });
     } else {
-      this.subtotal.setValue(this.truncateDecimals(subTotal, 2));
-      this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 2));
-      this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 2));
-      this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+      this.subtotal.setValue(this.truncateDecimals(subTotal, 4));
+      this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
+      this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 4));
+      this.total.setValue(this.truncateDecimals(this.subtotal.value + this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 4));
       // this.subtotal.setValue(subTotal);
       // this.totalImpuestosRetenidos.setValue(totalImpuestosRetenidos);
       // this.totalImpuestosTrasladados.setValue(totalImpuestosTrasladados);
@@ -794,6 +806,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
       finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
 
     return parseFloat(finalResult);
+  }
+
+  round(number: number, digits) {
+    const n = parseFloat((Math.round(number * 100) / 100).toFixed(digits));
+    return n;
   }
 
   /* #region  Properties */
