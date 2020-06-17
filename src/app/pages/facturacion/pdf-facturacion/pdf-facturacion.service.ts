@@ -46,7 +46,12 @@ export class PdfFacturacionService {
     return this.http.get(url);
   }
 
-  pdfGenerate(id: string): Observable<any>{
+  envioCorreoCFDI(correo: string, archivo: string, nombre: string): Observable<any> {
+    const url = URL_SERVICIOS + '/pdfFacturacion/envioCorreo/' + correo + '&' + archivo + '&' + nombre;
+    return this.http.get(url);
+  }
+
+  pdfGenerate(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/pdfFacturacion/pdfCFDI/' + id;
     return this.http.get(url);
   }

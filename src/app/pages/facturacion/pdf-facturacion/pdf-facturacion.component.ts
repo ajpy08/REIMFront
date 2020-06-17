@@ -11,6 +11,7 @@ import { DATOS_TIMBRADO, RFCEMISOR } from 'src/app/config/config';
 declare var swal: any;
 
 import { CFDI } from '../models/cfdi.models';
+import { ok } from 'assert';
 export interface DialogData {
   // contenedor: string;
   data: any;
@@ -36,11 +37,13 @@ export class PdfFacturacionComponent implements OnInit {
   subtotal = 0;
   comprobante = '';
   usoCFDI = '';
-  url = `T-${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.xml`;
+  url = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.xml`;
+  urlpDF = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.pdf`;
   moneda = '';
   claveUnidad = '';
   tasa = [];
   count = 0;
+  des = 0;
   letrasTotal = '';
   uuid = '';
   metodoPago = '';
@@ -74,6 +77,7 @@ export class PdfFacturacionComponent implements OnInit {
     this.clave();
     this.NumerosAletras();
     this.totales();
+    this.descuento();
     this.getmetodoPago();
     this.generarQR(this.ObjetoQR);
   }
@@ -127,26 +131,26 @@ export class PdfFacturacionComponent implements OnInit {
 
   tasaCuota(tasa) {
     let tasaCuota = '';
-    if (tasa.tasaCuota >= 10) {
-      tasaCuota = '0.' + tasa.tasaCuota;
+    if (tasa.tasaCuota.$numberDecimal >= 10) {
+      tasaCuota = '0.' + tasa.tasaCuota.$numberDecimal;
     } else {
-      tasaCuota = '0.0' + tasa.tasaCuota;
+      tasaCuota = '0.0' + tasa.tasaCuota.$numberDecimal;
     }
     return tasaCuota;
   }
   importe(importes) {
     let result = '';
-    const sep = importes.importe.toString().indexOf('.');
+    const sep = importes.importe.$numberDecimal.toString().indexOf('.');
     if (sep !== -1) {
-      result = importes.importe.toString().split('.');
-      if (result[1].length > 2) {
+      result = importes.importe.$numberDecimal.toString().split('.');
+      if (result[1].length >= 2) {
 
-        return result = result[0] + '.' + result[1] + '0';
+        return result = result[0] + '.' + result[1];
       } else {
-        return importes.importe + '0';
+        return importes.importe.$numberDecimal + '0';
       }
     } else {
-      return importes.importe + '.00';
+      return importes.importe.$numberDecimal + '.00';
     }
   }
 
@@ -186,14 +190,21 @@ export class PdfFacturacionComponent implements OnInit {
   }
 
   totales() {
-    this.subtotal = this.data.data.cfdi.subtotal;
-    this.totalRetenidos = this.data.data.cfdi.totalImpuestosRetenidos;
-    this.totalTrasladados = this.data.data.cfdi.totalImpuestosTrasladados;
-    this.total = this.data.data.cfdi.total;
+    this.subtotal = this.data.data.cfdi.subtotal.$numberDecimal;
+    this.totalRetenidos = this.data.data.cfdi.totalImpuestosRetenidos.$numberDecimal;
+    this.totalTrasladados = this.data.data.cfdi.totalImpuestosTrasladados.$numberDecimal;
+    this.total = this.data.data.cfdi.total.$numberDecimal;
+  }
+
+  descuento() {
+    this.data.data.cfdi.conceptos.forEach(c => {
+      const number = parseFloat(c.descuento.$numberDecimal);
+      this.des = this.des + number;
+    });
   }
 
   NumerosAletras() {
-    this.pdfFacturacionService.getNumeroAletras(this.data.data.cfdi.total).subscribe((resLetra) => {
+    this.pdfFacturacionService.getNumeroAletras(this.data.data.cfdi.total.$numberDecimal).subscribe((resLetra) => {
       this.letrasTotal = resLetra.numeroLetras;
     });
   }
@@ -249,7 +260,7 @@ export class PdfFacturacionComponent implements OnInit {
                       cadenaOriginal: restim.CadenaComplemento, selloSat: selloSAT, rfcProvSat: rfcProvCer, rfcEmisor: rfcEmisor, rfcReceptor: res.rfc,
                       total: res.total
                     };
-                    this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio);
+                    this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio, res.nombre);
                   }, 3000);
                 }
               }, (error) => {
@@ -266,23 +277,27 @@ export class PdfFacturacionComponent implements OnInit {
     });
   }
 
-  datosTimbre(ObjetoTimbrado, correo, serie, folio) {
+  datosTimbre(ObjetoTimbrado, correo, serie, folio, nombreEmisor) {
     this.mensaje = 'Generando PDF un momento ...';
     setTimeout(() => {
       this.facturacionService.actualizarDatosTimbre(ObjetoTimbrado).subscribe(() => {
         setTimeout(() => {
           this.mensaje = 'Enviando Correo a ' + correo;
           this.pdfFacturacionService.pdfGenerate(ObjetoTimbrado._id).subscribe((res) => {
-            if (res) {
-              this.cargandoTimbre = false;
-              this.dialigRef.close();
-              swal('Correcto', 'Se ha timbrado correctamente el CFDI ' + serie + '-' + folio, 'success');
+            if (res.ok === true) {
+              const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}`;
+              this.pdfFacturacionService.envioCorreoCFDI(correo, archivo, nombreEmisor).subscribe((resCorreo) => {
+                if (resCorreo.ok === true) {
+                  this.cargandoTimbre = false;
+                  this.dialigRef.close();
+                  swal('Correcto', 'Se ha timbrado y enviado correo correctamente  ' + serie + '-' + folio, 'success');
+                }
+              });
             }
           });
         }, 3000);
       });
     }, 5000);
-
   }
   cadenaOriginal() {
     if (this.data.data.cfdi.cadenaOriginalSat) {
@@ -320,6 +335,26 @@ export class PdfFacturacionComponent implements OnInit {
       return;
     }
   }
+
+  envioCFDI() {
+    swal({
+      title: '¿ Estas seguro?',
+      text: 'Se enviara correo a ' + this.data.data.cfdi.correo,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(correo => {
+      if (correo) {
+        const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}`;
+        this.pdfFacturacionService.envioCorreoCFDI(this.data.data.cfdi.correo, archivo, this.data.data.cfdi.nombre).subscribe((res) => {
+          if (res.ok === true) {
+            swal('Correcto', 'Correo Enviando a ' + this, this.data.data.cfdi.correo + 'success');
+          }
+        });
+      }
+    });
+  }
+
 
   closepdf() {
     this.dialigRef.close();
