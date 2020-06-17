@@ -109,12 +109,12 @@
 
             <ng-container matColumnDef="subTotal">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Sub Total</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.subtotal}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.subtotal.$numberDecimal}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.total}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.total.$numberDecimal}} </mat-cell>
             </ng-container>
 
 
