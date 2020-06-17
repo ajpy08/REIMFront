@@ -1,7 +1,7 @@
 <div class="row animated fadeIn">
   <div class="col-sm-12">
     <div class="card card-body">
-      <form [formGroup]="regForm" (ngSubmit)="guardar()" novalidate>
+      <form [formGroup]="regForm" (ngSubmit)="guardar()" (keydown.enter)="$event.preventDefault()" novalidate>
         <div class="row">
           <div class="my-container">
             <div class="col-md-3">
@@ -248,12 +248,11 @@
                             <mat-form-field>
                               <input matInput [value]="item.get('valorUnitario').value" formControlName="valorUnitario"
                                 type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
-                              <!-- {{item.get('valorUnitario').value | currency}} -->
                             </mat-form-field>
                           </div>
                         </td>
                         <td>
-                          {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value}}
+                          {{this.round(item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value, 2)}}
                         </td>
                         <td>
                           <div class="col-md-5">
@@ -262,32 +261,10 @@
                                 type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
                             </mat-form-field>
                           </div>
-                          <!-- {{item.get('descuento').value | currency}} -->
                         </td>
                         <td>
                           {{item.get('importe').value}}
                         </td>
-                        <!-- <td>
-                          {{item.get('descripcion').value}}
-                        </td>
-                        <td>
-                          {{item.get('unidad').value}}
-                        </td>
-                        <td>
-                          {{item.get('cantidad').value}}
-                        </td>
-                        <td>
-                          {{item.get('valorUnitario').value | currency}}
-                        </td>
-                        <td>
-                          {{item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value | currency}}
-                        </td>
-                        <td>
-                          {{item.get('descuento').value | currency}}
-                        </td>
-                        <td>
-                          {{item.get('importe').value | currency}}
-                        </td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -327,6 +304,13 @@
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
                         <input matInput formControlName="totalImpuestosTrasladados" type="text"
                           [value]="regForm.get('totalImpuestosTrasladados').value">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-12" *ngIf="regForm.get('totalDescuentos').value > 0">
+                      <mat-form-field>
+                        <mat-label><b>TOTAL DESCUENTO</b></mat-label>
+                        <input matInput formControlName="totalDescuentos" type="text"
+                          [value]="regForm.get('totalDescuentos').value">
                       </mat-form-field>
                     </div>
                     <div class="col-md-12">
