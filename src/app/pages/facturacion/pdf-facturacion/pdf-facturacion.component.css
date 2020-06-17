@@ -79,7 +79,7 @@ th.metodos {
 }
 
 th.codcantidad {
-  width: 50px;
+  width: 63px;
 }
 
 th.unidad {
@@ -87,7 +87,7 @@ th.unidad {
 }
 
 th.imp {
-  width: 153px;
+  width: 108px;
 }
 
 th.letras {
@@ -314,6 +314,7 @@ p.uso {
     margin-left: 15%;
     ;
   }
+
 }
 
 @media (max-width: 600px) {
@@ -416,7 +417,7 @@ p.uso {
 }
 
 .pageloader {
-  width: 59%;
+  width: 764px;
   height: 100%;
   background: rgba(0,0,0,.87);
   position: fixed;
@@ -505,6 +506,9 @@ ul {
   margin-left: 13px;
   margin-top: 8px;
 }
+.fa-envelope {
+  color: white;
+}
 
 label {
   width: 51px;
@@ -520,8 +524,10 @@ label {
 }
 
 .botonC {
-  margin-top: -230px;
-  margin-left: 12px;
+  position: fixed;
+  margin-left: -33px;
+  margin-top: -135px;
+
 }
 
 .botonX {
@@ -530,8 +536,13 @@ label {
 }
 
 .botonT {
-  margin-left: 20px;
-  margin-top: -90px;
+  margin-left: 12px;
+  margin-top: -141px;
+}
+.botonE {
+  margin-top: -161px;
+  margin-left: 1px;
+  background-color: grey;
 }
 
 .conta {

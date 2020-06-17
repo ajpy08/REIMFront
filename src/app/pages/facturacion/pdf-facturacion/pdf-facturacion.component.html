@@ -70,6 +70,7 @@
                 <th>DESCRIPCIÒN</th>
                 <th class="imp">IMPUESTOS</th>
                 <th class="codcantidad">IMPORTE</th>
+                <th class="codcantidad">DTO.</th>
 
                 
             </thead>
@@ -80,11 +81,15 @@
             <td>{{item.claveUnidad}} - {{claveUnidad}}</td>
             <td>{{item.descripcion}}</td>
             <div *ngFor="let c of item.impuestos">
-                <td>({{traslado(c)}}) | {{c.impuesto}} | {{tasaCuota(c)}} | ${{importe(c) | coma}}</td>
+                <td>({{traslado(c)}}) | {{c.impuesto.$numberDecimal}} | {{tasaCuota(c)}} | ${{importe(c) | coma}}</td>
             </div>
             <!-- <td>{{item.valorUnitario}}</td> -->
-            <td>$ {{item.importe | coma}}</td>
+            <td>$ {{item.importe.$numberDecimal | coma}}</td>
+            <td>$ {{item.descuento.$numberDecimal | coma}}</td>
             <tr>
+                <td>
+                    <hr class="linea">
+                </td>
                 <td>
                     <hr class="linea">
                 </td>
@@ -107,6 +112,7 @@
         </tbody>
 
         <div class="tablatotales">
+            <strong>DESCUENTO: &nbsp;$&nbsp; &nbsp;</strong> <span class="totales">{{des| coma }}<br></span>
             <strong>SUBTOTAL: &nbsp;$ &nbsp;</strong> <span class="totales">{{subtotal | coma}}<br></span> 
             <strong>TOTAL IMPORTES RETENIDOS: &nbsp;$ &nbsp; &nbsp; </strong> <span class="totales"> {{totalRetenidos | coma}}<br></span>
             <strong>TOTAL IMPORTES TRASLADADOS: &nbsp;$ &nbsp; &nbsp; </strong> <span class="totales">{{totalTrasladados | coma}}<br></span>
@@ -194,13 +200,20 @@
     <input id="checkbox" type="checkbox" />
     <ul>
         <div *ngIf="data.data.cfdi.uuid">
-            <button type="button" matTooltip="Descargar PDF" class="botonD btn btn-info  btn-circle" (click)='pdf()'>
-                <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+            <!-- <button type="button" matTooltip="Descargar PDF" class="botonD btn btn-info  btn-circle" (click)='pdf()'>
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button> -->
+            <a matTooltip="Descargar PDF" class="botonD btn btn-info  btn-circle" [href]="urlpDF | imagen: 'pdf'"
+                download="PDF" target="_blank">
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            </a>
 
             <a matTooltip="Descargar XML" class="botonX btn btn-success btn-circle" [href]="url | imagen: 'xml'"
                 download="Xml" target="_blank">
                 <i class="fa fa-file-archive-o"></i>
             </a>
+            <button type="button" matTooltip="Envio correo CFDI" class="botonE btn btn-circle" (click)="envioCFDI()">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+            </button>
         </div>
         <div *ngIf="!data.data.cfdi.uuid">
 

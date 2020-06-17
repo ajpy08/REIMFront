@@ -36,6 +36,9 @@ export class ImagenPipe implements PipeTransform {
       case 'xml':
         url += '/cfdi/' + img;
         break;
+      case 'pdf':
+        url += '/cfdiP/' + img;
+        break;
       case 'temp':
         url += '/temp/' + img;
         break;
