@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Concepto } from './../models/concepto.models';
 import { Component, OnInit, Inject, ViewChild, ElementRef, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatTabGroup, MatSort } from '@angular/material';
@@ -260,7 +261,7 @@ export class PdfFacturacionComponent implements OnInit {
                       cadenaOriginal: restim.CadenaComplemento, selloSat: selloSAT, rfcProvSat: rfcProvCer, rfcEmisor: rfcEmisor, rfcReceptor: res.rfc,
                       total: res.total
                     };
-                    this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio, res.nombre);
+                    this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio, res.cfdiData.nombre);
                   }, 3000);
                 }
               }, (error) => {
@@ -282,15 +283,19 @@ export class PdfFacturacionComponent implements OnInit {
     setTimeout(() => {
       this.facturacionService.actualizarDatosTimbre(ObjetoTimbrado).subscribe(() => {
         setTimeout(() => {
-          this.mensaje = 'Enviando Correo a ' + correo;
           this.pdfFacturacionService.pdfGenerate(ObjetoTimbrado._id).subscribe((res) => {
             if (res.ok === true) {
-              const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}`;
+              const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}`;
               this.pdfFacturacionService.envioCorreoCFDI(correo, archivo, nombreEmisor).subscribe((resCorreo) => {
                 if (resCorreo.ok === true) {
-                  this.cargandoTimbre = false;
-                  this.dialigRef.close();
-                  swal('Correcto', 'Se ha timbrado y enviado correo correctamente  ' + serie + '-' + folio, 'success');
+                  setTimeout(() => {
+                    this.pdfFacturacionService.subirBooket(resCorreo.archivos, true).subscribe(() => {
+                      this.cargandoTimbre = false;
+                      this.dialigRef.close();
+                      swal('Correcto', 'Se ha timbrado la Factura ' + serie + '-' + folio + 'y enviado correo correctamente a ' +
+                        correo, 'success');
+                    });
+                  }, 5000);
                 }
               });
             }
@@ -299,6 +304,7 @@ export class PdfFacturacionComponent implements OnInit {
       });
     }, 5000);
   }
+
   cadenaOriginal() {
     if (this.data.data.cfdi.cadenaOriginalSat) {
       const cadenaCortada = this.data.data.cfdi.cadenaOriginalSat.substr(0, 155);
@@ -345,16 +351,40 @@ export class PdfFacturacionComponent implements OnInit {
       dangerMode: true
     }).then(correo => {
       if (correo) {
-        const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}`;
-        this.pdfFacturacionService.envioCorreoCFDI(this.data.data.cfdi.correo, archivo, this.data.data.cfdi.nombre).subscribe((res) => {
-          if (res.ok === true) {
-            swal('Correcto', 'Correo Enviando a ' + this, this.data.data.cfdi.correo + 'success');
-          }
-        });
+        this.CorreoXBoton();
       }
     });
   }
 
+  generarPDF() {
+    this.pdfFacturacionService.pdfGenerate(this.data.data.cfdi._id).subscribe((res) => {
+    });
+  }
+  envioCorreo() {
+    const oks = true;
+    const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}`;
+    this.pdfFacturacionService.envioCorreoCFDIB(this.data.data.cfdi.correo, archivo, this.data.data.cfdi.nombre).subscribe((resEnvio) => {
+      if (resEnvio.ok === true) {
+        swal('Correcto', 'Correo Enviando a ' + this.data.data.cfdi.correo, 'success');
+      }
+    });
+  }
+
+
+  async CorreoXBoton() {
+    const pdf = await this.generarPDF();
+    const envioCOrreo = await this.envioCorreo();
+    const BorrarTemp = await this.BorrarTemp();
+  }
+
+  BorrarTemp() {
+    setTimeout(() => {
+      const archivos = [];
+      archivos.push(this.url, this.urlpDF);
+      this.pdfFacturacionService.subirBooket(archivos, false).subscribe(() => {
+      })
+    }, 3000);
+  }
 
   closepdf() {
     this.dialigRef.close();
