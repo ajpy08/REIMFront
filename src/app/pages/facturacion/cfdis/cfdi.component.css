@@ -420,5 +420,51 @@
 .info {
     position: absolute;
     margin-left: 57%;
-    top: 78%;;
+    top: 82%;
 }
+.fa-trash {
+    color: red;
+}
+.bote {
+    width: 595px;
+    top: 51px;
+    position: absolute;
+
+}
+ul {
+    display: none;
+  }
+
+.conta {
+    position: relative;
+  }
+  #checkbox {
+    opacity: 0;
+  }
+  #checkbox:checked+ul {
+    display: block;
+  }
+
+  .botonD {
+    background-color: cornflowerblue;
+    margin-left: 15px;
+    margin-top: -69px;
+  }
+
+  label {
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background-color: brown;
+  }
+
+  .total{
+      color: black;
+  }
+
+  .fa-bars {
+    color: cornsilk;
+    font-size: 20px;
+    margin-left: 8px;
+    margin-top: 6px;
+  }
