@@ -285,35 +285,35 @@
               <div class="col-md-3">
                 <div class="example-header mat-elevation-z8">
                   <div class="my-container">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>SUBTOTAL</b></mat-label>
                         <input matInput formControlName="subtotal" type="text"
                           [value]="regForm.get('subtotal').value">
                       </mat-form-field>
                     </div>
-                    <div class="col-md-12" *ngIf="regForm.get('totalImpuestosRetenidos').value > 0">
+                    <div class="col-md-8" *ngIf="regForm.get('totalImpuestosRetenidos').value > 0">
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS RETENIDOS</b></mat-label>
                         <input matInput formControlName="totalImpuestosRetenidos" type="text"
                           [value]="regForm.get('totalImpuestosRetenidos').value">
                       </mat-form-field>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
                         <input matInput formControlName="totalImpuestosTrasladados" type="text"
                           [value]="regForm.get('totalImpuestosTrasladados').value">
                       </mat-form-field>
                     </div>
-                    <div class="col-md-12" *ngIf="regForm.get('totalDescuentos').value > 0">
+                    <div class="col-md-8" *ngIf="regForm.get('totalDescuentos').value > 0">
                       <mat-form-field>
                         <mat-label><b>TOTAL DESCUENTO</b></mat-label>
                         <input matInput formControlName="totalDescuentos" type="text"
                           [value]="regForm.get('totalDescuentos').value">
                       </mat-form-field>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>TOTAL</b></mat-label>
                         <input matInput formControlName="total" type="text"
@@ -324,8 +324,13 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>         
         </div>
+        <!-- <div class="info">
+          <button type="button" class="btn btn-danger"  matTooltip="Información Adicional" (click)="BotoninformacionAdicional()">
+            <i class="fas fa-info"></i>
+          </button>
+        </div> -->
         <div class="es">
           <div class="col-md-10">
             <div class="text-left">

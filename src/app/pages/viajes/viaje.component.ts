@@ -220,7 +220,8 @@ export class ViajeComponent implements OnInit {
             tipo,
             peso,
             destinatario,
-            patio !== '' && patio !== 'undefined' ? patio : undefined
+            patio !== '' && patio !== 'undefined' ? patio : undefined,
+            this.regForm.controls['naviera'].value
           )
           .subscribe(res => {
             if (res.ok) {

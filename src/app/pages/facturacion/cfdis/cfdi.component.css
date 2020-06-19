@@ -219,6 +219,11 @@
         width: 561px;
         top: 60px;
     }
+    .info {
+        position: absolute;
+        margin-left: 57%;
+        top: 78%;
+    }
 }
 
 @media (max-width: 600px) {
@@ -410,4 +415,10 @@
         width: 1140px;
         top: 60px;
     }
+}
+
+.info {
+    position: absolute;
+    margin-left: 57%;
+    top: 78%;;
 }
