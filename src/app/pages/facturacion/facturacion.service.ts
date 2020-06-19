@@ -18,7 +18,10 @@ export class FacturacionService {
   receptor;
   tipo = '';
   maniobras = [];
-  aFacturar = [];
+  carritoAFacturar = [];
+  aFacturarV = [];
+  aFacturarM = [];
+  peso = '';
 
   constructor(
     public http: HttpClient,

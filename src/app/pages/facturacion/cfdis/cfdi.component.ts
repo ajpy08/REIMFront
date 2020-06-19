@@ -71,6 +71,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
     this.usuarioLogueado = this.usuarioService.usuario;
 
+    /* #region  Socket.IO */
     this.socket.on('update-cfdi', function (data: any) {
       if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
         if (data.data._id) {
@@ -97,7 +98,15 @@ export class CFDIComponent implements OnInit, OnDestroy {
         });
       }
     }.bind(this));
+    /* #endregion */
+
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if (this.facturacionService.peso === 'VACIOS') {
+      this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarV;
+    } else {
+      this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarM;
+    }
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
@@ -151,6 +160,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.socket.removeListener('delete-cfdi');
     this.socket.removeListener('new-cfdi');
     // this.facturacionService.maniobras = [];
+    this.facturacionService.carritoAFacturar = [];
   }
 
   cargaValoresIniciales(concept) {
@@ -202,10 +212,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
     let subTotal = 0.0;
     let totalDescuentos = 0.0;
 
-    if (this.facturacionService.aFacturar.length > 0) {
+    if (this.facturacionService.carritoAFacturar.length > 0) {
       if (this.facturacionService.tipo === 'Descarga') {
 
-        this.facturacionService.aFacturar.forEach(c => {
+        this.facturacionService.carritoAFacturar.forEach(c => {
           let impuestosRetenidos = 0.00;
           let impuestosTrasladados = 0.00;
           const concepto = new Concepto();
@@ -440,8 +450,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   quitar(indice: number) {
     const id = this.conceptos.value[indice]._id;
-    const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === id);
-    this.facturacionService.aFacturar.splice(pos, 1);
+    const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
+    this.facturacionService.carritoAFacturar.splice(pos, 1);
     if (this.id === 'nuevo' || this.id === undefined) {
       this.cargaValoresIniciales(undefined);
     } else {
@@ -598,7 +608,13 @@ export class CFDIComponent implements OnInit, OnDestroy {
         } else {
           this.socket.emit('updatecfdi', res);
         }
-        this.facturacionService.aFacturar = [];
+        this.facturacionService.carritoAFacturar = [];
+
+        if (this.facturacionService.peso === 'VACIOS') {
+          this.facturacionService.aFacturarV = [];
+        } else {
+          this.facturacionService.aFacturarM = [];
+        }
         this.regForm.markAsPristine();
       });
     }

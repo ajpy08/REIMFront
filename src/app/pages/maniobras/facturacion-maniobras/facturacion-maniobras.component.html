@@ -31,11 +31,6 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
-                  (click)="consultaManiobrasVacios()">
-                    <i class="fas fa-filter"></i>
-                    Filtrar
-                  </button> -->
                 </div>
                 <div class="col-sm">
                   <div class="col-sm">
@@ -54,15 +49,34 @@
                     </mat-checkbox>
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-5">
+                  <button [disabled]="this.facturacionService.aFacturarM.length <= 0" matTooltip="Facturar Seleccionados"
+                    (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturarM.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
+                  <a *ngIf="this.selectionVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionVacios.selected, idProdServ)" class="float">
+                    <i class="fa fa-plus my-float"></i>
+                  </a> <br><br>
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="idProdServ" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
+                      <mat-option *ngFor="let producto of productos" [value]="producto._id">
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div> <br>
             <h3 class="card-title">Total Maniobras ( <small>{{totalRegistrosVacios}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -90,7 +104,7 @@
                     <!-- <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button> -->
-                    <button matTooltip="Editar Maniobra" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
+                    <button matTooltip="Ver Maniobra" (click)="open(row._id)" class="btn btn-sm btn-info m-r-5">
                       <i class="fa fa-eye" aria-hidden="true"></i>
                     </button>
                     <!-- <button class="btn btn-outline-danger btn-sm m-r-5" (click)="corregirContenedor(row)">
@@ -260,11 +274,6 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10" 
-                  (click)="consultaManiobrasLavadoVacios()">
-                    <i class="fas fa-filter"></i>
-                    Filtrar
-                  </button> -->
                 </div>
                 <div class="col-sm">
                   <div class="col-sm">
@@ -288,7 +297,27 @@
                     </mat-checkbox>
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-5">
+                  <button [disabled]="this.facturacionService.aFacturarM.length <= 0" matTooltip="Facturar Seleccionados"
+                    (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturarM.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
+                  <a *ngIf="this.selectionLavadoVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionLavadoVacios.selected, idProdServL)" class="float">
+                    <i class="fa fa-plus my-float"></i>
+                  </a> <br><br>
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="idProdServL" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
+                      <mat-option *ngFor="let producto of productos" [value]="producto._id">
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div><br>
@@ -438,8 +467,8 @@
                   <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
                 </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-header-row *matHeaderRowDef="displayedColumnsLavado" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsLavado;"></mat-row>
               </mat-table>
               <mat-paginator #MatPaginatorLavado [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
                 [showFirstLastButtons]>
@@ -517,7 +546,27 @@
                     </mat-checkbox>
                   </div>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-5">
+                  <button [disabled]="this.facturacionService.aFacturarM.length <= 0" matTooltip="Facturar Seleccionados"
+                    (click)="facturar()" mat-raised-button color="primary"
+                    matBadge="{{this.facturacionService.aFacturarM.length}}" matBadgePosition="after"
+                    matBadgeColor="accent">
+                    <i class="fa fa-dollar-sign" aria-hidden="true"></i>
+                    Facturar
+                  </button>
+                  <a *ngIf="this.selectionReparacionVacios.selected.length > 0 && soyAdmin()"
+                    (click)="agregarFacturas(this.selectionReparacionVacios.selected, idProdServR)" class="float">
+                    <i class="fa fa-plus my-float"></i>
+                  </a> <br><br>
+                  <mat-form-field>
+                    <mat-select [(ngModel)]="idProdServR" placeholder="Seleccione un Producto o Servicio"
+                      name="prodServ">
+                      <!-- <mat-option>--- NINGUNO ---</mat-option> -->
+                      <mat-option *ngFor="let producto of productos" [value]="producto._id">
+                        {{ producto.codigo + ' | ' + producto.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
                 </div>
               </div>
             </div><br>
@@ -669,8 +718,8 @@
                   <mat-cell *matCellDef="let row"> {{row.hFinLavado}} </mat-cell>
                 </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-header-row *matHeaderRowDef="displayedColumnsReparacion" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsReparacion;"></mat-row>
               </mat-table>
               <mat-paginator #MatPaginatorReparacion [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10"
                 [showFirstLastButtons]>

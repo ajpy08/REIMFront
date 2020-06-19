@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Maniobra } from '../../../models/maniobra.models';
-import { ManiobraService, ViajeService } from '../../../services/service.index';
+import { ManiobraService, ViajeService, FacturacionService, UsuarioService } from '../../../services/service.index';
 import { ExcelService } from '../../../services/service.index';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -29,11 +29,14 @@ import {
   MatDialog,
   MatDialogConfig,
   MatTabGroup,
-  MatTabChangeEvent
+  MatTabChangeEvent,
+  MatSnackBar
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AsignarFacturaComponent } from '../../../dialogs/asignar-factura/asignar-factura.component';
-import { Router, UrlHandlingStrategy } from '@angular/router';
+import { Router } from '@angular/router';
+import { Usuario } from '../../usuarios/usuario.model';
+import { ROLES } from 'src/app/config/config';
 
 const moment = _moment;
 
@@ -84,29 +87,19 @@ export class FacturacionManiobrasComponent implements OnInit {
   totalRegistrosReparacionVacios = 0;
 
   displayedColumns = [
-    'select',
-    'actions',
-    'folio',
-    'cargaDescarga',
-    'contenedor',
-    'tipo',
-    'lavado',
-    'grado',
-    'fLlegada',
-    'operador',
-    'placa',
-    'transportista',
-    'reparaciones',
-    'facturaManiobra',
-    'viaje',
-    'buque',
-    'peso',
-    'cliente',
-    'agencia',
-    'estatus',
-    'hDescarga',
-    'hFinLavado'
-  ];
+    'select', 'actions', 'folio', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
+
+  displayedColumnsLavado = [
+    'select', 'actions', 'folio', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
+
+  displayedColumnsReparacion = [
+    'select', 'actions', 'folio', 'cargaDescarga', 'contenedor', 'tipo', 'lavado', 'grado', 'fLlegada', 'operador',
+    'placa', 'transportista', 'reparaciones', 'facturaManiobra', 'viaje', 'buque', 'peso', 'cliente',
+    'agencia', 'estatus', 'hDescarga', 'hFinLavado'];
   dataSourceVacios: any;
   dataSourceLavadoVacios: any;
   dataSourceReparacionVacios: any;
@@ -149,19 +142,30 @@ export class FacturacionManiobrasComponent implements OnInit {
   viajeReparacion: string = undefined;
   CD: string = undefined;
   // filtrarCD = new FormControl(false);
+  productos = [];
+  idProdServ = '5e876ada96bb521c1429f763';
+  idProdServL = '5e876b0396bb521c1429f764';
+  idProdServR = '5e876b4496bb521c1429f766';
+  usuarioLogueado = new Usuario();
 
   constructor(
     public _maniobraService: ManiobraService,
     public _viajeService: ViajeService,
     public _excelService: ExcelService,
     public matDialog: MatDialog,
-    private router: Router
+    private router: Router,
+    public facturacionService: FacturacionService,
+    private usuarioService: UsuarioService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    this.facturacionService.peso = 'OTROS';
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarViajes(new Date().toString());
 
     this.consulta();
+    this.consultaProdServ();
 
     const indexTAB = localStorage.getItem('FacturacionTabs');
     if (indexTAB) {
@@ -569,12 +573,10 @@ export class FacturacionManiobrasComponent implements OnInit {
 
   onLinkClick(event: MatTabChangeEvent) {
     localStorage.setItem('FacturacionTabs', event.index.toString());
+    this.selectionVacios.clear();
+    this.selectionLavadoVacios.clear();
+    this.selectionReparacionVacios.clear();
   }
-  // detalle(id: string) {
-  //   localStorage.setItem('history', '/facturacion-maniobras');
-
-  //   this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
-  // }
 
   open(id: string) {
     let history;
@@ -598,5 +600,208 @@ export class FacturacionManiobrasComponent implements OnInit {
 
     // Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
+  }
+
+  agregarFacturas(maniobras, idProdServ) {
+    let aAgregar = [];
+    if (maniobras.length > 0) {
+      if (this.validaClienteViajeXManiobras(maniobras)) {
+        if (idProdServ !== undefined) {
+          maniobras.forEach(ma => {
+            if (this.facturacionService.aFacturarM.length > 0) {
+              const res = this.facturacionService.aFacturarM.filter(function (concept) {
+                return concept.idProdServ === idProdServ;
+              });
+
+              if (res.length > 0) {
+                res.forEach(r => {
+                  // r.maniobras.forEach(m => {
+
+                  const resM = r.maniobras.filter(function (man) {
+                    return man._id === ma._id;
+                  });
+
+                  if (resM.length > 0) {
+                    aAgregar = [];
+                    swal('El contenedor ' + ma.contenedor + ' ya se agrego con este concepto', '', 'error');
+                  } else {
+                    aAgregar.push(ma);
+                  }
+                  // });
+                });
+              } else {
+                aAgregar.push(ma);
+              }
+            } else {
+              aAgregar.push(ma);
+            }
+          });
+        } else {
+          aAgregar = [];
+          swal('Debes seleccionar un Producto o Servicio!', '', 'error');
+        }
+      } else {
+        aAgregar = [];
+        swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+      }
+    } else {
+      aAgregar = [];
+      swal('Debes seleccionar por lo menos una maniobra!', '', 'error');
+    }
+
+    if (aAgregar.length > 0) {
+      const c = this.facturacionService.aFacturarM.filter(function (concept) {
+        return concept.idProdServ === idProdServ;
+      });
+      if (c.length > 0) {
+        aAgregar.forEach(x => {
+          const pos = this.facturacionService.aFacturarM.findIndex(a => a.idProdServ === idProdServ);
+          this.facturacionService.aFacturarM[pos].maniobras.push(x);
+          aAgregar = [];
+          this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
+          this.selectionVacios.clear();
+          this.selectionLavadoVacios.clear();
+          this.selectionReparacionVacios.clear();
+          // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarM.length + ' concepto (s) por facturar', 'success');
+        });
+      } else {
+        const concepto = {
+          idProdServ: idProdServ,
+          maniobras: aAgregar
+        };
+        this.facturacionService.aFacturarM.push(concepto);
+        aAgregar = [];
+        this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
+        this.selectionVacios.clear();
+        this.selectionLavadoVacios.clear();
+        this.selectionReparacionVacios.clear();
+        // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarM.length + ' concepto (s) por facturar', 'success');
+      }
+    }
+    // console.log(this.facturacionService.aFacturarM);
+  }
+
+  facturar() {
+    if (this.facturacionService.aFacturarM.length > 0) {
+      if (this.validaClienteViajeXConceptos(this.facturacionService.aFacturarM)) {
+        //////////////// DATOS GENERALES ////////////////
+        // Serie (default)
+        // Folio (default)
+        // Sucursal (default)
+        // Forma de Pago (default)
+        // Moneda (default)
+        this.facturacionService.IE = 'I';
+        // Fecha (default)
+        /////////////////////////////////////////////////
+
+        /////////////////// RECEPTOR ////////////////////
+        this.facturacionService.receptor = this.facturacionService.aFacturarM[0].maniobras[0].naviera;
+        this.facturacionService.tipo = 'Descarga';
+        /////////////////////////////////////////////////
+
+        /////////////////// CONCEPTOS ///////////////////
+        // Producto Servicio (por cada concepto en array aFacturarM)
+        // this.facturacionService.aFacturarM.forEach(c => {
+        //   c.maniobras.forEach(m => {
+        //     this.facturacionService.maniobras.push(m._id);
+        //   });
+        // });
+        // this.facturacionService.maniobras = this.selectionVacios.selected;
+        /////////////////////////////////////////////////
+        this.router.navigate(['/cfdi/nuevo']);
+      } else {
+        swal('Las maniobras seleccionadas son de diferente NAVIERA', '', 'error');
+      }
+    } else {
+      swal('Debes tener alguna maniobra seleccionada para facturar', '', 'error');
+    }
+  }
+
+  validaClienteViajeXConceptos(conceptos) {
+    let naviera;
+    // let viaje;
+    let ok = true;
+
+    conceptos.forEach(c => {
+      c.maniobras.forEach(m => {
+        if (naviera === undefined) {
+          naviera = m.naviera;
+        } else {
+          if (naviera !== m.naviera) {
+            ok = false;
+          }
+        }
+
+        // if (viaje === undefined) {
+        //   viaje = m.viaje._id;
+        // } else {
+        //   if (viaje !== m.viaje._id) {
+        //     ok = false;
+        //   }
+        // }
+      });
+    });
+    return ok;
+  }
+
+  validaClienteViajeXManiobras(maniobras) {
+    let naviera;
+    // let viaje;
+    let ok = true;
+
+    maniobras.forEach(m => {
+      if (naviera === undefined) {
+        naviera = m.naviera;
+      } else {
+        if (naviera !== m.naviera) {
+          ok = false;
+        }
+      }
+
+      // if (viaje === undefined) {
+      //   viaje = m.viaje._id;
+      // } else {
+      //   if (viaje !== m.viaje._id) {
+      //     ok = false;
+      //   }
+      // }
+    });
+    return ok;
+  }
+
+  consultaProdServ() {
+    this.facturacionService.getProductosServicios().subscribe(productos => {
+      this.productos = productos.productos_servicios;
+    });
+  }
+
+  soyAdmin() {
+    if (
+      this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
+      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  openSnackBar(message: string, action: string) {
+    const snackBarRef = this.snackBar.open(message, action, {
+      duration: 3500,
+    });
+
+    snackBarRef.afterDismissed().subscribe(facturar => {
+      if (facturar.dismissedByAction === true) {
+        this.facturar();
+      }
+    });
+
+    // snackBarRef.onAction().subscribe(() => {
+    //   console.log('action was explicitly clicked');
+    // });
+    // snackBarRef.afterDismissed().subscribe(() => {
+    //   console.log('regardless of how the snackbar has been dismissed');
+    // });
   }
 }
