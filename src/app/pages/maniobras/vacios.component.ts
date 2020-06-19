@@ -157,6 +157,7 @@ export class VaciosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.facturacionService.peso = 'VACIOS';
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarViajes(new Date().toString());
 
@@ -555,18 +556,15 @@ export class VaciosComponent implements OnInit {
   }
   onLinkClick(event: MatTabChangeEvent) {
     localStorage.setItem('VacioTabs', event.index.toString());
+    this.selectionVacios.clear();
+    this.selectionLavadoVacios.clear();
+    this.selectionReparacionVacios.clear();
   }
   corregirContenedor(id) {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {
       id.contenedor = res.contenedor;
     });
   }
-
-  // detalle(id: string) {
-  //   localStorage.setItem('history', '/vacios');
-
-  //   this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
-  // }
 
   open(id: string) {
     let history;
@@ -598,8 +596,8 @@ export class VaciosComponent implements OnInit {
       if (this.validaClienteViajeXManiobras(maniobras)) {
         if (idProdServ !== undefined) {
           maniobras.forEach(ma => {
-            if (this.facturacionService.aFacturar.length > 0) {
-              const res = this.facturacionService.aFacturar.filter(function (concept) {
+            if (this.facturacionService.aFacturarV.length > 0) {
+              const res = this.facturacionService.aFacturarV.filter(function (concept) {
                 return concept.idProdServ === idProdServ;
               });
 
@@ -640,34 +638,40 @@ export class VaciosComponent implements OnInit {
     }
 
     if (aAgregar.length > 0) {
-      const c = this.facturacionService.aFacturar.filter(function (concept) {
+      const c = this.facturacionService.aFacturarV.filter(function (concept) {
         return concept.idProdServ === idProdServ;
       });
       if (c.length > 0) {
         aAgregar.forEach(x => {
-          const pos = this.facturacionService.aFacturar.findIndex(a => a.idProdServ === idProdServ);
-          this.facturacionService.aFacturar[pos].maniobras.push(x);
+          const pos = this.facturacionService.aFacturarV.findIndex(a => a.idProdServ === idProdServ);
+          this.facturacionService.aFacturarV[pos].maniobras.push(x);
           aAgregar = [];
           this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-          // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturar.length + ' concepto (s) por facturar', 'success');
+          this.selectionVacios.clear();
+          this.selectionLavadoVacios.clear();
+          this.selectionReparacionVacios.clear();
+          // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
         });
       } else {
         const concepto = {
           idProdServ: idProdServ,
           maniobras: aAgregar
         };
-        this.facturacionService.aFacturar.push(concepto);
+        this.facturacionService.aFacturarV.push(concepto);
         aAgregar = [];
         this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-        // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturar.length + ' concepto (s) por facturar', 'success');
+        this.selectionVacios.clear();
+        this.selectionLavadoVacios.clear();
+        this.selectionReparacionVacios.clear();
+        // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
       }
     }
-    // console.log(this.facturacionService.aFacturar);
+    // console.log(this.facturacionService.aFacturarV);
   }
 
   facturar() {
-    if (this.facturacionService.aFacturar.length > 0) {
-      if (this.validaClienteViajeXConceptos(this.facturacionService.aFacturar)) {
+    if (this.facturacionService.aFacturarV.length > 0) {
+      if (this.validaClienteViajeXConceptos(this.facturacionService.aFacturarV)) {
         //////////////// DATOS GENERALES ////////////////
         // Serie (default)
         // Folio (default)
@@ -679,13 +683,13 @@ export class VaciosComponent implements OnInit {
         /////////////////////////////////////////////////
 
         /////////////////// RECEPTOR ////////////////////
-        this.facturacionService.receptor = this.facturacionService.aFacturar[0].maniobras[0].naviera;
+        this.facturacionService.receptor = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
         this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
 
         /////////////////// CONCEPTOS ///////////////////
-        // Producto Servicio (por cada concepto en array aFacturar)
-        // this.facturacionService.aFacturar.forEach(c => {
+        // Producto Servicio (por cada concepto en array aFacturarV)
+        // this.facturacionService.aFacturarV.forEach(c => {
         //   c.maniobras.forEach(m => {
         //     this.facturacionService.maniobras.push(m._id);
         //   });
