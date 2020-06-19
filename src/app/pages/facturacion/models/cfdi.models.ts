@@ -17,6 +17,7 @@ export class CFDI {
     public selloSat?: string,
     public rfcProvCer?: string,
     public selloEmisro?: string,
+    
     // public version?: string, // FALTA
     // public noCertificado?: string, // FALTA
     // public sello?: string, // FALTA
@@ -42,6 +43,7 @@ export class CFDI {
     public fAlta?: Date,
     public usuarioMod?: string,
     public fMod?: Date,
+    public informacionAdicional?: string,
     public _id?: string
   ) { }
 }
