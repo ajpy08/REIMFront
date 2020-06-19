@@ -110,6 +110,24 @@
               </mat-cell>
             </ng-container>
 
+            <!-- <ng-container matColumnDef="pagado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Pagado</mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox disabled [checked] = 'true' *ngIf="row.solicitud?.rutaComprobante">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container> -->
+
+            <ng-container matColumnDef="pagado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Pagado</mat-header-cell>>
+              <mat-cell *matCellDef="let row">
+                <i *ngIf="row.solicitud?.rutaComprobante; else notShow" class="fa fa-check" aria-hidden="true"></i>
+                <ng-template #notShow>
+                  <i class="fas fa-times" aria-hidden="true"></i>
+                </ng-template>
+              </mat-cell>>
+            </ng-container>
+
             <ng-container matColumnDef="fechaingreso">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Ingreso</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
