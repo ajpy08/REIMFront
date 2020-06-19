@@ -389,7 +389,7 @@ export class AprobarDescargaComponent implements OnInit {
         cont.get('contenedor').value,
         cont.get('tipo').value,
         cont.get('patio').value,
-        cont.get('peso').value, '')
+        cont.get('peso').value, '', null)
         .subscribe(maniobra => {
           cont.get('maniobra').setValue(maniobra.maniobra._id);
           cont.get('folio').setValue(maniobra.maniobra.folio);

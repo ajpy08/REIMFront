@@ -50,9 +50,18 @@ export class PdfFacturacionService {
     const url = URL_SERVICIOS + '/pdfFacturacion/envioCorreo/' + correo + '&' + archivo + '&' + nombre;
     return this.http.get(url);
   }
+  envioCorreoCFDIB(correo: string, archivo: string, nombre: string): Observable<any> {
+    const url = URL_SERVICIOS + '/pdfFacturacion/envioCorreoB/' + correo + '&' + archivo + '&' + nombre;
+    return this.http.get(url);
+  }
 
   pdfGenerate(id: string): Observable<any> {
     const url = URL_SERVICIOS + '/pdfFacturacion/pdfCFDI/' + id;
+    return this.http.get(url);
+  }
+
+  subirBooket(archivos: any, subir: boolean): Observable<any> {
+    const url = URL_SERVICIOS + '/pdfFacturacion/booket/' + archivos + '&' + subir;
     return this.http.get(url);
   }
 
