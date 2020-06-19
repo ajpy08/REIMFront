@@ -50,6 +50,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   tiposComprobante = [];
   usosCFDI = [];
   cfdi;
+  infoAd = '';
   usuarioLogueado = new Usuario;
   id;
   agrupado = true;
@@ -411,6 +412,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       noIdentificacion: [''],
       valorUnitario: [''],
       importe: [''],
+      informacionAdicional: [{value: '',  disabled: true}],
       impuestos: [''],
       unidad: [''],
       totalDescuentos: [{ value: '', disabled: true }],
@@ -618,6 +620,20 @@ export class CFDIComponent implements OnInit, OnDestroy {
         this.regForm.markAsPristine();
       });
     }
+  }
+
+  BotoninformacionAdicional() {
+
+    swal({
+      title: 'Informacion Adicional',
+      icon: 'info',
+      content: 'input',
+    }).then((info) => {
+      this.regForm.controls['informacionAdicional'].setValue(info) ;
+    });
+  }
+  BorrarInformacion(){
+    this.regForm.controls['informacionAdicional'].setValue('') ;
   }
 
   cambioSerie(serie) {
@@ -1000,6 +1016,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   get total() {
     return this.regForm.get('total');
+  }
+  get informacionAdicional() {
+    return this.regForm.get('informacionAdicional');
   }
   /* #endregion */
 }
