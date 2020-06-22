@@ -60,7 +60,7 @@ export class CFDISComponent implements OnInit {
       this.ok = data.data.ok;
       this.serieFolio = data.data.serieFolio;
       this.dis = data.data.id;
-      if (this.ok === undefined) {
+      if (this.ok === undefined || this.ok === false) {
         this.cargarCFDIS();
       }
 

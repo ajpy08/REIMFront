@@ -502,19 +502,19 @@ ul {
 
 .fa-bars {
   color: cornsilk;
-  font-size: 30px;
-  margin-left: 13px;
-  margin-top: 8px;
+  font-size: 26px;
+  margin-left: 10px;
+  margin-top: 7px;
 }
 .fa-envelope {
   color: white;
 }
 
 label {
-  width: 51px;
-  height: 49px;
+  width: 41px;
+  height: 37px;
   border-radius: 50%;
-  background-color: brown;
+  background-color: #002c77;
 }
 
 .botonD {

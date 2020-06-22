@@ -44,6 +44,7 @@ export const MY_FORMATS = {
 export class CFDIComponent implements OnInit, OnDestroy {
   regForm: FormGroup;
   url: string;
+  info = '';
   series: Serie[] = [];
   formasPago = [];
   metodosPago = [];
@@ -99,6 +100,17 @@ export class CFDIComponent implements OnInit, OnDestroy {
         });
       }
     }.bind(this));
+
+    this.socket.on('timbrado-cfdi', function (data: any) {
+      if (data.data.ok === true) {
+        this.router.navigate(['/cfdis']);
+        swal({
+          title: 'TIMBRANDO',
+          text: 'CFDI: ' + data.data.serieFolio,
+          icon: 'warning'
+        });
+      }
+      }.bind(this));
     /* #endregion */
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -160,6 +172,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.socket.removeListener('update-cfdi');
     this.socket.removeListener('delete-cfdi');
     this.socket.removeListener('new-cfdi');
+    this.socket.removeListener('timbrado-cfdi');
     this.facturacionService.carritoAFacturar = [];
   }
 
@@ -465,6 +478,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.conceptos.removeAt(0);
     let concepts;
     this.facturacionService.getCFDI(id).subscribe(res => {
+      if (res.informacionAdicional === '@') {
+        res.informacionAdicional = '';
+      }
       this.cfdi = res;
 
       // tslint:disable-next-line: forin
