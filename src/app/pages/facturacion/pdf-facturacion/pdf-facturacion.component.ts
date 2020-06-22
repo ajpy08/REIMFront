@@ -70,16 +70,17 @@ export class PdfFacturacionComponent implements OnInit {
     private usuarioService: UsuarioService) { }
 
   ngOnInit() {
-    this.socket.on('timbrado-cfdi', function(data: any) {
+    this.socket.on('alert-timbre', function(data: any) {
     if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
-      this.dialigRef.close();
-      swal({
-        title: 'Timbrando',
-        text: 'CFDI: ' + data.data.serieFolio,
-        icon: 'warning'
-      })
+      if (data.data.ok === true) {
+        this.dialigRef.close();
+        swal({
+          title: 'TIMBRANDO',
+          text: 'CFDI: ' + data.data.serieFolio,
+          icon: 'warning'
+        });
+      }
     }
-    
     }.bind(this));
 
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -109,6 +110,7 @@ export class PdfFacturacionComponent implements OnInit {
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.ngOnInit();
+    this.socket.removeListener('alert-timbre');
   }
 
 
@@ -247,6 +249,7 @@ export class PdfFacturacionComponent implements OnInit {
     }).then(timbrar => {
       if (timbrar) {
         const serieFolio = this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio;
+        this.socket.emit('alerttimbre', {usuarioLogeado, ok, serieFolio});
         this.socket.emit('timbradocfdi',{ok, serieFolio, id, usuarioLogeado});
         this.cargandoTimbre = true;
         this.mensaje = 'Validando Datos';
@@ -325,7 +328,7 @@ export class PdfFacturacionComponent implements OnInit {
                   setTimeout(() => {
                     this.pdfFacturacionService.subirBooket(resCorreo.archivos, true).subscribe(() => {
                       this.cargandoTimbre = false;
-                      this.socket.emit('alerttimbre', res);
+                      this.socket.emit('alerttimbre', usuarioLogeado);
                       this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
                       this.dialigRef.close();
                       swal('Correcto', 'Se ha timbrado la Factura ' + serie + '-' + folio + 'y enviado correo correctamente a ' +

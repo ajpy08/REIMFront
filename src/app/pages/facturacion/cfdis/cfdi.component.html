@@ -221,15 +221,21 @@
                     <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
-
-                          <!-- <div class="conta">
+<!-- 
+                          <div class="conta">
                             <label for="checkbox">
                               <i class="fa fa-bars"></i>
                             </label>
                             <input id="checkbox" type="checkbox" />
                             <ul>
-                              <a matTooltip="Modificar Impuestos" class="botonD btn btn-info  btn-circle"  
-                              (click)="openDialogImpuestos(item.value)"><i class="fas fa-dollar-sign"></i></a>
+                              <a matTooltip="Modificar Impuestos" class="botonD btn   btn-circle"
+                                (click)="openDialogImpuestos(item.value)"><i class="fas fa-dollar-sign"></i></a>
+
+                                <a matTooltip="Modificar Maniobras"
+                                (click)="openDialogManiobras(item.value)" class="botonI btn  btn-circle">
+                                <i class="fas fa-boxes"></i></a>
+                                <a matTooltip="Quitar Concepto" (click)="quitar(i)" class=" botonC btn btn-danger btn-circle">
+                                  <i class="fa fa-trash-o"></i></a>
                             </ul>
                           </div> -->
                           <button type="button" matTooltip="Modificar Impuestos"
@@ -244,15 +250,15 @@
                             <i class="fa fa-trash-o"></i>
                           </button>
                         </td>
-                        <td scope="row">{{i+1}}</td>
+                         <td scope="row">{{i+1}}</td>
                         <td>
                           <!-- {{item.get('descripcion').value}} -->
                           <div class="col-md">
                             <mat-form-field>
-                              <input matInput [value]="item.get('descripcion').value" formControlName="descripcion"
-                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;">
-                              <!-- <textarea matInput [value]="item.get('descripcion').value" formControlName="descripcion"
-                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea> -->
+                              <!-- <input matInput [value]="item.get('descripcion').value" formControlName="descripcion"
+                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"> -->
+                              <textarea matInput [value]="item.get('descripcion').value" formControlName="descripcion"
+                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea>
                             </mat-form-field>
                           </div>
                         </td>
