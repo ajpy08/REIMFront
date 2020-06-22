@@ -57,6 +57,10 @@ export class FacturacionService {
   guardarCFDI(cfdi: CFDI): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cfdi';
     if (cfdi._id) {
+
+      if (cfdi.informacionAdicional === '') {
+        cfdi.informacionAdicional = '@';
+      }
       // actualizando
       url += '/' + cfdi._id;
       url += '?token=' + this._usuarioService.token;
@@ -102,6 +106,9 @@ export class FacturacionService {
   }
 
   timbrarXML(nombre: string, id: string, direccion: string, info: string): Observable<any> {
+    if (info === '') {
+      info = '@';
+    }
     const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id +  '&' + direccion +  '&' + info +  '/' ;
      return this.http.get(url);
    }
