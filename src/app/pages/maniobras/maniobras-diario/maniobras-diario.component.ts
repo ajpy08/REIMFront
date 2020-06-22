@@ -70,6 +70,7 @@ export class ManiobrasDiarioComponent implements OnInit {
 
   displayedColumns = [
     'actions',
+    'pagado',
     'fechaingreso',
     'hLlegada',
     'operador',

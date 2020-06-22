@@ -31,7 +31,7 @@
                     <div class="col-md-6">
                       <mat-form-field>
                         <mat-label><b>FOLIO</b></mat-label>
-                        <input matInput formControlName="folio" type="text">
+                        <input matInput class="total" formControlName="folio" type="text">
                       </mat-form-field>
                     </div>
                   </div>
@@ -246,7 +246,15 @@
                         </td>
                         <td scope="row">{{i+1}}</td>
                         <td>
-                          {{item.get('descripcion').value}}
+                          <!-- {{item.get('descripcion').value}} -->
+                          <div class="col-md">
+                            <mat-form-field>
+                              <input matInput [value]="item.get('descripcion').value" formControlName="descripcion"
+                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;">
+                              <!-- <textarea matInput [value]="item.get('descripcion').value" formControlName="descripcion"
+                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea> -->
+                            </mat-form-field>
+                          </div>
                         </td>
                         <td>
                           {{item.get('unidad').value}}
@@ -324,7 +332,8 @@
                     <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>SUBTOTAL</b></mat-label>
-                        <input matInput class="total"  formControlName="subtotal" type="text" [value]="regForm.get('subtotal').value">
+                        <input matInput class="total" formControlName="subtotal" type="text"
+                          [value]="regForm.get('subtotal').value">
                       </mat-form-field>
                     </div>
                     <div class="col-md-8" *ngIf="regForm.get('totalImpuestosRetenidos').value > 0">
@@ -337,21 +346,22 @@
                     <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
-                        <input matInput  class="total" formControlName="totalImpuestosTrasladados" type="text"
+                        <input matInput class="total" formControlName="totalImpuestosTrasladados" type="text"
                           [value]="regForm.get('totalImpuestosTrasladados').value">
                       </mat-form-field>
                     </div>
                     <div class="col-md-8 " *ngIf="regForm.get('totalDescuentos').value > 0">
                       <mat-form-field>
                         <mat-label><b>TOTAL DESCUENTO</b></mat-label>
-                        <input matInput  class="total"formControlName="totalDescuentos" type="text"
+                        <input matInput class="total" formControlName="totalDescuentos" type="text"
                           [value]="regForm.get('totalDescuentos').value">
                       </mat-form-field>
                     </div>
                     <div class="col-md-8">
                       <mat-form-field>
                         <mat-label><b>TOTAL</b></mat-label>
-                        <input matInput class="total" formControlName="total" type="text" [value]="regForm.get('total').value">
+                        <input matInput class="total" formControlName="total" type="text"
+                          [value]="regForm.get('total').value">
                       </mat-form-field>
                     </div>
                   </div>

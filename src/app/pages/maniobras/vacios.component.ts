@@ -647,9 +647,9 @@ export class VaciosComponent implements OnInit {
           this.facturacionService.aFacturarV[pos].maniobras.push(x);
           aAgregar = [];
           this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-          this.selectionVacios.clear();
-          this.selectionLavadoVacios.clear();
-          this.selectionReparacionVacios.clear();
+          // this.selectionVacios.clear();
+          // this.selectionLavadoVacios.clear();
+          // this.selectionReparacionVacios.clear();
           // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
         });
       } else {
@@ -660,9 +660,9 @@ export class VaciosComponent implements OnInit {
         this.facturacionService.aFacturarV.push(concepto);
         aAgregar = [];
         this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-        this.selectionVacios.clear();
-        this.selectionLavadoVacios.clear();
-        this.selectionReparacionVacios.clear();
+        // this.selectionVacios.clear();
+        // this.selectionLavadoVacios.clear();
+        // this.selectionReparacionVacios.clear();
         // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
       }
     }
@@ -736,6 +736,16 @@ export class VaciosComponent implements OnInit {
     let naviera;
     let viaje;
     let ok = true;
+
+    if (this.facturacionService.aFacturarV.length > 0) {
+      naviera = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
+
+      if (this.facturacionService.aFacturarV[0].maniobras[0].viaje._id) {
+        viaje = this.facturacionService.aFacturarV[0].maniobras[0].viaje._id;
+      } else {
+        viaje = this.facturacionService.aFacturarV[0].maniobras[0].viaje;
+      }
+    }
 
     maniobras.forEach(m => {
       if (naviera === undefined) {
