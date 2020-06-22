@@ -160,7 +160,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.socket.removeListener('update-cfdi');
     this.socket.removeListener('delete-cfdi');
     this.socket.removeListener('new-cfdi');
-    // this.facturacionService.maniobras = [];
     this.facturacionService.carritoAFacturar = [];
   }
 
@@ -412,7 +411,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       noIdentificacion: [''],
       valorUnitario: [''],
       importe: [''],
-      informacionAdicional: [{value: '',  disabled: true}],
+      informacionAdicional: [{ value: '', disabled: true }],
       impuestos: [''],
       unidad: [''],
       totalDescuentos: [{ value: '', disabled: true }],
@@ -516,10 +515,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
           });
         }
 
-        if (this.cfdi.conceptos[0].maniobras === 1) {
-          this.agrupado = false;
-        } else {
+        // VALIDAR
+        if (this.agrupadoDesagrupado(this.cfdi.conceptos)) {
           this.agrupado = true;
+        } else {
+          this.agrupado = false;
         }
 
         this.cfdi.conceptos.forEach(concepto => {
@@ -629,11 +629,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
       icon: 'info',
       content: 'input',
     }).then((info) => {
-      this.regForm.controls['informacionAdicional'].setValue(info) ;
+      this.regForm.controls['informacionAdicional'].setValue(info);
     });
   }
-  BorrarInformacion(){
-    this.regForm.controls['informacionAdicional'].setValue('') ;
+
+  BorrarInformacion() {
+    this.regForm.controls['informacionAdicional'].setValue('');
   }
 
   cambioSerie(serie) {
@@ -734,6 +735,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     } else {
       const posicion = this.cfdi.conceptos.findIndex(a => a._id === concepto._id);
       if (posicion >= 0) {
+        this.cfdi = this.regForm.getRawValue();
         this.cfdi.conceptos[posicion] = concepto;
       }
       this.recargaValoresCFDI();
@@ -777,6 +779,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.cfdi.direccion = this.direccion.value;
       this.cfdi.correo = this.correo.value;
       this.cfdi.conceptos = this.conceptos.value;
+      this.cfdi.informacionAdicional = this.informacionAdicional.value;
     }
 
     this.cfdi.conceptos = [];
@@ -824,6 +827,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.cfdi.direccion = this.direccion.value;
       this.cfdi.correo = this.correo.value;
       this.cfdi.conceptos = [];
+      this.cfdi.informacionAdicional = this.informacionAdicional.value;
 
 
       const start = async () => {
@@ -857,6 +861,23 @@ export class CFDIComponent implements OnInit, OnDestroy {
       };
       start();
     }
+  }
+
+  agrupadoDesagrupado(conceptos) {
+    let agrupado = true;
+    let concept;
+
+    conceptos.forEach(c => {
+      if (concept === undefined) {
+        concept = c._id;
+      } else {
+        if (concept === c._id) {
+          agrupado = false;
+        }
+      }
+    });
+
+    return agrupado;
   }
 
   groupArray(dataSource, field) {
