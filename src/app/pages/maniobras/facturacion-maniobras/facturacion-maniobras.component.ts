@@ -749,6 +749,10 @@ export class FacturacionManiobrasComponent implements OnInit {
     // let viaje;
     let ok = true;
 
+    if (this.facturacionService.aFacturarV.length > 0) {
+      naviera = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
+    }
+
     maniobras.forEach(m => {
       if (naviera === undefined) {
         naviera = m.naviera;
