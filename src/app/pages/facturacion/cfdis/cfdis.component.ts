@@ -15,6 +15,10 @@ declare var swal: any;
 })
 export class CFDISComponent implements OnInit {
   cfdisExcel = [];
+  ok;
+  uuid = false;
+  dis;
+  serieFolio = '';
   usuarioLogueado: Usuario;
   totalRegistros = 0;
   cargando = true;
@@ -51,6 +55,16 @@ export class CFDISComponent implements OnInit {
     this.socket.on('delete-cfdi', function (data: any) {
       this.cargarCFDIS();
     }.bind(this));
+
+    this.socket.on('timbrado-cfdi', function (data: any) {
+      this.ok = data.data.ok;
+      this.serieFolio = data.data.serieFolio;
+      this.dis = data.data.id;
+      if (this.ok === undefined) {
+        this.cargarCFDIS();
+      }
+
+    }.bind(this));
   }
 
   applyFilter(filterValue: string) {
@@ -78,6 +92,12 @@ export class CFDISComponent implements OnInit {
       } else {
         this.tablaCargar = false;
       }
+      cfdis.cfdis.forEach(uuid => {
+        if (uuid.uuid !== undefined) {
+          this.uuid = true;
+        }
+
+      });
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.totalRegistros = cfdis.cfdis.length;
