@@ -7,12 +7,16 @@ import * as html2pdf from 'html2pdf.js';
 import html2canvas from 'html2canvas';
 import { PdfFacturacionService } from './pdf-facturacion.service';
 import { FacturacionService } from '../facturacion.service';
+import * as io from 'socket.io-client';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 import { DATOS_TIMBRADO, RFCEMISOR } from 'src/app/config/config';
 
 declare var swal: any;
 
 import { CFDI } from '../models/cfdi.models';
 import { ok } from 'assert';
+import { Usuario } from '../../usuarios/usuario.model';
+import { UsuarioService } from 'src/app/services/service.index';
 export interface DialogData {
   // contenedor: string;
   data: any;
@@ -26,9 +30,10 @@ export interface DialogData {
 export class PdfFacturacionComponent implements OnInit {
 
   @ViewChild('contenido') contenido: ElementRef;
-
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
   cargandoTimbre = false;
   mensaje = 'TIMBRADO';
+  ok = true;
   elementType = 'img';
   qr = '';
   value = '';
@@ -49,6 +54,7 @@ export class PdfFacturacionComponent implements OnInit {
   uuid = '';
   metodoPago = '';
   NserieSAT = '';
+  usuarioLogueado: Usuario;
   fechaCertificado = '';
   codigoQR = '';
   ObjetoQR = {
@@ -60,9 +66,27 @@ export class PdfFacturacionComponent implements OnInit {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   constructor(public dialigRef: MatDialogRef<PdfFacturacionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData, private pdfFacturacionService: PdfFacturacionService, private facturacionService: FacturacionService) { }
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, private pdfFacturacionService: PdfFacturacionService, private facturacionService: FacturacionService, 
+    private usuarioService: UsuarioService) { }
 
   ngOnInit() {
+    this.socket.on('timbrado-cfdi', function(data: any) {
+    if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
+      this.dialigRef.close();
+      swal({
+        title: 'Timbrando',
+        text: 'CFDI: ' + data.data.serieFolio,
+        icon: 'warning'
+      })
+    }
+    
+    }.bind(this));
+
+    this.usuarioLogueado = this.usuarioService.usuario;
+
+    if (this.data.data.cfdi.informacionAdicional === '@') {
+      this.data.data.cfdi.informacionAdicional = '';
+    }
     if (this.data.data.cfdi.tipoComprobante === 'I') {
       this.comprobante = 'Ingreso';
     } else if (this.data.data.cfdi.tipoComprobante === 'E') {
@@ -212,6 +236,8 @@ export class PdfFacturacionComponent implements OnInit {
 
 
   xmlCFDIS(id: string) {
+    const usuarioLogeado = this.usuarioLogueado;
+    let ok = true;
     swal({
       title: '¿ Estas seguro?',
       text: 'Se mandara a timbrar CFDI ' + this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio,
@@ -220,6 +246,8 @@ export class PdfFacturacionComponent implements OnInit {
       dangerMode: true
     }).then(timbrar => {
       if (timbrar) {
+        const serieFolio = this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio;
+        this.socket.emit('timbradocfdi',{ok, serieFolio, id, usuarioLogeado});
         this.cargandoTimbre = true;
         this.mensaje = 'Validando Datos';
 
@@ -228,7 +256,7 @@ export class PdfFacturacionComponent implements OnInit {
             this.mensaje = 'Generando XML';
           }, 3000);
           if (res.ok === true) {
-            this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.InformacionAdicional)
+            this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.informacionAdicional)
               .subscribe((restim) => { // timbrar XML
                 if (restim.ok === true) {
                   setTimeout(() => {
@@ -266,11 +294,15 @@ export class PdfFacturacionComponent implements OnInit {
                 }
               }, (error) => {
                 this.cargandoTimbre = false;
+                let ok = false;
+                this.socket.emit('timbradocfdi', ok);
                 swal('Error', `${error.error.mensaje}`, 'error');
               });
           }
         }, (err) => {
           this.cargandoTimbre = false;
+          let ok = false;
+          this.socket.emit('timbradocfdi', ok);
           swal('Error', `${err.error.mensaje}`, 'error');
           this.count = 0;
         });
@@ -279,6 +311,8 @@ export class PdfFacturacionComponent implements OnInit {
   }
 
   datosTimbre(ObjetoTimbrado, correo, serie, folio, nombreEmisor) {
+    let ok = false;
+    const usuarioLogeado = this.usuarioLogueado;
     this.mensaje = 'Generando PDF un momento ...';
     setTimeout(() => {
       this.facturacionService.actualizarDatosTimbre(ObjetoTimbrado).subscribe(() => {
@@ -291,16 +325,34 @@ export class PdfFacturacionComponent implements OnInit {
                   setTimeout(() => {
                     this.pdfFacturacionService.subirBooket(resCorreo.archivos, true).subscribe(() => {
                       this.cargandoTimbre = false;
+                      this.socket.emit('alerttimbre', res);
+                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
                       this.dialigRef.close();
                       swal('Correcto', 'Se ha timbrado la Factura ' + serie + '-' + folio + 'y enviado correo correctamente a ' +
                         correo, 'success');
+                    }, (err) => {
+                      let ok = false;
+                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                      swal('Error', `${err.error.mensaje}`, 'error');
                     });
                   }, 5000);
                 }
+              }, (err) => {
+                let ok = false;
+                this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                swal('Error', `${err.error.mensaje}`, 'error');
               });
             }
+          }, (err) => {
+            let ok = false;
+            this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+            swal('Error', `${err.error.mensaje}`, 'error');
           });
         }, 3000);
+      }, (err) => {
+        let ok = false;
+        this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+        swal('Error', `${err.error.mensaje}`, 'error');
       });
     }, 5000);
   }
@@ -358,6 +410,10 @@ export class PdfFacturacionComponent implements OnInit {
 
   generarPDF() {
     this.pdfFacturacionService.pdfGenerate(this.data.data.cfdi._id).subscribe((res) => {
+    }, (err) => {
+      let ok = false;
+      this.socket.emit('timbradocfdi', ok);
+      swal('Error', `${err.error.mensaje}`, 'error');
     });
   }
   envioCorreo() {
@@ -367,6 +423,10 @@ export class PdfFacturacionComponent implements OnInit {
       if (resEnvio.ok === true) {
         swal('Correcto', 'Correo Enviando a ' + this.data.data.cfdi.correo, 'success');
       }
+    }, (err) => {
+      let ok = false;
+      this.socket.emit('timbradocfdi', ok);
+      swal('Error', `${err.error.mensaje}`, 'error');
     });
   }
 
@@ -382,6 +442,10 @@ export class PdfFacturacionComponent implements OnInit {
       const archivos = [];
       archivos.push(this.url, this.urlpDF);
       this.pdfFacturacionService.subirBooket(archivos, false).subscribe(() => {
+      }, (err) => {
+        let ok = false;
+        this.socket.emit('timbradocfdi', ok);
+        swal('Error', `${err.error.mensaje}`, 'error');
       })
     }, 3000);
   }
