@@ -47,6 +47,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   info = '';
   series: Serie[] = [];
   formasPago = [];
+  maniobrasDeleteConcepto = [];
   metodosPago = [];
   tiposComprobante = [];
   usosCFDI = [];
@@ -464,6 +465,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   quitar(indice: number) {
     const id = this.conceptos.value[indice]._id;
+    if (this.regForm.value._id !== 'nuevo') {
+      this.conceptos.value[indice].maniobras.forEach(m => {
+        this.maniobrasDeleteConcepto.push({cfdi: this.regForm.value._id, maniobra: m});
+      });
+    }
     const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
     this.facturacionService.carritoAFacturar.splice(pos, 1);
     if (this.id === 'nuevo' || this.id === undefined) {
@@ -577,9 +583,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
     if (this.id === 'nuevo') {
       this.consultarManiobraConcepto();
     } else {
-      this.guardarCFDI();
+        this.guardarCFDI();
     }
   }
+
 
   consultarManiobraConcepto() {
     // let promesas;
@@ -613,9 +620,26 @@ export class CFDIComponent implements OnInit, OnDestroy {
     });
 
   }
+  
+  deleteManiobra(maniobras) {
+    maniobras.forEach(m => {
+      const cfdi = m.cfdi,
+      maniobra = m.maniobra;
+      this.facturacionService.deletManiobrasConceptos(cfdi, maniobra).subscribe((res) => {
+        return res;
+      });
+    });
+  }
+
+  async borrarManiobriaConceptos(maniobras) {
+  const maniobrasD = await this.deleteManiobra(maniobras);
+  }
 
   guardarCFDI() {
     if (this.regForm.valid) {
+      if (this.maniobrasDeleteConcepto.length > 0 ) {
+        this.borrarManiobriaConceptos(this.maniobrasDeleteConcepto);
+      }
       this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
@@ -627,6 +651,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
           this.socket.emit('updatecfdi', res);
         }
         this.facturacionService.carritoAFacturar = [];
+        this.maniobrasDeleteConcepto = [];
 
         if (this.facturacionService.peso === 'VACIOS') {
           this.facturacionService.aFacturarV = [];
@@ -635,6 +660,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
         }
         this.regForm.markAsPristine();
       });
+    } else {
+      swal('ERROR', 'No se permite dejar sin conceptos, \n no se ha aplicado ningun cambio', 'error');
     }
   }
 
