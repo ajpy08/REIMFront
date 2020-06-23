@@ -465,7 +465,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
   quitar(indice: number) {
     const id = this.conceptos.value[indice]._id;
-    this.maniobrasDeleteConcepto.push(id);
+    if (this.regForm.value._id !== 'nuevo') {
+      this.conceptos.value[indice].maniobras.forEach(m => {
+        this.maniobrasDeleteConcepto.push({cfdi: this.regForm.value._id, maniobra: m});
+      });
+    }
     const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
     this.facturacionService.carritoAFacturar.splice(pos, 1);
     if (this.id === 'nuevo' || this.id === undefined) {
@@ -618,8 +622,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
   
   deleteManiobra(maniobras) {
-    this.facturacionService.deletManiobrasConceptos(maniobras).subscribe((res) => {
-      return res;
+    maniobras.forEach(m => {
+      const cfdi = m.cfdi,
+      maniobra = m.maniobra;
+      this.facturacionService.deletManiobrasConceptos(cfdi, maniobra).subscribe((res) => {
+        return res;
+      });
     });
   }
 
@@ -652,6 +660,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
         }
         this.regForm.markAsPristine();
       });
+    } else {
+      swal('ERROR', 'No se permite dejar sin conceptos, \n no se ha aplicado ningun cambio', 'error');
     }
   }
 

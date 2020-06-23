@@ -327,8 +327,8 @@ export class FacturacionService {
   }
   /* #endregion */
 
-  deletManiobrasConceptos(maniobras: any): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + maniobras;
+  deletManiobrasConceptos(cfdi: string, maniobra: string): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra;
     return this.http.get(url);
   }
 }
