@@ -42,7 +42,7 @@ export class FacturacionService {
       const timbres = timbre.toString();
       params = params.append('timbre', timbres);
     }
-    return this.http.get(url, {params: params});
+    return this.http.get(url, { params: params });
   }
 
   getCFDI(id: string): Observable<any> {
@@ -109,20 +109,20 @@ export class FacturacionService {
     if (info === '') {
       info = '@';
     }
-    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id +  '&' + direccion +  '&' + info +  '/' ;
-     return this.http.get(url);
-   }
+    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '&' + direccion + '&' + info + '/';
+    return this.http.get(url);
+  }
 
-   actualizarDatosTimbre(cfdi: CFDI): Observable<any> {
-      let url = URL_SERVICIOS + '/cfdis/datosTimbrado/' + cfdi._id + '/';
-      url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, cfdi).pipe(map((resp: any) => {
-        // swal('Correcto', 'Se ha timbrado correctamente', 'success');
-        return resp.cfdiTimbradoAct;
-      }));
-   }
+  actualizarDatosTimbre(cfdi: CFDI): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/datosTimbrado/' + cfdi._id + '/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, cfdi).pipe(map((resp: any) => {
+      // swal('Correcto', 'Se ha timbrado correctamente', 'success');
+      return resp.cfdiTimbradoAct;
+    }));
+  }
 
-   codeQR(uuid: string, rfc_emisor: string, rfc_receptor: string, total: string, sello: string): Observable<any> {
+  codeQR(uuid: string, rfc_emisor: string, rfc_receptor: string, total: string, sello: string): Observable<any> {
     let selloMod = '';
     const sus = sello.indexOf('/');
     if (sus !== -1) {
@@ -130,9 +130,9 @@ export class FacturacionService {
     } else {
       selloMod = sello;
     }
-     const url =  URL_SERVICIOS + '/cfdis/code/' + uuid  + '&' + rfc_emisor + '&' + rfc_receptor + '&' + total + '&' + selloMod + '/';
-     return this.http.get(url);
-   }
+    const url = URL_SERVICIOS + '/cfdis/code/' + uuid + '&' + rfc_emisor + '&' + rfc_receptor + '&' + total + '&' + selloMod + '/';
+    return this.http.get(url);
+  }
 
   /* #endregion */
 
@@ -327,4 +327,8 @@ export class FacturacionService {
   }
   /* #endregion */
 
+  deletManiobrasConceptos(cfdi: string, maniobra: string): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra;
+    return this.http.get(url);
+  }
 }
