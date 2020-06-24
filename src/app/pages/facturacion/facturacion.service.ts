@@ -327,13 +327,9 @@ export class FacturacionService {
   }
   /* #endregion */
 
-  // deletManiobrasConceptos(cfdi: string, maniobra: string, concepto: string): Observable<any> {
-  //   const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra + '&' + concepto;
-  //   return this.http.get(url);
-  // }
-
-  deletManiobrasConceptos(cfdi: string, maniobra: string): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra;
+  deletManiobrasConceptos(cfdi: string, maniobra: string, concepto: string): Observable<any> {
+    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra + '&' + concepto;
     return this.http.get(url);
   }
+
 }

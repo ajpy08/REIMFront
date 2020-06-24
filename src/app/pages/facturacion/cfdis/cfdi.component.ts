@@ -55,6 +55,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   tiposComprobante = [];
   usosCFDI = [];
   cfdi;
+
   infoAd = '';
   usuarioLogueado = new Usuario;
   id;
@@ -120,7 +121,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
-    if (this.facturacionService.peso === 'VACIOS') {
+    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
       this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarV;
     } else {
       this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarM;
@@ -337,6 +338,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
     /////////////////////////////////////////////////////////////////////////////////////////
   }
 
+  onchange(uno, dos) {
+    console.table({uno: uno, dos: dos});
+  }
+
   recargaValoresCFDI() {
     let totalImpuestosRetenidos = 0;
     let totalImpuestosTrasladados = 0;
@@ -494,7 +499,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     const id = this.conceptos.value[indice]._id;
     if (this.regForm.value._id !== 'nuevo') {
       this.conceptos.value[indice].maniobras.forEach(m => {
-        this.maniobrasDeleteConcepto.push({ cfdi: this.regForm.value._id, maniobra: m });
+        this.maniobrasDeleteConcepto.push({cfdi: this.regForm.value._id, maniobra: m, concepto: this.conceptos.value[indice]._id});
       });
     }
     const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
@@ -651,8 +656,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
   deleteManiobra(maniobras) {
     maniobras.forEach(m => {
       const cfdi = m.cfdi,
-        maniobra = m.maniobra;
-      this.facturacionService.deletManiobrasConceptos(cfdi, maniobra).subscribe((res) => {
+      maniobra = m.maniobra,
+      productoSer = m.concepto;
+      this.facturacionService.deletManiobrasConceptos(cfdi, maniobra, productoSer).subscribe((res) => {
         return res;
       });
     });
