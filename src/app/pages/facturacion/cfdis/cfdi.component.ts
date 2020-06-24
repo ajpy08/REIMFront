@@ -1,3 +1,5 @@
+import { SolicitudService } from './../../solicitudes/solicitud.service';
+/* #region  Imports */
 import { Impuesto } from './../models/impuesto.models';
 import { ManiobrasCFDIComponent } from './../../../dialogs/maniobras-cfdi/maniobras-cfdi.component';
 import { ManiobraService, UsuarioService } from 'src/app/services/service.index';
@@ -16,10 +18,11 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { CFDI } from '../models/cfdi.models';
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
-import { ROLES } from 'src/app/config/config';
+import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
 declare var swal: any;
 const moment = _moment;
+/* #endregion */
 
 export const MY_FORMATS = {
   parse: {
@@ -66,7 +69,8 @@ export class CFDIComponent implements OnInit, OnDestroy {
     private navieraService: NavieraService,
     public matDialog: MatDialog,
     private usuarioService: UsuarioService,
-    public maniobraService: ManiobraService) { }
+    public maniobraService: ManiobraService,
+    public solicitudService: SolicitudService) { }
 
   ngOnInit() {
     this.createFormGroup();
@@ -111,7 +115,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
           icon: 'warning'
         });
       }
-      }.bind(this));
+    }.bind(this));
     /* #endregion */
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -198,23 +202,46 @@ export class CFDIComponent implements OnInit, OnDestroy {
     ///////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////// RECEPTOR /////////////////////////////////////
-    if (this.facturacionService.receptor) {
-      if (this.facturacionService.tipo === 'Descarga') {
-        this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
-          this.rfc.setValue(naviera.rfc);
-          this.nombre.setValue(naviera.razonSocial);
-          this.usoCFDI.setValue(naviera.usoCFDI.usoCFDI);
+    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
+      if (this.facturacionService.receptor) {
+        if (this.facturacionService.tipo === 'Descarga') {
+          this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
+            this.rfc.setValue(naviera.rfc);
+            this.nombre.setValue(naviera.razonSocial);
+            this.usoCFDI.setValue(naviera.usoCFDI.usoCFDI);
+            let direccion = '';
+            direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
+            direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
+            direccion += naviera.colonia !== undefined && naviera.colonia !== '' ? ' ' + naviera.colonia : '';
+            direccion += naviera.municipio !== undefined && naviera.municipio !== '' ? ' ' + naviera.municipio : '';
+            direccion += naviera.ciudad !== undefined && naviera.ciudad !== '' ? ' ' + naviera.ciudad : '';
+            direccion += naviera.estado !== undefined && naviera.estado !== '' ? ' ' + naviera.estado : '';
+            direccion += naviera.cp !== undefined && naviera.cp !== '' ? ' ' + naviera.cp : '';
+            this.direccion.setValue(direccion.trim());
+            this.correo.setValue(naviera.correoFac);
+          });
+        }
+      }
+    } else {
+      const solicitud = this.facturacionService.carritoAFacturar[0].maniobras[0].solicitud;
+      if (solicitud) {
+        this.solicitudService.cargarSolicitud(solicitud).subscribe(s => {
+          this.rfc.setValue(s.rfc);
+          this.nombre.setValue(s.razonSocial);
+          this.usoCFDI.setValue(s.usoCFDI.usoCFDI);
           let direccion = '';
-          direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
-          direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
-          direccion += naviera.colonia !== undefined && naviera.colonia !== '' ? ' ' + naviera.colonia : '';
-          direccion += naviera.municipio !== undefined && naviera.municipio !== '' ? ' ' + naviera.municipio : '';
-          direccion += naviera.ciudad !== undefined && naviera.ciudad !== '' ? ' ' + naviera.ciudad : '';
-          direccion += naviera.estado !== undefined && naviera.estado !== '' ? ' ' + naviera.estado : '';
-          direccion += naviera.cp !== undefined && naviera.cp !== '' ? ' ' + naviera.cp : '';
+          direccion += s.calle !== undefined && s.calle !== '' ? s.calle : '';
+          direccion += s.noExterior !== undefined && s.noExterior !== '' ? ' ' + s.noExterior : '';
+          direccion += s.colonia !== undefined && s.colonia !== '' ? ' ' + s.colonia : '';
+          direccion += s.municipio !== undefined && s.municipio !== '' ? ' ' + s.municipio : '';
+          direccion += s.ciudad !== undefined && s.ciudad !== '' ? ' ' + s.ciudad : '';
+          direccion += s.estado !== undefined && s.estado !== '' ? ' ' + s.estado : '';
+          direccion += s.cp !== undefined && s.cp !== '' ? ' ' + s.cp : '';
           this.direccion.setValue(direccion.trim());
-          this.correo.setValue(naviera.correoFac);
+          this.correo.setValue(s.correoFac);
         });
+      } else {
+        swal('Error', 'La maniobra no cuenta con el campo solicitud, favor de comunicarse con TI', 'error');
       }
     }
     /////////////////////////////////////////////////////////////////////////////
@@ -467,7 +494,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     const id = this.conceptos.value[indice]._id;
     if (this.regForm.value._id !== 'nuevo') {
       this.conceptos.value[indice].maniobras.forEach(m => {
-        this.maniobrasDeleteConcepto.push({cfdi: this.regForm.value._id, maniobra: m});
+        this.maniobrasDeleteConcepto.push({ cfdi: this.regForm.value._id, maniobra: m });
       });
     }
     const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
@@ -583,7 +610,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     if (this.id === 'nuevo') {
       this.consultarManiobraConcepto();
     } else {
-        this.guardarCFDI();
+      this.guardarCFDI();
     }
   }
 
@@ -620,11 +647,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
     });
 
   }
-  
+
   deleteManiobra(maniobras) {
     maniobras.forEach(m => {
       const cfdi = m.cfdi,
-      maniobra = m.maniobra;
+        maniobra = m.maniobra;
       this.facturacionService.deletManiobrasConceptos(cfdi, maniobra).subscribe((res) => {
         return res;
       });
@@ -632,12 +659,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   async borrarManiobriaConceptos(maniobras) {
-  const maniobrasD = await this.deleteManiobra(maniobras);
+    const maniobrasD = await this.deleteManiobra(maniobras);
   }
 
   guardarCFDI() {
     if (this.regForm.valid) {
-      if (this.maniobrasDeleteConcepto.length > 0 ) {
+      if (this.maniobrasDeleteConcepto.length > 0) {
         this.borrarManiobriaConceptos(this.maniobrasDeleteConcepto);
       }
       this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
@@ -952,7 +979,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return n;
   }
 
-  /* #region  Properties */
+  /* #region Properties */
 
   get fecha() {
     return this.regForm.get('fecha');

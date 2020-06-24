@@ -1,5 +1,4 @@
 import { UsuarioService } from 'src/app/services/service.index';
-import { filter } from 'rxjs/operators';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Maniobra } from '../../models/maniobra.models';
@@ -28,7 +27,7 @@ import { AsignarFacturaComponent } from '../../dialogs/asignar-factura/asignar-f
 import { Router } from '@angular/router';
 import { FacturacionService } from '../facturacion/facturacion.service';
 import { Usuario } from '../usuarios/usuario.model';
-import { ROLES } from 'src/app/config/config';
+import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
 
 const moment = _moment;
 
@@ -157,7 +156,6 @@ export class VaciosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.facturacionService.peso = 'VACIOS';
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarViajes(new Date().toString());
 
@@ -554,12 +552,14 @@ export class VaciosComponent implements OnInit {
       }
     });
   }
+
   onLinkClick(event: MatTabChangeEvent) {
     localStorage.setItem('VacioTabs', event.index.toString());
     this.selectionVacios.clear();
     this.selectionLavadoVacios.clear();
     this.selectionReparacionVacios.clear();
   }
+
   corregirContenedor(id) {
     this._maniobraService.corrigeContenedor(id).subscribe(res => {
       id.contenedor = res.contenedor;
@@ -683,6 +683,7 @@ export class VaciosComponent implements OnInit {
         /////////////////////////////////////////////////
 
         /////////////////// RECEPTOR ////////////////////
+        this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
         this.facturacionService.receptor = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
         this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
