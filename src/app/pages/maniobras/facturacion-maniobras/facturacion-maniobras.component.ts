@@ -1,3 +1,4 @@
+import { SolicitudService } from './../../solicitudes/solicitud.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Maniobra } from '../../../models/maniobra.models';
@@ -156,7 +157,8 @@ export class FacturacionManiobrasComponent implements OnInit {
     private router: Router,
     public facturacionService: FacturacionService,
     private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private solicitudService: SolicitudService
   ) { }
 
   ngOnInit() {
@@ -602,10 +604,13 @@ export class FacturacionManiobrasComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
-  agregarFacturas(maniobras, idProdServ) {
+  async agregarFacturas(maniobras, idProdServ) {
     let aAgregar = [];
+    let okValidacion;
     if (maniobras.length > 0) {
-      if (this.validaClienteViajeXManiobras(maniobras)) {
+      okValidacion =  this.validaClienteXManiobras(maniobras);
+
+      if (okValidacion) {
         if (idProdServ !== undefined) {
           maniobras.forEach(ma => {
             if (this.facturacionService.aFacturarM.length > 0) {
@@ -642,7 +647,7 @@ export class FacturacionManiobrasComponent implements OnInit {
         }
       } else {
         aAgregar = [];
-        swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+        swal('Las maniobras seleccionadas son de cliente distinto!', '', 'error');
       }
     } else {
       aAgregar = [];
@@ -659,10 +664,9 @@ export class FacturacionManiobrasComponent implements OnInit {
           this.facturacionService.aFacturarM[pos].maniobras.push(x);
           aAgregar = [];
           this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-          this.selectionVacios.clear();
-          this.selectionLavadoVacios.clear();
-          this.selectionReparacionVacios.clear();
-          // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarM.length + ' concepto (s) por facturar', 'success');
+          // this.selectionVacios.clear();
+          // this.selectionLavadoVacios.clear();
+          // this.selectionReparacionVacios.clear();
         });
       } else {
         const concepto = {
@@ -672,13 +676,11 @@ export class FacturacionManiobrasComponent implements OnInit {
         this.facturacionService.aFacturarM.push(concepto);
         aAgregar = [];
         this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-        this.selectionVacios.clear();
-        this.selectionLavadoVacios.clear();
-        this.selectionReparacionVacios.clear();
-        // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarM.length + ' concepto (s) por facturar', 'success');
+        // this.selectionVacios.clear();
+        // this.selectionLavadoVacios.clear();
+        // this.selectionReparacionVacios.clear();
       }
     }
-    // console.log(this.facturacionService.aFacturarM);
   }
 
   facturar() {
@@ -695,8 +697,8 @@ export class FacturacionManiobrasComponent implements OnInit {
         /////////////////////////////////////////////////
 
         /////////////////// RECEPTOR ////////////////////
-        this.facturacionService.receptor = this.facturacionService.aFacturarM[0].maniobras[0].naviera;
-        this.facturacionService.tipo = 'Descarga';
+        // this.facturacionService.receptor = this.facturacionService.aFacturarM[0].maniobras[0].naviera;
+        // this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
 
         /////////////////// CONCEPTOS ///////////////////
@@ -744,33 +746,85 @@ export class FacturacionManiobrasComponent implements OnInit {
     return ok;
   }
 
-  validaClienteViajeXManiobras(maniobras) {
-    let naviera;
+  // validaClienteViajeXManiobras(maniobras) {
+  //   let naviera;
+  //   // let viaje;
+  //   let ok = true;
+
+  //   if (this.facturacionService.aFacturarV.length > 0) {
+  //     naviera = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
+  //   }
+
+  //   maniobras.forEach(m => {
+  //     if (naviera === undefined) {
+  //       naviera = m.naviera;
+  //     } else {
+  //       if (naviera !== m.naviera) {
+  //         ok = false;
+  //       }
+  //     }
+
+  //     // if (viaje === undefined) {
+  //     //   viaje = m.viaje._id;
+  //     // } else {
+  //     //   if (viaje !== m.viaje._id) {
+  //     //     ok = false;
+  //     //   }
+  //     // }
+  //   });
+  //   return ok;
+  // }
+
+  validaClienteXManiobras(maniobras) {
+    let clienteSolicitud;
+    let clienteAFacturar;
     // let viaje;
-    let ok = true;
+    let ok = false;
 
-    if (this.facturacionService.aFacturarV.length > 0) {
-      naviera = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
-    }
+    const start = async () => {
+      await this.asyncForEach(maniobras, async (m) => {
+        if (m.solicitud) {
+          const s: any = await this.solicitudService.getSolicitudAsync(m.solicitud._id);
+          switch (s.facturarA) {
+            case 'Naviera':
+              clienteSolicitud = s.naviera;
+              break;
+            case 'Agencia Aduanal':
+              clienteSolicitud = s.agencia;
+              break;
+            case 'Cliente':
+              clienteSolicitud = s.cliente;
+              break;
+            default:
+          }
 
-    maniobras.forEach(m => {
-      if (naviera === undefined) {
-        naviera = m.naviera;
-      } else {
-        if (naviera !== m.naviera) {
-          ok = false;
+          if (clienteAFacturar === undefined) {
+            clienteAFacturar = clienteSolicitud;
+            ok = true;
+          } else {
+            if (clienteAFacturar !== clienteSolicitud) {
+              ok = false;
+            } else {
+              if (ok !== false) {
+                ok = true;
+              }
+            }
+          }
+          // });
+        } else {
+          swal('Error', 'La maniobra no cuenta con solicitud asociada \ncomunicate con TI', 'error');
         }
-      }
+      });
+      return ok;
+    };
+    start();
+  }
 
-      // if (viaje === undefined) {
-      //   viaje = m.viaje._id;
-      // } else {
-      //   if (viaje !== m.viaje._id) {
-      //     ok = false;
-      //   }
-      // }
-    });
-    return ok;
+  async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index]);
+      // await callback(array[index], index, array);
+    }
   }
 
   consultaProdServ() {

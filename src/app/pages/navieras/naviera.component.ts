@@ -262,7 +262,7 @@ export class NavieraComponent implements OnInit {
       // this.regForm.controls['correosF'].setValue(naviera.correo);
       // this.regForm.controls['correoFac'].setValue(naviera.correoFac);
       this.regForm.controls['credito'].setValue(naviera.credito);
-      this.regForm.controls['usoCFDI'].setValue(naviera.usoCFDI);
+      this.regForm.controls['usoCFDI'].setValue(naviera.usoCFDI ? naviera.usoCFDI._id : '');
       this.regForm.controls['img'].setValue(naviera.img);
       this.regForm.controls['caat'].setValue(naviera.caat);
       this.regForm.controls['activo'].setValue(naviera.activo);

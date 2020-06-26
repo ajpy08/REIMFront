@@ -685,7 +685,7 @@ export class VaciosComponent implements OnInit {
         /////////////////// RECEPTOR ////////////////////
         this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
         this.facturacionService.receptor = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
-        this.facturacionService.tipo = 'Descarga';
+        // this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
 
         /////////////////// CONCEPTOS ///////////////////
