@@ -66,7 +66,7 @@ export class PdfFacturacionComponent implements OnInit {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
 
   constructor(public dialigRef: MatDialogRef<PdfFacturacionComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData, private pdfFacturacionService: PdfFacturacionService, private facturacionService: FacturacionService, 
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, private pdfFacturacionService: PdfFacturacionService, private facturacionService: FacturacionService,
     private usuarioService: UsuarioService) { }
 
   ngOnInit() {
@@ -294,10 +294,14 @@ export class PdfFacturacionComponent implements OnInit {
                     };
                     this.datosTimbre(ObjetoTimbre, res.cfdiData.correo, res.cfdiData.serie, res.cfdiData.folio, res.cfdiData.nombre);
                   }, 3000);
+                  setTimeout(() => {
+                    this.ResCredito();
+                  }, 1000);
+
                 }
               }, (error) => {
                 this.cargandoTimbre = false;
-                let ok = false;
+                const ok = false;
                 this.socket.emit('timbradocfdi', ok);
                 swal('Error', `${error.error.mensaje}`, 'error');
               });
@@ -430,6 +434,11 @@ export class PdfFacturacionComponent implements OnInit {
       let ok = false;
       this.socket.emit('timbradocfdi', ok);
       swal('Error', `${err.error.mensaje}`, 'error');
+    });
+  }
+
+  ResCredito() {
+    this.pdfFacturacionService.QuitarCredito().subscribe((res) => {
     });
   }
 

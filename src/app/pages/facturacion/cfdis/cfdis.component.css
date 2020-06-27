@@ -5,7 +5,32 @@
 .alert-danger {
     width: 281px;
     position: absolute;
+    margin-left: 55%;
+    top: 16px;
+}
+.contadorTIMBRES {
+    width: 167px;
     margin-left: 60%;
-    top: 6px;
-
+    margin-top: -61px;
+}
+.botonCredito {
+    margin-top: 17px;
+    margin-left: 12px;
+    position: absolute;
+}
+.cre {
+color: black;
+}
+.red {
+    animation-name: parpadeo;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  
+    -webkit-animation-name:parpadeo;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    color: red;
+    font-weight: bold;
 }
