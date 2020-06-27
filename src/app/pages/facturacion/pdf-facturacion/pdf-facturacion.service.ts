@@ -65,6 +65,11 @@ export class PdfFacturacionService {
     return this.http.get(url);
   }
 
+  QuitarCredito(): Observable<any> {
+    const url = URL_SERVICIOS + '/pdfFacturacion/QuitCredito/';
+    return this.http.get(url);
+  }
+
 
 }
 

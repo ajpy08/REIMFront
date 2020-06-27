@@ -9,7 +9,7 @@ export class CFDI {
     public serie?: string,
     public subTotal?: number,
     public tipoComprobante?: string,
-    public total?: number,
+    public total?: any,
     public uuid?: string,
     public NoSerieSat?: string,
     public fechaCer?: Date,
