@@ -47,6 +47,11 @@ export class SolicitudService {
       .pipe(map((resp: any) => resp.solicitud));
   }
 
+  async getSolicitudAsync(id: string) {
+    const url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
+    return await this.http.get(url).toPromise();
+  }
+
   getSolicitudIncludes(id: string): Observable<any> {
     return this.http
       .get(URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes')
