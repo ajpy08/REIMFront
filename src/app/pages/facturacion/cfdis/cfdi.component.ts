@@ -183,13 +183,14 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.socket.removeListener('new-cfdi');
     this.socket.removeListener('timbrado-cfdi');
 
-    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
+    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO && this.id !== 'nuevo') {
       this.facturacionService.aFacturarV = [];
+      this.facturacionService.carritoAFacturar = [];
     } else {
       this.facturacionService.aFacturarM = [];
+      this.facturacionService.carritoAFacturar = [];
     }
     this.ObjetoSelect = [];
-    this.facturacionService.carritoAFacturar = [];
   }
 
   cargaValoresIniciales(concept) {
@@ -387,7 +388,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.ObjetoSelect.splice(pos, 1);
       this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].maniobra;
     }
-
+  }
 
   recargaValoresCFDI() {
     let totalImpuestosRetenidos = 0;
