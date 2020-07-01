@@ -1,7 +1,7 @@
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FacturacionService } from '../facturacion.service';
-import { ExcelService } from 'src/app/services/service.index';
+import { ExcelService, UsuarioService } from 'src/app/services/service.index';
 import { CFDI } from '../models/cfdi.models';
 import { PdfFacturacionComponent } from 'src/app/pages/facturacion/pdf-facturacion/pdf-facturacion.component';
 import * as io from 'socket.io-client';
@@ -16,12 +16,14 @@ declare var swal: any;
 export class CFDISComponent implements OnInit {
   cfdisExcel = [];
   ok;
+  credit = false;
   uuid = false;
   dis;
   serieFolio = '';
   usuarioLogueado: Usuario;
   totalRegistros = 0;
   cargando = true;
+  creditosTimbre;
   tablaCargar = false;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
@@ -42,9 +44,12 @@ export class CFDISComponent implements OnInit {
   dataSource: any;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private facturacionService: FacturacionService, private _excelService: ExcelService, public dialog: MatDialog) { }
+  constructor(private facturacionService: FacturacionService, private usuarioService: UsuarioService,
+    private _excelService: ExcelService, public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.agregarCreditos('B');
+    this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarCFDIS();
     this.socket.on('new-cfdi', function (data: any) {
       this.cargarCFDIS();
@@ -62,8 +67,8 @@ export class CFDISComponent implements OnInit {
       this.dis = data.data.id;
       if (this.ok === undefined || this.ok === false) {
         this.cargarCFDIS();
+        this.agregarCreditos('B');
       }
-
     }.bind(this));
   }
 
@@ -123,6 +128,30 @@ export class CFDISComponent implements OnInit {
     });
   }
 
+  agregarCreditos(val) {
+    if (val === 'A') {
+      swal({
+        title: 'CREDITOS TIMBRE',
+        icon: 'info',
+        content: 'input',
+        loseOnConfirm: false, 
+        closeOnCancel: false,
+        allowOutsideClick: false
+      }).then((credito) => {
+        if(credito !== null) {
+          this.facturacionService.creditos(credito).subscribe((res) => {
+            this.creditosTimbre = res.contador;
+            this.agregarCreditos('B');
+          });
+        }
+      });
+    } else if (val === 'B') {
+      this.facturacionService.getCreditos('CreditosTimbre').subscribe((res) => {
+        this.creditosTimbre = res.creditos.seq;
+        res.creditos.seq <= 10 ? this.credit = true : this.credit = false;
+      });
+    }
+  }
 
   pdf(cfdi: CFDI): void {
     this.facturacionService.getCFDIPDF(cfdi._id).subscribe(res => {
@@ -141,6 +170,23 @@ export class CFDISComponent implements OnInit {
       });
     });
   }
+
+  cancelarCFDI(cfdi: CFDI): void {
+    swal({
+      title: '¿ Estas seguro ?',
+      text: 'Estas a punto de cancelar la factura ' + cfdi.serie + '-' + cfdi.folio,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(cancelacion => {
+      if (cancelacion) {
+        this.facturacionService.cancelacionCFDI(cfdi.rfc, cfdi.uuid, cfdi.total.$numberDecimal).subscribe((res) => {
+          console.log(res);
+        });
+      }
+    });
+  }
+
 
 
   // CreaDatosExcel(datos) {

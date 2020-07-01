@@ -215,6 +215,11 @@ export class FacturacionService {
     }
   }
 
+  cancelacionCFDI(rfcEmisor: string, uuid: string, total: any): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/cancelacionCFDI/' + rfcEmisor + '&' + uuid +  '&' + total + '/';
+    return this.http.get(url);
+  }
+
   borrarProductoServicio(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/productos-servicios/producto-servicio/' + id;
     url += '?token=' + this._usuarioService.token;
@@ -226,6 +231,15 @@ export class FacturacionService {
   }
 
   /* #endregion */
+
+  creditos(creditos: string): Observable<any> {
+  const url = URL_SERVICIOS + '/cfdis/creditos/' + creditos;
+  return this.http.put(url, creditos);
+  }
+  getCreditos(id: string): Observable<any> {
+  const url = URL_SERVICIOS + '/cfdis/getCreditos/' + id;
+  return this.http.get(url);
+  }
 
   /* #region  CLAVE UNIDAD */
   getClaveUnidades(): Observable<any> {
