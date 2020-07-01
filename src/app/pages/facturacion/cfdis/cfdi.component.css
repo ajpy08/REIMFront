@@ -3,6 +3,7 @@
     width: 650px;
     padding: 8px 24px 0;
 }
+
 .mat-table-big {
     width: 2009px;
 }
@@ -17,6 +18,7 @@
     top: 23px;
     background-color: #002C77;
 }
+
 .botonB {
     width: 10px;
 }
@@ -463,8 +465,8 @@ ul {
     margin-top: -81px;
     width: 32px;
     position: absolute;
-
 }
+
 /* .fa-dollar-sign {
     color: white;
     margin-left: -5px;
@@ -489,14 +491,16 @@ ul {
     font-size: 16px;
     position: absolute;
 } */
+
 .botonC {
     height: 31px;
-    background-color: #D22D2D ;
+    background-color: #D22D2D;
     margin-left: -7px;
     margin-top: -21px;
     width: 32px;
     position: absolute;
 }
+
 /* .fa-trash-o {
     color: white;
     margin-left: -9px;
@@ -526,4 +530,66 @@ label {
 
 ::ng-deep .mat-select-value-text {
     color: rgba(0, 0, 0, .88);
+}
+
+.btnDolar {
+    /* border: 2px solid #74DF00;
+    border-radius: 5px; */
+    background-color: white;
+    transition: background-color .5s;
+    width: 38px;
+    height: 38px;
+}
+
+.fa-dollar-sign {
+    color: black;
+    font-size: 18px;
+}
+
+.btnDolar:hover {
+    background-color: #74DF00;
+}
+
+.btnBoxe {
+    /* border: 2px solid #0080FF;
+    border-radius: 5px; */
+    background-color: white;
+    transition: background-color .5s;
+    width: 38px;
+    height: 38px;
+}
+
+.fa-boxes {
+    color: black;
+    font-size: 18px;
+    margin-left: -5px;
+}
+
+.btnBoxe:hover {
+    background-color: #0080FF;
+}
+
+.btnTrash {
+    /* border: 2px solid #B40404;
+    border-radius: 5px; */
+    background-color: white;
+    transition: background-color .5s;
+    width: 38px;
+    height: 38px;
+}
+
+.fa-trash-o {
+    color: black;
+    font-size: 18px;
+    margin-left: -2px;
+    font-size: 21px;
+}
+
+.btnTrash:hover {
+    background-color: #B40404;
+}
+
+.contenedorBotones {
+    margin-left: 15px;
+    /* margin-top: -30px; */
 }

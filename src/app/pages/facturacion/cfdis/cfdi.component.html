@@ -200,6 +200,21 @@
                       <a>Desagrupado</a>
                     </ng-template>
                   </mat-checkbox>
+                  <div class="contenedorBotones">
+                    <div class="row">
+                      <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Impuestos"
+                        (click)="openDialogImpuestos(idSelect)" class="btnDolar btn  m-r-5">
+                        <i class="fas fa-dollar-sign"></i>
+                      </button>
+                      <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Maniobras"
+                        (click)="openDialogManiobras(idSelect)" class="btnBoxe btn  m-r-5">
+                        <i class="fas fa-boxes"></i>
+                      </button>
+                      <button type="button" matTooltip="Quitar Concepto" (click)="agrupinD(ObjetoSelect)" class="btnTrash btn m-r-5">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </div>
+                  </div>
                   <!-- <mat-checkbox [checked]= true (change)="agruparDesagruparConcepto($event.checked, item.value)"
                     matTooltip="Agrupar/Desagrupar Concepto">
                   </mat-checkbox> -->
@@ -207,7 +222,7 @@
                     <thead>
                       <tr>
                         <th scope="col"></th>
-                        <th scope="col">Consecutivo</th>
+                        <th scope="col">#</th>
                         <th scope="col">Concepto</th>
                         <th scope="col">Unidad </th>
                         <th scope="col">Cantidad</th>
@@ -221,7 +236,7 @@
                     <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
-<!-- 
+                          <!-- 
                           <div class="conta">
                             <label for="checkbox">
                               <i class="fa fa-bars"></i>
@@ -238,7 +253,7 @@
                                   <i class="fa fa-trash-o"></i></a>
                             </ul>
                           </div> -->
-                          <button type="button" matTooltip="Modificar Impuestos"
+                          <!-- <button type="button" matTooltip="Modificar Impuestos"
                             (click)="openDialogImpuestos(item.value)" class="btn btn-primary m-r-5">
                             <i class="fas fa-dollar-sign"></i>
                           </button>
@@ -248,19 +263,20 @@
                           </button>
                           <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
-                          </button>
-                          <!-- <mat-checkbox (change)="onchange(item.value, $event.checked)" name="optcion" ></mat-checkbox> -->
+                          </button> -->
+                          <mat-checkbox  (change)="onchange(item.value, i, $event)"></mat-checkbox>
+ 
 
                         </td>
-                         <td scope="row">{{i+1}}</td>
+                        <td scope="row">{{i+1}}</td>
                         <td>
                           <!-- {{item.get('descripcion').value}} -->
                           <div class="col-md">
-                            <mat-form-field>
+                            <mat-form-field class="example-full-width">
                               <!-- <input matInput [value]="item.get('descripcion').value" formControlName="descripcion"
                                 type="text" (blur)="asignaValores(item.value)" style="text-align: center;"> -->
                               <textarea matInput [value]="item.get('descripcion').value" formControlName="descripcion"
-                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea>
+                                rows="6" cols="70" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea>
                             </mat-form-field>
                           </div>
                         </td>
