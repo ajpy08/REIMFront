@@ -16,7 +16,7 @@ import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.model
 export class FacturacionService {
   IE = '';
   receptor;
-  tipo = '';
+  // tipo = '';
   // maniobras = [];
   carritoAFacturar = [];
   aFacturarV = [];
