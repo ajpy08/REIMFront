@@ -387,7 +387,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.ObjetoSelect.splice(pos, 1);
       this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].maniobra;
     }
-
+  }
 
   recargaValoresCFDI() {
     let totalImpuestosRetenidos = 0;
