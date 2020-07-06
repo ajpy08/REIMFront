@@ -23,33 +23,35 @@ export class ClienteService {
 
   getClientesRole(role?: string): Observable<any> {
     let url = URL_SERVICIOS + '/clientes/role/' + role;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.clientes));
   }
 
   getClientesEmpresa(idEmpresa: string, desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/clientes/empresa/' + idEmpresa + '?desde' + desde;
+    let url = URL_SERVICIOS + '/clientes/empresa/' + idEmpresa + '?desde' + desde;
     return this.http.get(url);
   }
 
   getClientesEmpresas(idsEmpresas: string): Observable<any> {
-
-    const url = URL_SERVICIOS + '/clientes/empresas/' + idsEmpresas;
+    let url = URL_SERVICIOS + '/clientes/empresas/' + idsEmpresas;
     return this.http.get(url);
   }
 
   getClientes(desde: number = 0, act: boolean): Observable<any> {
-    let url = URL_SERVICIOS + '/clientes?desde=' + desde;
+    let url = URL_SERVICIOS + '/clientes?desde=' + desde + '/';
     let params = new HttpParams();
     if (act === true || act === false) {
       const tf = act.toString();
       params = params.append('act', tf);
     }
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url, { params: params });
   }
 
   getCliente(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/clientes/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.cliente));
   }

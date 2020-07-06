@@ -12,7 +12,7 @@ export class SolicitudService {
   constructor(
     public http: HttpClient,
     public _usuarioService: UsuarioService
-  ) {}
+  ) { }
 
   // El campo agencias es un string de IDS separados por comas..
   getSolicitudes(
@@ -37,25 +37,29 @@ export class SolicitudService {
       params = params.append('agencias', agencias);
     }
     // console.log(params.toString());
-    const url = URL_SERVICIOS + '/solicitudes';
+    let url = URL_SERVICIOS + '/solicitudes';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url, { params: params });
   }
 
   cargarSolicitud(id: string): Observable<any> {
-    return this.http
-      .get(URL_SERVICIOS + '/solicitudes/solicitud/' + id)
+    let url = URL_SERVICIOS + + '/solicitudes/solicitud/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url)
       .pipe(map((resp: any) => resp.solicitud));
   }
 
   async getSolicitudAsync(id: string) {
-    const url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
+    let url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
+    url += '?token=' + this._usuarioService.token;
     return await this.http.get(url).toPromise();
   }
 
   getSolicitudIncludes(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes';
+    url += '?token=' + this._usuarioService.token;
     return this.http
-      .get(URL_SERVICIOS + '/solicitudes/solicitud/' + id + '/includes')
-      .pipe(map((resp: any) => resp.solicitud));
+      .get(url).pipe(map((resp: any) => resp.solicitud));
   }
 
   guardaViajeBuque(solicitud: Solicitud) {
@@ -175,6 +179,7 @@ export class SolicitudService {
     let params = new HttpParams();
     let url = URL_SERVICIOS + '/solicitudes/solicitud';
     url += '/' + solicitud._id + '/enviacorreo';
+    url += '?token=' + this._usuarioService.token;
     if (solicitud._id) {
       params = params.append('_id', solicitud._id);
     }
@@ -226,14 +231,14 @@ export class SolicitudService {
     return this.http.delete(url).pipe(map((res: any) => {
       return res.maniobra;
     }),
-    catchError(err => {
-      swal(
-        'ERROR',
-        'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
-        'error'
-      );
-      return throwError(err);
-    })
+      catchError(err => {
+        swal(
+          'ERROR',
+          'La maniobra no se encuentra en TRANSITO, por lo tanto no se puede eliminar',
+          'error'
+        );
+        return throwError(err);
+      })
     );
   }
 

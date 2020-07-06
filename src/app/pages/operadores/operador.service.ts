@@ -22,7 +22,8 @@ export class OperadorService {
   ) { }
 
   getOperadores(transportista?: string, activo?: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/operadores/';
+    let url = URL_SERVICIOS + '/operadores/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (transportista) {
       params = params.append('transportista', transportista);
@@ -35,7 +36,8 @@ export class OperadorService {
   }
 
   getOperador(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/operadores/operador/' + id;
+    let url = URL_SERVICIOS + '/operadores/operador/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.operadores));
   }
