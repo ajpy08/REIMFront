@@ -235,7 +235,7 @@ export class ReportesComponent implements OnInit {
     totalM = this.minutos.reduce((a, b) => a + b, 0);
     totalh = this.horas.reduce((a, b) => a + b, 0);
 
-    if (totalM === 0 && totalh === 0 ) {
+    if (totalM === 0 && totalh === 0) {
       resultadoxTipo = '00:00';
       return resultadoxTipo;
     }
@@ -276,32 +276,32 @@ export class ReportesComponent implements OnInit {
         this.reparaciones20.forEach(g20 => {
           g20.maniobras.forEach(g20maniobras => {
             if (tipo === '20') {
-              tiempoFinal = this.time(g20maniobras.hIniReparacion, g20maniobras.hFinReparacion);
+              tiempoFinal = this.time(g20maniobras.hIniReparacion, g20maniobras.hFinReparacion, null, null);
               this.tiempo.push(tiempoFinal);
             }
 
             if (g20maniobras.tipo === tipo) {
-              tiempoFinal = this.time(g20maniobras.hIniReparacion, g20maniobras.hFinReparacion);
+              tiempoFinal = this.time(g20maniobras.hIniReparacion, g20maniobras.hFinReparacion, null, null);
               this.tiempo.push(tiempoFinal);
             }
           });
         });
-      } 
+      }
     } else if (tipo.includes('40')) {
       if (this.reparaciones40 !== undefined) {
         this.reparaciones40.forEach(g40 => {
           g40.maniobras.forEach(g40maniobras => {
             if (tipo === '40') {
-              tiempoFinal = this.time(g40maniobras.hIniReparacion, g40maniobras.hFinReparacion);
+              tiempoFinal = this.time(g40maniobras.hIniReparacion, g40maniobras.hFinReparacion, null, null);
               this.tiempo.push(tiempoFinal);
             }
             if (g40maniobras.tipo === tipo) {
-              tiempoFinal = this.time(g40maniobras.hIniReparacion, g40maniobras.hFinReparacion);
+              tiempoFinal = this.time(g40maniobras.hIniReparacion, g40maniobras.hFinReparacion, null, null);
               this.tiempo.push(tiempoFinal);
             }
           });
         });
-      } 
+      }
     }
     final = this.tiempos(this.tiempo);
     return final;
@@ -316,32 +316,32 @@ export class ReportesComponent implements OnInit {
         this.lavado20.forEach(g20 => {
           g20.maniobras.forEach(g20maniobras => {
             if (tipo === '20') {
-              tiempoFinal = this.time(g20maniobras.hIniLavado, g20maniobras.hFinLavado);
+              tiempoFinal = this.time(g20maniobras.hIniLavado, g20maniobras.hFinLavado, null, null);
               this.tiempoLavado.push(tiempoFinal);
             }
 
             if (g20maniobras.tipo === tipo) {
-              tiempoFinal = this.time(g20maniobras.hIniLavado, g20maniobras.hFinLavado);
+              tiempoFinal = this.time(g20maniobras.hIniLavado, g20maniobras.hFinLavado, null, null);
               this.tiempoLavado.push(tiempoFinal);
             }
           });
         });
-      } 
+      }
     } else if (tipo.includes('40')) {
       if (this.lavado40 !== undefined) {
         this.lavado40.forEach(g40 => {
           g40.maniobras.forEach(g40maniobras => {
             if (tipo === '40') {
-              tiempoFinal = this.time(g40maniobras.hIniLavado, g40maniobras.hFinLavado);
+              tiempoFinal = this.time(g40maniobras.hIniLavado, g40maniobras.hFinLavado, null, null);
               this.tiempoLavado.push(tiempoFinal);
             }
             if (g40maniobras.tipo === tipo) {
-              tiempoFinal = this.time(g40maniobras.hIniLavado, g40maniobras.hFinLavado);
+              tiempoFinal = this.time(g40maniobras.hIniLavado, g40maniobras.hFinLavado, null, null);
               this.tiempoLavado.push(tiempoFinal);
             }
           });
         });
-      } 
+      }
     }
     finalLavado = this.tiempos(this.tiempoLavado);
     return finalLavado;
@@ -603,8 +603,20 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  time(hIni, hFin) {
+  time(hIni, hFin, fIni, fFin) {
     let resultado;
+    let dias;
+
+    if (fIni !== undefined && fIni !== null && fFin !== undefined && fFin !== null) {
+      const fechaIni = fIni.split('-');
+      const fechaFin = fFin.split('-');
+
+      const diaIni = fechaIni[2].split('T');
+      const diaFin = fechaFin[2].split('T');
+
+      dias = diaFin[0] - diaIni[0];
+    }
+
     const a = moment([hIni], 'HH:mm');
     const b = moment([hFin], 'HH:mm');
     const diffH = Math.abs(b.diff(a, 'hours'));
@@ -612,12 +624,12 @@ export class ReportesComponent implements OnInit {
 
     if (diffM > 59) {
       const minRestantes = diffM - (diffH * 60);
-      resultado = (diffH < 10 ? '0' : '') + diffH + ':' + (minRestantes < 10 ? '0' : '') + minRestantes;
+      resultado = (dias > 0 ? `${dias} dia(s), ` : '') + (diffH < 10 ? '0' : '') + diffH + ':' + (minRestantes < 10 ? '0' : '') + minRestantes;
     } else {
       if (hFin !== undefined) {
-        resultado = '00:' + (diffM < 10 ? '0' : '') + diffM;
+        resultado = (dias > 0 ? `${dias} dia(s), ` : '') + '00:' + (diffM < 10 ? '0' : '') + diffM;
       } else {
-        resultado = '00:00';
+        resultado = (dias > 0 ? `${dias} dia(s), ` : '') + '00:00';
       }
     }
     return resultado;
@@ -644,7 +656,8 @@ export class ReportesComponent implements OnInit {
           maniobras => {
             maniobras.maniobras.forEach(t => {
               if (t.hIniLavado) {
-                this.time(t.hIniLavado, t.hFinLavado);
+                this.time(t.hIniLavado, t.hFinLavado, t.fIniReparacion !== undefined || t.fIniReparacion !== null ? t.fIniReparacion : null,
+                  t.fIniReparacion !== undefined || t.fIniReparacion !== null ? t.fIniReparacion : null);
               }
             });
             this.dataSource = new MatTableDataSource(maniobras.maniobras);
@@ -756,7 +769,7 @@ export class ReportesComponent implements OnInit {
     this.ManiobrasExcel = [];
     datos.forEach(m => {
       let resultado = '';
-      resultado = this.time(m.hIniLavado, m.hFinLavado);
+      resultado = this.time(m.hIniLavado, m.hFinLavado, null, null);
       const maniobra = {
         Contenedor: m.contenedor,
         Tipo: m.tipo,
@@ -843,14 +856,14 @@ export class ReportesComponent implements OnInit {
 
 
       const maniobra = {
-        Nombre_Buque:           m.viaje &&
-        m.viaje !== undefined &&
-        m.viaje.buque &&
-        m.viaje.buque &&
-        m.viaje.buque !== undefined &&
-        m.viaje.buque.nombre !== ''
-        ? m.viaje.buque.nombre
-        : '' && m.viaje.buque.nombre,
+        Nombre_Buque: m.viaje &&
+          m.viaje !== undefined &&
+          m.viaje.buque &&
+          m.viaje.buque &&
+          m.viaje.buque !== undefined &&
+          m.viaje.buque.nombre !== ''
+          ? m.viaje.buque.nombre
+          : '' && m.viaje.buque.nombre,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
         Fecha_Alta: m.fAlta !== undefined ? m.fLlegada.substring(0, 10) : '',
@@ -877,13 +890,16 @@ export class ReportesComponent implements OnInit {
   /* #region  EXCEL REPARACIONES */
   CreaDatosExcelReparaciones(datos) {
     this.ManiobrasExcel = [];
+    let resultado = '';
     datos.forEach(m => {
-      let resultado = '';
-      resultado = this.time(m.hIniReparacion, m.hFinReparacion);
-
+      if (m.fFinReparacion && m.fIniReparacion !== undefined || m.fFinReparacion && m.fIniReparacion !== null) {
+        resultado = this.time(m.hIniReparacion, m.hFinReparacion, m.fIniReparacion, m.fFinReparacion);
+      } else {
+        resultado = this.time(m.hIniReparacion, m.hFinReparacion, null, null);
+      }
 
       const maniobra = {
-        Nombre_Buque: m.viaje.buque && m.viaje.buque !== undefined && m.viaje.buque.nombre !== '' ? m.viaje.buque.nombre : '' && m.viaje.buque.nombre,
+        Nombre_Buque: m.viaje && m.viaje.buque !== undefined && m.viaje.buque.nombre !== '' ? m.viaje.buque.nombre : '' && m.viaje.buque.nombre,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
         Fecha_Inicio_Reparacion: m.fIniReparacion !== undefined ? m.fLlegada.substring(0, 10) : '',
