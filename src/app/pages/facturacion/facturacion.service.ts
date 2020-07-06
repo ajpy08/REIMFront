@@ -31,12 +31,14 @@ export class FacturacionService {
   /* #region  CFDIS */
 
   getCFDIS(): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/';
+    let url = URL_SERVICIOS + '/cfdis/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getCFDIS_T_sT(timbre: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/T_ST/' + timbre;
+    let url = URL_SERVICIOS + '/cfdis/T_ST/' + timbre;
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (timbre) {
       const timbres = timbre.toString();
@@ -46,11 +48,13 @@ export class FacturacionService {
   }
 
   getCFDI(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    let url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
   }
   getCFDIPDF(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    let url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -109,7 +113,8 @@ export class FacturacionService {
     if (info === '') {
       info = '@';
     }
-    const url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '&' + direccion + '&' + info + '/';
+    let url = URL_SERVICIOS + '/cfdis/timbrado/' + nombre + '&' + id + '&' + direccion + '&' + info + '/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -130,7 +135,8 @@ export class FacturacionService {
     } else {
       selloMod = sello;
     }
-    const url = URL_SERVICIOS + '/cfdis/code/' + uuid + '&' + rfc_emisor + '&' + rfc_receptor + '&' + total + '&' + selloMod + '/';
+    let url = URL_SERVICIOS + '/cfdis/code/' + uuid + '&' + rfc_emisor + '&' + rfc_receptor + '&' + total + '&' + selloMod + '/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -138,12 +144,14 @@ export class FacturacionService {
 
   /* #region  CLAVE PRODUCTOS SERVICIO */
   getClaveproductosServicio(): Observable<any> {
-    const url = URL_SERVICIOS + '/clave-productos-servicios';
+    let url = URL_SERVICIOS + '/clave-productos-servicios';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getClaveProductoServicio(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/clave-productos-servicios/clave-producto-servicio/' + id;
+    let url = URL_SERVICIOS + '/clave-productos-servicios/clave-producto-servicio/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.ClaveProServicio));
   }
 
@@ -181,12 +189,14 @@ export class FacturacionService {
 
   /* #region  Productos o Servicios */
   getProductosServicios(): Observable<any> {
-    const url = URL_SERVICIOS + '/productos-servicios';
+    let url = URL_SERVICIOS + '/productos-servicios';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getProductoServicio(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/productos-servicios/producto-servicio/' + id;
+    let url = URL_SERVICIOS + '/productos-servicios/producto-servicio/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.producto_servicio));
   }
 
@@ -217,6 +227,7 @@ export class FacturacionService {
 
   cancelacionCFDI(rfcEmisor: string, uuid: string, total: any): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cancelacionCFDI/' + rfcEmisor + '&' + uuid +  '&' + total + '/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -233,22 +244,26 @@ export class FacturacionService {
   /* #endregion */
 
   creditos(creditos: string): Observable<any> {
-  const url = URL_SERVICIOS + '/cfdis/creditos/' + creditos;
+  let url = URL_SERVICIOS + '/cfdis/creditos/' + creditos;
+  url += '?token=' + this._usuarioService.token;
   return this.http.put(url, creditos);
   }
   getCreditos(id: string): Observable<any> {
-  const url = URL_SERVICIOS + '/cfdis/getCreditos/' + id;
+  let url = URL_SERVICIOS + '/cfdis/getCreditos/' + id;
+  url += '?token=' + this._usuarioService.token;
   return this.http.get(url);
   }
 
   /* #region  CLAVE UNIDAD */
   getClaveUnidades(): Observable<any> {
-    const url = URL_SERVICIOS + '/clave-unidades';
+    let url = URL_SERVICIOS + '/clave-unidades';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getClaveUnidad(id: string) {
-    const url = URL_SERVICIOS + '/clave-unidades/clave-unidad/' + id;
+    let url = URL_SERVICIOS + '/clave-unidades/clave-unidad/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.clave_unidad));
   }
   guardarClaveUnidad(clave_unidad: ClaveUnidadServicio): Observable<any> {
@@ -289,60 +304,69 @@ export class FacturacionService {
 
   /* #region  Claves SAT */
   getClavesSAT(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/clavesSAT';
+    let url = URL_SERVICIOS + '/facturacion/clavesSAT';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   /* #region  Claves Unidad */
   getClavesUnidad(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/clavesUnidad';
+    let url = URL_SERVICIOS + '/facturacion/clavesUnidad';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   /* #region  Series */
   getSeries(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/series';
+    let url = URL_SERVICIOS + '/facturacion/series';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getSerieXSerie(serie: string): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/series/' + serie;
+    let url = URL_SERVICIOS + '/facturacion/series/' + serie;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.serie));
   }
   /* #endregion */
 
   /* #region  Formas de Pago */
   getFormasPago(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/formas-pago';
+    let url = URL_SERVICIOS + '/facturacion/formas-pago';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   /* #region  Metodos de Pago */
   getMetodosPago(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/metodos-pago';
+    let url = URL_SERVICIOS + '/facturacion/metodos-pago';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   /* #region  Tipos de Comprobante */
   getTiposComprobante(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/tipos-comprobante';
+    let url = URL_SERVICIOS + '/facturacion/tipos-comprobante';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   /* #region Usos de CFDI */
   getUsosCFDI(): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/usos-CFDI';
+    let url = URL_SERVICIOS + '/facturacion/usos-CFDI';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
   /* #endregion */
 
   deletManiobrasConceptos(cfdi: string, maniobra: string, concepto: string): Observable<any> {
-    const url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra + '&' + concepto;
+    let url = URL_SERVICIOS + '/facturacion/deleteConceptoManiobra/' + cfdi + '&' + maniobra + '&' + concepto;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 

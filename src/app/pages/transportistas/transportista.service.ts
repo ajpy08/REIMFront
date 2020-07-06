@@ -27,12 +27,14 @@ export class TransportistaService {
 
 
   getTransportistas(tf: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/transportistas/' + tf;
+    let url = URL_SERVICIOS + '/transportistas/' + tf;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getTransportista(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/transportistas/transportista/' + id;
+    let url = URL_SERVICIOS + '/transportistas/transportista/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.transportista));
   }
@@ -156,7 +158,7 @@ export class TransportistaService {
   // ! ESTE METODO FUNCIONA PARA DESCARTIVAR CAMIONES O OPERADORES QUE TENGA EL TRANPORTISTA
   desactivar(id: string, CO: string): Observable<any> {
     let url = URL_SERVICIOS + '/transportistas/desactivar/' + id + '&' + CO;
-    // url += '?token=' + this._usuarioService.token;
+    url += '?token=' + this._usuarioService.token;
     return this.http.put(url, CO).pipe(map((resp: any) => {
       return resp;
     }));

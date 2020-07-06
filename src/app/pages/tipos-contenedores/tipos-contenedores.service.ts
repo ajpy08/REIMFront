@@ -14,19 +14,22 @@ export class TiposContenedoresService {
   ) { }
 
   getTiposContenedor(): Observable<any> {
-    const url = URL_SERVICIOS + '/tipos_contenedores/';
+    let url = URL_SERVICIOS + '/tipos_contenedores/';
+    url += '?token=' + this.usuarioService.token;
     return this.http.get(url);
   }
 
   getTipoContenedor(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/tipos_contenedores/tipoContenedor/' + id;
+    url += '?token=' + this.usuarioService.token;
         return this.http.get(url)
     .pipe(map((resp:any) => resp.tipoContenedor));
   }
 
   getTipoContenedorXTipo(tipo: string): Observable<any> {
     tipo = encodeURIComponent(tipo);
-    const url = URL_SERVICIOS + '/tipos_contenedores/tipoCont/' + tipo;
+    let url = URL_SERVICIOS + '/tipos_contenedores/tipoCont/' + tipo;
+    url += '?token=' + this.usuarioService.token;
         return this.http.get(url)
     .pipe(map((resp:any) => resp.tipo));
   }

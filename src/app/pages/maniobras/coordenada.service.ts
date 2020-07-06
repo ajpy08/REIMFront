@@ -8,7 +8,7 @@ import swal from 'sweetalert';
 import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root' 
+  providedIn: 'root'
 })
 export class CoordenadaService {
 
@@ -16,7 +16,8 @@ export class CoordenadaService {
     private usuarioService: UsuarioService) { }
 
   getCoordenadas(bahia?: string, tipo?: string, activo?: boolean, conManiobra?: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/coordenadas/';
+    let url = URL_SERVICIOS + '/coordenadas/';
+    url += '?token=' + this.usuarioService.token;
     let params = new HttpParams();
     if (bahia) {
       params = params.append('bahia', bahia);
@@ -30,26 +31,27 @@ export class CoordenadaService {
     if (conManiobra) {
       params = params.append('conManiobra', conManiobra.toString());
     }
-    
+
     return this.http.get(url, { params: params });
   }
   bahia_posicion
   getCoordenadasDisponibles(maniobra?: string): Observable<any> {
-    const url = URL_SERVICIOS + '/coordenadas/disponibles/?maniobra=' + maniobra;       
+    let url = URL_SERVICIOS + '/coordenadas/disponibles/?maniobra=' + maniobra;
     return this.http.get(url);
   }
 
   getCoordenada(bahia?: string, posicion?: string): Observable<any> {
-    const url = URL_SERVICIOS + '/coordenadas/coordenada/bahia_posicion';
+    let  url = URL_SERVICIOS + '/coordenadas/coordenada/bahia_posicion';
+    url += '?token=' + this.usuarioService.token;
     let params = new HttpParams();
     if (bahia) {
       params = params.append('bahia', bahia);
     }
-    
+
     if (posicion) {
       params = params.append('posicion', posicion.toString());
     }
-    
+
     return this.http.get(url, { params: params })
     .pipe(map( (resp: any) => resp.coordenada ));
   }
@@ -60,11 +62,11 @@ export class CoordenadaService {
   //   if (bahia) {
   //     params = params.append('bahia', bahia);
   //   }
-    
+
   //   if (posicion) {
   //     params = params.append('posicion', posicion.toString());
   //   }
-    
+
   //   return this.http.get(url, { params: params });
   // }
 

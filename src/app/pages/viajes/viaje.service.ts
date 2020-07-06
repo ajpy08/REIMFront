@@ -19,11 +19,11 @@ export class ViajeService {
     public _usuarioService: UsuarioService
   ) { }
 
-// ==========================================
-// Obtener todas los viajes, de acuerdo a los filtros solicitados.
-// las fechas deben ir en formato DD-MM-YYYY
-// TODOS los parametros son opcionales (para traer todos lo registros no mandar los parametros)
-// ==========================================
+  // ==========================================
+  // Obtener todas los viajes, de acuerdo a los filtros solicitados.
+  // las fechas deben ir en formato DD-MM-YYYY
+  // TODOS los parametros son opcionales (para traer todos lo registros no mandar los parametros)
+  // ==========================================
 
   getViajes(fIniArribo?: string, fFinArribo?: string, viaje?: string, buque?: string): Observable<any> {
     let params = new HttpParams();
@@ -31,25 +31,28 @@ export class ViajeService {
       params = params.append('finiarribo', fIniArribo);
       params = params.append('ffinarribo', fFinArribo);
     }
-    if (viaje)  {
+    if (viaje) {
       params = params.append('viaje', viaje);
     }
-    if (buque)  {
+    if (buque) {
       params = params.append('buque', buque);
     }
     // console.log(params.toString());
-    const url = URL_SERVICIOS + '/viajes';
-    return this.http.get(url, {params: params });
+    let url = URL_SERVICIOS + '/viajes';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url, { params: params });
   }
 
   getViajesA(anio: string): Observable<any> {
-    const url = URL_SERVICIOS + '/viajes/anio/' + anio;
+    let url = URL_SERVICIOS + '/viajes/anio/' + anio;
+    url += '?token=' + this._usuarioService.token;
     // console.log( url )
     return this.http.get(url);
   }
 
   getViajeXID(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/viajes/viaje/' + id;
+    let url = URL_SERVICIOS + '/viajes/viaje/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.viaje));
   }
 
@@ -71,7 +74,7 @@ export class ViajeService {
       }));
   }
 
-  actualizaViaje (viaje: Viaje): Observable<any> {
+  actualizaViaje(viaje: Viaje): Observable<any> {
     let url = URL_SERVICIOS + '/viajes';
     url += '/' + viaje._id;
     url += '?token=' + this._usuarioService.token;
@@ -95,7 +98,7 @@ export class ViajeService {
     url += '&contenedor=' + contenedor + '&tipo=' + tipo + '&peso=' + peso + '&destinatario=' + destinatario + '&naviera=' + naviera;
 
     if (patio) {
-      url += '&patio='+ patio;      
+      url += '&patio=' + patio;
     }
 
     return this.http.put(url, '')

@@ -18,11 +18,13 @@ export class ReparacionService {
 
   getReparaciones(): Observable<any> {
     let url = URL_SERVICIOS + '/reparaciones/';
-    return this.http.get(url)
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
   }
 
   getReparacion(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/reparaciones/reparacion/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.reparacion));
   }

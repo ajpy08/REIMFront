@@ -20,7 +20,8 @@ export class CamionService {
   ) { }
 
   getCamiones(act?: boolean, transportista?: string, ): Observable<any> {
-    const url = URL_SERVICIOS + '/camiones/' ;
+    let url = URL_SERVICIOS + '/camiones/' ;
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (transportista)  {
       params = params.append('transportista', transportista);
@@ -33,7 +34,8 @@ export class CamionService {
   }
 
   getCamion(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/camiones/camion/' + id;
+    let url = URL_SERVICIOS + '/camiones/camion/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.camion));
   }

@@ -31,7 +31,7 @@ export class SubirArchivoService {
       for (const item of imagenes) {
         const formData = new FormData();
         formData.append('file', item.archivo, item.nombreArchivo);
-        const url = URL_SERVICIOS + '/maniobras/maniobra/' + id + '/addimg/' + tipo + '/';
+        let url = URL_SERVICIOS + '/maniobras/maniobra/' + id + '/addimg/' + tipo + '/';
         this.http.put( url, formData, {reportProgress: true, observe: 'events'} )
         .subscribe(event => {
           if (event.type === HttpEventType.UploadProgress) {

@@ -21,12 +21,14 @@ export class NavieraService {
   ) { }
 
   getNavieras(tf: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/navieras/' + tf;
+    let url = URL_SERVICIOS + '/navieras/' + tf;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getNaviera(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/navieras/naviera/' + id;
+    let url = URL_SERVICIOS + '/navieras/naviera/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.naviera));
   }
