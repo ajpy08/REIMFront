@@ -154,7 +154,7 @@
                     <!--========Combombox Usos CFDI=========-->
                     <mat-form-field>
                       <mat-select placeholder="USOS CFDI" formControlName="usoCFDI" name="usoCFDI">
-                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI._id">
+                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI.usoCFDI">
                           {{ usoCFDI.usoCFDI + ' - ' + usoCFDI.descripcion }}
                         </mat-option>
                       </mat-select>
