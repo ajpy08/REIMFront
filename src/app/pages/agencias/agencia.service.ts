@@ -19,11 +19,13 @@ export class AgenciaService {
 
   getAgencias(tf: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/agencias/' + tf;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getAgencia(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/agencias/agencia/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.agencia));
   }

@@ -20,17 +20,20 @@ export class BuqueService {
   ) {}
 
   getBuques(tf: boolean): Observable<any> {
-    const url = URL_SERVICIOS + '/buques/' + tf;
+    let url = URL_SERVICIOS + '/buques/' + tf;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getBuqueXNaviera(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/buques/naviera/' + id;
+    let url = URL_SERVICIOS + '/buques/naviera/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getBuque(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/buques/buque/' + id;
+    let url = URL_SERVICIOS + '/buques/buque/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.buque));
   }
 

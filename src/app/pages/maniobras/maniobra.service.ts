@@ -20,23 +20,27 @@ export class ManiobraService {
   ) { }
 
   getManiobra(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   async getManiobraAsync(id: string) {
-    const url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + id;
+    url += '?token=' + this._usuarioService.token;
     return await this.http.get(url).toPromise();
   }
 
   getManiobraConIncludes(id: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/maniobra/' + id + '/includes';
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + id + '/includes';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getManiobras(cargadescarga?: string, estatus?: string, transportista?: string, contenedor?: string, viaje?: string, peso?: string,
     lavado?: boolean, reparacion?: boolean, naviera?: string, buque?: string, fIniLlegada?: string, fFinLlegada?: string, cliente?: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/';
+    let url = URL_SERVICIOS + '/maniobras/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (cargadescarga) {
       params = params.append('cargadescarga', cargadescarga);
@@ -80,7 +84,8 @@ export class ManiobraService {
 
   /* #region  REPORTES */
   getReporte(fIniLlegada?: string, fFinLlegada?: string, tipo?: string): Observable<any> {
-    const url = URL_SERVICIOS + '/reportes/lavado/';
+    let url = URL_SERVICIOS + '/reportes/lavado/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (tipo) {
       params = params.append('tipo', tipo);
@@ -94,7 +99,8 @@ export class ManiobraService {
 
   }
   getReporteR(fIniLlegada?: string, fFinLlegada?: string, tipo?: string): Observable<any> {
-    const url = URL_SERVICIOS + '/reportes/reparacion/';
+    let url = URL_SERVICIOS + '/reportes/reparacion/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (tipo) {
       params = params.append('tipo', tipo);
@@ -109,12 +115,14 @@ export class ManiobraService {
   }
 
   getXLAvar(): Observable<any> {
-    const url = URL_SERVICIOS + '/reportes/';
+    let url = URL_SERVICIOS + '/reportes/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getXReparar(): Observable<any> {
-    const url = URL_SERVICIOS + '/reportes/reparacionesPen/';
+    let url = URL_SERVICIOS + '/reportes/reparacionesPen/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -130,7 +138,8 @@ export class ManiobraService {
     lavado?: boolean,
     reparacion?: boolean
   ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/inventarioLR/';
+    let url = URL_SERVICIOS + '/maniobras/inventarioLR/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (naviera) {
       params = params.append('naviera', naviera);
@@ -172,7 +181,8 @@ export class ManiobraService {
     descargados?: boolean,
     yaLavados?: boolean
   ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/facturacion-vacios';
+    let url = URL_SERVICIOS + '/maniobras/facturacion-vacios';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (cargadescarga) {
       params = params.append('cargadescarga', cargadescarga);
@@ -223,7 +233,8 @@ export class ManiobraService {
     descargados?: boolean,
     yaLavados?: boolean
   ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/facturacion-maniobras';
+    let url = URL_SERVICIOS + '/maniobras/facturacion-maniobras';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (cargadescarga) {
       params = params.append('cargadescarga', cargadescarga);
@@ -268,7 +279,7 @@ export class ManiobraService {
     viaje: string,
     buque: string
   ): Observable<any> {
-    const url =
+    let url =
       URL_SERVICIOS +
       '/maniobras/buscaxcontenedorviaje?contenedor=' +
       contenedor +
@@ -276,21 +287,25 @@ export class ManiobraService {
       viaje +
       '&buque=' +
       buque;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobra));
   }
 
   getManiobrasXViajeImportacion(viaje: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/xviaje/' + viaje + '/importacion';
+    let url = URL_SERVICIOS + '/maniobras/xviaje/' + viaje + '/importacion';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
   getContenedoresDisponibles(): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
+    let url = URL_SERVICIOS + '/maniobras/contenedores/disponibles/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
   getManiobrasxCargar(): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/xcargar/';
+    let url = URL_SERVICIOS + '/maniobras/xcargar/';
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
 
@@ -302,7 +317,8 @@ export class ManiobraService {
     fechaLlegadaFin: string,
     LR: string
   ): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras/Lavado/Reparacion/';
+    let url = URL_SERVICIOS + '/maniobras/Lavado/Reparacion/';
+    url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (naviera) {
       params = params.append('naviera', naviera);
@@ -422,7 +438,8 @@ export class ManiobraService {
   }
 
   corrigeContenedor(maniobra: Maniobra): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobra/' + maniobra._id + '/corrige_contenedor';
+    let url = URL_SERVICIOS + '/maniobra/' + maniobra._id + '/corrige_contenedor';
+    url += '?token=' + this._usuarioService.token;
     return this.http.put(url, maniobra).pipe(
       map((resp: any) => {
         swal('Datos actualizados con éxito', '', 'success');
@@ -432,7 +449,8 @@ export class ManiobraService {
   }
 
   cargarManiobras(desde: number = 0): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobras?desde=' + desde;
+    let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(
       map((resp: any) => {
         this.totalManiobras = resp.total;
@@ -487,13 +505,13 @@ export class ManiobraService {
   }
 
   buscarManiobraFecha(fechaIncio: string, fechaFin: string): Observable<any> {
-    const url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
+    let url = URL_SERVICIOS + '/maniobra/rangofecha?fechaInicio=' + fechaIncio + '&fechaFin=' + fechaFin;
+    url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.maniobras));
   }
 
   removerFotosLavados(id: string, foto: string): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/removeimgl/' + id + '&' + foto;
-    url += '?token=' + this._usuarioService.token;
     return this.http.put(url, foto).pipe(
       map((resp: any) => {
         swal(
@@ -512,7 +530,6 @@ export class ManiobraService {
 
   removerFotosReparados(id: string, foto: string): Observable<any> {
     let url = URL_SERVICIOS + '/maniobra/removeimgr/' + id + '&' + foto;
-    url += '?token=' + this._usuarioService.token;
     return this.http.put(url, foto).pipe(
       map((resp: any) => {
         swal(
@@ -547,7 +564,7 @@ export class ManiobraService {
   }
 
   getFotos(id: string, lavado_reparacion: string): Observable<any> {
-    const url =
+    let url =
       URL_SERVICIOS +
       '/documentos/maniobra/' +
       id +
@@ -559,7 +576,7 @@ export class ManiobraService {
 
   eliminaFoto(key: string) {
     return new Promise((resolve, reject) => {
-      const url = URL_SERVICIOS + '/documentos/maniobra/eliminaFoto?key=' + key;
+      let url = URL_SERVICIOS + '/documentos/maniobra/eliminaFoto?key=' + key;
       this.http.get(url).subscribe(event => {
         resolve(true);
         // if (event.type === HttpEventType.Response) {
@@ -651,6 +668,7 @@ export class ManiobraService {
     let params = new HttpParams();
     let url = URL_SERVICIOS + '/maniobras/maniobra';
     url += '/' + maniobra._id + '/enviacorreo';
+    url += '?token=' + this._usuarioService.token;
     if (maniobra._id) {
       params = params.append('_id', maniobra._id);
     }
