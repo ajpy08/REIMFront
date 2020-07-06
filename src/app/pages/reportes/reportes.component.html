@@ -436,7 +436,7 @@
                 <ng-container matColumnDef="tiempoReparacion">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Tiempo</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    {{time(row.hIniReparacion, row.hFinReparacion)}}
+                    {{time(row.hIniReparacion, row.hFinReparacion, row.fIniReparacion, row.fFinReparacion)}}
                   </mat-cell>
                 </ng-container>
 
