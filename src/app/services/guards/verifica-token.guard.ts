@@ -79,7 +79,7 @@ export class VerificaTokenGuard implements CanActivateChild {
   logout() {
     this._usuarioService.updateStatusUser(this._usuarioService.usuario).subscribe((usuario) => {
       this._usuarioService.logout();
-      this.socket.emit('logoutuser', usuario);
+      this.socket.emit('logout-user', usuario);
     });
   }
 
