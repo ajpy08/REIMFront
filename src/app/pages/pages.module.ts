@@ -149,6 +149,7 @@ import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unida
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-facturacion.component';
+import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 
 
 @NgModule({
@@ -234,6 +235,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         ReportesComponent,
         ManiobrasTrasportistaComponent,
         PdfFacturacionComponent,
+        ImageCropperComponent
      ],
     exports: [
         DashboardComponent
@@ -269,7 +271,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
         MatListModule,
         MatBadgeModule,
         MatTooltipModule,
-        QRCodeModule,
+        QRCodeModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent ]
