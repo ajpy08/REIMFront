@@ -54,11 +54,12 @@
                 ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
               </p>
               <ng-template #notShow>
-                <img [src]="img.value | imagen:'usuario'" class="img-circle pointer">                
+                <img *ngIf="data != undefined && data != null && !data.image" [src]="img.value | imagen:'usuario'" class="img-circle pointer">                
                 <img *ngIf="data && data.image" class="img-circle pointer" [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
               </ng-template>
               <!-- <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*"
                 #fileFoto> -->
+                <br><br>
               <div>
                 <img-cropper *ngIf="data" [image]="data" [settings]="cropperSettings"></img-cropper> <br>
                 <br>

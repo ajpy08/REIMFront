@@ -5,6 +5,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Cliente } from '../../models/cliente.models';
 import swal from 'sweetalert';
 import { CropperSettings } from 'ng2-img-cropper';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +21,8 @@ export class ProfileComponent implements OnInit {
   listaEmpresas: Cliente[] = [];
   data: any;
   cropperSettings: CropperSettings;
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
+  usuarioLogueado = new Usuario;
 
   constructor(public _usuarioService: UsuarioService, private _subirArchivoService: SubirArchivoService, private fb: FormBuilder) {
 
@@ -26,17 +30,48 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.createFormGroup();
+    this.usuarioLogueado = this._usuarioService.usuario;
     this.cargarUsuario(this._usuarioService.usuario._id);
 
     this.cropperSettings = new CropperSettings();
-    this.cropperSettings.width = 100;
-    this.cropperSettings.height = 100;
-    this.cropperSettings.croppedWidth = 100;
-    this.cropperSettings.croppedHeight = 100;
+    // this.cropperSettings.width = 0.1;
+    // this.cropperSettings.height = 0.1;
+    // this.cropperSettings.croppedWidth = 0.1;
+    // this.cropperSettings.croppedHeight = 0.1;
+    // this.cropperSettings.canvasWidth = 400;
+    // this.cropperSettings.canvasHeight = 300;
+
     this.cropperSettings.canvasWidth = 400;
     this.cropperSettings.canvasHeight = 300;
+    this.cropperSettings.width = 20;
+    this.cropperSettings.height = 20;
+    this.cropperSettings.minWidth = 2;
+    this.cropperSettings.minHeight = 2;
+    this.cropperSettings.croppedWidth = 100;
+    this.cropperSettings.croppedHeight = 100;
+    this.cropperSettings.touchRadius = 20;
+    this.cropperSettings.minWithRelativeToResolution = true;
+    this.cropperSettings.noFileInput = false;
+    // this.cropperSettings.cropperDrawSettings:CropperDrawSettings - rendering options
+    // this.cropperSettings.strokeWidth:number - box/ellipsis stroke width
+    // this.cropperSettings.strokeColor:string - box/ellipsis stroke color
+
+    // this.cropperSettings.allowedFilesRegex:RegExp - (default: /.(jpe?g|png|gif)$/i) - Regex for allowed images
+    this.cropperSettings.preserveSize = false;
+    this.cropperSettings.fileType = 'image/jpeg';
+    this.cropperSettings.compressRatio = 1.0;
+    this.cropperSettings.dynamicSizing = false;
+    // this.cropperSettings.cropperClass: string - set class on canvas element;
+    // this.cropperSettings.croppingClass: string - appends class to cropper when image is set (#142);
+    // this.cropperSettings.resampleFn: Function(canvas) - function used to resample the cropped image (#136); - see example #3 from runtime sample app
+    this.cropperSettings.cropOnResize = true;
 
     this.data = {};
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('actualizar-perfil');
   }
 
   createFormGroup() {
@@ -57,8 +92,6 @@ export class ProfileComponent implements OnInit {
   get img() {
     return this.regForm.get('img');
   }
-
-
 
   get _id() {
     return this.regForm.get('_id');
@@ -91,7 +124,6 @@ export class ProfileComponent implements OnInit {
   // }
 
   subirFoto() {
-
     if (!this.data) {
       this.data = {};
     } else {
@@ -106,7 +138,7 @@ export class ProfileComponent implements OnInit {
           this.regForm.get('img').setValue(nombreArchivo);
           this.regForm.get('img').markAsDirty();
           this.fotoTemporal = true;
-          // this.data = {};
+          // this.data = undefined;
           this.guardarUsuario();
         });
     }
@@ -141,9 +173,9 @@ export class ProfileComponent implements OnInit {
       this._usuarioService.actualizaPerfil(this.regForm.value)
         .subscribe(usuario => {
           // this.fileFoto = null;
-          this.data = null;
           this.fotoTemporal = false;
           this.regForm.markAsPristine();
+          this.socket.emit('actualizarperfil', this._usuarioService.usuario);
         });
     }
   }
