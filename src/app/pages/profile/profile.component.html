@@ -34,7 +34,8 @@
                   </mat-form-field>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10" [disabled]="regForm.pristine || regForm.invalid">
+              <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+                [disabled]="regForm.pristine || regForm.invalid">
                 <i class="fa fa-save"></i>
                 Guardar
               </button>
@@ -46,16 +47,29 @@
           <mat-card>
             <div class="card-body" align="center">
               <h4 class="card-title">Foto de perfil</h4>
-              <h6 class="card-subtitle">{{this.nombre.value}}</h6>
+              <h6 class="card-subtitle">{{this.nombre.value}}</h6> <br>
               <p *ngIf="fotoTemporal; else notShow" class="text-danger">
-                <img (click)="fileFoto.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
+                <!-- <img (click)="fileFoto.click()" [src]="img.value | imagen:'temp'" class="w150 img-circle pointer"> -->
+                <img [src]="img.value | imagen:'temp'" class="w150 img-circle pointer">
+                ¡Archivo Temporal, debe guardar el registro del usuario para confirmar!
               </p>
               <ng-template #notShow>
-                <img (click)="fileFoto.click()" [src]="img.value | imagen:'usuario'" class="w150 img-circle pointer">
+                <img *ngIf="data != undefined && data != null && !data.image" [src]="img.value | imagen:'usuario'" class="img-circle pointer">                
+                <img *ngIf="data && data.image" class="img-circle pointer" [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
               </ng-template>
-              <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*" #fileFoto>
+              <!-- <input (change)="onFileSelected($event)" type="file" style="display:none" name="fileFoto" accept="image/*"
+                #fileFoto> -->
+                <br><br>
+              <div>
+                <img-cropper *ngIf="data" [image]="data" [settings]="cropperSettings"></img-cropper> <br>
+                <br>
+              </div>
               <br><br>
-              <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click(); "><i class="fa fa-file"></i> Cambiar foto</button>
+              <button class="btn btn-info waves-effect waves-light" type="button" (click)="subirFoto()">
+                <i class="fa fa-file"></i> Cambiar foto
+              </button>
+              <!-- <button class="btn btn-info waves-effect waves-light" type="button" (click)="fileFoto.click(); "><i
+                  class="fa fa-file"></i> Cambiar foto</button> -->
 
             </div>
           </mat-card>
@@ -69,7 +83,8 @@
               <h4 class="card-title">Mis Empresas</h4>
               <div class="form-group" *ngFor="let empresa of listaEmpresas">
                 <p class="form-control-static"> {{empresa.nombreComercial}} </p>
-                <button [routerLink]="['/misclientes', empresa._id ]" class="btn btn-danger"> <i class="fa fa-pencil"></i> Ver clientes</button>
+                <button [routerLink]="['/misclientes', empresa._id ]" class="btn btn-danger"> <i
+                    class="fa fa-pencil"></i> Ver clientes</button>
               </div>
             </div>
           </mat-card>

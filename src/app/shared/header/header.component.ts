@@ -299,6 +299,12 @@ export class HeaderComponent implements OnInit {
         this.usuarioService.logout2(data.data.usuario._id);
     }.bind(this));
 
+    this.socket.on('actualizar-perfil', function (data: any) {
+      if (this.usuario._id === data.data._id) {
+        this.cargarUsuario(data.data._id);
+      }
+    }.bind(this));
+
     // this.socket.on('update-papeleta', function (data: any) {
     //   if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
     //     this.notifications = [];
@@ -339,6 +345,12 @@ export class HeaderComponent implements OnInit {
     //   }
     // }.bind(this));
 
+  }
+
+  cargarUsuario(id: string) {
+    this._usuarioService.getUsuario(id).subscribe(usuario => {
+      this.usuario = usuario;
+    });
   }
 
   buscar(termino: string) {
