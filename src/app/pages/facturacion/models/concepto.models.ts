@@ -17,6 +17,7 @@ export class Concepto {
         public maniobras?: any[],
         public impuestosRetenidos?: number,
         public impuestosTrasladados?: number,
+        public cfdis?: any[],
         public _id?: string
     ) {}
 }

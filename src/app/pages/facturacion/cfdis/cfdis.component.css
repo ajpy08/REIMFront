@@ -34,3 +34,30 @@ color: black;
     color: red;
     font-weight: bold;
 }
+
+.botonN{
+    margin-top: -44px;
+    width: 10px;
+    position: absolute;
+    margin-left: 148px;
+}
+
+.botonNotas {
+ height: 34px;
+ background: white;
+}
+
+.botonNotas:hover {
+    color: white;
+    background-color: #D62B06;
+    
+}
+
+
+.fa-credit-card {
+    font-size: 20px;
+}
+.fa-credit-card:hover {
+    font-size: 20px;
+    color: white;
+}

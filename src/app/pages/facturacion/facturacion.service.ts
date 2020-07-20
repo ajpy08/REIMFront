@@ -370,4 +370,11 @@ export class FacturacionService {
     return this.http.get(url);
   }
 
+  // NOTAS DE CREDITO //
+  getTipoRelacion(): Observable<any> {
+    let url = URL_SERVICIOS + '/notas/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
 }

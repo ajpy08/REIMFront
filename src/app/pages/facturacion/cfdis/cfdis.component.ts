@@ -7,6 +7,7 @@ import { PdfFacturacionComponent } from 'src/app/pages/facturacion/pdf-facturaci
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 import { Usuario } from '../../usuarios/usuario.model';
+import { NotasDeCreditoComponent } from '../notas-de-credito/notas-de-credito.component';
 declare var swal: any;
 @Component({
   selector: 'app-cfdis',
@@ -134,11 +135,11 @@ export class CFDISComponent implements OnInit {
         title: 'CREDITOS TIMBRE',
         icon: 'info',
         content: 'input',
-        loseOnConfirm: false, 
+        loseOnConfirm: false,
         closeOnCancel: false,
         allowOutsideClick: false
       }).then((credito) => {
-        if(credito !== null) {
+        if (credito !== null) {
           this.facturacionService.creditos(credito).subscribe((res) => {
             this.creditosTimbre = res.contador;
             this.agregarCreditos('B');
@@ -166,6 +167,23 @@ export class CFDISComponent implements OnInit {
       });
 
       dialogPDF.afterClosed().subscribe(result => {
+
+      });
+    });
+  }
+
+  notas(): void {
+    this.facturacionService.getCFDIS().subscribe(res => {
+      const cfdis = res;
+      const dialogNotas = this.dialog.open(NotasDeCreditoComponent, {
+        width: '950px',
+        height: '800px',
+        data: { data: cfdis },
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
+        panelClass: 'filter.popup'
+      });
+      dialogNotas.afterClosed().subscribe(result => {
 
       });
     });

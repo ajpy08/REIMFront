@@ -96,6 +96,8 @@ export class UsuarioService {
     localStorage.removeItem('L/R');
     localStorage.removeItem('TiemposTab');
     localStorage.removeItem('LR');
+    localStorage.removeItem('cfdis');
+    localStorage.removeItem('IE');
     localStorage.removeItem('urlMain');
     this.router.navigate(['/login']);
   }

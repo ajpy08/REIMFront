@@ -1,0 +1,141 @@
+<div class="linea">
+  <hr class="lineahr">
+  <div class="botonCerrar">
+    <div class="float-right">
+      <button (click)="cerrar()" class="cerrarB">
+        <span><i class="fa fa-times" aria-hidden="true"></i></span>
+      </button>
+    </div>
+    <div class="float-left">
+      <h2 class="title">Notas de Credito</h2>
+    </div>
+  </div>
+</div>
+<div [hidden]="this.okTipoRelacion === true">
+  <mat-form-field appearance="fill">
+    <mat-select placeholder="Tipo Relación" (selectionChange)="ObtenerTabla( $event.value )">
+      <mat-option *ngFor="let tipo of this.tipoRelacion" [value]="tipo">
+        {{tipo.clave}} - {{tipo.descripcion}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="tipoRelacion" *ngIf="this.okTipoRelacion === true">
+  Tipo Relación: {{this.getTipoRelacion}}
+  <button matTooltip='Editar Tipo Relación' (click)="loaderSelectTipoRelacion()" type="button" class="loaderTipo"> <i class="fa fa-pencil" aria-hidden="true"></i> </button>
+</div>
+<div [hidden]="this.okTipoRelacion === false">
+  <div class="filtro">
+    <div class="row">
+      <mat-form-field>
+        <input matInput (keyup)="filterCFDIS($event.target.value)" placeholder="Escriba algo para filtrar">
+      </mat-form-field>
+      <!-- <div class="float-right">
+        <button matTooltip="Buscar Folio" (keyup)="applyFilterReparaciones(this.folioAgregar)" class="buscar">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+      </div> -->
+    </div>
+  </div>
+  <div class="float-right">
+    <div class="facturar">
+      <button [disabled]="this.totalAfacturar <= 0" class="btn btn-primary" (click)="facturar()"
+        matBadge="{{this.totalAfacturar}}" matBadgePosition="after" matBadgeColor="accent"><i class="fa fa-dollar-sign"
+          aria-hidden="true"></i> Facturar</button>
+    </div>
+  </div>
+  <div class="float-right">
+    <div class="cfdis">
+      <button [disabled]="this.totalAfacturar == 0" matTooltip="CFDIS Relacionados" class="info btn btn-primary"
+        (click)="cfdiAgregados('A')">
+        <i class="fa fa-info" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div class="tablet">
+    <table mat-table class="table table-bordered" #table [dataSource]="dataSourcesCfdis" matSort>
+
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggleCfdis() : null"
+            [checked]="cfdisNotas.hasValue() && isAllSelectedCfdis()"
+            [indeterminate]="cfdisNotas.hasValue() && !isAllSelectedCfdis()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? cfdisNotas.toggle(row) : null"
+            [checked]="cfdisNotas.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="serie">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Serie</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.serie}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="folio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="uuid">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Uuid</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.uuid}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.nombre}} </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="5" [showFirstLastButtons]>
+  </mat-paginator>
+</div>
+
+<div *ngIf="mostrarCFDI === true">
+  <div class="fondo">
+    <div class="tablaT">
+      <div class="botonCerrart">
+        <div class="float-right">
+          <button (click)="cfdiAgregados('C')" class="cerrarT">
+            <span><i class="fa fa-times" aria-hidden="true"></i></span>
+          </button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Serie</th>
+              <th scope="col">Folio </th>
+              <th scope="col">Uuid</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of this.cfdisFacturar; let i = index;">
+            <th scope="row">{{i+1}}</th>
+            <td>{{item.serie}}</td>
+            <td>{{item.folio}}</td>
+            <td>{{item.uuid}}</td>
+            <td>
+              <button (click)="removeContenedor( i )" class="btn btn-danger">
+                <i class="fas fa-trash"></i>
+              </button>
+
+            </td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button mat-mini-fab *ngIf="this.cfdisNotas.selected.length > 0  && this.mostrarCFDI === false && this.okTipoRelacion === true" (click)="validarCfdi(this.cfdisNotas.selected)"
+  class="float btn">
+  <i class="fa fa-plus my-float"></i>
+</button>
