@@ -10,7 +10,7 @@
 
 .example-header2 {
     min-height: 64px;
-    width: 85%;
+    width: 97%;
     padding: 8px 24px 0;
 }
 
@@ -606,4 +606,8 @@ label {
 }
 .space-grey.mat-select-panel {
     background: rgba(101,115,126, 0.5);
+  }
+
+  .valorUnitario {
+      width: auto;
   }

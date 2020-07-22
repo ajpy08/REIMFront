@@ -20,6 +20,8 @@ export class CFDISComponent implements OnInit {
   credit = false;
   uuid = false;
   dis;
+  activo = false;
+  acttrue = false;
   serieFolio = '';
   usuarioLogueado: Usuario;
   totalRegistros = 0;
@@ -51,15 +53,15 @@ export class CFDISComponent implements OnInit {
   ngOnInit() {
     this.agregarCreditos('B');
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarCFDIS();
+    this.filtrado(this.activo);
     this.socket.on('new-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
     }.bind(this));
     this.socket.on('update-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
     }.bind(this));
     this.socket.on('delete-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
     }.bind(this));
 
     this.socket.on('timbrado-cfdi', function (data: any) {
@@ -67,10 +69,18 @@ export class CFDISComponent implements OnInit {
       this.serieFolio = data.data.serieFolio;
       this.dis = data.data.id;
       if (this.ok === undefined || this.ok === false) {
-        this.cargarCFDIS();
+        this.filtrado(this.activo);
         this.agregarCreditos('B');
       }
     }.bind(this));
+  }
+
+  filtrado(bool: Boolean) {
+    if (bool === false) {
+      this.cargarCFDIS('A');
+    } else {
+      this.cargarCFDIS('N');
+    }
   }
 
   applyFilter(filterValue: string) {
@@ -89,9 +99,9 @@ export class CFDISComponent implements OnInit {
     }
   }
 
-  cargarCFDIS() {
+  cargarCFDIS(serie) {
     this.cargando = true;
-    this.facturacionService.getCFDIS().subscribe(cfdis => {
+    this.facturacionService.getCFDIS(serie).subscribe(cfdis => {
       this.dataSource = new MatTableDataSource(cfdis.cfdis);
       if (cfdis.cfdis.length === 0) {
         this.tablaCargar = true;
@@ -121,7 +131,13 @@ export class CFDISComponent implements OnInit {
     }).then(borrado => {
       if (borrado) {
         this.facturacionService.borrarCFDI(cfdis._id).subscribe((res) => {
-          this.cargarCFDIS();
+          if (cfdis.serie === 'N') {
+            this.filtrado(true);
+            this.activo = true;
+          } else {
+            this.filtrado(false);
+            this.activo = false;
+          }
           this.socket.emit('deletecfdi', cfdis);
           swal('Correcto', ' Se ha borrado el CFDI ' + cfdis.serie + '-' + cfdis.folio, 'success');
         });
@@ -136,8 +152,10 @@ export class CFDISComponent implements OnInit {
         icon: 'info',
         content: 'input',
         loseOnConfirm: false,
-        closeOnCancel: false,
-        allowOutsideClick: false
+        closeOnCancel: true,
+        allowOutsideClick: false,
+        buttons: true,
+        dangerMode: true
       }).then((credito) => {
         if (credito !== null) {
           this.facturacionService.creditos(credito).subscribe((res) => {
@@ -173,7 +191,7 @@ export class CFDISComponent implements OnInit {
   }
 
   notas(): void {
-    this.facturacionService.getCFDIS().subscribe(res => {
+    this.facturacionService.getCFDIS('A').subscribe(res => {
       const cfdis = res;
       const dialogNotas = this.dialog.open(NotasDeCreditoComponent, {
         width: '950px',

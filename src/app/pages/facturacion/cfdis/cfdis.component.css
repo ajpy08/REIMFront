@@ -1,6 +1,9 @@
 .alertaTimbre {
     width: 100px;
 }
+*:focus {
+    outline: none;
+}
 
 .alert-danger {
     width: 281px;
@@ -36,10 +39,10 @@ color: black;
 }
 
 .botonN{
-    margin-top: -44px;
+    margin-top: -77px;
     width: 10px;
     position: absolute;
-    margin-left: 148px;
+    margin-left: 242px;;
 }
 
 .botonNotas {
@@ -47,10 +50,16 @@ color: black;
  background: white;
 }
 
+
 .botonNotas:hover {
     color: white;
-    background-color: #D62B06;
-    
+    background-color: #D62B06;   
+}
+.botonNotas:active {
+    border: none;
+}
+.botonNotas:focus {
+    outline: none;
 }
 
 

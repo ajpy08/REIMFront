@@ -16,7 +16,7 @@
 <div class="row animated fadeIn">
   <div class="col-sm-12">
     <div class="card card-body">
-      <form [formGroup]="regForm" (ngSubmit)="guardar()" novalidate>
+      <form [formGroup]="regForm" (ngSubmit)="guardarNotas()" novalidate>
         <div class="row">
           <div class="my-container">
             <div class="col-md-3">
@@ -219,7 +219,15 @@
                     <strong> 3.&nbsp;&nbsp;CONCEPTOS </strong>
                   </div>
                 </div>
+
                 <div class="table-resposive">
+                  <!-- <mat-checkbox [(ngModel)]="agrupado" [ngModelOptions]="{standalone: true}"
+                    (change)="agruparDesagruparConcepto($event.checked)" matTooltip="Agrupar/Desagrupar Concepto">
+                    <a *ngIf="agrupado;else desagrupar">Agrupado</a>
+                    <ng-template #desagrupar>
+                      <a>Desagrupado</a>
+                    </ng-template>
+                  </mat-checkbox> -->
                   <table class="table table-hover">
                     <thead>
                       <tr>
@@ -246,10 +254,15 @@
                           {{item.get('cantidad').value}}
                         </td>
                         <td>
-                          {{item.get('valorUnitario').value}}
+                          <div class="col-md-6">
+                            <mat-form-field>
+                              <input matInput [value]="item.get('valorUnitario').value" formControlName="valorUnitario"
+                                type="number" (blur)="recalcularValor(item.value)" style="text-align: center;">
+                            </mat-form-field>
+                          </div>
                         </td>
                         <td>
-                          {{item.get('impuestos').value}}
+                          {{this.round(item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value, 2)}}
                         </td>
                         <td>
                           {{item.get('descuento').value}}
@@ -293,13 +306,6 @@
                         <mat-label><b>TOTAL DE IMPUESTOS TRASLADADOS</b></mat-label>
                         <input matInput class="total" formControlName="totalImpuestosTrasladados" type="text"
                           [value]="regForm.get('totalImpuestosTrasladados').value">
-                      </mat-form-field>
-                    </div>
-                    <div class="col-md-8 " *ngIf="regForm.get('totalDescuentos').value > 0">
-                      <mat-form-field>
-                        <mat-label><b>TOTAL DESCUENTO</b></mat-label>
-                        <input matInput class="total" formControlName="totalDescuentos" type="text"
-                          [value]="regForm.get('totalDescuentos').value">
                       </mat-form-field>
                     </div>
                     <div class="col-md-8">

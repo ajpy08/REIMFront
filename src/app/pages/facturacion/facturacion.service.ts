@@ -1,11 +1,12 @@
 import { CFDI } from './models/cfdi.models';
+import {NOTAS } from './models/notas.models';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
 import { UsuarioService } from '../usuarios/usuario.service';
 import { ProductoServicio } from './models/producto-servicio.models';
 import { ClaveProductosServicio } from './clave-productos-servicios/clave-producto.servicio.models';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.models';
@@ -30,8 +31,8 @@ export class FacturacionService {
 
   /* #region  CFDIS */
 
-  getCFDIS(): Observable<any> {
-    let url = URL_SERVICIOS + '/cfdis/';
+  getCFDIS(serie: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/' + serie + '/';
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
@@ -376,5 +377,26 @@ export class FacturacionService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
+  guardarNotas(notas: NOTAS): Observable<any> {
+    let url = URL_SERVICIOS + '/notas/notas/';
+    if (notas._id) {
+      url += notas._id;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, notas).pipe(map((resp: any) => {
+        swal('Nota de Credito Actualizada', notas.serie + ' - ' + notas.folio, 'success');
+        return resp.nostas;
+      }));
+    } else {
+      url += '?token=' + this._usuarioService.token;
+      return this.http.post(url, notas).pipe(map((resp:any) => {
+        swal('Nota de Credito Creada', notas.serie + ' - ' + notas.folio, 'success');
+        return resp.nota;
+      }));
+    }
+  }
+
+
+  // FIN NOTAS DE CREDITO //
+
 
 }

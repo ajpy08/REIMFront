@@ -24,10 +24,19 @@
         </div> -->
 
 
-        <h3 class="card-title">CFDIS: ( <small>{{totalRegistros}}</small> )</h3>
+        <div *ngIf="this.activo === false">
+          <h3 class="card-title">CFDIS: ( <small>{{totalRegistros}}</small> )</h3>
+        </div>
+        <div *ngIf="this.activo === true">
+          <h3 class="card-title">NOTAS DE CREDITO: ( <small>{{totalRegistros}}</small> )</h3>
+        </div>
+        <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" #bool (value)="bool.checked" 
+          (change)="filtrado(bool.checked)">NOTAS DE CREDITO</mat-checkbox>
+        </div>
 
           <div class="botonN">
-            <button matTooltip="Nuevo Notas de Credito" class="botonNotas btn m-r-5" (click)="notas()">
+            <button matTooltip="Nuevo Notas de Credito" class="botonNotas btn" (click)="notas()">
               <i class="fa fa-credit-card" aria-hidden="true"></i>
             </button>
           </div>

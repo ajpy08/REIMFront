@@ -113,7 +113,7 @@ export class NotasDeCreditoComponent implements OnInit {
     this.okTipoRelacion = true;
     if (this.dataSourcesCfdis === undefined) {
       this.data.data.cfdis.forEach((c, i) => {
-        if (c.uuid !== undefined) {
+        if (c.uuid !== undefined && c.serie === 'A') {
           this.DS.push(this.data.data.cfdis[i]);
         }
       });

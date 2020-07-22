@@ -1,8 +1,6 @@
 import { Impuesto } from 'src/app/pages/facturacion/models/impuesto.models';
-import { Maniobra } from '../../../models/maniobra.models';
-import { ProductoServicio } from './producto-servicio.models';
 
-export class Concepto {
+export class NotasConcepto {
     constructor(
         public cantidad?: number,
         public claveProdServ?: string,
@@ -14,7 +12,7 @@ export class Concepto {
         public impuestos?: Impuesto[],
         public unidad?: string,
         public descuento?: number,
-        public maniobras?: any[],
+        public cfdis?: any[],
         public impuestosRetenidos?: number,
         public impuestosTrasladados?: number,
         public _id?: string
