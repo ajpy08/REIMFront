@@ -203,7 +203,7 @@
                       <i class="fa fa-edit"></i>
                     </button>
                     <button matTooltip="Ver Solicitud" *ngIf="row.estatus==='APROBADA'"
-                      [routerLink]="['/solicitudes/solicitud_descarga', row._id ]" class="btn btn-primary m-r-5">
+                      [routerLink]="['/solicitudes/solicitud_carga', row._id ]" class="btn btn-primary m-r-5">
                       <i class="fa fa-eye"></i>
                     </button>
                     <button matTooltip="Eliminar Solicitud" *ngIf="(row.estatus==='NA')"
