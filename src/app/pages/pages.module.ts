@@ -153,6 +153,8 @@ import { NotasDeCreditoComponent } from './facturacion/notas-de-credito/notas-de
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
 import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/pdf-notas-de-credito.component';
 import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
+import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
+import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago/complementos-pago.component';
 
 
 @NgModule({
@@ -238,6 +240,8 @@ import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
         ReportesComponent,
         ManiobrasTrasportistaComponent,
         PdfFacturacionComponent,
+        FacturasPpdComponent,
+        ComplementosPagoComponent,
         NotasDeCreditoComponent,
         NotaDeCreditoComponent,
         PdfNotasDeCreditoComponent,
