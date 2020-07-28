@@ -150,6 +150,8 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-facturacion.component';
 import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
+import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
+import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago/complementos-pago.component';
 
 
 @NgModule({
@@ -235,7 +237,9 @@ import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
         ReportesComponent,
         ManiobrasTrasportistaComponent,
         PdfFacturacionComponent,
-        ImageCropperComponent
+        ImageCropperComponent,
+        FacturasPpdComponent,
+        ComplementosPagoComponent
      ],
     exports: [
         DashboardComponent
