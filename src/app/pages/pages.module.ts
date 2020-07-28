@@ -241,9 +241,7 @@ import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
         NotasDeCreditoComponent,
         NotaDeCreditoComponent,
         PdfNotasDeCreditoComponent,
-        ImageCropperComponent
-    ],
-        
+        ImageCropperComponent,
      ],
     exports: [
         DashboardComponent
