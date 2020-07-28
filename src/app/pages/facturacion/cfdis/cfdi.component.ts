@@ -458,6 +458,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
             impuestosRetenidos,
             impuestosTrasladados,
             concepto._id)));
+          console.log(this.conceptos);
         } else {
           this.subtotal.setValue(this.truncateDecimals(subTotal, 4));
           this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
@@ -473,7 +474,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
       this.totalDescuentos.setValue(this.round(totalDescuentos, 2));
       this.total.setValue(this.round(this.subtotal.value - this.totalDescuentos.value +
-        this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+      this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
     }
   }
 
