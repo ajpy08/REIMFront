@@ -70,10 +70,10 @@ export class CamionesComponent implements OnInit {
 
   filtrado(bool: boolean) {
     if (bool === false) {
-      bool = true;
-        this.cargarCamiones(bool);
-    } else if (bool === true) {
       bool = false;
+      this.cargarCamiones(bool);
+    } else if (bool === true) {
+      bool = true;
       this.cargarCamiones(bool);
     }
 
@@ -90,7 +90,7 @@ export class CamionesComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
-      if (this.dataSource.filteredData.length === 0 ) {
+      if (this.dataSource.filteredData.length === 0) {
         this.tablaCargar = true;
       } else {
         this.tablaCargar = false;
@@ -165,15 +165,15 @@ export class CamionesComponent implements OnInit {
         }, (error) => {
           swal({
             title: 'No se permite eliminar el camion',
-            text: 'El camion ' +  camion.noEconomico + ' cuenta con historial de registro en el sistema. ' +
-             ' La acción permitida es DESACTIVAR,  ¿ DESEA CONTINUAR ?',
-             icon: 'warning',
-             buttons: true,
-             dangerMode: true
+            text: 'El camion ' + camion.noEconomico + ' cuenta con historial de registro en el sistema. ' +
+              ' La acción permitida es DESACTIVAR,  ¿ DESEA CONTINUAR ?',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
           }).then(borrado => {
             if (borrado) {
               this._camionService.habilitaDeshabilitaCamion(camion, false).subscribe(() => {
-                swal ('Correcto', 'Cambio de estado del Camion con placa ' + camion.placa + 'realizado con exito', 'success');
+                swal('Correcto', 'Cambio de estado del Camion con placa ' + camion.placa + 'realizado con exito', 'success');
                 this.filtrado(this.acttrue);
               });
             }
