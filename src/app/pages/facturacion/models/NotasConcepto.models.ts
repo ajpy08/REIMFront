@@ -1,4 +1,5 @@
 import { Impuesto } from 'src/app/pages/facturacion/models/impuesto.models';
+import { cfdisNotas } from 'src/app/pages/facturacion/models/cfdisNota.models';
 
 export class NotasConcepto {
     constructor(
@@ -12,7 +13,7 @@ export class NotasConcepto {
         public impuestos?: Impuesto[],
         public unidad?: string,
         public descuento?: number,
-        public cfdis?: any[],
+        public cfdis?: cfdisNotas[],
         public impuestosRetenidos?: number,
         public impuestosTrasladados?: number,
         public _id?: string

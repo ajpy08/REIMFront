@@ -151,6 +151,7 @@ import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-re
 import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-facturacion.component';
 import { NotasDeCreditoComponent } from './facturacion/notas-de-credito/notas-de-credito.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/pdf-notas-de-credito.component';
 
 
 @NgModule({
@@ -238,6 +239,7 @@ import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-c
         PdfFacturacionComponent,
         NotasDeCreditoComponent,
         NotaDeCreditoComponent,
+        PdfNotasDeCreditoComponent,
     ],
     exports: [
         DashboardComponent
@@ -277,6 +279,7 @@ import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-c
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
+        PdfNotasDeCreditoComponent,
         NotasDeCreditoComponent]
 })
 

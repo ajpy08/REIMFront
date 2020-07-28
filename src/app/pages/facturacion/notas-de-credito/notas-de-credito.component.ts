@@ -57,12 +57,12 @@ export class NotasDeCreditoComponent implements OnInit {
       this.getTabla(getLocalStorageTipo);
     }
 
-         this.facturacionService.getProductosServicios().subscribe(productos => {
-        let pos = 0;
-        this.productos = productos.productos_servicios;
-        pos = this.productos.findIndex(p => p.codigo === 'TLR18');
-        localStorage.setItem('prodSer',  JSON.stringify(productos.productos_servicios[pos]));
-      });
+    this.facturacionService.getProductosServicios().subscribe(productos => {
+      let pos = 0;
+      this.productos = productos.productos_servicios;
+      pos = this.productos.findIndex(p => p.codigo === 'TLR18');
+      localStorage.setItem('prodSer', JSON.stringify(productos.productos_servicios[pos]));
+    });
 
     if (localStorage.getItem('cfdis') === null) {
       // tslint:disable-next-line: no-unused-expression
@@ -95,7 +95,7 @@ export class NotasDeCreditoComponent implements OnInit {
       localStorage.setItem('tipoRelacion', tipos);
       if (this.dataSourcesCfdis === undefined) {
         this.data.data.cfdis.forEach((c, i) => {
-          if (c.uuid !== undefined) {
+          if (c.uuid !== undefined && c.notaDeCreditoRelacionada === undefined) {
             this.DS.push(this.data.data.cfdis[i]);
           }
         });
@@ -113,7 +113,7 @@ export class NotasDeCreditoComponent implements OnInit {
     this.okTipoRelacion = true;
     if (this.dataSourcesCfdis === undefined) {
       this.data.data.cfdis.forEach((c, i) => {
-        if (c.uuid !== undefined && c.serie === 'A') {
+        if (c.uuid !== undefined && c.serie === 'A' && c.notaDeCreditoRelacionada === undefined) {
           this.DS.push(this.data.data.cfdis[i]);
         }
       });
@@ -167,6 +167,7 @@ export class NotasDeCreditoComponent implements OnInit {
       localStorage.setItem('cfdis', JSON.stringify(this.agrupadoCFDIS));
       const t = JSON.parse(localStorage.getItem('cfdis'));
       this.totalAfacturar = t.length;
+      this.agrupadoCFDIS = [];
     } else {
       let result;
       let i;
@@ -196,6 +197,7 @@ export class NotasDeCreditoComponent implements OnInit {
       const t = JSON.parse(localStorage.getItem('cfdis'));
       this.totalAfacturar = t.length;
     }
+    this.cfdisNotas.clear();
   }
 
   facturar() {

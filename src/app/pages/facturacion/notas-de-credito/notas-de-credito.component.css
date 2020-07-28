@@ -1,5 +1,5 @@
 .tablet {
-    margin-top: 51px;
+    margin-top: 11px;
 }
 
 .botonCerrar {
@@ -81,7 +81,7 @@
 
 .fondo {
     width: 900px;
-    margin-top: -572px;
+    margin-top: -717px;
     height: 724px;
     background: rgba(60, 64, 60, 0.7);
     position: relative;
@@ -124,8 +124,8 @@
 }
 
 .tipoRelacion {
-    margin-top: 97px;
-    position: absolute;
+    margin-top: 12px;
+    position: relative;
     font-size: 17px;
     font-weight: 1000;
 }

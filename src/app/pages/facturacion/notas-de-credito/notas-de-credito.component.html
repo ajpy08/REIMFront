@@ -20,10 +20,6 @@
     </mat-select>
   </mat-form-field>
 </div>
-<div class="tipoRelacion" *ngIf="this.okTipoRelacion === true">
-  Tipo Relación: {{this.getTipoRelacion}}
-  <button matTooltip='Editar Tipo Relación' (click)="loaderSelectTipoRelacion()" type="button" class="loaderTipo"> <i class="fa fa-pencil" aria-hidden="true"></i> </button>
-</div>
 <div [hidden]="this.okTipoRelacion === false">
   <div class="filtro">
     <div class="row">
@@ -51,7 +47,10 @@
         <i class="fa fa-info" aria-hidden="true"></i></button>
     </div>
   </div>
-
+  <div class="tipoRelacion" *ngIf="this.okTipoRelacion === true">
+    Tipo Relación: {{this.getTipoRelacion}}
+    <button matTooltip='Editar Tipo Relación' (click)="loaderSelectTipoRelacion()" type="button" class="loaderTipo"> <i class="fa fa-pencil" aria-hidden="true"></i> </button>
+  </div>
   <div class="tablet">
     <table mat-table class="table table-bordered" #table [dataSource]="dataSourcesCfdis" matSort>
 

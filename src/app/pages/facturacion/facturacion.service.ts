@@ -394,8 +394,32 @@ export class FacturacionService {
       }));
     }
   }
+  borrarNota(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/notas/nota_de_credito/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.delete(url).pipe(map(resp => swal('NOTA Borrada', 'Eliminado correctamente', 'success')));
+  }
 
+  GenerarxmlNota(id: string): Observable<any> {
+  let url = URL_SERVICIOS + '/notas/nota/' + id + '/xml/';
+  url += '?token=' + this._usuarioService.token;
+  return this.http.get(url);
+  }
 
+  timbrarXMLNota(nombre: string, id: string, direccion: string): Observable<any> {
+    let url = URL_SERVICIOS + '/notas/notaTimbre/' + nombre + '&' + id + '&' + direccion + '/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
+  actualizarDatosTimbreNota(cfdi: CFDI): Observable<any> {
+    let url = URL_SERVICIOS + '/notas/datosTimbrado/' + cfdi._id + '/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, cfdi).pipe(map((resp: any) => {
+      // swal('Correcto', 'Se ha timbrado correctamente', 'success');
+      return resp.cfdiTimbradoAct;
+    }));
+  }
   // FIN NOTAS DE CREDITO //
 
 

@@ -33,12 +33,13 @@ export class NOTAS {
       public direccion?: string,
       public correo?: string,
   
-      public conceptosCFDI?: any[],
+      public conceptos?: any[],
   
       public totalImpuestosRetenidos?: number,
       public totalImpuestosTrasladados?: number,
   
       public sucursal?: string,
+      public tipoRelacion?: string,
       public usuarioAlta?: string,
       public fAlta?: Date,
       public usuarioMod?: string,

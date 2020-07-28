@@ -24,10 +24,10 @@
         </div> -->
 
 
-        <div *ngIf="this.activo === false">
+        <div *ngIf="this.mostrar === false">
           <h3 class="card-title">CFDIS: ( <small>{{totalRegistros}}</small> )</h3>
         </div>
-        <div *ngIf="this.activo === true">
+        <div *ngIf="this.mostrar === true">
           <h3 class="card-title">NOTAS DE CREDITO: ( <small>{{totalRegistros}}</small> )</h3>
         </div>
         <div class="col-sm-2">
@@ -86,20 +86,29 @@
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let cfdis">
                 <div *ngIf="usuarioLogueado.role === 'ADMIN_ROLE' && cfdis.uuid">
-                  <button matTooltip="Eliminar CFDIS" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="borrarCFDIS( cfdis )" class="btn btn-danger m-r-5" >
+                  <button matTooltip="ELIMINAR" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="borrarCFDIS( cfdis )" class="btn btn-danger m-r-5" >
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
-                  <div *ngIf="!cfdis.uuid">
-                    <button [disabled]="this.ok === true && cfdis._id === this.dis" matTooltip="Editar CFDI" [routerLink]="['/cfdi', cfdis._id]"  class="btn btn-primary m-r-5">
+                  <div *ngIf="!cfdis.uuid && cfdis.serie === 'A'">
+                    <button [disabled]="this.ok === true && cfdis._id === this.dis" matTooltip="Editar Cfdis" [routerLink]="['/cfdi', cfdis._id]"  class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button matTooltip="Eliminar CFDIS" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="borrarCFDIS( cfdis )" class="btn btn-danger m-r-5">
+                    <button matTooltip="Eliminar" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="borrarCFDIS( cfdis )" class="btn btn-danger m-r-5">
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </div>
 
-                <div *ngIf="cfdis.uuid">
+                  <div *ngIf="!cfdis.uuid && cfdis.serie === 'N'">
+                    <button [disabled]="this.ok === true && cfdis._id === this.dis" matTooltip="Editar Nota" [routerLink]="['/nota_de_credito', cfdis._id]"  class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button matTooltip="Eliminar" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="borrarCFDIS( cfdis )" class="btn btn-danger m-r-5">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </div>
+
+                <div *ngIf="cfdis.uuid && cfdis.serie === 'A'">
                   <button matTooltip="CANCELACIÓN CFDI" (click)="cancelarCFDI(cfdis)" class="btn btn-danger m-r-5"><i class="fa fa-ban" aria-hidden="true"></i></button>
                 </div>
                   <button matTooltip="PRE Visualizar PDF" [disabled]="this.ok === true && cfdis._id === this.dis" (click)="pdf( cfdis )" class="btn btn-warning m-r-5">

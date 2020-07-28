@@ -237,11 +237,11 @@
                         <th>Cantidad</th>
                         <th>ValorUnitario</th>
                         <th>Impuestos</th>
-                        <th>Descuento</th>
+                        <!-- <th>Descuento</th> -->
                         <th>Importe</th>
                       </tr>
                     </thead>
-                    <tbody formArrayName="conceptosCFDI" *ngFor="let item of conceptosCFDI.controls; let i = index">
+                    <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index">
                       <tr [formGroupName]="i">
                         <td scope="row">{{i+1}}</td>
                         <td>
@@ -264,9 +264,9 @@
                         <td>
                           {{this.round(item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value, 2)}}
                         </td>
-                        <td>
+                        <!-- <td>
                           {{item.get('descuento').value}}
-                        </td>
+                        </td> -->
                         <td>
                           {{item.get('importe').value}}
                         </td>

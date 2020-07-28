@@ -66,6 +66,11 @@ export class PdfFacturacionService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
+  pdfGenerateNota(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/pdfFacturacion/pdFNota/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
 
   subirBooket(archivos: any, subir: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/pdfFacturacion/booket/' + archivos + '&' + subir;
@@ -75,6 +80,15 @@ export class PdfFacturacionService {
 
   QuitarCredito(): Observable<any> {
     let url = URL_SERVICIOS + '/pdfFacturacion/QuitCredito/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
+
+  // ! NOTAS DE CREDITO //
+
+  getTipo(tipo: string): Observable<any> {
+    let url = URL_SERVICIOS + '/pdfFacturacion/Tipo/' + tipo + '/';
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
