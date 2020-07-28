@@ -7,6 +7,8 @@ import { PdfFacturacionComponent } from 'src/app/pages/facturacion/pdf-facturaci
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 import { Usuario } from '../../usuarios/usuario.model';
+import { NotasDeCreditoComponent } from '../notas-de-credito/notas-de-credito.component';
+import { PdfNotasDeCreditoComponent } from '../pdf-notas-de-credito/pdf-notas-de-credito.component';
 declare var swal: any;
 @Component({
   selector: 'app-cfdis',
@@ -19,6 +21,9 @@ export class CFDISComponent implements OnInit {
   credit = false;
   uuid = false;
   dis;
+  mostrar = false;
+  activo = false;
+  acttrue = false;
   serieFolio = '';
   usuarioLogueado: Usuario;
   totalRegistros = 0;
@@ -50,15 +55,21 @@ export class CFDISComponent implements OnInit {
   ngOnInit() {
     this.agregarCreditos('B');
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.cargarCFDIS();
+    this.filtrado(this.activo);
     this.socket.on('new-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
     }.bind(this));
     this.socket.on('update-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
     }.bind(this));
     this.socket.on('delete-cfdi', function (data: any) {
-      this.cargarCFDIS();
+      this.filtrado(this.activo);
+    }.bind(this));
+
+    this.socket.on('nota-Timbre', function(data: any) {
+        if (data.data.ok === false) {
+          this.filtrado(true);
+        }
     }.bind(this));
 
     this.socket.on('timbrado-cfdi', function (data: any) {
@@ -66,10 +77,20 @@ export class CFDISComponent implements OnInit {
       this.serieFolio = data.data.serieFolio;
       this.dis = data.data.id;
       if (this.ok === undefined || this.ok === false) {
-        this.cargarCFDIS();
+        this.filtrado(this.activo);
         this.agregarCreditos('B');
       }
     }.bind(this));
+  }
+
+  filtrado(bool: Boolean) {
+    if (bool === false) {
+      this.mostrar = false;
+      this.cargarCFDIS('A');
+    } else {
+      this.mostrar = true;
+      this.cargarCFDIS('N');
+    }
   }
 
   applyFilter(filterValue: string) {
@@ -88,9 +109,9 @@ export class CFDISComponent implements OnInit {
     }
   }
 
-  cargarCFDIS() {
+  cargarCFDIS(serie) {
     this.cargando = true;
-    this.facturacionService.getCFDIS().subscribe(cfdis => {
+    this.facturacionService.getCFDIS(serie).subscribe(cfdis => {
       this.dataSource = new MatTableDataSource(cfdis.cfdis);
       if (cfdis.cfdis.length === 0) {
         this.tablaCargar = true;
@@ -111,21 +132,47 @@ export class CFDISComponent implements OnInit {
   }
 
   borrarCFDIS(cfdis: CFDI) {
-    swal({
-      title: '¿Esta seguro',
-      text: 'Estas a punto de borrar CFDI ' + cfdis.serie + '-' + cfdis.folio,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then(borrado => {
-      if (borrado) {
-        this.facturacionService.borrarCFDI(cfdis._id).subscribe((res) => {
-          this.cargarCFDIS();
-          this.socket.emit('deletecfdi', cfdis);
-          swal('Correcto', ' Se ha borrado el CFDI ' + cfdis.serie + '-' + cfdis.folio, 'success');
-        });
-      }
-    });
+    let CN = '';
+    if (cfdis.serie === 'A') {
+        CN = 'CFDI';
+    } else {
+        CN = 'NOTA';
+    }
+      swal({
+        title: '¿Esta seguro',
+        text: 'Estas a punto de borrar ' + CN + ' ' + cfdis.serie + '-' + cfdis.folio,
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrado => {
+        if (borrado) {
+          if (cfdis.serie === 'A') {
+            this.facturacionService.borrarCFDI(cfdis._id).subscribe((res) => {
+              if (cfdis.serie === 'N') {
+                this.filtrado(true);
+                this.activo = true;
+              } else {
+                this.filtrado(false);
+                this.activo = false;
+              }
+              this.socket.emit('deletecfdi', cfdis);
+              swal('Correcto', ' Se ha borrado el CFDI ' + cfdis.serie + '-' + cfdis.folio, 'success');
+            });
+          } else if (cfdis.serie === 'N') {
+            this.facturacionService.borrarNota(cfdis._id).subscribe((res) => {
+              if (cfdis.serie === 'N') {
+                this.filtrado(true);
+                this.activo = true;
+              } else {
+                this.filtrado(false);
+                this.activo = false;
+              }
+              this.socket.emit('deletecfdi', cfdis);
+              swal('Correcto', ' Se ha borrado la Nota de cretido ' + cfdis.serie + '-' + cfdis.folio, 'success');
+            });
+          }
+        }
+      });
   }
 
   agregarCreditos(val) {
@@ -134,11 +181,13 @@ export class CFDISComponent implements OnInit {
         title: 'CREDITOS TIMBRE',
         icon: 'info',
         content: 'input',
-        loseOnConfirm: false, 
-        closeOnCancel: false,
-        allowOutsideClick: false
+        loseOnConfirm: false,
+        closeOnCancel: true,
+        allowOutsideClick: false,
+        buttons: true,
+        dangerMode: true
       }).then((credito) => {
-        if(credito !== null) {
+        if (credito !== null) {
           this.facturacionService.creditos(credito).subscribe((res) => {
             this.creditosTimbre = res.contador;
             this.agregarCreditos('B');
@@ -155,17 +204,47 @@ export class CFDISComponent implements OnInit {
 
   pdf(cfdi: CFDI): void {
     this.facturacionService.getCFDIPDF(cfdi._id).subscribe(res => {
-      const cfdiPdf = res;
-      const dialogPDF = this.dialog.open(PdfFacturacionComponent, {
-        width: '800px',
-        height: '1000px',
-        data: { data: cfdiPdf },
+      if (res.cfdi.serie === 'A') {
+        const cfdiPdf = res;
+        const dialogPDF = this.dialog.open(PdfFacturacionComponent, {
+          width: '800px',
+          height: '1000px',
+          data: { data: cfdiPdf },
+          backdropClass: 'cdk-overlay-transparent-backdrop',
+          hasBackdrop: true,
+          panelClass: 'filter.popup'
+        });
+        dialogPDF.afterClosed().subscribe(result => {
+        });
+      }
+      if (res.cfdi.serie === 'N') {
+        const notaPdf = res;
+        const dialogPDF = this.dialog.open(PdfNotasDeCreditoComponent, {
+          width: '800px',
+          height: '1000px',
+          data: { data: notaPdf },
+          backdropClass: 'cdk-overlay-transparent-backdrop',
+          hasBackdrop: true,
+          panelClass: 'filter.popup'
+        });
+        dialogPDF.afterClosed().subscribe(result => {
+        });
+      }
+    });
+  }
+
+  notas(): void {
+    this.facturacionService.getCFDIS('A').subscribe(res => {
+      const cfdis = res;
+      const dialogNotas = this.dialog.open(NotasDeCreditoComponent, {
+        width: '950px',
+        height: '800px',
+        data: { data: cfdis },
         backdropClass: 'cdk-overlay-transparent-backdrop',
         hasBackdrop: true,
         panelClass: 'filter.popup'
       });
-
-      dialogPDF.afterClosed().subscribe(result => {
+      dialogNotas.afterClosed().subscribe(result => {
 
       });
     });

@@ -149,6 +149,9 @@ import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unida
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-facturacion.component';
+import { NotasDeCreditoComponent } from './facturacion/notas-de-credito/notas-de-credito.component';
+import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/pdf-notas-de-credito.component';
 import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 
 
@@ -235,7 +238,12 @@ import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
         ReportesComponent,
         ManiobrasTrasportistaComponent,
         PdfFacturacionComponent,
+        NotasDeCreditoComponent,
+        NotaDeCreditoComponent,
+        PdfNotasDeCreditoComponent,
         ImageCropperComponent
+    ],
+        
      ],
     exports: [
         DashboardComponent
@@ -274,7 +282,9 @@ import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
         QRCodeModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
-    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent ]
+    entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
+        PdfNotasDeCreditoComponent,
+        NotasDeCreditoComponent]
 })
 
 export class PagesModules { }
