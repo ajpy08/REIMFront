@@ -1,92 +1,73 @@
-import { async } from '@angular/core/testing';
-import { Concepto } from './../models/concepto.models';
-import { Component, OnInit, Inject, ViewChild, ElementRef, Output } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatTabGroup, MatSort } from '@angular/material';
-import * as jsPDF from 'jspdf';
-import * as html2pdf from 'html2pdf.js';
-import html2canvas from 'html2canvas';
-import { PdfFacturacionService } from './pdf-facturacion.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { PdfFacturacionService } from '../pdf-facturacion/pdf-facturacion.service';
+import { UsuarioService } from '../../usuarios/usuario.service';
 import { FacturacionService } from '../facturacion.service';
 import * as io from 'socket.io-client';
 import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
-import { DATOS_TIMBRADO, RFCEMISOR } from 'src/app/config/config';
-
-declare var swal: any;
-
-import { CFDI } from '../models/cfdi.models';
-import { ok } from 'assert';
 import { Usuario } from '../../usuarios/usuario.model';
-import { UsuarioService } from 'src/app/services/service.index';
+import { RFCEMISOR } from 'src/app/config/config';
 export interface DialogData {
   // contenedor: string;
   data: any;
 }
 
-@Component({
-  selector: 'app-pdf-facturacion',
-  templateUrl: './pdf-facturacion.component.html',
-  styleUrls: ['./pdf-facturacion.component.css']
-})
-export class PdfFacturacionComponent implements OnInit {
+declare var swal: any;
 
-  @ViewChild('contenido') contenido: ElementRef;
+@Component({
+  selector: 'app-pdf-notas-de-credito',
+  templateUrl: './pdf-notas-de-credito.component.html',
+  styleUrls: ['./pdf-notas-de-credito.component.css']
+})
+export class PdfNotasDeCreditoComponent implements OnInit {
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
-  cargandoTimbre = false;
+  moneda = '';
+  metodoPago = '';
+  usoCFDI = '';
   mensaje = 'TIMBRADO';
-  ok = true;
-  elementType = 'img';
-  qr = '';
+  comprobante = '';
   value = '';
+  cfdiRelacionados = '';
+  letrasTotal = '';
+  claveUnidad = '';
+  codigoQR = '';
+  tipo = '';
+  cargandoTimbre = false;
   total = 0;
+  count = 0;
   totalTrasladados = 0;
   totalRetenidos = 0;
   subtotal = 0;
-  comprobante = '';
-  usoCFDI = '';
+  usuarioLogueado: Usuario;
   url = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.xml`;
   urlpDF = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}.pdf`;
-  moneda = '';
-  claveUnidad = '';
-  tasa = [];
-  count = 0;
-  des = 0;
-  letrasTotal = '';
-  uuid = '';
-  metodoPago = '';
-  NserieSAT = '';
-  usuarioLogueado: Usuario;
-  fechaCertificado = '';
-  codigoQR = '';
   ObjetoQR = {
     uuid: this.data.data.cfdi.uuid, rfcEmisor: this.data.data.NoCertificadoEmisor, rfcReceptor: this.data.data.cfdi.rfc,
     selloEmisor: this.data.data.cfdi.selloEmisor, total: this.data.data.cfdi.total
   };
 
-
-  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
-
-  constructor(public dialigRef: MatDialogRef<PdfFacturacionComponent>,
+  constructor(public dialogRef: MatDialogRef<PdfNotasDeCreditoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private pdfFacturacionService: PdfFacturacionService, private facturacionService: FacturacionService,
     private usuarioService: UsuarioService) { }
 
   ngOnInit() {
-    this.socket.on('alert-timbre', function(data: any) {
-    if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
-      if (data.data.ok === true) {
-        this.dialigRef.close();
-        swal({
-          title: 'TIMBRANDO',
-          text: 'CFDI: ' + data.data.serieFolio,
-          icon: 'warning'
-        });
+    this.socket.on('alert-timbre', function (data: any) {
+      if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
+        if (data.data.ok === true) {
+          this.dialigRef.close();
+          swal({
+            title: 'TIMBRANDO',
+            text: 'Nota: ' + data.data.serieFolio,
+            icon: 'warning'
+          });
+        }
       }
-    }
     }.bind(this));
-
     this.usuarioLogueado = this.usuarioService.usuario;
-
-    if (this.data.data.cfdi.informacionAdicional === '@') {
-      this.data.data.cfdi.informacionAdicional = '';
+    if (this.data.data.cfdi.moneda === 'MXN') {
+      this.moneda = 'Peso Mexicano';
+    } else if (this.data.data.cfdi.cfdi.moneda === 'USD') {
+      this.moneda = 'Dolar Americano';
     }
     if (this.data.data.cfdi.tipoComprobante === 'I') {
       this.comprobante = 'Ingreso';
@@ -94,58 +75,67 @@ export class PdfFacturacionComponent implements OnInit {
       this.comprobante = 'Egreso';
     }
 
-    if (this.data.data.cfdi.moneda === 'MXN') {
-      this.moneda = 'Peso Mexicano';
-    } else if (this.data.data.cfdi.cfdi.moneda === 'USD') {
-      this.moneda = 'Dolar Americano';
-    }
     this.uso();
     this.clave();
     this.NumerosAletras();
     this.totales();
-    this.descuento();
     this.getmetodoPago();
-    this.generarQR(this.ObjetoQR);
-  }
-  // tslint:disable-next-line: use-life-cycle-interface
-  ngOnDestroy() {
-    this.ngOnInit();
-    this.socket.removeListener('alert-timbre');
+    this.getTipo();
+    this.cfdiRelacionado();
+    this.generarQRs(this.ObjetoQR);
   }
 
+  getTipo() {
+    this.pdfFacturacionService.getTipo(this.data.data.cfdi.tipoRelacion).subscribe((res) => {
+      res.tipo.forEach(t => {
+        this.tipo = t.clave + ' - ' + t.descripcion;
+      });
+    });
+  }
 
-  pdf(): void {
-    let opt = {};
-
-    if (this.data.data.cfdi.conceptos.length >= 10) {
-      opt = {
-        margin: 3,
-        filename: `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: {},
-        pagebreak: { before: '.qrcon', after: ['#after1', '#after2'], avoid: 'img' }
-      };
+  cfdiRelacionado() {
+    let cfdi = '';
+    this.data.data.cfdi.conceptos.forEach(cf => {
+      cf.cfdis.forEach(c => {
+        cfdi += c.uuid + ', ';
+      });
+    });
+    cfdi = cfdi.slice(0, -2);
+    this.cfdiRelacionados = cfdi;
+  }
+  uso() {
+    this.pdfFacturacionService.getUSO(this.data.data.cfdi.usoCFDI).subscribe((res) => {
+      res.usoCFDI.forEach(u => {
+        this.usoCFDI = u.descripcion;
+      });
+    });
+  }
+  getmetodoPago() {
+    this.pdfFacturacionService.getMetodoPago(this.data.data.cfdi.metodoPago).subscribe((res) => {
+      res.MetodoPago.forEach(metodo => {
+        this.metodoPago = metodo.descripcion;
+      });
+    });
+  }
+  obtenerFechaCert(fecha) {
+    if (fecha !== undefined) {
+      let fechaMod = fecha.slice(0, -5);
+      fechaMod = fechaMod.replace('T', ' ');
+      return fechaMod;
     } else {
-      opt = {
-        margin: 3,
-        filename: `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: {},
-      };
+      return ' ';
     }
-
-
-
-    const datapdf = document.getElementById('contenido');
-
-    html2pdf()
-      .from(datapdf)
-      .set(opt)
-      .save();
   }
-
+  clave() {
+    this.data.data.cfdi.conceptos.forEach(c => {
+      this.claveUnidad = c.claveUnidad;
+    });
+    this.pdfFacturacionService.getCLAVE(this.claveUnidad).subscribe((res) => {
+      res.claveUnidad.forEach(c_u => {
+        this.claveUnidad = c_u.nombre;
+      });
+    });
+  }
   traslado(tr) {
     let TR = '';
     if (tr.TR === 'TRASLADO') {
@@ -172,7 +162,7 @@ export class PdfFacturacionComponent implements OnInit {
       result = importes.importe.$numberDecimal.toString().split('.');
       if (result[1].length >= 2) {
 
-        return result = result[0] + '.' + result[1];
+        return result = result[0] + '.' + result[1].slice(0, 2);
       } else {
         return importes.importe.$numberDecimal + '0';
       }
@@ -181,86 +171,36 @@ export class PdfFacturacionComponent implements OnInit {
     }
   }
 
-  uso() {
-    this.pdfFacturacionService.getUSO(this.data.data.cfdi.usoCFDI).subscribe((res) => {
-      res.usoCFDI.forEach(u => {
-        this.usoCFDI = u.descripcion;
-      });
-    });
-  }
-  getmetodoPago() {
-    this.pdfFacturacionService.getMetodoPago(this.data.data.cfdi.metodoPago).subscribe((res) => {
-      res.MetodoPago.forEach(metodo => {
-        this.metodoPago = metodo.descripcion;
-      });
-    });
-  }
-  obtenerFechaCert(fecha) {
-    if (fecha !== undefined) {
-      let fechaMod = fecha.slice(0, -5);
-      fechaMod = fechaMod.replace('T', ' ');
-      return fechaMod;
-    } else {
-      return ' ';
-    }
-  }
-
-  clave() {
-    this.data.data.cfdi.conceptos.forEach(c => {
-      this.claveUnidad = c.claveUnidad;
-    });
-    this.pdfFacturacionService.getCLAVE(this.claveUnidad).subscribe((res) => {
-      res.claveUnidad.forEach(c_u => {
-        this.claveUnidad = c_u.nombre;
-      });
-    });
-  }
-
-  totales() {
-    this.subtotal = this.data.data.cfdi.subtotal.$numberDecimal;
-    this.totalRetenidos = this.data.data.cfdi.totalImpuestosRetenidos.$numberDecimal;
-    this.totalTrasladados = this.data.data.cfdi.totalImpuestosTrasladados.$numberDecimal;
-    this.total = this.data.data.cfdi.total.$numberDecimal;
-  }
-
-  descuento() {
-    this.data.data.cfdi.conceptos.forEach(c => {
-      const number = parseFloat(c.descuento.$numberDecimal);
-      this.des = this.des + number;
-    });
-  }
-
   NumerosAletras() {
     this.pdfFacturacionService.getNumeroAletras(this.data.data.cfdi.total.$numberDecimal).subscribe((resLetra) => {
       this.letrasTotal = resLetra.numeroLetras;
     });
   }
 
-
-  xmlCFDIS(id: string) {
+  timbrarNota(id: string) {
     const usuarioLogeado = this.usuarioLogueado;
     // tslint:disable-next-line: no-shadowed-variable
     const ok = true;
     swal({
       title: '¿ Estas seguro?',
-      text: 'Se mandara a timbrar CFDI ' + this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio,
+      text: 'Se mandara a timbrar Nota ' + this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio,
       icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(timbrar => {
       if (timbrar) {
         const serieFolio = this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio;
-        this.socket.emit('alerttimbre', {usuarioLogeado, ok, serieFolio});
-        this.socket.emit('timbradocfdi', {ok, serieFolio, id, usuarioLogeado});
+        this.socket.emit('alerttimbreNota', { usuarioLogeado, ok, serieFolio });
+        this.socket.emit('timbradoNota', { ok, serieFolio, id, usuarioLogeado });
         this.cargandoTimbre = true;
         this.mensaje = 'Validando Datos';
 
-        this.facturacionService.xmlCFDI(id).subscribe((res) => { // generar XML
+        this.facturacionService.GenerarxmlNota(id).subscribe((res) => { // generar XML
           setTimeout(() => {
             this.mensaje = 'Generando XML';
           }, 3000);
           if (res.ok === true) {
-            this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.informacionAdicional)
+            this.facturacionService.timbrarXMLNota(res.NombreArchivo, id, res.cfdiData.direccion)
               .subscribe((restim) => { // timbrar XML
                 if (restim.ok === true) {
                   setTimeout(() => {
@@ -304,7 +244,7 @@ export class PdfFacturacionComponent implements OnInit {
                 this.cargandoTimbre = false;
                 // tslint:disable-next-line: no-shadowed-variable
                 const ok = false;
-                this.socket.emit('timbradocfdi', ok);
+                this.socket.emit('timbradoNota', ok);
                 swal('Error', `${error.error.mensaje}`, 'error');
               });
           }
@@ -312,11 +252,16 @@ export class PdfFacturacionComponent implements OnInit {
           this.cargandoTimbre = false;
           // tslint:disable-next-line: no-shadowed-variable
           const ok = false;
-          this.socket.emit('timbradocfdi', ok);
+          this.socket.emit('timbradoNota', ok);
           swal('Error', `${err.error.mensaje}`, 'error');
           this.count = 0;
         });
       }
+    });
+  }
+
+  ResCredito() {
+    this.pdfFacturacionService.QuitarCredito().subscribe((res) => {
     });
   }
 
@@ -326,9 +271,9 @@ export class PdfFacturacionComponent implements OnInit {
     const usuarioLogeado = this.usuarioLogueado;
     this.mensaje = 'Generando PDF un momento ...';
     setTimeout(() => {
-      this.facturacionService.actualizarDatosTimbre(ObjetoTimbrado).subscribe(() => {
+      this.facturacionService.actualizarDatosTimbreNota(ObjetoTimbrado).subscribe(() => {
         setTimeout(() => {
-          this.pdfFacturacionService.pdfGenerate(ObjetoTimbrado._id).subscribe((res) => {
+          this.pdfFacturacionService.pdfGenerateNota(ObjetoTimbrado._id).subscribe((res) => {
             if (res.ok === true) {
               const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}`;
               this.pdfFacturacionService.envioCorreoCFDI(correo, archivo, nombreEmisor).subscribe((resCorreo) => {
@@ -336,15 +281,16 @@ export class PdfFacturacionComponent implements OnInit {
                   setTimeout(() => {
                     this.pdfFacturacionService.subirBooket(resCorreo.archivos, true).subscribe(() => {
                       this.cargandoTimbre = false;
-                      this.socket.emit('alerttimbre', usuarioLogeado);
-                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
-                      this.dialigRef.close();
+                      this.socket.emit('alerttimbreNota', usuarioLogeado);
+                      this.socket.emit('timbradoNota', { ok, usuarioLogeado });
+                      this.socket.emit('notaTimbre', {ok});
+                      this.dialogRef.close();
                       swal('Correcto', 'Se ha timbrado la Factura ' + serie + '-' + folio + 'y enviado correo correctamente a ' +
                         correo, 'success');
                     }, (err) => {
                       // tslint:disable-next-line: no-shadowed-variable
                       const ok = false;
-                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                      this.socket.emit('timbradoNota', { ok, usuarioLogeado });
                       swal('Error', `${err.error.mensaje}`, 'error');
                     });
                   }, 5000);
@@ -352,25 +298,26 @@ export class PdfFacturacionComponent implements OnInit {
               }, (err) => {
                 // tslint:disable-next-line: no-shadowed-variable
                 const ok = false;
-                this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                this.socket.emit('timbradoNota', { ok, usuarioLogeado });
                 swal('Error', `${err.error.mensaje}`, 'error');
               });
             }
           }, (err) => {
             // tslint:disable-next-line: no-shadowed-variable
             const ok = false;
-            this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+            this.socket.emit('timbradoNota', { ok, usuarioLogeado });
             swal('Error', `${err.error.mensaje}`, 'error');
           });
         }, 3000);
       }, (err) => {
         // tslint:disable-next-line: no-shadowed-variable
         const ok = false;
-        this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+        this.socket.emit('timbradoNota', { ok, usuarioLogeado });
         swal('Error', `${err.error.mensaje}`, 'error');
       });
     }, 5000);
   }
+
 
   cadenaOriginal() {
     if (this.data.data.cfdi.cadenaOriginalSat) {
@@ -382,7 +329,75 @@ export class PdfFacturacionComponent implements OnInit {
     }
   }
 
-  generarQR(ObjetoQR) {
+  totales() {
+    this.subtotal = this.data.data.cfdi.subtotal.$numberDecimal;
+    this.totalRetenidos = this.data.data.cfdi.totalImpuestosRetenidos.$numberDecimal;
+    this.totalTrasladados = this.data.data.cfdi.totalImpuestosTrasladados.$numberDecimal;
+    this.total = this.data.data.cfdi.total.$numberDecimal;
+  }
+
+  envioCFDI() {
+    swal({
+      title: '¿ Estas seguro?',
+      text: 'Se enviara correo a ' + this.data.data.cfdi.correo,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(correo => {
+      if (correo) {
+        this.CorreoXBoton();
+      }
+    });
+  }
+  generarPDF() {
+    this.pdfFacturacionService.pdfGenerate(this.data.data.cfdi._id).subscribe((res) => {
+    }, (err) => {
+      // tslint:disable-next-line: no-shadowed-variable
+      const ok = false;
+      this.socket.emit('timbradoNota', ok);
+      swal('Error', `${err.error.mensaje}`, 'error');
+    });
+  }
+
+  envioCorreo() {
+    const oks = true;
+    const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}`;
+    this.pdfFacturacionService.envioCorreoCFDIB(this.data.data.cfdi.correo, archivo, this.data.data.cfdi.nombre).subscribe((resEnvio) => {
+      if (resEnvio.ok === true) {
+        swal('Correcto', 'Correo Enviando a ' + this.data.data.cfdi.correo, 'success');
+      }
+    }, (err) => {
+      // tslint:disable-next-line: no-shadowed-variable
+      const ok = false;
+      this.socket.emit('timbradoNota', ok);
+      swal('Error', `${err.error.mensaje}`, 'error');
+    });
+  }
+
+  async CorreoXBoton() {
+    const pdf = await this.generarPDF();
+    const envioCOrreo = await this.envioCorreo();
+    const BorrarTemp = await this.BorrarTemp();
+  }
+
+  BorrarTemp() {
+    setTimeout(() => {
+      const archivos = [];
+      archivos.push(this.url, this.urlpDF);
+      this.pdfFacturacionService.subirBooket(archivos, false).subscribe(() => {
+      }, (err) => {
+        // tslint:disable-next-line: no-shadowed-variable
+        const ok = false;
+        this.socket.emit('timbradoNota', ok);
+        swal('Error', `${err.error.mensaje}`, 'error');
+      });
+    }, 3000);
+  }
+  closepdf() {
+    this.dialogRef.close();
+  }
+
+  generarQRs(ObjetoQR) {
     if (this.data.data.cfdi.uuid) {
       let selloEmisorCortado = '';
       if (ObjetoQR.selloEmisor) {
@@ -409,71 +424,5 @@ export class PdfFacturacionComponent implements OnInit {
     }
   }
 
-  envioCFDI() {
-    swal({
-      title: '¿ Estas seguro?',
-      text: 'Se enviara correo a ' + this.data.data.cfdi.correo,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true
-    }).then(correo => {
-      if (correo) {
-        this.CorreoXBoton();
-      }
-    });
-  }
 
-  generarPDF() {
-    this.pdfFacturacionService.pdfGenerate(this.data.data.cfdi._id).subscribe((res) => {
-    }, (err) => {
-      // tslint:disable-next-line: no-shadowed-variable
-      const ok = false;
-      this.socket.emit('timbradocfdi', ok);
-      swal('Error', `${err.error.mensaje}`, 'error');
-    });
-  }
-  envioCorreo() {
-    const oks = true;
-    const archivo = `${this.data.data.cfdi.serie}-${this.data.data.cfdi.folio}-${this.data.data.cfdi._id}`;
-    this.pdfFacturacionService.envioCorreoCFDIB(this.data.data.cfdi.correo, archivo, this.data.data.cfdi.nombre).subscribe((resEnvio) => {
-      if (resEnvio.ok === true) {
-        swal('Correcto', 'Correo Enviando a ' + this.data.data.cfdi.correo, 'success');
-      }
-    }, (err) => {
-      // tslint:disable-next-line: no-shadowed-variable
-      const ok = false;
-      this.socket.emit('timbradocfdi', ok);
-      swal('Error', `${err.error.mensaje}`, 'error');
-    });
-  }
-
-  ResCredito() {
-    this.pdfFacturacionService.QuitarCredito().subscribe((res) => {
-    });
-  }
-
-
-  async CorreoXBoton() {
-    const pdf = await this.generarPDF();
-    const envioCOrreo = await this.envioCorreo();
-    const BorrarTemp = await this.BorrarTemp();
-  }
-
-  BorrarTemp() {
-    setTimeout(() => {
-      const archivos = [];
-      archivos.push(this.url, this.urlpDF);
-      this.pdfFacturacionService.subirBooket(archivos, false).subscribe(() => {
-      }, (err) => {
-        // tslint:disable-next-line: no-shadowed-variable
-        const ok = false;
-        this.socket.emit('timbradocfdi', ok);
-        swal('Error', `${err.error.mensaje}`, 'error');
-      });
-    }, 3000);
-  }
-
-  closepdf() {
-    this.dialigRef.close();
-  }
 }

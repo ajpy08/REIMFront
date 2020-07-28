@@ -369,7 +369,7 @@ export class HeaderComponent implements OnInit {
     solicitudes.forEach(solicitud => {
       let nombreAgencia = '';
       let promesa;
-      if (!solicitud.agencia.razonSocial) {
+      if ( solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
         // tslint:disable-next-line: no-unused-expression
         promesa = new Promise((resolve, reject) => {
           this.agenciaService.getAgencia(solicitud.agencia).subscribe((agencia) => {
@@ -379,7 +379,11 @@ export class HeaderComponent implements OnInit {
         });
       } else {
         promesa = new Promise((resolve, reject) => {
-          nombreAgencia = solicitud.agencia.razonSocial;
+          if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
+            nombreAgencia = solicitud.agencia.razonSocial;
+          } else {
+            nombreAgencia = solicitud.razonSocial;
+          }
           resolve(true);
         });
       }

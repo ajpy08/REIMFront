@@ -43,7 +43,7 @@ export class SolicitudService {
   }
 
   cargarSolicitud(id: string): Observable<any> {
-    let url = URL_SERVICIOS + + '/solicitudes/solicitud/' + id;
+    let url = URL_SERVICIOS + '/solicitudes/solicitud/' + id;
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
       .pipe(map((resp: any) => resp.solicitud));

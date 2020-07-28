@@ -93,6 +93,7 @@ import { ClaveUnidadesComponent } from './facturacion/clave-unidades/clave-unida
 import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
+import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -547,6 +548,12 @@ const pagesRoutes: Routes = [
         path: '',
         redirectTo: '/dashboard',
         pathMatch: 'full'
+    },
+    {
+        path: 'nota_de_credito/:id',
+        component: NotaDeCreditoComponent,
+        canActivate: [REIMGuard],
+        data: {titulo: 'Nota de Credito', roles: [ ROLES.ADMIN_ROLE]}
     },
 
     // otherwise redirect to home
