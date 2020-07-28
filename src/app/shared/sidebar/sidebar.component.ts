@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SidebarService, UsuarioService } from '../../services/service.index';
 import { Usuario } from '../../pages/usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
+import * as io from 'socket.io-client';
+import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 
 
 @Component({
@@ -12,6 +14,7 @@ import { ROLES } from 'src/app/config/config';
 export class SidebarComponent implements OnInit {
   usuario: Usuario;
   role = 'Rol no asignado';
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   constructor(public _sidebar: SidebarService, public _usuarioService: UsuarioService) { }
 
@@ -19,6 +22,23 @@ export class SidebarComponent implements OnInit {
     this.usuario = this._usuarioService.usuario;
     this._sidebar.cargarMenu();
     this.mostrarRole();
+
+    this.socket.on('actualizar-perfil', function (data: any) {
+      if (this.usuario._id === data.data._id) {
+        this.cargarUsuario(data.data._id);
+      }
+    }.bind(this));
+  }
+
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('actualizar-perfil');
+  }
+
+  cargarUsuario(id: string) {
+    this._usuarioService.getUsuario(id).subscribe(usuario => {
+      this.usuario = usuario;
+    });
   }
 
   mostrarRole() {

@@ -104,11 +104,40 @@ export class UsuarioService {
     this.router.navigate(['/login']);
   }
 
+  logout2(usuario) {
+    // Sentry.configureScope(scope => scope.setUser(null));
+
+    if (localStorage.getItem('id') === usuario) {
+      this.menu = [];
+      this.usuario = null;
+      this.token = '';
+
+      localStorage.removeItem('id'); // Lo elimine no se si sirve para algo.
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('menu');
+      localStorage.removeItem('history');
+      localStorage.removeItem('historyArray');
+      localStorage.removeItem('AprobSolicitudes');
+      localStorage.removeItem('ManiobrasTabs');
+      localStorage.removeItem('InventarioTabs');
+      localStorage.removeItem('AprobacionTabs');
+      localStorage.removeItem('TrasportistaTabs');
+      localStorage.removeItem('FacturacionTabs');
+      localStorage.removeItem('VacioTabs');
+      localStorage.removeItem('L/R');
+      localStorage.removeItem('TiemposTab');
+      localStorage.removeItem('LR');
+      localStorage.removeItem('urlMain');
+      this.router.navigate(['/login']);
+    }
+  }
+
   updateStatusUser(usuario) {
     // if (this.usuario) {
-      let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/user/logout';
-      url += '?token=' + this.token;
-      return this.http.put(url, usuario);
+    let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/user/logout';
+    url += '?token=' + this.token;
+    return this.http.put(url, usuario);
     // }
   }
 

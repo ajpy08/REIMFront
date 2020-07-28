@@ -1,10 +1,9 @@
 import { Maniobra } from 'src/app/models/maniobra.models';
-import { ManiobraService, FacturacionService } from 'src/app/services/service.index';
+import { ManiobraService, FacturacionService, UsuarioService } from 'src/app/services/service.index';
 import { AgenciaService } from './../../pages/agencias/agencia.service';
 import { Notification } from './../../models/notification.models';
 import { SolicitudService } from './../../pages/solicitudes/solicitud.service';
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../../services/service.index';
 import { Usuario } from '../../pages/usuarios/usuario.model';
 import { Router } from '@angular/router';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
@@ -30,7 +29,8 @@ export class HeaderComponent implements OnInit {
     private agenciaService: AgenciaService,
     private maniobraService: ManiobraService,
     public router: Router,
-    public facturacionService: FacturacionService) { }
+    public facturacionService: FacturacionService,
+    public usuarioService: UsuarioService) { }
 
   ngOnInit() {
 
@@ -295,6 +295,16 @@ export class HeaderComponent implements OnInit {
 
     }.bind(this));
 
+    this.socket.on('logout-user', function (data: any) {
+        this.usuarioService.logout2(data.data.usuario._id);
+    }.bind(this));
+
+    this.socket.on('actualizar-perfil', function (data: any) {
+      if (this.usuario._id === data.data._id) {
+        this.cargarUsuario(data.data._id);
+      }
+    }.bind(this));
+
     // this.socket.on('update-papeleta', function (data: any) {
     //   if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
     //     this.notifications = [];
@@ -335,6 +345,12 @@ export class HeaderComponent implements OnInit {
     //   }
     // }.bind(this));
 
+  }
+
+  cargarUsuario(id: string) {
+    this._usuarioService.getUsuario(id).subscribe(usuario => {
+      this.usuario = usuario;
+    });
   }
 
   buscar(termino: string) {
@@ -404,7 +420,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     this._usuarioService.updateStatusUser(this._usuarioService.usuario).subscribe((usuario) => {
       this._usuarioService.logout();
-      this.socket.emit('logoutuser', usuario);
+      this.socket.emit('logout-user', usuario);
     });
   }
 }

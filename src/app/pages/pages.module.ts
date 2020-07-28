@@ -152,6 +152,7 @@ import { PdfFacturacionComponent } from './facturacion/pdf-facturacion/pdf-factu
 import { NotasDeCreditoComponent } from './facturacion/notas-de-credito/notas-de-credito.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
 import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/pdf-notas-de-credito.component';
+import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 
 
 @NgModule({
@@ -240,7 +241,10 @@ import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/p
         NotasDeCreditoComponent,
         NotaDeCreditoComponent,
         PdfNotasDeCreditoComponent,
+        ImageCropperComponent
     ],
+        
+     ],
     exports: [
         DashboardComponent
     ],
@@ -275,7 +279,7 @@ import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/p
         MatListModule,
         MatBadgeModule,
         MatTooltipModule,
-        QRCodeModule,
+        QRCodeModule
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
