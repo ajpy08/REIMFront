@@ -70,17 +70,17 @@ export class PdfFacturacionComponent implements OnInit {
     private usuarioService: UsuarioService) { }
 
   ngOnInit() {
-    this.socket.on('alert-timbre', function(data: any) {
-    if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
-      if (data.data.ok === true) {
-        this.dialigRef.close();
-        swal({
-          title: 'TIMBRANDO',
-          text: 'CFDI: ' + data.data.serieFolio,
-          icon: 'warning'
-        });
+    this.socket.on('alert-timbre', function (data: any) {
+      if (data.data.usuarioLogeado._id !== this.usuarioLogueado._id) {
+        if (data.data.ok === true) {
+          this.dialigRef.close();
+          swal({
+            title: 'TIMBRANDO',
+            text: 'CFDI: ' + data.data.serieFolio,
+            icon: 'warning'
+          });
+        }
       }
-    }
     }.bind(this));
 
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -250,8 +250,8 @@ export class PdfFacturacionComponent implements OnInit {
     }).then(timbrar => {
       if (timbrar) {
         const serieFolio = this.data.data.cfdi.serie + '-' + this.data.data.cfdi.folio;
-        this.socket.emit('alerttimbre', {usuarioLogeado, ok, serieFolio});
-        this.socket.emit('timbradocfdi', {ok, serieFolio, id, usuarioLogeado});
+        this.socket.emit('alerttimbre', { usuarioLogeado, ok, serieFolio });
+        this.socket.emit('timbradocfdi', { ok, serieFolio, id, usuarioLogeado });
         this.cargandoTimbre = true;
         this.mensaje = 'Validando Datos';
 
@@ -260,7 +260,15 @@ export class PdfFacturacionComponent implements OnInit {
             this.mensaje = 'Generando XML';
           }, 3000);
           if (res.ok === true) {
-            this.facturacionService.timbrarXML(res.NombreArchivo, id, res.cfdiData.direccion, res.cfdiData.informacionAdicional)
+            let dir = '';
+            const d = res.cfdiData.direccion.indexOf(' ');
+            const buscar = '/';
+            if (d !== -1) {
+              dir = res.cfdiData.direccion.replace(new RegExp(buscar, 'g'), '-');
+            } else {
+              dir = res.cfdiData.direccion;
+            }
+            this.facturacionService.timbrarXML(res.NombreArchivo, id, dir, res.cfdiData.informacionAdicional)
               .subscribe((restim) => { // timbrar XML
                 if (restim.ok === true) {
                   setTimeout(() => {
@@ -337,14 +345,14 @@ export class PdfFacturacionComponent implements OnInit {
                     this.pdfFacturacionService.subirBooket(resCorreo.archivos, true).subscribe(() => {
                       this.cargandoTimbre = false;
                       this.socket.emit('alerttimbre', usuarioLogeado);
-                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                      this.socket.emit('timbradocfdi', { ok, usuarioLogeado });
                       this.dialigRef.close();
                       swal('Correcto', 'Se ha timbrado la Factura ' + serie + '-' + folio + 'y enviado correo correctamente a ' +
                         correo, 'success');
                     }, (err) => {
                       // tslint:disable-next-line: no-shadowed-variable
                       const ok = false;
-                      this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                      this.socket.emit('timbradocfdi', { ok, usuarioLogeado });
                       swal('Error', `${err.error.mensaje}`, 'error');
                     });
                   }, 5000);
@@ -352,21 +360,21 @@ export class PdfFacturacionComponent implements OnInit {
               }, (err) => {
                 // tslint:disable-next-line: no-shadowed-variable
                 const ok = false;
-                this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+                this.socket.emit('timbradocfdi', { ok, usuarioLogeado });
                 swal('Error', `${err.error.mensaje}`, 'error');
               });
             }
           }, (err) => {
             // tslint:disable-next-line: no-shadowed-variable
             const ok = false;
-            this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+            this.socket.emit('timbradocfdi', { ok, usuarioLogeado });
             swal('Error', `${err.error.mensaje}`, 'error');
           });
         }, 3000);
       }, (err) => {
         // tslint:disable-next-line: no-shadowed-variable
         const ok = false;
-        this.socket.emit('timbradocfdi', {ok, usuarioLogeado});
+        this.socket.emit('timbradocfdi', { ok, usuarioLogeado });
         swal('Error', `${err.error.mensaje}`, 'error');
       });
     }, 5000);
