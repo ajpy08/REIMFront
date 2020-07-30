@@ -23,6 +23,7 @@ export class FacturacionService {
   aFacturarV = [];
   aFacturarM = [];
   peso = '';
+  aComplementar = [];
 
   constructor(
     public http: HttpClient,
