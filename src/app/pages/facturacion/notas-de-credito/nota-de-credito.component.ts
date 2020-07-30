@@ -253,7 +253,7 @@ export class NotaDeCreditoComponent implements OnInit {
       conceptosN.unidad = '0';
       conceptosN.cantidad = this.cantidadV(this.getLocalStorageCFDIS.length, 'D');
       // conceptosN.cfdis = c._id;
-      conceptosN.valorUnitario = this.getLocalStorageCFDIS !== undefined ? this.truncateDecimals(c.total.$numberDecimal, 4) : 0.00;
+      conceptosN.valorUnitario = this.getLocalStorageCFDIS !== undefined ? this.truncateDecimals(c.subtotal.$numberDecimal, 4) : 0.00;
       conceptosN.descuento = 0.00;
       conceptosN.claveProdServ = this.getProdLocalStorage.claveSAT.claveProdServ;
       conceptosN.claveUnidad = this.getProdLocalStorage.unidadSAT.claveUnidad;
@@ -474,7 +474,7 @@ export class NotaDeCreditoComponent implements OnInit {
       conceptosN.unidad = '0';
       conceptosN.cantidad = this.cantidadV(this.getLocalStorageCFDIS.length, 'D');
       conceptosN.cfdis = this.getLocalStorageCFDIS;
-      conceptosN.valorUnitario = this.getLocalStorageCFDIS !== undefined ? this.truncateDecimals(c.total.$numberDecimal, 4) : 0.00;
+      conceptosN.valorUnitario = this.getLocalStorageCFDIS !== undefined ? this.truncateDecimals(c.subtotal.$numberDecimal, 4) : 0.00;
       conceptosN.descuento = 0.00;
       conceptosN.claveProdServ = this.getProdLocalStorage.claveSAT.claveProdServ;
       conceptosN.claveUnidad = this.getProdLocalStorage.unidadSAT.claveUnidad;

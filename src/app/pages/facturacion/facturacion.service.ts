@@ -409,6 +409,8 @@ export class FacturacionService {
   }
 
   timbrarXMLNota(nombre: string, id: string, direccion: string): Observable<any> {
+
+
     let url = URL_SERVICIOS + '/notas/notaTimbre/' + nombre + '&' + id + '&' + direccion + '/';
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
