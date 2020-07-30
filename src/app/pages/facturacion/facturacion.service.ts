@@ -31,10 +31,19 @@ export class FacturacionService {
 
   /* #region  CFDIS */
 
-  getCFDIS(serie: string): Observable<any> {
-    let url = URL_SERVICIOS + '/cfdis/' + serie + '/';
+  getCFDIS(serie?: string, metodoPago?: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/';
     url += '?token=' + this._usuarioService.token;
-    return this.http.get(url);
+
+    let params = new HttpParams();
+    if (serie) {
+      params = params.append('serie', serie);
+    }
+    if (metodoPago) {
+      params = params.append('metodoPago', metodoPago);
+    }
+
+    return this.http.get(url, { params: params });
   }
 
   getCFDIS_T_sT(timbre: boolean): Observable<any> {

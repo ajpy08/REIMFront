@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _moment from 'moment';
 import swal from 'sweetalert';
 import {
-  MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogConfig,
-  MatTabChangeEvent, MatTabGroup, MatSnackBar
+  MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -14,7 +13,6 @@ import { Usuario } from 'src/app/pages/usuarios/usuario.model';
 import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
 import { Complemento } from '../../models/complemento.models';
 
-const moment = _moment;
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -84,8 +82,7 @@ export class FacturasPpdComponent implements OnInit {
 
   cargaCFDIS() {
     this.cargando = true;
-    const cargaDescarga = 'D';
-    this.facturacionService.getCFDIS('PPD').subscribe(cfdis => {
+    this.facturacionService.getCFDIS('', 'PPD').subscribe(cfdis => {
       this.dataSource = new MatTableDataSource(cfdis.cfdis);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
