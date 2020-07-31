@@ -50,7 +50,9 @@
       <td class="receptorTD">
         R.F.C: {{data.data.cfdi.rfc}}<br>
         Nombre: {{data.data.cfdi.nombre}}<br>
-        Dirección: {{data.data.cfdi.direccion}}
+        <p class="direccion">
+          Dirección: {{data.data.cfdi.direccion}}
+        </p>
         <p class="uso">
           USO CFDI: {{usoCFDI}}
         </p>
@@ -121,7 +123,7 @@
 
   <div class="tipoRelacion">
     {{this.tipo}}
-  </div>
+  </div> <br>
 
   <table>
     <thead>
