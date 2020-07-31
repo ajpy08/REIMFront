@@ -200,7 +200,7 @@ export class PdfNotasDeCreditoComponent implements OnInit {
             this.mensaje = 'Generando XML';
           }, 3000);
           if (res.ok === true) {
-            this.facturacionService.timbrarXMLNota(res.NombreArchivo, id, res.cfdiData.direccion)
+            this.facturacionService.timbrarXMLNota(res.NombreArchivo, id)
               .subscribe((restim) => { // timbrar XML
                 if (restim.ok === true) {
                   setTimeout(() => {
