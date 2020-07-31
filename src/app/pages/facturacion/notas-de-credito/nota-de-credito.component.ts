@@ -261,7 +261,7 @@ export class NotaDeCreditoComponent implements OnInit {
       conceptosN.noIdentificacion = this.getProdLocalStorage.codigo;
       conceptosN.importe = this.truncateDecimals(conceptosN.valorUnitario * conceptosN.cantidad, 4);
       // conceptosN.importe = getLocalStorageCFDI !== undefined ? this.truncateDecimals(c.total.$numberDecimal, 4) : 0.00;
-      this.pusSubtotal.push(c.total.$numberDecimal);
+      this.pusSubtotal.push(c.subtotal.$numberDecimal);
 
 
       this.getProdLocalStorage.impuestos.forEach(pro => {
@@ -481,7 +481,7 @@ export class NotaDeCreditoComponent implements OnInit {
       conceptosN.descripcion = this.getProdLocalStorage.descripcion + ' : ' + c.serie + ' - ' + c.folio;
       conceptosN.noIdentificacion = this.getProdLocalStorage.codigo;
       conceptosN.importe = this.getLocalStorageCFDIS !== undefined ? this.truncateDecimals(c.total.$numberDecimal, 4) : 0.00;
-      this.pusSubtotal.push(c.total.$numberDecimal);
+      this.pusSubtotal.push(c.subtotal.$numberDecimal);
 
       this.Notas.conceptos = this.conceptos.value;
 
