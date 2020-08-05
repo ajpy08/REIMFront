@@ -52,7 +52,7 @@
                 <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                 Facturar
               </button>
-              <a *ngIf="this.selectionComplementos.selected.length > 0 && soyAdmin()"
+              <a *ngIf="this.selectionFacturas.selected.length === 1 && soyAdmin()"
                 (click)="agregarFacturas()" class="float">
                 <i class="fa fa-plus my-float"></i>
               </a> <br><br>
@@ -79,15 +79,15 @@
 
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggleVacios() : null"
-                  [checked]="selectionComplementos.hasValue() && isAllSelectedVacios()"
-                  [indeterminate]="selectionComplementos.hasValue() && !isAllSelectedVacios()">
-                </mat-checkbox>
+                <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selectionFacturas.hasValue() && isAllSelected()"
+                  [indeterminate]="selectionFacturas.hasValue() && !isAllSelected()">
+                </mat-checkbox> -->
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <mat-checkbox (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionComplementos.toggle(row) : null"
-                  [checked]="selectionComplementos.isSelected(row)">
+                  (change)="$event ? selectionFacturas.toggle(row) : null"
+                  [checked]="selectionFacturas.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
             </ng-container>

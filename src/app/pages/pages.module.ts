@@ -155,6 +155,8 @@ import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/p
 import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
 import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago/complementos-pago.component';
+import { DocumentoRelacionadoComponent } from './facturacion/dialogs/documento-relacionado/documento-relacionado.component';
+import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.component';
 
 
 @NgModule({
@@ -246,6 +248,8 @@ import { ComplementosPagoComponent } from './facturacion/complemento-pago/comple
         NotaDeCreditoComponent,
         PdfNotasDeCreditoComponent,
         ImageCropperComponent,
+        DetallePagoComponent,
+        DocumentoRelacionadoComponent
      ],
     exports: [
         DashboardComponent
@@ -285,8 +289,7 @@ import { ComplementosPagoComponent } from './facturacion/complemento-pago/comple
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
-        PdfNotasDeCreditoComponent,
-        NotasDeCreditoComponent]
+        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent]
 })
 
 export class PagesModules { }

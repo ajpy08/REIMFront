@@ -1,3 +1,4 @@
+import { DocumentoRelacionadoComponent } from './../../dialogs/documento-relacionado/documento-relacionado.component';
 import { DetallePagoComponent } from './../../../../dialogs/detalle-pago/detalle-pago.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _moment from 'moment';
@@ -47,11 +48,12 @@ export class FacturasPpdComponent implements OnInit {
   cargando = true;
   totalRegistros = 0;
   usuarioLogueado = new Usuario();
+  disabled = false;
 
   displayedColumns = ['select', 'folio', 'fecha', 'metodoPago', 'total'];
 
   dataSource: any;
-  selectionComplementos = new SelectionModel<Complemento>(true, []);
+  selectionFacturas = new SelectionModel<Complemento>(true, []);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(public matDialog: MatDialog,
@@ -66,18 +68,18 @@ export class FacturasPpdComponent implements OnInit {
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelectedVacios() {
-    const numSelected = this.selectionComplementos.selected.length;
+  isAllSelected() {
+    const numSelected = this.selectionFacturas.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggleVacios() {
-    this.isAllSelectedVacios()
-      ? this.selectionComplementos.clear()
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selectionFacturas.clear()
       : this.dataSource.data.forEach(row =>
-        this.selectionComplementos.select(row)
+        this.selectionFacturas.select(row)
       );
   }
 
@@ -149,7 +151,7 @@ export class FacturasPpdComponent implements OnInit {
   //         this.facturacionService.aFacturarV[pos].maniobras.push(x);
   //         aAgregar = [];
   //         this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-  //         // this.selectionComplementos.clear();
+  //         // this.selectionFacturas.clear();
   //         // this.selectionLavadoVacios.clear();
   //         // this.selectionReparacionVacios.clear();
   //         // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
@@ -162,7 +164,7 @@ export class FacturasPpdComponent implements OnInit {
   //       this.facturacionService.aFacturarV.push(concepto);
   //       aAgregar = [];
   //       this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-  //       // this.selectionComplementos.clear();
+  //       // this.selectionFacturas.clear();
   //       // this.selectionLavadoVacios.clear();
   //       // this.selectionReparacionVacios.clear();
   //       // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
@@ -173,13 +175,13 @@ export class FacturasPpdComponent implements OnInit {
 
   agregarFacturas() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = this.selectionComplementos;
-    const dialogRef = this.matDialog.open(DetallePagoComponent, dialogConfig);
+    dialogConfig.data = this.selectionFacturas.selected[0];
+    const dialogRef = this.matDialog.open(DocumentoRelacionadoComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // if (this.checkedReparacionVacios) {
-        this.selectionComplementos = new SelectionModel<Complemento>(true, []);
+        this.selectionFacturas = new SelectionModel<Complemento>(true, []);
         // this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
@@ -215,7 +217,7 @@ export class FacturasPpdComponent implements OnInit {
         //     this.facturacionService.maniobras.push(m._id);
         //   });
         // });
-        // this.facturacionService.maniobras = this.selectionComplementos.selected;
+        // this.facturacionService.maniobras = this.selectionFacturas.selected;
         /////////////////////////////////////////////////
         this.router.navigate(['/cfdi/nuevo']);
       } else {
