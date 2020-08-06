@@ -18,7 +18,9 @@ import { ROLES } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
 import { Router } from '@angular/router';
 import { Naviera } from '../../navieras/navieras.models';
+import * as _moment from 'moment';
 declare var swal: any;
+const moment = _moment;
 
 @Component({
   selector: 'app-inventario',
@@ -32,6 +34,7 @@ export class InventarioComponent implements OnInit {
   totalRegistrosLR = 0;
   displayedColumns = [
     'fLlegada',
+    'dias',
     'viaje',
     'nombre',
     'nombreComercial',
@@ -44,6 +47,7 @@ export class InventarioComponent implements OnInit {
   ];
   displayedColumnsGroups = [
     'fLlegada',
+    'dias',
     'viaje',
     'nombre',
     // "nombreComercial",
@@ -82,7 +86,7 @@ export class InventarioComponent implements OnInit {
     private navieraService: NavieraService,
     private _excelService: ExcelService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -96,6 +100,7 @@ export class InventarioComponent implements OnInit {
       this.displayedColumnsLR = [
         'actions',
         'fLlegada',
+        'dias',
         'viaje',
         'nombre',
         'nombreComercial',
@@ -111,6 +116,7 @@ export class InventarioComponent implements OnInit {
       this.blockNaviera = true;
       this.displayedColumnsLR = [
         'fLlegada',
+        'dias',
         'viaje',
         'nombre',
         'nombreComercial',
@@ -235,7 +241,9 @@ export class InventarioComponent implements OnInit {
         .subscribe(maniobras => {
           this.maniobras = maniobras.maniobras;
 
-          this.dataSource = new MatTableDataSource(maniobras.maniobras);
+          this.maniobras = this.maniobras.sort((a, b) => a.fLlegada.localeCompare(b.fLlegada));
+
+          this.dataSource = new MatTableDataSource(this.maniobras);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.totalRegistros = maniobras.maniobras.length;
@@ -463,17 +471,17 @@ export class InventarioComponent implements OnInit {
         EntradaPatio: d.fLlegada,
         Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje !== undefined && d.viaje.viaje !== '' ? d.viaje.viaje : '',
         Buque: d.viaje && d.viaje.buque && d.viaje.buque !== undefined && d.viaje.buque !== null &&
-        d.viaje.buque.nombre && d.viaje.buque.nombre !== undefined &&
-        d.viaje.buque.nombre !== '' ? d.viaje.buque.nombre : '',
+          d.viaje.buque.nombre && d.viaje.buque.nombre !== undefined &&
+          d.viaje.buque.nombre !== '' ? d.viaje.buque.nombre : '',
         VigenciaTemporal: d.viaje && d.viaje.fVigenciaTemporal !== undefined &&
-        d.viaje.fVigenciaTemporal !== null && d.viaje.fVigenciaTemporal ? d.viaje.fVigenciaTemporal : '',
+          d.viaje.fVigenciaTemporal !== null && d.viaje.fVigenciaTemporal ? d.viaje.fVigenciaTemporal : '',
         Contenedor: d.contenedor,
         Tipo: d.tipo,
         Estado: d.peso,
         Grado: d.grado,
         // operador: d.operador != undefined ? d.operador.nombre : '',
         Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial !== undefined &&
-        d.naviera.nombreComercial !== '' ? d.naviera.nombreComercial : '',
+          d.naviera.nombreComercial !== '' ? d.naviera.nombreComercial : '',
         Reparaciones: reparaciones,
         FAlta: d.fAlta.substring(0, 10),
       };
@@ -682,5 +690,19 @@ export class InventarioComponent implements OnInit {
     this.router.navigate([
       '/maniobras/maniobra/' + id + '/termina_lavado_reparacion'
     ]);
+  }
+
+  calculaDias(fEnt) {
+    const hoy = moment();
+    const fEntrada = moment(fEnt);
+    let dias = 0;
+    if (fEntrada !== undefined) {
+      dias = hoy.diff(fEntrada, 'days');
+    } else {
+      dias = 0;
+    }
+
+
+    return dias;
   }
 }

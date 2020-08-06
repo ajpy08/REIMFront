@@ -67,6 +67,11 @@
                   <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
                 </ng-container>
 
+                <ng-container matColumnDef="dias">
+                  <mat-header-cell *matHeaderCellDef >Dias/Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{calculaDias(row.fLlegada)}}</mat-cell>
+                </ng-container>                      
+
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
@@ -235,10 +240,16 @@
                         <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
                       </ng-container>
 
+                      <ng-container matColumnDef="dias">
+                        <mat-header-cell *matHeaderCellDef >Dias/Patio</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{calculaDias(row.fLlegada)}}</mat-cell>
+                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                      </ng-container>                      
+
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
-                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="nombre">
@@ -345,10 +356,16 @@
                         <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>>
                       </ng-container>
 
+                      <ng-container matColumnDef="dias">
+                        <mat-header-cell *matHeaderCellDef >Dias/Patio</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{calculaDias(row.fLlegada)}}</mat-cell>
+                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                      </ng-container>                      
+
                       <ng-container matColumnDef="viaje">
                         <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
                         <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
-                        <mat-footer-cell *matFooterCellDef> {{g.maniobras.length}} </mat-footer-cell>>
+                        <mat-footer-cell *matFooterCellDef> </mat-footer-cell>
                       </ng-container>
 
                       <ng-container matColumnDef="nombre">
@@ -464,6 +481,11 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
                 </ng-container>
+
+                <ng-container matColumnDef="dias">
+                  <mat-header-cell *matHeaderCellDef >Dias/Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{calculaDias(row.fLlegada)}}</mat-cell>
+                </ng-container>                      
 
                 <ng-container matColumnDef="viaje">
                   <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
