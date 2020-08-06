@@ -19,16 +19,16 @@ export class CamionService {
     public _usuarioService: UsuarioService
   ) { }
 
-  getCamiones(act?: boolean, transportista?: string, ): Observable<any> {
+  getCamiones(activo?: boolean, transportista?: string, ): Observable<any> {
     let url = URL_SERVICIOS + '/camiones/' ;
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (transportista)  {
       params = params.append('transportista', transportista);
     }
-    if (act === true || act === false) {
-      const tf = act.toString();
-      params = params.append('act', tf);
+    if (activo === true || activo === false) {
+      const tf = activo.toString();
+      params = params.append('activo', tf);
     }
     return this.http.get(url, {params: params });
   }

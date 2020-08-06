@@ -70,14 +70,14 @@ export class CamionesComponent implements OnInit {
 
   filtrado(bool: boolean) {
     if (bool === false) {
+      bool = true;
+        this.cargarCamiones(bool);
+    } else if (bool === true) {
       bool = false;
       this.cargarCamiones(bool);
-    } else if (bool === true) {
-      bool = true;
-      this.cargarCamiones(bool);
     }
-
   }
+
   ngOnDestroy() {
     this.socket.removeListener('delete-camion');
     this.socket.removeListener('update-camion');

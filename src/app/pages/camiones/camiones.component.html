@@ -33,6 +33,9 @@
         <div class="col-sm-2">
           <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
         </div>
+        <!-- <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
+        </div> -->
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
