@@ -1,3 +1,4 @@
+import { VariasService } from './../varias.service';
 import { ClienteService } from './../../../services/cliente/cliente.service';
 import { SolicitudService } from './../../solicitudes/solicitud.service';
 /* #region  Imports */
@@ -301,12 +302,12 @@ export class CFDIComponent implements OnInit, OnDestroy {
           if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
             concepto.cantidad = conceptoCalcular.maniobras.length;
             concepto.maniobras = conceptoCalcular.maniobras;
-            concepto.valorUnitario = this.truncateDecimals(conceptoCalcular.valorUnitario, 4);
-            concepto.descuento = this.truncateDecimals(conceptoCalcular.descuento, 4);
+            concepto.valorUnitario = VariasService.truncateDecimals(conceptoCalcular.valorUnitario, 4);
+            concepto.descuento = VariasService.truncateDecimals(conceptoCalcular.descuento, 4);
           } else {
             concepto.cantidad = c.maniobras.length;
             concepto.maniobras = c.maniobras;
-            concepto.valorUnitario = prodServ !== undefined ? this.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
+            concepto.valorUnitario = prodServ !== undefined ? VariasService.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
             concepto.descuento = 0.00;
           }
           if (prodServ && concepto.maniobras.length > 0) {
@@ -314,18 +315,18 @@ export class CFDIComponent implements OnInit, OnDestroy {
             concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
             concepto.descripcion = prodServ.descripcion;
             concepto.noIdentificacion = prodServ.codigo;
-            concepto.importe = this.round(concepto.valorUnitario * concepto.cantidad - concepto.descuento, 2);
+            concepto.importe = VariasService.round(concepto.valorUnitario * concepto.cantidad - concepto.descuento, 2);
             subTotal += concepto.importe;
             totalDescuentos += concepto.descuento;
             // totalDescuentos += concepto.descuento;
             if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
               conceptoCalcular.impuestos.forEach(impuesto => {
                 if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                  impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                   totalImpuestosRetenidos += impuestosRetenidos;
                 } else {
                   if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                    impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosTrasladados += impuestosTrasladados;
                   }
                 }
@@ -333,32 +334,32 @@ export class CFDIComponent implements OnInit, OnDestroy {
               concepto.impuestos = conceptoCalcular.impuestos;
             } else {
               prodServ.impuestos.forEach(impuesto => {
-                impuesto.importe = this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                impuesto.importe = VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                 if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                  impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                   totalImpuestosRetenidos += impuestosRetenidos;
                 } else {
                   if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                    impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosTrasladados += impuestosTrasladados;
                   }
                 }
               });
               concepto.impuestos = prodServ.impuestos;
             }
-            concepto.impuestosRetenidos = this.truncateDecimals(impuestosRetenidos, 4);
-            concepto.impuestosTrasladados = this.truncateDecimals(impuestosTrasladados, 4);
+            concepto.impuestosRetenidos = VariasService.truncateDecimals(impuestosRetenidos, 4);
+            concepto.impuestosTrasladados = VariasService.truncateDecimals(impuestosTrasladados, 4);
             // concepto.impuestos = prodServ.impuestos;
 
             concepto.unidad = '0';
             this.conceptos.push(this.agregarArray(concepto));
             this.cfdi.conceptos = this.conceptos.value;
           }
-          this.subtotal.setValue(this.round(subTotal, 2));
-          this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
-          this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
-          this.totalDescuentos.setValue(this.round(totalDescuentos, 2));
-          this.total.setValue(this.round(this.subtotal.value - this.totalDescuentos.value +
+          this.subtotal.setValue(VariasService.round(subTotal, 2));
+          this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
+          this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
+          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
+          this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
             this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
         });
       });
@@ -374,7 +375,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
 
-  onchange(objeto, indice, event) {
+  onChange(objeto, indice, event) {
     let pos = 0;
     if (event.checked === true) {
       this.idSelect = objeto;
@@ -415,20 +416,20 @@ export class CFDIComponent implements OnInit, OnDestroy {
           let impuestosRetenidos = 0.00;
           let impuestosTrasladados = 0.00;
           concepto.cantidad = concepto.maniobras.length;
-          concepto.importe = this.round(concepto.valorUnitario * concepto.cantidad, 2);
+          concepto.importe = VariasService.round(concepto.valorUnitario * concepto.cantidad, 2);
           subTotal += concepto.importe;
           totalDescuentos += concepto.descuento;
           // totalDescuentos += concepto.descuento;
           concepto.impuestos.forEach(impuesto => {
-            impuesto.importe = this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+            impuesto.importe = VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
             if (impuesto.TR === 'RETENCION') {
-              impuestosRetenidos += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+              impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
               totalImpuestosRetenidos += impuestosRetenidos;
               // impuestosRetenidos += impuesto.importe;
               // totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
             } else {
               if (impuesto.TR === 'TRASLADO') {
-                impuestosTrasladados += this.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
                 totalImpuestosTrasladados += impuestosTrasladados;
                 // impuestosTrasladados += impuesto.importe;
                 // totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
@@ -436,11 +437,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
             }
           });
 
-          this.subtotal.setValue(this.round(subTotal, 2));
-          this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
-          this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
-          this.totalDescuentos.setValue(this.round(totalDescuentos, 2));
-          this.total.setValue(this.round(this.subtotal.value - this.totalDescuentos.value +
+          this.subtotal.setValue(VariasService.round(subTotal, 2));
+          this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
+          this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
+          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
+          this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
             this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
 
           this.conceptos.push(this.agregarArray(new Concepto(
@@ -458,23 +459,22 @@ export class CFDIComponent implements OnInit, OnDestroy {
             impuestosRetenidos,
             impuestosTrasladados,
             concepto._id)));
-          console.log(this.conceptos);
         } else {
-          this.subtotal.setValue(this.truncateDecimals(subTotal, 4));
-          this.totalImpuestosRetenidos.setValue(this.truncateDecimals(totalImpuestosRetenidos, 4));
-          this.totalImpuestosTrasladados.setValue(this.truncateDecimals(totalImpuestosTrasladados, 4));
-          this.totalDescuentos.setValue(this.round(totalDescuentos, 2));
-          this.total.setValue(this.truncateDecimals(this.subtotal.value - this.totalDescuentos.value +
+          this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));
+          this.totalImpuestosRetenidos.setValue(VariasService.truncateDecimals(totalImpuestosRetenidos, 4));
+          this.totalImpuestosTrasladados.setValue(VariasService.truncateDecimals(totalImpuestosTrasladados, 4));
+          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
+          this.total.setValue(VariasService.truncateDecimals(this.subtotal.value - this.totalDescuentos.value +
             this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 4));
         }
       });
     } else {
-      this.subtotal.setValue(this.round(subTotal, 2));
-      this.totalImpuestosRetenidos.setValue(this.round(totalImpuestosRetenidos, 2));
-      this.totalImpuestosTrasladados.setValue(this.round(totalImpuestosTrasladados, 2));
-      this.totalDescuentos.setValue(this.round(totalDescuentos, 2));
-      this.total.setValue(this.round(this.subtotal.value - this.totalDescuentos.value +
-      this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+      this.subtotal.setValue(VariasService.round(subTotal, 2));
+      this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
+      this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
+      this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
+      this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
+        this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
     }
   }
 
@@ -549,7 +549,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     // await this.agruparDesagruparConcepto(this.agrupado);
   }
 
-
   quitar(objeto) {
     if (objeto !== undefined && objeto.length > 0) {
       objeto.forEach(i => {
@@ -619,7 +618,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   //         });
   //         this.facturacionService.carritoAFacturar[pos].maniobras.splice(ind, 1);
   //         this.recargaValoresCFDI();
-  //       }       
+  //       }
   //       this.facturacionService.carritoAFacturar.splice(pos, 1);
   //       if (this.id === 'nuevo' || this.id === undefined) {
   //         this.cargaValoresIniciales(undefined);
@@ -741,7 +740,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     }
   }
 
-
   consultarManiobraConcepto() {
     // let promesas;
     let ok = true;
@@ -821,7 +819,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   BotoninformacionAdicional() {
-
     swal({
       title: 'Informacion Adicional',
       icon: 'info',
@@ -843,7 +840,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   openDialogImpuestos(concepto) {
-
     if (concepto !== undefined) {
       // let cfdi;
       // cfdi = this.regForm.value;
@@ -879,7 +875,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
   }
 
   openDialogManiobras(concepto) {
-
     if (concepto !== undefined) {
       // let cfdi;
       // cfdi = this.cfdi;
@@ -993,7 +988,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.cfdi.conceptos = [];
 
     if (agrupar) {
-      const groups = this.groupArray(this.conceptos.value, '_id');
+      const groups = VariasService.groupArray(this.conceptos.value, '_id');
       // tslint:disable-next-line: forin
       for (const g in groups) {
         const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
@@ -1042,9 +1037,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
 
       const start = async () => {
-        await this.asyncForEach(this.conceptos.value, async (c) => {
+        await VariasService.asyncForEach(this.conceptos.value, async (c) => {
           // await waitFor(200);
-          await this.asyncForEach(c.maniobras, async (m) => {
+          await VariasService.asyncForEach(c.maniobras, async (m) => {
             // await waitFor(200);
 
             const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
@@ -1094,34 +1089,38 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return agrupado;
   }
 
-  groupArray(dataSource, field) {
-    return dataSource.reduce(function (groups, x) {
-      (groups[x[field]] = groups[x[field]] || []).push(x);
-      return groups;
-    }, {});
+  calculaImpuestos (impTras, impRet) {
+    return VariasService.round(impTras - impRet, 2);
   }
 
-  async asyncForEach(array, callback) {
-    for (let index = 0; index < array.length; index++) {
-      await callback(array[index]);
-      // await callback(array[index], index, array);
-    }
-  }
+  // groupArray(dataSource, field) {
+  //   return dataSource.reduce(function (groups, x) {
+  //     (groups[x[field]] = groups[x[field]] || []).push(x);
+  //     return groups;
+  //   }, {});
+  // }
 
-  truncateDecimals(num, digits) {
-    const numS = num.toString(),
-      decPos = numS.indexOf('.'),
-      substrLength = decPos === -1 ? numS.length : 1 + decPos + digits,
-      trimmedResult = numS.substr(0, substrLength),
-      finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
+  // async asyncForEach(array, callback) {
+  //   for (let index = 0; index < array.length; index++) {
+  //     await callback(array[index]);
+  //     // await callback(array[index], index, array);
+  //   }
+  // }
 
-    return parseFloat(finalResult);
-  }
+  // truncateDecimals(num, digits) {
+  //   const numS = num.toString(),
+  //     decPos = numS.indexOf('.'),
+  //     substrLength = decPos === -1 ? numS.length : 1 + decPos + digits,
+  //     trimmedResult = numS.substr(0, substrLength),
+  //     finalResult = isNaN(trimmedResult) ? 0 : trimmedResult;
 
-  round(number: number, digits) {
-    const n = parseFloat((Math.round(number * 100) / 100).toFixed(digits));
-    return n;
-  }
+  //   return parseFloat(finalResult);
+  // }
+
+  // round(number: number, digits) {
+  //   const n = parseFloat((Math.round(number * 100) / 100).toFixed(digits));
+  //   return n;
+  // }
 
   /* #region Properties */
 

@@ -6,38 +6,22 @@
         <div class="col-md-12">
           <mat-form-field>
             <input matInput formControlName="saldo" name="saldo" type="text" class="form-control" placeholder="Saldo">
-            <!-- <mat-error *ngIf="saldo.touched && saldo.invalid && !saldo.errors?.minlength">
-              <sup>*</sup>Por Favor Ingrese el Numero de Operación
-            </mat-error>
-            <mat-error *ngIf="saldo.errors && saldo.errors['minlength']">
-              <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
-            </mat-error> -->
           </mat-form-field>
         </div> <br>
         <div class="col-md-12">
           <mat-form-field>
             <input matInput formControlName="porPagar" name="porPagar" type="text" class="form-control"
               placeholder="Por pagar" (blur)="calcula(this.porPagar.value)">
-              <!-- <div *ngIf="porPagar.hasError('porPagar')">El valor debe que ser mayor que 0.</div> -->
               <mat-error *ngIf="porPagar.invalid">
                 <sup>*</sup>El valor debe que ser mayor que 0.
               </mat-error>
-            <!-- <mat-error *ngIf="porPagar.errors && porPagar.errors['minlength']">
-              <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
-            </mat-error> -->
           </mat-form-field>
         </div><br>
         <div class="col-md-12">
           <mat-form-field>
             <input matInput formControlName="saldoInsoluto" name="saldoInsoluto" type="text" class="form-control"
               placeholder="Saldo Insoluto">
-              <div *ngIf="saldoInsoluto.hasError('saldoInsoluto')">El valor debe que ser mayor que 0.</div>
-            <!-- <mat-error *ngIf="saldoInsoluto.touched && saldoInsoluto.invalid && !saldoInsoluto.errors?.minlength">
-              <sup>*</sup>Por Favor Ingrese el Numero de Operación
-            </mat-error>
-            <mat-error *ngIf="saldoInsoluto.errors && saldoInsoluto.errors['minlength']">
-              <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
-            </mat-error> -->
+              <div *ngIf="saldoInsoluto.hasError('saldoInsoluto')">El valor debe que ser mayor que 0</div>
           </mat-form-field>
         </div><br>
         <!-- <div class="col-md-12">

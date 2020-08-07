@@ -264,7 +264,7 @@
                           <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button> -->
-                          <mat-checkbox  (change)="onchange(item.value, i, $event)"></mat-checkbox>
+                          <mat-checkbox  (change)="onChange(item.value, i, $event)"></mat-checkbox>
  
 
                         </td>
@@ -294,8 +294,8 @@
                             </mat-form-field>
                           </div>
                         </td>
-                        <td>
-                          {{this.round(item.get('impuestosTrasladados').value - item.get('impuestosRetenidos').value, 2)}}
+                        <td> 
+                          {{calculaImpuestos(item.get('impuestosTrasladados').value, item.get('impuestosRetenidos').value)}}
                         </td>
                         <td>
                           <div class="col-md-5">
