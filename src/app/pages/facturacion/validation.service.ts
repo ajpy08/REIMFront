@@ -14,6 +14,7 @@ export class ValidationService {
       return null;
     }
   }
+
 // static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
 //     let config = {
 //         required: 'Required',

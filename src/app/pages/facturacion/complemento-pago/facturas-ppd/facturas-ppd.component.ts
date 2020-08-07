@@ -182,6 +182,7 @@ export class FacturasPpdComponent implements OnInit {
       if (result) {
         // if (this.checkedReparacionVacios) {
         this.selectionFacturas = new SelectionModel<Complemento>(true, []);
+        console.log(result);
         // this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
         // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
         //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);

@@ -13,32 +13,25 @@
               <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
             </mat-error> -->
           </mat-form-field>
-        </div>
+        </div> <br>
         <div class="col-md-12">
           <mat-form-field>
             <input matInput formControlName="porPagar" name="porPagar" type="text" class="form-control"
-              placeholder="Por pagar">
-              <mat-error *ngIf="porPagar.touched && porPagar.hasError('porPagar')">
-                <sup>*</sup>Ingrese un valor mayor que 0.
+              placeholder="Por pagar" (blur)="calcula(this.porPagar.value)">
+              <!-- <div *ngIf="porPagar.hasError('porPagar')">El valor debe que ser mayor que 0.</div> -->
+              <mat-error *ngIf="porPagar.invalid">
+                <sup>*</sup>El valor debe que ser mayor que 0.
               </mat-error>
-
-
-
-            <!-- <mat-error *ngIf="porPagar.touched && porPagar.invalid && !porPagar.errors?.minlength">
-              <sup>*</sup>Por Favor Ingrese el Numero de Operación
-            </mat-error>
-            <mat-error *ngIf="porPagar.errors && porPagar.errors['minlength']">
+            <!-- <mat-error *ngIf="porPagar.errors && porPagar.errors['minlength']">
               <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
             </mat-error> -->
           </mat-form-field>
-        </div>
+        </div><br>
         <div class="col-md-12">
           <mat-form-field>
             <input matInput formControlName="saldoInsoluto" name="saldoInsoluto" type="text" class="form-control"
               placeholder="Saldo Insoluto">
-            <mat-error *ngIf="porPagar.touched && porPagar.invalid && !porPagar.errors?.minlength">
-              <sup>*</sup>El valor insoluto debe que ser mayor que 0.
-            </mat-error>
+              <div *ngIf="saldoInsoluto.hasError('saldoInsoluto')">El valor debe que ser mayor que 0.</div>
             <!-- <mat-error *ngIf="saldoInsoluto.touched && saldoInsoluto.invalid && !saldoInsoluto.errors?.minlength">
               <sup>*</sup>Por Favor Ingrese el Numero de Operación
             </mat-error>
@@ -46,15 +39,22 @@
               <sup>*</sup>El Numero de Operación debe contener al menos 6 caracteres<br>
             </mat-error> -->
           </mat-form-field>
-        </div>
+        </div><br>
+        <!-- <div class="col-md-12">
+          <mat-form-field>
+            <label for="email">Email</label>
+            <input matInput formControlName="email" id="email"/>
+            <div *ngIf="email.touched && email.hasError('email')">Invalid</div>
+          </mat-form-field>
+        </div> -->
       </div>
     </div>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-    [disabled]="regForm.pristine || regForm.invalid" (click)="relacionarDocumento()">
+  <button *ngIf="this.saldo.value !== 0" type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+    [disabled]="regForm.invalid" (click)="relacionarDocumento()">
     <i class="fa fa-save"></i>
     Relacionar
   </button>

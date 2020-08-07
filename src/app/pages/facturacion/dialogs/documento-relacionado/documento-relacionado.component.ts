@@ -1,3 +1,4 @@
+import { VariasService } from './../../varias.service';
 import { ValidationService } from './../../validation.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import {
@@ -5,6 +6,8 @@ import {
 } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { FacturacionService } from '../../facturacion.service';
+import { CFDI } from '../../models/cfdi.models';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-documento-relacionado',
@@ -25,10 +28,11 @@ export class DocumentoRelacionadoComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      saldo: [{ value: '', disabled: true }],
-      porPagar: ['', [Validators.required, ValidationService.emailValidator]],
+      saldo: [{ value: '', disabled: true }, [Validators.required]],
+      // email: ['', [Validators.required, ValidationService.emailValidator]],
+      porPagar: [{ value: '' }, Validators.compose([Validators.required, ValidationService.positiveVal, Validators.min(1)])],
       // saldoInsoluto: [{ value: '', disabled: true }]
-      saldoInsoluto: ['', Validators.compose([Validators.required, ValidationService.positiveVal])]
+      saldoInsoluto: [{ value: '', disabled: true }, Validators.compose([Validators.required, ValidationService.positiveVal])]
     });
   }
 
@@ -41,7 +45,27 @@ export class DocumentoRelacionadoComponent implements OnInit {
     const yaPAgado = 0;
     this.regForm.controls['saldo'].setValue(this.data.total.$numberDecimal - yaPAgado);
     this.regForm.controls['porPagar'].setValue(this.saldo.value);
-    this.regForm.controls['saldoInsoluto'].setValue(this.saldo.value - this.porPagar.value);
+    this.regForm.controls['saldoInsoluto'].setValue(this.saldo.value - (this.porPagar.value));
+  }
+
+  calcula() {
+    // if (this.porPagar.value <= 0) {
+    //   swal('El valor debe ser diferente de $' + this.porPagar.value, '', 'error');
+    //   this.cargarMontos(new CFDI());
+    // } else if (this.porPagar.value <= this.saldo.value) {
+    //   const saldoInsoluto = this.saldo.value - Math.abs(this.porPagar.value);
+    //   this.regForm.controls['saldoInsoluto'].setValue(VariasService.truncateDecimals(saldoInsoluto, 2));
+    // } else {
+    //   swal('El valor debe ser menor o igual a $' + this.saldo.value, '', 'error');
+    //   this.cargarMontos(new CFDI());
+    // }
+
+    if (!this.porPagar.invalid) {
+      const saldoInsoluto = this.saldo.value - Math.abs(this.porPagar.value);
+      this.regForm.controls['saldoInsoluto'].setValue(VariasService.truncateDecimals(saldoInsoluto, 2));
+    } else {
+      this.cargarMontos(new CFDI());
+    }
   }
 
   close(result: string) {
@@ -67,6 +91,10 @@ export class DocumentoRelacionadoComponent implements OnInit {
 
   get saldoInsoluto() {
     return this.regForm.get('saldoInsoluto');
+  }
+
+  get email() {
+    return this.regForm.get('email');
   }
   /* #endregion */
 
