@@ -13,7 +13,7 @@
             <input matInput formControlName="porPagar" name="porPagar" type="text" class="form-control"
               placeholder="Por pagar" (blur)="calcula(this.porPagar.value)">
               <mat-error *ngIf="porPagar.invalid">
-                <sup>*</sup>El valor debe que ser mayor que 0.
+                <sup>*</sup>El valor debe que ser mayor que 0 y diferente de {{this.porPagar.value}}.
               </mat-error>
           </mat-form-field>
         </div><br>
@@ -37,7 +37,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button *ngIf="this.saldo.value !== 0" type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+  <button *ngIf="this.saldo.value !== 0 && this.porPagar.value <= this.saldo.value" type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
     [disabled]="regForm.invalid" (click)="relacionarDocumento()">
     <i class="fa fa-save"></i>
     Relacionar
