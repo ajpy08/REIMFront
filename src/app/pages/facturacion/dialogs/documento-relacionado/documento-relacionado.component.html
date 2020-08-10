@@ -13,7 +13,7 @@
             <input matInput formControlName="porPagar" name="porPagar" type="text" class="form-control"
               placeholder="Por pagar" (blur)="calcula(this.porPagar.value)">
               <mat-error *ngIf="porPagar.invalid">
-                <sup>*</sup>El valor debe que ser mayor que 0 y diferente de {{this.porPagar.value}}.
+                <sup>*</sup>El valor debe que ser mayor que 0 y diferente de {{this.porPagar.value > 0 ? this.porPagar.value : 'VACIO'}}.
               </mat-error>
           </mat-form-field>
         </div><br>
@@ -24,13 +24,6 @@
               <div *ngIf="saldoInsoluto.hasError('saldoInsoluto')">El valor debe que ser mayor que 0</div>
           </mat-form-field>
         </div><br>
-        <!-- <div class="col-md-12">
-          <mat-form-field>
-            <label for="email">Email</label>
-            <input matInput formControlName="email" id="email"/>
-            <div *ngIf="email.touched && email.hasError('email')">Invalid</div>
-          </mat-form-field>
-        </div> -->
       </div>
     </div>
   </form>

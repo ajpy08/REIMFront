@@ -29,9 +29,7 @@ export class DocumentoRelacionadoComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       saldo: [{ value: '', disabled: true }, [Validators.required]],
-      // email: ['', [Validators.required, ValidationService.emailValidator]],
       porPagar: [{ value: '' }, Validators.compose([Validators.required, ValidationService.positiveVal, Validators.min(1)])],
-      // saldoInsoluto: [{ value: '', disabled: true }]
       saldoInsoluto: [{ value: '', disabled: true }, Validators.compose([Validators.required, ValidationService.positiveVal])]
     });
   }
@@ -49,16 +47,6 @@ export class DocumentoRelacionadoComponent implements OnInit {
   }
 
   calcula() {
-    // if (this.porPagar.value <= 0) {
-    //   swal('El valor debe ser diferente de $' + this.porPagar.value, '', 'error');
-    //   this.cargarMontos(new CFDI());
-    // } else if (this.porPagar.value <= this.saldo.value) {
-    //   const saldoInsoluto = this.saldo.value - Math.abs(this.porPagar.value);
-    //   this.regForm.controls['saldoInsoluto'].setValue(VariasService.truncateDecimals(saldoInsoluto, 2));
-    // } else {
-    //   swal('El valor debe ser menor o igual a $' + this.saldo.value, '', 'error');
-    //   this.cargarMontos(new CFDI());
-    // }
 
     if (!this.porPagar.invalid) {
       const saldoInsoluto = this.saldo.value - Math.abs(this.porPagar.value);
@@ -93,9 +81,6 @@ export class DocumentoRelacionadoComponent implements OnInit {
     return this.regForm.get('saldoInsoluto');
   }
 
-  get email() {
-    return this.regForm.get('email');
-  }
   /* #endregion */
 
 }
