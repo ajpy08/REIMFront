@@ -3,8 +3,10 @@ export class Pago {
         public fecha?: string,
         public formaPago?: string,
         public moneda?: string,
+        // public tipoCambioP?: number, // cuando la moneda sea diferente a MXN
+        public monto?: number,
         public numeroOperacion?: string,
-        public doctosRelacionados?: any[],
+
         // Ordenante
         public numeroCuentaOrd?: string,
         public rfcEntidadEmisoraOrd?: string,
@@ -15,11 +17,14 @@ export class Pago {
         public rfcEntidadEmisoraBen?: string,
 
         // Informacion Digital
-        public tipoCadenaPago?: string,
-        public cadenaOriginal?: string,
-        public certificado?: string,
-        public sello?: string,
+        // public tipoCadenaPago?: string, // Si existe este campo es obligatorio registrar los campos CertificadoPago,
+        // CadenaPago y SelloPago, en otro caso estos campos no deben existir
+        // public certPago?: string,
+        // public cadPago?: string,
+        // public selloPago?: string,
 
-        public _id?: string
+        public doctosRelacionados?: any[],
+
+        // public _id?: string
     ) { }
 }

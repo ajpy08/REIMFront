@@ -16,9 +16,15 @@ export class Complemento {
         public total?: number, // DEBE SER 0
         public tipoComprobante?: string,
         // public metodoPago?: string, // NO DEBE EXISTIR
-        // public lugarExpedicion?: string,
+        public lugarExpedicion?: string, // Siempre CP del lugar de expedicion
         public confirmacion?: string,
 
+        // Nodo: CfdiRelacionados  PENDIENTE (Cuando un Complemento de Pago sustituye a otro
+        // que por alguna razon estuvo mal, se relaciona el CP que sera sustituido, leer Guia_comple_pagos del SAT)
+        // Tipo de Relacion (04)
+
+        // Nodo: CfdiRelacionado (En este nodo se debe expresar la información del comprobante relacionado).
+        // UUID
 
         public uuid?: string,
         public NoSerieSat?: string,
@@ -29,13 +35,15 @@ export class Complemento {
         public selloEmisro?: string,
 
 
-        // rfcEmisor?: string, // FALTA
-        // nombreEmisor?: string, // FALTA
-        // regimenFiscal?: string, // FALTA
+        rfcEmisor?: string, // FALTA
+        nombreEmisor?: string, // FALTA
+        regimenFiscal?: string, // FALTA
 
-        public rfc?: string,
-        public nombre?: string,
-        public usoCFDI?: string,
+        public rfcReceptor?: string,
+        public nombreReceptor?: string,
+        // public ResidenciaFiscal, // Si es extranjero
+        // public NumRegIdTrib, // Si es extranjero
+        public usoCFDI?: string, // Debe ser P01
 
         public concepto?: any,
 

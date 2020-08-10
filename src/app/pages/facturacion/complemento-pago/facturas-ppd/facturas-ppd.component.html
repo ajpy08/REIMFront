@@ -45,9 +45,9 @@
               </div>
             </div> -->
             <div class="col-sm-5">
-              <button [disabled]="this.facturacionService.aFacturarV.length <= 0" matTooltip="Facturar Seleccionados"
+              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Facturar Seleccionados"
                 (click)="facturar()" mat-raised-button color="primary"
-                matBadge="{{this.facturacionService.aFacturarV.length}}" matBadgePosition="after"
+                matBadge="{{this.facturacionService.aComplementar.length}}" matBadgePosition="after"
                 matBadgeColor="accent">
                 <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                 Facturar

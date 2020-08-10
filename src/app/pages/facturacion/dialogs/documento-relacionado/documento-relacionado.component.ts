@@ -1,3 +1,4 @@
+import { DoctoRelacionado } from './../../models/docto-relacionado.models';
 import { VariasService } from './../../varias.service';
 import { ValidationService } from './../../validation.service';
 import { Component, OnInit, Inject } from '@angular/core';
@@ -56,16 +57,25 @@ export class DocumentoRelacionadoComponent implements OnInit {
     }
   }
 
-  close(result: string) {
+  close(result: DoctoRelacionado) {
     this.dialogRef.close(result);
   }
 
   relacionarDocumento() {
 
-    const docto = {
-    };
+    const docto = new DoctoRelacionado();
+    docto.idDocumento = this.data.uuid;
+    docto.serie = this.data.serie;
+    docto.folio = this.data.folio;
+    docto.monedaDR = this.data.moneda;
+    docto.metodoDePagoDR = this.data.metodoPago;
+    docto.numParcialidad = 1;
+    docto.impSaldoAnt = this.saldo.value;
+    docto.impPagado = this.porPagar.value;
+    docto.impSaldoInsoluto = this.saldoInsoluto.value;
 
-    this.close('Se agrego documento Relacionado !!!');
+
+    this.close(docto);
   }
 
   /* #region  Properties */

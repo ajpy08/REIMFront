@@ -6,8 +6,8 @@ export class DoctoRelacionado {
         public monedaDR?: string,
         public metodoDePagoDR?: string,
         public numParcialidad?: number,
-        public impSaldoAnt?: string,
-        public impPagado?: string,
-        public impSaldoInsoluto?: string,
+        public impSaldoAnt?: number,
+        public impPagado?: number,
+        public impSaldoInsoluto?: number,
     ) { }
 }

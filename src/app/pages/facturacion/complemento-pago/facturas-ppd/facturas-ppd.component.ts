@@ -180,21 +180,22 @@ export class FacturasPpdComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // if (this.checkedReparacionVacios) {
-        this.selectionFacturas = new SelectionModel<Complemento>(true, []);
-        console.log(result);
-        // this.filtraManiobrasDescargaVaciosReparacion(this.checkedReparacionVacios);
-        // if (this.checkedHDescagaR && this.dataSourceReparacionVacios.data.length > 0) {
-        //   this.cargarManiobrasDescargadosVaciosReparaciones(this.checkedHDescagaR);
-        // }
-        // }
+        const pos = this.facturacionService.aComplementar.findIndex(a => a.idDocumento === result.idDocumento);
+
+        if (pos >= 0) {
+          swal('Ya esta agregada esta factura', '', 'error');
+          this.selectionFacturas.clear();
+        } else {
+          this.facturacionService.aComplementar.push(result);
+          console.log(result);
+        }
       }
     });
   }
 
   facturar() {
-    if (this.facturacionService.aFacturarV.length > 0) {
-      if (this.validaClienteViajeXConceptos(this.facturacionService.aFacturarV)) {
+    if (this.facturacionService.aComplementar.length > 0) {
+      if (this.validaClienteViajeXConceptos(this.facturacionService.aComplementar)) {
         //////////////// DATOS GENERALES ////////////////
         // Serie (default)
         // Folio (default)
@@ -207,7 +208,7 @@ export class FacturasPpdComponent implements OnInit {
 
         /////////////////// RECEPTOR ////////////////////
         this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
-        this.facturacionService.receptor = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
+        this.facturacionService.receptor = this.facturacionService.aComplementar[0].maniobras[0].naviera;
         // this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
 
@@ -261,13 +262,13 @@ export class FacturasPpdComponent implements OnInit {
     let viaje;
     let ok = true;
 
-    if (this.facturacionService.aFacturarV.length > 0) {
-      naviera = this.facturacionService.aFacturarV[0].maniobras[0].naviera;
+    if (this.facturacionService.aComplementar.length > 0) {
+      naviera = this.facturacionService.aComplementar[0].maniobras[0].naviera;
 
-      if (this.facturacionService.aFacturarV[0].maniobras[0].viaje._id) {
-        viaje = this.facturacionService.aFacturarV[0].maniobras[0].viaje._id;
+      if (this.facturacionService.aComplementar[0].maniobras[0].viaje._id) {
+        viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje._id;
       } else {
-        viaje = this.facturacionService.aFacturarV[0].maniobras[0].viaje;
+        viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje;
       }
     }
 
