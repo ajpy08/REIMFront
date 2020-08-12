@@ -196,14 +196,14 @@ export class FacturasPpdComponent implements OnInit {
 
   facturar() {
     if (this.facturacionService.aComplementar.length > 0) {
-      if (this.validaClienteViajeXConceptos(this.facturacionService.aComplementar)) {
+      if (this.validaCliente(this.facturacionService.aComplementar)) {
         //////////////// DATOS GENERALES ////////////////
         // Serie (default)
         // Folio (default)
         // Sucursal (default)
         // Forma de Pago (default)
         // Moneda (default)
-        this.facturacionService.IE = 'I';
+        this.facturacionService.IE = 'P';
         // Fecha (default)
         /////////////////////////////////////////////////
 
@@ -231,67 +231,56 @@ export class FacturasPpdComponent implements OnInit {
     }
   }
 
-  validaClienteViajeXConceptos(conceptos) {
-    let naviera;
-    let viaje;
+  validaCliente(facturas) {
+    let rfc;
     let ok = true;
 
-    conceptos.forEach(c => {
-      c.maniobras.forEach(m => {
-        if (naviera === undefined) {
-          naviera = m.naviera;
+    facturas.forEach(c => {
+        if (rfc === undefined) {
+          rfc = c.rfc;
         } else {
-          if (naviera !== m.naviera) {
+          if (rfc !== c.rfc) {
             ok = false;
           }
         }
-
-        if (viaje === undefined) {
-          viaje = m.viaje._id;
-        } else {
-          if (viaje !== m.viaje._id) {
-            ok = false;
-          }
-        }
-      });
     });
     return ok;
   }
 
-  validaClienteViajeXManiobras(maniobras) {
-    let naviera;
-    let viaje;
-    let ok = true;
+  // validaClienteViajeXManiobras(maniobras) {
+  //   let naviera;
+  //   let viaje;
+  //   let ok = true;
 
-    if (this.facturacionService.aComplementar.length > 0) {
-      naviera = this.facturacionService.aComplementar[0].maniobras[0].naviera;
+  //   if (this.facturacionService.aComplementar.length > 0) {
+  //     naviera = this.facturacionService.aComplementar[0].maniobras[0].naviera;
 
-      if (this.facturacionService.aComplementar[0].maniobras[0].viaje._id) {
-        viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje._id;
-      } else {
-        viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje;
-      }
-    }
+  //     if (this.facturacionService.aComplementar[0].maniobras[0].viaje._id) {
+  //       viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje._id;
+  //     } else {
+  //       viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje;
+  //     }
+  //   }
 
-    maniobras.forEach(m => {
-      if (naviera === undefined) {
-        naviera = m.naviera;
-      } else {
-        if (naviera !== m.naviera) {
-          ok = false;
-        }
-      }
+  //   maniobras.forEach(m => {
+  //     if (naviera === undefined) {
+  //       naviera = m.naviera;
+  //     } else {
+  //       if (naviera !== m.naviera) {
+  //         ok = false;
+  //       }
+  //     }
 
-      if (viaje === undefined) {
-        viaje = m.viaje._id;
-      } else {
-        if (viaje !== m.viaje._id) {
-          ok = false;
-        }
-      }
-    });
-    return ok;
-  }
+  //     if (viaje === undefined) {
+  //       viaje = m.viaje._id;
+  //     } else {
+  //       if (viaje !== m.viaje._id) {
+  //         ok = false;
+  //       }
+  //     }
+  //   });
+  //   return ok;
+  // }
 
   // consultaProdServ() {
   //   this.facturacionService.getProductosServicios().subscribe(productos => {

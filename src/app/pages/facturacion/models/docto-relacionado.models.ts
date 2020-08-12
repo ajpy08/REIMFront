@@ -1,6 +1,7 @@
 export class DoctoRelacionado {
     constructor(
         public idDocumento?: string,
+        public rfc?: string,
         public serie?: string,
         public folio?: number,
         public monedaDR?: string,
