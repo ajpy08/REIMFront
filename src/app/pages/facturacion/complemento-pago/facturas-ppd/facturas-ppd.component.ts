@@ -208,8 +208,8 @@ export class FacturasPpdComponent implements OnInit {
         /////////////////////////////////////////////////
 
         /////////////////// RECEPTOR ////////////////////
-        this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
-        this.facturacionService.receptor = this.facturacionService.aComplementar[0].maniobras[0].naviera;
+        // this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
+        this.facturacionService.uuid = this.facturacionService.aComplementar[0].idDocumento;
         // this.facturacionService.tipo = 'Descarga';
         /////////////////////////////////////////////////
 
@@ -222,7 +222,7 @@ export class FacturasPpdComponent implements OnInit {
         // });
         // this.facturacionService.maniobras = this.selectionFacturas.selected;
         /////////////////////////////////////////////////
-        this.router.navigate(['/cfdi/nuevo']);
+        this.router.navigate(['/complemento/nuevo']);
       } else {
         swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
       }

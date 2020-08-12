@@ -35,9 +35,9 @@ export class Complemento {
         public selloEmisro?: string,
 
 
-        rfcEmisor?: string, // FALTA
-        nombreEmisor?: string, // FALTA
-        regimenFiscal?: string, // FALTA
+        public rfcEmisor?: string, // FALTA
+        public nombreEmisor?: string, // FALTA
+        public regimenFiscal?: string, // FALTA
 
         public rfcReceptor?: string,
         public nombreReceptor?: string,

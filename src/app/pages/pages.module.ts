@@ -154,9 +154,10 @@ import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-c
 import { PdfNotasDeCreditoComponent } from './facturacion/pdf-notas-de-credito/pdf-notas-de-credito.component';
 import {ImageCropperComponent, CropperSettings} from 'ng2-img-cropper';
 import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
-import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago/complementos-pago.component';
+import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago.component';
 import { DocumentoRelacionadoComponent } from './facturacion/dialogs/documento-relacionado/documento-relacionado.component';
 import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.component';
+import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
 
 
 @NgModule({
@@ -234,7 +235,6 @@ import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.compo
         ProductoServicioComponent,
         CFDIComponent,
         CFDISComponent,
-        CFDIComponent,
         ClaveProductosServiciosComponent,
         ClaveProductosServicioComponent,
         ClaveUnidadComponent,
@@ -249,7 +249,8 @@ import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.compo
         PdfNotasDeCreditoComponent,
         ImageCropperComponent,
         DetallePagoComponent,
-        DocumentoRelacionadoComponent
+        DocumentoRelacionadoComponent,
+        ComplementoPagoComponent
      ],
     exports: [
         DashboardComponent

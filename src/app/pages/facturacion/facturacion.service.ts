@@ -24,6 +24,7 @@ export class FacturacionService {
   aFacturarM = [];
   peso = '';
   aComplementar = [];
+  uuid = '';
 
   constructor(
     public http: HttpClient,
@@ -63,6 +64,14 @@ export class FacturacionService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
   }
+
+  getCFDIxUUID(uuid: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/uuid/';
+    url += uuid + '&';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   getCFDIPDF(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
     url += '?token=' + this._usuarioService.token;

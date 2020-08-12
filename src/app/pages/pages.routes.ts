@@ -1,5 +1,6 @@
+import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
 import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
-import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago/complementos-pago.component';
+import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago.component';
 import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
 import { CFDISComponent } from './facturacion/cfdis/cfdis.component';
 import { ProductoServicioComponent } from './facturacion/productos-servicios/producto-servicio.component';
@@ -537,6 +538,12 @@ const pagesRoutes: Routes = [
         component: ComplementosPagoComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Catalogo de Complementos de Pago', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'complemento/:id',
+        component: ComplementoPagoComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Complemento de Pago', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: 'facturas-ppd',
