@@ -187,6 +187,7 @@ export class FacturasPpdComponent implements OnInit {
           this.selectionFacturas.clear();
         } else {
           this.facturacionService.aComplementar.push(result);
+          this.selectionFacturas.clear();
           console.log(result);
         }
       }
