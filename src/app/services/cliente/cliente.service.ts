@@ -56,6 +56,12 @@ export class ClienteService {
       .pipe(map((resp: any) => resp.cliente));
   }
 
+  getClienteXRazonSocial(razonSocial: string): Observable<any> {
+    let url = URL_SERVICIOS + '/clientes/razonSocial/' + razonSocial;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   borrarCliente(cliente: Cliente): Observable<any> {
     let url = URL_SERVICIOS + '/clientes/' + cliente._id;
     url += '?token=' + this._usuarioService.token;

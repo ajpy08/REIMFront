@@ -45,13 +45,11 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-12">
-                    <!--========Combombox Formas de Pago=========-->
+                  <!-- <div class="col-md-12">
                     <mat-form-field>
                       <mat-select placeholder="FORMA DE PAGO" formControlName="formaPago" name="formaPago">
                         <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.formaPago">
                           {{ formaPago.formaPago + ' - ' + formaPago.descripcion }}
-                          <!-- {{ (formaPago.formaPago | leftpad: 5: 'b') + ' - ' + formaPago.descripcion }} -->
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="formaPago.touched && formaPago.invalid">
@@ -71,7 +69,6 @@
                   </div>
 
                   <div class="col-md-12">
-                    <!--========Combombox Tipo de comprobante=========-->
                     <mat-form-field>
                       <mat-select placeholder="TIPO DE COMPROBANTE" formControlName="tipoComprobante"
                         name="tipoComprobante">
@@ -87,7 +84,6 @@
                   </div>
 
                   <div class="col-md-12">
-                    <!--========Combombox Metodo de Pago =========-->
                     <mat-form-field>
                       <mat-select placeholder="METODO DE PAGO" formControlName="metodoPago" name="metodoPago">
                         <mat-option *ngFor="let metodoPago of metodosPago" [value]="metodoPago.metodoPago">
@@ -98,15 +94,9 @@
                         <sup>*</sup>Por Favor Ingrese un Metodo de Pago
                       </mat-error>
                     </mat-form-field>
-                  </div>
+                  </div> -->
 
                   <div class="col-md-12">
-                    <!-- <mat-form-field>
-                      <mat-label>FECHA</mat-label>
-                      <input matInput [matDatepicker]="dp3" disabled>
-                      <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
-                      <mat-datepicker #dp3 disabled="false"></mat-datepicker>
-                    </mat-form-field> -->
                     <mat-form-field>
                       <input matInput formControlName="fecha" [matDatepicker]="fecha" type="text"
                         placeholder="Fecha Factura">

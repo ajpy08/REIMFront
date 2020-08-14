@@ -1,5 +1,4 @@
 import { CFDI } from './models/cfdi.models';
-import {NOTAS } from './models/notas.models';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../environments/environment';
@@ -10,6 +9,7 @@ import { Observable, throwError, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.models';
+import { NOTAS } from './models/notas.models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,8 @@ export class FacturacionService {
   aFacturarV = [];
   aFacturarM = [];
   peso = '';
+  aComplementar = [];
+  uuid = '';
 
   constructor(
     public http: HttpClient,
@@ -31,10 +33,19 @@ export class FacturacionService {
 
   /* #region  CFDIS */
 
-  getCFDIS(serie: string): Observable<any> {
-    let url = URL_SERVICIOS + '/cfdis/' + serie + '/';
+  getCFDIS(serie?: string, metodoPago?: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/';
     url += '?token=' + this._usuarioService.token;
-    return this.http.get(url);
+
+    let params = new HttpParams();
+    if (serie) {
+      params = params.append('serie', serie);
+    }
+    if (metodoPago) {
+      params = params.append('metodoPago', metodoPago);
+    }
+
+    return this.http.get(url, { params: params });
   }
 
   getCFDIS_T_sT(timbre: boolean): Observable<any> {
@@ -53,6 +64,14 @@ export class FacturacionService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url).pipe(map((resp: any) => resp.cfdi));
   }
+
+  getCFDIxUUID(uuid: string): Observable<any> {
+    let url = URL_SERVICIOS + '/cfdis/uuid/';
+    url += uuid + '&';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   getCFDIPDF(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/cfdis/cfdi/' + id;
     url += '?token=' + this._usuarioService.token;
