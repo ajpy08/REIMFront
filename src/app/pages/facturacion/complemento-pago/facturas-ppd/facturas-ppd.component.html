@@ -13,9 +13,9 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <div class="container">
-          <div class="row">
-            <!-- <div class="col-sm">
+        <!-- <div class="container"> -->
+          <div style="text-align: right;" class="row">
+            <!--<div class="col-sm">
               <mat-form-field>
                 <mat-select (selectionChange)="consulta()" [(ngModel)]="viaje" placeholder="Seleccione un viaje"
                   name="viaje">
@@ -25,8 +25,8 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </div> -->
-            <!-- <div class="col-sm">
+            </div>-->
+            <!--<div class="col-sm">
               <div class="col-sm">
                 <mat-checkbox [(ngModel)]="checkedVacios" #sinFactura (change)="consultaManiobrasDescargaVacios()">
                   Por Facturar
@@ -42,18 +42,19 @@
                   (change)="consultaManiobrasDescargaVacios()">
                   Ya Lavados
                 </mat-checkbox>
-              </div>
-            </div> -->
-            <div class="col-sm-5">
-              <button [disabled]="this.facturacionService.aFacturarV.length <= 0" matTooltip="Facturar Seleccionados"
+            </div>
+            </div>-->
+
+            <div class="col-sm-12">
+              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Facturar Seleccionados"
                 (click)="facturar()" mat-raised-button color="primary"
-                matBadge="{{this.facturacionService.aFacturarV.length}}" matBadgePosition="after"
+                matBadge="{{this.facturacionService.aComplementar.length}}" matBadgePosition="after"
                 matBadgeColor="accent">
                 <i class="fa fa-dollar-sign" aria-hidden="true"></i>
                 Facturar
               </button>
-              <a *ngIf="this.selectionComplementos.selected.length > 0 && soyAdmin()"
-                (click)="agregarFacturas(this.selectionComplementos.selected, 1)" class="float">
+              <a *ngIf="this.selectionFacturas.selected.length === 1 && soyAdmin()" (click)="agregarFacturas()"
+                class="float">
                 <i class="fa fa-plus my-float"></i>
               </a> <br><br>
               <!-- <mat-form-field>
@@ -66,7 +67,7 @@
               </mat-form-field> -->
             </div>
           </div>
-        </div> <br>
+        <!-- </div> <br> -->
         <h3 class="card-title">Facturas ( <small>{{totalRegistros}}</small> )</h3>
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
@@ -79,15 +80,15 @@
 
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggleVacios() : null"
-                  [checked]="selectionComplementos.hasValue() && isAllSelectedVacios()"
-                  [indeterminate]="selectionComplementos.hasValue() && !isAllSelectedVacios()">
-                </mat-checkbox>
+                <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selectionFacturas.hasValue() && isAllSelected()"
+                  [indeterminate]="selectionFacturas.hasValue() && !isAllSelected()">
+                </mat-checkbox> -->
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <mat-checkbox (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionComplementos.toggle(row) : null"
-                  [checked]="selectionComplementos.isSelected(row)">
+                  (change)="$event ? selectionFacturas.toggle(row) : null"
+                  [checked]="selectionFacturas.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
             </ng-container>
@@ -122,7 +123,7 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header>Metodo de Pago</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.metodoPago}} </mat-cell>
             </ng-container>
-            
+
             <ng-container matColumnDef="total">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.total.$numberDecimal | currency}} </mat-cell>

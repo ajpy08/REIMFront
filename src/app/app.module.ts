@@ -50,6 +50,7 @@ import { ErrorHandler, Injectable } from '@angular/core';
 import * as Sentry from '@sentry/browser';
 import { Id_sentry } from '../app/config/config';
 import { Usuario } from './pages/usuarios/usuario.model';
+import { ValidationService } from './pages/facturacion/validation.service';
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
@@ -123,7 +124,8 @@ export function getErrorHandler(): ErrorHandler {
       useClass: RefreshTokenInterceptor,
       multi: true
     },
-    { provide: ErrorHandler, useFactory: getErrorHandler }
+    { provide: ErrorHandler, useFactory: getErrorHandler },
+    ValidationService
   ],
   bootstrap: [AppComponent]
 })

@@ -38,14 +38,14 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-cfdi',
-  templateUrl: './cfdi.component.html',
-  styleUrls: ['./cfdi.component.css'],
+  selector: 'app-complemento-pago',
+  templateUrl: './complemento-pago.component.html',
+  styleUrls: ['./complemento-pago.component.css'],
   providers: [{ provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
-export class CFDIComponent implements OnInit, OnDestroy {
+export class ComplementoPagoComponent implements OnInit, OnDestroy {
   regForm: FormGroup;
   url: string;
   info = '';
@@ -63,8 +63,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
   usuarioLogueado = new Usuario;
   id;
   agrupado = true;
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
-
+  // socket = io(URL_SOCKET_IO, PARAM_SOCKET);
   constructor(
     public router: Router,
     public activatedRoute: ActivatedRoute,
@@ -84,43 +83,43 @@ export class CFDIComponent implements OnInit, OnDestroy {
     this.usuarioLogueado = this.usuarioService.usuario;
 
     /* #region  Socket.IO */
-    this.socket.on('update-cfdi', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        if (data.data._id) {
-          this.createFormGroup();
-          this.cargarCFDI(data.data._id);
-          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
-            swal({
-              title: 'Actualizado',
-              text: 'Otro usuario ha actualizado este cfdi',
-              icon: 'info'
-            });
-          }
-        }
-      }
-    }.bind(this));
+    // this.socket.on('update-cfdi', function (data: any) {
+    //   if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+    //     if (data.data._id) {
+    //       this.createFormGroup();
+    //       this.cargarCFDI(data.data._id);
+    //       if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+    //         swal({
+    //           title: 'Actualizado',
+    //           text: 'Otro usuario ha actualizado este cfdi',
+    //           icon: 'info'
+    //         });
+    //       }
+    //     }
+    //   }
+    // }.bind(this));
 
-    this.socket.on('delete-cfdi', function (data: any) {
-      if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-        this.router.navigate(['/cfdis']);
-        swal({
-          title: 'Eliminado',
-          text: 'Se elimino este CFDI por otro usuario',
-          icon: 'warning'
-        });
-      }
-    }.bind(this));
+    // this.socket.on('delete-cfdi', function (data: any) {
+    //   if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
+    //     this.router.navigate(['/cfdis']);
+    //     swal({
+    //       title: 'Eliminado',
+    //       text: 'Se elimino este CFDI por otro usuario',
+    //       icon: 'warning'
+    //     });
+    //   }
+    // }.bind(this));
 
-    this.socket.on('timbrado-cfdi', function (data: any) {
-      if (data.data.ok === true) {
-        this.router.navigate(['/cfdis']);
-        swal({
-          title: 'TIMBRANDO',
-          text: 'CFDI: ' + data.data.serieFolio,
-          icon: 'warning'
-        });
-      }
-    }.bind(this));
+    // this.socket.on('timbrado-cfdi', function (data: any) {
+    //   if (data.data.ok === true) {
+    //     this.router.navigate(['/cfdis']);
+    //     swal({
+    //       title: 'TIMBRANDO',
+    //       text: 'CFDI: ' + data.data.serieFolio,
+    //       icon: 'warning'
+    //     });
+    //   }
+    // }.bind(this));
     /* #endregion */
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -133,29 +132,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
-      if (this.facturacionService.IE === 'I') {
-        this.serie.setValue(this.series[0].serie);
-        this.folio.setValue(this.series[0].folio);
-      }
-    });
-
-    this.facturacionService.getFormasPago().subscribe(formasPago => {
-      this.formasPago = formasPago.formasPago;
-      this.formaPago.setValue(formasPago.formasPago[2].formaPago);
-    });
-
-    this.facturacionService.getMetodosPago().subscribe(metodosPago => {
-      this.metodosPago = metodosPago.metodosPago;
-      this.metodoPago.setValue(metodosPago.metodosPago[1].metodoPago);
-    });
-
-    this.facturacionService.getTiposComprobante().subscribe(tiposComprobante => {
-      this.tiposComprobante = tiposComprobante.tiposComprobante;
-      this.tipoComprobante.setValue(this.facturacionService.IE);
-    });
-
-    this.facturacionService.getUsosCFDI().subscribe(usosCFDI => {
-      this.usosCFDI = usosCFDI.usosCFDI;
+      // if (this.facturacionService.IE === 'P') {
+        this.serie.setValue(this.series[2].serie);
+        this.folio.setValue(this.series[2].folio);
+      // }
     });
 
     this.conceptos.removeAt(0);
@@ -178,11 +158,10 @@ export class CFDIComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.facturacionService.IE = '';
     this.facturacionService.receptor = undefined;
-    // this.facturacionService.tipo = '';
-    this.socket.removeListener('update-cfdi');
-    this.socket.removeListener('delete-cfdi');
-    this.socket.removeListener('new-cfdi');
-    this.socket.removeListener('timbrado-cfdi');
+    // this.socket.removeListener('update-cfdi');
+    // this.socket.removeListener('delete-cfdi');
+    // this.socket.removeListener('new-cfdi');
+    // this.socket.removeListener('timbrado-cfdi');
 
     if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO && this.id !== 'nuevo') {
       this.facturacionService.aFacturarV = [];
@@ -205,7 +184,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     ////////////////////////////////////////////////////////////////////////////////
     // this.serie.setValue(this.series[0]);
     // this.formaPago.setValue('03');
-    this.moneda.setValue('MXN');
+    // this.moneda.setValue('MXN');
     ////////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////// FECHA /////////////////////////////////////
@@ -215,72 +194,24 @@ export class CFDIComponent implements OnInit, OnDestroy {
     ///////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////// RECEPTOR /////////////////////////////////////
-    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
-      if (this.facturacionService.receptor) {
-        // if (this.facturacionService.tipo === 'Descarga') {
-        this.navieraService.getNaviera(this.facturacionService.receptor).subscribe((naviera) => {
-          this.rfc.setValue(naviera.rfc);
-          this.nombre.setValue(naviera.razonSocial);
-          this.usoCFDI.setValue(naviera.usoCFDI.usoCFDI);
+    if (this.facturacionService.uuid) {
+      this.facturacionService.getCFDIxUUID(this.facturacionService.uuid).subscribe(cfdi => {
+        this.clienteService.getClienteXRazonSocial(cfdi.nombre).subscribe(cliente => {
+          this.rfc.setValue(cliente.rfc);
+          this.nombre.setValue(cliente.razonSocial);
+          // this.usoCFDI.setValue(cliente.usoCFDI.usoCFDI);
           let direccion = '';
-          direccion += naviera.calle !== undefined && naviera.calle !== '' ? naviera.calle : '';
-          direccion += naviera.noExterior !== undefined && naviera.noExterior !== '' ? ' ' + naviera.noExterior : '';
-          direccion += naviera.colonia !== undefined && naviera.colonia !== '' ? ' ' + naviera.colonia : '';
-          direccion += naviera.municipio !== undefined && naviera.municipio !== '' ? ' ' + naviera.municipio : '';
-          direccion += naviera.ciudad !== undefined && naviera.ciudad !== '' ? ' ' + naviera.ciudad : '';
-          direccion += naviera.estado !== undefined && naviera.estado !== '' ? ' ' + naviera.estado : '';
-          direccion += naviera.cp !== undefined && naviera.cp !== '' ? ' ' + naviera.cp : '';
+          direccion += cliente.calle !== undefined && cliente.calle !== '' ? cliente.calle : '';
+          direccion += cliente.noExterior !== undefined && cliente.noExterior !== '' ? ' ' + cliente.noExterior : '';
+          direccion += cliente.colonia !== undefined && cliente.colonia !== '' ? ' ' + cliente.colonia : '';
+          direccion += cliente.municipio !== undefined && cliente.municipio !== '' ? ' ' + cliente.municipio : '';
+          direccion += cliente.ciudad !== undefined && cliente.ciudad !== '' ? ' ' + cliente.ciudad : '';
+          direccion += cliente.estado !== undefined && cliente.estado !== '' ? ' ' + cliente.estado : '';
+          direccion += cliente.cp !== undefined && cliente.cp !== '' ? ' ' + cliente.cp : '';
           this.direccion.setValue(direccion.trim());
-          this.correo.setValue(naviera.correoFac);
+          this.correo.setValue(cliente.correoFac);
         });
-        // }
-      }
-    } else {
-      let solicitud;
-      let cliente;
-      if (this.facturacionService.carritoAFacturar.length > 0 && this.facturacionService.carritoAFacturar[0].maniobras[0].solicitud) {
-        solicitud = this.facturacionService.carritoAFacturar[0].maniobras[0].solicitud._id;
-        if (solicitud) {
-          this.solicitudService.cargarSolicitud(solicitud).subscribe(s => {
-            this.rfc.setValue(s.rfc);
-            this.nombre.setValue(s.razonSocial);
-
-            switch (s.facturarA) {
-              case 'Naviera':
-                cliente = s.naviera;
-                break;
-              case 'Agencia Aduanal':
-                cliente = s.agencia;
-                break;
-              case 'Cliente':
-                cliente = s.cliente;
-                break;
-              default:
-              // this.usoCFDI.setValue('5e8244516730a23d0c0a12bf');
-            }
-
-            if (cliente) {
-              this.clienteService.getCliente(cliente).subscribe((c) => {
-                this.usoCFDI.setValue(c.usoCFDI);
-              });
-            }
-
-            let direccion = '';
-            direccion += s.calle !== undefined && s.calle !== '' ? s.calle : '';
-            direccion += s.noExterior !== undefined && s.noExterior !== '' ? ' ' + s.noExterior : '';
-            direccion += s.colonia !== undefined && s.colonia !== '' ? ' ' + s.colonia : '';
-            direccion += s.municipio !== undefined && s.municipio !== '' ? ' ' + s.municipio : '';
-            direccion += s.ciudad !== undefined && s.ciudad !== '' ? ' ' + s.ciudad : '';
-            direccion += s.estado !== undefined && s.estado !== '' ? ' ' + s.estado : '';
-            direccion += s.cp !== undefined && s.cp !== '' ? ' ' + s.cp : '';
-            this.direccion.setValue(direccion.trim());
-            this.correo.setValue(s.correoFac);
-          });
-        }
-      } else {
-        swal('Error', 'Faltan datos de Receptor', 'error');
-        // Si es diferente a VACIOS puede que la maniobra[0] no tenga solicitud y no pueda obtener los datos de receptor.
-      }
+      });
     }
     /////////////////////////////////////////////////////////////////////////////
 
@@ -480,18 +411,15 @@ export class CFDIComponent implements OnInit, OnDestroy {
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
-      fecha: ['', [Validators.required]],
-      // fecha: [moment().local().startOf('day')],
-      // folio: ['', [Validators.required]],
-      folio: [{ value: '', disabled: true }, [Validators.required]],
+      fecha: ['', [Validators.required]], //
+      folio: [{ value: '', disabled: true }, [Validators.required]], //
       formaPago: ['', [Validators.required]],
       metodoPago: ['', [Validators.required]],
-      moneda: ['', [Validators.required]],
-      serie: ['', [Validators.required]],
-      subtotal: [{ value: '', disabled: true }, [Validators.required]],
-      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      total: [{ value: '', disabled: true }, [Validators.required]],
+      moneda: ['', [Validators.required]], //
+      serie: ['', [Validators.required]], //
+      subtotal: [{ value: '', disabled: true }, [Validators.required]], //
+      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]], //
+      total: [{ value: '', disabled: true }, [Validators.required]], //
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
@@ -514,9 +442,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
       impuestosRetenidos: [''],
       impuestosTrasladados: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)], { validators: Validators.required }),
-      // CFDIS RELACIONADOS
-      // cfdiRelacionados: ['', [Validators.required]],
-      // IMPUESTOS
       totalImpuestosRetenidos: [{ value: '', disabled: true }, [Validators.required]],
       totalImpuestosTrasladados: [{ value: '', disabled: true }, [Validators.required]],
       sucursal: [{ value: '', disabled: true }],
@@ -757,11 +682,11 @@ export class CFDIComponent implements OnInit, OnDestroy {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.id = res._id;
-          this.socket.emit('newcfdi', res);
+          // this.socket.emit('newcfdi', res);
           this.router.navigate(['/cfdis']);
           // this.router.navigate(['/cfdi/', this.regForm.get('_id').value]);
         } else {
-          this.socket.emit('updatecfdi', res);
+          // this.socket.emit('updatecfdi', res);
         }
         this.facturacionService.carritoAFacturar = [];
         this.maniobrasDeleteConcepto = [];
@@ -929,9 +854,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
       this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
       this.cfdi.fecha = this.fecha.value;
       this.cfdi.folio = this.folio.value;
-      this.cfdi.formaPago = this.formaPago.value;
-      this.cfdi.metodoPago = this.metodoPago.value;
-      this.cfdi.moneda = this.moneda.value;
+      // this.cfdi.formaPago = this.formaPago.value;
+      // this.cfdi.metodoPago = this.metodoPago.value;
+      // this.cfdi.moneda = this.moneda.value;
       this.cfdi.serie = this.serie.value;
       // subtotal
       this.cfdi.tipoComprobante = this.tipoComprobante.value;
@@ -980,9 +905,9 @@ export class CFDIComponent implements OnInit, OnDestroy {
     } else {
       this.cfdi.fecha = this.fecha.value;
       this.cfdi.folio = this.folio.value;
-      this.cfdi.formaPago = this.formaPago.value;
-      this.cfdi.metodoPago = this.metodoPago.value;
-      this.cfdi.moneda = this.moneda.value;
+      // this.cfdi.formaPago = this.formaPago.value;
+      // this.cfdi.metodoPago = this.metodoPago.value;
+      // this.cfdi.moneda = this.moneda.value;
       this.cfdi.serie = this.serie.value;
       // subtotal
       this.cfdi.tipoComprobante = this.tipoComprobante.value;
@@ -1049,7 +974,7 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return agrupado;
   }
 
-  calculaImpuestos (impTras, impRet) {
+  calculaImpuestos(impTras, impRet) {
     return VariasService.round(impTras - impRet, 2);
   }
 
@@ -1092,17 +1017,17 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('folio');
   }
 
-  // get sucursal() {
-  //   return this.regForm.get('sucursal');
+  get sucursal() {
+    return this.regForm.get('sucursal');
+  }
+
+  // get formaPago() {
+  //   return this.regForm.get('formaPago');
   // }
 
-  get formaPago() {
-    return this.regForm.get('formaPago');
-  }
-
-  get metodoPago() {
-    return this.regForm.get('metodoPago');
-  }
+  // get metodoPago() {
+  //   return this.regForm.get('metodoPago');
+  // }
 
   get moneda() {
     return this.regForm.get('moneda');
@@ -1180,10 +1105,6 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('unidad');
   }
 
-  // get maniobras() {
-  //   return this.regForm.get('maniobras');
-  // }
-
   get impuestosRetenidos() {
     return this.regForm.get('impuestosRetenidos');
   }
@@ -1215,4 +1136,5 @@ export class CFDIComponent implements OnInit, OnDestroy {
     return this.regForm.get('informacionAdicional');
   }
   /* #endregion */
+
 }
