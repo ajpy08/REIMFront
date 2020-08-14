@@ -132,10 +132,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
-      if (this.facturacionService.IE === 'P') {
+      // if (this.facturacionService.IE === 'P') {
         this.serie.setValue(this.series[2].serie);
         this.folio.setValue(this.series[2].folio);
-      }
+      // }
     });
 
     this.conceptos.removeAt(0);
@@ -184,7 +184,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     ////////////////////////////////////////////////////////////////////////////////
     // this.serie.setValue(this.series[0]);
     // this.formaPago.setValue('03');
-    this.moneda.setValue('MXN');
+    // this.moneda.setValue('MXN');
     ////////////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////// FECHA /////////////////////////////////////
@@ -411,18 +411,15 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
-      fecha: ['', [Validators.required]],
-      // fecha: [moment().local().startOf('day')],
-      // folio: ['', [Validators.required]],
-      folio: [{ value: '', disabled: true }, [Validators.required]],
+      fecha: ['', [Validators.required]], //
+      folio: [{ value: '', disabled: true }, [Validators.required]], //
       formaPago: ['', [Validators.required]],
       metodoPago: ['', [Validators.required]],
-      moneda: ['', [Validators.required]],
-      serie: ['', [Validators.required]],
-      subtotal: [{ value: '', disabled: true }, [Validators.required]],
-      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      // tipoComprobante: [{ value: '', disabled: true }, [Validators.required]],
-      total: [{ value: '', disabled: true }, [Validators.required]],
+      moneda: ['', [Validators.required]], //
+      serie: ['', [Validators.required]], //
+      subtotal: [{ value: '', disabled: true }, [Validators.required]], //
+      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]], //
+      total: [{ value: '', disabled: true }, [Validators.required]], //
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
@@ -445,9 +442,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       impuestosRetenidos: [''],
       impuestosTrasladados: [''],
       conceptos: this.fb.array([this.agregarArray(new Concepto)], { validators: Validators.required }),
-      // CFDIS RELACIONADOS
-      // cfdiRelacionados: ['', [Validators.required]],
-      // IMPUESTOS
       totalImpuestosRetenidos: [{ value: '', disabled: true }, [Validators.required]],
       totalImpuestosTrasladados: [{ value: '', disabled: true }, [Validators.required]],
       sucursal: [{ value: '', disabled: true }],
@@ -860,9 +854,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
       this.cfdi.fecha = this.fecha.value;
       this.cfdi.folio = this.folio.value;
-      this.cfdi.formaPago = this.formaPago.value;
-      this.cfdi.metodoPago = this.metodoPago.value;
-      this.cfdi.moneda = this.moneda.value;
+      // this.cfdi.formaPago = this.formaPago.value;
+      // this.cfdi.metodoPago = this.metodoPago.value;
+      // this.cfdi.moneda = this.moneda.value;
       this.cfdi.serie = this.serie.value;
       // subtotal
       this.cfdi.tipoComprobante = this.tipoComprobante.value;
@@ -911,9 +905,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     } else {
       this.cfdi.fecha = this.fecha.value;
       this.cfdi.folio = this.folio.value;
-      this.cfdi.formaPago = this.formaPago.value;
-      this.cfdi.metodoPago = this.metodoPago.value;
-      this.cfdi.moneda = this.moneda.value;
+      // this.cfdi.formaPago = this.formaPago.value;
+      // this.cfdi.metodoPago = this.metodoPago.value;
+      // this.cfdi.moneda = this.moneda.value;
       this.cfdi.serie = this.serie.value;
       // subtotal
       this.cfdi.tipoComprobante = this.tipoComprobante.value;
@@ -1023,17 +1017,17 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     return this.regForm.get('folio');
   }
 
-  // get sucursal() {
-  //   return this.regForm.get('sucursal');
+  get sucursal() {
+    return this.regForm.get('sucursal');
+  }
+
+  // get formaPago() {
+  //   return this.regForm.get('formaPago');
   // }
 
-  get formaPago() {
-    return this.regForm.get('formaPago');
-  }
-
-  get metodoPago() {
-    return this.regForm.get('metodoPago');
-  }
+  // get metodoPago() {
+  //   return this.regForm.get('metodoPago');
+  // }
 
   get moneda() {
     return this.regForm.get('moneda');
@@ -1110,10 +1104,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   get unidad() {
     return this.regForm.get('unidad');
   }
-
-  // get maniobras() {
-  //   return this.regForm.get('maniobras');
-  // }
 
   get impuestosRetenidos() {
     return this.regForm.get('impuestosRetenidos');
