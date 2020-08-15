@@ -6,6 +6,7 @@ export { TransportistaService } from '../pages/transportistas/transportista.serv
 
 export { SolicitudService } from '../pages/solicitudes/solicitud.service';
 export { BuqueService } from '../pages/buques/buque.service';
+export { VigenciaService } from '../pages/vigencias/vigencia.service';
 export { FacturacionService } from '../pages/facturacion/facturacion.service';
 
 export { SharedService } from './shared/shared.service';

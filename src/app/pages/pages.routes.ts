@@ -1,3 +1,5 @@
+import { VigenciaComponent } from './vigencias/vigencia.component';
+import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
 import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
 import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago.component';
@@ -271,6 +273,19 @@ const pagesRoutes: Routes = [
     },
 
     //////////////////////////////////////////////
+
+    {
+        path: 'vigencias',
+        component: VigenciasComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Mantenimiento de Vigencias', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'vigencias/vigencia/:id',
+        component: VigenciaComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de datos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
 
     {
         path: 'maniobras',
