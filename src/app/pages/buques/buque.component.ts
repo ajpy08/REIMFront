@@ -9,12 +9,14 @@ import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ROLES } from 'src/app/config/config';
 import swal from 'sweetalert';
+import { Usuario } from '../usuarios/usuario.model';
 @Component({
   selector: 'app-buque',
   templateUrl: './buque.component.html',
   styles: []
 })
 export class BuqueComponent implements OnInit, OnDestroy {
+  usuarioLogueado = new Usuario;
   buque: Buque = new Buque();
   navieras: Naviera[] = [];
   regForm: FormGroup;

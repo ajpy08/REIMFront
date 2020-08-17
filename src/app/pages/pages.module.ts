@@ -158,6 +158,8 @@ import { ComplementosPagoComponent } from './facturacion/complemento-pago/comple
 import { DocumentoRelacionadoComponent } from './facturacion/dialogs/documento-relacionado/documento-relacionado.component';
 import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
+import { VigenciasComponent } from './vigencias/vigencias.component';
+import { VigenciaComponent } from './vigencias/vigencia.component';
 
 
 @NgModule({
@@ -250,7 +252,9 @@ import { ComplementoPagoComponent } from './facturacion/complemento-pago/complem
         ImageCropperComponent,
         DetallePagoComponent,
         DocumentoRelacionadoComponent,
-        ComplementoPagoComponent
+        ComplementoPagoComponent,
+        VigenciasComponent,
+        VigenciaComponent
      ],
     exports: [
         DashboardComponent
