@@ -12,6 +12,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Usuario } from '../usuarios/usuario.model';
+import * as _moment from 'moment';
+const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
@@ -160,6 +162,19 @@ export class VigenciaComponent implements OnInit, OnDestroy {
         this.regForm.markAsPristine();
       });
     }
+  }
+
+  calculaFVencimiento(fecha) {
+    const fEntrada = moment(fecha);
+    let hoy = moment();
+    let fVencimiento = moment();
+    if (fEntrada !== undefined) {
+      fVencimiento = fEntrada.add(10, 'y');
+    } else {
+      fVencimiento = hoy;
+    }
+
+    this.fVencimiento.setValue(fVencimiento);
   }
 
   back() {
