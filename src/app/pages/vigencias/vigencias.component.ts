@@ -162,8 +162,8 @@ export class VigenciasComponent implements OnInit, OnDestroy {
       const vigencia = {
         // Id: v._id,
         Contenedor: v.contenedor,
-        FechaManufactura: v.fManufactura,
-        FechaVencimiento: v.fVencimiento,
+        FechaManufactura: v.fManufactura.substring(0, 10),
+        FechaVencimiento: v.fVencimiento.substring(0, 10),
         Observaciones: v.observaciones,
         UsuarioAlta: v.usuarioAlta.nombre,
         FAlta: v.fAlta.substring(0, 10)
