@@ -278,7 +278,7 @@ const pagesRoutes: Routes = [
         path: 'vigencias',
         component: VigenciasComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Mantenimiento de Vigencias', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Mantenimiento de Vigencias', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'vigencias/vigencia/:id',
