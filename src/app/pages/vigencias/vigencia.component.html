@@ -14,7 +14,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="inputpersonalizado">
-                <input matInput formControlName="fManufactura" (dateChange) = "calculaFVencimiento()" [matDatepicker]="pickerfmanufactura" type="text"
+                <input matInput formControlName="fManufactura" (dateChange)="calculaFVencimiento(this.fManufactura.value)" [matDatepicker]="pickerfmanufactura" type="text"
                   class="form-control" placeholder="Fecha de Manufactura">
                 <mat-datepicker-toggle matSuffix [for]="pickerfmanufactura"></mat-datepicker-toggle>
                 <mat-datepicker #pickerfmanufactura></mat-datepicker>

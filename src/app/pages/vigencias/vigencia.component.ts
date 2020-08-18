@@ -165,16 +165,19 @@ export class VigenciaComponent implements OnInit, OnDestroy {
   }
 
   calculaFVencimiento(fecha) {
-    const fEntrada = moment(fecha);
-    let hoy = moment();
-    let fVencimiento = moment();
-    if (fEntrada !== undefined) {
-      fVencimiento = fEntrada.add(10, 'y');
-    } else {
-      fVencimiento = hoy;
-    }
-
-    this.fVencimiento.setValue(fVencimiento);
+    const id = this.activatedRoute.snapshot.paramMap.get('id')
+    if (id === 'nuevo') {
+      const fEntrada = moment(fecha);
+      let hoy = moment();
+      let fVencimiento = moment();
+      if (fEntrada !== undefined) {
+        fVencimiento = fEntrada.add(10, 'y');
+      } else {
+        fVencimiento = hoy;
+      }
+  
+      this.fVencimiento.setValue(fVencimiento);
+    }    
   }
 
   back() {

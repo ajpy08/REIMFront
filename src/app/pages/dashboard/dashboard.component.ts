@@ -175,7 +175,7 @@ export class DashboardComponent implements OnInit {
 
   }
   cargarCFDI() {
-    this.facturacionService.getCFDIS('A').subscribe(cfdis => {
+    this.facturacionService.getCFDIS('A', '').subscribe(cfdis => {
       this.cfdiTotal = cfdis.total;
     });
 
