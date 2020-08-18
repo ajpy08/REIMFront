@@ -111,7 +111,7 @@ export class CFDISComponent implements OnInit {
 
   cargarCFDIS(serie) {
     this.cargando = true;
-    this.facturacionService.getCFDIS(serie).subscribe(cfdis => {
+    this.facturacionService.getCFDIS(serie, '').subscribe(cfdis => {
       this.dataSource = new MatTableDataSource(cfdis.cfdis);
       if (cfdis.cfdis.length === 0) {
         this.tablaCargar = true;
@@ -234,7 +234,7 @@ export class CFDISComponent implements OnInit {
   }
 
   notas(): void {
-    this.facturacionService.getCFDIS('A').subscribe(res => {
+    this.facturacionService.getCFDIS('A', '').subscribe(res => {
       const cfdis = res;
       const dialogNotas = this.dialog.open(NotasDeCreditoComponent, {
         width: '950px',

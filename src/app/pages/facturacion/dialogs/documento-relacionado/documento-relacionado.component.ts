@@ -57,7 +57,7 @@ export class DocumentoRelacionadoComponent implements OnInit {
     }
   }
 
-  close(result: DoctoRelacionado) {
+  close(result) {
     this.dialogRef.close(result);
   }
 
