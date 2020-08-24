@@ -101,7 +101,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
     // this.socket.on('delete-cfdi', function (data: any) {
     //   if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) {
-    //     this.router.navigate(['/cfdis']);
+    //     this.router.navigate(['/complementos']);
     //     swal({
     //       title: 'Eliminado',
     //       text: 'Se elimino este CFDI por otro usuario',
@@ -112,7 +112,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
     // this.socket.on('timbrado-cfdi', function (data: any) {
     //   if (data.data.ok === true) {
-    //     this.router.navigate(['/cfdis']);
+    //     this.router.navigate(['/complementos']);
     //     swal({
     //       title: 'TIMBRANDO',
     //       text: 'CFDI: ' + data.data.serieFolio,
@@ -124,11 +124,11 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
-    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
-      this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarV;
-    } else {
-      this.facturacionService.carritoAFacturar = this.facturacionService.aFacturarM;
-    }
+    // if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
+    //   this.facturacionService.aComplementar = this.facturacionService.aFacturarV;
+    // } else {
+    //   this.facturacionService.aComplementar = this.facturacionService.aFacturarM;
+    // }
 
     this.facturacionService.getSeries().subscribe(series => {
       this.series = series.series;
@@ -152,7 +152,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       this.cargaValoresIniciales(undefined);
     }
     // this.impuestos.removeAt(0);
-    this.url = '/cfdis';
+    this.url = '/complementos';
   }
 
   ngOnDestroy(): void {
@@ -163,12 +163,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     // this.socket.removeListener('new-cfdi');
     // this.socket.removeListener('timbrado-cfdi');
 
-    if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO && this.id !== 'nuevo') {
-      this.facturacionService.aFacturarV = [];
-      this.facturacionService.carritoAFacturar = [];
+    if (this.id !== 'nuevo') {
+      this.facturacionService.aComplementar = [];
     } else {
-      this.facturacionService.aFacturarM = [];
-      this.facturacionService.carritoAFacturar = [];
+      this.facturacionService.aComplementar = [];
     }
     this.ObjetoSelect = [];
   }
@@ -197,19 +195,19 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     if (this.facturacionService.uuid) {
       this.facturacionService.getCFDIxUUID(this.facturacionService.uuid).subscribe(cfdi => {
         this.clienteService.getClienteXRazonSocial(cfdi.nombre).subscribe(cliente => {
-          this.rfc.setValue(cliente.rfc);
-          this.nombre.setValue(cliente.razonSocial);
-          // this.usoCFDI.setValue(cliente.usoCFDI.usoCFDI);
+          this.rfc.setValue(cliente.cliente.rfc);
+          this.nombre.setValue(cliente.cliente.razonSocial);
+          // this.usoCFDI.setValue(cliente.cliente.usoCFDI.usoCFDI);
           let direccion = '';
-          direccion += cliente.calle !== undefined && cliente.calle !== '' ? cliente.calle : '';
-          direccion += cliente.noExterior !== undefined && cliente.noExterior !== '' ? ' ' + cliente.noExterior : '';
-          direccion += cliente.colonia !== undefined && cliente.colonia !== '' ? ' ' + cliente.colonia : '';
-          direccion += cliente.municipio !== undefined && cliente.municipio !== '' ? ' ' + cliente.municipio : '';
-          direccion += cliente.ciudad !== undefined && cliente.ciudad !== '' ? ' ' + cliente.ciudad : '';
-          direccion += cliente.estado !== undefined && cliente.estado !== '' ? ' ' + cliente.estado : '';
-          direccion += cliente.cp !== undefined && cliente.cp !== '' ? ' ' + cliente.cp : '';
+          direccion += cliente.cliente.calle !== undefined && cliente.cliente.calle !== '' ? cliente.cliente.calle : '';
+          direccion += cliente.cliente.noExterior !== undefined && cliente.cliente.noExterior !== '' ? ' ' + cliente.cliente.noExterior : '';
+          direccion += cliente.cliente.colonia !== undefined && cliente.cliente.colonia !== '' ? ' ' + cliente.cliente.colonia : '';
+          direccion += cliente.cliente.municipio !== undefined && cliente.cliente.municipio !== '' ? ' ' + cliente.cliente.municipio : '';
+          direccion += cliente.cliente.ciudad !== undefined && cliente.cliente.ciudad !== '' ? ' ' + cliente.cliente.ciudad : '';
+          direccion += cliente.cliente.estado !== undefined && cliente.cliente.estado !== '' ? ' ' + cliente.cliente.estado : '';
+          direccion += cliente.cliente.cp !== undefined && cliente.cliente.cp !== '' ? ' ' + cliente.cliente.cp : '';
           this.direccion.setValue(direccion.trim());
-          this.correo.setValue(cliente.correoFac);
+          this.correo.setValue(cliente.cliente.correoFac);
         });
       });
     }
@@ -222,9 +220,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     let subTotal = 0.0;
     let totalDescuentos = 0.0;
 
-    if (this.facturacionService.carritoAFacturar.length > 0) {
+    if (this.facturacionService.aComplementar.length > 0) {
       // if (this.facturacionService.tipo === 'Descarga') {
-      this.facturacionService.carritoAFacturar.forEach(c => {
+      this.facturacionService.aComplementar.forEach(c => {
         let impuestosRetenidos = 0.00;
         let impuestosTrasladados = 0.00;
         const concepto = new Concepto();
@@ -423,8 +421,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       // RECEPTOR
       nombre: ['', [Validators.required]],
       rfc: ['', [Validators.required]],
-      usoCFDI: ['', [Validators.required]],
       direccion: ['', [Validators.required]],
+      noRegistro: [''],
       correo: ['', [Validators.required]],
       // CONCEPTOS
       cantidad: [''],
@@ -491,25 +489,25 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           this.recargaValoresCFDI();
         } else {
           if (this.agrupado === true) {
-            const con = this.facturacionService.carritoAFacturar.findIndex(cons => cons.idProdServ === i.maniobra._id);
-            this.facturacionService.carritoAFacturar.splice(con, 1);
+            const con = this.facturacionService.aComplementar.findIndex(cons => cons.idProdServ === i.maniobra._id);
+            this.facturacionService.aComplementar.splice(con, 1);
           } else {
             let n = 0;
-            const pos = this.facturacionService.carritoAFacturar.findIndex(cons => cons.idProdServ === i.maniobra._id);
-            const mDelete = this.facturacionService.carritoAFacturar[pos].maniobras.filter(function (dato, ind) {
+            const pos = this.facturacionService.aComplementar.findIndex(cons => cons.idProdServ === i.maniobra._id);
+            const mDelete = this.facturacionService.aComplementar[pos].maniobras.filter(function (dato, ind) {
               if (dato._id === i.maniobra.maniobras[0]._id) {
                 n = ind;
               }
             });
-            this.facturacionService.carritoAFacturar[pos].maniobras.splice(n, 1);
-            // const poss = this.facturacionService.carritoAFacturar.find(fuction c => c.maniobras[] === i.maniobra.maniobras[0]._id &&
+            this.facturacionService.aComplementar[pos].maniobras.splice(n, 1);
+            // const poss = this.facturacionService.aComplementar.find(fuction c => c.maniobras[] === i.maniobra.maniobras[0]._id &&
             //  c.idProdServ === i.maniobra._id);
-            // this.facturacionService.carritoAFacturar.splice(poss, 1);
+            // this.facturacionService.aComplementar.splice(poss, 1);
           }
           this.cargaValoresIniciales(undefined);
           this.agrupado = true;
           // const id = this.conceptos.value[ind]._id;
-          // const pos = this.facturacionService.carritoAFacturar.findIndex(a => a.idProdServ === id);
+          // const pos = this.facturacionService.aComplementar.findIndex(a => a.idProdServ === id);
         }
       });
     } else {
@@ -683,12 +681,12 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           this.regForm.get('_id').setValue(res._id);
           this.id = res._id;
           // this.socket.emit('newcfdi', res);
-          this.router.navigate(['/cfdis']);
+          this.router.navigate(['/complementos']);
           // this.router.navigate(['/cfdi/', this.regForm.get('_id').value]);
         } else {
           // this.socket.emit('updatecfdi', res);
         }
-        this.facturacionService.carritoAFacturar = [];
+        this.facturacionService.aComplementar = [];
         this.maniobrasDeleteConcepto = [];
 
         if (this.facturacionService.peso === 'VACIOS') {
@@ -863,8 +861,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       // total
       this.cfdi.nombre = this.nombre.value;
       this.cfdi.rfc = this.rfc.value;
-      this.cfdi.usoCFDI = this.usoCFDI.value;
       this.cfdi.direccion = this.direccion.value;
+      this.cfdi.noRegistro = this.noRegistro.value;
       this.cfdi.correo = this.correo.value;
       this.cfdi.conceptos = this.conceptos.value;
       this.cfdi.informacionAdicional = this.informacionAdicional.value;
@@ -914,8 +912,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       // total
       this.cfdi.nombre = this.nombre.value;
       this.cfdi.rfc = this.rfc.value;
-      this.cfdi.usoCFDI = this.usoCFDI.value;
       this.cfdi.direccion = this.direccion.value;
+      this.cfdi.noRegistro = this.noRegistro.value;
       this.cfdi.correo = this.correo.value;
       this.cfdi.conceptos = [];
       this.cfdi.informacionAdicional = this.informacionAdicional.value;
@@ -1055,14 +1053,14 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
   get nombre() {
     return this.regForm.get('nombre');
-  }
-
-  get usoCFDI() {
-    return this.regForm.get('usoCFDI');
-  }
+  }  
 
   get direccion() {
     return this.regForm.get('direccion');
+  }
+
+  get noRegistro() {
+    return this.regForm.get('noRegistro');
   }
 
   get correo() {

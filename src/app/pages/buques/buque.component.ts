@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Buque } from './buques.models';
-import { BuqueService, NavieraService, UsuarioService } from '../../services/service.index';
-import { NgForm, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BuqueService, NavieraService } from '../../services/service.index';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Naviera } from 'src/app/pages/navieras/navieras.models';
-import { Location } from '@angular/common';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ROLES } from 'src/app/config/config';
@@ -29,10 +28,7 @@ export class BuqueComponent implements OnInit, OnDestroy {
     public _navieraService: NavieraService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private usuarioService: UsuarioService,
-    private location: Location
-  ) {}
+    private fb: FormBuilder  ) {}
 
   ngOnInit() {
     this.createFormGroup();
@@ -69,7 +65,7 @@ export class BuqueComponent implements OnInit, OnDestroy {
        }
     }.bind(this));
 
-    this.socket.on('delete-buque', function(data: any) {
+    this.socket.on('delete-buque', function() {
       if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
       this.router.navigate(['/buques']);
       swal({

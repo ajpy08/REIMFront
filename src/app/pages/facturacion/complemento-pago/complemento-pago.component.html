@@ -141,16 +141,9 @@
                   </div>
 
                   <div class="col-md-12">
-                    <!--========Combombox Usos CFDI=========-->
                     <mat-form-field>
-                      <mat-select placeholder="USOS CFDI" formControlName="usoCFDI" name="usoCFDI">
-                        <mat-option *ngFor="let usoCFDI of usosCFDI" [value]="usoCFDI.usoCFDI">
-                          {{ usoCFDI.usoCFDI + ' - ' + usoCFDI.descripcion }}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="usoCFDI.touched && usoCFDI.invalid">
-                        <sup>*</sup>Por Favor Ingrese un uso de CFDI
-                      </mat-error>
+                      <mat-label><b>NUMERO DE REGISRO DE IDENTIDAD FISCAL</b></mat-label>
+                      <input matInput formControlName="noRegistro" type="text">
                     </mat-form-field>
                   </div>
 

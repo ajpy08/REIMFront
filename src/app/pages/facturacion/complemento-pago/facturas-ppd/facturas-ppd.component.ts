@@ -94,85 +94,6 @@ export class FacturasPpdComponent implements OnInit {
     this.cargando = false;
   }
 
-  // agregarFacturas(maniobras, idProdServ) {
-  //   let aAgregar = [];
-  //   if (maniobras.length > 0) {
-  //     if (this.validaClienteViajeXManiobras(maniobras)) {
-  //       if (idProdServ !== undefined) {
-  //         maniobras.forEach(ma => {
-  //           if (this.facturacionService.aFacturarV.length > 0) {
-  //             const res = this.facturacionService.aFacturarV.filter(function (concept) {
-  //               return concept.idProdServ === idProdServ;
-  //             });
-
-  //             if (res.length > 0) {
-  //               res.forEach(r => {
-  //                 // r.maniobras.forEach(m => {
-
-  //                 const resM = r.maniobras.filter(function (man) {
-  //                   return man._id === ma._id;
-  //                 });
-
-  //                 if (resM.length > 0) {
-  //                   aAgregar = [];
-  //                   swal('El contenedor ' + ma.contenedor + ' ya se agrego con este concepto', '', 'error');
-  //                 } else {
-  //                   aAgregar.push(ma);
-  //                 }
-  //                 // });
-  //               });
-  //             } else {
-  //               aAgregar.push(ma);
-  //             }
-  //           } else {
-  //             aAgregar.push(ma);
-  //           }
-  //         });
-  //       } else {
-  //         aAgregar = [];
-  //         swal('Debes seleccionar un Producto o Servicio!', '', 'error');
-  //       }
-  //     } else {
-  //       aAgregar = [];
-  //       swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
-  //     }
-  //   } else {
-  //     aAgregar = [];
-  //     swal('Debes seleccionar por lo menos una maniobra!', '', 'error');
-  //   }
-
-  //   if (aAgregar.length > 0) {
-  //     const c = this.facturacionService.aFacturarV.filter(function (concept) {
-  //       return concept.idProdServ === idProdServ;
-  //     });
-  //     if (c.length > 0) {
-  //       aAgregar.forEach(x => {
-  //         const pos = this.facturacionService.aFacturarV.findIndex(a => a.idProdServ === idProdServ);
-  //         this.facturacionService.aFacturarV[pos].maniobras.push(x);
-  //         aAgregar = [];
-  //         this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-  //         // this.selectionFacturas.clear();
-  //         // this.selectionLavadoVacios.clear();
-  //         // this.selectionReparacionVacios.clear();
-  //         // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
-  //       });
-  //     } else {
-  //       const concepto = {
-  //         idProdServ: idProdServ,
-  //         maniobras: aAgregar
-  //       };
-  //       this.facturacionService.aFacturarV.push(concepto);
-  //       aAgregar = [];
-  //       this.openSnackBar('Maniobras agregadas para facturar!', 'Facturar');
-  //       // this.selectionFacturas.clear();
-  //       // this.selectionLavadoVacios.clear();
-  //       // this.selectionReparacionVacios.clear();
-  //       // swal('Maniobras agregadas', 'Tienes ' + this.facturacionService.aFacturarV.length + ' concepto (s) por facturar', 'success');
-  //     }
-  //   }
-  //   // console.log(this.facturacionService.aFacturarV);
-  // }
-
   agregarFacturas() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionFacturas.selected[0];
@@ -246,47 +167,6 @@ export class FacturasPpdComponent implements OnInit {
     });
     return ok;
   }
-
-  // validaClienteViajeXManiobras(maniobras) {
-  //   let naviera;
-  //   let viaje;
-  //   let ok = true;
-
-  //   if (this.facturacionService.aComplementar.length > 0) {
-  //     naviera = this.facturacionService.aComplementar[0].maniobras[0].naviera;
-
-  //     if (this.facturacionService.aComplementar[0].maniobras[0].viaje._id) {
-  //       viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje._id;
-  //     } else {
-  //       viaje = this.facturacionService.aComplementar[0].maniobras[0].viaje;
-  //     }
-  //   }
-
-  //   maniobras.forEach(m => {
-  //     if (naviera === undefined) {
-  //       naviera = m.naviera;
-  //     } else {
-  //       if (naviera !== m.naviera) {
-  //         ok = false;
-  //       }
-  //     }
-
-  //     if (viaje === undefined) {
-  //       viaje = m.viaje._id;
-  //     } else {
-  //       if (viaje !== m.viaje._id) {
-  //         ok = false;
-  //       }
-  //     }
-  //   });
-  //   return ok;
-  // }
-
-  // consultaProdServ() {
-  //   this.facturacionService.getProductosServicios().subscribe(productos => {
-  //     this.productos = productos.productos_servicios;
-  //   });
-  // }
 
   soyAdmin() {
     if (

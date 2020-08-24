@@ -160,6 +160,7 @@ import { DetallePagoComponent } from '../dialogs/detalle-pago/detalle-pago.compo
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
+import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
 
 
 @NgModule({
@@ -254,7 +255,8 @@ import { VigenciaComponent } from './vigencias/vigencia.component';
         DocumentoRelacionadoComponent,
         ComplementoPagoComponent,
         VigenciasComponent,
-        VigenciaComponent
+        VigenciaComponent,
+        PagoComponent
      ],
     exports: [
         DashboardComponent

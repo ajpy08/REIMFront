@@ -1,0 +1,133 @@
+<div class="row animated fadeIn">
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Pago</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarPago()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="fechaPago" [matDatepicker]="fechapago" type="text"
+                  placeholder="Fecha de Pago">
+                <mat-error *ngIf="fechaPago.touched && fechaPago.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Fecha de Pago
+                </mat-error>
+                <mat-datepicker-toggle matSuffix [for]="fechapago"></mat-datepicker-toggle>
+                <mat-datepicker #fechapago></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select formControlName="formaPago" aria-placeholder="Forma de Pago">
+                  <mat-option value="01">01 - Efectivo</mat-option>
+                  <mat-option value="03">03 - Transferencia electrónica de fondos</mat-option>
+                </mat-select>
+                <!-- <mat-select placeholder="FORMA DE PAGO" formControlName="formaPago" name="formaPago">
+                  <mat-option *ngFor="let formaPago of formasPago" [value]="formaPago.formaPago">
+                    {{ formaPago.formaPago + ' - ' + formaPago.descripcion }}
+                  </mat-option>
+                </mat-select> -->
+                <mat-error *ngIf="formaPago.touched && formaPago.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Forma de Pago
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label><b>MONEDA</b></mat-label>
+                <mat-select formControlName="moneda" aria-placeholder="Moneda">
+                  <mat-option value="MXN">MXN - Peso Mexicano</mat-option>
+                  <mat-option value="USD">USD - Dolar Americano</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="noOperacion" name="noOperacion" type="text" class="form-control"
+                  placeholder="Número de Operación">
+                <mat-error *ngIf="noOperacion.touched && noOperacion.invalid">
+                  <sup>*</sup>Por Favor Ingrese un número de operación
+                </mat-error>
+              </mat-form-field>
+            </div> <br><br>
+            <div class="example-header2">
+              <div class="my-container">
+                <div class="col-md-12">
+                  <div class="hiden3">
+                    <div class="letra3">
+                      <strong> Documentos Relacionados </strong>
+                    </div>
+                  </div>
+  
+                  <div class="table-responsive">
+                    <div class="contenedorBotones">
+                      <div class="row">
+                        <!-- <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Maniobras"
+                          (click)="openDialogManiobras(idSelect)" class="btnBoxe btn  m-r-5">
+                          <i class="fa fa-edit"></i>
+                        </button> -->
+                        <!-- <button type="button" matTooltip="Quitar Concepto" (click)="agrupinD(ObjetoSelect)" class="btnTrash btn m-r-5">
+                          <i class="fa fa-trash-o"></i>
+                        </button> -->
+                        <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Maniobras"
+                          class="btnBoxe btn  m-r-5">
+                          <i class="fa fa-edit"></i>
+                        </button>
+                        <button type="button" matTooltip="Quitar Concepto" class="btnTrash btn m-r-5">
+                          <i class="fa fa-trash-o"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <!-- <mat-checkbox [checked]= true (change)="agruparDesagruparConcepto($event.checked, item.value)"
+                      matTooltip="Agrupar/Desagrupar Concepto">
+                    </mat-checkbox> -->
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col">Folio</th>
+                          <th scope="col">F.Emisión </th>
+                          <th scope="col">Saldo</th>
+                          <th scope="col">Importe Pagado</th>
+                          <th scope="col">Saldo Insoluto</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody formArrayName="docRelacionados" *ngFor="let item of docRelacionados.controls; let i = index;">
+                        <tr [formGroupName]="i">
+                          <td>
+                            <mat-checkbox  (change)="onChange(item.value, i, $event)"></mat-checkbox>
+                          </td>
+                          <td>
+                            {{item.get('folio').value}}
+                          </td>
+                          <td>
+                            {{item.get('fEmision').value}}
+                          </td>
+                          <td>
+                            {{item.get('saldo').value}}
+                          </td>
+                          <td>
+                            {{item.get('importePagado').value}}
+                          </td>
+                          <td> 
+                            {{item.get('saldoInsoluto').value}}
+                          </td>                         
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br><br>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+            <!-- <a routerLink="/pagos" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

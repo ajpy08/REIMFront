@@ -1,3 +1,4 @@
+import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -565,6 +566,12 @@ const pagesRoutes: Routes = [
         component: FacturasPpdComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Facturas PPD', roles: [ROLES.ADMIN_ROLE] }
+    },
+    {
+        path: 'pago-complemento',
+        component: PagoComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Pago de Complemento de Pago', roles: [ROLES.ADMIN_ROLE] }
     },
     {
         path: '',

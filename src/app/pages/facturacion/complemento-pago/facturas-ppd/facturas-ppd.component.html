@@ -46,12 +46,12 @@
             </div>-->
 
             <div class="col-sm-12">
-              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Facturar Seleccionados"
+              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Agregar"
                 (click)="facturar()" mat-raised-button color="primary"
                 matBadge="{{this.facturacionService.aComplementar.length}}" matBadgePosition="after"
                 matBadgeColor="accent">
-                <i class="fa fa-dollar-sign" aria-hidden="true"></i>
-                Facturar
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Agregar
               </button>
               <a *ngIf="this.selectionFacturas.selected.length === 1 && soyAdmin()" (click)="agregarFacturas()"
                 class="float">
