@@ -171,18 +171,18 @@
               <div class="col-md-12">
                 <div class="hiden3">
                   <div class="letra3">
-                    <strong> 3.&nbsp;&nbsp;CONCEPTOS </strong>
+                    <strong> 3.&nbsp;&nbsp;PAGOS </strong>
                   </div>
                 </div>
 
                 <div class="table-responsive">
-                  <mat-checkbox [(ngModel)]="agrupado" [ngModelOptions]="{standalone: true}"
+                  <!-- <mat-checkbox [(ngModel)]="agrupado" [ngModelOptions]="{standalone: true}"
                     (change)="agruparDesagruparConcepto($event.checked)" matTooltip="Agrupar/Desagrupar Concepto">
                     <a *ngIf="agrupado;else desagrupar">Agrupado</a>
                     <ng-template #desagrupar>
                       <a>Desagrupado</a>
                     </ng-template>
-                  </mat-checkbox>
+                  </mat-checkbox> -->
                   <div class="contenedorBotones">
                     <div class="row">
                       <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Impuestos"
@@ -193,7 +193,8 @@
                         (click)="openDialogManiobras(idSelect)" class="btnBoxe btn  m-r-5">
                         <i class="fas fa-boxes"></i>
                       </button>
-                      <button type="button" matTooltip="Quitar Concepto" (click)="agrupinD(ObjetoSelect)" class="btnTrash btn m-r-5">
+                      <button type="button" matTooltip="Quitar Concepto" (click)="agrupinD(ObjetoSelect)"
+                        class="btnTrash btn m-r-5">
                         <i class="fa fa-trash-o"></i>
                       </button>
                     </div>
@@ -206,17 +207,14 @@
                       <tr>
                         <th scope="col"></th>
                         <th scope="col">#</th>
-                        <th scope="col">Concepto</th>
-                        <th scope="col">Unidad </th>
-                        <th scope="col">Cantidad</th>
-                        <th scope="col">ValorUnitario</th>
-                        <th scope="col">Impuestos</th>
-                        <th scope="col">Descuento</th>
-                        <th scope="col">Importe</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">FormaPago </th>
+                        <th scope="col">NoOperación</th>
+                        <th scope="col">Monto</th>
                         <th></th>
                       </tr>
                     </thead>
-                    <tbody formArrayName="conceptos" *ngFor="let item of conceptos.controls; let i = index;">
+                    <tbody formArrayName="pagos" *ngFor="let item of pagos.controls; let i = index;">
                       <tr [formGroupName]="i">
                         <td>
                           <!-- 
@@ -247,53 +245,29 @@
                           <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button> -->
-                          <mat-checkbox  (change)="onChange(item.value, i, $event)"></mat-checkbox>
- 
+                          <mat-checkbox (change)="onChange(item.value, i, $event)"></mat-checkbox>
+
 
                         </td>
                         <td scope="row">{{i+1}}</td>
+                        <td>{{item.get('fecha').value}}</td>
                         <td>
-                          <!-- {{item.get('descripcion').value}} -->
-                          <div class="col-md">
-                            <mat-form-field class="example-full-width">
-                              <!-- <input matInput [value]="item.get('descripcion').value" formControlName="descripcion"
-                                type="text" (blur)="asignaValores(item.value)" style="text-align: center;"> -->
-                              <textarea matInput [value]="item.get('descripcion').value" formControlName="descripcion"
-                                rows="6" cols="70" (blur)="asignaValores(item.value)" style="text-align: center;"></textarea>
-                            </mat-form-field>
-                          </div>
+                          {{item.get('formaPago').value}}
                         </td>
                         <td>
-                          {{item.get('unidad').value}}
+                          {{item.get('numeroOperacion').value}}
                         </td>
                         <td>
-                          {{item.get('cantidad').value}}
-                        </td>
-                        <td>
-                          <div class="col-md-6">
-                            <mat-form-field>
-                              <input matInput [value]="item.get('valorUnitario').value" formControlName="valorUnitario"
-                                type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
-                            </mat-form-field>
-                          </div>
-                        </td>
-                        <td> 
                           {{calculaImpuestos(item.get('impuestosTrasladados').value, item.get('impuestosRetenidos').value)}}
-                        </td>
-                        <td>
-                          <div class="col-md-5">
-                            <mat-form-field>
-                              <input matInput [value]="item.get('descuento').value" formControlName="descuento"
-                                type="number" (blur)="asignaValores(item.value)" style="text-align: center;">
-                            </mat-form-field>
-                          </div>
-                        </td>
-                        <td>
-                          {{item.get('importe').value}}
                         </td>
                       </tr>
                     </tbody>
                   </table>
+                  <div>
+                    <button matTooltip="Nuevo Pago" mat-mini-fab class="btn btn-primary" type="button" (click)="openDialogPagos()">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

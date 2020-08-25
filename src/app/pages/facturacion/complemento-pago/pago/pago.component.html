@@ -1,5 +1,5 @@
 <div class="row animated fadeIn">
-  <div class="col-md-6">
+  <div class="col-md">
     <div class="card card-body">
       <h3 class="box-title m-b-0">Pago</h3><br>
       <div class="row">
@@ -55,7 +55,7 @@
                       <strong> Documentos Relacionados </strong>
                     </div>
                   </div>
-  
+
                   <div class="table-responsive">
                     <div class="contenedorBotones">
                       <div class="row">
@@ -90,10 +90,11 @@
                           <th></th>
                         </tr>
                       </thead>
-                      <tbody formArrayName="docRelacionados" *ngFor="let item of docRelacionados.controls; let i = index;">
+                      <tbody formArrayName="docRelacionados"
+                        *ngFor="let item of docRelacionados.controls; let i = index;">
                         <tr [formGroupName]="i">
                           <td>
-                            <mat-checkbox  (change)="onChange(item.value, i, $event)"></mat-checkbox>
+                            <mat-checkbox (change)="onChange(item.value, i, $event)"></mat-checkbox>
                           </td>
                           <td>
                             {{item.get('folio').value}}
@@ -107,12 +108,18 @@
                           <td>
                             {{item.get('importePagado').value}}
                           </td>
-                          <td> 
+                          <td>
                             {{item.get('saldoInsoluto').value}}
-                          </td>                         
+                          </td>
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                  <div>
+                    <button matTooltip="Crear complemento de pago" mat-mini-fab class="btn btn-primary"
+                      [routerLink]="['/facturas-ppd']" type="button">
+                      <i class="fa fa-plus"></i>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -123,8 +130,7 @@
               <i class="fa fa-save"></i>
               Guardar
             </button>
-            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
-            <!-- <a routerLink="/pagos" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
+            <button class="btn btn-danger waves-effect waves-light" (click)="close()">Close</button>
           </form>
         </div>
       </div>

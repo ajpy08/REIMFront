@@ -566,13 +566,7 @@ const pagesRoutes: Routes = [
         component: FacturasPpdComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Facturas PPD', roles: [ROLES.ADMIN_ROLE] }
-    },
-    {
-        path: 'pago-complemento',
-        component: PagoComponent,
-        canActivate: [REIMGuard],
-        data: { titulo: 'Pago de Complemento de Pago', roles: [ROLES.ADMIN_ROLE] }
-    },
+    },    
     {
         path: '',
         redirectTo: '/dashboard',

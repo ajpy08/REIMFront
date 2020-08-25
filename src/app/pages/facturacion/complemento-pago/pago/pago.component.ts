@@ -1,17 +1,20 @@
-import { FacturacionService } from './../../facturacion.service';
 import { DoctoRelacionado } from './../../models/docto-relacionado.models';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import swal from 'sweetalert';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Usuario } from 'src/app/pages/usuarios/usuario.model';
 import { Pago } from '../../models/pago.models';
-import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
+
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ROLES } from 'src/app/config/config';
-import * as io from 'socket.io-client';
+// import { ROLES } from 'src/app/config/config';
+// import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
+// import * as io from 'socket.io-client';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
+import { MatDialogRef } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import {
+  MAT_DIALOG_DATA
+} from '@angular/material/dialog';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -35,28 +38,31 @@ export const MY_FORMATS = {
   { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
-export class PagoComponent implements OnInit, OnDestroy {
+export class PagoComponent implements OnInit {
 
   usuarioLogueado = new Usuario;
   pago: Pago = new Pago();
   regForm: FormGroup;
   url: string;
   act = true;
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
+  // socket = io(URL_SOCKET_IO, PARAM_SOCKET);
   formasPago = [];
   idSelect;
   indiceSelect;
   ObjetoSelect = [];
   infoAd = '';
 
+  docsRelacionados = new SelectionModel<Pago>(true, []);
   constructor(
-    public router: Router,
-    public activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private facturacionService: FacturacionService
+    public dialogRef: MatDialogRef<PagoComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit() {
+
+    this.docsRelacionados = this.data;
+
     this.createFormGroup();
 
     this.moneda.setValue('MXN');
@@ -66,47 +72,44 @@ export class PagoComponent implements OnInit, OnDestroy {
     this.fechaPago.setValue(fecha);
     ///////////////////////////////////////////////////////////////////////////////
 
-    this.socket.on('update-buque', function (data: any) {
-      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
-        if (data.data._id) {
-          this.createFormGroup();
-          this.cargarBuque(data.data._id);
-          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
-            swal({
-              title: 'Actualizado',
-              text: 'Otro usuario ha actualizado este buque',
-              icon: 'info'
-            });
-          }
-        }
-        // } else {
-        //   this.cargarBuque(id);
-      }
-    }.bind(this));
+    // this.socket.on('update-buque', function (data: any) {
+    //   if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+    //     if (data.data._id) {
+    //       this.createFormGroup();
+    //       this.cargarBuque(data.data._id);
+    //       if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+    //         swal({
+    //           title: 'Actualizado',
+    //           text: 'Otro usuario ha actualizado este buque',
+    //           icon: 'info'
+    //         });
+    //       }
+    //     }
+    //     // } else {
+    //     //   this.cargarBuque(id);
+    //   }
+    // }.bind(this));
 
-    this.socket.on('delete-buque', function (data: any) {
-      if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
-        this.router.navigate(['/buques']);
-        swal({
-          title: 'Eliminado',
-          text: 'Se elimino este buque por otro usuario',
-          icon: 'warning'
-        });
-      }
-    }.bind(this));
+    // this.socket.on('delete-buque', function (data: any) {
+    //   if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+    //     this.router.navigate(['/pagos']);
+    //     swal({
+    //       title: 'Eliminado',
+    //       text: 'Se elimino este buque por otro usuario',
+    //       icon: 'warning'
+    //     });
+    //   }
+    // }.bind(this));
 
     // this.facturacionService.getFormasPago().subscribe(formasPago => {
     //   this.formasPago = formasPago.formasPago;
     //   this.formaPago.setValue(formasPago.formasPago[2].formaPago);
     // });
-    this.formaPago.setValue('03');
+    this.formaPago.setValue('01');
     this.docRelacionados.removeAt(0);
   }
 
-  ngOnDestroy() {
-  }
-
-  cargarPago(id: string) {
+  cargarPago() {
     // this._pagoService.getPago(id).subscribe(res => {
     //   this.pago = res;
     //   // tslint:disable-next-line: forin
@@ -172,12 +175,8 @@ export class PagoComponent implements OnInit, OnDestroy {
     }
   }
 
-  back() {
-    if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history');
-    }
-    this.router.navigate([this.url]);
-    localStorage.removeItem('history');
+  close(): void {
+    this.dialogRef.close();
   }
 
   /* #region  Properties */
