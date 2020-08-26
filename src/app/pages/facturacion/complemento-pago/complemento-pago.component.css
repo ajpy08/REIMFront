@@ -12,6 +12,7 @@
     min-height: 64px;
     width: 85%;
     padding: 8px 24px 0;
+    margin-top: 20px;
 }
 
 .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
@@ -32,6 +33,8 @@
 .table-responsive {
     border: 3px white solid;
     box-shadow: 3px 2px 26px grey;
+    width: auto;
+    margin-left: -20px;
 }
 
 .hiden {
@@ -46,6 +49,7 @@
     color: white;
     height: 31px;
     width: 650px;
+    margin-top: 20px;
 }
 
 .hiden3 {
@@ -54,6 +58,7 @@
     height: 31px;
     width: auto;
     position: relative;
+    margin-left: -20px;
 }
 
 .letra {
@@ -75,7 +80,7 @@
     font-size: 21px;
     top: 10px;
     text-align: center;
-    margin-top: 20px;
+    padding-top: 4px;
 }
 
 .es {
@@ -130,16 +135,17 @@
     }
     .letra2 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 50px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 76px;
-        margin-top: 20px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .table-responsive {
         border: 3px white solid;
@@ -153,7 +159,7 @@
         top: 23px;
         background-color: #002C77;
         width: 38px;
-        height: 0px;
+        height: 38px;
     }
     .container2 {
         margin-top: 30px;
@@ -187,7 +193,7 @@
         color: white;
         height: 31px;
         margin-left: -27px;
-        width: 355px;
+        width: 600px;
         position: relative;
     }
     .letra {
@@ -198,30 +204,31 @@
     }
     .letra2 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 50px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 76px;
-        margin-top: 20px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .table-responsive {
         border: 3px white solid;
         box-shadow: 1px -10px 26px grey;
         margin-left: -28px;
         display: flex;
-        width: 358px;
+        width: 600px;
         overflow-x: auto;
     }
     .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
-        height: 0px;
+        height: 38px;
     }
     .container2 {
         margin-top: 50px;
@@ -259,7 +266,7 @@
         background: #002C77;
         color: white;
         height: 31px;
-        margin-left: -27px;
+        margin-left: -20px;
         width: 355px;
         position: relative;
     }
@@ -271,16 +278,17 @@
     }
     .letra2 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 50px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 76px;
-        margin-top: 20px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .table-responsive {
         border: 3px white solid;
@@ -289,12 +297,14 @@
         display: flex;
         width: 358px;
         overflow-x: auto;
+        font-size: 15px;
+        margin-left: -20px;
     }
     .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
-        height: 0px;
+        height: 38px;
     }
     .container2 {
         margin-top: 30px;
@@ -333,16 +343,17 @@
     }
     .letra2 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 50px;
+        margin-left: 0px;        
+        padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 18px;
         top: 10px;
-        margin-left: 76px;
-        margin-top: 20px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .table-responsive {
         border: 3px white solid;
@@ -350,13 +361,15 @@
         margin-left: -28px;
         display: flex;
         width: 306px;
-        overflow-x: auto;
+        overflow-x: auto;        
+        font-size: 14px;
+        margin-left: -27px;
     }
     .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
-        height: 0px;
+        height: 38px;
     }
     .container2 {
         margin-top: 41px;
@@ -396,14 +409,15 @@
     .letra2 {
         font-size: 15px;
         top: 10px;
-        margin-left: 77px;
+        margin-left: 0px;        
+        padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 21px;
+        font-size: 15px;
         top: 10px;
-        margin-left: 44px;
-        margin-top: 20px;
+        margin-left: 0px;
+        padding-top: 4px;
     }
     .table-responsive {
         border: 3px white solid;
@@ -411,13 +425,15 @@
         margin-left: -28px;
         display: flex;
         width: 259px;
-        overflow-x: auto;
+        overflow-x: auto;        
+        font-size: 12px;
+        margin-left: -20px;
     }
     .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
-        height: 0px;
+        height: 38px;
     }
     .container2 {
         margin-top: 30px;

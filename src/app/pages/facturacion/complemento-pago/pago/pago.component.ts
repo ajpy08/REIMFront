@@ -129,7 +129,16 @@ export class PagoComponent implements OnInit {
       formaPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
       noOperacion: ['', [Validators.required]],
-      docRelacionados: this.fb.array([this.agregarArray(new DoctoRelacionado)], { validators: Validators.required })
+      docRelacionados: this.fb.array([this.agregarArray(new DoctoRelacionado)], { validators: Validators.required }),
+      numeroCuentaOrd: ['', [Validators.required]],
+      rfcEntidadEmisoraOrd: ['', [Validators.required]],
+      bancoOrd: ['', [Validators.required]],
+      numeroCuentaBen: ['', [Validators.required]],
+      rfcEntidadEmisoraBen: ['', [Validators.required]],
+      tipoCadenaPago: ['', [Validators.required]],
+      certPago: ['', [Validators.required]],
+      cadPago: ['', [Validators.required]],
+      selloPago: ['', [Validators.required]]
     });
   }
 
@@ -198,6 +207,42 @@ export class PagoComponent implements OnInit {
 
   get docRelacionados() {
     return this.regForm.get('docRelacionados') as FormArray;
+  }
+
+  get numeroCuentaOrd() {
+    return this.regForm.get('numeroCuentaOrd');
+  }
+
+  get rfcEntidadEmisoraOrd() {
+    return this.regForm.get('rfcEntidadEmisoraOrd');
+  }
+
+  get bancoOrd() {
+    return this.regForm.get('bancoOrd');
+  }
+
+  get numeroCuentaBen() {
+    return this.regForm.get('numeroCuentaBen');
+  }
+
+  get rfcEntidadEmisoraBen() {
+    return this.regForm.get('rfcEntidadEmisoraBen');
+  }
+
+  get tipoCadenaPago() {
+    return this.regForm.get('tipoCadenaPago');
+  }
+
+  get certPago() {
+    return this.regForm.get('certPago');
+  }
+
+  get cadPago() {
+    return this.regForm.get('cadPago');
+  }
+
+  get selloPago() {
+    return this.regForm.get('selloPago');
   }
 
   /* #endregion */
