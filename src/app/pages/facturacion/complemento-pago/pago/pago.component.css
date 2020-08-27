@@ -15,7 +15,8 @@
     padding: 8px 24px 0;
 }
 
-.btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+.btn-primary.mat-mini-fab.mat-accent:hover,
+.btn-primary.mat-mini-fab.mat-accent {
     top: 23px;
     background-color: #002C77;
 }
@@ -158,7 +159,8 @@
         overflow-x: auto;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -230,7 +232,8 @@
         overflow-x: auto;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -308,7 +311,8 @@
         font-size: 15px;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -375,7 +379,8 @@
         font-size: 14px;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -442,7 +447,8 @@
         font-size: 12px;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -496,6 +502,7 @@ ul {
     position: absolute;
 }
 
+
 /* .fa-dollar-sign {
     color: white;
     margin-left: -5px;
@@ -513,6 +520,7 @@ ul {
     position: absolute;
 }
 
+
 /* .fa-boxes {
     color:white;
     margin-left: -9px;
@@ -529,6 +537,7 @@ ul {
     width: 32px;
     position: absolute;
 }
+
 
 /* .fa-trash-o {
     color: white;

@@ -1,3 +1,5 @@
+import { FacturasPpdComponent } from './../facturas-ppd/facturas-ppd.component';
+import { CFDI } from './../../models/cfdi.models';
 import { DoctoRelacionado } from './../../models/docto-relacionado.models';
 import { Component, OnInit, Inject } from '@angular/core';
 import { Usuario } from 'src/app/pages/usuarios/usuario.model';
@@ -13,7 +15,7 @@ import * as _moment from 'moment';
 import { MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
-  MAT_DIALOG_DATA
+  MAT_DIALOG_DATA, MatDialogConfig, MatDialog
 } from '@angular/material/dialog';
 const moment = _moment;
 
@@ -53,10 +55,12 @@ export class PagoComponent implements OnInit {
   infoAd = '';
 
   docsRelacionados = new SelectionModel<Pago>(true, []);
+  facturasAComplementar = new SelectionModel<CFDI>(true, []);
   constructor(
     public dialogRef: MatDialogRef<PagoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public matDialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -182,6 +186,44 @@ export class PagoComponent implements OnInit {
       this.ObjetoSelect.splice(pos, 1);
       this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].maniobra;
     }
+  }
+
+  openDialogFacturasPPD() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = this.facturasAComplementar;
+    const dialogRef = this.matDialog.open(FacturasPpdComponent, dialogConfig);
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.selectionPagos = new SelectionModel<Pago>(true, []);
+    //   }
+    // });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        result.forEach(concepto => {
+          this.docRelacionados.push(this.agregarArray(concepto));          
+        });
+            // this.cfdi.conceptos = this.conceptos.value;
+        // this.cfdi = cfdi;
+        // const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+        // if (pos >= 0) {
+        //   this.cfdi.pagos[pos] = result;
+        // }
+        // this.recargaValoresCFDI();
+        // if (this.id === 'nuevo' || this.id === undefined) {
+        //   this.cargaValoresIniciales(dialogConfig.data);
+        // } else {
+        //   // this.cargarCFDI(this.id);
+        //   // this.cfdi = cfdi;
+        //   const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+        //   if (pos >= 0) {
+        //     this.cfdi.pagos[pos] = result;
+        //   }
+        //   this.recargaValoresCFDI();
+        // }
+      }
+    });
   }
 
   close(): void {

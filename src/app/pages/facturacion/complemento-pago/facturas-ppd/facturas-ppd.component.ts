@@ -1,10 +1,9 @@
 import { DocumentoRelacionadoComponent } from './../../dialogs/documento-relacionado/documento-relacionado.component';
-import { DetallePagoComponent } from './../../../../dialogs/detalle-pago/detalle-pago.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import * as _moment from 'moment';
 import swal from 'sweetalert';
 import {
-  MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, MatDialogConfig
+  MatPaginator, MatSort, MatTableDataSource, MatDialog, MatSnackBar, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA
 } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -12,7 +11,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { Router } from '@angular/router';
 import { UsuarioService, FacturacionService } from 'src/app/services/service.index';
 import { Usuario } from 'src/app/pages/usuarios/usuario.model';
-import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
+import { ROLES } from 'src/app/config/config';
 import { Complemento } from '../../models/complemento.models';
 
 
@@ -60,7 +59,9 @@ export class FacturasPpdComponent implements OnInit {
     private router: Router,
     public facturacionService: FacturacionService,
     private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<FacturasPpdComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
@@ -94,7 +95,7 @@ export class FacturasPpdComponent implements OnInit {
     this.cargando = false;
   }
 
-  agregarFacturas() {
+  seleccionarFactura() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.selectionFacturas.selected[0];
     const dialogRef = this.matDialog.open(DocumentoRelacionadoComponent, dialogConfig);
@@ -115,40 +116,37 @@ export class FacturasPpdComponent implements OnInit {
     });
   }
 
-  facturar() {
-    if (this.facturacionService.aComplementar.length > 0) {
-      if (this.validaCliente(this.facturacionService.aComplementar)) {
-        //////////////// DATOS GENERALES ////////////////
-        // Serie (default)
-        // Folio (default)
-        // Sucursal (default)
-        // Forma de Pago (default)
-        // Moneda (default)
-        this.facturacionService.IE = 'P';
-        // Fecha (default)
-        /////////////////////////////////////////////////
+  agregarAPago() {
+    if (this.validaCliente(this.facturacionService.aComplementar)) {
+      //////////////// DATOS GENERALES ////////////////
+      // Serie (default)
+      // Folio (default)
+      // Sucursal (default)
+      // Forma de Pago (default)
+      // Moneda (default)
+      this.facturacionService.IE = 'P';
+      // Fecha (default)
+      /////////////////////////////////////////////////
 
-        /////////////////// RECEPTOR ////////////////////
-        // this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
-        this.facturacionService.uuid = this.facturacionService.aComplementar[0].idDocumento;
-        // this.facturacionService.tipo = 'Descarga';
-        /////////////////////////////////////////////////
+      /////////////////// RECEPTOR ////////////////////
+      // this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
+      this.facturacionService.uuid = this.facturacionService.aComplementar[0].idDocumento;
+      // this.facturacionService.tipo = 'Descarga';
+      /////////////////////////////////////////////////
 
-        /////////////////// CONCEPTOS ///////////////////
-        // Producto Servicio (por cada concepto en array aFacturarV)
-        // this.facturacionService.aFacturarV.forEach(c => {
-        //   c.maniobras.forEach(m => {
-        //     this.facturacionService.maniobras.push(m._id);
-        //   });
-        // });
-        // this.facturacionService.maniobras = this.selectionFacturas.selected;
-        /////////////////////////////////////////////////
-        this.router.navigate(['/complemento/nuevo']);
-      } else {
-        swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
-      }
+      /////////////////// CONCEPTOS ///////////////////
+      // Producto Servicio (por cada concepto en array aFacturarV)
+      // this.facturacionService.aFacturarV.forEach(c => {
+      //   c.maniobras.forEach(m => {
+      //     this.facturacionService.maniobras.push(m._id);
+      //   });
+      // });
+      // this.facturacionService.maniobras = this.selectionFacturas.selected;
+      /////////////////////////////////////////////////
+
+      this.dialogRef.close(this.facturacionService.aComplementar);
     } else {
-      swal('Debes tener alguna maniobra seleccionada para facturar', '', 'error');
+      swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
     }
   }
 
@@ -157,13 +155,13 @@ export class FacturasPpdComponent implements OnInit {
     let ok = true;
 
     facturas.forEach(c => {
-        if (rfc === undefined) {
-          rfc = c.rfc;
-        } else {
-          if (rfc !== c.rfc) {
-            ok = false;
-          }
+      if (rfc === undefined) {
+        rfc = c.rfc;
+      } else {
+        if (rfc !== c.rfc) {
+          ok = false;
         }
+      }
     });
     return ok;
   }
@@ -186,7 +184,7 @@ export class FacturasPpdComponent implements OnInit {
 
     snackBarRef.afterDismissed().subscribe(facturar => {
       if (facturar.dismissedByAction === true) {
-        this.facturar();
+        this.agregarAPago();
       }
     });
 
@@ -207,6 +205,10 @@ export class FacturasPpdComponent implements OnInit {
     } else {
       console.error('Error al filtrar el dataSource de CFDIs PPD');
     }
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 
 }
