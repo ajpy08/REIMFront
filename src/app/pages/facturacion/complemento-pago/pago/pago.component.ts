@@ -149,6 +149,7 @@ export class PagoComponent implements OnInit {
   agregarArray(doc: DoctoRelacionado): FormGroup {
     return this.fb.group({
       idDocumento: [doc.idDocumento],
+      fEmision: [doc.fEmision],
       rfc: [doc.rfc],
       serie: [doc.serie],
       folio: [doc.folio],
@@ -201,8 +202,8 @@ export class PagoComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        result.forEach(concepto => {
-          this.docRelacionados.push(this.agregarArray(concepto));          
+        result.forEach(docRelacionado => {
+          this.docRelacionados.push(this.agregarArray(docRelacionado));          
         });
             // this.cfdi.conceptos = this.conceptos.value;
         // this.cfdi = cfdi;

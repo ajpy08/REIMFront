@@ -56,7 +56,6 @@ export class FacturasPpdComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(public matDialog: MatDialog,
-    private router: Router,
     public facturacionService: FacturacionService,
     private usuarioService: UsuarioService,
     private snackBar: MatSnackBar,
