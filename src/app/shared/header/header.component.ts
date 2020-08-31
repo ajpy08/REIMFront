@@ -296,7 +296,7 @@ export class HeaderComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('logout-user', function (data: any) {
-        this.usuarioService.logout2(data.data.usuario._id);
+      this.usuarioService.logout2(data.data.usuario._id);
     }.bind(this));
 
     this.socket.on('actualizar-perfil', function (data: any) {
@@ -366,43 +366,89 @@ export class HeaderComponent implements OnInit {
   }
 
   doSolicitudesNotifications(solicitudes) {
-    solicitudes.forEach(solicitud => {
-      let nombreAgencia = '';
-      let promesa;
-      if ( solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
-        // tslint:disable-next-line: no-unused-expression
-        promesa = new Promise((resolve, reject) => {
-          this.agenciaService.getAgencia(solicitud.agencia).subscribe((agencia) => {
-            nombreAgencia = agencia.razonSocial;
+    if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+      solicitudes.forEach(solicitud => {
+        let nombreAgencia = '';
+        let promesa;
+        if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
+          // tslint:disable-next-line: no-unused-expression
+          promesa = new Promise((resolve, reject) => {
+            this.agenciaService.getAgencia(solicitud.agencia).subscribe((agencia) => {
+              nombreAgencia = agencia.razonSocial;
+              resolve(true);
+            });
+          });
+        } else {
+          promesa = new Promise((resolve, reject) => {
+            if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
+              nombreAgencia = solicitud.agencia.razonSocial;
+            } else {
+              nombreAgencia = solicitud.razonSocial;
+            }
             resolve(true);
           });
-        });
-      } else {
-        promesa = new Promise((resolve, reject) => {
-          if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
-            nombreAgencia = solicitud.agencia.razonSocial;
-          } else {
-            nombreAgencia = solicitud.razonSocial;
+        }
+
+        promesa.then((value: boolean) => {
+          if (value) {
+            const notify = new Notification;
+            const tipo = solicitud.tipo === 'D' ? 'Descarga' : solicitud.tipo === 'C' ? 'Carga' : 'TIPO';
+            const contenedor = solicitud.contenedores.length > 1 ? 'contenedores' : 'contenedor';
+            notify.name = nombreAgencia;
+            notify.description = 'Solicitud de ' + tipo + '(' + solicitud.contenedores.length + ' ' + contenedor + ')';
+            notify.fAlta = solicitud.fAlta;
+            notify._id = solicitud._id;
+            notify.url = `https://reimcontainerpark.com.mx/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
+
+            this.notifications.push(notify);
           }
-          resolve(true);
+        });
+      });
+    } else {
+
+      if (this.usuario.role === ROLES.AA_ROLE) {
+        solicitudes.forEach(solicitud => {
+          const res = this.usuario.empresas.findIndex(empresa => empresa._id === solicitud.agencia._id);
+          if (res > -1) {
+            let nombreAgencia = '';
+            let promesa;
+            if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
+              // tslint:disable-next-line: no-unused-expression
+              promesa = new Promise((resolve, reject) => {
+                this.agenciaService.getAgencia(solicitud.agencia).subscribe((agencia) => {
+                  nombreAgencia = agencia.razonSocial;
+                  resolve(true);
+                });
+              });
+            } else {
+              promesa = new Promise((resolve, reject) => {
+                if (solicitud.agencia !== undefined && !solicitud.agencia.razonSocial) {
+                  nombreAgencia = solicitud.agencia.razonSocial;
+                } else {
+                  nombreAgencia = solicitud.razonSocial;
+                }
+                resolve(true);
+              });
+            }
+
+            promesa.then((value: boolean) => {
+              if (value) {
+                const notify = new Notification;
+                const tipo = solicitud.tipo === 'D' ? 'Descarga' : solicitud.tipo === 'C' ? 'Carga' : 'TIPO';
+                const contenedor = solicitud.contenedores.length > 1 ? 'contenedores' : 'contenedor';
+                notify.name = nombreAgencia;
+                notify.description = 'Solicitud de ' + tipo + '(' + solicitud.contenedores.length + ' ' + contenedor + ')';
+                notify.fAlta = solicitud.fAlta;
+                notify._id = solicitud._id;
+                notify.url = `https://reimcontainerpark.com.mx/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
+
+                this.notifications.push(notify);
+              }
+            });
+          }
         });
       }
-
-      promesa.then((value: boolean) => {
-        if (value) {
-          const notify = new Notification;
-          const tipo = solicitud.tipo === 'D' ? 'Descarga' : solicitud.tipo === 'C' ? 'Carga' : 'TIPO';
-          const contenedor = solicitud.contenedores.length > 1 ? 'contenedores' : 'contenedor';
-          notify.name = nombreAgencia;
-          notify.description = 'Solicitud de ' + tipo + '(' + solicitud.contenedores.length + ' ' + contenedor + ')';
-          notify.fAlta = solicitud.fAlta;
-          notify._id = solicitud._id;
-          notify.url = `https://reimcontainerpark.com.mx/#/solicitudes/aprobaciones/aprobar_${tipo.toLocaleLowerCase()}/${notify._id}`;
-
-          this.notifications.push(notify);
-        }
-      });
-    });
+    }
   }
 
   doManiobraNotification(maniobra) {
