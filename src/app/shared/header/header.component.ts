@@ -452,15 +452,32 @@ export class HeaderComponent implements OnInit {
   }
 
   doManiobraNotification(maniobra) {
-    const notify = new Notification;
-    const tipo = maniobra.cargaDescarga === 'D' ? 'Descarga' : maniobra.cargaDescarga === 'C' ? 'Carga' : 'TIPO';
-    notify.name = 'Maniobra de ' + tipo;
-    notify.description = ' Folio ' + maniobra.folio + ' (' + maniobra.agencia.razonSocial + ')';
-    notify.fAlta = maniobra.fAlta;
-    notify._id = maniobra._id;
-    notify.url = `https://reimcontainerpark.com.mx/#/solicitud_transportista/${notify._id}`;
+    if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+      const notify = new Notification;
+      const tipo = maniobra.cargaDescarga === 'D' ? 'Descarga' : maniobra.cargaDescarga === 'C' ? 'Carga' : 'TIPO';
+      notify.name = 'Maniobra de ' + tipo;
+      notify.description = ' Folio ' + maniobra.folio + ' (' + maniobra.agencia.razonSocial + ')';
+      notify.fAlta = maniobra.fAlta;
+      notify._id = maniobra._id;
+      notify.url = `https://reimcontainerpark.com.mx/#/solicitud_transportista/${notify._id}`;
 
-    this.notifications.push(notify);
+      this.notifications.push(notify);
+    } else {
+      if (this.usuario.role === ROLES.TRANSPORTISTA_ROLE) {
+        const res = this.usuario.empresas.findIndex(empresa => empresa._id === maniobra.transportista._id);
+        if (res > -1) {
+          const notify = new Notification;
+          const tipo = maniobra.cargaDescarga === 'D' ? 'Descarga' : maniobra.cargaDescarga === 'C' ? 'Carga' : 'TIPO';
+          notify.name = 'Maniobra de ' + tipo;
+          notify.description = ' Folio ' + maniobra.folio + ' (' + maniobra.agencia.razonSocial + ')';
+          notify.fAlta = maniobra.fAlta;
+          notify._id = maniobra._id;
+          notify.url = `https://reimcontainerpark.com.mx/#/solicitud_transportista/${notify._id}`;
+
+          this.notifications.push(notify);
+        }
+      }
+    }
   }
 
   logout() {
