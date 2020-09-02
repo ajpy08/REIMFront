@@ -101,22 +101,22 @@ export class FacturasPpdComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const pos = this.facturacionService.aComplementar.findIndex(a => a.idDocumento === result.idDocumento);
+        const pos = this.facturacionService.documentosRelacionados.findIndex(a => a.idDocumento === result.idDocumento);
 
         if (pos >= 0) {
           swal('Ya esta agregada esta factura', '', 'error');
           this.selectionFacturas.clear();
         } else {
-          this.facturacionService.aComplementar.push(result);
+          this.facturacionService.documentosRelacionados.push(result);
           this.selectionFacturas.clear();
-          console.log(result);
+          // console.log(result);
         }
       }
     });
   }
 
-  agregarAPago() {
-    if (this.validaCliente(this.facturacionService.aComplementar)) {
+  agregarDocumentosRelacionados() {
+    if (this.validaCliente(this.facturacionService.documentosRelacionados)) {
       //////////////// DATOS GENERALES ////////////////
       // Serie (default)
       // Folio (default)
@@ -129,7 +129,7 @@ export class FacturasPpdComponent implements OnInit {
 
       /////////////////// RECEPTOR ////////////////////
       // this.facturacionService.peso = ESTADOS_CONTENEDOR.VACIO;
-      this.facturacionService.uuid = this.facturacionService.aComplementar[0].idDocumento;
+      this.facturacionService.uuid = this.facturacionService.documentosRelacionados[0].idDocumento;
       // this.facturacionService.tipo = 'Descarga';
       /////////////////////////////////////////////////
 
@@ -143,9 +143,9 @@ export class FacturasPpdComponent implements OnInit {
       // this.facturacionService.maniobras = this.selectionFacturas.selected;
       /////////////////////////////////////////////////
 
-      this.dialogRef.close(this.facturacionService.aComplementar);
+      this.dialogRef.close(this.facturacionService.documentosRelacionados);
     } else {
-      swal('Las maniobras seleccionadas son de diferente NAVIERA o distinto VIAJE', '', 'error');
+      swal('Las facturas seleccionadas son de diferente CLIENTE', '', 'error');
     }
   }
 
@@ -183,7 +183,7 @@ export class FacturasPpdComponent implements OnInit {
 
     snackBarRef.afterDismissed().subscribe(facturar => {
       if (facturar.dismissedByAction === true) {
-        this.agregarAPago();
+        this.agregarDocumentosRelacionados();
       }
     });
 

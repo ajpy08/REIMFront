@@ -48,9 +48,9 @@
 
             <div class="col-sm-12">
               <br>
-              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Agregar"
-                (click)="agregarAPago()" mat-raised-button color="primary"
-                matBadge="{{this.facturacionService.aComplementar.length}}" matBadgePosition="after"
+              <button [disabled]="this.facturacionService.documentosRelacionados.length <= 0" matTooltip="Agregar"
+                (click)="agregarDocumentosRelacionados()" mat-raised-button color="primary"
+                matBadge="{{this.facturacionService.documentosRelacionados.length}}" matBadgePosition="after"
                 matBadgeColor="accent">
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 Agregar

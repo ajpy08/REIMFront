@@ -14,16 +14,13 @@ import * as _moment from 'moment';
 import { Concepto } from '../models/concepto.models';
 import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
-import { CFDI } from '../models/cfdi.models';
-import * as io from 'socket.io-client';
-import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
-import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
 import { VariasService } from './../varias.service';
 import { ClienteService } from './../../../services/cliente/cliente.service';
 import { SolicitudService } from './../../solicitudes/solicitud.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Pago } from '../models/pago.models';
+import { Complemento } from '../models/complemento.models';
 declare var swal: any;
 const moment = _moment;
 /* #endregion */
@@ -58,7 +55,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   metodosPago = [];
   tiposComprobante = [];
   usosCFDI = [];
-  cfdi;
+  complemento;
   idSelect;
   indiceSelect;
   ObjetoSelect = [];
@@ -74,7 +71,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     public facturacionService: FacturacionService,
-    private navieraService: NavieraService,
     public matDialog: MatDialog,
     private usuarioService: UsuarioService,
     public maniobraService: ManiobraService,
@@ -84,7 +80,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.createFormGroup();
 
-    this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
+    this.complemento = new Complemento('3.3', '', 0, '', 0, '', 0, '', '',  '', '', '', '',new Concepto(), '', '', '', '', '', 0,
+    '', '', '', '', '', '', '','', '', '',[], '', new Date(), '', new Date(), '', '');
     this.usuarioLogueado = this.usuarioService.usuario;
 
     /* #region  Socket.IO */
@@ -130,9 +127,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     // if (this.facturacionService.peso === ESTADOS_CONTENEDOR.VACIO) {
-    //   this.facturacionService.aComplementar = this.facturacionService.aFacturarV;
+    //   this.facturacionService.documentosRelacionados = this.facturacionService.aFacturarV;
     // } else {
-    //   this.facturacionService.aComplementar = this.facturacionService.aFacturarM;
+    //   this.facturacionService.documentosRelacionados = this.facturacionService.aFacturarM;
     // }
 
     this.facturacionService.getSeries().subscribe(series => {
@@ -176,9 +173,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     // this.socket.removeListener('timbrado-cfdi');
 
     if (this.id !== 'nuevo') {
-      this.facturacionService.aComplementar = [];
+      this.facturacionService.documentosRelacionados = [];
     } else {
-      this.facturacionService.aComplementar = [];
+      this.facturacionService.documentosRelacionados = [];
     }
     this.ObjetoSelect = [];
   }
@@ -232,9 +229,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     let subTotal = 0.0;
     let totalDescuentos = 0.0;
 
-    if (this.facturacionService.aComplementar.length > 0) {
+    if (this.facturacionService.documentosRelacionados.length > 0) {
       // if (this.facturacionService.tipo === 'Descarga') {
-      this.facturacionService.aComplementar.forEach(c => {
+      this.facturacionService.documentosRelacionados.forEach(c => {
         let impuestosRetenidos = 0.00;
         let impuestosTrasladados = 0.00;
         const concepto = new Concepto();
@@ -294,22 +291,15 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
             concepto.unidad = '0';
             this.pagos.push(this.agregarArray(concepto));
-            this.cfdi.pagos = this.pagos.value;
+            this.complemento.pagos = this.pagos.value;
           }
-          this.subtotal.setValue(VariasService.round(subTotal, 2));
-          this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
-          this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
-          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
-          this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
-            this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+          this.subtotal.setValue(0);
+          this.total.setValue(0);
         });
       });
       // }
     } else {
       this.subtotal.setValue(0);
-      this.totalImpuestosRetenidos.setValue(0);
-      this.totalImpuestosTrasladados.setValue(0);
-      this.totalDescuentos.setValue(0);
       this.total.setValue(0);
     }
     /////////////////////////////////////////////////////////////////////////////////////////
@@ -342,16 +332,16 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     this.ObjetoSelect = [];
     this.idSelect = undefined;
     // tslint:disable-next-line: forin
-    for (const propiedad in this.cfdi) {
+    for (const propiedad in this.complemento) {
       for (const control in this.regForm.controls) {
         if (propiedad === control.toString() && propiedad !== 'pagos') {
-          this.regForm.controls[propiedad].setValue(this.cfdi[propiedad]);
+          this.regForm.controls[propiedad].setValue(this.complemento[propiedad]);
         }
       }
     }
 
-    if (this.cfdi.pagos.length > 0) {
-      this.cfdi.pagos.forEach(concepto => {
+    if (this.complemento.pagos.length > 0) {
+      this.complemento.pagos.forEach(concepto => {
         if (concepto.maniobras.length > 0) {
           let impuestosRetenidos = 0.00;
           let impuestosTrasladados = 0.00;
@@ -377,12 +367,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
             }
           });
 
-          this.subtotal.setValue(VariasService.round(subTotal, 2));
-          this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
-          this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
-          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
-          this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
-            this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+          this.subtotal.setValue(0);
+          this.total.setValue(0);
 
           this.pagos.push(this.agregarArray(new Concepto(
             concepto.cantidad,
@@ -400,60 +386,45 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
             impuestosTrasladados,
             concepto._id)));
         } else {
-          this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));
-          this.totalImpuestosRetenidos.setValue(VariasService.truncateDecimals(totalImpuestosRetenidos, 4));
-          this.totalImpuestosTrasladados.setValue(VariasService.truncateDecimals(totalImpuestosTrasladados, 4));
-          this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
-          this.total.setValue(VariasService.truncateDecimals(this.subtotal.value - this.totalDescuentos.value +
-            this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 4));
+          this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));          
+          this.total.setValue(0);
         }
       });
     } else {
-      this.subtotal.setValue(VariasService.round(subTotal, 2));
-      this.totalImpuestosRetenidos.setValue(VariasService.round(totalImpuestosRetenidos, 2));
-      this.totalImpuestosTrasladados.setValue(VariasService.round(totalImpuestosTrasladados, 2));
-      this.totalDescuentos.setValue(VariasService.round(totalDescuentos, 2));
-      this.total.setValue(VariasService.round(this.subtotal.value - this.totalDescuentos.value +
-        this.totalImpuestosTrasladados.value - this.totalImpuestosRetenidos.value, 2));
+      this.subtotal.setValue(VariasService.round(subTotal, 2));      
+      this.total.setValue(0);
     }
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
-      fecha: ['', [Validators.required]], //
-      folio: [{ value: '', disabled: true }, [Validators.required]], //
-      formaPago: ['', [Validators.required]],
-      metodoPago: ['', [Validators.required]],
-      moneda: ['', [Validators.required]], //
-      serie: ['', [Validators.required]], //
-      subtotal: [{ value: '', disabled: true }, [Validators.required]], //
-      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]], //
-      total: [{ value: '', disabled: true }, [Validators.required]], //
+      version: ['', [Validators.required]], // *** //
+      fecha: ['', [Validators.required]], // *** //
+      folio: [{ value: '', disabled: true }, [Validators.required]], // *** //
+      // formaPago: ['', [Validators.required]],
+      // metodoPago: ['', [Validators.required]],
+      moneda: ['', [Validators.required]], // *** //
+      serie: ['', [Validators.required]], // *** //
+      subtotal: [{ value: '', disabled: true }, [Validators.required]], // *** //
+      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]], // *** //
+      total: [{ value: '', disabled: true }, [Validators.required]], // *** //
       // RECEPTOR
-      nombre: ['', [Validators.required]],
-      rfc: ['', [Validators.required]],
-      direccion: ['', [Validators.required]],
+      nombre: ['', [Validators.required]], // *** //
+      rfc: ['', [Validators.required]], // *** //
+      direccion: ['', [Validators.required]], // *** //
       noRegistro: [''],
+      usoCFDI: ['P01', [Validators.required]], // *** //
       correo: ['', [Validators.required]],
       // CONCEPTOS
-      cantidad: [''],
-      claveProdServ: [''],
-      claveUnidad: [''],
-      descripcion: [''],
-      noIdentificacion: [''],
-      valorUnitario: [''],
-      importe: [''],
+      cantidad: [''], // *** //
+      claveProdServ: [''], // *** //
+      claveUnidad: [''], // *** //
+      descripcion: [''], // *** //
+      importe: [''], // *** //
+      valorUnitario: [''], // *** //
       informacionAdicional: [{ value: '', disabled: true }],
-      impuestos: [''],
-      unidad: [''],
-      totalDescuentos: [{ value: '', disabled: true }],
-      // maniobras: [''],
-      impuestosRetenidos: [''],
-      impuestosTrasladados: [''],
-      pagos: this.fb.array([this.agregarArray(new Concepto)], { validators: Validators.required }),
-      totalImpuestosRetenidos: [{ value: '', disabled: true }, [Validators.required]],
-      totalImpuestosTrasladados: [{ value: '', disabled: true }, [Validators.required]],
+      pagos: this.fb.array([this.agregarArray(new Concepto(1, '84111506', 'ACT', 'Pago', '', 0, 0))], { validators: Validators.required }),
       sucursal: [{ value: '', disabled: true }],
       _id: ['']
     });
@@ -486,40 +457,34 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   quitar(objeto) {
     if (objeto !== undefined && objeto.length > 0) {
       objeto.forEach(i => {
-        const ind = i.indice;
         if (this.id !== 'nuevo') {
           if (this.agrupado === true) {
-            const idProd = this.cfdi.pagos.findIndex(p => p._id === i.maniobra._id);
-            this.cfdi.pagos.splice(idProd, 1);
+            const idProd = this.complemento.pagos.findIndex(p => p._id === i.maniobra._id);
+            this.complemento.pagos.splice(idProd, 1);
           } else {
-            const poss = this.cfdi.pagos.findIndex(c => c.maniobras[0] === i.maniobra.maniobras[0] && c._id === i.maniobra._id);
-            this.cfdi.pagos[poss].maniobras.forEach(m => {
-              this.maniobrasDeleteConcepto.push({ cfdi: this.regForm.value._id, maniobra: m, concepto: this.pagos.value[poss]._id });
+            const poss = this.complemento.pagos.findIndex(c => c.maniobras[0] === i.maniobra.maniobras[0] && c._id === i.maniobra._id);
+            this.complemento.pagos[poss].maniobras.forEach(m => {
+              this.maniobrasDeleteConcepto.push({ complemento: this.regForm.value._id, maniobra: m, concepto: this.pagos.value[poss]._id });
             });
-            this.cfdi.pagos.splice(poss, 1);
+            this.complemento.pagos.splice(poss, 1);
           }
           this.recargaValoresCFDI();
         } else {
           if (this.agrupado === true) {
-            const con = this.facturacionService.aComplementar.findIndex(cons => cons.idProdServ === i.maniobra._id);
-            this.facturacionService.aComplementar.splice(con, 1);
+            const con = this.facturacionService.documentosRelacionados.findIndex(cons => cons.idProdServ === i.maniobra._id);
+            this.facturacionService.documentosRelacionados.splice(con, 1);
           } else {
             let n = 0;
-            const pos = this.facturacionService.aComplementar.findIndex(cons => cons.idProdServ === i.maniobra._id);
-            const mDelete = this.facturacionService.aComplementar[pos].maniobras.filter(function (dato, ind) {
-              if (dato._id === i.maniobra.maniobras[0]._id) {
-                n = ind;
-              }
-            });
-            this.facturacionService.aComplementar[pos].maniobras.splice(n, 1);
-            // const poss = this.facturacionService.aComplementar.find(fuction c => c.maniobras[] === i.maniobra.maniobras[0]._id &&
+            const pos = this.facturacionService.documentosRelacionados.findIndex(cons => cons.idProdServ === i.maniobra._id);
+            this.facturacionService.documentosRelacionados[pos].maniobras.splice(n, 1);
+            // const poss = this.facturacionService.documentosRelacionados.find(fuction c => c.maniobras[] === i.maniobra.maniobras[0]._id &&
             //  c.idProdServ === i.maniobra._id);
-            // this.facturacionService.aComplementar.splice(poss, 1);
+            // this.facturacionService.documentosRelacionados.splice(poss, 1);
           }
           this.cargaValoresIniciales(undefined);
           this.agrupado = true;
           // const id = this.pagos.value[ind]._id;
-          // const pos = this.facturacionService.aComplementar.findIndex(a => a.idProdServ === id);
+          // const pos = this.facturacionService.documentosRelacionados.findIndex(a => a.idProdServ === id);
         }
       });
     } else {
@@ -535,10 +500,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       if (res.informacionAdicional === '@') {
         res.informacionAdicional = '';
       }
-      this.cfdi = res;
+      this.complemento = res;
 
       // tslint:disable-next-line: forin
-      for (const propiedad in this.cfdi) {
+      for (const propiedad in this.complemento) {
         for (const control in this.regForm.controls) {
           if (propiedad === control.toString() && propiedad !== 'pagos') {
             if (res[propiedad].$numberDecimal) {
@@ -570,17 +535,17 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
                     }
                   }
                 });
-                this.cfdi.pagos = concepts;
+                this.complemento.pagos = concepts;
               }
             }
           }
         }
       }
 
-      if (this.cfdi.pagos.length > 0) {
+      if (this.complemento.pagos.length > 0) {
         let subTotal = 0;
-        if (this.cfdi.pagos[0].maniobras.length > 0) {
-          this.maniobraService.getManiobra(this.cfdi.pagos[0].maniobras[0]).subscribe(m => {
+        if (this.complemento.pagos[0].maniobras.length > 0) {
+          this.maniobraService.getManiobra(this.complemento.pagos[0].maniobras[0]).subscribe(m => {
             this.facturacionService.receptor = m.maniobra.naviera._id;
           });
         }
@@ -592,7 +557,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         //   this.agrupado = false;
         // }
 
-        this.cfdi.pagos.forEach(concepto => {
+        this.complemento.pagos.forEach(concepto => {
           let impuestosRetenidos = 0;
           let impuestosTrasladados = 0;
           subTotal += concepto.importe;
@@ -680,7 +645,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   }
 
   async borrarManiobriaConceptos(maniobras) {
-    const maniobrasD = await this.deleteManiobra(maniobras);
   }
 
   guardarCFDI() {
@@ -698,7 +662,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         } else {
           // this.socket.emit('updatecfdi', res);
         }
-        this.facturacionService.aComplementar = [];
+        this.facturacionService.documentosRelacionados = [];
         this.maniobrasDeleteConcepto = [];
 
         if (this.facturacionService.peso === 'VACIOS') {
@@ -736,29 +700,29 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
   openDialogImpuestos(concepto) {
     if (concepto !== undefined) {
-      // let cfdi;
-      // cfdi = this.regForm.value;
-      this.cfdi = this.regForm.getRawValue();
+      // let complemento;
+      // complemento = this.regForm.value;
+      this.complemento = this.regForm.getRawValue();
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = concepto;
       const dialogRef = this.matDialog.open(ImpuestosCFDIComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          // this.cfdi = cfdi;
-          const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+          // this.complemento = complemento;
+          const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
           if (pos >= 0) {
-            this.cfdi.pagos[pos] = result;
+            this.complemento.pagos[pos] = result;
           }
           this.recargaValoresCFDI();
           // if (this.id === 'nuevo' || this.id === undefined) {
           //   this.cargaValoresIniciales(dialogConfig.data);
           // } else {
           //   // this.cargarCFDI(this.id);
-          //   // this.cfdi = cfdi;
-          //   const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+          //   // this.complemento = complemento;
+          //   const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
           //   if (pos >= 0) {
-          //     this.cfdi.pagos[pos] = result;
+          //     this.complemento.pagos[pos] = result;
           //   }
           //   this.recargaValoresCFDI();
           // }
@@ -771,18 +735,18 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
   openDialogManiobras(concepto) {
     if (concepto !== undefined) {
-      // let cfdi;
-      // cfdi = this.cfdi;
-      this.cfdi = this.regForm.getRawValue();
+      // let complemento;
+      // complemento = this.complemento;
+      this.complemento = this.regForm.getRawValue();
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = concepto;
       const dialogRef = this.matDialog.open(ManiobrasCFDIComponent, dialogConfig);
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+          const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
           if (pos >= 0) {
-            this.cfdi.pagos[pos] = result;
+            this.complemento.pagos[pos] = result;
           }
           this.recargaValoresCFDI();
           // if (this.id === 'nuevo' || this.id === undefined) {
@@ -814,9 +778,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     for (const p in concepto) {
       if (p === 'valorUnitario' && (concepto[p] <= 0 || concepto[p] === null || concepto[p] === undefined)) {
         swal('Error', `El ${p} debe ser mayor que 0`, 'error');
-        const pos = this.cfdi.pagos.findIndex(a => a._id === concepto._id);
+        const pos = this.complemento.pagos.findIndex(a => a._id === concepto._id);
         if (pos >= 0) {
-          concepto[p] = this.cfdi.pagos[pos][p];
+          concepto[p] = this.complemento.pagos[pos][p];
         }
       } else {
         if (typeof (concepto[p]) === 'object') {
@@ -831,10 +795,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     if (concepto.descuento >= concepto.importe) {
       swal('Error', `El descuento (${concepto.descuento}) debe ser menor o igual que el importe (${concepto.importe})`, 'error');
     } else {
-      const posicion = this.cfdi.pagos.findIndex(a => a._id === concepto._id);
+      const posicion = this.complemento.pagos.findIndex(a => a._id === concepto._id);
       if (posicion >= 0) {
-        this.cfdi = this.regForm.getRawValue();
-        this.cfdi.pagos[posicion] = concepto;
+        this.complemento = this.regForm.getRawValue();
+        this.complemento.pagos[posicion] = concepto;
       }
       this.recargaValoresCFDI();
     }
@@ -984,10 +948,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   //   return agrupado;
   // }
 
-  calculaImpuestos(impTras, impRet) {
-    return VariasService.round(impTras - impRet, 2);
-  }
-
   // openDialogPagos(pago) {
   //   // if (pago !== undefined) {
   //     this.cfdi = this.regForm.getRawValue();
@@ -1034,20 +994,25 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // this.cfdi = cfdi;
-        const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
-        if (pos >= 0) {
-          this.cfdi.pagos[pos] = result;
-        }
-        this.recargaValoresCFDI();
+
+        result.forEach(pago => {
+          this.pagos.push(this.agregarArray(pago));
+        });
+
+        // this.complemento = complemento;
+        // const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
+        // if (pos >= 0) {
+        //   this.complemento.pagos[pos] = result;
+        // }
+        // this.recargaValoresCFDI();
         // if (this.id === 'nuevo' || this.id === undefined) {
         //   this.cargaValoresIniciales(dialogConfig.data);
         // } else {
         //   // this.cargarCFDI(this.id);
-        //   // this.cfdi = cfdi;
-        //   const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
+        //   // this.complemento = complemento;
+        //   const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
         //   if (pos >= 0) {
-        //     this.cfdi.pagos[pos] = result;
+        //     this.complemento.pagos[pos] = result;
         //   }
         //   this.recargaValoresCFDI();
         // }
@@ -1056,6 +1021,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   }
 
   /* #region Properties */
+
+  get version() {
+    return this.regForm.get('version');
+  }
 
   get fecha() {
     return this.regForm.get('fecha');
@@ -1068,14 +1037,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   get sucursal() {
     return this.regForm.get('sucursal');
   }
-
-  // get formaPago() {
-  //   return this.regForm.get('formaPago');
-  // }
-
-  // get metodoPago() {
-  //   return this.regForm.get('metodoPago');
-  // }
 
   get moneda() {
     return this.regForm.get('moneda');
@@ -1113,6 +1074,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     return this.regForm.get('noRegistro');
   }
 
+  get usoCFDI() {
+    return this.regForm.get('usoCFDI');
+  }
+
   get correo() {
     return this.regForm.get('correo');
   }
@@ -1132,49 +1097,17 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   get descripcion() {
     return this.regForm.get('descripcion');
   }
-
-  get noIdentificacion() {
-    return this.regForm.get('noIdentificacion');
+  
+  get importe() {
+    return this.regForm.get('importe');
   }
 
   get valorUnitario() {
     return this.regForm.get('valorUnitario');
   }
 
-  get importe() {
-    return this.regForm.get('importe');
-  }
-
-  get impuestos() {
-    return this.regForm.get('impuestos');
-  }
-
-  get unidad() {
-    return this.regForm.get('unidad');
-  }
-
-  get impuestosRetenidos() {
-    return this.regForm.get('impuestosRetenidos');
-  }
-
-  get impuestosTrasladados() {
-    return this.regForm.get('impuestosTrasladados');
-  }
-
   get pagos() {
     return this.regForm.get('pagos') as FormArray;
-  }
-
-  get totalImpuestosRetenidos() {
-    return this.regForm.get('totalImpuestosRetenidos');
-  }
-
-  get totalImpuestosTrasladados() {
-    return this.regForm.get('totalImpuestosTrasladados');
-  }
-
-  get totalDescuentos() {
-    return this.regForm.get('totalDescuentos');
   }
 
   get total() {

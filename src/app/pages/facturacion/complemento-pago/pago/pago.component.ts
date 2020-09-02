@@ -1,3 +1,4 @@
+import { FacturacionService } from 'src/app/services/service.index';
 import { FacturasPpdComponent } from './../facturas-ppd/facturas-ppd.component';
 import { CFDI } from './../../models/cfdi.models';
 import { DoctoRelacionado } from './../../models/docto-relacionado.models';
@@ -61,6 +62,7 @@ export class PagoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     public matDialog: MatDialog,
+    public facturacionService: FacturacionService
   ) { }
 
   ngOnInit() {
@@ -109,7 +111,7 @@ export class PagoComponent implements OnInit {
     //   this.formasPago = formasPago.formasPago;
     //   this.formaPago.setValue(formasPago.formasPago[2].formaPago);
     // });
-    this.formaPago.setValue('01');
+    this.formaPago.setValue('03');
     this.docRelacionados.removeAt(0);
   }
 
@@ -139,10 +141,10 @@ export class PagoComponent implements OnInit {
       bancoOrd: ['', [Validators.required]],
       numeroCuentaBen: ['', [Validators.required]],
       rfcEntidadEmisoraBen: ['', [Validators.required]],
-      tipoCadenaPago: ['', [Validators.required]],
-      certPago: ['', [Validators.required]],
-      cadPago: ['', [Validators.required]],
-      selloPago: ['', [Validators.required]]
+      tipoCadenaPago: [''],
+      certPago: [''],
+      cadPago: [''],
+      selloPago: ['']
     });
   }
 
@@ -160,21 +162,6 @@ export class PagoComponent implements OnInit {
       impPagado: [doc.impPagado],
       impSaldoInsoluto: [doc.impSaldoInsoluto]
     });
-  }
-
-  guardarPago() {
-    if (this.regForm.valid) {
-      // this._pagoService.guardarPago(this.regForm.value).subscribe(res => {
-      //   if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
-      //     this.regForm.get('_id').setValue(res._id);
-      //     this.socket.emit('newpago', res);
-      //     this.router.navigate(['/pagos/pago', this.regForm.get('_id').value]);
-      //   } else {
-      //     this.socket.emit('updatepago', res);
-      //   }
-      //   this.regForm.markAsPristine();
-      // });
-    }
   }
 
   onChange(objeto, indice, event) {
@@ -203,9 +190,9 @@ export class PagoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         result.forEach(docRelacionado => {
-          this.docRelacionados.push(this.agregarArray(docRelacionado));          
+          this.docRelacionados.push(this.agregarArray(docRelacionado));
         });
-            // this.cfdi.conceptos = this.conceptos.value;
+        // this.cfdi.conceptos = this.conceptos.value;
         // this.cfdi = cfdi;
         // const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
         // if (pos >= 0) {
@@ -225,6 +212,76 @@ export class PagoComponent implements OnInit {
         // }
       }
     });
+  }
+
+  validaCampos(valor) {
+    if (valor.value === '03') {
+      this.regForm.get('numeroCuentaOrd').setValidators(Validators.required);
+      this.regForm.get('rfcEntidadEmisoraOrd').setValidators(Validators.required);
+      this.regForm.get('bancoOrd').setValidators(Validators.required);
+      this.regForm.get('numeroCuentaBen').setValidators(Validators.required);
+      this.regForm.get('rfcEntidadEmisoraBen').setValidators(Validators.required);
+
+      this.regForm.get('numeroCuentaOrd').updateValueAndValidity();
+      this.regForm.get('rfcEntidadEmisoraOrd').updateValueAndValidity();
+      this.regForm.get('bancoOrd').updateValueAndValidity();
+      this.regForm.get('numeroCuentaBen').updateValueAndValidity();
+      this.regForm.get('rfcEntidadEmisoraBen').updateValueAndValidity();
+
+    } else {
+      this.regForm.get('numeroCuentaOrd').clearValidators();
+      this.regForm.get('rfcEntidadEmisoraOrd').clearValidators();
+      this.regForm.get('bancoOrd').clearValidators();
+      this.regForm.get('numeroCuentaBen').clearValidators();
+      this.regForm.get('rfcEntidadEmisoraBen').clearValidators();
+
+      this.regForm.get('numeroCuentaOrd').updateValueAndValidity();
+      this.regForm.get('rfcEntidadEmisoraOrd').updateValueAndValidity();
+      this.regForm.get('bancoOrd').updateValueAndValidity();
+      this.regForm.get('numeroCuentaBen').updateValueAndValidity();
+      this.regForm.get('rfcEntidadEmisoraBen').updateValueAndValidity();
+
+      this.regForm.get('numeroCuentaOrd').setValue('');
+      this.regForm.get('rfcEntidadEmisoraOrd').setValue('');
+      this.regForm.get('bancoOrd').setValue('');
+      this.regForm.get('numeroCuentaBen').setValue('');
+      this.regForm.get('rfcEntidadEmisoraBen').setValue('');
+
+      //Inicio control a vacio para que cambie la validación
+      this.regForm.get('tipoCadenaPago').setValue('');
+      // Invoco al metodo para que haga las validaciones
+      this.validaCamposTipoCadenaPago('');
+    }
+  }
+
+  validaCamposTipoCadenaPago(valor) {
+    if (valor.value === '01') {
+      this.regForm.get('certPago').setValidators(Validators.required);
+      this.regForm.get('cadPago').setValidators(Validators.required);
+      this.regForm.get('selloPago').setValidators(Validators.required);
+
+      this.regForm.get('certPago').updateValueAndValidity();
+      this.regForm.get('cadPago').updateValueAndValidity();
+      this.regForm.get('selloPago').updateValueAndValidity();
+    } else {
+      this.regForm.get('certPago').clearValidators();
+      this.regForm.get('cadPago').clearValidators();
+      this.regForm.get('selloPago').clearValidators();
+
+      this.regForm.get('certPago').updateValueAndValidity();
+      this.regForm.get('cadPago').updateValueAndValidity();
+      this.regForm.get('selloPago').updateValueAndValidity();
+
+      this.regForm.get('certPago').setValue('');
+      this.regForm.get('cadPago').setValue('');
+      this.regForm.get('selloPago').setValue('');
+
+
+    }
+  }
+
+  agregarPago() {
+      this.dialogRef.close(this.facturacionService.pagos);
   }
 
   close(): void {

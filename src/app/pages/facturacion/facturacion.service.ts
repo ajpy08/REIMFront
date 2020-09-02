@@ -23,7 +23,8 @@ export class FacturacionService {
   aFacturarV = [];
   aFacturarM = [];
   peso = '';
-  aComplementar = [];
+  documentosRelacionados = [];
+  pagos = [];
   uuid = '';
 
   constructor(
