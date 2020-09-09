@@ -11,7 +11,6 @@ import { Serie } from '../models/serie.models';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
-import { Concepto } from '../models/concepto.models';
 import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { Usuario } from '../../usuarios/usuario.model';
@@ -21,6 +20,7 @@ import { SolicitudService } from './../../solicitudes/solicitud.service';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Pago } from '../models/pago.models';
 import { Complemento } from '../models/complemento.models';
+import { Concepto } from '../models/concepto.models';
 declare var swal: any;
 const moment = _moment;
 /* #endregion */
@@ -51,7 +51,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   info = '';
   series: Serie[] = [];
   formasPago = [];
-  maniobrasDeleteConcepto = [];
+  maniobrasDeletePago = [];
   metodosPago = [];
   tiposComprobante = [];
   usosCFDI = [];
@@ -80,8 +80,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.createFormGroup();
 
-    this.complemento = new Complemento('3.3', '', 0, '', 0, '', 0, '', '',  '', '', '', '',new Concepto(), '', '', '', '', '', 0,
-    '', '', '', '', '', '', '','', '', '',[], '', new Date(), '', new Date(), '', '');
+    this.complemento = new Complemento('3.3', '', 0, '', 0, '', 0, '', '', '', '', '', '', new Concepto(), '', '', '', '', '', 0,
+      '', '', '', '', '', '', '', '', '', '', [], '', new Date(), '', new Date(), '', '');
     this.usuarioLogueado = this.usuarioService.usuario;
 
     /* #region  Socket.IO */
@@ -155,14 +155,14 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     }
     // this.impuestos.removeAt(0);
     this.url = '/complementos';
-    
+
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.openDialogPagos();
     });
-}
+  }
 
   ngOnDestroy(): void {
     this.facturacionService.IE = '';
@@ -183,9 +183,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   cargaValoresIniciales(concept) {
     this.pagos.controls = [];
     this.pagos.setValue([]);
-    let conceptoCalcular;
+    let pagoCalcular;
     if (concept !== undefined) {
-      conceptoCalcular = concept;
+      pagoCalcular = concept;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -234,63 +234,63 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       this.facturacionService.documentosRelacionados.forEach(c => {
         let impuestosRetenidos = 0.00;
         let impuestosTrasladados = 0.00;
-        const concepto = new Concepto();
+        const pago = new Pago();
         this.facturacionService.getProductoServicio(c.idProdServ).subscribe((prodServ) => {
-          concepto._id = prodServ._id;
-          if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
-            concepto.cantidad = conceptoCalcular.maniobras.length;
-            concepto.maniobras = conceptoCalcular.maniobras;
-            concepto.valorUnitario = VariasService.truncateDecimals(conceptoCalcular.valorUnitario, 4);
-            concepto.descuento = VariasService.truncateDecimals(conceptoCalcular.descuento, 4);
+          pago._id = prodServ._id;
+          if (pagoCalcular && prodServ._id === pagoCalcular._id) {
+            pago.cantidad = pagoCalcular.maniobras.length;
+            pago.maniobras = pagoCalcular.maniobras;
+            pago.valorUnitario = VariasService.truncateDecimals(pagoCalcular.valorUnitario, 4);
+            pago.descuento = VariasService.truncateDecimals(pagoCalcular.descuento, 4);
           } else {
-            concepto.cantidad = c.maniobras.length;
-            concepto.maniobras = c.maniobras;
-            concepto.valorUnitario = prodServ !== undefined ? VariasService.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
-            concepto.descuento = 0.00;
+            pago.cantidad = c.maniobras.length;
+            pago.maniobras = c.maniobras;
+            pago.valorUnitario = prodServ !== undefined ? VariasService.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
+            pago.descuento = 0.00;
           }
-          if (prodServ && concepto.maniobras.length > 0) {
-            concepto.claveProdServ = prodServ.claveSAT.claveProdServ;
-            concepto.claveUnidad = prodServ.unidadSAT.claveUnidad;
-            concepto.descripcion = prodServ.descripcion;
-            concepto.noIdentificacion = prodServ.codigo;
-            concepto.importe = VariasService.round(concepto.valorUnitario * concepto.cantidad - concepto.descuento, 2);
-            subTotal += concepto.importe;
-            totalDescuentos += concepto.descuento;
-            // totalDescuentos += concepto.descuento;
-            if (conceptoCalcular && prodServ._id === conceptoCalcular._id) {
-              conceptoCalcular.impuestos.forEach(impuesto => {
+          if (prodServ && pago.maniobras.length > 0) {
+            pago.claveProdServ = prodServ.claveSAT.claveProdServ;
+            pago.claveUnidad = prodServ.unidadSAT.claveUnidad;
+            pago.descripcion = prodServ.descripcion;
+            pago.noIdentificacion = prodServ.codigo;
+            pago.importe = VariasService.round(pago.valorUnitario * pago.cantidad - pago.descuento, 2);
+            subTotal += pago.importe;
+            totalDescuentos += pago.descuento;
+            // totalDescuentos += pago.descuento;
+            if (pagoCalcular && prodServ._id === pagoCalcular._id) {
+              pagoCalcular.impuestos.forEach(impuesto => {
                 if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                  impuestosRetenidos += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                   totalImpuestosRetenidos += impuestosRetenidos;
                 } else {
                   if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                    impuestosTrasladados += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosTrasladados += impuestosTrasladados;
                   }
                 }
               });
-              concepto.impuestos = conceptoCalcular.impuestos;
+              pago.impuestos = pagoCalcular.impuestos;
             } else {
               prodServ.impuestos.forEach(impuesto => {
-                impuesto.importe = VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                impuesto.importe = VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                 if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                  impuestosRetenidos += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                   totalImpuestosRetenidos += impuestosRetenidos;
                 } else {
                   if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                    impuestosTrasladados += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                     totalImpuestosTrasladados += impuestosTrasladados;
                   }
                 }
               });
-              concepto.impuestos = prodServ.impuestos;
+              pago.impuestos = prodServ.impuestos;
             }
-            concepto.impuestosRetenidos = VariasService.truncateDecimals(impuestosRetenidos, 4);
-            concepto.impuestosTrasladados = VariasService.truncateDecimals(impuestosTrasladados, 4);
-            // concepto.impuestos = prodServ.impuestos;
+            pago.impuestosRetenidos = VariasService.truncateDecimals(impuestosRetenidos, 4);
+            pago.impuestosTrasladados = VariasService.truncateDecimals(impuestosTrasladados, 4);
+            // pago.impuestos = prodServ.impuestos;
 
-            concepto.unidad = '0';
-            this.pagos.push(this.agregarArray(concepto));
+            pago.unidad = '0';
+            this.pagos.push(this.agregarArray(pago));
             this.complemento.pagos = this.pagos.value;
           }
           this.subtotal.setValue(0);
@@ -341,28 +341,28 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     }
 
     if (this.complemento.pagos.length > 0) {
-      this.complemento.pagos.forEach(concepto => {
-        if (concepto.maniobras.length > 0) {
+      this.complemento.pagos.forEach(pago => {
+        if (pago.maniobras.length > 0) {
           let impuestosRetenidos = 0.00;
           let impuestosTrasladados = 0.00;
-          concepto.cantidad = concepto.maniobras.length;
-          concepto.importe = VariasService.round(concepto.valorUnitario * concepto.cantidad, 2);
-          subTotal += concepto.importe;
-          totalDescuentos += concepto.descuento;
-          // totalDescuentos += concepto.descuento;
-          concepto.impuestos.forEach(impuesto => {
-            impuesto.importe = VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+          pago.cantidad = pago.maniobras.length;
+          pago.importe = VariasService.round(pago.valorUnitario * pago.cantidad, 2);
+          subTotal += pago.importe;
+          totalDescuentos += pago.descuento;
+          // totalDescuentos += pago.descuento;
+          pago.impuestos.forEach(impuesto => {
+            impuesto.importe = VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
             if (impuesto.TR === 'RETENCION') {
-              impuestosRetenidos += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+              impuestosRetenidos += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
               totalImpuestosRetenidos += impuestosRetenidos;
               // impuestosRetenidos += impuesto.importe;
-              // totalImpuestosRetenidos += concepto.importe * (impuesto.tasaCuota / 100);
+              // totalImpuestosRetenidos += pago.importe * (impuesto.tasaCuota / 100);
             } else {
               if (impuesto.TR === 'TRASLADO') {
-                impuestosTrasladados += VariasService.truncateDecimals(concepto.importe * (impuesto.tasaCuota / 100), 4);
+                impuestosTrasladados += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
                 totalImpuestosTrasladados += impuestosTrasladados;
                 // impuestosTrasladados += impuesto.importe;
-                // totalImpuestosTrasladados += concepto.importe * (impuesto.tasaCuota / 100);
+                // totalImpuestosTrasladados += pago.importe * (impuesto.tasaCuota / 100);
               }
             }
           });
@@ -370,28 +370,29 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           this.subtotal.setValue(0);
           this.total.setValue(0);
 
-          this.pagos.push(this.agregarArray(new Concepto(
-            concepto.cantidad,
-            concepto.claveProdServ,
-            concepto.claveUnidad,
-            concepto.descripcion,
-            concepto.noIdentificacion,
-            concepto.valorUnitario,
-            concepto.importe,
-            concepto.impuestos,
-            concepto.unidad,
-            concepto.descuento,
-            concepto.maniobras,
-            impuestosRetenidos,
-            impuestosTrasladados,
-            concepto._id)));
+          this.pagos.push(this.agregarArray(new Pago(
+            // pago.cantidad,
+            // pago.claveProdServ,
+            // pago.claveUnidad,
+            // pago.descripcion,
+            // pago.noIdentificacion,
+            // pago.valorUnitario,
+            // pago.importe,
+            // pago.impuestos,
+            // pago.unidad,
+            // pago.descuento,
+            // pago.maniobras,
+            // impuestosRetenidos,
+            // impuestosTrasladados,
+            // pago._id
+            )));
         } else {
-          this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));          
+          this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));
           this.total.setValue(0);
         }
       });
     } else {
-      this.subtotal.setValue(VariasService.round(subTotal, 2));      
+      this.subtotal.setValue(VariasService.round(subTotal, 2));
       this.total.setValue(0);
     }
   }
@@ -424,34 +425,50 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       importe: [''], // *** //
       valorUnitario: [''], // *** //
       informacionAdicional: [{ value: '', disabled: true }],
-      pagos: this.fb.array([this.agregarArray(new Concepto(1, '84111506', 'ACT', 'Pago', '', 0, 0))], { validators: Validators.required }),
+      // PAGOS
+      fechaPago: [''], // *** //
+      formaPago: [''], // *** //
+      monedaPago: [''], // *** //
+      monto: [''], // *** //
+      numeroOperacion: [''], // *** //
+      numeroCuentaOrd: [''], // *** //
+      rfcEntidadEmisoraOrd: [''], // *** //
+      bancoOrd: [''], // *** //
+      numeroCuentaBen: [''], // *** //
+      rfcEntidadEmisoraBen: [''], // *** //
+      tipoCadenaPago: [''], // *** //
+      certPago: [''], // *** //
+      cadPago: [''], // *** //
+      selloPago: [''], // *** //
+      doctosRelacionados: [''], // *** //
+      pagos: this.fb.array([this.agregarArray(new Pago)], { validators: Validators.required }),
       sucursal: [{ value: '', disabled: true }],
       _id: ['']
     });
   }
 
-  agregarArray(concepto: Concepto): FormGroup {
+  agregarArray(pago: Pago): FormGroup {
     return this.fb.group({
-      // consecutivo: [concepto.consecutivo],
-      _id: [concepto._id],
-      cantidad: [concepto.cantidad],
-      claveProdServ: [concepto.claveProdServ],
-      claveUnidad: [concepto.claveUnidad],
-      descripcion: [concepto.descripcion],
-      noIdentificacion: [concepto.noIdentificacion],
-      importe: [concepto.importe],
-      valorUnitario: [concepto.valorUnitario],
-      impuestos: [concepto.impuestos],
-      unidad: [concepto.unidad],
-      descuento: [concepto.descuento],
-      maniobras: [concepto.maniobras],
-      impuestosRetenidos: [concepto.impuestosRetenidos],
-      impuestosTrasladados: [concepto.impuestosTrasladados]
+      fechaPago: [pago.fecha],
+      formaPago: [pago.formaPago],
+      monedaPago: [pago.moneda],
+      monto: [pago.monto],
+      numeroOperacion: [pago.numeroOperacion],
+      numeroCuentaOrd: [pago.numeroCuentaOrd],
+      rfcEntidadEmisoraOrd: [pago.rfcEntidadEmisoraOrd],
+      bancoOrd: [pago.bancoOrd],
+      numeroCuentaBen: [pago.numeroCuentaBen],
+      rfcEntidadEmisoraBen: [pago.rfcEntidadEmisoraBen],
+      tipoCadenaPago: [pago.tipoCadenaPago],
+      certPago: [pago.certPago],
+      cadPago: [pago.cadPago],
+      selloPago: [pago.selloPago],
+      doctosRelacionados: [pago.doctosRelacionados]
     });
   }
   async agrupinD(indice) {
     await this.quitar(indice);
-    // await this.agruparDesagruparConcepto(this.agrupado);
+    // await this.agruparDesagruparPago(this.agrupado);
   }
 
   quitar(objeto) {
@@ -464,7 +481,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           } else {
             const poss = this.complemento.pagos.findIndex(c => c.maniobras[0] === i.maniobra.maniobras[0] && c._id === i.maniobra._id);
             this.complemento.pagos[poss].maniobras.forEach(m => {
-              this.maniobrasDeleteConcepto.push({ complemento: this.regForm.value._id, maniobra: m, concepto: this.pagos.value[poss]._id });
+              this.maniobrasDeletePago.push({ complemento: this.regForm.value._id, maniobra: m, concepto: this.pagos.value[poss]._id });
             });
             this.complemento.pagos.splice(poss, 1);
           }
@@ -488,7 +505,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      swal('Error', 'Selecciona un Concepto', 'error');
+      swal('Error', 'Selecciona un Pago', 'error');
     }
     this.ObjetoSelect = [];
   }
@@ -557,11 +574,11 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         //   this.agrupado = false;
         // }
 
-        this.complemento.pagos.forEach(concepto => {
+        this.complemento.pagos.forEach(pago => {
           let impuestosRetenidos = 0;
           let impuestosTrasladados = 0;
-          subTotal += concepto.importe;
-          concepto.impuestos.forEach(impuesto => {
+          subTotal += pago.importe;
+          pago.impuestos.forEach(impuesto => {
             if (impuesto.TR === 'RETENCION') {
               impuestosRetenidos += impuesto.importe;
             } else {
@@ -570,21 +587,22 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
               }
             }
           });
-          this.pagos.push(this.agregarArray(new Concepto(
-            concepto.cantidad,
-            concepto.claveProdServ,
-            concepto.claveUnidad,
-            concepto.descripcion,
-            concepto.noIdentificacion,
-            concepto.valorUnitario,
-            concepto.importe,
-            concepto.impuestos,
-            concepto.unidad,
-            concepto.descuento,
-            concepto.maniobras,
-            impuestosRetenidos,
-            impuestosTrasladados,
-            concepto._id)));
+          this.pagos.push(this.agregarArray(new Pago(
+            // pago.cantidad,
+            // pago.claveProdServ,
+            // pago.claveUnidad,
+            // pago.descripcion,
+            // pago.noIdentificacion,
+            // pago.valorUnitario,
+            // pago.importe,
+            // pago.impuestos,
+            // pago.unidad,
+            // pago.descuento,
+            // pago.maniobras,
+            // impuestosRetenidos,
+            // impuestosTrasladados,
+            // pago._id
+            )));
         });
       } else {
         this.regForm.controls['pagos'].setValue(undefined);
@@ -593,64 +611,64 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   }
 
   guardar() {
-    if (this.id === 'nuevo') {
-      this.consultarManiobraConcepto();
-    } else {
-      this.guardarCFDI();
-    }
+    this.guardarCFDI();
+    // if (this.id === 'nuevo') {
+    //   this.consultarManiobraConceptos();
+    // } else {
+    //   this.guardarCFDI();
+    // }
   }
 
-  consultarManiobraConcepto() {
-    // let promesas;
-    let ok = true;
-    let promesas;
-    this.regForm.value.pagos.forEach(c => {
-      promesas = c.maniobras.map((m) => {
-        return new Promise(resolve => {
-          this.facturacionService.getManiobrasConceptos(m._id, c._id).subscribe(resM => {
-            if (resM.maniobrasConceptos.length > 0) {
-              resolve(false);
-            } else {
-              resolve(true);
-            }
-          });
-        });
-      });
-    });
-    Promise.all(promesas).then(result => {
-      result.forEach(r => {
-        if (r === false) {
-          ok = false;
-        }
-      });
+  // consultarManiobraConceptos() {
+  //   // let promesas;
+  //   let ok = true;
+  //   let promesas;
+  //   this.regForm.value.pagos.forEach(c => {
+  //     promesas = c.maniobras.map((m) => {
+  //       return new Promise(resolve => {
+  //         this.facturacionService.getManiobrasConceptos(m._id, c._id).subscribe(resM => {
+  //           if (resM.maniobrasPagos.length > 0) {
+  //             resolve(false);
+  //           } else {
+  //             resolve(true);
+  //           }
+  //         });
+  //       });
+  //     });
+  //   });
+  //   Promise.all(promesas).then(result => {
+  //     result.forEach(r => {
+  //       if (r === false) {
+  //         ok = false;
+  //       }
+  //     });
 
-      if (ok) {
-        this.guardarCFDI();
-      } else {
-        swal('Error', 'Existe(n) Maniobra(s) con ese mismo concepto', 'error');
-      }
-    });
+  //     if (ok) {
+  //       this.guardarCFDI();
+  //     } else {
+  //       swal('Error', 'Existe(n) Maniobra(s) con ese mismo concepto', 'error');
+  //     }
+  //   });
+  // }
 
-  }
+  // deleteManiobra(maniobras) {
+  //   maniobras.forEach(m => {
+  //     const cfdi = m.cfdi,
+  //       maniobra = m.maniobra,
+  //       productoSer = m.concepto;
+  //     this.facturacionService.deletManiobrasConceptos(cfdi, maniobra, productoSer).subscribe((res) => {
+  //       return res;
+  //     });
+  //   });
+  // }
 
-  deleteManiobra(maniobras) {
-    maniobras.forEach(m => {
-      const cfdi = m.cfdi,
-        maniobra = m.maniobra,
-        productoSer = m.concepto;
-      this.facturacionService.deletManiobrasConceptos(cfdi, maniobra, productoSer).subscribe((res) => {
-        return res;
-      });
-    });
-  }
-
-  async borrarManiobriaConceptos(maniobras) {
+  async borrarManiobriaPagos(maniobras) {
   }
 
   guardarCFDI() {
     if (this.regForm.valid) {
-      if (this.maniobrasDeleteConcepto.length > 0) {
-        this.borrarManiobriaConceptos(this.maniobrasDeleteConcepto);
+      if (this.maniobrasDeletePago.length > 0) {
+        this.borrarManiobriaPagos(this.maniobrasDeletePago);
       }
       this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
@@ -663,7 +681,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           // this.socket.emit('updatecfdi', res);
         }
         this.facturacionService.documentosRelacionados = [];
-        this.maniobrasDeleteConcepto = [];
+        this.maniobrasDeletePago = [];
 
         if (this.facturacionService.peso === 'VACIOS') {
           this.facturacionService.aFacturarV = [];
@@ -729,7 +747,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      swal('Error', 'Selecciona un Concepto', 'error');
+      swal('Error', 'Selecciona un Pago', 'error');
     }
   }
 
@@ -761,7 +779,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      swal('Error', 'Selecciona un Concepto', 'error');
+      swal('Error', 'Selecciona un Pago', 'error');
     }
   }
 
@@ -823,7 +841,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     // }
   }
 
-  // agruparDesagruparConcepto(agrupar) {
+  // agruparDesagruparPago(agrupar) {
   //   if (!this.cfdi) {
   //     this.cfdi = new CFDI('', 0, '', '', '', '', 0, '', 0, '', '', new Date(), '', '', '', '', '', '', '', '', '', []);
   //     this.cfdi.fecha = this.fecha.value;
@@ -850,7 +868,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   //     const groups = VariasService.groupArray(this.pagos.value, '_id');
   //     // tslint:disable-next-line: forin
   //     for (const g in groups) {
-  //       const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+  //       const con = new Pago(0, '', '', '', '', 0, 0, [], '', 0, []);
   //       // tslint:disable-next-line: forin
   //       groups[g].forEach(c => {
   //         c.maniobras.forEach(m => {
@@ -901,7 +919,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   //         await VariasService.asyncForEach(c.maniobras, async (m) => {
   //           // await waitFor(200);
 
-  //           const con = new Concepto(0, '', '', '', '', 0, 0, [], '', 0, []);
+  //           const con = new Pago(0, '', '', '', '', 0, 0, [], '', 0, []);
   //           con._id = c._id;
   //           con.cantidad = 1;
   //           con.unidad = '0';
@@ -992,12 +1010,9 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     //   }
     // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-
-        result.forEach(pago => {
-          this.pagos.push(this.agregarArray(pago));
-        });
+    dialogRef.afterClosed().subscribe(pago => {
+      if (pago) {
+        this.pagos.push(this.agregarArray(pago));
 
         // this.complemento = complemento;
         // const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
@@ -1097,7 +1112,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   get descripcion() {
     return this.regForm.get('descripcion');
   }
-  
+
   get importe() {
     return this.regForm.get('importe');
   }
@@ -1110,6 +1125,65 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     return this.regForm.get('pagos') as FormArray;
   }
 
+  get fechaPago() {
+    return this.regForm.get('fechaPago');
+  }
+
+  get formaPago() {
+    return this.regForm.get('formaPago');
+  }
+
+  get monedaPago() {
+    return this.regForm.get('monedaPago');
+  }
+
+  get monto() {
+    return this.regForm.get('monto');
+  }
+
+  get numeroOperacion() {
+    return this.regForm.get('numeroOperacion');
+  }
+
+  get numeroCuentaOrd() {
+    return this.regForm.get('numeroCuentaOrd');
+  }
+
+  get rfcEntidadEmisoraOrd() {
+    return this.regForm.get('rfcEntidadEmisoraOrd');
+  }
+
+  get bancoOrd() {
+    return this.regForm.get('bancoOrd');
+  }
+
+  get numeroCuentaBen() {
+    return this.regForm.get('numeroCuentaBen');
+  }
+
+  get rfcEntidadEmisoraBen() {
+    return this.regForm.get('rfcEntidadEmisoraBen');
+  }
+
+  get tipoCadenaPago() {
+    return this.regForm.get('tipoCadenaPago');
+  }
+
+  get certPago() {
+    return this.regForm.get('certPago');
+  }
+
+  get cadPago() {
+    return this.regForm.get('cadPago');
+  }
+
+  get selloPago() {
+    return this.regForm.get('selloPago');
+  }
+
+  get doctosRelacionados() {
+    return this.regForm.get('doctosRelacionados');
+  }
   get total() {
     return this.regForm.get('total');
   }

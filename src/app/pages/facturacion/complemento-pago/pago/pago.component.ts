@@ -112,7 +112,7 @@ export class PagoComponent implements OnInit {
     //   this.formaPago.setValue(formasPago.formasPago[2].formaPago);
     // });
     this.formaPago.setValue('03');
-    this.docRelacionados.removeAt(0);
+    this.doctosRelacionados.removeAt(0);
   }
 
   cargarPago() {
@@ -135,7 +135,7 @@ export class PagoComponent implements OnInit {
       formaPago: ['', [Validators.required]],
       moneda: ['', [Validators.required]],
       noOperacion: ['', [Validators.required]],
-      docRelacionados: this.fb.array([this.agregarArray(new DoctoRelacionado)], { validators: Validators.required }),
+      doctosRelacionados: this.fb.array([this.agregarArray(new DoctoRelacionado)], { validators: Validators.required }),
       numeroCuentaOrd: ['', [Validators.required]],
       rfcEntidadEmisoraOrd: ['', [Validators.required]],
       bancoOrd: ['', [Validators.required]],
@@ -190,7 +190,7 @@ export class PagoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         result.forEach(docRelacionado => {
-          this.docRelacionados.push(this.agregarArray(docRelacionado));
+          this.doctosRelacionados.push(this.agregarArray(docRelacionado));
         });
         // this.cfdi.conceptos = this.conceptos.value;
         // this.cfdi = cfdi;
@@ -281,11 +281,40 @@ export class PagoComponent implements OnInit {
   }
 
   agregarPago() {
-      this.dialogRef.close(this.facturacionService.pagos);
+
+    const pago = new Pago();
+    pago.fecha = this.fechaPago.value;
+    pago.formaPago = this.formaPago.value;
+    pago.moneda = this.moneda.value;
+    pago.monto = this.calculaMonto(this.doctosRelacionados.value);
+    pago.numeroOperacion = this.noOperacion.value;
+    pago.numeroCuentaOrd = this.numeroCuentaOrd.value;
+    pago.rfcEntidadEmisoraOrd = this.rfcEntidadEmisoraOrd.value;
+    pago.bancoOrd = this.bancoOrd.value;
+    pago.numeroCuentaBen = this.numeroCuentaBen.value;
+    pago.rfcEntidadEmisoraBen = this.rfcEntidadEmisoraBen.value;
+    pago.tipoCadenaPago = this.tipoCadenaPago.value;
+    pago.certPago = this.certPago.value;
+    pago.cadPago = this.cadPago.value;
+    pago.selloPago = this.selloPago.value;
+    pago.doctosRelacionados = this.doctosRelacionados.value;
+
+    this.facturacionService.pagos.push(pago)
+    this.close(pago);
   }
 
-  close(): void {
-    this.dialogRef.close();
+  calculaMonto(doctosRelacionados) {
+    let monto = 0;
+
+    doctosRelacionados.forEach(doc => {
+      monto += doc.impPagado;
+    });
+
+    return monto;
+  }
+
+  close(result) {
+    this.dialogRef.close(result);
   }
 
   /* #region  Properties */
@@ -305,8 +334,8 @@ export class PagoComponent implements OnInit {
     return this.regForm.get('noOperacion');
   }
 
-  get docRelacionados() {
-    return this.regForm.get('docRelacionados') as FormArray;
+  get doctosRelacionados() {
+    return this.regForm.get('doctosRelacionados') as FormArray;
   }
 
   get numeroCuentaOrd() {

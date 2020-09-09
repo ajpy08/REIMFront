@@ -94,8 +94,8 @@
                                                     <th></th>
                                                 </tr>
                                             </thead>
-                                            <tbody formArrayName="docRelacionados"
-                                                *ngFor="let item of docRelacionados.controls; let i = index;">
+                                            <tbody formArrayName="doctosRelacionados"
+                                                *ngFor="let item of doctosRelacionados.controls; let i = index;">
                                                 <tr [formGroupName]="i">
                                                     <td scope="row">{{i+1}}</td>
                                                     <td>
@@ -248,7 +248,7 @@
                             </div>
                             <br><br>
                             <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-                                [disabled]="regForm.pristine || regForm.invalid">
+                            (click)="agregarPago()" [disabled]="regForm.pristine || regForm.invalid">
                                 <i class="fa fa-save"></i>
                                 Agregar
                             </button>
@@ -257,9 +257,10 @@
                     </div>
                 </div>
             </mat-dialog-content>
-            <p>Form value {{ regForm.value | json }} </p>
-            <p> Form status {{ regForm.status | json}} </p>
-            <!-- <p> Form status2 {{ regForm.pristine | json}} </p> -->
+            <div class="output">
+                <p>Form Data: {{regForm.value | json}}</p>
+                <p>Is Valid: {{regForm.valid}}</p>
+            </div>
         </div>
     </div>
 </div>
