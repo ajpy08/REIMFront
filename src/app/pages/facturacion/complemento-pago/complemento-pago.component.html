@@ -188,7 +188,7 @@
 
                         </td>
                         <td scope="row">{{i+1}}</td>
-                        <td>{{item.get('fecha').value}}</td>
+                        <td>{{item.get('fechaPago').value | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                         <td>
                           {{item.get('formaPago').value}}
                         </td>

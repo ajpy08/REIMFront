@@ -222,80 +222,12 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     }
     /////////////////////////////////////////////////////////////////////////////
 
-    ////////////////////////////////////// CONCEPTO /////////////////////////////////////////////
-    let totalImpuestosRetenidos = 0;
-    let totalImpuestosTrasladados = 0;
-    // let totalDescuentos = 0;
-    let subTotal = 0.0;
-    let totalDescuentos = 0.0;
+    //////////////////////////////////// PAGO ///////////////////////////////////
 
-    if (this.facturacionService.documentosRelacionados.length > 0) {
+    if (this.facturacionService.pagos.length > 0) {
       // if (this.facturacionService.tipo === 'Descarga') {
-      this.facturacionService.documentosRelacionados.forEach(c => {
-        let impuestosRetenidos = 0.00;
-        let impuestosTrasladados = 0.00;
-        const pago = new Pago();
-        this.facturacionService.getProductoServicio(c.idProdServ).subscribe((prodServ) => {
-          pago._id = prodServ._id;
-          if (pagoCalcular && prodServ._id === pagoCalcular._id) {
-            pago.cantidad = pagoCalcular.maniobras.length;
-            pago.maniobras = pagoCalcular.maniobras;
-            pago.valorUnitario = VariasService.truncateDecimals(pagoCalcular.valorUnitario, 4);
-            pago.descuento = VariasService.truncateDecimals(pagoCalcular.descuento, 4);
-          } else {
-            pago.cantidad = c.maniobras.length;
-            pago.maniobras = c.maniobras;
-            pago.valorUnitario = prodServ !== undefined ? VariasService.truncateDecimals(prodServ.valorUnitario, 4) : 0.00;
-            pago.descuento = 0.00;
-          }
-          if (prodServ && pago.maniobras.length > 0) {
-            pago.claveProdServ = prodServ.claveSAT.claveProdServ;
-            pago.claveUnidad = prodServ.unidadSAT.claveUnidad;
-            pago.descripcion = prodServ.descripcion;
-            pago.noIdentificacion = prodServ.codigo;
-            pago.importe = VariasService.round(pago.valorUnitario * pago.cantidad - pago.descuento, 2);
-            subTotal += pago.importe;
-            totalDescuentos += pago.descuento;
-            // totalDescuentos += pago.descuento;
-            if (pagoCalcular && prodServ._id === pagoCalcular._id) {
-              pagoCalcular.impuestos.forEach(impuesto => {
-                if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
-                  totalImpuestosRetenidos += impuestosRetenidos;
-                } else {
-                  if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
-                    totalImpuestosTrasladados += impuestosTrasladados;
-                  }
-                }
-              });
-              pago.impuestos = pagoCalcular.impuestos;
-            } else {
-              prodServ.impuestos.forEach(impuesto => {
-                impuesto.importe = VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
-                if (impuesto.TR === 'RETENCION') {
-                  impuestosRetenidos += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
-                  totalImpuestosRetenidos += impuestosRetenidos;
-                } else {
-                  if (impuesto.TR === 'TRASLADO') {
-                    impuestosTrasladados += VariasService.truncateDecimals(pago.importe * (impuesto.tasaCuota / 100), 4);
-                    totalImpuestosTrasladados += impuestosTrasladados;
-                  }
-                }
-              });
-              pago.impuestos = prodServ.impuestos;
-            }
-            pago.impuestosRetenidos = VariasService.truncateDecimals(impuestosRetenidos, 4);
-            pago.impuestosTrasladados = VariasService.truncateDecimals(impuestosTrasladados, 4);
-            // pago.impuestos = prodServ.impuestos;
-
-            pago.unidad = '0';
-            this.pagos.push(this.agregarArray(pago));
-            this.complemento.pagos = this.pagos.value;
-          }
-          this.subtotal.setValue(0);
-          this.total.setValue(0);
-        });
+      this.facturacionService.pagos.forEach(pago => {
+        this.pagos.push(this.agregarArray(pago));
       });
       // }
     } else {
@@ -385,7 +317,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
             // impuestosRetenidos,
             // impuestosTrasladados,
             // pago._id
-            )));
+          )));
         } else {
           this.subtotal.setValue(VariasService.truncateDecimals(subTotal, 4));
           this.total.setValue(0);
@@ -400,16 +332,17 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   createFormGroup() {
     this.regForm = this.fb.group({
       // GENERALES
-      version: ['', [Validators.required]], // *** //
+      version: ['3.3', [Validators.required]], // *** //
       fecha: ['', [Validators.required]], // *** //
       folio: [{ value: '', disabled: true }, [Validators.required]], // *** //
+      lugarExpedicion: [{ value: '97320' }, [Validators.required]], // *** //
       // formaPago: ['', [Validators.required]],
       // metodoPago: ['', [Validators.required]],
-      moneda: ['', [Validators.required]], // *** //
+      moneda: ['XXX', [Validators.required]], // *** //
       serie: ['', [Validators.required]], // *** //
-      subtotal: [{ value: '', disabled: true }, [Validators.required]], // *** //
-      tipoComprobante: [{ value: '', disabled: true }, [Validators.required]], // *** //
-      total: [{ value: '', disabled: true }, [Validators.required]], // *** //
+      subtotal: [{ value: 0 }, [Validators.required]], // *** //
+      tipoComprobante: [{ value: 'P', disabled: true }, [Validators.required]], // *** //
+      total: [{ value: 0, disabled: true }, [Validators.required]], // *** //
       // RECEPTOR
       nombre: ['', [Validators.required]], // *** //
       rfc: ['', [Validators.required]], // *** //
@@ -602,7 +535,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
             // impuestosRetenidos,
             // impuestosTrasladados,
             // pago._id
-            )));
+          )));
         });
       } else {
         this.regForm.controls['pagos'].setValue(undefined);
@@ -714,73 +647,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       this.serie.setValue(s.serie);
       this.folio.setValue(s.folio);
     });
-  }
-
-  openDialogImpuestos(concepto) {
-    if (concepto !== undefined) {
-      // let complemento;
-      // complemento = this.regForm.value;
-      this.complemento = this.regForm.getRawValue();
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = concepto;
-      const dialogRef = this.matDialog.open(ImpuestosCFDIComponent, dialogConfig);
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          // this.complemento = complemento;
-          const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
-          if (pos >= 0) {
-            this.complemento.pagos[pos] = result;
-          }
-          this.recargaValoresCFDI();
-          // if (this.id === 'nuevo' || this.id === undefined) {
-          //   this.cargaValoresIniciales(dialogConfig.data);
-          // } else {
-          //   // this.cargarCFDI(this.id);
-          //   // this.complemento = complemento;
-          //   const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
-          //   if (pos >= 0) {
-          //     this.complemento.pagos[pos] = result;
-          //   }
-          //   this.recargaValoresCFDI();
-          // }
-        }
-      });
-    } else {
-      swal('Error', 'Selecciona un Pago', 'error');
-    }
-  }
-
-  openDialogManiobras(concepto) {
-    if (concepto !== undefined) {
-      // let complemento;
-      // complemento = this.complemento;
-      this.complemento = this.regForm.getRawValue();
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = concepto;
-      const dialogRef = this.matDialog.open(ManiobrasCFDIComponent, dialogConfig);
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
-          if (pos >= 0) {
-            this.complemento.pagos[pos] = result;
-          }
-          this.recargaValoresCFDI();
-          // if (this.id === 'nuevo' || this.id === undefined) {
-          //   this.cargaValoresIniciales(result);
-          // } else {
-          //   const pos = cfdi.pagos.findIndex(a => a._id === result._id);
-          //   if (pos >= 0) {
-          //     this.cfdi.pagos[pos] = result;
-          //   }
-          //   this.recargaValoresCFDI();
-          // }
-        }
-      });
-    } else {
-      swal('Error', 'Selecciona un Pago', 'error');
-    }
   }
 
   back() {
@@ -1011,8 +877,11 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     // });
 
     dialogRef.afterClosed().subscribe(pago => {
+      this.pagos.setValue([]);
       if (pago) {
         this.pagos.push(this.agregarArray(pago));
+
+        this.facturacionService.pagos = this.pagos.value;
 
         // this.complemento = complemento;
         // const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
@@ -1049,8 +918,8 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     return this.regForm.get('folio');
   }
 
-  get sucursal() {
-    return this.regForm.get('sucursal');
+  get lugarExpedicion() {
+    return this.regForm.get('lugarExpedicion');
   }
 
   get moneda() {
