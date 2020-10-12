@@ -86,6 +86,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col"></th>
+                                                    <th scope="col"></th>
                                                     <th scope="col">Folio</th>
                                                     <th scope="col">F.Emisión </th>
                                                     <th scope="col">Saldo</th>
@@ -97,6 +98,9 @@
                                             <tbody formArrayName="doctosRelacionados"
                                                 *ngFor="let item of doctosRelacionados.controls; let i = index;">
                                                 <tr [formGroupName]="i">
+                                                    <td>
+                                                        <mat-checkbox (change)="onChange(item.value, i, $event)"></mat-checkbox>
+                                                    </td>
                                                     <td scope="row">{{i+1}}</td>
                                                     <td>
                                                         {{item.get('folio').value}}

@@ -36,7 +36,7 @@ export class Complemento {
 
         public rfcReceptor?: string,
         public nombreReceptor?: string,
-        public ResidenciaFiscal?: string, // Si es extranjero
+        public residenciaFiscal?: string, // Si es extranjero
         // public NumRegIdTrib, // Si es extranjero y residencia fiscal existe
         public usoCFDI?: string, // Debe ser P01
 

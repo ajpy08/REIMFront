@@ -544,7 +544,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   }
 
   guardar() {
-    this.guardarCFDI();
+    this.guardarComplemento();
     // if (this.id === 'nuevo') {
     //   this.consultarManiobraConceptos();
     // } else {
@@ -598,12 +598,12 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   async borrarManiobriaPagos(maniobras) {
   }
 
-  guardarCFDI() {
+  guardarComplemento() {
     if (this.regForm.valid) {
-      if (this.maniobrasDeletePago.length > 0) {
-        this.borrarManiobriaPagos(this.maniobrasDeletePago);
-      }
-      this.facturacionService.guardarCFDI(this.regForm.getRawValue()).subscribe(res => {
+      // if (this.maniobrasDeletePago.length > 0) {
+      //   this.borrarManiobriaPagos(this.maniobrasDeletePago);
+      // }
+      this.facturacionService.guardarComplemento(this.regForm.getRawValue()).subscribe(res => {
         if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
           this.regForm.get('_id').setValue(res._id);
           this.id = res._id;
@@ -614,13 +614,13 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
           // this.socket.emit('updatecfdi', res);
         }
         this.facturacionService.documentosRelacionados = [];
-        this.maniobrasDeletePago = [];
+        // this.maniobrasDeletePago = [];
 
-        if (this.facturacionService.peso === 'VACIOS') {
-          this.facturacionService.aFacturarV = [];
-        } else {
-          this.facturacionService.aFacturarM = [];
-        }
+        // if (this.facturacionService.peso === 'VACIOS') {
+        //   this.facturacionService.aFacturarV = [];
+        // } else {
+        //   this.facturacionService.aFacturarM = [];
+        // }
         this.regForm.markAsPristine();
       });
     } else {

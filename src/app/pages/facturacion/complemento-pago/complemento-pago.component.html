@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <!--INICIO DE CONCEPTO-->
+          <!--INICIO DE PAGO-->
           <div class="example-header2">
             <div class="my-container">
               <div class="col-md-12">
@@ -126,15 +126,15 @@
                 <div class="table-responsive">
                   <div class="contenedorBotones">
                     <div class="row">
-                      <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Impuestos"
+                      <!-- <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Impuestos"
                         (click)="openDialogImpuestos(idSelect)" class="btnDolar btn  m-r-5">
                         <i class="fas fa-dollar-sign"></i>
                       </button>
                       <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Maniobras"
                         (click)="openDialogManiobras(idSelect)" class="btnBoxe btn  m-r-5">
                         <i class="fas fa-boxes"></i>
-                      </button>
-                      <button type="button" matTooltip="Quitar Concepto" (click)="agrupinD(ObjetoSelect)"
+                      </button> -->
+                      <button type="button" matTooltip="Quitar Pago" (click)="agrupinD(ObjetoSelect)"
                         class="btnTrash btn m-r-5">
                         <i class="fa fa-trash-o"></i>
                       </button>
@@ -168,7 +168,7 @@
                                 <a matTooltip="Modificar Maniobras"
                                 (click)="openDialogManiobras(item.value)" class="botonI btn  btn-circle">
                                 <i class="fas fa-boxes"></i></a>
-                                <a matTooltip="Quitar Concepto" (click)="quitar(i)" class=" botonC btn btn-danger btn-circle">
+                                <a matTooltip="Quitar Pago" (click)="quitar(i)" class=" botonC btn btn-danger btn-circle">
                                   <i class="fa fa-trash-o"></i></a>
                             </ul>
                           </div> -->
@@ -180,7 +180,7 @@
                             (click)="openDialogManiobras(item.value)" class="btn btn-success m-r-5">
                             <i class="fas fa-boxes"></i>
                           </button>
-                          <button type="button" matTooltip="Quitar Concepto" (click)="quitar(i)" class="btn btn-danger">
+                          <button type="button" matTooltip="Quitar Pago" (click)="quitar(i)" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>
                           </button> -->
                           <mat-checkbox (change)="onChange(item.value, i, $event)"></mat-checkbox>
