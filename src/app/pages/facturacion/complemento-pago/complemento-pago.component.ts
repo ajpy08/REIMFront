@@ -1,8 +1,6 @@
 import { PagoComponent } from './pago/pago.component';
 /* #region  Imports */
-import { ManiobrasCFDIComponent } from './../../../dialogs/maniobras-cfdi/maniobras-cfdi.component';
 import { ManiobraService, UsuarioService } from 'src/app/services/service.index';
-import { ImpuestosCFDIComponent } from './../../../dialogs/impuestos-cfdi/impuestos-cfdi.component';
 import { FacturacionService } from './../facturacion.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,7 +9,6 @@ import { Serie } from '../models/serie.models';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import * as _moment from 'moment';
-import { NavieraService } from '../../navieras/naviera.service';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { Usuario } from '../../usuarios/usuario.model';
 import { VariasService } from './../varias.service';
@@ -143,7 +140,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     this.pagos.removeAt(0);
 
     if (this.id !== 'nuevo') {
-      this.cargarCFDI(this.id);
+      this.cargarComplemento(this.id);
     } else {
       // tslint:disable-next-line: forin
       for (const control in this.regForm.controls) {
@@ -183,9 +180,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   cargaValoresIniciales(concept) {
     this.pagos.controls = [];
     this.pagos.setValue([]);
-    let pagoCalcular;
     if (concept !== undefined) {
-      pagoCalcular = concept;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -253,7 +248,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     }
   }
 
-  recargaValoresCFDI() {
+  recargaValoresComplemento() {
     let totalImpuestosRetenidos = 0;
     let totalImpuestosTrasladados = 0;
     // let totalDescuentos = 0;
@@ -418,11 +413,11 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
             });
             this.complemento.pagos.splice(poss, 1);
           }
-          this.recargaValoresCFDI();
+          this.recargaValoresComplemento();
         } else {
           if (this.agrupado === true) {
-            const con = this.facturacionService.documentosRelacionados.findIndex(cons => cons.idProdServ === i.maniobra._id);
-            this.facturacionService.documentosRelacionados.splice(con, 1);
+            const con = this.facturacionService.pagos.findIndex(cons => cons.fecha === i.fecha);
+            this.facturacionService.pagos.splice(con, 1);
           } else {
             let n = 0;
             const pos = this.facturacionService.documentosRelacionados.findIndex(cons => cons.idProdServ === i.maniobra._id);
@@ -443,7 +438,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
     this.ObjetoSelect = [];
   }
 
-  cargarCFDI(id: string) {
+  cargarComplemento(id: string) {
     this.pagos.removeAt(0);
     let concepts;
     this.facturacionService.getCFDI(id).subscribe(res => {
@@ -493,7 +488,6 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       }
 
       if (this.complemento.pagos.length > 0) {
-        let subTotal = 0;
         if (this.complemento.pagos[0].maniobras.length > 0) {
           this.maniobraService.getManiobra(this.complemento.pagos[0].maniobras[0]).subscribe(m => {
             this.facturacionService.receptor = m.maniobra.naviera._id;
@@ -508,15 +502,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         // }
 
         this.complemento.pagos.forEach(pago => {
-          let impuestosRetenidos = 0;
-          let impuestosTrasladados = 0;
-          subTotal += pago.importe;
           pago.impuestos.forEach(impuesto => {
             if (impuesto.TR === 'RETENCION') {
-              impuestosRetenidos += impuesto.importe;
             } else {
               if (impuesto.TR === 'TRASLADO') {
-                impuestosTrasladados += impuesto.importe;
               }
             }
           });
@@ -595,7 +584,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   //   });
   // }
 
-  async borrarManiobriaPagos(maniobras) {
+  async borrarManiobriaPagos() {
   }
 
   guardarComplemento() {
@@ -684,7 +673,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
         this.complemento = this.regForm.getRawValue();
         this.complemento.pagos[posicion] = concepto;
       }
-      this.recargaValoresCFDI();
+      this.recargaValoresComplemento();
     }
 
     // if (this.id === 'nuevo' || this.id === undefined) {
@@ -883,6 +872,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
 
         this.facturacionService.pagos = this.pagos.value;
 
+        this.recargaValoresComplemento();
         // this.complemento = complemento;
         // const pos = this.complemento.pagos.findIndex(a => a._id === result._id);
         // if (pos >= 0) {

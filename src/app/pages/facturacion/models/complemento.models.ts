@@ -59,7 +59,7 @@ export class Complemento {
         public CadPago?: string, // Es requerido en caso de que el campo TipoCadPago
         public selloPago?: string, // Es requerido en caso de que el campo TipoCadPago
 
-        public doctosRelacionados?: any[],
+        public pagos?: any[],
 
         public usuarioAlta?: string,
         public fAlta?: Date,
