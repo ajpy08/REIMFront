@@ -2,6 +2,7 @@
     min-height: 64px;
     width: 650px;
     padding: 8px 24px 0;
+    margin-left: -50px;
 }
 
 .mat-table-big {
@@ -12,10 +13,10 @@
     min-height: 64px;
     width: 85%;
     padding: 8px 24px 0;
-    margin-top: 20px;
 }
 
-.btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+.btn-primary.mat-mini-fab.mat-accent:hover,
+.btn-primary.mat-mini-fab.mat-accent {
     top: 23px;
     background-color: #002C77;
 }
@@ -33,7 +34,7 @@
 .table-responsive {
     border: 3px white solid;
     box-shadow: 3px 2px 26px grey;
-    width: auto;
+    width: 900px;
     margin-left: -20px;
 }
 
@@ -49,14 +50,14 @@
     color: white;
     height: 31px;
     width: 650px;
-    margin-top: 20px;
+    margin-left: -50px;
 }
 
 .hiden3 {
     background: #002C77;
     color: white;
     height: 31px;
-    width: auto;
+    width: 900px;
     position: relative;
     margin-left: -20px;
 }
@@ -105,6 +106,7 @@
         width: 340px;
         padding: 8px 24px 0;
         top: 10px;
+        margin-left: -50px;
     }
     .hiden {
         background: #002C77;
@@ -118,12 +120,13 @@
         color: white;
         height: 31px;
         width: 341px;
+        margin-left: -50px;
     }
     .hiden3 {
         background: #002C77;
         color: white;
         height: 31px;
-        margin-left: -27px;
+        margin-left: -20px;
         width: 708px;
         position: relative;
     }
@@ -154,8 +157,10 @@
         display: flex;
         width: 710px;
         overflow-x: auto;
+        margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -174,6 +179,7 @@
         width: 340px;
         padding: 8px 24px 0;
         top: 10px;
+        margin-left: -50px;
     }
     .hiden {
         background: #002C77;
@@ -187,13 +193,14 @@
         color: white;
         height: 31px;
         width: 342px;
+        margin-left: -50px;
     }
     .hiden3 {
         background: #002C77;
         color: white;
         height: 31px;
-        margin-left: -27px;
-        width: 600px;
+        margin-left: -20px;
+        width: 500px;
         position: relative;
     }
     .letra {
@@ -221,10 +228,12 @@
         box-shadow: 1px -10px 26px grey;
         margin-left: -28px;
         display: flex;
-        width: 600px;
+        width: 500px;
         overflow-x: auto;
+        margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -248,6 +257,7 @@
         width: 340px;
         padding: 8px 24px 0;
         top: 10px;
+        margin-left: -50px;
     }
     .hiden {
         background: #002C77;
@@ -260,14 +270,15 @@
         background: #002C77;
         color: white;
         height: 31px;
-        width: 100%;
+        width: 342px;
+        margin-left: -50px;
     }
     .hiden3 {
         background: #002C77;
         color: white;
         height: 31px;
         margin-left: -20px;
-        width: 355px;
+        width: 358px;
         position: relative;
     }
     .letra {
@@ -300,7 +311,8 @@
         font-size: 15px;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -319,19 +331,21 @@
         width: 301px;
         padding: 8px 24px 0;
         top: 10px;
+        margin-left: -50px;
     }
     .hiden2 {
         margin-top: 10px;
         background: #002C77;
         color: white;
         height: 31px;
-        width: 100%;
+        width: 301px;
+        margin-left: -50px;
     }
     .hiden3 {
         background: #002C77;
         color: white;
         height: 31px;
-        margin-left: -27px;
+        margin-left: -20px;
         width: 306px;
         position: relative;
     }
@@ -343,14 +357,14 @@
     }
     .letra2 {
         size: 10pt;
-        font-size: 18px;
+        font-size: 16px;
         top: 10px;
-        margin-left: 0px;        
+        margin-left: 0px;
         padding-top: 4px;
     }
     .letra3 {
         size: 10pt;
-        font-size: 18px;
+        font-size: 16px;
         top: 10px;
         margin-left: 0px;
         padding-top: 4px;
@@ -361,11 +375,12 @@
         margin-left: -28px;
         display: flex;
         width: 306px;
-        overflow-x: auto;        
+        overflow-x: auto;
         font-size: 14px;
-        margin-left: -27px;
+        margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -384,19 +399,22 @@
         width: 258px;
         padding: 8px 24px 0;
         top: 10px;
+        margin-left: -50px;
     }
     .hiden2 {
         margin-top: 10px;
         background: #002C77;
         color: white;
         height: 31px;
-        width: 100%;
+        width: 256px;
+        font-size: small;
+        margin-left: -50px;
     }
     .hiden3 {
         background: #002C77;
         color: white;
         height: 31px;
-        margin-left: -27px;
+        margin-left: -20px;
         width: 256px;
         position: relative;
     }
@@ -409,7 +427,7 @@
     .letra2 {
         font-size: 15px;
         top: 10px;
-        margin-left: 0px;        
+        margin-left: 0px;
         padding-top: 4px;
     }
     .letra3 {
@@ -425,11 +443,12 @@
         margin-left: -28px;
         display: flex;
         width: 259px;
-        overflow-x: auto;        
+        overflow-x: auto;
         font-size: 12px;
         margin-left: -20px;
     }
-    .btn-primary.mat-mini-fab.mat-accent:hover, .btn-primary.mat-mini-fab.mat-accent {
+    .btn-primary.mat-mini-fab.mat-accent:hover,
+    .btn-primary.mat-mini-fab.mat-accent {
         top: 23px;
         background-color: #002C77;
         width: 38px;
@@ -483,6 +502,7 @@ ul {
     position: absolute;
 }
 
+
 /* .fa-dollar-sign {
     color: white;
     margin-left: -5px;
@@ -500,6 +520,7 @@ ul {
     position: absolute;
 }
 
+
 /* .fa-boxes {
     color:white;
     margin-left: -9px;
@@ -516,6 +537,7 @@ ul {
     width: 32px;
     position: absolute;
 }
+
 
 /* .fa-trash-o {
     color: white;

@@ -65,6 +65,7 @@ export class DocumentoRelacionadoComponent implements OnInit {
 
     const docto = new DoctoRelacionado();
     docto.idDocumento = this.data.uuid;
+    docto.fEmision = this.data.fecha;
     docto.rfc = this.data.rfc;
     docto.serie = this.data.serie;
     docto.folio = this.data.folio;

@@ -5,10 +5,10 @@ export class Complemento {
         public serie?: string,
         public folio?: number,
         public fecha?: string,
-        public sello?: string, // FALTA
+        // public sello?: string, // FALTA
         // public formaPago?: string, // NO DEBE EXISTIR
-        public noCertificado?: string, // FALTA
-        public certificado?: string, // FALTA
+        // public noCertificado?: string, // FALTA
+        // public certificado?: string, // FALTA
         // public condicionesDePago?: string, // NO DEBE EXISTIR
         public subTotal?: number, // DEBE SER 0
         // public Descuento?: number, // NO DEBE EXISTIR
@@ -17,8 +17,8 @@ export class Complemento {
         public total?: number, // DEBE SER 0
         public tipoComprobante?: string, // Se debe registrar la clave "P" (Pago)
         // public metodoPago?: string, // NO DEBE EXISTIR
-        public lugarExpedicion?: string, // Siempre CP del lugar de expedicion
-        public confirmacion?: string,
+        // public lugarExpedicion?: string, // Siempre CP del lugar de expedicion Backend
+        public confirmacion?: string, // *************PEDIENTE*************//
         // Confirmación.- Se debe registrar la clave de confirmación única e irrepetible que entregue el Proveedor de Certificación
         // de CFDI o el SAT a los emisores (usuarios) para expedir el comprobante con importes o tipo de cambio
         // fuera del rango establecido o en ambos casos.
@@ -30,14 +30,14 @@ export class Complemento {
         // Nodo: CfdiRelacionado (En este nodo se debe expresar la información del comprobante relacionado).
         // UUID
 
-        public rfcEmisor?: string, // FALTA
-        public nombreEmisor?: string, // FALTA
-        public regimenFiscal?: string, // FALTA
+        // public rfcEmisor?: string, // Backend
+        // public nombreEmisor?: string, // Backend
+        // public regimenFiscal?: string, // Backend
 
         public rfcReceptor?: string,
         public nombreReceptor?: string,
-        // public ResidenciaFiscal, // Si es extranjero
-        // public NumRegIdTrib, // Si es extranjero
+        public residenciaFiscal?: string, // Si es extranjero
+        // public NumRegIdTrib, // Si es extranjero y residencia fiscal existe
         public usoCFDI?: string, // Debe ser P01
 
         public concepto?: Concepto,
@@ -59,7 +59,7 @@ export class Complemento {
         public CadPago?: string, // Es requerido en caso de que el campo TipoCadPago
         public selloPago?: string, // Es requerido en caso de que el campo TipoCadPago
 
-        public doctosRelacionados?: any[],
+        public pagos?: any[],
 
         public usuarioAlta?: string,
         public fAlta?: Date,

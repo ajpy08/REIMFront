@@ -465,10 +465,10 @@ export class InventarioComponent implements OnInit {
         reparaciones = reparaciones.substring(0, reparaciones.length - 2);
       }
 
-
       // console.log(d)
       const dato = {
         EntradaPatio: d.fLlegada,
+        Dias_Patio: this.calculaDias(d.fLlegada),
         Viaje: d.viaje && d.viaje.viaje && d.viaje.viaje !== undefined && d.viaje.viaje !== '' ? d.viaje.viaje : '',
         Buque: d.viaje && d.viaje.buque && d.viaje.buque !== undefined && d.viaje.buque !== null &&
           d.viaje.buque.nombre && d.viaje.buque.nombre !== undefined &&
