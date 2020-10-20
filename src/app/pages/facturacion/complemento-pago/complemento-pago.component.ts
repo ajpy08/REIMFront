@@ -77,8 +77,7 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.createFormGroup();
 
-    this.complemento = new Complemento('3.3', '', 0, '', 0, '', 0, '', '', '', '', '', '', new Concepto(), '', '', '', '', '', 0,
-      '', '', '', '', '', '', '', '', '', '', [], '', new Date(), '', new Date(), '', '');
+    this.complemento = new Complemento('3.3', '', 0, '', 0, '', 0, '', '', '', '', '', '', new Concepto(), '', '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', [], '', new Date(), '', new Date(), '', '');
     this.usuarioLogueado = this.usuarioService.usuario;
 
     /* #region  Socket.IO */
@@ -387,10 +386,10 @@ export class ComplementoPagoComponent implements OnInit, OnDestroy {
       bancoOrd: [pago.bancoOrd],
       numeroCuentaBen: [pago.numeroCuentaBen],
       rfcEntidadEmisoraBen: [pago.rfcEntidadEmisoraBen],
-      tipoCadenaPago: [pago.tipoCadenaPago],
-      certPago: [pago.certPago],
-      cadPago: [pago.cadPago],
-      selloPago: [pago.selloPago],
+      // tipoCadenaPago: [pago.tipoCadenaPago],
+      // certPago: [pago.certPago],
+      // cadPago: [pago.cadPago],
+      // selloPago: [pago.selloPago],
       doctosRelacionados: [pago.doctosRelacionados]
     });
   }
