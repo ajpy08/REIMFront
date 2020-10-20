@@ -13,7 +13,8 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <!-- <div class="container"> -->
+        <mat-dialog-content>
+          <!-- <div class="container"> -->
           <div style="text-align: right;" class="row">
             <!--<div class="col-sm">
               <mat-form-field>
@@ -46,17 +47,15 @@
             </div>-->
 
             <div class="col-sm-12">
-              <button [disabled]="this.facturacionService.aComplementar.length <= 0" matTooltip="Facturar Seleccionados"
-                (click)="facturar()" mat-raised-button color="primary"
-                matBadge="{{this.facturacionService.aComplementar.length}}" matBadgePosition="after"
+              <br>
+              <button [disabled]="this.facturacionService.documentosRelacionados.length <= 0" matTooltip="Agregar"
+                (click)="agregarDocumentosRelacionados()" mat-raised-button color="primary"
+                matBadge="{{this.facturacionService.documentosRelacionados.length}}" matBadgePosition="after"
                 matBadgeColor="accent">
-                <i class="fa fa-dollar-sign" aria-hidden="true"></i>
-                Facturar
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Agregar
               </button>
-              <a *ngIf="this.selectionFacturas.selected.length === 1 && soyAdmin()" (click)="agregarFacturas()"
-                class="float">
-                <i class="fa fa-plus my-float"></i>
-              </a> <br><br>
+              <br><br>
               <!-- <mat-form-field>
                 <mat-select [(ngModel)]="idProdServ" placeholder="Seleccione un Producto o Servicio" name="prodServ">
                   <mat-option>--- NINGUNO ---</mat-option>
@@ -67,33 +66,33 @@
               </mat-form-field> -->
             </div>
           </div>
-        <!-- </div> <br> -->
-        <h3 class="card-title">Facturas ( <small>{{totalRegistros}}</small> )</h3>
-        <div class="example-header mat-elevation-z8">
-          <mat-form-field>
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
-          </mat-form-field>
-        </div>
-        <br>
-        <div class="example-container mat-elevation-z8">
-          <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
+          <!-- </div> <br> -->
+          <h3 class="card-title">Facturas ( <small>{{totalRegistros}}</small> )</h3>
+          <div class="example-header mat-elevation-z8">
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+            </mat-form-field>
+          </div>
+          <br>
+          <div class="example-container mat-elevation-z8">
+            <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
 
-            <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
-                <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef>
+                  <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
                   [checked]="selectionFacturas.hasValue() && isAllSelected()"
                   [indeterminate]="selectionFacturas.hasValue() && !isAllSelected()">
                 </mat-checkbox> -->
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()"
-                  (change)="$event ? selectionFacturas.toggle(row) : null"
-                  [checked]="selectionFacturas.isSelected(row)">
-                </mat-checkbox>
-              </mat-cell>
-            </ng-container>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selectionFacturas.toggle(row) : null"
+                    [checked]="selectionFacturas.isSelected(row)">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
 
-            <!-- <ng-container matColumnDef="actions">
+              <!-- <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
               <mat-cell *matCellDef="let row">
                 <button [routerLink]="['/maniobras/maniobra/', row._id,'detalle']" class="btn btn-sm btn-info m-r-5">
@@ -109,32 +108,42 @@
               </mat-cell>
             </ng-container> -->
 
-            <ng-container matColumnDef="fecha">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="fecha">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.fecha | date:'dd/MM/yyyy'}} </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="folio">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.serie}} - {{row.folio}}</mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="folio">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.serie}} - {{row.folio}}</mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="metodoPago">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Metodo de Pago</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.metodoPago}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="metodoPago">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Metodo de Pago</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.metodoPago}} </mat-cell>
+              </ng-container>
 
-            <ng-container matColumnDef="total">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.total.$numberDecimal | currency}} </mat-cell>
-            </ng-container>
+              <ng-container matColumnDef="total">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Total</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.total.$numberDecimal | currency}} </mat-cell>
+              </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
-          </mat-paginator>
+              <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="10" [showFirstLastButtons]>
+            </mat-paginator>
+          </div>
+        </mat-dialog-content>
+        <div style="text-align: center">
+          <button matTooltip="Agregar facturas a pago" mat-mini-fab class="btn btn-primary"
+            (click)="seleccionarFactura()" type="button">
+            <i class="fa fa-plus"></i>
+          </button>
         </div>
+        <!-- <a *ngIf="this.selectionFacturas.selected.length === 1 && soyAdmin()" (click)="seleccionarFactura()" class="float">
+          <i class="fa fa-plus my-float"></i>
+        </a> -->
       </div>
     </div>
   </div>

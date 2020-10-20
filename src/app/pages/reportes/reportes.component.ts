@@ -773,7 +773,7 @@ export class ReportesComponent implements OnInit {
       const maniobra = {
         Contenedor: m.contenedor,
         Tipo: m.tipo,
-        Fecha: m.fIniLavado !== undefined ? m.fLlegada.substring(0, 10) : '',
+        Fecha: m.fIniLavado !== undefined ? m.fIniLavado.substring(0, 10) : '',
         Hora_Inicio_Lavado: m.hIniLavado,
         Hora_Fin_Lavado: m.hFinLavado,
         tiempo: resultado
@@ -806,7 +806,7 @@ export class ReportesComponent implements OnInit {
       const maniobra = {
         Contenedor: m.contenedor,
         Tipo: m.tipo,
-        Fecha_Alta: m.fAlta !== undefined ? m.fLlegada.substring(0, 10) : '',
+        Fecha_Alta: m.fAlta !== undefined ? m.fAlta.substring(0, 10) : '',
         Lavado: m.lavado
       };
       this.ManiobrasExcel.push(maniobra);
@@ -866,7 +866,7 @@ export class ReportesComponent implements OnInit {
           : '' && m.viaje.buque.nombre,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
-        Fecha_Alta: m.fAlta !== undefined ? m.fLlegada.substring(0, 10) : '',
+        Fecha_Alta: m.fAlta !== undefined ? m.fAlta.substring(0, 10) : '',
         Reparaciones: reparaciones,
         observaciones: observaciones,
 
@@ -902,7 +902,7 @@ export class ReportesComponent implements OnInit {
         Nombre_Buque: m.viaje && m.viaje.buque !== undefined && m.viaje.buque.nombre !== '' ? m.viaje.buque.nombre : '' && m.viaje.buque.nombre,
         Contenedor: m.contenedor,
         Tipo: m.tipo,
-        Fecha_Inicio_Reparacion: m.fIniReparacion !== undefined ? m.fLlegada.substring(0, 10) : '',
+        Fecha_Inicio_Reparacion: m.fIniReparacion !== undefined ? m.fIniReparacion.substring(0, 10) : '',
         Hora_Inicio_Reparacion: m.hIniReparacion,
         Fecha_Fin_Reparacion: m.fFinReparacion !== undefined ? m.fLlegada.substring(0, 10) : '',
         Hpra_Fin_Reparacion: m.hFinReparacion,

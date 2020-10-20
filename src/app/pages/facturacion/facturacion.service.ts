@@ -10,6 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { ClaveUnidadServicio } from './clave-unidades/clave-unidad.service.models';
 import { NOTAS } from './models/notas.models';
+import { Complemento } from './models/complemento.models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,8 @@ export class FacturacionService {
   aFacturarV = [];
   aFacturarM = [];
   peso = '';
-  aComplementar = [];
+  documentosRelacionados = [];
+  pagos = [];
   uuid = '';
 
   constructor(
@@ -114,6 +116,45 @@ export class FacturacionService {
       .delete(url)
       .pipe(
         map(resp => swal('CFDI Borrado', 'Eliminado correctamente', 'success'))
+      );
+  }
+
+  guardarComplemento(complemento: Complemento): Observable<any> {
+    let url = URL_SERVICIOS + '/complementos/complemento';
+    if (complemento._id) {
+
+      if (complemento.informacionAdicional === '') {
+        complemento.informacionAdicional = '@';
+      }
+      // actualizando
+      url += '/' + complemento._id;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, complemento).pipe(
+        map((resp: any) => {
+          swal('complemento Actualizado', complemento.serie + ' - ' + complemento.folio, 'success');
+          return resp.complemento;
+        })
+      );
+    } else {
+      // creando
+      url += '?token=' + this._usuarioService.token;
+      return this.http.post(url, complemento).pipe(
+        map((resp: any) => {
+          swal('Complemento Creado', complemento.serie + ' - ' + complemento.folio, 'success');
+          // console.log(resp)
+          return resp.complemento;
+        })
+      );
+    }
+  }
+
+  borrarComplemento(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/complementos/complemento/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http
+      .delete(url)
+      .pipe(
+        map(resp => swal('complemento Borrado', 'Eliminado correctamente', 'success'))
       );
   }
 

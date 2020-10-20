@@ -1,6 +1,7 @@
 export class DoctoRelacionado {
     constructor(
         public idDocumento?: string,
+        public fEmision?: Date,
         public rfc?: string,
         public serie?: string,
         public folio?: number,

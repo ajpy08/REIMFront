@@ -1,7 +1,6 @@
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
-import { FacturasPpdComponent } from './facturacion/complemento-pago/facturas-ppd/facturas-ppd.component';
 import { ComplementosPagoComponent } from './facturacion/complemento-pago/complementos-pago.component';
 import { CFDIComponent } from './facturacion/cfdis/cfdi.component';
 import { CFDISComponent } from './facturacion/cfdis/cfdis.component';
@@ -84,7 +83,6 @@ import { ManiobrasDiarioComponent } from './maniobras/maniobras-diario/maniobras
 import { TiposContenedoresComponent } from './tipos-contenedores/TiposContenedoresComponent';
 import { TipoContenedoresComponent } from './tipos-contenedores/tipo-contenedores.component';
 import { ROLES } from '../config/config';
-import { NotfoundComponent } from '../shared/notfound/notfound.component';
 import { LiberacionesBLComponent } from './liberacion-bl/liberaciones-bl.component';
 import { LiberacionBLComponent } from './liberacion-bl/liberacion-bl.component';
 import { AprobacionesBkComponent } from './liberacion-bl/aprobaciones-bk/aprobaciones-bk.component';
@@ -559,13 +557,7 @@ const pagesRoutes: Routes = [
         component: ComplementoPagoComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Complemento de Pago', roles: [ROLES.ADMIN_ROLE] }
-    },
-    {
-        path: 'facturas-ppd',
-        component: FacturasPpdComponent,
-        canActivate: [REIMGuard],
-        data: { titulo: 'Facturas PPD', roles: [ROLES.ADMIN_ROLE] }
-    },
+    },   
     {
         path: '',
         redirectTo: '/dashboard',

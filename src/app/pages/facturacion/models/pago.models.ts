@@ -17,11 +17,11 @@ export class Pago {
         public rfcEntidadEmisoraBen?: string,
 
         // Informacion Digital
-        // public tipoCadenaPago?: string, // Si existe este campo es obligatorio registrar los campos CertificadoPago,
+        public tipoCadenaPago?: string, // Si existe este campo es obligatorio registrar los campos CertificadoPago,
         // CadenaPago y SelloPago, en otro caso estos campos no deben existir
-        // public certPago?: string,
-        // public cadPago?: string,
-        // public selloPago?: string,
+        public certPago?: string,
+        public cadPago?: string,
+        public selloPago?: string,
 
         public doctosRelacionados?: any[],
 
