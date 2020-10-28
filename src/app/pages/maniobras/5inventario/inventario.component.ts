@@ -97,6 +97,22 @@ export class InventarioComponent implements OnInit {
       this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE ||
       this.usuarioLogueado.role === ROLES.PATIO_ROLE
     ) {
+
+      this.displayedColumns = [
+        'actions',
+        'fLlegada',
+        'dias',
+        'viaje',
+        'nombre',
+        'nombreComercial',
+        'fVigenciaTemporal',
+        'pdfTemporal',
+        'contenedor',
+        'tipo',
+        'peso',
+        'grado'
+      ];
+
       this.displayedColumnsLR = [
         'actions',
         'fLlegada',
@@ -241,7 +257,7 @@ export class InventarioComponent implements OnInit {
         .subscribe(maniobras => {
           this.maniobras = maniobras.maniobras;
 
-          this.maniobras = this.maniobras.sort((a, b) => a.fLlegada.localeCompare(b.fLlegada));
+          // this.maniobras = this.maniobras.sort((a, b) => a.fLlegada.localeCompare(b.fLlegada));
 
           this.dataSource = new MatTableDataSource(this.maniobras);
           this.dataSource.sort = this.sort;
@@ -690,6 +706,30 @@ export class InventarioComponent implements OnInit {
     this.router.navigate([
       '/maniobras/maniobra/' + id + '/termina_lavado_reparacion'
     ]);
+  }
+
+  openDetalleManiobra(id: string) {
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
+        array.push(history[i]);
+      }
+    }
+    // Agrego mi nueva ruta al array
+    array.push('/inventario');
+
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    // Voy a pagina.
+    this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
   calculaDias(fEnt) {

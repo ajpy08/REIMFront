@@ -151,7 +151,7 @@ export class PagoComponent implements OnInit {
   agregarArray(doc: DoctoRelacionado): FormGroup {
     return this.fb.group({
       idDocumento: [doc.idDocumento],
-      fEmision: [doc.fEmision],
+      // fEmision: [doc.fEmision],
       rfc: [doc.rfc],
       serie: [doc.serie],
       folio: [doc.folio],
@@ -293,10 +293,10 @@ export class PagoComponent implements OnInit {
     pago.bancoOrd = this.bancoOrd.value;
     pago.numeroCuentaBen = this.numeroCuentaBen.value;
     pago.rfcEntidadEmisoraBen = this.rfcEntidadEmisoraBen.value;
-    pago.tipoCadenaPago = this.tipoCadenaPago.value;
-    pago.certPago = this.certPago.value;
-    pago.cadPago = this.cadPago.value;
-    pago.selloPago = this.selloPago.value;
+    // pago.tipoCadenaPago = this.tipoCadenaPago.value;
+    // pago.certPago = this.certPago.value;
+    // pago.cadPago = this.cadPago.value;
+    // pago.selloPago = this.selloPago.value;
     pago.doctosRelacionados = this.doctosRelacionados.value;
 
     this.facturacionService.pagos.push(pago)

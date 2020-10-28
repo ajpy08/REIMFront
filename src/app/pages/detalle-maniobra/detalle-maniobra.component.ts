@@ -265,6 +265,8 @@ export class DetalleManiobraComponent implements OnInit {
       }
       this.regForm.controls['mostrarFotosRNaviera'].setValue(maniob.maniobra.mostrarFotosRNaviera);
       this.regForm.controls['mostrarFotosRAA'].setValue(maniob.maniobra.mostrarFotosRAA);
+
+      console.log(maniob.maniobra);
     });
     this.cargando = false;
   }
