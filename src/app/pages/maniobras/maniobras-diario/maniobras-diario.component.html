@@ -215,9 +215,13 @@
             </ng-container>
 
             <ng-container matColumnDef="reparaciones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <p *ngFor="let item of row.reparaciones"> {{item.reparacion}} </p>
+                <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                  <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                    {{rep.reparacion}}
+                  </mat-option>
+                </mat-select>
               </mat-cell>
             </ng-container>
 
