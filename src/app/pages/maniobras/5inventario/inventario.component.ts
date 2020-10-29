@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import {
   MatPaginator,
   MatSort,
@@ -78,14 +78,15 @@ export class InventarioComponent implements OnInit {
   blockNaviera = false;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('MatPaginatorL', { read: MatPaginator })
-  @ViewChild('MatPaginatorR', { read: MatPaginator })
-  MatPaginatorL: MatPaginator;
-  MatPaginatorR: MatPaginator;
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild('matPaginatorL', { read: MatPaginator })
+  // @ViewChild('matPaginatorR', { read: MatPaginator })
+  // matPaginatorL: MatPaginator;
+  // matPaginatorR: MatPaginator;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('MatSort2') MatSort2: MatSort;
-  @ViewChild('MatSort3') MatSort3: MatSort;
+  @ViewChild('MatSort2') matSort2: MatSort;
+  @ViewChild('MatSort3') matSort3: MatSort;
   constructor(
     public maniobraService: ManiobraService,
     private usuarioService: UsuarioService,
@@ -192,6 +193,7 @@ export class InventarioComponent implements OnInit {
       if (value) {
         this.agrupa20_40(this.maniobras);
         this.cargarL();
+        this.cargarR();
       }
     });
   }
@@ -267,7 +269,7 @@ export class InventarioComponent implements OnInit {
 
           this.dataSource = new MatTableDataSource(this.maniobras);
           this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator = this.paginator.toArray()[0];
           this.totalRegistros = maniobras.maniobras.length;
 
           if (this.maniobras) {
@@ -289,7 +291,7 @@ export class InventarioComponent implements OnInit {
         null,
         null,
         null,
-        null,
+        true,
         null,
         this.navieraSeleccionada
       )
@@ -297,9 +299,35 @@ export class InventarioComponent implements OnInit {
         this.maniobras = maniobras.maniobras;
 
         this.dataSourceL = new MatTableDataSource(maniobras.maniobras);
-        this.dataSourceL.sort = this.sort;
-        this.dataSourceL.paginator = this.paginator;
+        this.dataSourceL.sort = this.matSort2;
+        this.dataSourceL.paginator = this.paginator.toArray()[1];
         this.totalRegistrosL = maniobras.maniobras.length;
+      });
+    this.cargando = false;
+  }
+
+  cargarR() {
+    this.cargando = true;
+
+    this.maniobraService
+      .getManiobras(
+        null,
+        ETAPAS_MANIOBRA.LAVADO_REPARACION,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true,
+        this.navieraSeleccionada
+      )
+      .subscribe(maniobras => {
+        this.maniobras = maniobras.maniobras;
+
+        this.dataSourceR = new MatTableDataSource(maniobras.maniobras);
+        this.dataSourceR.sort = this.matSort3;
+        this.dataSourceR.paginator = this.paginator.toArray()[2];
+        this.totalRegistrosR = maniobras.maniobras.length;
       });
     this.cargando = false;
   }
