@@ -34,7 +34,7 @@
 
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #table [dataSource]="dataSourceLavados" matSort>
+              <mat-table class="mat-table-big" #table [dataSource]="dataSourceLavados" matSort>
 
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
@@ -96,11 +96,13 @@
                 </ng-container>
 
                 <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <p *ngFor="let rep of row.reparaciones">
-                      {{rep.reparacion}}
-                    </p><br><br>
+                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                        {{rep.reparacion}}
+                      </mat-option>
+                    </mat-select>
                   </mat-cell>
                 </ng-container>
 
@@ -163,7 +165,7 @@
             </div>
             <br>
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" [dataSource]="dataSourceReparaciones" #MatSortReparacion="matSort"
+              <mat-table class="mat-table-big" [dataSource]="dataSourceReparaciones" #MatSortReparacion="matSort"
                 matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
@@ -225,11 +227,13 @@
                 </ng-container>
 
                 <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <p *ngFor="let rep of row.reparaciones">
-                      {{rep.reparacion}}
-                    </p><br><br>
+                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                        {{rep.reparacion}}
+                      </mat-option>
+                    </mat-select>
                   </mat-cell>
                 </ng-container>
 
@@ -356,13 +360,15 @@
             </ng-container>
 
             <ng-container matColumnDef="reparaciones">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-              <mat-cell *matCellDef="let row">
-                <p *ngFor="let rep of row.reparaciones">
-                  {{rep.reparacion}}
-                </p><br><br>
-              </mat-cell>
-            </ng-container>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
+                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
+                        {{rep.reparacion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-cell>
+                </ng-container>
 
             <ng-container matColumnDef="fotosreparacion">
               <mat-header-cell *matHeaderCellDef>Fotos Reparaciones</mat-header-cell>
