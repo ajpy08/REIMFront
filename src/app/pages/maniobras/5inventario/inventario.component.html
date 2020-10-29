@@ -156,7 +156,7 @@
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{obtenTotales("20")}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
-        <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceLR)}} )</b>
+        <h4 mat-line><b>Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras, dataSourceL)}} )</b>
         </h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g20.maniobras)}} |
@@ -167,17 +167,17 @@
         <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}} |
               'C' | DISPONIBLES</i></span></p>
         <mat-divider></mat-divider>
-        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('A', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('A', g20.tipo, dataSourceL.data)}} |
               'A' | REPARACIONES</i></span></p>
-        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('B', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('B', g20.tipo, dataSourceL.data)}} |
               'B' | REPARACIONES</i></span></p>
-        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('C', g20.tipo, dataSourceLR.data)}} |
+        <p matLine><span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('C', g20.tipo, dataSourceL.data)}} |
               'C' | REPARACIONES</i></span></p>
-        <p matLine><span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('PT', g20.tipo, dataSourceLR.data)}}
+        <p matLine><span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('PT', g20.tipo, dataSourceL.data)}}
               | 'PT' | PERDIDA TOTAL</i></span></p>
       </mat-list-item>
       <mat-divider></mat-divider><br>
@@ -185,7 +185,7 @@
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
       <mat-list-item *ngFor="let g40 of groupedDisponibles40">
-        <h4 mat-line><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras, dataSourceLR)}} )</b>
+        <h4 mat-line><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras, dataSourceL)}} )</b>
         </h4>
         <p matLine>
           <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}} | 'A' |
@@ -198,20 +198,20 @@
               'C' | DISPONIBLES</i></span></p>
         <mat-divider></mat-divider>
         <p matLine>
-          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('A', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('A', g40.tipo, dataSourceL.data)}} |
               'A' | REPARACIONES</i></span></p>
         <p matLine>
-          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('B', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('B', g40.tipo, dataSourceL.data)}} |
               'B' | REPARACIONES</i></span></p>
         <p matLine>
-          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('C', g40.tipo, dataSourceLR.data)}} |
+          <span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('C', g40.tipo, dataSourceL.data)}} |
               'C' | REPARACIONES</i></span></p>
         <p matLine>
-          <span *ngIf="dataSourceLR"><i class="fas fa-caret-right">
-              {{cuentaReparaciones('PT', g40.tipo, dataSourceLR.data)}}
+          <span *ngIf="dataSourceL"><i class="fas fa-caret-right">
+              {{cuentaReparaciones('PT', g40.tipo, dataSourceL.data)}}
               | 'PT' | PERDIDA TOTAL</i></span></p>
         <mat-divider></mat-divider><br>
       </mat-list-item>
@@ -329,7 +329,6 @@
       </div>
     </div>
   </mat-tab>
-
   <mat-tab>
     <ng-template mat-tab-label>
       <div *ngIf="c40;else sincont40">
@@ -447,11 +446,11 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <div *ngIf="totalRegistrosLR > 0;else sincontLR">
-        <i class="fas fa-tint"> Lavado-Reparacion ( {{totalRegistrosLR}} )</i>
+      <div *ngIf="totalRegistrosL > 0;else sincontL">
+        <i class="fas fa-tint"> Lavado ( {{totalRegistrosL}} )</i>
       </div>
-      <ng-template #sincontLR>
-        <i class="fas fa-toolbox"> Lavado - Reparacion ( 0 )</i>
+      <ng-template #sincontL>
+        <i class="fas fa-toolbox"> Lavado ( 0 )</i>
       </ng-template>
     </ng-template>
     <br>
@@ -460,28 +459,28 @@
         <div class="card">
           <div class="card-body">
             <div class="text-right">
-              <button (click)="exportAsXLSX(dataSourceLR, 'Contenedores en Lavado - Reparacion')"
+              <button (click)="exportAsXLSX(dataSourceL, 'Contenedores en Lavado')"
                 class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i>
               </button>
             </div>
-            <h3 class="card-title">Contenedores en Lavado Reparación : (
-              <small>{{totalRegistrosLR}}</small> )</h3>
+            <h3 class="card-title">Contenedores en Lavado : (
+              <small>{{totalRegistrosL}}</small> )</h3>
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value, dataSourceLR, totalRegistrosLR)"
+                <input matInput (keyup)="applyFilter($event.target.value, dataSourceL, totalRegistrosL)"
                   placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
 
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #MatSort2="matSort" [dataSource]="dataSourceLR" matSort>
+              <mat-table class="mat-table-big" #MatSort2="matSort" [dataSource]="dataSourceL" matSort>
 
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef > Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Lavado y Reparación" (click)="open(row._id)"
+                    <button matTooltip="Editar Lavado" (click)="open(row._id)"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit" aria-hidden="true"></i>
                     </button>
@@ -558,11 +557,11 @@
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
                 </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumnsLR" class="encabezado">
+                <mat-header-row *matHeaderRowDef="displayedColumnsL" class="encabezado">
                 </mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsLR;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsL;"></mat-row>
               </mat-table>
-              <mat-paginator #MatPaginatorLR [pageSizeOptions]="[50, 100, 200]" [pageSize]="100" [showFirstLastButtons]>
+              <mat-paginator [pageSizeOptions]="[50, 100, 200]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -570,4 +569,129 @@
       </div>
     </div>
   </mat-tab>
+  <!-- <mat-tab>
+    <ng-template mat-tab-label>
+      <div *ngIf="totalRegistrosR > 0;else sincontR">
+        <i class="fas fa-tint"> Reparación ( {{totalRegistrosR}} )</i>
+      </div>
+      <ng-template #sincontR>
+        <i class="fas fa-toolbox"> Reparación ( 0 )</i>
+      </ng-template>
+    </ng-template>
+    <br>
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="text-right">
+              <button (click)="exportAsXLSX(dataSourceR, 'Contenedores en Reparación')"
+                class="btn btn-success m-r-5">
+                <i class="fas fa-file-excel"></i>
+              </button>
+            </div>
+            <h3 class="card-title">Contenedores en Reparación : (
+              <small>{{totalRegistrosR}}</small> )</h3>
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value, dataSourceR, totalRegistrosR)"
+                  placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+            <br>
+
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-medium" #MatSort3="matSort" [dataSource]="dataSourceR" matSort>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef > Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button matTooltip="Editar Reparación" (click)="open(row._id)"
+                      class="btn btn-primary m-r-5">
+                      <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fLlegada">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fLlegada | date:'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dias">
+                  <mat-header-cell *matHeaderCellDef >Dias/Patio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{calculaDias(row.fLlegada)}}</mat-cell>
+                </ng-container>                      
+
+                <ng-container matColumnDef="viaje">
+                  <mat-header-cell *matHeaderCellDef >Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nombre">
+                  <mat-header-cell *matHeaderCellDef >Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nombreComercial">
+                  <mat-header-cell *matHeaderCellDef >Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cliente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="agencia">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.lavado}}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="reparaciones">
+                  <mat-header-cell *matHeaderCellDef >Reparaciones</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <br>
+                    <p *ngFor="let rep of row.reparaciones">
+                      {{rep.reparacion}}
+                    </p><br><br>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsR" class="encabezado">
+                </mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsR;"></mat-row>
+              </mat-table>
+              <mat-paginator #MatPaginatorR [pageSizeOptions]="[50, 100, 200]" [pageSize]="100" [showFirstLastButtons]>
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab> -->
 </mat-tab-group>
