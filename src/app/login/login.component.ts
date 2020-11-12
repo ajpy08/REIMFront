@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     const browser = Bowser.getParser(window.navigator.userAgent);
     if (this._usuarioService.usuario &&
       (this._usuarioService.usuario !== 'jpuc@mieryteran.com.mx' ||
-        this._usuarioService.usuario !== 'rgarcia@tlreim.com.mx')) {
+        this._usuarioService.usuario !== 'angel@mieryteran.com.mx')) {
       if (browser.getBrowser().name === 'Microsoft Edge' || browser.getBrowser().name === 'Edge') {
         swal({
           title: 'Error',
