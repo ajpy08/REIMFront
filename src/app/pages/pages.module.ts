@@ -161,6 +161,8 @@ import { ComplementoPagoComponent } from './facturacion/complemento-pago/complem
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
+import { MaterialesComponent } from './materiales/materiales.component';
+import { MaterialComponent } from './materiales/material.component';
 
 
 @NgModule({
@@ -257,7 +259,9 @@ import { PagoComponent } from './facturacion/complemento-pago/pago/pago.componen
         VigenciasComponent,
         VigenciaComponent,
         PagoComponent,
-        FacturasPpdComponent
+        FacturasPpdComponent,
+        MaterialesComponent,
+        MaterialComponent
      ],
     exports: [
         DashboardComponent

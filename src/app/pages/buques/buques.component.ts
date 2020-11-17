@@ -163,7 +163,6 @@ export class BuquesComponent implements OnInit, OnDestroy {
               }
             });
           });
-        // .subscribe(() => this.cargarBuques());
       }
     });
   }

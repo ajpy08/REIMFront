@@ -1,49 +1,47 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Operador } from './operador.models';
+import { Material } from './material.models';
 import {
-  OperadorService,
+  MaterialService,
   UsuarioService,
   ExcelService
 } from '../../services/service.index';
+
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 declare var swal: any;
+
 @Component({
-  selector: 'app-operadores',
-  templateUrl: './operadores.component.html',
-  styles: []
+  selector: 'app-materiales',
+  templateUrl: './materiales.component.html',
+  styleUrls: ['./materiales.component.css']
 })
-export class OperadoresComponent implements OnInit {
-  operadores: Operador[] = [];
+export class MaterialesComponent implements OnInit {
+  materiales: Material[] = [];
   cargando = true;
   activo = false;
   acttrue = false;
   tablaCargar = false;
   totalRegistros = 0;
   usuarioLogueado: Usuario;
-  operadoresExcel = [];
+  materialesExcel = [];
 
   displayedColumns = [
     'actions',
     'activo',
-    'foto',
-    'transportista.nombreComercial',
-    'nombre',
-    'vigenciaLicencia',
-    'licencia'
+    'descripcion',
+    'unidadMedida',
+    'costo'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
-
   constructor(
-    public _operadorService: OperadorService,
+    public materialService: MaterialService,
     private usuarioService: UsuarioService,
     private excelService: ExcelService
   ) { }
@@ -52,17 +50,17 @@ export class OperadoresComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.filtrado(this.activo);
 
-    this.socket.on('new-operador', function () {
+    this.socket.on('new-material', function () {
       this.filtrado(this.activo);
     }.bind(this));
 
-    this.socket.on('update-operador', function (data: any) {
+    this.socket.on('update-material', function (data: any) {
       if (data.data._id) {
         this.filtrado(this.activo);
       }
     }.bind(this));
 
-    this.socket.on('delete-operador', function () {
+    this.socket.on('delete-material', function () {
       this.filtrado(this.activo);
     }.bind(this));
   }
@@ -79,74 +77,58 @@ export class OperadoresComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Operadores');
+      console.error('Error al filtrar el dataSource de Materiales');
     }
   }
+
   filtrado(bool: boolean) {
     if (bool === false) {
       bool = true;
-        this.cargarOperadores(bool);
+        this.cargarMateriales(bool);
     } else if (bool === true) {
       bool = false;
-      this.cargarOperadores(bool);
+      this.cargarMateriales(bool);
     }
-
   }
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
-    this.socket.removeListener('delete-operador');
-    this.socket.removeListener('update-operador');
-    this.socket.removeListener('new-operador');
+    this.socket.removeListener('delete-material');
+    this.socket.removeListener('update-material');
+    this.socket.removeListener('new-material');
   }
 
-   cargarOperadores(bool: boolean) {
+  cargarMateriales(bool: boolean) {
     this.cargando = true;
 
-    if (
-      this.usuarioLogueado.role === ROLES.ADMIN_ROLE ||
-      this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE
-    ) {
-      this._operadorService.getOperadores(null, bool).subscribe(operadores => {
-        this.dataSource = new MatTableDataSource(operadores.operadores);
-        if (operadores.operadores.length === 0) {
+    this.materialService.getMateriales(null, bool).subscribe(materiales => {
+        this.dataSource = new MatTableDataSource(materiales.materiales);
+        if (materiales.materiales.length === 0 || materiales.materiales === undefined) {
           this.tablaCargar = true;
         } else {
           this.tablaCargar = false;
         }
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        this.totalRegistros = operadores.operadores.length;
+        this.totalRegistros = materiales.materiales.length;
       });
-    } else {
-      if (this.usuarioLogueado.role === ROLES.TRANSPORTISTA_ROLE) {
-        this._operadorService
-          .getOperadores(this.usuarioLogueado.empresas[0]._id, bool)
-          .subscribe(operadores => {
-            this.dataSource = new MatTableDataSource(operadores.operadores);
-            this.dataSource.sort = this.sort;
-            this.dataSource.paginator = this.paginator;
-            this.totalRegistros = operadores.operadores.length;
-          });
-      }
-    }
     this.cargando = false;
   }
 
-  habilitaDeshabilitaOperador(operador, event) {
+  habilitaDeshabilitaMaterial(material, event) {
     if (event.checked === false) {
       swal({
         title: '¿Esta seguro?',
-        text: 'Esta apunto de deshabilitar a ' + operador.nombre,
+        text: 'Esta apunto de deshabilitar a ' + material.descripcion,
         icon: 'warning',
         buttons: true,
         dangerMode: true
       }).then(borrar => {
         if (borrar) {
-          this._operadorService
-            .habilitaDeshabilitaOperador(operador, event.checked)
+          this.materialService
+            .habilitaDeshabilitaMaterial(material, event.checked)
             .subscribe(() => {
-              this.cargarOperadores(true);
+              this.cargarMateriales(true);
             });
         } else {
           event.source.checked = !event.checked;
@@ -155,17 +137,17 @@ export class OperadoresComponent implements OnInit {
     } else {
       swal({
         title: '¿Esta seguro?',
-        text: 'Esta apunto de habilitar a ' + operador.nombre,
+        text: 'Esta apunto de habilitar a ' + material.descripcion,
         icon: 'warning',
         buttons: true,
         dangerMode: true
       }).then(borrar => {
         if (borrar) {
-          this._operadorService
-            .habilitaDeshabilitaOperador(operador, event.checked)
+          this.materialService
+            .habilitaDeshabilitaMaterial(material, event.checked)
             .subscribe(() => {
               this.acttrue = false;
-              this.cargarOperadores(true);
+              this.cargarMateriales(true);
             });
         } else {
           event.source.checked = !event.checked;
@@ -174,30 +156,30 @@ export class OperadoresComponent implements OnInit {
     }
   }
 
-  borrarOperador(operador: Operador) {
+  borrarMaterial(material: Material) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + operador.nombre,
+      text: 'Esta apunto de borrar a ' + material.descripcion,
       icon: 'warning',
       buttons: true,
       dangerMode: true
     }).then(borrar => {
       if (borrar) {
-        this._operadorService
-          .borrarOperador(operador)
+        this.materialService
+          .borrarMaterial(material)
           .subscribe(() => {
-            this.socket.emit('deleteoperador', operador);
+            this.socket.emit('deletematerial', material);
           }, () => {
             swal({
-              title: 'No se puede eliminar al Operador',
-              text: 'El operador  ' + operador.nombre + '  cuenta con historial en el sistema. ' +
+              title: 'No se puede eliminar Material',
+              text: 'El material  ' + material.descripcion + '  cuenta con detalles en el sistema. ' +
               'La acción permitida es DESACTIVAR, \n¿ DESEA CONTINUAR ?',
               icon: 'warning',
               buttons: true,
               dangerMode: true
             }).then(borrado => {
               if (borrado) {
-                this._operadorService.habilitaDeshabilitaOperador(operador, false).subscribe(() => {
+                this.materialService.habilitaDeshabilitaMaterial(material, false).subscribe(() => {
                   this.filtrado(this.acttrue);
                 });
               }
@@ -209,23 +191,24 @@ export class OperadoresComponent implements OnInit {
 
   crearDatosExcel(datos) {
     datos.forEach(d => {
-      const operadores = {
+      const materiales = {
         Nombre_comercial: d.transportista.nombreComercial,
         Nombre: d.nombre,
         VigenciaLicencia: d.vigenciaLicencia,
         Licencia: d.licencia,
         Activo: d.activo
       };
-      this.operadoresExcel.push(operadores);
+      this.materialesExcel.push(materiales);
     });
   }
 
   exportarXLSX(): void {
     this.crearDatosExcel(this.dataSource.filteredData);
-    if (this.operadoresExcel) {
-      this.excelService.exportAsExcelFile(this.operadoresExcel, 'Operadores');
+    if (this.materialesExcel != undefined && this.materialesExcel != null && this.materialesExcel.length > 0) {
+      this.excelService.exportAsExcelFile(this.materialesExcel, 'Materiales');
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
   }
+
 }

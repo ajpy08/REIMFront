@@ -95,6 +95,8 @@ import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+import { MaterialesComponent } from './materiales/materiales.component';
+import { MaterialComponent } from './materiales/material.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -568,6 +570,18 @@ const pagesRoutes: Routes = [
         component: NotaDeCreditoComponent,
         canActivate: [REIMGuard],
         data: {titulo: 'Nota de Credito', roles: [ ROLES.ADMIN_ROLE]}
+    },
+    {
+        path: 'materiales',
+        component: MaterialesComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Materiales', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'materiales/material/:id',
+        component: MaterialComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
     // otherwise redirect to home

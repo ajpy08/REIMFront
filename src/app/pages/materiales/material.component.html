@@ -1,0 +1,63 @@
+<div class="row animated fadeIn">
+
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Material: {{ descripcion.value }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarMaterial()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
+                  placeholder="Descripcion del material *">
+                <mat-error *ngIf="descripcion.touched && descripcion.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Descripcion
+                </mat-error>
+              </mat-form-field>
+              <!-- <mat-form-field>
+                <input matInput formControlName="unidadMedida" name="unidadMedida" type="text" class="form-control"
+                  placeholder="Unidad de medida del material *">
+                <mat-error *ngIf="unidadMedida.touched && unidadMedida.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Unidad de medida
+                </mat-error>
+              </mat-form-field> -->
+              <!--========Combombox Transportistas=========-->
+              <mat-form-field>
+                <mat-select placeholder="Seleccione una Unidad de Medida" formControlName="unidadMedida" name="unidadMedida">
+                  <mat-option *ngFor="let unidad of unidades" [value]="unidad._id">
+                    {{ unidad.descripcion }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="unidadMedida.touched && unidadMedida.invalid">
+                  <sup>*</sup>Por Favor Ingrese una Unidad de Medida
+                </mat-error>
+              </mat-form-field>
+              <!--=========================================-->
+              <mat-form-field>
+                <input matInput formControlName="costo" name="costo" type="number" class="form-control"
+                  placeholder="Costo del material *">
+                <mat-error *ngIf="costo.touched && costo.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Costo
+                </mat-error>
+              </mat-form-field>
+              <mat-checkbox formControlName="activo" class="form-control" name="activo" placeholder="Activo">
+                Activo
+              </mat-checkbox>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+            <!-- <a routerLink="/materiales" class="btn btn-danger waves-effect waves-light">Regresar</a> -->
+          </form>
+          <!-- <p>Form value {{ regForm.value | json }} </p>
+          <p> Form status {{ regForm.status | json}} </p>
+          <p> Form status2 {{ regForm.pristine | json}} </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
