@@ -244,7 +244,7 @@ export class NotasDeCreditoComponent implements OnInit {
     if (this.dataSourcesCfdis && this.dataSourcesCfdis.data.length > 0) {
       this.dataSourcesCfdis.filter = folio;
     } else {
-      console.error('Error al filtrar el dataSource de Reparaciones Vacios');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceReparacionVacios.filter = filterValue;

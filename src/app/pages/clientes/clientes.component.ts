@@ -94,7 +94,7 @@ export class ClientesComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Clientes');
+      console.error('No se puede filtrar en un Datasource vacío');
     }
   }
 

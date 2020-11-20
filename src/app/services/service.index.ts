@@ -1,3 +1,4 @@
+import { ProveedorService } from './../pages/proveedores/proveedor.service';
 export { UsuarioService } from '../pages/usuarios/usuario.service';
 export { ReparacionService } from '../pages/reparaciones/reparacion.service';
 export { NavieraService } from '../pages/navieras/naviera.service';
@@ -21,6 +22,10 @@ export { TiposContenedoresService } from '../pages/tipos-contenedores/tipos-cont
 
 export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';
+export { MaterialService } from '../pages/materiales/material.service';
+export { UnidadService } from '../services/shared/unidades.service';
+export { EntradaService } from '../pages/entradas/entrada.service';
+export { ProveedorService } from '../pages/proveedores/proveedor.service';
 // Guards
 export { LoginGuard } from './guards/login-guard';
 export { VerificaTokenGuard } from './guards/verifica-token.guard';

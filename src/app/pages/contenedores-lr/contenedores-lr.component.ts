@@ -229,7 +229,7 @@ export class ContenedoresLRComponent implements OnInit {
         this.dataSourceLavados.filter = filterValue;
         this.totalRegistrosLavados = this.dataSourceLavados.filteredData.length;
       } else {
-        console.error('Error al filtrar el dataSource de Lavados');
+        console.error('No se puede filtrar en un Datasource vacío');
       }
 
       // this.dataSourceLavados.filter = filterValue;
@@ -242,7 +242,7 @@ export class ContenedoresLRComponent implements OnInit {
         this.dataSourceReparaciones.filter = filterValue;
         this.totalRegistrosReparaciones = this.dataSourceReparaciones.filteredData.length;
       } else {
-        console.error('Error al filtrar el dataSource de Reparaciones');
+        console.error('No se puede filtrar en un Datasource vacío');
       }
 
       // this.dataSourceReparaciones.filter = filterValue;

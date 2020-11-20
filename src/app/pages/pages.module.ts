@@ -1,3 +1,5 @@
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
 import { NgModule } from '@angular/core';
 import { PAGES_ROUTES } from './pages.routes';
 import { SharedModule } from '../shared/shared.module';
@@ -161,6 +163,11 @@ import { ComplementoPagoComponent } from './facturacion/complemento-pago/complem
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
+import { MaterialesComponent } from './materiales/materiales.component';
+import { MaterialComponent } from './materiales/material.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { EntradaComponent } from './entradas/entrada.component';
+import { DetalleComponent } from './entradas/detalle.component';
 
 
 @NgModule({
@@ -257,7 +264,14 @@ import { PagoComponent } from './facturacion/complemento-pago/pago/pago.componen
         VigenciasComponent,
         VigenciaComponent,
         PagoComponent,
-        FacturasPpdComponent
+        FacturasPpdComponent,
+        MaterialesComponent,
+        MaterialComponent,
+        EntradasComponent,
+        EntradaComponent,
+        DetalleComponent,
+        ProveedorComponent,
+        ProveedoresComponent
      ],
     exports: [
         DashboardComponent
@@ -297,7 +311,7 @@ import { PagoComponent } from './facturacion/complemento-pago/pago/pago.componen
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
-        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent]
+        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent, DetalleComponent ]
 })
 
 export class PagesModules { }

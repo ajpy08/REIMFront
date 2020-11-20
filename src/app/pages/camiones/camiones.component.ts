@@ -96,7 +96,7 @@ export class CamionesComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Camiones');
+      console.error('No se puede filtrar en un Datasource vacío');
     }
   }
 

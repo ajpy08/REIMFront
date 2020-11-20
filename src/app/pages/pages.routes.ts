@@ -1,3 +1,4 @@
+import { ProveedorComponent } from './proveedores/proveedor.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -95,6 +96,11 @@ import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+import { MaterialesComponent } from './materiales/materiales.component';
+import { MaterialComponent } from './materiales/material.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { EntradaComponent } from './entradas/entrada.component';
+import { ProveedoresComponent } from './proveedores/proveedores.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -568,6 +574,42 @@ const pagesRoutes: Routes = [
         component: NotaDeCreditoComponent,
         canActivate: [REIMGuard],
         data: {titulo: 'Nota de Credito', roles: [ ROLES.ADMIN_ROLE]}
+    },
+    {
+        path: 'materiales',
+        component: MaterialesComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Materiales', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'materiales/material/:id',
+        component: MaterialComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'entradas',
+        component: EntradasComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Entradas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'entradas/entrada/:id',
+        component: EntradaComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'proveedores',
+        component: ProveedoresComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'proveedores/proveedor/:id',
+        component: ProveedorComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
     // otherwise redirect to home

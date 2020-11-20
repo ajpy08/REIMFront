@@ -1,4 +1,3 @@
-import { catchError } from 'rxjs/operators';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Operador } from './operador.models';
 import {
@@ -11,7 +10,6 @@ import { Usuario } from '../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
-import { throwError } from 'rxjs';
 declare var swal: any;
 @Component({
   selector: 'app-operadores',
@@ -54,7 +52,7 @@ export class OperadoresComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
     this.filtrado(this.activo);
 
-    this.socket.on('new-operador', function (data: any) {
+    this.socket.on('new-operador', function () {
       this.filtrado(this.activo);
     }.bind(this));
 
@@ -64,7 +62,7 @@ export class OperadoresComponent implements OnInit {
       }
     }.bind(this));
 
-    this.socket.on('delete-operador', function (data: any) {
+    this.socket.on('delete-operador', function () {
       this.filtrado(this.activo);
     }.bind(this));
   }
@@ -81,7 +79,7 @@ export class OperadoresComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Operadores');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
   filtrado(bool: boolean) {
@@ -147,7 +145,7 @@ export class OperadoresComponent implements OnInit {
         if (borrar) {
           this._operadorService
             .habilitaDeshabilitaOperador(operador, event.checked)
-            .subscribe(borrado => {
+            .subscribe(() => {
               this.cargarOperadores(true);
             });
         } else {
@@ -165,7 +163,7 @@ export class OperadoresComponent implements OnInit {
         if (borrar) {
           this._operadorService
             .habilitaDeshabilitaOperador(operador, event.checked)
-            .subscribe(borrado => {
+            .subscribe(() => {
               this.acttrue = false;
               this.cargarOperadores(true);
             });
@@ -187,9 +185,9 @@ export class OperadoresComponent implements OnInit {
       if (borrar) {
         this._operadorService
           .borrarOperador(operador)
-          .subscribe(borrado => {
+          .subscribe(() => {
             this.socket.emit('deleteoperador', operador);
-          }, (error) => {
+          }, () => {
             swal({
               title: 'No se puede eliminar al Operador',
               text: 'El operador  ' + operador.nombre + '  cuenta con historial en el sistema. ' +

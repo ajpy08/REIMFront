@@ -272,7 +272,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
         this.tablaCargarD = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Solicitudes Transportista Descargas');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceDescargas.filter = filterValue;
@@ -296,7 +296,7 @@ export class SolicitudesTransportistaComponent implements OnInit {
         this.tablaCargarC = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Solicitudes Transportista Cargas');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceCargas.filter = filterValue;

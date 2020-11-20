@@ -167,7 +167,7 @@ export class InventarioComponent implements OnInit {
       dataSource.filter = filterValue;
       this.totalRegistros = dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Inventario');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 

@@ -1,0 +1,122 @@
+<div class="row animated fadeIn">
+
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Entrada: {{ noFactura.value }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarEntrada()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <input matInput formControlName="noFactura" name="noFactura" type="text" class="form-control"
+                  placeholder="Numero de Factura">
+                <mat-error *ngIf="noFactura.touched && noFactura.invalid">
+                  <sup>*</sup>Por Favor Ingrese un No. de Factura
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="proveedor" name="proveedor" type="text" class="form-control"
+                  placeholder="Proveedor">
+                <mat-error *ngIf="proveedor.touched && proveedor.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Proveedor
+                </mat-error>
+              </mat-form-field>
+              <!--========Combombox Transportistas=========-->
+              <!-- <mat-form-field>
+                <mat-select placeholder="Seleccione un Proveedor" formControlName="proveedor" name="proveedor">
+                  <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor._id">
+                    {{ proveedor.razonSocial }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="proveedor.touched && proveedor.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Proveedor
+                </mat-error>
+              </mat-form-field> -->
+              <!--=========================================-->
+              <mat-form-field class="inputpersonalizado">
+                <input matInput formControlName="fFactura" [matDatepicker]="picker" type="text" class="form-control"
+                  placeholder="Fecha de Factura">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <br>
+
+            <div class="my-container">
+              <div class="col-md-12">
+                  <div class="hiden3">
+                      <div class="letra3">
+                          <strong> DETALLE</strong>
+                      </div>
+                  </div>
+
+                  <div class="table-responsive">
+                      <div class="contenedorBotones">
+                          <div class="row">
+                              <button type="button" [disabled]="this.ObjetoSelect.length > 1"
+                                  matTooltip="Modificar Maniobras" class="btnBoxe btn  m-r-5">
+                                  <i class="fa fa-edit"></i>
+                              </button>
+                              <button type="button" matTooltip="Quitar Concepto"
+                                  class="btnTrash btn m-r-5">
+                                  <i class="fa fa-trash-o"></i>
+                              </button>
+                          </div>
+                      </div>
+                      <table class="table table-hover">
+                          <thead>
+                              <tr>
+                                  <th scope="col"></th>
+                                  <th scope="col"></th>
+                                  <th scope="col">Material</th>
+                                  <th scope="col">Cantidad</th>
+                                  <th scope="col">Costo</th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody formArrayName="detalles"
+                              *ngFor="let item of detalles.controls; let i = index;">
+                              <tr [formGroupName]="i">
+                                  <td>
+                                      <mat-checkbox (change)="onChange(item.value, i, $event)">
+                                      </mat-checkbox>
+                                  </td>
+                                  <td scope="row">{{i+1}}</td>
+                                  <td>
+                                      {{item.get('material').value.descripcion}}
+                                  </td>
+                                  <td>
+                                      {{item.get('cantidad').value}}
+                                  </td>
+                                  <td>
+                                      {{item.get('costo').value}}
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <div style="text-align: center">
+                      <button matTooltip="Crear Entrada" mat-mini-fab
+                          class="btn btn-primary" (click)="openDialogDetalle()" type="button">
+                          <i class="fa fa-plus"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+          </form>
+          <div class="output">
+            <p>Form Data: {{regForm.value | json}}</p>
+            <p>Is Valid: {{regForm.valid}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

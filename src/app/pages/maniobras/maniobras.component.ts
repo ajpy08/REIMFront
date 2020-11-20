@@ -236,7 +236,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarT = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Transito');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtTransito.filter = filterValue;
@@ -256,7 +256,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarE = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Espera');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtEspera.filter = filterValue;
@@ -276,7 +276,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarR = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Revision');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtRevision.filter = filterValue;
@@ -296,7 +296,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarLR = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Lavado Reparacion');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtLavadoReparacion.filter = filterValue;
@@ -316,7 +316,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarX = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de XCargar');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtXCargar.filter = filterValue;
@@ -335,7 +335,7 @@ export class ManiobrasComponent implements OnInit {
         this.tablaCargarD = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de XAprobar');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtXAprobar.filter = filterValue;
