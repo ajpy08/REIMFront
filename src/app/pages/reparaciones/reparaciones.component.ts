@@ -39,7 +39,7 @@ export class ReparacionesComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Reparaciones');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 

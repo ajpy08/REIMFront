@@ -159,7 +159,7 @@ export class LiberacionesBLComponent implements OnInit {
       this.dtCargas.filter = filterValue;
       this.totalRegistrosCargas = this.dtCargas.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Cargas');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtCargas.filter = filterValue;

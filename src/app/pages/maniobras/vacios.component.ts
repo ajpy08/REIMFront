@@ -252,7 +252,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceVacios.filter = filterValue;
       this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Vacios');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceVacios.filter = filterValue;
@@ -270,7 +270,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceLavadoVacios.filter = filterValue;
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Lavado Vacios');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceLavadoVacios.filter = filterValue;
@@ -285,7 +285,7 @@ export class VaciosComponent implements OnInit {
       this.dataSourceReparacionVacios.filter = filterValue;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Reparaciones Vacios');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceReparacionVacios.filter = filterValue;

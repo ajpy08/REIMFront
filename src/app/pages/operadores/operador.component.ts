@@ -123,11 +123,11 @@ export class OperadorComponent implements OnInit {
       }
     }.bind(this));
   }
-    // tslint:disable-next-line: use-life-cycle-interface
-    ngOnDestroy() {
-      this.socket.removeListener('delete-operador');
-      this.socket.removeListener('update-operador');
-    }
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.socket.removeListener('delete-operador');
+    this.socket.removeListener('update-operador');
+  }
 
   cargarOperador(id: string) {
     this._operadorService.getOperador(id)

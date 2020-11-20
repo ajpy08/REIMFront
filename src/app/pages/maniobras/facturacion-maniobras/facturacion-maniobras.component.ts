@@ -257,7 +257,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       this.dataSourceVacios.filter = filterValue;
       this.totalRegistrosVacios = this.dataSourceVacios.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Facturacion Maniobras');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceVacios.filter = filterValue;
@@ -276,7 +276,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       this.totalRegistrosLavadoVacios = this.dataSourceLavadoVacios.filteredData.length;
     } else {
       console.error(
-        'Error al filtrar el dataSource de Facturacion Maniobras Lavados'
+        'No se puede filtrar en un datasource vacío'
       );
     }
 
@@ -292,7 +292,7 @@ export class FacturacionManiobrasComponent implements OnInit {
       this.dataSourceReparacionVacios.filter = filterValue;
       this.totalRegistrosReparacionVacios = this.dataSourceReparacionVacios.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Facturacion Maniobras Reparaciones');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dataSourceReparacionVacios.filter = filterValue;

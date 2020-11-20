@@ -1,0 +1,141 @@
+import { Material } from './../materiales/material.models';
+import { DetalleMaterial } from './../../models/detalleMaterial.models';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Usuario } from 'src/app/pages/usuarios/usuario.model';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import {
+  MAT_DIALOG_DATA, MatDialogConfig, MatDialog
+} from '@angular/material/dialog';
+import { MaterialService } from '../materiales/material.service';
+
+@Component({
+  selector: 'app-detalle',
+  templateUrl: './detalle.component.html',
+  styleUrls: ['./detalle.component.css']
+})
+export class DetalleComponent implements OnInit {
+  usuarioLogueado = new Usuario;
+  detalle: DetalleMaterial = new DetalleMaterial();
+  regForm: FormGroup;
+  url: string;
+  act = true;
+  // socket = io(URL_SOCKET_IO, PARAM_SOCKET);
+  formasPago = [];
+  idSelect;
+  indiceSelect;
+  ObjetoSelect = [];
+  infoAd = '';
+  materiales: Material[] = [];
+
+  detallesAgregar = new SelectionModel<DetalleMaterial>(true, []);
+  // facturasAComplementar = new SelectionModel<CFDI>(true, []);
+  constructor(
+    public dialogRef: MatDialogRef<DetalleComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder,
+    public matDialog: MatDialog,
+    public materialService: MaterialService
+  ) { }
+
+  ngOnInit() {
+    this.detallesAgregar = this.data;
+    this.materialService.getMateriales().subscribe(materiales => {
+      this.materiales = materiales.materiales;
+    });
+
+    this.createFormGroup();
+
+    // this.socket.on('update-buque', function (data: any) {
+    //   if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+    //     if (data.data._id) {
+    //       this.createFormGroup();
+    //       this.cargarBuque(data.data._id);
+    //       if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+    //         swal({
+    //           title: 'Actualizado',
+    //           text: 'Otro usuario ha actualizado este buque',
+    //           icon: 'info'
+    //         });
+    //       }
+    //     }
+    //     // } else {
+    //     //   this.cargarBuque(id);
+    //   }
+    // }.bind(this));
+
+    // this.socket.on('delete-buque', function (data: any) {
+    //   if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
+    //     this.router.navigate(['/pagos']);
+    //     swal({
+    //       title: 'Eliminado',
+    //       text: 'Se elimino este buque por otro usuario',
+    //       icon: 'warning'
+    //     });
+    //   }
+    // }.bind(this));
+
+    // this.facturacionService.getFormasPago().subscribe(formasPago => {
+    //   this.formasPago = formasPago.formasPago;
+    //   this.formaPago.setValue(formasPago.formasPago[2].formaPago);
+    // });
+  }
+
+  cargarPago() {
+    // this._pagoService.getPago(id).subscribe(res => {
+    //   this.pago = res;
+    //   // tslint:disable-next-line: forin
+    //   for (const propiedad in this.pago) {
+    //     for (const control in this.regForm.controls) {
+    //       if (propiedad === control.toString()) {
+    //         this.regForm.controls[propiedad].setValue(res[propiedad]);
+    //       }
+    //     }
+    //   }
+    // });
+  }
+
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      material: ['', [Validators.required]],
+      cantidad: ['', [Validators.required]],
+      costo: ['', [Validators.required]]
+    });
+  }
+
+  agregarArray(detalle: DetalleMaterial): FormGroup {
+    return this.fb.group({
+      material: [detalle.material],
+      cantidad: [detalle.cantidad],
+      costo: [detalle.costo],
+    });
+  }
+
+  agregarDetalle() {
+    const detalle = new DetalleMaterial();
+    detalle.material = this.material.value;
+    detalle.cantidad = this.cantidad.value;
+    detalle.costo = this.costo.value;
+    this.close(detalle);
+  }
+
+  close(result) {
+    this.dialogRef.close(result);
+  }
+
+  /* #region  Properties */
+  get material() {
+    return this.regForm.get('material');
+  }
+
+  get cantidad() {
+    return this.regForm.get('cantidad');
+  }
+
+  get costo() {
+    return this.regForm.get('costo');
+  }
+  /* #endregion */
+
+}

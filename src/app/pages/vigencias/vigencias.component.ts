@@ -83,7 +83,7 @@ export class VigenciasComponent implements OnInit, OnDestroy {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Vigencias');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
   habilitarDesabilitarVigencia(vigencia, event) {

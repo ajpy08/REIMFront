@@ -38,7 +38,7 @@ export class ProductosServiciosComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Productos-Servicios');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 

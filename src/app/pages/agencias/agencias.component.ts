@@ -77,7 +77,7 @@ export class AgenciasComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.log('Error al filtrar el dataSource de Agencias');
+      console.log('No se puede filtrar en un Datasource vacío');
     }
   }
 

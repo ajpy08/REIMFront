@@ -56,7 +56,7 @@ export class StatusComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Status');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 
