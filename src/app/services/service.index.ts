@@ -23,6 +23,7 @@ export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';
 export { MaterialService } from '../pages/materiales/material.service';
 export { UnidadService } from '../services/shared/unidades.service';
+export { EntradaService } from '../pages/entradas/entrada.service';
 // Guards
 export { LoginGuard } from './guards/login-guard';
 export { VerificaTokenGuard } from './guards/verifica-token.guard';

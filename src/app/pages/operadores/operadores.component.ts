@@ -79,7 +79,7 @@ export class OperadoresComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Operadores');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
   filtrado(bool: boolean) {

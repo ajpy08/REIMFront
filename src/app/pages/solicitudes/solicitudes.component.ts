@@ -274,7 +274,7 @@ export class SolicitudesComponent implements OnInit {
         this.tablaCargarC = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Aprobaciones Cargas');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtCargas.filter = filterValue;
@@ -294,7 +294,7 @@ export class SolicitudesComponent implements OnInit {
         this.tablaCargarD = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Aprobaciones Descargas');
+      console.error('No se puede filtrar en un datasource vacío');
     }
 
     // this.dtDescargas.filter = filterValue;

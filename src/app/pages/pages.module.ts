@@ -163,6 +163,9 @@ import { VigenciaComponent } from './vigencias/vigencia.component';
 import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
 import { MaterialesComponent } from './materiales/materiales.component';
 import { MaterialComponent } from './materiales/material.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { EntradaComponent } from './entradas/entrada.component';
+import { DetalleComponent } from './entradas/detalle.component';
 
 
 @NgModule({
@@ -261,7 +264,10 @@ import { MaterialComponent } from './materiales/material.component';
         PagoComponent,
         FacturasPpdComponent,
         MaterialesComponent,
-        MaterialComponent
+        MaterialComponent,
+        EntradasComponent,
+        EntradaComponent,
+        DetalleComponent
      ],
     exports: [
         DashboardComponent
@@ -301,7 +307,7 @@ import { MaterialComponent } from './materiales/material.component';
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
-        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent]
+        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent, DetalleComponent ]
 })
 
 export class PagesModules { }

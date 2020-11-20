@@ -356,7 +356,7 @@ export class ManiobrasTrasportistaComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Maniobras Diario');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 

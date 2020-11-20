@@ -74,7 +74,7 @@ export class NavierasComponent implements OnInit {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Navieras');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 

@@ -76,7 +76,7 @@ export class BuquesComponent implements OnInit, OnDestroy {
         this.tablaCargar = false;
       }
     } else {
-      console.error('Error al filtrar el dataSource de Buques');
+      console.error('No se puede filtrar en un Datasource vacío');
     }
   }
   habilitarDesabilitarBuque(buque, event) {

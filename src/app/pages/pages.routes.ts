@@ -97,6 +97,8 @@ import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-re
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
 import { MaterialesComponent } from './materiales/materiales.component';
 import { MaterialComponent } from './materiales/material.component';
+import { EntradasComponent } from './entradas/entradas.component';
+import { EntradaComponent } from './entradas/entrada.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -582,6 +584,18 @@ const pagesRoutes: Routes = [
         component: MaterialComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'entradas',
+        component: EntradasComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Entradas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'entradas/entrada/:id',
+        component: EntradaComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
     // otherwise redirect to home

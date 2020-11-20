@@ -33,7 +33,7 @@ export class ClaveUnidadesComponent implements OnInit {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
     } else {
-      console.error('Error al filtrar el dataSource de Clave Unidad');
+      console.error('No se puede filtrar en un datasource vacío');
     }
   }
 
