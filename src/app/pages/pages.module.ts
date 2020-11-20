@@ -1,3 +1,5 @@
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
 import { NgModule } from '@angular/core';
 import { PAGES_ROUTES } from './pages.routes';
 import { SharedModule } from '../shared/shared.module';
@@ -267,7 +269,9 @@ import { DetalleComponent } from './entradas/detalle.component';
         MaterialComponent,
         EntradasComponent,
         EntradaComponent,
-        DetalleComponent
+        DetalleComponent,
+        ProveedorComponent,
+        ProveedoresComponent
      ],
     exports: [
         DashboardComponent

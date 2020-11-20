@@ -1,3 +1,4 @@
+import { ProveedorComponent } from './proveedores/proveedor.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -99,6 +100,7 @@ import { MaterialesComponent } from './materiales/materiales.component';
 import { MaterialComponent } from './materiales/material.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { EntradaComponent } from './entradas/entrada.component';
+import { ProveedoresComponent } from './proveedores/proveedores.component';
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -596,6 +598,18 @@ const pagesRoutes: Routes = [
         component: EntradaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'proveedores',
+        component: ProveedoresComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'proveedores/proveedor/:id',
+        component: ProveedorComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
     // otherwise redirect to home
