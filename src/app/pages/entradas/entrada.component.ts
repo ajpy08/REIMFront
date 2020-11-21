@@ -1,3 +1,4 @@
+import { ProveedorService } from './../proveedores/proveedor.service';
 import { DetalleComponent } from './detalle.component';
 import { Material } from './../materiales/material.models';
 import { DetalleMaterial } from './../../models/detalleMaterial.models';
@@ -22,6 +23,7 @@ import { UsuarioService } from '../usuarios/usuario.service';
 import { Unidad } from 'src/app/models/unidad.models';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Proveedor } from '../proveedores/proveedor.models';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -50,7 +52,7 @@ export class EntradaComponent implements OnInit {
   usuarioLogueado: Usuario;
   url: string;
   materiales: Material[] = [];
-  // proveedores: Proveedor[] = [];
+  proveedores: Proveedor[] = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
   idSelect;
@@ -67,16 +69,16 @@ export class EntradaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private location: Location,
     public matDialog: MatDialog,
-    // private unidadService: UnidadService
+    private proveedorService: ProveedorService
   ) { }
 
   ngOnInit() {
     this.createFormGroup();
     this.usuarioLogueado = this.usuarioService.usuario;
 
-    // this.unidadService.getUnidades().subscribe(unidades => {
-    //   this.unidades = unidades.unidades;
-    // });
+    this.proveedorService.getProveedores(true).subscribe(proveedores => {
+      this.proveedores = proveedores.proveedores;
+    });
 
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id !== 'nuevo') {
