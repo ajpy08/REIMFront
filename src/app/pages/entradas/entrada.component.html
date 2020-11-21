@@ -14,15 +14,15 @@
                   <sup>*</sup>Por Favor Ingrese un No. de Factura
                 </mat-error>
               </mat-form-field>
-              <mat-form-field>
+              <!-- <mat-form-field>
                 <input matInput formControlName="proveedor" name="proveedor" type="text" class="form-control"
                   placeholder="Proveedor">
                 <mat-error *ngIf="proveedor.touched && proveedor.invalid">
                   <sup>*</sup>Por Favor Ingrese un Proveedor
                 </mat-error>
-              </mat-form-field>
-              <!--========Combombox Transportistas=========-->
-              <!-- <mat-form-field>
+              </mat-form-field> -->
+              <!--========Combombox Proveedores=========-->
+              <mat-form-field>
                 <mat-select placeholder="Seleccione un Proveedor" formControlName="proveedor" name="proveedor">
                   <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor._id">
                     {{ proveedor.razonSocial }}
@@ -31,7 +31,7 @@
                 <mat-error *ngIf="proveedor.touched && proveedor.invalid">
                   <sup>*</sup>Por Favor Ingrese un Proveedor
                 </mat-error>
-              </mat-form-field> -->
+              </mat-form-field>
               <!--=========================================-->
               <mat-form-field class="inputpersonalizado">
                 <input matInput formControlName="fFactura" [matDatepicker]="picker" type="text" class="form-control"
