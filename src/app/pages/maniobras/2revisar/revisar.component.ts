@@ -17,6 +17,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
+import { Evento } from '../../../models/evento.models';
 
 @Component({
   selector: 'app-revisar',
@@ -212,7 +213,8 @@ export class RevisarComponent implements OnInit {
   addEvento(item): void {
     const rep = this.tiposEvento.find(x => x.id === item);
     this.eventos.push(this.creaEvento(rep.descripcion,'','','','',''));
-    this._maniobraService.addEvento(this.regForm.get('_id').value,rep.descripcion,"E","PRUEBA DE ANGEL").subscribe(eventos => {
+    let ev = new Evento('',rep.descripcion,'E','Prueba','','','','',[]);
+    this._maniobraService.addEvento(this.regForm.get('_id').value,ev).subscribe(eventos => {
       console.log(eventos);
       this.cargaEventos(this.regForm.get('_id').value);
     });
