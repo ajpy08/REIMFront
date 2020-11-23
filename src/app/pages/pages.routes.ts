@@ -95,6 +95,10 @@ import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
+
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -569,6 +573,18 @@ const pagesRoutes: Routes = [
         canActivate: [REIMGuard],
         data: {titulo: 'Nota de Credito', roles: [ ROLES.ADMIN_ROLE]}
     },
+    {
+        path: 'proveedores',
+        component: ProveedoresComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catalodo de Proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
+    },
+    {
+        path: 'proveedores/proveedor/:id',
+        component: ProveedorComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.TRANSPORTISTA_ROLE] }
+    }
 
     // otherwise redirect to home
     // { path: '**', component: NotfoundComponent }

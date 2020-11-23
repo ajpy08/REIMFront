@@ -1,3 +1,4 @@
+
 export { UsuarioService } from '../pages/usuarios/usuario.service';
 export { ReparacionService } from '../pages/reparaciones/reparacion.service';
 export { NavieraService } from '../pages/navieras/naviera.service';
@@ -21,6 +22,7 @@ export { TiposContenedoresService } from '../pages/tipos-contenedores/tipos-cont
 
 export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';
+export { ProveedorService } from '../pages/proveedores/proveedor.service';
 // Guards
 export { LoginGuard } from './guards/login-guard';
 export { VerificaTokenGuard } from './guards/verifica-token.guard';
@@ -28,4 +30,5 @@ export { REIMGuard } from './guards/reim.guard';
 // Interceptors
 export { RefreshTokenInterceptor } from './interceptors/token-interceptor.service';
 // export { TransportistasComponent } from './../pages/transportistas/transportistas.component';
+
 

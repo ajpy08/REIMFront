@@ -39,6 +39,7 @@ import { OperadorComponent } from './operadores/operador.component';
 import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
 
+
 ////////////////////////////////////////
 
 
@@ -162,6 +163,9 @@ import { VigenciasComponent } from './vigencias/vigencias.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
 
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
+
 
 @NgModule({
     declarations: [
@@ -257,7 +261,9 @@ import { PagoComponent } from './facturacion/complemento-pago/pago/pago.componen
         VigenciasComponent,
         VigenciaComponent,
         PagoComponent,
-        FacturasPpdComponent
+        FacturasPpdComponent,
+        ProveedoresComponent,
+        ProveedorComponent
      ],
     exports: [
         DashboardComponent
