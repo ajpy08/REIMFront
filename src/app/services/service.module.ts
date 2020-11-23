@@ -4,6 +4,8 @@ import { HttpClientModule  } from '@angular/common/http';
 import { ModalUploadService } from '../components/modal-upload/modal-upload.service';
 import { ModalDropzoneService } from '../components/modal-dropzone/modal-dropzone.service';
 
+
+
 import {
     SettingsService,
     SharedService,
@@ -31,7 +33,8 @@ import {
     LoginGuard,     
     VerificaTokenGuard,
     REIMGuard,
-    RefreshTokenInterceptor
+    RefreshTokenInterceptor,
+    ProveedorService
    } from './service.index';
 
 
@@ -69,7 +72,8 @@ import {
       LoginGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
-      REIMGuard
+      REIMGuard,
+      ProveedorService
     ],
     declarations: []
   })

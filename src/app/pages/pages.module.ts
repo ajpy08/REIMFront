@@ -1,5 +1,3 @@
-import { ProveedoresComponent } from './proveedores/proveedores.component';
-import { ProveedorComponent } from './proveedores/proveedor.component';
 import { NgModule } from '@angular/core';
 import { PAGES_ROUTES } from './pages.routes';
 import { SharedModule } from '../shared/shared.module';
@@ -40,6 +38,7 @@ import { OperadorComponent } from './operadores/operador.component';
 
 import { CamionesComponent } from './camiones/camiones.component';
 import { CamionComponent } from './camiones/camion.component';
+
 
 ////////////////////////////////////////
 
@@ -168,6 +167,9 @@ import { MaterialComponent } from './materiales/material.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { EntradaComponent } from './entradas/entrada.component';
 import { DetalleComponent } from './entradas/detalle.component';
+
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
 
 
 @NgModule({

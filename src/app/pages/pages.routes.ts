@@ -96,11 +96,18 @@ import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+<<<<<<< HEAD
 import { MaterialesComponent } from './materiales/materiales.component';
 import { MaterialComponent } from './materiales/material.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { EntradaComponent } from './entradas/entrada.component';
 import { ProveedoresComponent } from './proveedores/proveedores.component';
+=======
+
+import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
+
+>>>>>>> proveedores
 /* #endregion */
 
 const pagesRoutes: Routes = [

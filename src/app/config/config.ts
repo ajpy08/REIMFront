@@ -1,4 +1,5 @@
 import { Lavado } from '../models/lavado.models';
+import { TipoEvento } from '../models/tipoEvento.models';
 
 export const ID_MELFI = '5c49e55b6b427b166466c9b3';
 
@@ -103,6 +104,8 @@ export const PERMISOS = [
 ];
 
 export const TIPOS_LAVADO_ARRAY = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial'), new Lavado('A', 'Acondicionado')];
+
+export const TIPOS_EVENTO_ARRAY = [new TipoEvento('L', 'Lavado'), new TipoEvento('R', 'Reparacion'), new TipoEvento('A', 'Acondicionamiento')];
 
 /* #region  FACTURACION */
 export const TR_ARRAY = ['TRASLADO', 'RETENCION'];

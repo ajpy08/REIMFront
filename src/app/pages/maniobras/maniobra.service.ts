@@ -8,6 +8,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { FileItem } from '../../models/file-item.models';
+import { Evento } from '../../models/evento.models';
 
 @Injectable()
 export class ManiobraService {
@@ -695,4 +696,40 @@ export class ManiobraService {
     window.open(url);
     return this.http.get(url, { responseType: 'blob' });
   }
+
+  // tipoEvento: { type: String },
+  // tipoLavado: { type: String },
+  // Observaciones: { type: String },
+  // fIni: { type: Date },
+  // hIni: { type: String },
+  // fFin: { type: Date },
+  // hFin: { type: String },
+
+
+  addEvento(idManiobra: string, evento: Evento): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/addevento';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url,{tipoEvento:evento.tipoEvento,tipoLavado:evento.tipoLavado,observaciones:evento.observaciones})
+      .pipe(map((resp: any) => {
+        swal('Evento Agregado con exito', 'success');
+        return resp;
+      }));
+  }
+
+  removeEvento(idManiobra: string, idEvento: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/removeevento/' + idEvento;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, '')
+      .pipe(map((resp: any) => {
+        swal('Evento Eliminado', 'success');
+        return resp;
+      }));
+  }
+
+  getEventos(idManiobra: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/getEventos';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
 }
