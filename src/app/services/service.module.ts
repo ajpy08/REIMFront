@@ -34,7 +34,6 @@ import {
     VerificaTokenGuard,
     REIMGuard,
     RefreshTokenInterceptor,
-    ProveedorService
    } from './service.index';
 
 
