@@ -1,7 +1,7 @@
 import { ProveedorService } from './../proveedores/proveedor.service';
 import { DetalleComponent } from './detalle.component';
 import { Material } from './../materiales/material.models';
-import { DetalleMaterial } from './../../models/detalleMaterial.models';
+import { DetalleMaterial } from './detalleMaterial.models';
 import { UnidadService } from '../../services/shared/unidades.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -24,6 +24,7 @@ import { Unidad } from 'src/app/models/unidad.models';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Proveedor } from '../proveedores/proveedor.models';
+import { forceLoad } from '@sentry/browser';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -55,10 +56,11 @@ export class EntradaComponent implements OnInit {
   proveedores: Proveedor[] = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
+  id;
   idSelect;
   indiceSelect;
   ObjetoSelect = [];
-  detallesAgregar = new SelectionModel<DetalleMaterial>(true, []);
+  detallesSelect = new SelectionModel<DetalleMaterial>(true, []);
 
   constructor(
     public entradaService: EntradaService,
@@ -74,15 +76,16 @@ export class EntradaComponent implements OnInit {
 
   ngOnInit() {
     this.createFormGroup();
+    this.entrada = new Entrada();
     this.usuarioLogueado = this.usuarioService.usuario;
 
     this.proveedorService.getProveedores(true).subscribe(proveedores => {
       this.proveedores = proveedores.proveedores;
     });
 
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if (id !== 'nuevo') {
-      this.cargarEntrada(id);
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (this.id !== 'nuevo') {
+      this.cargarEntrada(this.id);
     } else {
       // tslint:disable-next-line: forin
       for (const control in this.regForm.controls) {
@@ -90,6 +93,10 @@ export class EntradaComponent implements OnInit {
           this.regForm.controls[control.toString()].setValue(undefined);
         }
       }
+
+      const timeZone = moment().format('Z');
+      const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
+      this.fFactura.setValue(fecha);
     }
 
     this.url = '/entradas';
@@ -133,13 +140,32 @@ export class EntradaComponent implements OnInit {
   }
 
   cargarEntrada(id: string) {
+    let detalles;
     this.entradaService.getEntrada(id)
       .subscribe(res => {
+
         // tslint:disable-next-line: forin
         for (const propiedad in this.entrada) {
           for (const control in this.regForm.controls) {
-            if (propiedad === control.toString()) {
+            if (propiedad === control.toString() && propiedad != 'detalles') {
               this.regForm.controls[propiedad].setValue(res[propiedad]);
+            } else {
+              if (propiedad === control.toString() && propiedad === 'detalles') {
+                this.detalles.removeAt(this.detalles.value.findIndex(d => d.material !== undefined));
+                detalles = res[propiedad];
+
+                if (detalles !== undefined) {
+                  
+                  detalles.forEach(det => {
+                    for (const prop in det.detalle) {
+                      if (det.detalle[prop].$numberDecimal) {
+                        det.detalle[prop] = parseFloat(det.detalle[prop].$numberDecimal);
+                      }
+                    }
+                    this.detalles.push(this.agregarArray(det.detalle));
+                  });
+                }
+              }
             }
           }
         }
@@ -166,7 +192,7 @@ export class EntradaComponent implements OnInit {
 
   guardarEntrada() {
     if (this.regForm.valid) {
-      // console.log (this.regForm.value);
+      // console.log(this.regForm.value);
       this.entradaService.guardarEntrada(this.regForm.value)
         .subscribe(res => {
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
@@ -183,6 +209,7 @@ export class EntradaComponent implements OnInit {
 
   onChange(objeto, indice, event) {
     let pos = 0;
+    this.ObjetoSelect = [];
     if (event.checked === true) {
       this.idSelect = objeto;
       this.ObjetoSelect.push({ detalle: objeto, indice: indice });
@@ -195,12 +222,15 @@ export class EntradaComponent implements OnInit {
 
   openDialogDetalle() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = this.detallesAgregar;
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = this.detallesSelect;
     const dialogRef = this.matDialog.open(DetalleComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(detalle => {
       if (detalle) {
         this.detalles.push(this.agregarArray(detalle));
+        this.regForm.markAsDirty();
         //     // this.cfdi.conceptos = this.conceptos.value;
         //     // this.cfdi = cfdi;
         //     // const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
@@ -221,6 +251,58 @@ export class EntradaComponent implements OnInit {
         //     // }
       }
     });
+  }
+
+  // async agrupinD(indice) {
+  //   await this.quitar(indice);
+  // }
+
+  quitar(element) {
+    if (element !== undefined && element.length > 0) {
+      element.forEach(i => {
+          this.detalles.removeAt(i.indice);
+          this.regForm.markAsDirty();
+      });
+    } else {
+      swal('Error', 'Selecciona un detalle', 'error');
+    }
+    this.ObjetoSelect = [];
+  }
+
+  modifica(detalle) {
+    if (detalle !== undefined && detalle.length > 0) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = false;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = new SelectionModel<DetalleMaterial>(true, detalle);
+      const dialogRef = this.matDialog.open(DetalleComponent, dialogConfig);
+
+      dialogRef.afterClosed().subscribe(detalleMod => {
+        if (detalleMod) {
+          const pos = this.detalles.value.findIndex(d => d.material._id === detalle[0].detalle.material._id);
+          this.detalles.removeAt(pos);
+          // this.detalles.removeAt(this.detalles.value.findIndex(d => d.material._id === detalle[0].detalle.material._id))
+          this.detalles.push(this.agregarArray(detalleMod));
+          // let n = 0;
+          // // const pos = dets.findIndex(det => det.material._id === detalle.detalle.material._id);
+          // const pos = detalle[0].indice;
+          // if (pos >= 0) {
+          //   console.log(this.detalles.value);
+          //   dets[pos].splice(n, 1);
+          //   // this.detalles.value[pos].detalles = detalleMod;
+          //   // console.log(this.detalles.value);
+          // }
+        }
+      });
+
+      // this.detalles.value.splice(0, this.detalles.value.length);
+      // dets.forEach(d => {
+      //   this.detalles.push(this.agregarArray(d));
+      // });
+    } else {
+      swal('Error', 'Selecciona un detalle', 'error');
+    }
+    this.ObjetoSelect = [];
   }
 
   back() {

@@ -1,4 +1,4 @@
-import { Material } from './../pages/materiales/material.models';
+import { Material } from '../materiales/material.models';
 export class DetalleMaterial {
     constructor(
         public material?: Material,
