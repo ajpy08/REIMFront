@@ -1,0 +1,74 @@
+<div class="row animated fadeIn">
+  <div class="col-md">
+    <div class="card card-body">
+      <mat-dialog-content>
+        <h3 class="box-title m-b-0">Evento de Maniobra</h3><br>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
+              <div class="my-container">
+                <!--========Mat-Select Materiales=========-->
+                <mat-form-field>
+                  <mat-select placeholder="Seleccione un Evento" formControlName="tipoEvento" name="tipoEvento">
+                    <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
+                      {{ evento.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="tipoEvento.touched && tipoEvento.invalid">
+                    <sup>*</sup>Por Favor seleccionar un tipo de evento
+                  </mat-error>
+                </mat-form-field>
+                <!--=========================================-->
+                <mat-form-field>
+                  <mat-label>Tipo Lavado</mat-label>
+                  <mat-select formControlName="tipoLavado" tabindex="1">
+                    <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                      {{tipo.descripcion}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Observaciones</mat-label>
+                  <textarea matInput formControlName="observaciones" name="observaciones" class="form-control" rows="3" cols="40" placeholder="Observaciones"></textarea>
+                  <mat-error *ngIf="observaciones.touched && observaciones.invalid">
+                    <sup>*</sup>Por Favor ingrese observaciones
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field class="inputpersonalizado">
+                  <mat-label>Fecha Inicio</mat-label>
+                  <input matInput formControlName="fIni" [matDatepicker]="picker" type="text" placeholder="Fecha de Inicio">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Hora Inicio</mat-label>
+                  <input matInput formControlName="hIni" type="time" placeholder="Hora Inicio" (focus)="ponHoraIni()">
+                </mat-form-field>
+                <mat-form-field class="inputpersonalizado">
+                  <mat-label>Fecha Fin</mat-label>
+                  <input matInput formControlName="fFin" [matDatepicker]="picker2" type="text" placeholder="Fecha de Finalizacion">
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Hora Inicio</mat-label>
+                  <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización" (focus)="ponHoraFin()">
+                </mat-form-field>
+              </div>
+              <br><br>
+              <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10" (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid">
+                <i class="fa fa-save"></i>
+                Agregar
+              </button>
+              <button class="btn btn-danger waves-effect waves-light" (click)="close(undefined)">Close</button>
+            </form>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <div class="output">
+        <p>Form Data: {{regForm.value | json}}</p>
+        <p>Is Valid: {{regForm.valid}}</p>
+      </div>
+    </div>
+  </div>
+</div>

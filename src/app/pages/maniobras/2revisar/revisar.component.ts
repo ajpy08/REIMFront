@@ -1,4 +1,4 @@
-import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from './../../../config/config';
+import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from '../../../config/config';
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
@@ -17,8 +17,9 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-import { Evento } from '../../../models/evento.models';
-
+import { Evento } from '../eventos/evento.models';
+import { EventoComponent } from '../eventos/evento.component';
+import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'app-revisar',
   templateUrl: './revisar.component.html',
@@ -47,7 +48,9 @@ export class RevisarComponent implements OnInit {
     public _reparacionService: ReparacionService,
     private fb: FormBuilder,
     private datePipe: DatePipe,
-    private coordenadaService: CoordenadaService, public dialog: MatDialog) { }
+    private coordenadaService: CoordenadaService, 
+    public matDialog: MatDialog
+    ) { }
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -201,31 +204,6 @@ export class RevisarComponent implements OnInit {
     this.reparaciones.removeAt(index);
   }
 
-
-  cargaEventos(id:string): void {
-    this._maniobraService.getEventos(id).subscribe(eventos => {
-      console.log(eventos);
-      this.listaEventos = eventos.eventos;
-    });
-
-  }
-
-  addEvento(item): void {
-    const rep = this.tiposEvento.find(x => x.id === item);
-    this.eventos.push(this.creaEvento(rep.descripcion,'','','','',''));
-    let ev = new Evento('',rep.descripcion,'E','Prueba','','','','',[]);
-    this._maniobraService.addEvento(this.regForm.get('_id').value,ev).subscribe(eventos => {
-      console.log(eventos);
-      this.cargaEventos(this.regForm.get('_id').value);
-    });
-  }
-
-  removeEvento(id: string) {
-    this._maniobraService.removeEvento(this.regForm.get('_id').value,id).subscribe(eventos => {
-      console.log(eventos);
-      this.cargaEventos(this.regForm.get('_id').value);
-    });
-  }
 
   cargarManiobra(id: string) {
     this._maniobraService.getManiobraConIncludes(id).subscribe(maniob => {
@@ -610,6 +588,32 @@ export class RevisarComponent implements OnInit {
     this.router.navigate(['/reparaciones/reparacion/nuevo']);
 
   }
+
+  cargaEventos(id:string): void {
+    this._maniobraService.getEventos(id).subscribe(eventos => {
+      console.log(eventos);
+      this.listaEventos = eventos.eventos;
+    });
+
+  }
+  openDialogEvento(id: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {_id:id,_idManiobra:this.regForm.get('_id').value};
+    const dialogRef = this.matDialog.open(EventoComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(detalle => {
+      if (detalle) {
+        this.cargaEventos(this.regForm.get('_id').value);
+      }
+    });
+  }
+
+  removeEvento(id: string) {
+    this._maniobraService.removeEvento(this.regForm.get('_id').value,id).subscribe(eventos => {
+      this.cargaEventos(this.regForm.get('_id').value);
+    });
+  }
+
 }
 
 

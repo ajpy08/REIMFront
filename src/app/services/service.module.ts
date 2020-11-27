@@ -64,15 +64,14 @@ import {
       ExcelService,
       MaterialService,
       UnidadService,
-      ProveedorService,
-      EntradaService,
       ModalUploadService,
       ModalDropzoneService,
       LoginGuard,
       VerificaTokenGuard,
       RefreshTokenInterceptor,
       REIMGuard,
-      ProveedorService
+      ProveedorService,
+      EntradaService
     ],
     declarations: []
   })

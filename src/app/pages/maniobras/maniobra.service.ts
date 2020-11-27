@@ -8,7 +8,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { FileItem } from '../../models/file-item.models';
-import { Evento } from '../../models/evento.models';
+import { Evento } from './eventos/evento.models';
 
 @Injectable()
 export class ManiobraService {
@@ -706,12 +706,22 @@ export class ManiobraService {
   // hFin: { type: String },
 
 
-  addEvento(idManiobra: string, evento: Evento): Observable<any> {
-    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/addevento';
+  addEvento(evento: Evento): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + evento._idManiobra + '/addevento';
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url,{tipoEvento:evento.tipoEvento,tipoLavado:evento.tipoLavado,observaciones:evento.observaciones})
+    return this.http.put(url,{evento})
       .pipe(map((resp: any) => {
         swal('Evento Agregado con exito', 'success');
+        return resp;
+      }));
+  }
+
+  editaEvento(evento: Evento): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + evento._idManiobra + '/editevento/'+evento._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url,{evento})
+      .pipe(map((resp: any) => {
+        swal('Evento Editado con exito', 'success');
         return resp;
       }));
   }
@@ -728,6 +738,12 @@ export class ManiobraService {
 
   getEventos(idManiobra: string): Observable<any> {
     let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/getEventos';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
+  getEvento(idManiobra: string, idEvento: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/getEvento/'+idEvento;
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }

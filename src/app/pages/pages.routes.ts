@@ -103,6 +103,7 @@ import { EntradaComponent } from './entradas/entrada.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
+import { EventoComponent } from './maniobras/eventos/evento.component';
 
 /* #endregion */
 
@@ -614,6 +615,13 @@ const pagesRoutes: Routes = [
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
+    {
+        path: 'maniobras/maniobra/:id/eventos/evento/:idEvento',
+        component: EventoComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualización de Evento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    }
+
 
     // otherwise redirect to home
     // { path: '**', component: NotfoundComponent }
