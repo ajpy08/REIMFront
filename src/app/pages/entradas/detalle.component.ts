@@ -40,7 +40,7 @@ export class DetalleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(this.data.selected.length > 0) {
+    if (this.data.selected.length > 0) {
       this.detalle = this.data.selected[0].detalle;
     }
 
@@ -50,7 +50,7 @@ export class DetalleComponent implements OnInit {
 
     this.createFormGroup();
 
-    if(this.detalle) {
+    if (this.detalle) {
       this.cargarPago(this.detalle);
     }
 
@@ -84,48 +84,55 @@ export class DetalleComponent implements OnInit {
     // }.bind(this));
   }
 
-  cargarPago(detalle : DetalleMaterial) {
-      // tslint:disable-next-line: forin
-      // for (const propiedad in this.detalle) {
-      //   for (const control in this.regForm.controls) {
-      //     if (propiedad === control.toString()) {
-      //       this.regForm.controls[propiedad].setValue(detalle[propiedad]);
-      //     }
-      //   }
-      // }
-      this.material.setValue(detalle.material._id);
-      this.cantidad.setValue(detalle.cantidad);
-      this.costo.setValue(detalle.costo);
+  cargarPago(detalle: DetalleMaterial) {
+    // tslint:disable-next-line: forin
+    for (const propiedad in this.detalle) {
+      for (const control in this.regForm.controls) {
+        if (propiedad === control.toString()) {
+          this.regForm.controls[propiedad].setValue(detalle[propiedad]);
+        }
+      }
+    }
+    // this.material.setValue(detalle.material);
+    // this.cantidad.setValue(detalle.cantidad);
+    // this.costo.setValue(detalle.costo);
+  }
+
+  compareObjects(o1: any, o2: any) {
+    if (o1.descripcion == o2.descripcion)
+      return true;
+    else return false
   }
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      material: ['', [Validators.required]],
+      _id: [''],
+      material: [new Material('test', 'test', 0, true, '', '', '', '', ''), [Validators.required]],
       cantidad: ['', [Validators.required]],
-      costo: ['', [Validators.required]]
-    });
-  }
-
-  agregarArray(detalle: DetalleMaterial): FormGroup {
-    return this.fb.group({
-      material: [detalle.material._id],
-      cantidad: [detalle.cantidad],
-      costo: [detalle.costo],
+      costo: ['', [Validators.required]],
+      entrada: [''],
     });
   }
 
   agregarDetalle() {
-    if(this.regForm.valid){
+    if (this.regForm.valid) {
       const detalle = new DetalleMaterial();
+      detalle._id = this._id.value;
       detalle.material = this.material.value;
       detalle.cantidad = this.cantidad.value;
       detalle.costo = this.costo.value;
+      detalle.entrada = this.entrada.value;
       this.save(detalle);
     }
   }
 
   save(result) {
     this.dialogRef.close(result);
+    // if (this.detalle._id) {
+      
+    // } else {
+    //   this.dialogRef.close(result);
+    // }
   }
 
   close() {
@@ -133,6 +140,11 @@ export class DetalleComponent implements OnInit {
   }
 
   /* #region  Properties */
+
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
   get material() {
     return this.regForm.get('material');
   }
@@ -143,6 +155,10 @@ export class DetalleComponent implements OnInit {
 
   get costo() {
     return this.regForm.get('costo');
+  }
+
+  get entrada() {
+    return this.regForm.get('entrada');
   }
   /* #endregion */
 

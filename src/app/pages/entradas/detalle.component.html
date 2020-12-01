@@ -9,8 +9,8 @@
               <div class="my-container">
                 <!--========Mat-Select Materiales=========-->
                 <mat-form-field>
-                  <mat-select placeholder="Seleccione un Material" formControlName="material" name="material">
-                    <mat-option *ngFor="let material of materiales" [value]="material._id">
+                  <mat-select [compareWith] = "compareObjects" placeholder="Seleccione un Material" formControlName="material" name="material">
+                    <mat-option *ngFor="let material of materiales" [value]="material">
                       {{ material.descripcion }}
                     </mat-option>
                   </mat-select>

@@ -2,7 +2,6 @@ import { ProveedorService } from './../proveedores/proveedor.service';
 import { DetalleComponent } from './detalle.component';
 import { Material } from './../materiales/material.models';
 import { DetalleMaterial } from './detalleMaterial.models';
-import { UnidadService } from '../../services/shared/unidades.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,15 +15,14 @@ import { Location } from '@angular/common';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
 import swal from 'sweetalert';
-
 import * as _moment from 'moment';
 import { EntradaService } from './entrada.service';
 import { UsuarioService } from '../usuarios/usuario.service';
-import { Unidad } from 'src/app/models/unidad.models';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Proveedor } from '../proveedores/proveedor.models';
-import { forceLoad } from '@sentry/browser';
+import { DetalleMaterialService } from './detalleMaterial.service';
+
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -69,9 +67,9 @@ export class EntradaComponent implements OnInit {
     private fb: FormBuilder,
     public _modalUploadService: ModalUploadService,
     private usuarioService: UsuarioService,
-    private location: Location,
     public matDialog: MatDialog,
-    private proveedorService: ProveedorService
+    private proveedorService: ProveedorService,
+    private detalleMaterialService: DetalleMaterialService
   ) { }
 
   ngOnInit() {
@@ -107,7 +105,7 @@ export class EntradaComponent implements OnInit {
         if (data.data._id) {
           this.createFormGroup();
           this.cargarEntrada(data.data._id);
-          if (data.data.usuarioMod !== this.usuarioLogueado._id) {
+          if (data.data.usuarioMod !== undefined && data.data.usuarioMod !== this.usuarioLogueado._id) {
             swal({
               title: 'Actualizado',
               text: 'Otro usuario ha actualizado este entrada',
@@ -118,7 +116,7 @@ export class EntradaComponent implements OnInit {
       }
     }.bind(this));
 
-    this.socket.on('delete-entrada', function (data: any) {
+    this.socket.on('delete-entrada', function () {
       if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE)) {
         this.router.navigate(['/entradas']);
         swal({
@@ -143,7 +141,7 @@ export class EntradaComponent implements OnInit {
     let detalles;
     this.entradaService.getEntrada(id)
       .subscribe(res => {
-
+        this.entrada = res;
         // tslint:disable-next-line: forin
         for (const propiedad in this.entrada) {
           for (const control in this.regForm.controls) {
@@ -155,14 +153,16 @@ export class EntradaComponent implements OnInit {
                 detalles = res[propiedad];
 
                 if (detalles !== undefined) {
-                  
+
                   detalles.forEach(det => {
-                    for (const prop in det.detalle) {
-                      if (det.detalle[prop].$numberDecimal) {
-                        det.detalle[prop] = parseFloat(det.detalle[prop].$numberDecimal);
+                    if (det.detalle !== null && det.detalle !== undefined) {
+                      for (const prop in det.detalle) {
+                        if (det.detalle[prop].$numberDecimal) {
+                          det.detalle[prop] = parseFloat(det.detalle[prop].$numberDecimal);
+                        }
                       }
+                      this.detalles.push(this.agregarArray(det.detalle));
                     }
-                    this.detalles.push(this.agregarArray(det.detalle));
                   });
                 }
               }
@@ -178,15 +178,18 @@ export class EntradaComponent implements OnInit {
       proveedor: ['', [Validators.required]],
       fFactura: ['', [Validators.required]],
       detalles: this.fb.array([this.agregarArray(new DetalleMaterial)], { validators: Validators.required }),
-      _id: ['']
+      _id: [''],
+      usuarioMod: ['']
     });
   }
 
   agregarArray(doc: DetalleMaterial): FormGroup {
     return this.fb.group({
+      _id: [doc._id],
       material: [doc.material],
       cantidad: [doc.cantidad],
       costo: [doc.costo],
+      entrada: [doc.entrada]
     });
   }
 
@@ -198,7 +201,7 @@ export class EntradaComponent implements OnInit {
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.socket.emit('newentrada', res);
-            this.router.navigate(['/entradas/entrada', this.regForm.get('_id').value]);
+            // this.router.navigate(['/entradas/entrada', this.regForm.get('_id').value]);
           } else {
             this.socket.emit('updateentrada', res);
           }
@@ -229,43 +232,38 @@ export class EntradaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(detalle => {
       if (detalle) {
-        this.detalles.push(this.agregarArray(detalle));
-        this.regForm.markAsDirty();
-        //     // this.cfdi.conceptos = this.conceptos.value;
-        //     // this.cfdi = cfdi;
-        //     // const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
-        //     // if (pos >= 0) {
-        //     //   this.cfdi.pagos[pos] = result;
-        //     // }
-        //     // this.recargaValoresCFDI();
-        //     // if (this.id === 'nuevo' || this.id === undefined) {
-        //     //   this.cargaValoresIniciales(dialogConfig.data);
-        //     // } else {
-        //     //   // this.cargarCFDI(this.id);
-        //     //   // this.cfdi = cfdi;
-        //     //   const pos = this.cfdi.pagos.findIndex(a => a._id === result._id);
-        //     //   if (pos >= 0) {
-        //     //     this.cfdi.pagos[pos] = result;
-        //     //   }
-        //     //   this.recargaValoresCFDI();
-        //     // }
+        if (this.id !== 'nuevo') {
+          detalle.entrada = this.id;
+          this.detalleMaterialService.guardarDetalleMaterial(detalle).subscribe(() => {
+            this.socket.emit('updateentrada', this.entrada);
+            this.regForm.markAsPristine();
+          });
+        } else {
+          this.detalles.push(this.agregarArray(detalle));
+          this.regForm.markAsDirty();
+        }
       }
     });
   }
-
-  // async agrupinD(indice) {
-  //   await this.quitar(indice);
-  // }
-
   quitar(element) {
-    if (element !== undefined && element.length > 0) {
-      element.forEach(i => {
+    if (this.id !== 'nuevo') {
+      const detalle = element[0].detalle;
+      if (detalle._id !== '' && detalle._id !== undefined && detalle._id !== null) {
+        this.detalleMaterialService.borrarDetalleMaterial(detalle).subscribe(detalleEliminado => {
+          this.socket.emit('updateentrada', this.entrada);
+        });
+      }
+    } else {
+      if (element !== undefined && element.length > 0) {
+        element.forEach(i => {
           this.detalles.removeAt(i.indice);
           this.regForm.markAsDirty();
-      });
-    } else {
-      swal('Error', 'Selecciona un detalle', 'error');
+        });
+      } else {
+        swal('Error', 'Selecciona un detalle', 'error');
+      }
     }
+
     this.ObjetoSelect = [];
   }
 
@@ -279,26 +277,12 @@ export class EntradaComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(detalleMod => {
         if (detalleMod) {
-          const pos = this.detalles.value.findIndex(d => d.material._id === detalle[0].detalle.material._id);
-          this.detalles.removeAt(pos);
-          // this.detalles.removeAt(this.detalles.value.findIndex(d => d.material._id === detalle[0].detalle.material._id))
-          this.detalles.push(this.agregarArray(detalleMod));
-          // let n = 0;
-          // // const pos = dets.findIndex(det => det.material._id === detalle.detalle.material._id);
-          // const pos = detalle[0].indice;
-          // if (pos >= 0) {
-          //   console.log(this.detalles.value);
-          //   dets[pos].splice(n, 1);
-          //   // this.detalles.value[pos].detalles = detalleMod;
-          //   // console.log(this.detalles.value);
-          // }
+          this.detalleMaterialService.guardarDetalleMaterial(detalleMod).subscribe(() => {
+            this.socket.emit('updateentrada', this.entrada);
+            this.regForm.markAsPristine();
+          });
         }
       });
-
-      // this.detalles.value.splice(0, this.detalles.value.length);
-      // dets.forEach(d => {
-      //   this.detalles.push(this.agregarArray(d));
-      // });
     } else {
       swal('Error', 'Selecciona un detalle', 'error');
     }
@@ -314,6 +298,11 @@ export class EntradaComponent implements OnInit {
   }
 
   /* #region Properties */
+
+  get _id() {
+    return this.regForm.get('_id');
+  }
+
   get noFactura() {
     return this.regForm.get('noFactura');
   }
@@ -328,6 +317,10 @@ export class EntradaComponent implements OnInit {
 
   get detalles() {
     return this.regForm.get('detalles') as FormArray;
+  }
+
+  get usuarioMod() {
+    return this.regForm.get('usuarioMod');
   }
 
   /* #endregion */
