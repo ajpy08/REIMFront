@@ -14,7 +14,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { Location } from '@angular/common';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
 import * as io from 'socket.io-client';
-import swal from 'sweetalert';
+// import swal from 'sweetalert';
 import * as _moment from 'moment';
 import { EntradaService } from './entrada.service';
 import { UsuarioService } from '../usuarios/usuario.service';
@@ -22,8 +22,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Proveedor } from '../proveedores/proveedor.models';
 import { DetalleMaterialService } from './detalleMaterial.service';
-
 const moment = _moment;
+declare var swal: any;
 
 export const MY_FORMATS = {
   parse: {
@@ -201,7 +201,7 @@ export class EntradaComponent implements OnInit {
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
             this.regForm.get('_id').setValue(res._id);
             this.socket.emit('newentrada', res);
-            // this.router.navigate(['/entradas/entrada', this.regForm.get('_id').value]);
+            this.router.navigate(['/entradas/entrada', this.regForm.get('_id').value]);
           } else {
             this.socket.emit('updateentrada', res);
           }
@@ -248,23 +248,38 @@ export class EntradaComponent implements OnInit {
   quitar(element) {
     if (this.id !== 'nuevo') {
       const detalle = element[0].detalle;
-      if (detalle._id !== '' && detalle._id !== undefined && detalle._id !== null) {
-        this.detalleMaterialService.borrarDetalleMaterial(detalle).subscribe(detalleEliminado => {
-          this.socket.emit('updateentrada', this.entrada);
-        });
+      if (element.length > 1) {
+        if (detalle._id !== '' && detalle._id !== undefined && detalle._id !== null) {
+          swal({
+            title: '¿Esta seguro?',
+            text: 'Esta apunto de borrar a ' + detalle.material.descripcion,
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+          }).then(borrar => {
+            if (borrar) {
+              this.detalleMaterialService.borrarDetalleMaterial(detalle).subscribe(detalleEliminado => {
+                this.socket.emit('updateentrada', this.entrada);
+              });
+            }
+          });
+        }
+        else {
+          if (element !== undefined && element.length > 0) {
+            element.forEach(i => {
+              this.detalles.removeAt(i.indice);
+              this.regForm.markAsDirty();
+            });
+          } else {
+            swal('Error', 'Selecciona un detalle', 'error');
+          }
+        }
+        this.ObjetoSelect = [];
       }
-    } else {
-      if (element !== undefined && element.length > 0) {
-        element.forEach(i => {
-          this.detalles.removeAt(i.indice);
-          this.regForm.markAsDirty();
-        });
-      } else {
-        swal('Error', 'Selecciona un detalle', 'error');
+      else {
+        swal('Error', 'La entrada debe contener por lo menos un detalle', 'error');
       }
     }
-
-    this.ObjetoSelect = [];
   }
 
   modifica(detalle) {
