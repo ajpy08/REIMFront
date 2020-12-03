@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
@@ -74,6 +74,25 @@ export class EventoComponent implements OnInit {
     }
   }
 
+  createFormGroup() {
+    this.regForm = this.fb.group({
+      tipoEvento: ['',[Validators.required]],
+      tipoLavado: ['',[Validators.required]],
+      observaciones: [''],
+      izquierdo: [''],
+      derecho: [''],
+      frente: [''],
+      posterior: [''],
+      techo: [''],
+      piso: [''],
+      interior: [''],
+      puerta: [''],
+      fechas: this.fb.array([]),
+      _id: [''],
+      _idManiobra: ['']
+    });
+  }
+
   cargarRegistro(evento: Evento) {
     this._maniobraService.getEvento(evento._idManiobra,evento._id).subscribe(res => {
       this.evento = res.evento;
@@ -99,35 +118,66 @@ export class EventoComponent implements OnInit {
   get observaciones() {
     return this.regForm.get('observaciones');
   }
-  get fIni() {
-    return this.regForm.get('fIni');
+  get izquiero() {
+    return this.regForm.get('izquierdo');
   }
-  get hIni() {
-    return this.regForm.get('hIni');
+  get derecho() {
+    return this.regForm.get('derecho');
   }
-  get fFin() {
-    return this.regForm.get('fFin');
+  get frente() {
+    return this.regForm.get('frente');
   }
-  get hFin() {
-    return this.regForm.get('hFin');
+  get posterior() {
+    return this.regForm.get('posterior');
   }
+  get piso() {
+    return this.regForm.get('piso');
+  }
+  get techo() {
+    return this.regForm.get('techo');
+  }
+  
+  get interior() {
+    return this.regForm.get('interior');
+  }
+  get puerta() {
+    return this.regForm.get('puerta');
+  }
+
+  get fechas() : FormArray {
+    return this.regForm.get("fechas") as FormArray
+  }
+
   get _id() {
     return this.regForm.get('_id');
   }
   get _idManiobra() {
     return this.regForm.get('_idManiobra');
   }
-  createFormGroup() {
-    this.regForm = this.fb.group({
-      tipoEvento: ['',[Validators.required]],
-      tipoLavado: ['',[Validators.required]],
-      observaciones: [''],
-      fIni: [''],
-      hIni: [''],
-      fFin: [''],
-      hFin: [''],
-      _id: [''],
-      _idManiobra: ['']
+  
+  
+  newFecha(): FormGroup {
+    return this.fb.group({
+      fIni: '',
+      hIni: '',
+      fFin: '',
+      hFin: ''
+    })
+ }
+ 
+ addFecha() {
+  this.fechas.push(this.newFecha());
+}
+removeFecha(i:number) {
+  this.fechas.removeAt(i);
+}
+
+  creaFecha(fIni: string,hIni: string, fFin: string, hFin: string): FormGroup {
+    return this.fb.group({
+      fIni: [fIni, [Validators.required]],
+      hIni: [hIni, [Validators.required]],
+      fFin: [fFin, [Validators.required]],
+      hFin: [hFin, [Validators.required]]
     });
   }
 
@@ -150,16 +200,16 @@ export class EventoComponent implements OnInit {
     this.close(this.regForm.value);
   }
 
-  ponHoraIni() {
-    if (this.hIni.value === undefined || this.hIni.value === '') {
-      this.hIni.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
-    }
-  }
-  ponHoraFin() {
-    if (this.hFin.value === undefined || this.hFin.value === '') {
-      this.hFin.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
-    }
-  }
+  // ponHoraIni() {
+  //   if (this.hIni.value === undefined || this.hIni.value === '') {
+  //     this.hIni.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+  //   }
+  // }
+  // ponHoraFin() {
+  //   if (this.hFin.value === undefined || this.hFin.value === '') {
+  //     this.hFin.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+  //   }
+  // }
 
   close(result) {
     this.dialogRef.close(result);
