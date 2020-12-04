@@ -88,6 +88,7 @@ export class EventoComponent implements OnInit {
       interior: [''],
       puerta: [''],
       fechas: this.fb.array([]),
+      materiales: this.fb.array([]),
       _id: [''],
       _idManiobra: ['']
     });
@@ -97,12 +98,15 @@ export class EventoComponent implements OnInit {
     this._maniobraService.getEvento(evento._idManiobra,evento._id).subscribe(res => {
       this.evento = res.evento;
       this.evento._idManiobra=evento._idManiobra;
+      console.log(this.evento);
      for (const propiedad in this.evento) 
         for (const control in this.regForm.controls) 
           if (propiedad === control.toString()) 
           {
-            
-            this.regForm.controls[propiedad].setValue(res.evento[propiedad]);
+            if (propiedad=="fechas")
+            res.evento[propiedad].forEach(x=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
+            else
+              this.regForm.controls[propiedad].setValue(res.evento[propiedad]);
           }
     });
   }
@@ -148,6 +152,10 @@ export class EventoComponent implements OnInit {
     return this.regForm.get("fechas") as FormArray
   }
 
+  get materiales() : FormArray {
+    return this.regForm.get("materiales") as FormArray
+  }
+
   get _id() {
     return this.regForm.get('_id');
   }
@@ -155,31 +163,41 @@ export class EventoComponent implements OnInit {
     return this.regForm.get('_idManiobra');
   }
   
-  
-  newFecha(): FormGroup {
+  newFecha(fIni='',hIni='', fFin='', hFin=''): FormGroup {
     return this.fb.group({
-      fIni: '',
-      hIni: '',
-      fFin: '',
-      hFin: ''
+      fIni: fIni,
+      hIni: hIni,
+      fFin: fFin,
+      hFin: hFin
     })
- }
+  }
  
- addFecha() {
-  this.fechas.push(this.newFecha());
-}
-removeFecha(i:number) {
+ addFecha(fIni='',hIni='', fFin='', hFin='') {
+  this.fechas.push(this.newFecha(fIni,hIni,fFin,hFin));
+ }
+
+ removeFecha(i:number) {
   this.fechas.removeAt(i);
+ }
+
+ newMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1): FormGroup {
+  return this.fb.group({
+    material: material,
+    descripcion: descripcion,
+    costo: costo,
+    precio: precio,
+    cantidad: cantidad
+  })
 }
 
-  creaFecha(fIni: string,hIni: string, fFin: string, hFin: string): FormGroup {
-    return this.fb.group({
-      fIni: [fIni, [Validators.required]],
-      hIni: [hIni, [Validators.required]],
-      fFin: [fFin, [Validators.required]],
-      hFin: [hFin, [Validators.required]]
-    });
-  }
+addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
+  this.materiales.push(this.newMaterial(material,descripcion,costo, precio, cantidad));
+}
+
+removeMaterial(i:number) {
+this.materiales.removeAt(i);
+}
+  
 
   guardarRegistro() {
     this._idManiobra.setValue( this.evento._idManiobra);

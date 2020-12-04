@@ -108,6 +108,54 @@
                     </div>
                   </div>
                 </div>
+
+
+                Materiales:
+
+                <mat-select placeholder="Seleccione un Material" formControlName="tipoEvento" name="tipoEvento">
+                  <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
+                    {{ evento.descripcion }}
+                  </mat-option>
+                </mat-select>
+
+                <p>
+                  <button type="button" (click)="addMaterial()">Add</button>
+                </p>
+                <div formArrayName="materiales">
+                  <div *ngFor="let material of this.materiales.controls; let i=index">
+                    <div [formGroupName]="i">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Cantidad</mat-label>
+                            <input matInput formControlName="cantidad" type="text" placeholder="Cantidad">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Descripcion</mat-label>
+                            <input matInput formControlName="descripcion" type="text" placeholder="Descripcion">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Costo</mat-label>
+                            <input matInput formControlName="costo" type="text" placeholder="Costo">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Precio</mat-label>
+                            <input matInput formControlName="precio" type="text" placeholder="Precio">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2"><button (click)="removeMaterial(i)">Remove</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
               <br><br>
               <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10" (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid">

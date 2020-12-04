@@ -5,12 +5,10 @@ export class Evento {
       public tipoEvento?: string,
       public tipoLavado?: string,
       public observaciones?: string,
-      public fIni?: string,
-      public hIni?: string,
-      public fFin?: string,
-      public hFin?: string,
-      public materiales?: []
+      public fechas?:[{fIni?: string, hIni?: string, fFin?: string, hFin?: string}],
+      public materiales?:[{material?: string, descripcion?: string, costo?: number, precio?:number, cantidad?: number}],
   ) {}
+
 }
 
 
