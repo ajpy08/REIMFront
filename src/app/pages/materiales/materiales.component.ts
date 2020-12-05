@@ -30,10 +30,14 @@ export class MaterialesComponent implements OnInit {
 
   displayedColumns = [
     'actions',
+    // 'valPrecios',
+    // 'valStock',
     'activo',
     'descripcion',
     'unidadMedida',
-    'costo'
+    'costo',
+    'precio',
+    'stock'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
@@ -209,6 +213,14 @@ export class MaterialesComponent implements OnInit {
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
+  }
+
+  getStock(material: string) {
+    let totalStock = 0;
+    this.materialService.getStockMaterial(material).subscribe(stock => {
+      totalStock = stock;
+    });
+    return totalStock;
   }
 
 }
