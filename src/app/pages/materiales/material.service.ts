@@ -40,6 +40,13 @@ export class MaterialService {
       .pipe(map((resp: any) => resp.material));
   }
 
+  getStockMaterial(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/materiales/material/stock/' + id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url)
+      .pipe(map((resp: any) => resp.stock));
+  }
+
   guardarMaterial(material: Material): Observable<any> {
     let url = URL_SERVICIOS + '/materiales/material';
     if (material._id) {

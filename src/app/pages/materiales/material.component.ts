@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Material } from './material.models';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
-import { ROLES } from 'src/app/config/config';
+import { ROLES, TIPOS_MATERIAL_ARRAY } from 'src/app/config/config';
 import { Usuario } from '../usuarios/usuario.model';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -46,6 +46,8 @@ export class MaterialComponent implements OnInit {
   url: string;
   unidades: Unidad[] = [];
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
+  tipos = TIPOS_MATERIAL_ARRAY;
+
   constructor(
     public materialService: MaterialService,
     public router: Router,
@@ -59,7 +61,7 @@ export class MaterialComponent implements OnInit {
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.createFormGroup();
+    this.createFormGroup();    
 
     this.unidadService.getUnidades().subscribe(unidades => {
       this.unidades = unidades.unidades;
@@ -73,6 +75,9 @@ export class MaterialComponent implements OnInit {
       for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
       }
+
+      this.tipo.setValue('I');
+      this.minimo.setValue(1);
       this.activo.setValue(true);
     }
 
@@ -119,7 +124,11 @@ export class MaterialComponent implements OnInit {
         for (const propiedad in this.material) {
           for (const control in this.regForm.controls) {
             if (propiedad === control.toString()) {
-              this.regForm.controls[propiedad].setValue(res[propiedad]);
+              if (res[propiedad].$numberDecimal !== undefined) {
+                this.regForm.controls[propiedad].setValue(res[propiedad].$numberDecimal);
+              } else {
+                this.regForm.controls[propiedad].setValue(res[propiedad]);
+              }
             }
           }
         }
@@ -131,7 +140,10 @@ export class MaterialComponent implements OnInit {
       descripcion: ['', [Validators.required]],
       unidadMedida: ['', [Validators.required]],
       costo: ['', [Validators.required]],
+      precio: ['', [Validators.required]],
       activo: ['', [Validators.required]],
+      tipo: ['', [Validators.required]],
+      minimo: ['', [Validators.required]],
       _id: ['']
     });
   }
@@ -175,8 +187,20 @@ export class MaterialComponent implements OnInit {
     return this.regForm.get('costo');
   }
 
+  get precio() {
+    return this.regForm.get('precio');
+  }
+
   get activo() {
     return this.regForm.get('activo');
+  }
+
+  get tipo() {
+    return this.regForm.get('tipo');
+  }
+
+  get minimo() {
+    return this.regForm.get('minimo');
   }
 
   get _id() {

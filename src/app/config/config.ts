@@ -108,3 +108,9 @@ export const TIPOS_LAVADO_ARRAY = [new Lavado('B', 'Basico'), new Lavado('E', 'E
 export const TR_ARRAY = ['TRASLADO', 'RETENCION'];
 export const IMPUESTOS_ARRAY = ['IVA', 'IEPS', 'ISR'];
 /* #endregion */
+
+// export const TIPOS_MATERIAL_ARRAY = ['I', 'M'];
+export const TIPOS_MATERIAL_ARRAY = [
+  { valor: 'I', descripcion: 'Insumo' },
+  { valor: 'M', descripcion: 'Mano de Obra' }
+];

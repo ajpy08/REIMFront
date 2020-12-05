@@ -14,13 +14,6 @@
                   <sup>*</sup>Por Favor Ingrese una Descripcion
                 </mat-error>
               </mat-form-field>
-              <!-- <mat-form-field>
-                <input matInput formControlName="unidadMedida" name="unidadMedida" type="text" class="form-control"
-                  placeholder="Unidad de medida del material *">
-                <mat-error *ngIf="unidadMedida.touched && unidadMedida.invalid">
-                  <sup>*</sup>Por Favor Ingrese una Unidad de medida
-                </mat-error>
-              </mat-form-field> -->
               <!--========Combombox Unidades de Medida=========-->
               <mat-form-field>
                 <mat-select placeholder="Seleccione una Unidad de Medida" formControlName="unidadMedida" name="unidadMedida">
@@ -29,7 +22,7 @@
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="unidadMedida.touched && unidadMedida.invalid">
-                  <sup>*</sup>Por Favor Ingrese una Unidad de Medida
+                  <sup>*</sup>Por Favor Ingrese una unidad de medida
                 </mat-error>
               </mat-form-field>
               <!--=========================================-->
@@ -37,7 +30,33 @@
                 <input matInput formControlName="costo" name="costo" type="number" class="form-control"
                   placeholder="Costo del material *">
                 <mat-error *ngIf="costo.touched && costo.invalid">
-                  <sup>*</sup>Por Favor Ingrese un Costo
+                  <sup>*</sup>Por Favor Ingrese un costo
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="precio" name="precio" type="number" class="form-control"
+                  placeholder="Precio del material *">
+                <mat-error *ngIf="precio.touched && precio.invalid">
+                  <sup>*</sup>Por Favor Ingrese un precio
+                </mat-error>
+              </mat-form-field>
+              <!--========Combombox Tipos=========-->
+              <mat-form-field>
+                <mat-select [(value)]="tipos[0].valor" placeholder="Seleccione un tipo" formControlName="tipo" name="tipo">
+                  <mat-option *ngFor="let tipo of tipos" [value]="tipo.valor">
+                    {{ tipo.descripcion }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="tipo.touched && tipo.invalid">
+                  <sup>*</sup>Por Favor Ingrese un tipo
+                </mat-error>
+              </mat-form-field>
+              <!--=========================================-->
+              <mat-form-field>
+                <input matInput formControlName="minimo" name="minimo" type="number" class="form-control"
+                  placeholder="Minimo del material *">
+                <mat-error *ngIf="minimo.touched && minimo.invalid">
+                  <sup>*</sup>Por Favor Ingrese un minimo
                 </mat-error>
               </mat-form-field>
               <mat-checkbox formControlName="activo" class="form-control" name="activo" placeholder="Activo">
