@@ -59,6 +59,16 @@
               </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="valPrecios">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Costo/Precio P.</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{1}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="valStock">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Poco Stock</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{1}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="activo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Activo</mat-header-cell>
               <mat-cell *matCellDef="let row">
@@ -79,7 +89,17 @@
 
             <ng-container matColumnDef="costo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Costo</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.costo | currency}} </mat-cell>
+              <mat-cell *matCellDef="let row"> {{row.costo?.$numberDecimal | currency}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="precio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Precio P.</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.precio?.$numberDecimal | currency}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stock">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Stock</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{getStock(row._id)}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>

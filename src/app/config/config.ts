@@ -111,3 +111,9 @@ export const TIPOS_EVENTO_ARRAY = [new TipoEvento('L', 'Lavado'), new TipoEvento
 export const TR_ARRAY = ['TRASLADO', 'RETENCION'];
 export const IMPUESTOS_ARRAY = ['IVA', 'IEPS', 'ISR'];
 /* #endregion */
+
+// export const TIPOS_MATERIAL_ARRAY = ['I', 'M'];
+export const TIPOS_MATERIAL_ARRAY = [
+  { valor: 'I', descripcion: 'Insumo' },
+  { valor: 'M', descripcion: 'Mano de Obra' }
+];
