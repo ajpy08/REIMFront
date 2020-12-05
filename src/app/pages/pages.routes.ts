@@ -1,4 +1,3 @@
-import { ProveedorComponent } from './proveedores/proveedor.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -96,11 +95,16 @@ import { ClaveUnidadComponent } from './facturacion/clave-unidades/clave-unidad.
 import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
+
 import { MaterialesComponent } from './materiales/materiales.component';
 import { MaterialComponent } from './materiales/material.component';
 import { EntradasComponent } from './entradas/entradas.component';
 import { EntradaComponent } from './entradas/entrada.component';
+
 import { ProveedoresComponent } from './proveedores/proveedores.component';
+import { ProveedorComponent } from './proveedores/proveedor.component';
+import { EventoComponent } from './maniobras/eventos/evento.component';
+
 /* #endregion */
 
 const pagesRoutes: Routes = [
@@ -611,6 +615,13 @@ const pagesRoutes: Routes = [
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
+    {
+        path: 'maniobras/maniobra/:id/eventos/evento/:idEvento',
+        component: EventoComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualización de Evento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    }
+
 
     // otherwise redirect to home
     // { path: '**', component: NotfoundComponent }

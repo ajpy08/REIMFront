@@ -1,0 +1,176 @@
+<div class="row animated fadeIn">
+  <div class="col-md">
+    <div class="card card-body">
+      <mat-dialog-content>
+        <h3 class="box-title m-b-0">Evento de Maniobra</h3><br>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
+              <div class="my-container">
+                <!--========Mat-Select Materiales=========-->
+                <mat-form-field>
+                  <mat-select placeholder="Seleccione un Evento" formControlName="tipoEvento" name="tipoEvento">
+                    <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
+                      {{ evento.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="tipoEvento.touched && tipoEvento.invalid">
+                    <sup>*</sup>Por Favor seleccionar un tipo de evento
+                  </mat-error>
+                </mat-form-field>
+                <!--=========================================-->
+                <mat-form-field>
+                  <mat-label>Tipo Lavado</mat-label>
+                  <mat-select formControlName="tipoLavado" tabindex="1">
+                    <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                      {{tipo.descripcion}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Observaciones</mat-label>
+                  <textarea matInput formControlName="observaciones" name="observaciones" class="form-control" rows="3" cols="40" placeholder="Observaciones"></textarea>
+                  <mat-error *ngIf="observaciones.touched && observaciones.invalid">
+                    <sup>*</sup>Por Favor ingrese observaciones
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Izquierdo</mat-label>
+                  <textarea matInput formControlName="izquierdo" name="izquierdo" class="form-control" rows="3" cols="40" placeholder="Izquierdo"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Derecho</mat-label>
+                  <textarea matInput formControlName="derecho" name="derecho" class="form-control" rows="3" cols="40" placeholder="Derecho"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Frente</mat-label>
+                  <textarea matInput formControlName="frente" name="frente" class="form-control" rows="3" cols="40" placeholder="Frente"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Posterior</mat-label>
+                  <textarea matInput formControlName="posterior" name="posterior" class="form-control" rows="3" cols="40" placeholder="Posterior"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Piso</mat-label>
+                  <textarea matInput formControlName="piso" name="piso" class="form-control" rows="3" cols="40" placeholder="Piso"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Techo</mat-label>
+                  <textarea matInput formControlName="techo" name="techo" class="form-control" rows="3" cols="40" placeholder="Techo"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Interior</mat-label>
+                  <textarea matInput formControlName="interior" name="interior" class="form-control" rows="3" cols="40" placeholder="Interior"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Puerta</mat-label>
+                  <textarea matInput formControlName="puerta" name="puerta" class="form-control" rows="3" cols="40" placeholder="Puerta"></textarea>
+                </mat-form-field>
+
+                Fechas:
+                <p>
+                  <button type="button" (click)="addFecha()">Add</button>
+                </p>
+                <div formArrayName="fechas">
+                  <div *ngFor="let fecha of this.fechas.controls; let i=index">
+                    <div [formGroupName]="i">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Fecha Inicio</mat-label>
+                            <input matInput formControlName="fIni" name="fIni" type="text" placeholder="Fecha Inicio" [matDatepicker]="PICK">
+                            <mat-datepicker-toggle matSuffix [for]="PICK"></mat-datepicker-toggle>
+                            <mat-datepicker #PICK></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Hora Inicio</mat-label>
+                            <input matInput formControlName="hIni" type="time" placeholder="Hora Finalización">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Fecha Inicio</mat-label>
+                            <input matInput formControlName="fFin" name="fFin" type="text" placeholder="Fecha Final" [matDatepicker]="PICKF">
+                            <mat-datepicker-toggle matSuffix [for]="PICKF"></mat-datepicker-toggle>
+                            <mat-datepicker #PICKF></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Hora Fin</mat-label>
+                            <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2"><button (click)="removeFecha(i)">Remove</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                Materiales:
+
+                <mat-select placeholder="Seleccione un Material" formControlName="tipoEvento" name="tipoEvento">
+                  <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
+                    {{ evento.descripcion }}
+                  </mat-option>
+                </mat-select>
+
+                <p>
+                  <button type="button" (click)="addMaterial()">Add</button>
+                </p>
+                <div formArrayName="materiales">
+                  <div *ngFor="let material of this.materiales.controls; let i=index">
+                    <div [formGroupName]="i">
+                      <div class="row">
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Cantidad</mat-label>
+                            <input matInput formControlName="cantidad" type="text" placeholder="Cantidad">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Descripcion</mat-label>
+                            <input matInput formControlName="descripcion" type="text" placeholder="Descripcion">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Costo</mat-label>
+                            <input matInput formControlName="costo" type="text" placeholder="Costo">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
+                            <mat-label>Precio</mat-label>
+                            <input matInput formControlName="precio" type="text" placeholder="Precio">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2"><button (click)="removeMaterial(i)">Remove</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <br><br>
+              <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10" (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid">
+                <i class="fa fa-save"></i>
+                Agregar
+              </button>
+              <button class="btn btn-danger waves-effect waves-light" (click)="close(undefined)">Close</button>
+            </form>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <div class="output">
+        <p>Form Data: {{regForm.value | json}}</p>
+        <p>Is Valid: {{regForm.valid}}</p>
+      </div>
+    </div>
+  </div>
+</div>
