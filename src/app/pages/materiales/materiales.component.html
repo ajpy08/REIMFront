@@ -97,10 +97,10 @@
               <mat-cell *matCellDef="let row"> {{row.precio?.$numberDecimal | currency}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="stock">
+            <!-- <ng-container matColumnDef="stock">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Stock</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{getStock(row._id)}} </mat-cell>
-            </ng-container>
+            </ng-container> -->
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

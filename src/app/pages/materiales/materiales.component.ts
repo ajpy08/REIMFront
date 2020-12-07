@@ -37,7 +37,7 @@ export class MaterialesComponent implements OnInit {
     'unidadMedida',
     'costo',
     'precio',
-    'stock'
+    // 'stock'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
