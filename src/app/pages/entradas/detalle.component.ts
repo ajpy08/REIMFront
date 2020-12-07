@@ -51,7 +51,7 @@ export class DetalleComponent implements OnInit {
     this.createFormGroup();
 
     if (this.detalle) {
-      this.cargarPago(this.detalle);
+      this.cargarDetalle(this.detalle);
     }
 
     // this.socket.on('update-buque', function (data: any) {
@@ -84,7 +84,7 @@ export class DetalleComponent implements OnInit {
     // }.bind(this));
   }
 
-  cargarPago(detalle: DetalleMaterial) {
+  cargarDetalle(detalle: DetalleMaterial) {
     // tslint:disable-next-line: forin
     for (const propiedad in this.detalle) {
       for (const control in this.regForm.controls) {
@@ -121,7 +121,6 @@ export class DetalleComponent implements OnInit {
       detalle.material = this.material.value;
       detalle.cantidad = this.cantidad.value;
       detalle.costo = this.costo.value;
-      detalle.entrada = this.entrada.value;
       this.save(detalle);
     }
   }

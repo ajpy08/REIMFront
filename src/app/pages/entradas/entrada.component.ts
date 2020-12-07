@@ -58,7 +58,7 @@ export class EntradaComponent implements OnInit {
   idSelect;
   indiceSelect;
   ObjetoSelect = [];
-  detallesSelect = new SelectionModel<DetalleMaterial>(true, []);
+  // detallesSelect = new SelectionModel<DetalleMaterial>(true, []);
 
   constructor(
     public entradaService: EntradaService,
@@ -155,14 +155,12 @@ export class EntradaComponent implements OnInit {
                 if (detalles !== undefined) {
 
                   detalles.forEach(det => {
-                    if (det.detalle !== null && det.detalle !== undefined) {
-                      for (const prop in det.detalle) {
-                        if (det.detalle[prop].$numberDecimal) {
-                          det.detalle[prop] = parseFloat(det.detalle[prop].$numberDecimal);
-                        }
+                    for (const prop in det) {
+                      if (det[prop].$numberDecimal) {
+                        det[prop] = parseFloat(det[prop].$numberDecimal);
                       }
-                      this.detalles.push(this.agregarArray(det.detalle));
                     }
+                    this.detalles.push(this.agregarArray(det));
                   });
                 }
               }
@@ -185,17 +183,14 @@ export class EntradaComponent implements OnInit {
 
   agregarArray(doc: DetalleMaterial): FormGroup {
     return this.fb.group({
-      _id: [doc._id],
       material: [doc.material],
       cantidad: [doc.cantidad],
-      costo: [doc.costo],
-      entrada: [doc.entrada]
+      costo: [doc.costo]
     });
   }
 
   guardarEntrada() {
     if (this.regForm.valid) {
-      // console.log(this.regForm.value);
       this.entradaService.guardarEntrada(this.regForm.value)
         .subscribe(res => {
           if (this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined) {
@@ -212,74 +207,56 @@ export class EntradaComponent implements OnInit {
 
   onChange(objeto, indice, event) {
     let pos = 0;
-    this.ObjetoSelect = [];
+    // this.ObjetoSelect = [];
     if (event.checked === true) {
       this.idSelect = objeto;
       this.ObjetoSelect.push({ detalle: objeto, indice: indice });
     } else if (this.ObjetoSelect.length > 0) {
-      pos = this.ObjetoSelect.findIndex(a => a.maniobra.maniobras[0] === objeto.maniobras[0] && a.maniobra._id === objeto._id);
+      pos = this.ObjetoSelect.findIndex(a => a.detalle.material === objeto.material && a.detalle.cantidad === objeto.cantidad);
       this.ObjetoSelect.splice(pos, 1);
-      this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].maniobra;
+      this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].detalle;
+    } else {
+      console.log('Entreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     }
   }
 
-  openDialogDetalle() {
+  openDialogDetalle(detalleEd) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.autoFocus = true;
-    dialogConfig.data = this.detallesSelect;
+    dialogConfig.data = new SelectionModel<DetalleMaterial>(true, detalleEd !== undefined ? detalleEd : undefined);
     const dialogRef = this.matDialog.open(DetalleComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(detalle => {
       if (detalle) {
-        if (this.id !== 'nuevo') {
-          detalle.entrada = this.id;
-          this.detalleMaterialService.guardarDetalleMaterial(detalle).subscribe(() => {
-            this.socket.emit('updateentrada', this.entrada);
-            this.regForm.markAsPristine();
-          });
+        if (detalleEd !== undefined) {
+          const pos = detalleEd[0].indice;
+          if (pos >= 0) {
+            this.detalles.removeAt(pos);
+            this.detalles.push(this.agregarArray(new DetalleMaterial(
+              detalle.material,
+              detalle.cantidad,
+              detalle.costo)));
+          }
         } else {
           this.detalles.push(this.agregarArray(detalle));
-          this.regForm.markAsDirty();
         }
+        this.regForm.markAsDirty();
       }
     });
   }
+  
   quitar(element) {
-    if (this.id !== 'nuevo') {
-      const detalle = element[0].detalle;
-      if (element.length > 1) {
-        if (detalle._id !== '' && detalle._id !== undefined && detalle._id !== null) {
-          swal({
-            title: '¿Esta seguro?',
-            text: 'Esta apunto de borrar a ' + detalle.material.descripcion,
-            icon: 'warning',
-            buttons: true,
-            dangerMode: true
-          }).then(borrar => {
-            if (borrar) {
-              this.detalleMaterialService.borrarDetalleMaterial(detalle).subscribe(detalleEliminado => {
-                this.socket.emit('updateentrada', this.entrada);
-              });
-            }
-          });
-        }
-        else {
-          if (element !== undefined && element.length > 0) {
-            element.forEach(i => {
-              this.detalles.removeAt(i.indice);
-              this.regForm.markAsDirty();
-            });
-          } else {
-            swal('Error', 'Selecciona un detalle', 'error');
-          }
-        }
-        this.ObjetoSelect = [];
-      }
-      else {
-        swal('Error', 'La entrada debe contener por lo menos un detalle', 'error');
-      }
+    if (element !== undefined && element.length > 0) {
+      element.forEach(i => {
+        const pos = this.detalles.value.findIndex(d => d.material === i.detalle.material && d.cantidad === i.detalle.cantidad);
+        this.detalles.removeAt(pos);
+      });
+      this.regForm.markAsDirty();      
+    } else {
+      swal('Error', 'Selecciona un detalle', 'error');
     }
+    this.ObjetoSelect = [];
   }
 
   modifica(detalle) {
@@ -292,10 +269,16 @@ export class EntradaComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(detalleMod => {
         if (detalleMod) {
-          this.detalleMaterialService.guardarDetalleMaterial(detalleMod).subscribe(() => {
-            this.socket.emit('updateentrada', this.entrada);
-            this.regForm.markAsPristine();
-          });
+          // const pos = this.detalles.value.findIndex(d => d.material === detalleMod.material);
+          const pos = detalle[0].indice;
+          if (pos >= 0) {
+            this.detalles.removeAt(pos);
+            this.detalles.push(this.agregarArray(new DetalleMaterial(
+              detalleMod.material,
+              detalleMod.cantidad,
+              detalleMod.costo)));
+            this.regForm.markAsDirty();
+          }
         }
       });
     } else {
