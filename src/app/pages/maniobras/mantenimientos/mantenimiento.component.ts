@@ -1,5 +1,6 @@
+
 import { Component, OnInit, Inject } from '@angular/core';
-import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from '../../../config/config';
+import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
@@ -9,8 +10,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialog} from '@angular/material/dialog';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { Evento } from './evento.models';
-import { ManiobraService } from "../maniobra.service";
+
+import { Mantenimiento } from './mantenimiento.models';
+import { MantenimientoService } from "../../../services/service.index";
+
 
 
 export const MY_FORMATS = {
@@ -26,8 +29,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-evento',
-  templateUrl: './evento.component.html',
+  selector: 'app-mantenimiento',
+  templateUrl: './mantenimiento.component.html',
   styles: [],
   providers: [
     DatePipe,
@@ -40,21 +43,21 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }
   ]
 })
-export class EventoComponent implements OnInit {
+export class MantenimientoComponent implements OnInit {
   usuarioLogueado = new Usuario;
   regForm: FormGroup;
   url: string;
   act = true;
-  evento: Evento = new Evento();
+  mantenimiento: Mantenimiento = new Mantenimiento();
   tiposLavado = TIPOS_LAVADO_ARRAY;
-  tiposEvento = TIPOS_EVENTO_ARRAY;
+  tiposMantenimiento = TIPOS_MANTENIMIENTO_ARRAY;
   
-  eventoAgregar = new SelectionModel<Evento>(true, []);
+  mantenimientoAgregar = new SelectionModel<Mantenimiento>(true, []);
 
   constructor(
-    public dialogRef: MatDialogRef<EventoComponent>,
+    public dialogRef: MatDialogRef<MantenimientoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public _maniobraService: ManiobraService,
+    public _mantenimientoService: MantenimientoService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -63,10 +66,10 @@ export class EventoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.evento = this.data;
+    this.mantenimiento = this.data;
     this.createFormGroup();
-    if (this.evento._id !== 'nuevo') {
-      this.cargarRegistro(this.evento);
+    if (this.mantenimiento._id !== 'nuevo') {
+      this.cargarRegistro(this.mantenimiento);
     } else {
       for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
@@ -76,9 +79,9 @@ export class EventoComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      tipoEvento: ['',[Validators.required]],
+      tipoMantenimiento: ['',[Validators.required]],
       tipoLavado: ['',[Validators.required]],
-      observaciones: [''],
+      observacionesGenerales: [''],
       izquierdo: [''],
       derecho: [''],
       frente: [''],
@@ -90,16 +93,16 @@ export class EventoComponent implements OnInit {
       fechas: this.fb.array([]),
       materiales: this.fb.array([]),
       _id: [''],
-      _idManiobra: ['']
+      Maniobra: ['']
     });
   }
 
-  cargarRegistro(evento: Evento) {
-    this._maniobraService.getEvento(evento._idManiobra,evento._id).subscribe(res => {
-      this.evento = res.evento;
-      this.evento._idManiobra=evento._idManiobra;
-      console.log(this.evento);
-     for (const propiedad in this.evento) 
+  cargarRegistro(mantenimiento: Mantenimiento) {
+    this._mantenimientoService.getMantenimiento(mantenimiento._id).subscribe(res => {
+      this.mantenimiento = res.mantenimiento;
+      this.mantenimiento.maniobra=mantenimiento.maniobra;
+      console.log(this.mantenimiento);
+     for (const propiedad in this.mantenimiento) 
         for (const control in this.regForm.controls) 
           if (propiedad === control.toString()) 
           {
@@ -113,14 +116,14 @@ export class EventoComponent implements OnInit {
 
 
   get tipoEvento() {
-    return this.regForm.get('tipoEvento');
+    return this.regForm.get('tipoMantenimiento');
   }
 
   get tipoLavado() {
     return this.regForm.get('tipoLavado');
   }
   get observaciones() {
-    return this.regForm.get('observaciones');
+    return this.regForm.get('observacionesGenerales');
   }
   get izquiero() {
     return this.regForm.get('izquierdo');
@@ -159,8 +162,8 @@ export class EventoComponent implements OnInit {
   get _id() {
     return this.regForm.get('_id');
   }
-  get _idManiobra() {
-    return this.regForm.get('_idManiobra');
+  get maniobra() {
+    return this.regForm.get('maniobra');
   }
   
   newFecha(fIni='',hIni='', fFin='', hFin=''): FormGroup {
@@ -200,16 +203,16 @@ this.materiales.removeAt(i);
   
 
   guardarRegistro() {
-    this._idManiobra.setValue( this.evento._idManiobra);
+    this.maniobra.setValue( this.mantenimiento.maniobra);
     if (this.regForm.valid) {
       if ( this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined )
-      this._maniobraService.addEvento(this.regForm.value).subscribe(res => {
+      this._mantenimientoService.agregarMantenimiento(this.regForm.value).subscribe(res => {
           this.regForm.get('_id').setValue(res._id);
          
         this.regForm.markAsPristine();
       });
       else
-      this._maniobraService.editaEvento(this.regForm.value).subscribe(res => {
+      this._mantenimientoService.modificaMantenimiento(this.regForm.value).subscribe(res => {
         console.log(res);
        
       this.regForm.markAsPristine();

@@ -1,4 +1,4 @@
-import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from '../../../config/config';
+import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
 import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
@@ -17,8 +17,8 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-import { Evento } from '../eventos/evento.models';
-import { EventoComponent } from '../eventos/evento.component';
+import { MantenimientoComponent } from '../mantenimientos/mantenimiento.component';
+import {MantenimientoService} from '../../../services/service.index'
 import { SelectionModel } from '@angular/cdk/collections';
 @Component({
   selector: 'app-revisar',
@@ -29,8 +29,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class RevisarComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado = TIPOS_LAVADO_ARRAY;
-  tiposEvento = TIPOS_EVENTO_ARRAY;
-  listaEventos;
+  tiposMantenimento = TIPOS_MANTENIMIENTO_ARRAY;
+  listaMantenimientos;
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   coordenadasDisponibles;
@@ -43,6 +43,7 @@ export class RevisarComponent implements OnInit {
 
   constructor(
     public _maniobraService: ManiobraService,
+    public _mantenimientoService: MantenimientoService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
@@ -58,7 +59,7 @@ export class RevisarComponent implements OnInit {
     this.createFormGroup();
     this.cargarManiobra(id);
     this.reparaciones.removeAt(0);
-    this.eventos.removeAt(0);
+    this.mantenimientos.removeAt(0);
     this.historial.removeAt(0);
     this.ObtenCoordenadasDisponibles(id);
     this.url = '/maniobras';
@@ -86,7 +87,7 @@ export class RevisarComponent implements OnInit {
       lavado: [''],
       lavadoObservacion: [''],
       reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
-      eventos: this.fb.array([this.creaEvento('', '', '','','','')]),
+      //eventos: this.fb.array([this.creaEvento('', '', '','','','')]),
       reparacionesObservacion: [''],
       bahia: [''],
       posicion: [''],
@@ -159,8 +160,8 @@ export class RevisarComponent implements OnInit {
   get reparaciones() {
     return this.regForm.get('reparaciones') as FormArray;
   }
-  get eventos() {
-    return this.regForm.get('eventos') as FormArray;
+  get mantenimientos() {
+    return this.regForm.get('mantenimientos') as FormArray;
   }
   get reparacionesObservacion() {
     return this.regForm.get('reparacionesObservacion');
@@ -184,16 +185,7 @@ export class RevisarComponent implements OnInit {
     });
   }
   
-  creaEvento(evento: string, fIni: string,hIni: string, fFin: string, hFin: string, observaciones: string): FormGroup {
-    return this.fb.group({
-      evento: [evento, [Validators.required]],
-      fIni: [fIni, [Validators.required]],
-      hIni: [hIni, [Validators.required]],
-      fFin: [fFin, [Validators.required]],
-      hFin: [hFin, [Validators.required]],
-      observaciones: [observaciones, [Validators.required]]
-    });
-  }
+
 
   addReparacion(item): void {
     const rep = this.tiposReparaciones.find(x => x._id === item);
@@ -258,7 +250,7 @@ export class RevisarComponent implements OnInit {
       if (maniob.maniobra.eventos)
       {
         console.log (maniob.maniobra.eventos)
-        this.listaEventos = maniob.maniobra.eventos;
+        this.listaMantenimientos = maniob.maniobra.eventos;
       }
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
@@ -589,28 +581,28 @@ export class RevisarComponent implements OnInit {
 
   }
 
-  cargaEventos(id:string): void {
-    this._maniobraService.getEventos(id).subscribe(eventos => {
-      console.log(eventos);
-      this.listaEventos = eventos.eventos;
+  cargaMantenimientos(id:string): void {
+    this._mantenimientoService.getMantenimientos(id).subscribe(mantenimientos => {
+      console.log(mantenimientos);
+      this.listaMantenimientos = mantenimientos.mantenimientos;
     });
 
   }
-  openDialogEvento(id: string) {
+  openDialogMantenimiento(id: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {_id:id,_idManiobra:this.regForm.get('_id').value};
-    const dialogRef = this.matDialog.open(EventoComponent, dialogConfig);
+    const dialogRef = this.matDialog.open(MantenimientoComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(detalle => {
       if (detalle) {
-        this.cargaEventos(this.regForm.get('_id').value);
+        this.cargaMantenimientos(this.regForm.get('_id').value);
       }
     });
   }
 
   removeEvento(id: string) {
-    this._maniobraService.removeEvento(this.regForm.get('_id').value,id).subscribe(eventos => {
-      this.cargaEventos(this.regForm.get('_id').value);
+    this._mantenimientoService.eliminaMantenimiento(id).subscribe(eventos => {
+      this.cargaMantenimientos(this.regForm.get('_id').value);
     });
   }
 
