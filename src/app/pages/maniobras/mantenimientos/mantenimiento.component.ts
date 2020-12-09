@@ -12,7 +12,8 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import { Mantenimiento } from './mantenimiento.models';
-import { MantenimientoService } from "../../../services/service.index";
+import { MantenimientoService,MaterialService } from "../../../services/service.index";
+import { Material } from '../../materiales/material.models';
 
 
 
@@ -51,13 +52,15 @@ export class MantenimientoComponent implements OnInit {
   mantenimiento: Mantenimiento = new Mantenimiento();
   tiposLavado = TIPOS_LAVADO_ARRAY;
   tiposMantenimiento = TIPOS_MANTENIMIENTO_ARRAY;
-  
+  listaMateriales: Material[];
+
   mantenimientoAgregar = new SelectionModel<Mantenimiento>(true, []);
 
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public _mantenimientoService: MantenimientoService,
+    public _materialService: MaterialService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -67,14 +70,20 @@ export class MantenimientoComponent implements OnInit {
   ngOnInit() {
 
     this.mantenimiento = this.data;
+    this._materialService.getMateriales(null, true).subscribe(materiales => {
+      this.listaMateriales = materiales.materiales;
+    });
+
     this.createFormGroup();
     if (this.mantenimiento._id !== 'nuevo') {
       this.cargarRegistro(this.mantenimiento);
     } else {
       for (const control in this.regForm.controls) {
+        if (control.toString()!== "fechas" && control.toString()!=="materiales")
         this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
+
   }
 
   createFormGroup() {
@@ -93,7 +102,7 @@ export class MantenimientoComponent implements OnInit {
       fechas: this.fb.array([]),
       materiales: this.fb.array([]),
       _id: [''],
-      Maniobra: ['']
+      maniobra: ['']
     });
   }
 
@@ -107,15 +116,15 @@ export class MantenimientoComponent implements OnInit {
           if (propiedad === control.toString()) 
           {
             if (propiedad=="fechas")
-            res.evento[propiedad].forEach(x=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
+            res.mantenimiento[propiedad].forEach(x=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
             else
-              this.regForm.controls[propiedad].setValue(res.evento[propiedad]);
+              this.regForm.controls[propiedad].setValue(res.mantenimiento[propiedad]);
           }
     });
   }
 
 
-  get tipoEvento() {
+  get tipoMantenimiento() {
     return this.regForm.get('tipoMantenimiento');
   }
 
@@ -203,21 +212,15 @@ this.materiales.removeAt(i);
   
 
   guardarRegistro() {
-    this.maniobra.setValue( this.mantenimiento.maniobra);
+    
+    this.regForm.controls["maniobra"].setValue( this.mantenimiento.maniobra);
     if (this.regForm.valid) {
-      if ( this.regForm.get('_id').value === '' || this.regForm.get('_id').value === undefined )
-      this._mantenimientoService.agregarMantenimiento(this.regForm.value).subscribe(res => {
+      this._mantenimientoService.guardarMantenimiento(this.regForm.value).subscribe(res => {
           this.regForm.get('_id').setValue(res._id);
-         
         this.regForm.markAsPristine();
       });
-      else
-      this._mantenimientoService.modificaMantenimiento(this.regForm.value).subscribe(res => {
-        console.log(res);
-       
-      this.regForm.markAsPristine();
-    });
-    }
+    };
+    
     this.close(this.regForm.value);
   }
 

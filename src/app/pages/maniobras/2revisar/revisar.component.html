@@ -105,15 +105,12 @@
                 <tr>
                   <th scope="row">{{item.tipoMantenimiento}}</th>
                   <td>{{item.tipoLavado}}</td>
-                  <td>{{item.hIni}}</td>
-                  <td>{{item.fFin}}</td>
-                  <td>{{item.hFin}}</td>
-                  <td>{{item.observaciones}}</td>
+                  <td>{{item.observacionesCompleto}}</td>
                   <td>
                     <button matTooltip="Editar Mantenimiento" (click)="openDialogMantenimiento( item._id )" class="btn btn-pramary" type="button">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button (click)="removeEvento( item._id )" class="btn btn-danger" type="button">
+                    <button (click)="removeMantenimiento( item._id )" class="btn btn-danger" type="button">
                       <i class="fas fa-trash"></i>
                     </button>
                   </td>
@@ -126,7 +123,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="true">
+    <!-- <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Lavado
@@ -153,10 +150,6 @@
           </mat-form-field>
         </div>
         <div class="col-md-3">
-          <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
-                  <i class="fas fa-camera-retro"></i>
-                  Fotos Lavado
-                </button> -->
           <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
             <i class="fas fa-camera-retro"></i>
             Fotos Lavado
@@ -164,9 +157,9 @@
         </div>
       </div>
 
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
 
-
+    <!-- 
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -191,11 +184,6 @@
           </button>
           <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success m-r-5"> <i
               class="fa fa-check"></i> Añadir</button>
-          <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Reparación
-            </button> -->
-
           <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
             <i class="fas fa-camera-retro"></i>
             Fotos Reparacion
@@ -233,7 +221,7 @@
           </mat-form-field>
         </div>
       </div>
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>

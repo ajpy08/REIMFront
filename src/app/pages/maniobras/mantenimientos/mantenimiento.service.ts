@@ -5,7 +5,8 @@ import { UsuarioService } from '../../usuarios/usuario.service';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
-import { Mantenimiento } from '../mantenimientos/mantenimiento.models';
+
+import { Mantenimiento } from './mantenimiento.models';
 
 @Injectable()
 export class MantenimientoService {
@@ -18,30 +19,35 @@ export class MantenimientoService {
   ) { }
 
 
-  agregarMantenimiento(mantenimiento: Mantenimiento): Observable<any> {
-    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/';
-    url += '?token=' + this._usuarioService.token;
-    return this.http.put(url,{mantenimiento})
-      .pipe(map((resp: any) => {
-        swal('Mantenimiento Agregado con exito', 'success');
-        return resp;
-      }));
-  }
-
-  modificaMantenimiento(mantenimiento: Mantenimiento): Observable<any> {
-    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + mantenimiento._id ;
-    url += '?token=' + this._usuarioService.token;
-    return this.http.put(url,{mantenimiento})
-      .pipe(map((resp: any) => {
-        swal('Manteniminento Editado con exito', 'success');
-        return resp;
-      }));
+  guardarMantenimiento(mantenimiento: Mantenimiento): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento';
+    if (mantenimiento._id) {
+      // actualizando
+      url += '/' + mantenimiento._id;
+      url += '?token=' + this._usuarioService.token;
+      
+      return this.http.put(url, {mantenimiento}).pipe(
+        map((resp: any) => {
+          swal('Mantenimiento Actualizado', mantenimiento.tipoMantenimiento, 'success');
+          return resp.mantenimiento;
+        })
+      );
+    } else {
+      // creando
+      url += '?token=' + this._usuarioService.token;
+      return this.http.post(url, mantenimiento).pipe(
+        map((resp: any) => {
+          swal('Mantenimiento Creado', mantenimiento.tipoMantenimiento, 'success');
+          return resp.mantenimiento;
+        })
+      );
+    }
   }
 
   eliminaMantenimiento(idMantenimiento: string): Observable<any> {
-    let url = URL_SERVICIOS + '/mantenimientos/mantenimientos/' + idMantenimiento;
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento;
     url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, '')
+    return this.http.delete(url )
       .pipe(map((resp: any) => {
         swal('Mantenimiento Eliminado', 'success');
         return resp;

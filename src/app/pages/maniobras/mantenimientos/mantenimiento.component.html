@@ -2,20 +2,20 @@
   <div class="col-md">
     <div class="card card-body">
       <mat-dialog-content>
-        <h3 class="box-title m-b-0">Evento de Maniobra</h3><br>
+        <h3 class="box-title m-b-0">Mantenimientos de Contenedor</h3><br>
         <div class="row">
           <div class="col-sm-12 col-xs-12">
             <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
               <div class="my-container">
                 <!--========Mat-Select Materiales=========-->
                 <mat-form-field>
-                  <mat-select placeholder="Seleccione un Evento" formControlName="tipoEvento" name="tipoEvento">
-                    <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
-                      {{ evento.descripcion }}
+                  <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento" name="tipoMantenimiento">
+                    <mat-option *ngFor="let mantenimiento of tiposMantenimiento" [value]="mantenimiento.id">
+                      {{ mantenimiento.descripcion }}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="tipoEvento.touched && tipoEvento.invalid">
-                    <sup>*</sup>Por Favor seleccionar un tipo de evento
+                  <mat-error *ngIf="tipoMantenimiento.touched && tipoMantenimiento.invalid">
+                    <sup>*</sup>Por Favor seleccionar un tipo de Mantenimiento
                   </mat-error>
                 </mat-form-field>
                 <!--=========================================-->
@@ -28,11 +28,8 @@
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field>
-                  <mat-label>Observaciones</mat-label>
-                  <textarea matInput formControlName="observaciones" name="observaciones" class="form-control" rows="3" cols="40" placeholder="Observaciones"></textarea>
-                  <mat-error *ngIf="observaciones.touched && observaciones.invalid">
-                    <sup>*</sup>Por Favor ingrese observaciones
-                  </mat-error>
+                  <mat-label>Observaciones Generales</mat-label>
+                  <textarea matInput formControlName="observacionesGenerales" name="observacionesGenerales" class="form-control" rows="3" cols="40" placeholder="ObservacionesGenerales"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Izquierdo</mat-label>
@@ -112,9 +109,9 @@
 
                 Materiales:
 
-                <mat-select placeholder="Seleccione un Material" formControlName="tipoEvento" name="tipoEvento">
-                  <mat-option *ngFor="let evento of tiposEvento" [value]="evento.id">
-                    {{ evento.descripcion }}
+                <mat-select placeholder="Seleccione un Material" name="material">
+                  <mat-option *ngFor="let material of listaMateriales" [value]="material._id">
+                    {{ material.descripcion }}
                   </mat-option>
                 </mat-select>
 
