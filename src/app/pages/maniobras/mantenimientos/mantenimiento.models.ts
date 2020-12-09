@@ -16,7 +16,8 @@ export class Mantenimiento {
       public puerta?: string,
       public observacionesCompleto?: string,
       public fechas?:[{fIni?: string, hIni?: string, fFin?: string, hFin?: string}],
-      public materiales?:[{material?: string, descripcion?: string, cantidad?: number, costo?: number, precio?:number}],
+      public materiales?:[{material?: string, descripcion?: string, cantidad?: number, costo?: number, precio?:{}}],
+      public finalizado?: boolean
   ) {}
 
 }

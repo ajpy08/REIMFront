@@ -91,21 +91,25 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="form-group">
             <table matNativeControl class="table table-striped">
               <thead>
                 <tr>
                   <th scope="col">Mantenimiento</th>
-                  <th scope="col">Tipo</th>
                   <th scope="col">Observaciones</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Cambio Grado</th>
+                  <th scope="col">Finalizado</th>
                 </tr>
               </thead>
               <tbody *ngFor="let item of listaMantenimientos; let i = index;">
                 <tr>
                   <th scope="row">{{item.tipoMantenimiento}}</th>
-                  <td>{{item.tipoLavado}}</td>
                   <td>{{item.observacionesCompleto}}</td>
+                  <td>{{item.tipoLavado}}</td>
+                  <td>{{item.cambioGrado}}</td>
+                  <td>{{item.finalizado}}</td>
                   <td>
                     <button matTooltip="Editar Mantenimiento" (click)="openDialogMantenimiento( item._id )" class="btn btn-pramary" type="button">
                       <i class="fas fa-edit"></i>

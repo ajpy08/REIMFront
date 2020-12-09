@@ -7,7 +7,7 @@
           <div class="col-sm-12 col-xs-12">
             <form [formGroup]="regForm" novalidate>
               <div class="my-container">
-                <!--========Mat-Select Materiales=========-->
+
                 <mat-form-field>
                   <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento" name="tipoMantenimiento" (selectionChange)="onChangeTipoMantenimiento($event)">
                     <mat-option *ngFor="let mantenimiento of tiposMantenimiento" [value]="mantenimiento.id">
@@ -18,24 +18,25 @@
                     <sup>*</sup>Por Favor seleccionar un tipo de Mantenimiento
                   </mat-error>
                 </mat-form-field>
-                <!--=========================================-->
-                <mat-form-field>
-                  <mat-label>Tipo Lavado</mat-label>
-                  <mat-select formControlName="tipoLavado" tabindex="1">
-                    <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
-                      {{tipo.descripcion}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                <div *ngIf="this.tipoLavado.enabled">
+                  <mat-form-field>
+                    <mat-label>Tipo Lavado</mat-label>
+                    <mat-select formControlName="tipoLavado" tabindex="1">
+                      <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                        {{tipo.descripcion}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div *ngIf="this.cambioGrado.enabled">
+                  <mat-checkbox formControlName="cambioGrado" name="cambioGrado">
+                    cambio de Grado
+                  </mat-checkbox>
+                </div>
 
-
-
-                <mat-checkbox formControlName="cambioGrado" name="cambioGrado">
-                  cambio de Grado
+                <mat-checkbox formControlName="finalizado" name="finalizado">
+                  Finalizado
                 </mat-checkbox>
-
-
-
 
                 <mat-form-field>
                   <mat-label>Observaciones Generales</mat-label>
@@ -85,9 +86,9 @@
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Fecha Inicio</mat-label>
-                            <input matInput formControlName="fIni" name="fIni" type="text" placeholder="Fecha Inicio" [matDatepicker]="PICK">
-                            <mat-datepicker-toggle matSuffix [for]="PICK"></mat-datepicker-toggle>
-                            <mat-datepicker #PICK></mat-datepicker>
+                            <input matInput formControlName="fIni" name="fIni" type="text" placeholder="Fecha Inicio" [matDatepicker]="pick">
+                            <mat-datepicker-toggle matSuffix [for]="pick"></mat-datepicker-toggle>
+                            <mat-datepicker #pick></mat-datepicker>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
@@ -99,15 +100,15 @@
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Fecha Inicio</mat-label>
-                            <input matInput formControlName="fFin" name="fFin" type="text" placeholder="Fecha Final" [matDatepicker]="PICKF">
-                            <mat-datepicker-toggle matSuffix [for]="PICKF"></mat-datepicker-toggle>
-                            <mat-datepicker #PICKF></mat-datepicker>
+                            <input matInput formControlName="fFin" name="fFin" type="text" placeholder="Fecha Final" [matDatepicker]="pickf">
+                            <mat-datepicker-toggle matSuffix [for]="pickf"></mat-datepicker-toggle>
+                            <mat-datepicker #pickf></mat-datepicker>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Hora Fin</mat-label>
-                            <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización">
+                            <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización" (focus)="ponHora($event)">
                           </mat-form-field>
                         </div>
                         <div class="col-md-2"><button (click)="removeFecha(i)">Remove</button></div>
@@ -119,15 +120,19 @@
 
                 Materiales:
 
-                <mat-select placeholder="Seleccione un Material" name="material">
+                <mat-select placeholder="Seleccione un Material" name="Material" #Material>
                   <mat-option *ngFor="let material of listaMateriales" [value]="material._id">
                     {{ material.descripcion }}
                   </mat-option>
                 </mat-select>
 
                 <p>
-                  <button type="button" (click)="addMaterial()">Add</button>
+                  <button type="button" (click)="addMaterial2(Material.value)">Add</button>
                 </p>
+
+
+
+
                 <div formArrayName="materiales">
                   <div *ngFor="let material of this.materiales.controls; let i=index">
                     <div [formGroupName]="i">

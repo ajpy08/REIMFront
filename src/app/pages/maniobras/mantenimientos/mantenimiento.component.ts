@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
@@ -14,8 +14,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material
 import { Mantenimiento } from './mantenimiento.models';
 import { MantenimientoService,MaterialService } from "../../../services/service.index";
 import { Material } from '../../materiales/material.models';
+import * as _moment from 'moment';
 
-
+const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
@@ -102,6 +103,7 @@ export class MantenimientoComponent implements OnInit {
       puerta: [''],
       fechas: this.fb.array([]),
       materiales: this.fb.array([]),
+      finalizado: [false],
       _id: [''],
       maniobra: ['']
     });
@@ -117,8 +119,13 @@ export class MantenimientoComponent implements OnInit {
             if (propiedad=="fechas")
             res.mantenimiento[propiedad].forEach((x: { fIni: string; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
             else{
+              if (propiedad=="materiales"){
+                res.mantenimiento[propiedad].forEach((x: { material: string; descripcion: string; costo: { $numberDecimal: number; }; precio: { $numberDecimal: number; }; cantidad: number; }) => {this.addMaterial(x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
+              }
+              else{
               this.regForm.controls[propiedad].enable({ onlySelf: true });
               this.regForm.controls[propiedad].setValue(res.mantenimiento[propiedad]);
+              }
             }
               
 
@@ -138,10 +145,10 @@ export class MantenimientoComponent implements OnInit {
   get cambioGrado() {
     return this.regForm.get('cambioGrado');
   }  
-  get observaciones() {
+  get observacionesGenerales() {
     return this.regForm.get('observacionesGenerales');
   }
-  get izquiero() {
+  get izquierdo() {
     return this.regForm.get('izquierdo');
   }
   get derecho() {
@@ -174,7 +181,9 @@ export class MantenimientoComponent implements OnInit {
   get materiales() : FormArray {
     return this.regForm.get("materiales") as FormArray
   }
-
+  get finalizado() {
+    return this.regForm.get('finalizado');
+  }
   get _id() {
     return this.regForm.get('_id');
   }
@@ -182,7 +191,7 @@ export class MantenimientoComponent implements OnInit {
     return this.regForm.get('maniobra');
   }
   
-  newFecha(fIni='',hIni='', fFin='', hFin=''): FormGroup {
+  newFecha(fIni=moment().startOf('day'),hIni='', fFin='', hFin=''): FormGroup {
     return this.fb.group({
       fIni: fIni,
       hIni: hIni,
@@ -191,7 +200,7 @@ export class MantenimientoComponent implements OnInit {
     })
   }
  
- addFecha(fIni='',hIni='', fFin='', hFin='') {
+ addFecha(fIni=moment().startOf('day'),hIni='', fFin='', hFin='') {
   this.fechas.push(this.newFecha(fIni,hIni,fFin,hFin));
  }
 
@@ -205,12 +214,33 @@ export class MantenimientoComponent implements OnInit {
     descripcion: descripcion,
     costo: costo,
     precio: precio,
-    cantidad: cantidad
+    cantidad: [{value:cantidad}, [this.checaStock("cantidad")]]
   })
+}
+
+checaStock(controlKey: string) {
+  return (control: AbstractControl): { [s: string]: boolean } => {
+    // control.parent es el FormGroup
+    if (this.regForm) { // en las primeras llamadas control.parent es undefined
+      const checkValue = this.regForm.controls[controlKey].value;
+      if (control.value !== checkValue) {
+        return {
+          match: true
+        };
+      }
+    }
+    return null;
+  };
 }
 
 addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
   this.materiales.push(this.newMaterial(material,descripcion,costo, precio, cantidad));
+}
+
+addMaterial2(id:String) {
+  const rep = this.listaMateriales.find(x => x._id === id);
+  console.log(rep);
+  this.materiales.push(this.newMaterial(rep._id,rep.descripcion,rep.costo.$numberDecimal,rep.precio.$numberDecimal, 1));
 }
 
 removeMaterial(i:number) {
@@ -241,17 +271,21 @@ onChangeTipoMantenimiento(event: { value: string; }) {
       this.tipoLavado.disable({ onlySelf: true });
     }
     if (event.value==='A') {
+
+      if (this.cambioGrado.value===undefined)
+        this.regForm.controls["cambioGrado"].setValue(false);
       this.cambioGrado.enable({ onlySelf: true });
     } else {
       this.cambioGrado.disable({ onlySelf: true });
     }
   }
 
-  // ponHoraIni() {
-  //   if (this.hIni.value === undefined || this.hIni.value === '') {
-  //     this.hIni.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
-  //   }
-  // }
+  ponHora(event: any) {
+    console.log(event);
+    // if (this.hIni.value === undefined || this.hIni.value === '') {
+    //   this.hIni.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
+    // }
+  }
   // ponHoraFin() {
   //   if (this.hFin.value === undefined || this.hFin.value === '') {
   //     this.hFin.setValue(this.datePipe.transform(new Date(), 'HH:mm'));
