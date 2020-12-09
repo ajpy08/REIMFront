@@ -40,6 +40,12 @@ export class MaterialService {
       .pipe(map((resp: any) => resp.material));
   }
 
+  getValidaCostoPrecio(): Observable<any> {
+    let url = URL_SERVICIOS + '/materiales/costo-precio/';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   getStockMaterial(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/materiales/material/stock/' + id;
     url += '?token=' + this._usuarioService.token;
