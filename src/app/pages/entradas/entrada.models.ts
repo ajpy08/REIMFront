@@ -3,7 +3,7 @@ export class Entrada {
         public noFactura?: string,
         public proveedor?: string,
         public fFactura?: number,
-        public detalles?: [],
+        public detalles?: any[],
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,
