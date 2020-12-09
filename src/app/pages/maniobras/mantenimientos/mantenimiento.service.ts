@@ -35,7 +35,7 @@ export class MantenimientoService {
     } else {
       // creando
       url += '?token=' + this._usuarioService.token;
-      return this.http.post(url, mantenimiento).pipe(
+      return this.http.post(url,{mantenimiento}).pipe(
         map((resp: any) => {
           swal('Mantenimiento Creado', mantenimiento.tipoMantenimiento, 'success');
           return resp.mantenimiento;

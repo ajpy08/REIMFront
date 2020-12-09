@@ -5,11 +5,11 @@
         <h3 class="box-title m-b-0">Mantenimientos de Contenedor</h3><br>
         <div class="row">
           <div class="col-sm-12 col-xs-12">
-            <form [formGroup]="regForm" (ngSubmit)="guardarRegistro()" novalidate>
+            <form [formGroup]="regForm" novalidate>
               <div class="my-container">
                 <!--========Mat-Select Materiales=========-->
                 <mat-form-field>
-                  <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento" name="tipoMantenimiento">
+                  <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento" name="tipoMantenimiento" (selectionChange)="onChangeTipoMantenimiento($event)">
                     <mat-option *ngFor="let mantenimiento of tiposMantenimiento" [value]="mantenimiento.id">
                       {{ mantenimiento.descripcion }}
                     </mat-option>
@@ -27,6 +27,16 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+
+
+
+                <mat-checkbox formControlName="cambioGrado" name="cambioGrado">
+                  cambio de Grado
+                </mat-checkbox>
+
+
+
+
                 <mat-form-field>
                   <mat-label>Observaciones Generales</mat-label>
                   <textarea matInput formControlName="observacionesGenerales" name="observacionesGenerales" class="form-control" rows="3" cols="40" placeholder="ObservacionesGenerales"></textarea>
@@ -157,9 +167,9 @@
               <br><br>
               <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10" (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid">
                 <i class="fa fa-save"></i>
-                Agregar
+                Guardar
               </button>
-              <button class="btn btn-danger waves-effect waves-light" (click)="close(undefined)">Close</button>
+              <button type="button" class="btn btn-danger waves-effect waves-light" (click)="close(undefined)">Close</button>
             </form>
           </div>
         </div>

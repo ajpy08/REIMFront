@@ -89,7 +89,8 @@ export class MantenimientoComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       tipoMantenimiento: ['',[Validators.required]],
-      tipoLavado: ['',[Validators.required]],
+      tipoLavado: [{value:'B',disabled: true}, [Validators.required]],
+      cambioGrado: [{value:false,disabled: true}],
       observacionesGenerales: [''],
       izquierdo: [''],
       derecho: [''],
@@ -110,15 +111,17 @@ export class MantenimientoComponent implements OnInit {
     this._mantenimientoService.getMantenimiento(mantenimiento._id).subscribe(res => {
       this.mantenimiento = res.mantenimiento;
       this.mantenimiento.maniobra=mantenimiento.maniobra;
-      console.log(this.mantenimiento);
      for (const propiedad in this.mantenimiento) 
         for (const control in this.regForm.controls) 
-          if (propiedad === control.toString()) 
-          {
+          if (propiedad === control.toString()) {         
             if (propiedad=="fechas")
-            res.mantenimiento[propiedad].forEach(x=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
-            else
+            res.mantenimiento[propiedad].forEach((x: { fIni: string; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
+            else{
+              this.regForm.controls[propiedad].enable({ onlySelf: true });
               this.regForm.controls[propiedad].setValue(res.mantenimiento[propiedad]);
+            }
+              
+
           }
     });
   }
@@ -131,6 +134,10 @@ export class MantenimientoComponent implements OnInit {
   get tipoLavado() {
     return this.regForm.get('tipoLavado');
   }
+
+  get cambioGrado() {
+    return this.regForm.get('cambioGrado');
+  }  
   get observaciones() {
     return this.regForm.get('observacionesGenerales');
   }
@@ -209,19 +216,35 @@ addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
 removeMaterial(i:number) {
 this.materiales.removeAt(i);
 }
+
+guardarRegistro() {
+  this.regForm.controls["maniobra"].setValue( this.mantenimiento.maniobra);
+  if (this.regForm.valid) {
+    this._mantenimientoService.guardarMantenimiento(this.regForm.value).subscribe(res => {
+        this.regForm.get('_id').setValue(res._id);
+      this.regForm.markAsPristine();
+    });
+    this.close(this.regForm.value);
+  };
+}
+
   
 
-  guardarRegistro() {
-    
-    this.regForm.controls["maniobra"].setValue( this.mantenimiento.maniobra);
-    if (this.regForm.valid) {
-      this._mantenimientoService.guardarMantenimiento(this.regForm.value).subscribe(res => {
-          this.regForm.get('_id').setValue(res._id);
-        this.regForm.markAsPristine();
-      });
-    };
-    
-    this.close(this.regForm.value);
+  
+onChangeTipoMantenimiento(event: { value: string; }) {
+    if (event.value==='L') {
+      if (this.tipoLavado.value==='' || this.tipoLavado.value===undefined)
+        this.regForm.controls["tipoLavado"].setValue("B");
+      this.tipoLavado.enable({ onlySelf: true });
+      
+    } else {
+      this.tipoLavado.disable({ onlySelf: true });
+    }
+    if (event.value==='A') {
+      this.cambioGrado.enable({ onlySelf: true });
+    } else {
+      this.cambioGrado.disable({ onlySelf: true });
+    }
   }
 
   // ponHoraIni() {
@@ -235,7 +258,7 @@ this.materiales.removeAt(i);
   //   }
   // }
 
-  close(result) {
+  close(result: any) {
     this.dialogRef.close(result);
   }
   

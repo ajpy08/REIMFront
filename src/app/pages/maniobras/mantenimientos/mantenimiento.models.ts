@@ -4,6 +4,7 @@ export class Mantenimiento {
       public maniobra?: string,
       public tipoMantenimiento?: string,
       public tipoLavado?: string,
+      public cambioGrado?: boolean,
       public observacionesGenerales?: string,
       public izquierdo?: string,
       public derecho?: string,
