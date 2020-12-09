@@ -1,3 +1,5 @@
+import { MaterialService } from './../../pages/materiales/material.service';
+import { Material } from './../../pages/materiales/material.models';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { ManiobraService, FacturacionService, UsuarioService } from 'src/app/services/service.index';
 import { AgenciaService } from './../../pages/agencias/agencia.service';
@@ -30,19 +32,26 @@ export class HeaderComponent implements OnInit {
     private maniobraService: ManiobraService,
     public router: Router,
     public facturacionService: FacturacionService,
-    public usuarioService: UsuarioService) { }
+    public usuarioService: UsuarioService,
+    public materialService: MaterialService) { }
 
   ngOnInit() {
 
     this.usuario = this._usuarioService.usuario;
 
-    this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
-      this.doSolicitudesNotifications(resp.solicitudes);
-    });
+    this.recargaNotificaciones();
 
-    this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
-      this.doSolicitudesNotifications(resp.solicitudes);
-    });
+    // this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+    //   this.doSolicitudesNotifications(resp.solicitudes);
+    // });
+
+    // this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
+    //   this.doSolicitudesNotifications(resp.solicitudes);
+    // });
+
+    // this.materialService.getValidaCostoPrecio().subscribe(materiales => {
+    //   this.ValidaCostoPrecioMaterial(materiales.materiales);
+    // });
 
     if (this.usuario.role === 'TRANSPORTISTA_ROLE') {
       this.usuario.empresas.forEach(empresa => {
@@ -76,6 +85,19 @@ export class HeaderComponent implements OnInit {
       });
     }
 
+    this.socket.on('new-entrada', function (data: any) {
+      this.recargaNotificaciones();
+    }.bind(this));
+
+    this.socket.on('update-entrada', function (data: any) {
+      this.recargaNotificaciones();
+    }.bind(this));
+
+    this.socket.on('update-material', function (data: any) {
+      this.recargaNotificaciones();
+    }.bind(this));
+    
+
     this.socket.on('new-solicitud', function (data: any) {
       if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
         const tempArray: Notification[] = [];
@@ -83,7 +105,6 @@ export class HeaderComponent implements OnInit {
         this.doSolicitudesNotifications(tempArray);
       }
     }.bind(this));
-
 
     this.socket.on('delete-solicitud', function (data: any) {
       if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
@@ -305,6 +326,7 @@ export class HeaderComponent implements OnInit {
       }
     }.bind(this));
 
+    /* #region  tmp */
     // this.socket.on('update-papeleta', function (data: any) {
     //   if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
     //     this.notifications = [];
@@ -344,7 +366,48 @@ export class HeaderComponent implements OnInit {
     //     }
     //   }
     // }.bind(this));
+    /* #endregion */
 
+  }
+
+  recargaNotificaciones () {
+    this.notifications = [];
+    this.solicitudesService.getSolicitudes('C', 'NA').subscribe(resp => {
+      this.doSolicitudesNotifications(resp.solicitudes);
+    });
+
+    this.solicitudesService.getSolicitudes('D', 'NA').subscribe(resp => {
+      this.doSolicitudesNotifications(resp.solicitudes);
+    });
+
+    this.materialService.getValidaCostoPrecio().subscribe(materiales => {
+      this.ValidaCostoPrecioMaterial(materiales.materiales);
+    });
+  }
+
+  ValidaCostoPrecioMaterial(materiales) {
+    if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+      materiales.forEach(material => {
+        const tempArray: Notification[] = [];
+        tempArray.push(material);
+        this.doMaterialNotification(tempArray);
+      });
+    }
+  }
+
+  // este me sirve para los sockets
+  ValidaCostoPrecioMaterial2(detalles) {
+    if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+      const tempArray: Notification[] = [];
+      detalles.forEach(det => {
+        this.materialService.getMaterial(det.material).subscribe(material => {
+          if (material.precio <= material.costo) {
+            tempArray.push(material);
+            this.doMaterialNotification(tempArray);
+          }
+        });
+      });
+    }
   }
 
   cargarUsuario(id: string) {
@@ -478,6 +541,22 @@ export class HeaderComponent implements OnInit {
         }
       }
     }
+  }
+
+  doMaterialNotification(materiales) {
+    materiales.forEach(material => {
+      if (this.usuario.role === ROLES.ADMIN_ROLE || this.usuario.role === ROLES.PATIOADMIN_ROLE) {
+        const notify = new Notification;
+        const tipo = 'Material';
+        notify.name = 'Debes actualizar el precio de ' + material.descripcion;
+        notify.description = 'El Precio P. es menor/igual que el Costo ';
+        notify.fAlta = material.fMod;
+        notify._id = material._id;
+        notify.url = `https://reimcontainerpark.com.mx/#/materiales/material/${material._id}`;
+
+        this.notifications.push(notify);
+      }
+    });
   }
 
   logout() {

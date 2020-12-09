@@ -39,34 +39,34 @@ export class DetalleMaterialService {
   //     .pipe(map((resp: any) => resp.detalleMaterial));
   // }
 
-  guardarDetalleMaterial(detalleMaterial: DetalleMaterial): Observable<any> {
-    let url = URL_SERVICIOS + '/detalles/detalle';
-    if (detalleMaterial._id) {
-      // actualizando
-      url += '/' + detalleMaterial._id;
-      url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, detalleMaterial)
-        .pipe(map((resp: any) => {
-          swal('DetalleMaterial Actualizado', detalleMaterial.material.descripcion, 'success');
-          return resp.detalleMaterial;
-        }));
-    } else {
-      // creando
-      url += '?token=' + this._usuarioService.token;
-      return this.http.post(url, detalleMaterial)
-        .pipe(map((resp: any) => {
-          swal('DetalleMaterial Creado', detalleMaterial.material.descripcion, 'success');
-          return resp.detalleMaterial;
-        }));
-    }
-  }
+  // guardarDetalleMaterial(detalleMaterial: DetalleMaterial): Observable<any> {
+  //   let url = URL_SERVICIOS + '/detalles/detalle';
+  //   if (detalleMaterial._id) {
+  //     // actualizando
+  //     url += '/' + detalleMaterial._id;
+  //     url += '?token=' + this._usuarioService.token;
+  //     return this.http.put(url, detalleMaterial)
+  //       .pipe(map((resp: any) => {
+  //         swal('DetalleMaterial Actualizado', detalleMaterial.material.descripcion, 'success');
+  //         return resp.detalleMaterial;
+  //       }));
+  //   } else {
+  //     // creando
+  //     url += '?token=' + this._usuarioService.token;
+  //     return this.http.post(url, detalleMaterial)
+  //       .pipe(map((resp: any) => {
+  //         swal('DetalleMaterial Creado', detalleMaterial.material.descripcion, 'success');
+  //         return resp.detalleMaterial;
+  //       }));
+  //   }
+  // }
 
-  borrarDetalleMaterial(detalleMaterial: DetalleMaterial): Observable<any> {
-    let url = URL_SERVICIOS + '/detalles/detalle/' + detalleMaterial._id;
-    url += '?token=' + this._usuarioService.token;
-    return this.http.delete(url)
-      .pipe(map(resp => swal('DetalleMaterial Borrado', 'Eliminado correctamente', 'success')),
-      );
-  }
+  // borrarDetalleMaterial(detalleMaterial: DetalleMaterial): Observable<any> {
+  //   let url = URL_SERVICIOS + '/detalles/detalle/' + detalleMaterial._id;
+  //   url += '?token=' + this._usuarioService.token;
+  //   return this.http.delete(url)
+  //     .pipe(map(resp => swal('DetalleMaterial Borrado', 'Eliminado correctamente', 'success')),
+  //     );
+  // }
 
 }
