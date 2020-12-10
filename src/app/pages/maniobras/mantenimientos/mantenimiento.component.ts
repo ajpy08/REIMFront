@@ -16,6 +16,7 @@ import { MantenimientoService,MaterialService } from "../../../services/service.
 import { Material } from '../../materiales/material.models';
 import * as _moment from 'moment';
 
+
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -117,10 +118,10 @@ export class MantenimientoComponent implements OnInit {
         for (const control in this.regForm.controls) 
           if (propiedad === control.toString()) {         
             if (propiedad=="fechas")
-            res.mantenimiento[propiedad].forEach((x: { fIni: string; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
+            res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
             else{
               if (propiedad=="materiales"){
-                res.mantenimiento[propiedad].forEach((x: { material: string; descripcion: string; costo: { $numberDecimal: number; }; precio: { $numberDecimal: number; }; cantidad: number; }) => {this.addMaterial(x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
+                res.mantenimiento[propiedad].forEach((x: any) => {this.addMaterial(x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
               }
               else{
               this.regForm.controls[propiedad].enable({ onlySelf: true });
@@ -214,7 +215,7 @@ export class MantenimientoComponent implements OnInit {
     descripcion: descripcion,
     costo: costo,
     precio: precio,
-    cantidad: [{value:cantidad}, [this.checaStock("cantidad")]]
+    cantidad: [cantidad, [this.checaStock("cantidad")]]
   })
 }
 

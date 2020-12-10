@@ -2,8 +2,8 @@ export class Material {
     constructor(
         public descripcion?: string,
         public unidadMedida?: string,
-        public costo?: number,
-        public precio?: number,
+        public costo?: any,
+        public precio?: any,
         public activo?: Boolean,
         public tipo?: string,
         public minimo?: number,
