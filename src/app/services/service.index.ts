@@ -26,6 +26,7 @@ export { UnidadService } from '../services/shared/unidades.service';
 export { EntradaService } from '../pages/entradas/entrada.service';
 export { DetalleMaterialService } from '../pages/entradas/detalleMaterial.service';
 export { ProveedorService } from '../pages/proveedores/proveedor.service';
+export {MantenimientoService} from '../pages/maniobras/mantenimientos/mantenimiento.service'
 
 // Guards
 export { LoginGuard } from './guards/login-guard';

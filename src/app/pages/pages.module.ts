@@ -170,7 +170,7 @@ import { DetalleComponent } from './entradas/detalle.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
-import { EventoComponent } from './maniobras/eventos/evento.component';
+import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
 
 
 @NgModule({
@@ -275,7 +275,7 @@ import { EventoComponent } from './maniobras/eventos/evento.component';
         DetalleComponent,
         ProveedorComponent,
         ProveedoresComponent,
-        EventoComponent
+        MantenimientoComponent
      ],
     exports: [
         DashboardComponent

@@ -1,6 +1,5 @@
-import { TIPOS_LAVADO_ARRAY, TIPOS_EVENTO_ARRAY } from '../../../config/config';
+import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
 import { Component, OnInit, ViewChild, ɵConsole } from '@angular/core';
-import { Lavado } from '../../../models/lavado.models';
 import { ManiobraService } from '../../../services/service.index';
 import { Reparacion } from '../../reparaciones/reparacion.models';
 import { ReparacionService } from '../../reparaciones/reparacion.service';
@@ -8,18 +7,15 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractCon
 import { Router, ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ETAPAS_MANIOBRA, GRADOS_CONTENEDOR_ARRAY } from '../../../config/config';
-import { Location } from '@angular/common';
 import swal from 'sweetalert';
 import { Coordenada } from 'src/app/models/coordenada.models';
 import { CoordenadaService } from '../coordenada.service';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { ReparacionComponent } from '../../reparaciones/reparacion.component';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-import { Evento } from '../eventos/evento.models';
-import { EventoComponent } from '../eventos/evento.component';
-import { SelectionModel } from '@angular/cdk/collections';
+import { MantenimientoComponent } from '../mantenimientos/mantenimiento.component';
+import {MantenimientoService} from '../../../services/service.index'
 @Component({
   selector: 'app-revisar',
   templateUrl: './revisar.component.html',
@@ -29,8 +25,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class RevisarComponent implements OnInit {
   regForm: FormGroup;
   tiposLavado = TIPOS_LAVADO_ARRAY;
-  tiposEvento = TIPOS_EVENTO_ARRAY;
-  listaEventos;
+  tiposMantenimento = TIPOS_MANTENIMIENTO_ARRAY;
+  listaMantenimientos;
   grados = GRADOS_CONTENEDOR_ARRAY;
   tiposReparaciones: Reparacion[] = [];
   coordenadasDisponibles;
@@ -43,6 +39,7 @@ export class RevisarComponent implements OnInit {
 
   constructor(
     public _maniobraService: ManiobraService,
+    public _mantenimientoService: MantenimientoService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     public _reparacionService: ReparacionService,
@@ -54,11 +51,9 @@ export class RevisarComponent implements OnInit {
 
   ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.cargarTiposReparaciones();
+    
     this.createFormGroup();
     this.cargarManiobra(id);
-    this.reparaciones.removeAt(0);
-    this.eventos.removeAt(0);
     this.historial.removeAt(0);
     this.ObtenCoordenadasDisponibles(id);
     this.url = '/maniobras';
@@ -83,11 +78,6 @@ export class RevisarComponent implements OnInit {
       hDescarga: [''],
       descargaAutorizada: [{ value: '', disabled: true }],
       grado: [''],
-      lavado: [''],
-      lavadoObservacion: [''],
-      reparaciones: this.fb.array([this.creaReparacion('', '', 0)]),
-      eventos: this.fb.array([this.creaEvento('', '', '','','','')]),
-      reparacionesObservacion: [''],
       bahia: [''],
       posicion: [''],
       // historial: this.fb.array([this.agregarArray(new Coordenada)], { validators: Validators.required })
@@ -159,9 +149,7 @@ export class RevisarComponent implements OnInit {
   get reparaciones() {
     return this.regForm.get('reparaciones') as FormArray;
   }
-  get eventos() {
-    return this.regForm.get('eventos') as FormArray;
-  }
+
   get reparacionesObservacion() {
     return this.regForm.get('reparacionesObservacion');
   }
@@ -175,34 +163,6 @@ export class RevisarComponent implements OnInit {
     return this.regForm.get('historial') as FormArray;
   }
   /* #endregion */
-
-  creaReparacion(id: string, desc: string, costo: number): FormGroup {
-    return this.fb.group({
-      id: [id, [Validators.required]],
-      reparacion: [desc, [Validators.required]],
-      costo: [costo, [Validators.required]]
-    });
-  }
-  
-  creaEvento(evento: string, fIni: string,hIni: string, fFin: string, hFin: string, observaciones: string): FormGroup {
-    return this.fb.group({
-      evento: [evento, [Validators.required]],
-      fIni: [fIni, [Validators.required]],
-      hIni: [hIni, [Validators.required]],
-      fFin: [fFin, [Validators.required]],
-      hFin: [hFin, [Validators.required]],
-      observaciones: [observaciones, [Validators.required]]
-    });
-  }
-
-  addReparacion(item): void {
-    const rep = this.tiposReparaciones.find(x => x._id === item);
-    this.reparaciones.push(this.creaReparacion(rep._id, rep.reparacion, rep.costo));
-  }
-
-  removeReparacion(index: number) {
-    this.reparaciones.removeAt(index);
-  }
 
 
   cargarManiobra(id: string) {
@@ -226,45 +186,15 @@ export class RevisarComponent implements OnInit {
       if (maniob.maniobra.operador) {
         this.regForm.controls['operador'].setValue(maniob.maniobra.operador.nombre);
       }
-
       this.regForm.controls['sello'].setValue(maniob.maniobra.sello);
       this.regForm.controls['fLlegada'].setValue(maniob.maniobra.fLlegada);
       this.regForm.controls['hLlegada'].setValue(maniob.maniobra.hLlegada);
       this.regForm.controls['hEntrada'].setValue(maniob.maniobra.hEntrada);
       this.regForm.controls['estatus'].setValue(maniob.maniobra.estatus);
-
-      if (maniob.maniobra.lavado) {
-        this.regForm.controls['lavado'].setValue(maniob.maniobra.lavado);
-      } else {
-        this.regForm.controls['lavado'].setValue(undefined);
-      }
-      if (maniob.maniobra.lavadoObservacion) {
-        this.regForm.controls['lavadoObservacion'].setValue(maniob.maniobra.lavado);
-      } else {
-        this.regForm.controls['lavadoObservacion'].setValue(undefined);
-      }
-      if (maniob.maniobra.reparaciones) {
-        maniob.maniobra.reparaciones.forEach(element => {
-          this.reparaciones.push(this.creaReparacion(element.id, element.reparacion, element.costo));
-        });
-      } else {
-        this.regForm.controls['reparaciones'].setValue(undefined);
-      }
-      if (maniob.maniobra.reparacionesObservacion) {
-        this.regForm.controls['reparacionesObservacion'].setValue(maniob.maniobra.reparacionesObservacion);
-      } else {
-        this.regForm.controls['reparacionesObservacion'].setValue(undefined);
-      }
-      if (maniob.maniobra.eventos)
-      {
-        console.log (maniob.maniobra.eventos)
-        this.listaEventos = maniob.maniobra.eventos;
-      }
       this.regForm.controls['grado'].setValue(maniob.maniobra.grado);
       this.regForm.controls['hDescarga'].setValue(maniob.maniobra.hDescarga);
       this.regForm.controls['hSalida'].setValue(maniob.maniobra.hSalida);
       this.regForm.controls['descargaAutorizada'].setValue(maniob.maniobra.descargaAutorizada);
-
       if (maniob.maniobra.historial) {
         maniob.maniobra.historial.forEach(element => {
           this.historial.push(this.agregarArray(new Coordenada(element.bahia, element.posicion)));
@@ -273,19 +203,10 @@ export class RevisarComponent implements OnInit {
       } else {
         this.regForm.controls['historial'].setValue(undefined);
       }
-      // if (this.descargaAutorizada.value === false) {
-      //   this.hDescarga.disable();
-      //   this.hSalida.disable();
-      // }
-
+      this.cargaMantenimientos(maniob.maniobra._id);
     });
   }
 
-  cargarTiposReparaciones() {
-    this._reparacionService.getReparaciones().subscribe((reparaciones) => {
-      this.tiposReparaciones = reparaciones.reparaciones;
-    });
-  }
 
   ponHoraDescarga() {
     if (this.hDescarga.value === undefined || this.hDescarga.value === '') {
@@ -510,43 +431,6 @@ export class RevisarComponent implements OnInit {
 
 
 
-
-
-
-
-  /* #region  Array de Arrays Javi */
-  ////////////////////////////////////////////////////////
-  // https://stackblitz.com/edit/angular-dffny7?file=app%2Fapp.component.ts
-
-  // addNewHistorial() {
-  //   let control = <FormArray>this.regForm.controls.historial;
-  //   control.push(
-  //     this.fb.group({
-  //       // nested form array, you could also add a form group initially
-  //       coordenadas: this.fb.array([])
-  //     })
-  //   )
-  // }
-
-  // deleteHistorial(index) {
-  //   let control = <FormArray>this.regForm.controls.historial;
-  //   control.removeAt(index)
-  // }
-
-  // addNewCoordenada(control) {
-  //   control.push(
-  //     this.fb.group({
-  //       coordenada: ['']
-  //     }))
-  // }
-
-  // deleteCoordenada(control, index) {
-  //   control.removeAt(index)
-  // }
-
-  //////////////////////////////////////////////////////
-  /* #endregion */
-
   ObtenCoordenadasDisponibles(maniobra?: string) {
     this.coordenadaService.getCoordenadasDisponibles(maniobra).subscribe(coordenadas => {
       this.coordenadasDisponibles = coordenadas.coordenadas;
@@ -589,28 +473,29 @@ export class RevisarComponent implements OnInit {
 
   }
 
-  cargaEventos(id:string): void {
-    this._maniobraService.getEventos(id).subscribe(eventos => {
-      console.log(eventos);
-      this.listaEventos = eventos.eventos;
+
+  cargaMantenimientos(id:string): void {
+    this._mantenimientoService.getMantenimientos(id).subscribe(mantenimientos => {
+      console.log(mantenimientos);
+      this.listaMantenimientos = mantenimientos.mantenimientos;
     });
 
   }
-  openDialogEvento(id: string) {
+  openDialogMantenimiento(id: string) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {_id:id,_idManiobra:this.regForm.get('_id').value};
-    const dialogRef = this.matDialog.open(EventoComponent, dialogConfig);
+    dialogConfig.data = {_id:id,maniobra:this.regForm.get('_id').value};
+    const dialogRef = this.matDialog.open(MantenimientoComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(detalle => {
       if (detalle) {
-        this.cargaEventos(this.regForm.get('_id').value);
+        this.cargaMantenimientos(this.regForm.get('_id').value);
       }
     });
   }
 
-  removeEvento(id: string) {
-    this._maniobraService.removeEvento(this.regForm.get('_id').value,id).subscribe(eventos => {
-      this.cargaEventos(this.regForm.get('_id').value);
+  removeMantenimiento(id: string) {
+    this._mantenimientoService.eliminaMantenimiento(id).subscribe(mantenimientos => {
+      this.cargaMantenimientos(this.regForm.get('_id').value);
     });
   }
 

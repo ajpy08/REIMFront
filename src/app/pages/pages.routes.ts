@@ -103,7 +103,7 @@ import { EntradaComponent } from './entradas/entrada.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
-import { EventoComponent } from './maniobras/eventos/evento.component';
+import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
 
 /* #endregion */
 
@@ -616,10 +616,10 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
-        path: 'maniobras/maniobra/:id/eventos/evento/:idEvento',
-        component: EventoComponent,
+        path: 'mantenimientos/mantenimiento/:id/',
+        component: MantenimientoComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualización de Evento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     }
 
 

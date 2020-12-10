@@ -78,45 +78,43 @@
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          EVENTOS
+          Mantenimientos
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <h3 class="box-title">Evento</h3>
+      <h3 class="box-title">Mantenimiento</h3>
       <hr class="m-t-0 m-b-40">
       <div class="row">
         <div class="col-md-3">
-          <button matTooltip="Crear Nuevo Evento" mat-mini-fab class="btn btn-primary" (click)="openDialogEvento('nuevo')" type="button">
+          <button matTooltip="Nuevo Mantenimiento" mat-mini-fab class="btn btn-primary" (click)="openDialogMantenimiento('nuevo')" type="button">
             <i class="fa fa-plus"></i>
         </button>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="form-group">
             <table matNativeControl class="table table-striped">
               <thead>
                 <tr>
-                  <th scope="col">evento</th>
-                  <th scope="col">F.Inicio</th>
-                  <th scope="col">H.Inicio</th>
-                  <th scope="col">F.Fin</th>
-                  <th scope="col">H.Fin</th>
+                  <th scope="col">Mantenimiento</th>
                   <th scope="col">Observaciones</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Cambio Grado</th>
+                  <th scope="col">Finalizado</th>
                 </tr>
               </thead>
-              <tbody *ngFor="let item of listaEventos; let i = index;">
+              <tbody *ngFor="let item of listaMantenimientos; let i = index;">
                 <tr>
-                  <th scope="row">{{item.tipoEvento}}</th>
-                  <td>{{item.fIni}}</td>
-                  <td>{{item.hIni}}</td>
-                  <td>{{item.fFin}}</td>
-                  <td>{{item.hFin}}</td>
-                  <td>{{item.observaciones}}</td>
+                  <th scope="row">{{item.tipoMantenimiento}}</th>
+                  <td>{{item.observacionesCompleto}}</td>
+                  <td>{{item.tipoLavado}}</td>
+                  <td>{{item.cambioGrado}}</td>
+                  <td>{{item.finalizado}}</td>
                   <td>
-                    <button matTooltip="Editar Evento" (click)="openDialogEvento( item._id )" class="btn btn-pramary" type="button">
+                    <button matTooltip="Editar Mantenimiento" (click)="openDialogMantenimiento( item._id )" class="btn btn-pramary" type="button">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button (click)="removeEvento( item._id )" class="btn btn-danger" type="button">
+                    <button (click)="removeMantenimiento( item._id )" class="btn btn-danger" type="button">
                       <i class="fas fa-trash"></i>
                     </button>
                   </td>
@@ -129,7 +127,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="true">
+    <!-- <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Lavado
@@ -156,10 +154,6 @@
           </mat-form-field>
         </div>
         <div class="col-md-3">
-          <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_lavado'}]" class="btn btn-primary">
-                  <i class="fas fa-camera-retro"></i>
-                  Fotos Lavado
-                </button> -->
           <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
             <i class="fas fa-camera-retro"></i>
             Fotos Lavado
@@ -167,9 +161,9 @@
         </div>
       </div>
 
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
 
-
+    <!-- 
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -194,11 +188,6 @@
           </button>
           <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success m-r-5"> <i
               class="fa fa-check"></i> Añadir</button>
-          <!-- <button [routerLink]="['/fotos', 'params', {id: _id, opcion: 'fotos_reparacion'}]" class="btn btn-primary">
-              <i class="fas fa-camera-retro"></i>
-              Fotos Reparación
-            </button> -->
-
           <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
             <i class="fas fa-camera-retro"></i>
             Fotos Reparacion
@@ -236,7 +225,7 @@
           </mat-form-field>
         </div>
       </div>
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
