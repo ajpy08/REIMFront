@@ -1,3 +1,4 @@
+import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -627,6 +628,12 @@ const pagesRoutes: Routes = [
         component: InventarioMaterialComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Catálogo de Inventario de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'faltante-material',
+        component: FaltantesMaterialComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
 
