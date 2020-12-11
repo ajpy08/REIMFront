@@ -4,12 +4,12 @@ import {
   EntradaService,
   UsuarioService,
   ExcelService
-} from '../../services/service.index';
+} from '../../../services/service.index';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from '../usuarios/usuario.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
-import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 declare var swal: any;
 

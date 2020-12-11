@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../../environments/environment';
-import { UsuarioService } from '../usuarios/usuario.service';
+import { URL_SERVICIOS } from '../../../../environments/environment';
+import { UsuarioService } from '../../usuarios/usuario.service';
 import { Material } from './material.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -46,11 +46,10 @@ export class MaterialService {
     return this.http.get(url);
   }
 
-  getStockMaterial(id: string): Observable<any> {
+  async getStockMaterialAsync(id: string) {
     let url = URL_SERVICIOS + '/materiales/material/stock/' + id;
     url += '?token=' + this._usuarioService.token;
-    return this.http.get(url)
-      .pipe(map((resp: any) => resp.stock));
+    return await this.http.get(url).toPromise();
   }
 
   guardarMaterial(material: Material): Observable<any> {
@@ -90,7 +89,7 @@ export class MaterialService {
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Material Borrado', 'Eliminado correctamente', 'success')),
-      );
+    );
   }
 
 }

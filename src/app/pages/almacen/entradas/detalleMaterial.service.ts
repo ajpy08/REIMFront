@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { URL_SERVICIOS } from '../../../environments/environment';
-import { UsuarioService } from '../usuarios/usuario.service';
+import { URL_SERVICIOS } from '../../../../environments/environment';
+import { UsuarioService } from '../../usuarios/usuario.service';
 import { DetalleMaterial } from './detalleMaterial.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';

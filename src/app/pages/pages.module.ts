@@ -1,3 +1,4 @@
+import { InventarioMaterialComponent } from './almacen/inventarioMaterial/inventarioMaterial.component';
 import { NgModule } from '@angular/core';
 import { PAGES_ROUTES } from './pages.routes';
 import { SharedModule } from '../shared/shared.module';
@@ -162,11 +163,11 @@ import { ComplementoPagoComponent } from './facturacion/complemento-pago/complem
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { PagoComponent } from './facturacion/complemento-pago/pago/pago.component';
-import { MaterialesComponent } from './materiales/materiales.component';
-import { MaterialComponent } from './materiales/material.component';
-import { EntradasComponent } from './entradas/entradas.component';
-import { EntradaComponent } from './entradas/entrada.component';
-import { DetalleComponent } from './entradas/detalle.component';
+import { MaterialesComponent } from './almacen/materiales/materiales.component';
+import { MaterialComponent } from './almacen/materiales/material.component';
+import { EntradasComponent } from './almacen/entradas/entradas.component';
+import { EntradaComponent } from './almacen/entradas/entrada.component';
+import { DetalleComponent } from './almacen/entradas/detalle.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
@@ -270,6 +271,7 @@ import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento
         FacturasPpdComponent,
         MaterialesComponent,
         MaterialComponent,
+        InventarioMaterialComponent,
         EntradasComponent,
         EntradaComponent,
         DetalleComponent,

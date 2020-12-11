@@ -1,5 +1,5 @@
-import { MaterialService } from './../../pages/materiales/material.service';
-import { Material } from './../../pages/materiales/material.models';
+import { MaterialService } from './../../pages/almacen/materiales/material.service';
+import { Material } from './../../pages/almacen/materiales/material.models';
 import { Maniobra } from 'src/app/models/maniobra.models';
 import { ManiobraService, FacturacionService, UsuarioService } from 'src/app/services/service.index';
 import { AgenciaService } from './../../pages/agencias/agencia.service';

@@ -1,21 +1,21 @@
-import { UnidadService } from '../../services/shared/unidades.service';
+import { UnidadService } from '../../../services/shared/unidades.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Material } from './material.models';
-import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+import { ModalUploadService } from '../../../components/modal-upload/modal-upload.service';
 import { ROLES, TIPOS_MATERIAL_ARRAY } from 'src/app/config/config';
-import { Usuario } from '../usuarios/usuario.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Location } from '@angular/common';
-import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import swal from 'sweetalert';
 
 import * as _moment from 'moment';
 import { MaterialService } from './material.service';
-import { UsuarioService } from '../usuarios/usuario.service';
+import { UsuarioService } from '../../usuarios/usuario.service';
 import { Unidad } from 'src/app/models/unidad.models';
 const moment = _moment;
 
