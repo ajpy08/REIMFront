@@ -141,7 +141,11 @@
                           <mat-form-field>
                             <mat-label>Cantidad</mat-label>
                             <input matInput formControlName="cantidad" type="text" placeholder="Cantidad">
+                            <mat-error *ngIf="materiales.controls[i].controls['cantidad'].invalid">
+                              <sup>*</sup>Por Favor seleccionar un tipo de Mantenimiento
+                            </mat-error>
                           </mat-form-field>
+
                         </div>
                         <div class="col-md-2">
                           <mat-form-field>
