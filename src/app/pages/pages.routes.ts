@@ -1,3 +1,4 @@
+import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
 import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
@@ -634,6 +635,12 @@ const pagesRoutes: Routes = [
         component: FaltantesMaterialComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'reporte-movimientos',
+        component: ReporteMovimientosComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Reporte de Movimientos de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
 
 

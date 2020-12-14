@@ -173,6 +173,7 @@ import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
 import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
+import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
 
 
 @NgModule({
@@ -280,7 +281,8 @@ import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltant
         ProveedorComponent,
         ProveedoresComponent,
         MantenimientoComponent,
-        FaltantesMaterialComponent
+        FaltantesMaterialComponent,
+        ReporteMovimientosComponent
      ],
     exports: [
         DashboardComponent
