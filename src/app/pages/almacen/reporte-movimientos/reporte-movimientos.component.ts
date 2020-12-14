@@ -12,6 +12,7 @@ import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
+import { ActivatedRoute } from '@angular/router';
 declare var swal: any;
 
 @Component({
@@ -27,6 +28,7 @@ export class ReporteMovimientosComponent implements OnInit {
   usuarioLogueado: Usuario;
   movimiento: Movimiento;
   entradasExcel = [];
+  id;
 
   displayedColumns = [
     'fFactura',
@@ -44,11 +46,13 @@ export class ReporteMovimientosComponent implements OnInit {
   constructor(
     public entradaService: EntradaService,
     private usuarioService: UsuarioService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    public activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.cargarEntradas();
     this.socket.on('new-entrada', function () {
       this.cargarEntradas();
@@ -92,6 +96,7 @@ export class ReporteMovimientosComponent implements OnInit {
     this.cargando = true;
 
     this.entradaService.getEntradas().subscribe(entradas => {
+
       let movimientos = [];
       entradas.entradas.forEach(e => {
         e.detalles.forEach(d => {
@@ -107,6 +112,9 @@ export class ReporteMovimientosComponent implements OnInit {
 
       });
 
+      if (this.id != undefined) {
+        movimientos = movimientos.filter(m => { return m.material._id <= this.id });
+      }
       this.dataSource = new MatTableDataSource(movimientos);
       if (entradas.entradas.length === 0 || entradas.entradas === undefined) {
         this.tablaCargar = true;

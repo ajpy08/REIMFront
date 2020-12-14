@@ -637,7 +637,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
-        path: 'reporte-movimientos',
+        path: 'reporte-movimientos/:id',
         component: ReporteMovimientosComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Reporte de Movimientos de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }

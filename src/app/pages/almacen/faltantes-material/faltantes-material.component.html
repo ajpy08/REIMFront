@@ -45,6 +45,16 @@
         <div class="catalogo-container mat-elevation-z8">
           <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
 
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                <button matTooltip="Detalles" [routerLink]="['/reporte-movimientos', row._id ]"
+                  class="btn btn-primary m-r-5">
+                  <i class="fas fa-info-circle"></i>
+                </button>
+              </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="descripcion">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>

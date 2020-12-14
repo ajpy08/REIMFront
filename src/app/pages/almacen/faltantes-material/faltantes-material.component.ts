@@ -12,6 +12,7 @@ import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { VariasService } from '../../facturacion/varias.service';
+import { ActivatedRoute } from '@angular/router';
 declare var swal: any;
 
 @Component({
@@ -28,8 +29,9 @@ export class FaltantesMaterialComponent implements OnInit {
   totalRegistros = 0;
   usuarioLogueado: Usuario;
   materialesExcel = [];
-
+  
   displayedColumns = [
+    'actions',
     'descripcion',
     'unidadMedida',
     'costo',
@@ -45,11 +47,12 @@ export class FaltantesMaterialComponent implements OnInit {
   constructor(
     public materialService: MaterialService,
     private usuarioService: UsuarioService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
   ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
+    
     this.filtrado(this.activo);
 
     this.socket.on('new-material', function () {
