@@ -215,24 +215,32 @@ export class MantenimientoComponent implements OnInit {
     descripcion: descripcion,
     costo: costo,
     precio: precio,
-    cantidad: [cantidad, [this.checaStock("cantidad")]]
+    cantidad: [cantidad, [this.checaStock(material)]]
   })
 }
 
-checaStock(controlKey: string) {
-  return (control: AbstractControl): { [s: string]: boolean } => {
+checaStock(id) {
+  return (control: AbstractControl): { [s: string]: any  | null} => {
+    console.log(this.materiales);
     // control.parent es el FormGroup
     if (this.regForm) { // en las primeras llamadas control.parent es undefined
-      const checkValue = this.regForm.controls[controlKey].value;
-      if (control.value !== checkValue) {
-        return {
-          match: true
-        };
-      }
+      this._materialService.getStockMaterial(id).subscribe(res=>{
+        if (res>control.value) {
+          console.log("si paso");
+          return {
+            checaStock: true
+          };
+        }
+        else
+          return null;
+      });
     }
     return null;
   };
 }
+
+
+
 
 addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
   this.materiales.push(this.newMaterial(material,descripcion,costo, precio, cantidad));
@@ -263,7 +271,7 @@ guardarRegistro() {
 
   
 onChangeTipoMantenimiento(event: { value: string; }) {
-    if (event.value==='L') {
+    if (event.value==='LAVADO') {
       if (this.tipoLavado.value==='' || this.tipoLavado.value===undefined)
         this.regForm.controls["tipoLavado"].setValue("B");
       this.tipoLavado.enable({ onlySelf: true });
@@ -271,7 +279,7 @@ onChangeTipoMantenimiento(event: { value: string; }) {
     } else {
       this.tipoLavado.disable({ onlySelf: true });
     }
-    if (event.value==='A') {
+    if (event.value==="ACONDICIONAMIENTO") {
 
       if (this.cambioGrado.value===undefined)
         this.regForm.controls["cambioGrado"].setValue(false);

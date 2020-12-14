@@ -127,113 +127,12 @@
 
     </mat-expansion-panel>
 
-    <!-- <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Lavado
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <h3 class="box-title">Lavado</h3>
-      <hr class="m-t-0 m-b-40">
-      <div class="row">
-        <div class="col-md-3">
-          <mat-form-field>
-            <mat-label>Tipo Lavado</mat-label>
-            <mat-select formControlName="lavado" tabindex="1">
-              <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
-                {{tipo.descripcion}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-label>Observaciones</mat-label>
-            <label class="control-label"><b>Observaciones :</b></label>
-            <textarea matInput formControlName="lavadoObservacion" rows="3" cols="40"></textarea>
-          </mat-form-field>
-        </div>
-        <div class="col-md-3">
-          <button type="button" [routerLink]="['/fotos',  _id.value]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
-            <i class="fas fa-camera-retro"></i>
-            Fotos Lavado
-          </button>
-        </div>
-      </div>
-
-    </mat-expansion-panel> -->
-
-    <!-- 
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Reparación
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <h3 class="box-title">Reparaciones</h3>
-      <hr class="m-t-0 m-b-40">
-      <div class="row">
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-select #tipoReparacion tabindex="1">
-              <mat-option *ngFor="let tipo of tiposReparaciones" [value]="tipo._id">
-                {{tipo.reparacion}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="col-md-4">
-          <button matTooltip="Añadir nueva Reparación" class="btn btn-primary  m-r-5 " (click)="open(_id.value, 'revisar')" type="button">
-            <i class="fa fa-cogs"></i>
-          </button>
-          <button (click)="addReparacion(tipoReparacion.value)" type="button" class="btn btn-success m-r-5"> <i
-              class="fa fa-check"></i> Añadir</button>
-          <button type="button" [routerLink]="['/fotos',_id.value]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
-            <i class="fas fa-camera-retro"></i>
-            Fotos Reparacion
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <table matNativeControl class="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Reparacion</th>
-                </tr>
-              </thead>
-              <tbody formArrayName="reparaciones" *ngFor="let item of reparaciones.controls; let i = index;">
-                <tr [formGroupName]="i">
-                  <th scope="row">{{i+1}}</th>
-                  <td>{{this.reparaciones.controls[i].get('reparacion').value}}</td>
-                  <td>
-                    <button (click)="removeReparacion( i )" class="btn btn-danger">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <mat-form-field>
-            <mat-label>Observaciones Reparación</mat-label>
-            <textarea matInput formControlName="reparacionesObservacion" rows="3" cols="40"></textarea>
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-expansion-panel> -->
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Descarga y Salida de Camion
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-
 
       <h3 class="box-title">Grado y Salida</h3>
       <hr class="m-t-0 m-b-40">
