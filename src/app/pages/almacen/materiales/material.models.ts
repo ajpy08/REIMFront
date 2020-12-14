@@ -7,6 +7,7 @@ export class Material {
         public activo?: Boolean,
         public tipo?: string,
         public minimo?: number,
+        public stock?: number,
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,

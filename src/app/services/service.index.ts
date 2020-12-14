@@ -21,10 +21,10 @@ export { TiposContenedoresService } from '../pages/tipos-contenedores/tipos-cont
 
 export { SubirArchivoService } from './subirArchivo/subir-archivo.service';
 export { ExcelService } from './excel/excel.service';
-export { MaterialService } from '../pages/materiales/material.service';
+export { MaterialService } from '../pages/almacen/materiales/material.service';
 export { UnidadService } from '../services/shared/unidades.service';
-export { EntradaService } from '../pages/entradas/entrada.service';
-export { DetalleMaterialService } from '../pages/entradas/detalleMaterial.service';
+export { EntradaService } from '../pages/almacen/entradas/entrada.service';
+export { DetalleMaterialService } from '../pages/almacen/entradas/detalleMaterial.service';
 export { ProveedorService } from '../pages/proveedores/proveedor.service';
 export {MantenimientoService} from '../pages/maniobras/mantenimientos/mantenimiento.service'
 

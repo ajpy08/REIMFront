@@ -1,0 +1,87 @@
+<div class="row animated fadeIn" *ngIf="cargando">
+  <div class="col-sm-11">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fas fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere por favor</span>
+    </div>
+  </div>
+</div>
+<div class="row animated fadeIn" *ngIf="!cargando">
+  <div class="col-11">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+          <button (click)="exportarXLSX()" class="btn btn-success m-r-10">
+            <i class="fas fa-file-excel"></i>
+          </button>
+          <!-- <button matTooltip="Añadir nuevo Material" mat-mini-fab class="btn btn-primary"
+            [routerLink]="['/materiales/material','nuevo']" type="button">
+            <i class="fa fa-plus"></i>
+          </button> -->
+        </div>
+        
+        <div class="contenedorPar">
+          <span class="parpa tex" *ngIf="this.tablaCargar === true">
+            <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+          </span>
+        </div>
+
+        <h3 class="card-title">Inventario de Materiales ( <small>{{totalRegistros}}</small> )</h3>
+        <!-- <div class="col-sm-2">
+          <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
+        </div> -->
+        
+        <div class="example-header mat-elevation-z8">
+          <mat-form-field>
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
+          </mat-form-field>
+        </div>
+        <br>
+        <div class="example-container mat-elevation-z8">
+        </div>
+        <div class="catalogo-container mat-elevation-z8">
+          <mat-table class="mat-table" #table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="unidadMedida">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Unidad</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.unidadMedida?.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="costo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Costo</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.costo?.$numberDecimal | currency}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="precio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Precio P.</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.precio?.$numberDecimal | currency}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="stock">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Stock</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.stock}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="minimo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Minimo</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.minimo?.$numberDecimal}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+        </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
+            </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

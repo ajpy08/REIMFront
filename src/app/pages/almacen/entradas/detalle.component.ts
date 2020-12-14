@@ -107,7 +107,7 @@ export class DetalleComponent implements OnInit {
   createFormGroup() {
     this.regForm = this.fb.group({
       _id: [''],
-      material: [new Material('test', 'test', 0, 0, true, '', 0, '', '', '', ''), [Validators.required]],
+      material: [new Material('test', 'test', 0, 0, true, '', 0, 0, '', '', '', ''), [Validators.required]],
       cantidad: ['', [Validators.required]],
       costo: ['', [Validators.required]],
       entrada: [''],

@@ -1,3 +1,5 @@
+import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
+import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
 import { VigenciaComponent } from './vigencias/vigencia.component';
 import { VigenciasComponent } from './vigencias/vigencias.component';
 import { ComplementoPagoComponent } from './facturacion/complemento-pago/complemento-pago.component';
@@ -96,14 +98,15 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { ManiobrasTrasportistaComponent } from './maniobras-Reporte/maniobras-reporte.component';
 import { NotaDeCreditoComponent } from './facturacion/notas-de-credito/nota-de-credito.component';
 
-import { MaterialesComponent } from './materiales/materiales.component';
-import { MaterialComponent } from './materiales/material.component';
-import { EntradasComponent } from './entradas/entradas.component';
-import { EntradaComponent } from './entradas/entrada.component';
+import { MaterialesComponent } from './almacen/materiales/materiales.component';
+import { MaterialComponent } from './almacen/materiales/material.component';
+import { EntradasComponent } from './almacen/entradas/entradas.component';
+import { EntradaComponent } from './almacen/entradas/entrada.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
+import { InventarioMaterialComponent } from './almacen/inventarioMaterial/inventarioMaterial.component';
 
 /* #endregion */
 
@@ -620,7 +623,25 @@ const pagesRoutes: Routes = [
         component: MantenimientoComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
-    }
+    },
+    {
+        path: 'inventario-material',
+        component: InventarioMaterialComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Inventario de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'faltante-material',
+        component: FaltantesMaterialComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'reporte-movimientos/:id',
+        component: ReporteMovimientosComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Reporte de Movimientos de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
 
 
     // otherwise redirect to home

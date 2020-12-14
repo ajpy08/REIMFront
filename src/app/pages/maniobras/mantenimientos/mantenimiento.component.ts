@@ -13,7 +13,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material
 
 import { Mantenimiento } from './mantenimiento.models';
 import { MantenimientoService,MaterialService } from "../../../services/service.index";
-import { Material } from '../../materiales/material.models';
+import { Material } from '../../almacen/materiales/material.models';
 import * as _moment from 'moment';
 
 
