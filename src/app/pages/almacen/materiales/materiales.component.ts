@@ -4,12 +4,12 @@ import {
   MaterialService,
   UsuarioService,
   ExcelService
-} from '../../services/service.index';
+} from '../../../services/service.index';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { Usuario } from '../usuarios/usuario.model';
+import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
-import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../environments/environment';
+import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 declare var swal: any;
 
@@ -196,11 +196,10 @@ export class MaterialesComponent implements OnInit {
   crearDatosExcel(datos) {
     datos.forEach(d => {
       const materiales = {
-        Nombre_comercial: d.transportista.nombreComercial,
-        Nombre: d.nombre,
-        VigenciaLicencia: d.vigenciaLicencia,
-        Licencia: d.licencia,
-        Activo: d.activo
+        Descripcion: d.descripcion,
+        Unidad: d.unidadMedida.descripcion,
+        Costo: d.costo.$numberDecimal,
+        Precio: d.precio.$numberDecimal
       };
       this.materialesExcel.push(materiales);
     });
@@ -215,12 +214,11 @@ export class MaterialesComponent implements OnInit {
     }
   }
 
-  getStock(material: string) {
-    let totalStock = 0;
-    this.materialService.getStockMaterial(material).subscribe(stock => {
-      totalStock = stock;
-    });
-    return totalStock;
-  }
-
+  // getStock(material: string) {
+  //   let totalStock = 0;
+  //   this.materialService.getStockMaterialAsync(material).subscribe(stock => {
+  //     totalStock = stock;
+  //   });
+  //   return totalStock;
+  // }
 }
