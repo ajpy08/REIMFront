@@ -105,7 +105,9 @@ import { EntradaComponent } from './almacen/entradas/entrada.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
+import { MantenimientosComponent } from './maniobras/mantenimientos/mantenimientos.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
+
 import { InventarioMaterialComponent } from './almacen/inventarioMaterial/inventarioMaterial.component';
 
 /* #endregion */
@@ -617,6 +619,13 @@ const pagesRoutes: Routes = [
         component: ProveedorComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    
+    {
+        path: 'mantenimientos',
+        component: MantenimientosComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
         path: 'mantenimientos/mantenimiento/:id/',
