@@ -271,7 +271,7 @@ guardarRegistro() {
 
   
 onChangeTipoMantenimiento(event: { value: string; }) {
-    if (event.value==='L') {
+    if (event.value==='LAVADO') {
       if (this.tipoLavado.value==='' || this.tipoLavado.value===undefined)
         this.regForm.controls["tipoLavado"].setValue("B");
       this.tipoLavado.enable({ onlySelf: true });
@@ -279,7 +279,7 @@ onChangeTipoMantenimiento(event: { value: string; }) {
     } else {
       this.tipoLavado.disable({ onlySelf: true });
     }
-    if (event.value==='A') {
+    if (event.value==="ACONDICIONAMIENTO") {
 
       if (this.cambioGrado.value===undefined)
         this.regForm.controls["cambioGrado"].setValue(false);

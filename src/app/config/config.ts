@@ -105,7 +105,7 @@ export const PERMISOS = [
 
 export const TIPOS_LAVADO_ARRAY = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
 
-export const TIPOS_MANTENIMIENTO_ARRAY = [new TipoEvento('L', 'Lavado'), new TipoEvento('R', 'Reparacion'), new TipoEvento('A', 'Acondicionamiento')];
+export const TIPOS_MANTENIMIENTO_ARRAY = [new TipoEvento('LAVADO', 'Lavado'), new TipoEvento('REPARACION', 'Reparacion'), new TipoEvento('ACONDICIONAMIENTO', 'Acondicionamiento')];
 
 /* #region  FACTURACION */
 export const TR_ARRAY = ['TRASLADO', 'RETENCION'];
