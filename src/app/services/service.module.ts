@@ -30,6 +30,7 @@ import {
     DetalleMaterialService,
     ProveedorService,
     MantenimientoService,
+    AlmacenService,
     LoginGuard,     
     VerificaTokenGuard,
     REIMGuard,
@@ -73,7 +74,8 @@ import {
       REIMGuard,
       ProveedorService,
       EntradaService,
-      MantenimientoService
+      MantenimientoService,
+      AlmacenService
     ],
     declarations: []
   })

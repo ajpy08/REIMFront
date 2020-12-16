@@ -1,3 +1,5 @@
+import { MaterialService } from './../materiales/material.service';
+import { AlmacenService } from './../almacen.service';
 import { Movimiento } from './movimiento.models';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Entrada } from '../entradas/entrada.models';
@@ -13,6 +15,7 @@ import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ActivatedRoute } from '@angular/router';
+import { Material } from '../materiales/material.models';
 declare var swal: any;
 
 @Component({
@@ -28,7 +31,7 @@ export class ReporteMovimientosComponent implements OnInit {
   usuarioLogueado: Usuario;
   movimiento: Movimiento;
   entradasExcel = [];
-  id;
+  materiales = [];
 
   displayedColumns = [
     'fFactura',
@@ -48,12 +51,23 @@ export class ReporteMovimientosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private excelService: ExcelService,
     public activatedRoute: ActivatedRoute,
+    private almacenService: AlmacenService,
+    private materialService: MaterialService
   ) { }
 
   ngOnInit() {
     this.usuarioLogueado = this.usuarioService.usuario;
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.cargarEntradas();
+
+    this.materialService.getMateriales().subscribe(materiales => {
+      this.materiales = materiales.materiales;
+    });
+
+    if (this.almacenService.material) {
+      this.cargarEntradas(this.almacenService.material._id);
+    } else {
+      this.cargarEntradas(undefined);
+    }  
+    
     this.socket.on('new-entrada', function () {
       this.cargarEntradas();
     }.bind(this));
@@ -90,12 +104,14 @@ export class ReporteMovimientosComponent implements OnInit {
     this.socket.removeListener('delete-entrada');
     this.socket.removeListener('update-entrada');
     this.socket.removeListener('new-entrada');
+
+    this.almacenService.material = new Material();
   }
 
-  cargarEntradas() {
+  cargarEntradas(material) {
     this.cargando = true;
 
-    this.entradaService.getEntradas().subscribe(entradas => {
+    this.entradaService.getEntradas('','', material).subscribe(entradas => {
 
       let movimientos = [];
       entradas.entradas.forEach(e => {
@@ -104,6 +120,7 @@ export class ReporteMovimientosComponent implements OnInit {
           this.movimiento.fFactura = e.fFactura;
           this.movimiento.noFactura = e.noFactura;
           this.movimiento.cantidad = d.cantidad;
+          this.movimiento.idMaterial = d.material._id;
           this.movimiento.material = d.material.descripcion;
           this.movimiento.costo = d.costo.$numberDecimal;
           this.movimiento.proveedor = e.proveedor;
@@ -112,9 +129,11 @@ export class ReporteMovimientosComponent implements OnInit {
 
       });
 
-      if (this.id != undefined) {
-        movimientos = movimientos.filter(m => { return m.material._id <= this.id });
+      if (material != undefined && material !== '') {
+        movimientos = movimientos.filter(m => { return m.idMaterial == material });
+      } else {
       }
+
       this.dataSource = new MatTableDataSource(movimientos);
       if (entradas.entradas.length === 0 || entradas.entradas === undefined) {
         this.tablaCargar = true;

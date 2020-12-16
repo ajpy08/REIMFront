@@ -220,23 +220,23 @@ export class MantenimientoComponent implements OnInit {
 }
 
 checaStock(id) {
-  return (control: AbstractControl): { [s: string]: any  | null} => {
-    console.log(this.materiales);
-    // control.parent es el FormGroup
-    if (this.regForm) { // en las primeras llamadas control.parent es undefined
-      this._materialService.getStockMaterial(id).subscribe(res=>{
-        if (res>control.value) {
-          console.log("si paso");
-          return {
-            checaStock: true
-          };
-        }
-        else
-          return null;
-      });
-    }
-    return null;
-  };
+  // return (control: AbstractControl): { [s: string]: any  | null} => {
+  //   console.log(this.materiales);
+  //   // control.parent es el FormGroup
+  //   if (this.regForm) { // en las primeras llamadas control.parent es undefined
+  //     this._materialService.getStockMaterial(id).subscribe(res=>{
+  //       if (res>control.value) {
+  //         console.log("si paso");
+  //         return {
+  //           checaStock: true
+  //         };
+  //       }
+  //       else
+  //         return null;
+  //     });
+  //   }
+  //   return null;
+  // };
 }
 
 
