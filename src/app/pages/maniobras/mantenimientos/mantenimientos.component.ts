@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator,MatTabGroup, MatTabChangeEvent } from '@angular/material';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { MantenimientoService,ExcelService } from '../../../services/service.index';
@@ -98,6 +98,29 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     this.cargando = false;
   }
 
+  onLinkClick(event: MatTabChangeEvent) {
+    localStorage.setItem('ManiobrasTabs', event.index.toString());
+  }
+
+  applyFilterReparacione(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+
+    // if (this.dtXAprobar && this.dtXAprobar.data.length > 0) {
+    //   this.dtXAprobar.filter = filterValue;
+    //   this.totalXAprobar = this.dtXAprobar.filteredData.length;
+    //   if (this.dtXAprobar.filteredData.length === 0 ) {
+    //     this.tablaCargarD = true;
+    //   } else {
+    //     this.tablaCargarD = false;
+    //   }
+    // } else {
+    //   console.error('No se puede filtrar en un datasource vacío');
+    // }
+
+    // this.dtXAprobar.filter = filterValue;
+    // this.totalXAprobar = this.dtXAprobar.filteredData.length;
+  }
 
   CreaDatosExcel(datos) {
     datos.forEach(b => {
