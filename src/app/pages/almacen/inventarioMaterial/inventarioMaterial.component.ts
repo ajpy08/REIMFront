@@ -3,7 +3,8 @@ import { Material } from '../materiales/material.models';
 import {
   MaterialService,
   UsuarioService,
-  ExcelService
+  ExcelService,
+  AlmacenService
 } from '../../../services/service.index';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -12,6 +13,7 @@ import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { VariasService } from '../../facturacion/varias.service';
+import { Router } from '@angular/router';
 declare var swal: any;
 
 @Component({
@@ -30,6 +32,7 @@ export class InventarioMaterialComponent implements OnInit {
   materialesExcel = [];
 
   displayedColumns = [
+    'actions',
     'descripcion',
     'unidadMedida',
     'costo',
@@ -45,7 +48,9 @@ export class InventarioMaterialComponent implements OnInit {
   constructor(
     public materialService: MaterialService,
     private usuarioService: UsuarioService,
-    private excelService: ExcelService
+    private excelService: ExcelService,
+    public router: Router,
+    public almacenService: AlmacenService
   ) { }
 
   ngOnInit() {
@@ -128,6 +133,11 @@ export class InventarioMaterialComponent implements OnInit {
       start();
     });
     this.cargando = false;
+  }
+
+  async filtraMovs(material) {
+    this.almacenService.material = material;
+    this.router.navigate(['/reporte-movimientos']);
   }
 
   habilitaDeshabilitaMaterial(material, event) {

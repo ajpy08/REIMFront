@@ -32,6 +32,7 @@ export class ReporteMovimientosComponent implements OnInit {
   movimiento: Movimiento;
   entradasExcel = [];
   materiales = [];
+  material;
 
   displayedColumns = [
     'fFactura',
@@ -56,13 +57,14 @@ export class ReporteMovimientosComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.usuarioLogueado = this.usuarioService.usuario;
+    this.usuarioLogueado = this.usuarioService.usuario;    
 
     this.materialService.getMateriales().subscribe(materiales => {
       this.materiales = materiales.materiales;
     });
 
     if (this.almacenService.material) {
+      this.material = this.almacenService.material._id;
       this.cargarEntradas(this.almacenService.material._id);
     } else {
       this.cargarEntradas(undefined);
