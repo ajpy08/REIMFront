@@ -19,7 +19,7 @@ export class EntradaService {
     public _usuarioService: UsuarioService,
   ) { }
 
-  getEntradas(noFactura?: string, proveedor?: string): Observable<any> {
+  getEntradas(noFactura?: string, proveedor?: string, material?: string): Observable<any> {
     let url = URL_SERVICIOS + '/entradas/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
@@ -27,8 +27,11 @@ export class EntradaService {
       params = params.append('noFactura', noFactura);
     }
     if (proveedor) {
-        params = params.append('proveedor', proveedor);
-      }
+      params = params.append('proveedor', proveedor);
+    }
+    if (material) {
+      params = params.append('material', material);
+    }
     return this.http.get(url, { params: params });
   }
 
@@ -66,7 +69,7 @@ export class EntradaService {
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
       .pipe(map(resp => swal('Entrada Borrada', 'Eliminada correctamente', 'success')),
-      );
+    );
   }
 
 }
