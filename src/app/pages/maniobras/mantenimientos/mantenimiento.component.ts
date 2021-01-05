@@ -220,6 +220,7 @@ export class MantenimientoComponent implements OnInit {
   })
 }
 
+
 // checaStock(id) {
 //   return (control: AbstractControl): { [s: string]: any  | null} => {
 //     console.log(this.materiales);
@@ -239,6 +240,7 @@ export class MantenimientoComponent implements OnInit {
 //     return null;
 //   };
 // }
+
 
 
 

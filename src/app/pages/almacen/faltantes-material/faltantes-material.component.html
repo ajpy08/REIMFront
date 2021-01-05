@@ -22,7 +22,7 @@
             <i class="fa fa-plus"></i>
           </button> -->
         </div>
-        
+
         <div class="contenedorPar">
           <span class="parpa tex" *ngIf="this.tablaCargar === true">
             <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
@@ -33,7 +33,7 @@
         <!-- <div class="col-sm-2">
           <mat-checkbox [checked]="acttrue" [(ngModel)]="acttrue" #bool (value)="bool.checked" (change)="filtrado(bool.checked)">INACTIVOS</mat-checkbox>
         </div> -->
-        
+
         <div class="example-header mat-elevation-z8">
           <mat-form-field>
             <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Escriba algo para filtrar">
@@ -48,7 +48,7 @@
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <button matTooltip="Detalles" [routerLink]="['/reporte-movimientos', row._id ]"
+                <button matTooltip="Detalles" (click)="filtraMovs(row)"
                   class="btn btn-primary m-r-5">
                   <i class="fas fa-info-circle"></i>
                 </button>
@@ -89,8 +89,8 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
         </div>
-            <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
-            </mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="25" [showFirstLastButtons]>
+        </mat-paginator>
       </div>
     </div>
   </div>
