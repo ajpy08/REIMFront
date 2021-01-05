@@ -59,6 +59,12 @@ export class MantenimientoService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
+  
+  getMantenimientosxTipo(tipo: string): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/xtipo/' + tipo;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
 
   getMantenimiento(idMantenimiento: string): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento
