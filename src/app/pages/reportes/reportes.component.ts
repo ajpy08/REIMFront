@@ -904,7 +904,7 @@ export class ReportesComponent implements OnInit {
         Tipo: m.tipo,
         Fecha_Inicio_Reparacion: m.fIniReparacion !== undefined ? m.fIniReparacion.substring(0, 10) : '',
         Hora_Inicio_Reparacion: m.hIniReparacion,
-        Fecha_Fin_Reparacion: m.fFinReparacion !== undefined ? m.fLlegada.substring(0, 10) : '',
+        Fecha_Fin_Reparacion: m.fFinReparacion !== undefined ? m.fFinReparacion.substring(0, 10) : '',
         Hpra_Fin_Reparacion: m.hFinReparacion,
         Tiempo: resultado,
       };
