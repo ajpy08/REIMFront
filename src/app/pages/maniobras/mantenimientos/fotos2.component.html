@@ -1,0 +1,140 @@
+<button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+<button *ngIf="galleryImgAntes && galleryImgAntes.length >0" class="btn btn-primary m-r-5" (click)="DescargarZip('TODOS')">
+  <i class="fas fa-download"></i> Descargar zip
+</button>
+<div class="container">
+  <div class="modal-body row">
+    <div class="col-md-3 text-center">
+      <p>Tipo Mantenimiento : {{mantenimiento.tipoMantenimiento}}</p>
+    </div>
+    <div class="col-md-9 text-center">
+      <h3>Observaciones</h3>
+      <p>{{mantenimiento.observacionesCompleto}}</p>
+    </div>
+  </div>
+</div>
+<ng-template mat-tab-label>
+  <i class="fas fa-cloud-upload-alt"> Carga</i>
+</ng-template>
+<div class="row">
+  <div class="col-md-4">
+    <h3>Seleccione archivos</h3>
+    <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" (comprimiendoImagen)="comprimiendo = $event" [yaCargo]="yaCargo" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone">
+      <h4>Suelta los archivos aquí</h4>
+      <img src="assets/images/drop-images.png">
+    </div>
+    <input class="hidden" (change)="seleccionImagen($event.target.files)" type="file" multiple />
+  </div>
+  <div class="col-md-8">
+    <h4>Cargar archivos</h4>
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="AD">
+      <mat-radio-button value="0" (change)="radioChange($event)">ANTES</mat-radio-button>
+      <mat-radio-button value="1" (change)="radioChange($event)">DESPUÉS</mat-radio-button>
+    </mat-radio-group>
+    <br>
+    <button (click)="subirFotos()" class="btn btn-success">Cargar fotos</button>
+    <button (click)="limpiarArchivos()" class="btn btn-danger">Limpiar</button>
+    <div class="row animated fadeIn" *ngIf="comprimiendo">
+      <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+          <strong>Comprimiendo Imagenes</strong>
+          <br>
+          <i class="fas fa-refresh fa-spin fa-2x"></i>
+          <br>
+          <span>Espere por favor</span>
+        </div>
+      </div>
+    </div>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Nombre archivo</th>
+          <th>Cargado</th>
+          <th>Tamaño</th>
+          <th>Progreso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let archivo of archivos">
+          <th>{{archivo.nombreArchivo}}</th>
+          <th><i *ngIf="archivo.progreso === 100;" class="fa fa-check" aria-hidden="true"></i></th>
+          <th>{{archivo.archivo.size / 1024 / 1024 | number: '.2-2'}} MB</th>
+          <th>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+            </div>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
+  <mat-tab label="antes">
+    <ng-template mat-tab-label>
+      <div *ngIf="galleryImgAntes;else imagesAntes">
+        <i class="fas fa-camera-retro"> Antes ({{galleryImgAntes.length}})</i>
+      </div>
+      <ng-template #imagesAntes>
+        <i class="fas fa-camera-retro"> Fotos Antes (0)</i>
+      </ng-template>
+    </ng-template>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+          <button *ngIf="galleryImgAntes && galleryImgAntes.length >0" class="btn btn-danger m-r-5" (click)="eliminaFoto(rutaFotoActual, 'ANTES')">
+            <i class="fas fa-trash"></i> Eliminar Foto
+          </button>
+        </div>
+        <br>
+
+        <div class="col-md-4"></div>
+      </div>
+      <br><br>
+      <div class="row">
+        <br>
+        <div class="col-md text-center"></div>
+        <div class="col-md text-center">
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImgAntes" (change)="onChange($event)" *ngIf="galleryImgAntes && galleryImgAntes.length >0"></ngx-gallery>
+        </div>
+        <div class="col-md text-center"></div>
+      </div>
+    </div>
+    <br>
+  </mat-tab>
+  <mat-tab label="despues">
+    <ng-template mat-tab-label>
+      <div *ngIf="galleryImgDespues;else imagesR">
+        <i class="fas fa-camera-retro"> Después ({{galleryImgDespues.length}})</i>
+      </div>
+      <ng-template #imagesR>
+        <i class="fas fa-camera-retro"> Después (0)</i>
+      </ng-template>
+    </ng-template>
+    <div class="container" style="align-content: center">
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+          <button *ngIf="galleryImgDespues && galleryImgDespues.length >0" class="btn btn-danger m-r-5" (click)="eliminaFoto(rutaFotoActual, 'DESPUES')">
+            <i class="fas fa-trash"></i> Eliminar Foto
+          </button>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+      <br><br>
+      <div class="row">
+        <div class="col-md text-center"></div>
+        <div class="col-md text-center">
+          <ngx-gallery [options]="galleryOptions" [images]="galleryImgDespues" (change)="onChange($event)" *ngIf="galleryImgDespues && galleryImgDespues.length >0"></ngx-gallery>
+        </div>
+        <div class="col-md text-center"></div>
+      </div>
+    </div>
+
+    <br>
+  </mat-tab>
+
+</mat-tab-group>

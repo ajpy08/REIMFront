@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ImagenPipe } from './imagen.pipe';
 import { FotosPipe } from './fotos.pipe';
+import { Fotos2Pipe } from './fotos2.pipe';
 import { ZipPipePipe } from './zip-pipe.pipe';
 import { IvaPipe } from '../pages/facturacion/pipes/iva.pipe';
 import { DecimalRightPadPipe } from './../pages/facturacion/pipes/decimal-rightpad.pipe';
@@ -15,6 +16,7 @@ import { ComaPipe } from '../pages/facturacion/pipes/coma.pipe';
   declarations: [
     ImagenPipe,
     FotosPipe,
+    Fotos2Pipe,
     ZipPipePipe,
     IvaPipe,
     DecimalRightPadPipe,
@@ -23,6 +25,7 @@ import { ComaPipe } from '../pages/facturacion/pipes/coma.pipe';
   exports: [
     ImagenPipe,
     FotosPipe,
+    Fotos2Pipe,
     DecimalRightPadPipe,
     NgCapitalizePipeModule,
     NgAbsPipeModule,
@@ -30,7 +33,8 @@ import { ComaPipe } from '../pages/facturacion/pipes/coma.pipe';
     ComaPipe
   ],
   providers: [
-    FotosPipe
+    FotosPipe,
+    Fotos2Pipe,
   ]
 })
 export class PipesModule { }

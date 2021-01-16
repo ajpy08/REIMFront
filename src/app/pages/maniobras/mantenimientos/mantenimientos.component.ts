@@ -46,7 +46,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   ngOnInit() {
     localStorage.removeItem('historyArray');
     this.cargarReparaciones();
-    this.cargarLavados();
+    //this.cargarLavados();
 
     // this.socket.on('new-mantenimiento', function (data: any) {
     //   this.filtrado(this.activo);
@@ -134,7 +134,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarReparaciones() {
     this.cargando = true;
-    this._mantenimientoService.getMantenimientosxTipo("REPARAR").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("REPARACION").subscribe(mant => {
       this.dtReparaciones = new MatTableDataSource(mant.mantenimientos);
       console.log(this.dtReparaciones)
       if (mant.mantenimientos.length === 0) 

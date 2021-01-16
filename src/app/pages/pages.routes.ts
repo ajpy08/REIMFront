@@ -107,6 +107,7 @@ import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
 import { MantenimientosComponent } from './maniobras/mantenimientos/mantenimientos.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
+import { Fotos2Component } from './maniobras/mantenimientos/fotos2.component';
 
 import { InventarioMaterialComponent } from './almacen/inventarioMaterial/inventarioMaterial.component';
 
@@ -633,6 +634,12 @@ const pagesRoutes: Routes = [
         canActivate: [REIMGuard],
         data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
+    {
+        path: 'mantenimientos/mantenimiento/:id/fotos',
+        component: Fotos2Component,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Fotos de Mantenimientos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },    
     {
         path: 'inventario-material',
         component: InventarioMaterialComponent,

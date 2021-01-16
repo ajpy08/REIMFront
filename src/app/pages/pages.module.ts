@@ -171,8 +171,10 @@ import { DetalleComponent } from './almacen/entradas/detalle.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
+
 import { MantenimientosComponent } from './maniobras/mantenimientos/mantenimientos.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
+import { Fotos2Component } from './maniobras/mantenimientos/fotos2.component';
 
 
 import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
@@ -285,6 +287,7 @@ import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/repor
         ProveedoresComponent,
         MantenimientosComponent,
         MantenimientoComponent,
+        Fotos2Component,
         FaltantesMaterialComponent,
         ReporteMovimientosComponent
      ],
