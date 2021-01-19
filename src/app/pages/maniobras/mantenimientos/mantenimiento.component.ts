@@ -47,16 +47,18 @@ export const MY_FORMATS = {
   ]
 })
 export class MantenimientoComponent implements OnInit {
+  
   usuarioLogueado = new Usuario;
   regForm: FormGroup;
   url: string;
+  regresar_cerrar="";
   act = true;
   mantenimiento: Mantenimiento = new Mantenimiento();
   tiposLavado = TIPOS_LAVADO_ARRAY;
   tiposMantenimiento = TIPOS_MANTENIMIENTO_ARRAY;
   listaMateriales: Material[];
-
   mantenimientoAgregar = new SelectionModel<Mantenimiento>(true, []);
+  dialogR = false;
 
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
@@ -71,7 +73,19 @@ export class MantenimientoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.mantenimiento = this.data;
+    this.url = '/mantenimientos';
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      this.mantenimiento._id = id;
+      this.dialogR = false;
+      this.regresar_cerrar = "Regresar";
+    }
+    else {
+      this.mantenimiento = this.data;
+      this.dialogR = true;
+      this.regresar_cerrar = "Cerrar";
+    }
+
     this._materialService.getMateriales(null, true).subscribe(materiales => {
       this.listaMateriales = materiales.materiales;
     });
@@ -266,11 +280,10 @@ guardarRegistro() {
         this.regForm.get('_id').setValue(res._id);
       this.regForm.markAsPristine();
     });
-    this.close(this.regForm.value);
+    if(this.dialogR) this.close(this.regForm.value);
   };
 }
-
-  
+ 
 
   
 onChangeTipoMantenimiento(event: { value: string; }) {
@@ -304,8 +317,22 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   //   }
   // }
 
+  salir(){
+    if (this.dialogR) this.close(undefined);
+    else this.back()
+
+  }
   close(result: any) {
     this.dialogRef.close(result);
+  }
+  
+  back() {
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    localStorage.removeItem('history');
+    
   }
   
 }

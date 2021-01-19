@@ -115,7 +115,7 @@ export class Fotos2Component implements OnInit {
       }
     ];
     
-    this.url = '/mantenimientos/fotos';
+    this.url = '/mantenimientos';
 
 
     const indexTAB = localStorage.getItem('AntesDespues');

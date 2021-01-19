@@ -25,9 +25,9 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   
   acttrue = false;
   
-  displayedColumnsReparaciones = ['actions','tipoMantenimiento' ,'observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
-  displayedColumnsLavados = ['actions','tipoMantenimiento' ,'observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
-  displayedColumnsAcondicionamientos = ['actions','tipoMantenimiento' ,'observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
+  displayedColumnsReparaciones = ['actions','observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
+  displayedColumnsLavados = ['actions','observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
+  displayedColumnsAcondicionamientos = ['actions','observacionesCompleto', 'maniobra.contenedor','maniobra.tipo','maniobra.peso'];
 
   dtReparaciones: any;
   dtLavados: any;
@@ -46,7 +46,8 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   ngOnInit() {
     localStorage.removeItem('historyArray');
     this.cargarReparaciones();
-    //this.cargarLavados();
+    this.cargarLavados();
+    this.cargarAcondicionamientos();
 
     // this.socket.on('new-mantenimiento', function (data: any) {
     //   this.filtrado(this.activo);
@@ -111,6 +112,19 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     this.totalLavados = this.dtLavados.filteredData.length;
   }
 
+  Filtro(): (data: any, filter: string) => boolean {
+    const filterFunction = function (data, filter): boolean {
+      const dataStr =
+        data.observacionesCompleto.toLowerCase() +
+        (data.contenedor ? data.contenedor.toLowerCase() : '') +
+        (data.maniobra ? data.maniobra.contenedor.toLowerCase() : '') +
+        (data.maniobra ? data.maniobra.tipo.toLowerCase() : '') +
+        (data.maniobra ? data.maniobra.peso.toLowerCase() : '');
+      return dataStr.indexOf(filter) !== -1;
+    };
+    return filterFunction;
+  }
+
   applyFilterAcondicionamientos(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -134,7 +148,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarReparaciones() {
     this.cargando = true;
-    this._mantenimientoService.getMantenimientosxTipo("REPARACION").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("REPARACION","PENDIENTES").subscribe(mant => {
       this.dtReparaciones = new MatTableDataSource(mant.mantenimientos);
       console.log(this.dtReparaciones)
       if (mant.mantenimientos.length === 0) 
@@ -143,6 +157,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
         this.tablaCargarR = false;
       this.dtReparaciones.sort = this.sort;
       this.dtReparaciones.paginator = this.paginator;
+      this.dtReparaciones.filterPredicate = this.Filtro();
       this.totalReparaciones = mant.mantenimientos.length;
     });
     this.cargando = false;
@@ -150,7 +165,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarLavados() {
     this.cargando = true;
-    this._mantenimientoService.getMantenimientosxTipo("LAVADO").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("LAVADO","PENDIENTES").subscribe(mant => {
       this.dtLavados = new MatTableDataSource(mant.mantenimientos);
       console.log(this.dtLavados)
       if (mant.mantenimientos.length === 0) 
@@ -159,6 +174,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
         this.tablaCargarL = false;
       this.dtLavados.sort = this.sort;
       this.dtLavados.paginator = this.paginator;
+      this.dtLavados.filterPredicate = this.Filtro();
       this.totalLavados = mant.mantenimientos.length;
     });
     this.cargando = false;
@@ -166,7 +182,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarAcondicionamientos() {
     this.cargando = true;
-    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO","PENDIENTES").subscribe(mant => {
       this.dtAcondicionamientos = new MatTableDataSource(mant.mantenimientos);
       console.log(this.dtAcondicionamientos)
       if (mant.mantenimientos.length === 0) 
@@ -175,6 +191,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
         this.tablaCargarA = false;
       this.dtAcondicionamientos.sort = this.sort;
       this.dtAcondicionamientos.paginator = this.paginator;
+      this.dtAcondicionamientos.filterPredicate = this.Filtro();
       this.totalAcondicionamientos = mant.mantenimientos.length;
     });
     this.cargando = false;

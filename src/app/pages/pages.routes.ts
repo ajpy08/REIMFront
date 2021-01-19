@@ -629,7 +629,7 @@ const pagesRoutes: Routes = [
         data: { titulo: 'Catálogo de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
-        path: 'mantenimientos/mantenimiento/:id/',
+        path: 'mantenimientos/mantenimiento/:id',
         component: MantenimientoComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
