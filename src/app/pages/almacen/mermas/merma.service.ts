@@ -3,23 +3,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../../../environments/environment';
 import { UsuarioService } from '../../usuarios/usuario.service';
-import { Entrada } from './entrada.models';
+import { Merma } from './merma.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import swal from 'sweetalert';
 
 @Injectable()
-export class EntradaService {
-  totalEntrada = 0;
+export class MermaService {
+  totalMerma = 0;
   constructor(
     public http: HttpClient,
     public router: Router,
     public _usuarioService: UsuarioService,
   ) { }
 
-  getEntradas(noFactura?: string, proveedor?: string, material?: string): Observable<any> {
-    let url = URL_SERVICIOS + '/entradas/';
+  getMermas(noFactura?: string, proveedor?: string, material?: string): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
     if (noFactura) {
@@ -34,40 +34,40 @@ export class EntradaService {
     return this.http.get(url, { params: params });
   }
 
-  getEntrada(id: string): Observable<any> {
-    let url = URL_SERVICIOS + '/entradas/entrada/' + id;
+  getMerma(id: string): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/merma/' + id;
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url)
-      .pipe(map((resp: any) => resp.entrada));
+      .pipe(map((resp: any) => resp.merma));
   }
 
-  guardarEntrada(entrada: Entrada): Observable<any> {
-    let url = URL_SERVICIOS + '/entradas/entrada';
-    if (entrada._id) {
+  guardarMerma(merma: Merma): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/merma';
+    if (merma._id) {
       // actualizando
-      url += '/' + entrada._id;
+      url += '/' + merma._id;
       url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, entrada)
+      return this.http.put(url, merma)
         .pipe(map((resp: any) => {
-          swal('Entrada Actualizada', entrada.noFactura, 'success');
-          return resp.entrada;
+          swal('Merma Actualizada', 'Actualizado correctamente', 'success');
+          return resp.merma;
         }));
     } else {
       // creando
       url += '?token=' + this._usuarioService.token;
-      return this.http.post(url, entrada)
+      return this.http.post(url, merma)
         .pipe(map((resp: any) => {
-          swal('Entrada Creada', entrada.noFactura, 'success');
-          return resp.entrada;
+          swal('Merma Creada', 'Creado correctamente', 'success');
+          return resp.merma;
         }));
     }
   }
 
-  borrarEntrada(entrada: Entrada): Observable<any> {
-    let url = URL_SERVICIOS + '/entradas/entrada/' + entrada._id;
+  borrarMerma(merma: Merma): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/merma/' + merma._id;
     url += '?token=' + this._usuarioService.token;
     return this.http.delete(url)
-      .pipe(map(resp => swal('Entrada Borrada', 'Eliminada correctamente', 'success')),
+      .pipe(map(resp => swal('Merma Borrada', 'Eliminada correctamente', 'success')),
     );
   }
 

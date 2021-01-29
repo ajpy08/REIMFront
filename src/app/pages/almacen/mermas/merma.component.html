@@ -1,0 +1,96 @@
+<div class="row animated fadeIn">
+
+  <div class="col-md-6">
+    <div class="card card-body">
+      <h3 class="box-title m-b-0">Merma: {{ _id.value }}</h3><br>
+      <div class="row">
+        <div class="col-sm-12 col-xs-12">
+          <form [formGroup]="regForm" (ngSubmit)="guardarMerma()" novalidate>
+            <div class="my-container">
+              <mat-form-field>
+                <textarea rows="5" matInput formControlName="motivo" name="motivo" type="text" class="form-control"
+                  placeholder="Motivo"> </textarea>
+                <mat-error *ngIf="motivo.touched && motivo.invalid">
+                  <sup>*</sup>Por Favor Ingrese un motivo
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <br>
+
+            <div class="my-container">
+              <div class="col-md-12">
+                <div class="hiden3">
+                  <div class="letra3">
+                    <strong> MATERIALES</strong>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <div class="contenedorBotones">
+                    <div class="row">
+                      <button type="button" [disabled]="this.ObjetoSelect.length > 1" matTooltip="Modificar Detalle" (click)="modifica(ObjetoSelect)"
+                        class="btnBoxe btn  m-r-5">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                      <button type="button" matTooltip="Quitar Detalle" (click)="quitar(ObjetoSelect)"
+                        class="btnTrash btn m-r-5">
+                        <i class="fa fa-trash-o"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">#</th>
+                        <th scope="col">Material</th>
+                        <th scope="col">Cantidad</th>
+                        <!-- <th scope="col">Costo</th> -->
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody formArrayName="materiales" *ngFor="let item of materiales.controls; let i = index;">
+                      <tr [formGroupName]="i">
+                        <td>
+                          <mat-checkbox (change)="onChange(item.value, i, $event)">
+                          </mat-checkbox>
+                        </td>
+                        <td scope="row">{{i+1}}</td>
+                        <td>
+                          {{item.get('material').value?.descripcion}}
+                        </td>
+                        <td>
+                          {{item.get('cantidad').value}}
+                        </td>
+                        <!-- <td>
+                          {{item.get('costo').value | currency}}
+                        </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="text-align: center">
+                  <button matTooltip="Crear Entrada" mat-mini-fab class="btn btn-primary" (click)="openDialogDetalle()"
+                    type="button">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              [disabled]="regForm.pristine || regForm.invalid ">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger" (click)="back()"> Regresar</button>
+          </form>
+          <div class="output">
+            <p>Form Data: {{regForm.value | json}}</p>
+            <p>Is Valid: {{regForm.valid}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

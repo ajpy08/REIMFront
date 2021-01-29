@@ -168,6 +168,7 @@ import { MaterialComponent } from './almacen/materiales/material.component';
 import { EntradasComponent } from './almacen/entradas/entradas.component';
 import { EntradaComponent } from './almacen/entradas/entrada.component';
 import { DetalleComponent } from './almacen/entradas/detalle.component';
+import { DetalleMermaComponent } from './almacen/mermas/detalleMerma.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
@@ -177,6 +178,8 @@ import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento
 
 import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
 import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
+import { MermasComponent } from './almacen/mermas/mermas.component';
+import { MermaComponent } from './almacen/mermas/merma.component';
 
 
 @NgModule({
@@ -281,12 +284,15 @@ import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/repor
         EntradasComponent,
         EntradaComponent,
         DetalleComponent,
+        DetalleMermaComponent,
         ProveedorComponent,
         ProveedoresComponent,
         MantenimientosComponent,
         MantenimientoComponent,
         FaltantesMaterialComponent,
-        ReporteMovimientosComponent
+        ReporteMovimientosComponent,
+        MermasComponent,
+        MermaComponent
      ],
     exports: [
         DashboardComponent
@@ -326,7 +332,8 @@ import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/repor
     ],
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
-        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent, DetalleComponent ]
+        PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent,
+        DetalleComponent, DetalleMermaComponent ]
 })
 
 export class PagesModules { }
