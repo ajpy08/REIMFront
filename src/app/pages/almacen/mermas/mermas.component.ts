@@ -1,4 +1,3 @@
-import { MaterialService } from './../materiales/material.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Merma } from './merma.models';
 import {
@@ -7,7 +6,7 @@ import {
   ExcelService
 } from '../../../services/service.index';
 
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
@@ -44,6 +43,7 @@ export class MermasComponent implements OnInit {
     public mermaService: MermaService,
     private usuarioService: UsuarioService,
     private excelService: ExcelService,
+    public matDialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -62,6 +62,10 @@ export class MermasComponent implements OnInit {
     this.socket.on('delete-merma', function () {
       this.cargarMermas();
     }.bind(this));
+
+    this.socket.on('aprobar-merma', function () {
+      this.cargarMermas();
+    }.bind(this));
   }
 
   applyFilter(filterValue: string) {
@@ -70,7 +74,7 @@ export class MermasComponent implements OnInit {
     if (this.dataSource && this.dataSource.data.length > 0) {
       this.dataSource.filter = filterValue;
       this.totalRegistros = this.dataSource.filteredData.length;
-      if (this.dataSource.filteredData.length === 0 ) {
+      if (this.dataSource.filteredData.length === 0) {
         this.tablaCargar = true;
       } else {
         this.tablaCargar = false;
@@ -91,16 +95,16 @@ export class MermasComponent implements OnInit {
     this.cargando = true;
 
     this.mermaService.getMermas().subscribe(mermas => {
-        this.dataSource = new MatTableDataSource(mermas.mermas);
-        if (mermas.mermas.length === 0 || mermas.mermas === undefined) {
-          this.tablaCargar = true;
-        } else {
-          this.tablaCargar = false;
-        }
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.totalRegistros = mermas.mermas.length;
-      });
+      this.dataSource = new MatTableDataSource(mermas.mermas);
+      if (mermas.mermas.length === 0 || mermas.mermas === undefined) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = mermas.mermas.length;
+    });
     this.cargando = false;
   }
 
@@ -150,6 +154,45 @@ export class MermasComponent implements OnInit {
     } else {
       swal('No se puede exportar un excel vacio', '', 'error');
     }
+  }
+
+  aprueba(merma: Merma) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de aprobar el registro',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(borrar => {
+      if (borrar) {
+        swal("¿Quieres agregar un comentario?:", {
+          content: "input",
+        })
+          .then((value) => {
+            if (value) {
+              merma.comentarioAprobacion = value;
+            }
+
+            this.mermaService
+              .aprobarMerma(merma)
+              .subscribe(() => {
+                this.socket.emit('aprobarmerma', merma);
+              });
+          });
+      }
+    });
+  }
+
+  validaAprobacion(merma: Merma) {
+    let ok = false;
+
+    if ((this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) && merma.fAprobacion == undefined) {
+      ok = true;
+    } else {
+      ok = false;
+    }
+
+    return ok;
   }
 
 }

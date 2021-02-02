@@ -71,4 +71,12 @@ export class MermaService {
     );
   }
 
+  aprobarMerma(merma: Merma): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/aprobar/merma/' + merma._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, merma)
+      .pipe(map(resp => swal('Merma Aprobada', 'Aprobada correctamente', 'success')),
+    );
+  }
+
 }

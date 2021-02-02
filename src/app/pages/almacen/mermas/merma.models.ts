@@ -4,6 +4,7 @@ export class Merma {
         public materiales?: any[],
         public usuarioAprobacion?: string,
         public fAprobacion?: string,
+        public comentarioAprobacion?: string,
         public usuarioAlta?: string,
         public fAlta?: string,
         public usuarioMod?: string,
