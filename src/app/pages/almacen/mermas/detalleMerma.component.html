@@ -1,0 +1,55 @@
+<div class="row animated fadeIn">
+  <div class="col-md">
+    <div class="card card-body">
+      <mat-dialog-content>
+        <h3 class="box-title m-b-0">Detalle de Merma</h3><br>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <form [formGroup]="regForm" (ngSubmit)="agregarDetalle()" novalidate>
+              <div class="my-container">
+                <!--========Mat-Select Materiales=========-->
+                <mat-form-field>
+                  <mat-select [compareWith] = "compareObjects" placeholder="Seleccione un Material" formControlName="material" name="material">
+                    <mat-option *ngFor="let material of materiales" [value]="material">
+                      {{ material.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="material.touched && material.invalid">
+                    <sup>*</sup>Por favor ingrese un material
+                  </mat-error>
+                </mat-form-field>
+                <!--=========================================-->
+                <mat-form-field>
+                  <input matInput formControlName="cantidad" name="cantidad" type="number" class="form-control"
+                    placeholder="Cantidad">
+                  <mat-error *ngIf="cantidad.touched && cantidad.invalid">
+                    <sup>*</sup>Por favor ingrese una cantidad
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- <mat-form-field>
+                  <input matInput formControlName="costo" name="costo" type="number" class="form-control"
+                    placeholder="costo">
+                  <mat-error *ngIf="costo.touched && costo.invalid">
+                    <sup>*</sup>Por favor ingrese un costo
+                  </mat-error>
+                </mat-form-field> -->
+              </div>
+              <br><br>
+              <button type="submit" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+                [disabled]="regForm.pristine || regForm.invalid">
+                <i class="fa fa-save"></i>
+                Agregar
+              </button>
+              <button type="button" class="btn btn-danger waves-effect waves-light" (click)="close()">Close</button>
+            </form>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <div class="output">
+        <p>Form Data: {{regForm.value | json}}</p>
+        <p>Is Valid: {{regForm.valid}}</p>
+      </div>
+    </div>
+  </div>
+</div>
