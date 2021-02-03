@@ -45,6 +45,17 @@ export class MantenimientoService {
     }
   }
 
+  agregaMaterial(idMantenimiento: string,material: any): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento+"/addMaterial";
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, {material}).pipe(
+      map((resp: any) => {
+        swal('Material Agregado con exito', "", 'success');
+        return resp.mantenimiento;
+      })
+    );
+  }
+
   eliminaMantenimiento(idMantenimiento: string): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento;
     url += '?token=' + this._usuarioService.token;

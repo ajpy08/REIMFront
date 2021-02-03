@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl,ValidationErrors, ValidatorFn  } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
@@ -231,32 +231,52 @@ export class MantenimientoComponent implements OnInit {
     precio: precio,
     //cantidad: [cantidad, [this.checaStock(material)]]
     cantidad: cantidad
-  })
+  },{Validators : this.checaStock2})
 }
 
 
-// checaStock(id) {
-//   return (control: AbstractControl): { [s: string]: any  | null} => {
-//     console.log(this.materiales);
-//     // control.parent es el FormGroup
-//     if (this.regForm) { // en las primeras llamadas control.parent es undefined
-//       this._materialService.getStockMaterial(id).subscribe(res=>{
-//         if (res>control.value) {
-//           console.log("si paso");
-//           return {
-//             checaStock: true
-//           };
-//         }
-//         else
-//           return null;
-//       });
-//     }
-//     return null;
-//   };
-// }
+checaStock(id) {
+  return (control: AbstractControl): { [s: string]: any  | null} => {
+    // control.parent es el FormGroup
+    if (this.regForm) { // en las primeras llamadas control.parent es undefined
+      this._materialService.getStockMaterial(id).subscribe(res=>{
+        if (res.stock>=control.value) {
+          console.log("si paso");
+          return null;
+        }
+        else
+        { console.log("NO HAY SUFICIENTE STOCK");
+          
+          return {
+            checaStock: false
+          };
+        }
+      });
+    }
+    return null;
+  };
+}
 
-
-
+checaStock2: ValidatorFn = (
+  control: FormGroup
+): ValidationErrors | null => {
+  const cantidad = control.get("cantidad")
+  const material = control.get("material")
+  
+  this._materialService.getStockMaterial(material.value).subscribe(res=>{
+    if (res.stock>=cantidad.value) {
+      console.log("si paso");
+return null;
+    }
+    else
+    { console.log("NO HAY SUFICIENTE STOCK");
+    return {
+      checaStock2: true
+    };
+    }
+  });
+  return null;
+}
 
 
 addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
@@ -270,7 +290,23 @@ addMaterial2(id:String) {
 }
 
 removeMaterial(i:number) {
-this.materiales.removeAt(i);
+//this.materiales.removeAt(i);
+console.log(this.materiales)
+}
+
+saveMaterial(i:number)
+{
+  const material : any = {material:this.materiales.controls[i].get("material").value,
+                          descripcion:this.materiales.controls[i].get("descripcion").value,
+                          costo:this.materiales.controls[i].get("costo").value,
+                          precio: this.materiales.controls[i].get("precio").value,
+                          cantidad: this.materiales.controls[i].get("cantidad").value};
+console.log (material);
+
+this._mantenimientoService.agregaMaterial(this.mantenimiento._id,material).subscribe(res => {
+  
+});
+
 }
 
 guardarRegistro() {
