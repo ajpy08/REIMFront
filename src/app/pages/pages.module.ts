@@ -180,7 +180,6 @@ import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltant
 import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
 import { MermasComponent } from './almacen/mermas/mermas.component';
 import { MermaComponent } from './almacen/mermas/merma.component';
-import { AutorizaMermaComponent } from './almacen/mermas/autoriza-merma/autoriza-merma.component';
 
 
 @NgModule({
@@ -294,7 +293,6 @@ import { AutorizaMermaComponent } from './almacen/mermas/autoriza-merma/autoriza
         ReporteMovimientosComponent,
         MermasComponent,
         MermaComponent,
-        AutorizaMermaComponent
      ],
     exports: [
         DashboardComponent
@@ -335,7 +333,7 @@ import { AutorizaMermaComponent } from './almacen/mermas/autoriza-merma/autoriza
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
         PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent,
-        DetalleComponent, DetalleMermaComponent, AutorizaMermaComponent ]
+        DetalleComponent, DetalleMermaComponent ]
 })
 
 export class PagesModules { }

@@ -58,6 +58,11 @@
                   class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
+
+                <button matTooltip="Desprueba Merma" (click)="desaprueba(merma)" *ngIf="validaDesaprobacion(merma)"
+                  class="btn btn-info m-r-5">
+                  <i class="fa fa-undo"></i>
+                </button>
               </mat-cell>
             </ng-container>
 

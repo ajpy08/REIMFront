@@ -1,3 +1,4 @@
+import { MaterialService } from './../materiales/material.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Merma } from './merma.models';
 import {
@@ -11,6 +12,7 @@ import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
+import { VariasService } from '../../facturacion/varias.service';
 declare var swal: any;
 
 @Component({
@@ -44,6 +46,7 @@ export class MermasComponent implements OnInit {
     private usuarioService: UsuarioService,
     private excelService: ExcelService,
     public matDialog: MatDialog,
+    private materialService: MaterialService
   ) { }
 
   ngOnInit() {
@@ -60,6 +63,10 @@ export class MermasComponent implements OnInit {
     }.bind(this));
 
     this.socket.on('delete-merma', function () {
+      this.cargarMermas();
+    }.bind(this));
+
+    this.socket.on('aprobar-merma', function () {
       this.cargarMermas();
     }.bind(this));
 
@@ -165,20 +172,40 @@ export class MermasComponent implements OnInit {
       dangerMode: true
     }).then(borrar => {
       if (borrar) {
-        swal("¿Quieres agregar un comentario?:", {
-          content: "input",
-        })
-          .then((value) => {
-            if (value) {
-              merma.comentarioAprobacion = value;
-            }
+        let datos = merma.materiales;
 
-            this.mermaService
-              .aprobarMerma(merma)
-              .subscribe(() => {
+        const start = async () => {
+          let ok = false;
+          await VariasService.asyncForEach(datos, async (d) => {
+            const stock: any = await this.materialService.getStockMaterialAsync(d.material._id);
+            if (stock.stock >= d.cantidad) {
+              ok = true;
+            } else {
+              ok = false;
+              return ok;
+            }
+          });
+          return ok;
+        };
+        const aprob = start();
+
+        aprob.then(res => {
+          if (res) {
+            swal("¿Quieres agregar un comentario?:", {
+              content: "input",
+            }).then((value) => {
+              if (value) {
+                merma.comentarioAprobacion = value;
+              }
+
+              this.mermaService.aprobarMerma(merma).subscribe(() => {
                 this.socket.emit('aprobarmerma', merma);
               });
-          });
+            });
+          } else {
+            swal('No se puede aprobar esta merma por que no hay suficiente en Stock', '', 'error');
+          }
+        });
       }
     });
   }
@@ -193,6 +220,34 @@ export class MermasComponent implements OnInit {
     }
 
     return ok;
+  }
+
+  validaDesaprobacion(merma: Merma) {
+    let ok = false;
+
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE && merma.fAprobacion !== undefined) {
+      ok = true;
+    } else {
+      ok = false;
+    }
+
+    return ok;
+  }
+
+  desaprueba(merma: Merma) {
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta apunto de desaprobar el registro',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(ok => {
+      if (ok) {
+        this.mermaService.DesaprobarMerma(merma).subscribe(() => {
+          this.socket.emit('desaprobarmerma', merma);
+        });
+      }
+    });
   }
 
 }

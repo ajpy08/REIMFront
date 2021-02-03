@@ -79,4 +79,12 @@ export class MermaService {
     );
   }
 
+  DesaprobarMerma(merma: Merma): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/desaprobar/merma/' + merma._id;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, merma)
+      .pipe(map(resp => swal('Merma Desaprobada', 'Desaprobada correctamente', 'success')),
+    );
+  }
+
 }
