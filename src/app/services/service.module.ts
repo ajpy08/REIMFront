@@ -27,6 +27,7 @@ import {
     MaterialService,
     UnidadService,
     EntradaService,
+    MermaService,
     DetalleMaterialService,
     ProveedorService,
     MantenimientoService,
@@ -74,6 +75,7 @@ import {
       REIMGuard,
       ProveedorService,
       EntradaService,
+      MermaService,
       MantenimientoService,
       AlmacenService
     ],

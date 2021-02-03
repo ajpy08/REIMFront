@@ -109,6 +109,8 @@ import { MantenimientosComponent } from './maniobras/mantenimientos/mantenimient
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
 
 import { InventarioMaterialComponent } from './almacen/inventarioMaterial/inventarioMaterial.component';
+import { MermasComponent } from './almacen/mermas/mermas.component';
+import { MermaComponent } from './almacen/mermas/merma.component';
 
 /* #endregion */
 
@@ -607,6 +609,18 @@ const pagesRoutes: Routes = [
         component: EntradaComponent,
         canActivate: [REIMGuard],
         data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'mermas',
+        component: MermasComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Catálogo de Mermas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+    },
+    {
+        path: 'mermas/merma/:id',
+        component: MermaComponent,
+        canActivate: [REIMGuard],
+        data: { titulo: 'Actualizacion de Merma', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
     },
     {
         path: 'proveedores',

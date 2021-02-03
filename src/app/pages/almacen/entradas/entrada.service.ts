@@ -7,8 +7,7 @@ import { Entrada } from './entrada.models';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
-declare var swal: any;
+import swal from 'sweetalert';
 
 @Injectable()
 export class EntradaService {

@@ -24,6 +24,7 @@ export { ExcelService } from './excel/excel.service';
 export { MaterialService } from '../pages/almacen/materiales/material.service';
 export { UnidadService } from '../services/shared/unidades.service';
 export { EntradaService } from '../pages/almacen/entradas/entrada.service';
+export { MermaService } from '../pages/almacen/mermas/merma.service';
 export { DetalleMaterialService } from '../pages/almacen/entradas/detalleMaterial.service';
 export { ProveedorService } from '../pages/proveedores/proveedor.service';
 export {MantenimientoService} from '../pages/maniobras/mantenimientos/mantenimiento.service';
