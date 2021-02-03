@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl,ValidationErrors, ValidatorFn  } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
@@ -47,16 +47,18 @@ export const MY_FORMATS = {
   ]
 })
 export class MantenimientoComponent implements OnInit {
+  
   usuarioLogueado = new Usuario;
   regForm: FormGroup;
   url: string;
+  regresar_cerrar="";
   act = true;
   mantenimiento: Mantenimiento = new Mantenimiento();
   tiposLavado = TIPOS_LAVADO_ARRAY;
   tiposMantenimiento = TIPOS_MANTENIMIENTO_ARRAY;
   listaMateriales: Material[];
-
   mantenimientoAgregar = new SelectionModel<Mantenimiento>(true, []);
+  dialogR = false;
 
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
@@ -71,7 +73,19 @@ export class MantenimientoComponent implements OnInit {
 
   ngOnInit() {
 
-    this.mantenimiento = this.data;
+    this.url = '/mantenimientos';
+    const id = this.activatedRoute.snapshot.paramMap.get('id');
+    if (id) {
+      this.mantenimiento._id = id;
+      this.dialogR = false;
+      this.regresar_cerrar = "Regresar";
+    }
+    else {
+      this.mantenimiento = this.data;
+      this.dialogR = true;
+      this.regresar_cerrar = "Cerrar";
+    }
+
     this._materialService.getMateriales(null, true).subscribe(materiales => {
       this.listaMateriales = materiales.materiales;
     });
@@ -217,32 +231,52 @@ export class MantenimientoComponent implements OnInit {
     precio: precio,
     //cantidad: [cantidad, [this.checaStock(material)]]
     cantidad: cantidad
-  })
+  },{Validators : this.checaStock2})
 }
 
 
-// checaStock(id) {
-//   return (control: AbstractControl): { [s: string]: any  | null} => {
-//     console.log(this.materiales);
-//     // control.parent es el FormGroup
-//     if (this.regForm) { // en las primeras llamadas control.parent es undefined
-//       this._materialService.getStockMaterial(id).subscribe(res=>{
-//         if (res>control.value) {
-//           console.log("si paso");
-//           return {
-//             checaStock: true
-//           };
-//         }
-//         else
-//           return null;
-//       });
-//     }
-//     return null;
-//   };
-// }
+checaStock(id) {
+  return (control: AbstractControl): { [s: string]: any  | null} => {
+    // control.parent es el FormGroup
+    if (this.regForm) { // en las primeras llamadas control.parent es undefined
+      this._materialService.getStockMaterial(id).subscribe(res=>{
+        if (res.stock>=control.value) {
+          console.log("si paso");
+          return null;
+        }
+        else
+        { console.log("NO HAY SUFICIENTE STOCK");
+          
+          return {
+            checaStock: false
+          };
+        }
+      });
+    }
+    return null;
+  };
+}
 
-
-
+checaStock2: ValidatorFn = (
+  control: FormGroup
+): ValidationErrors | null => {
+  const cantidad = control.get("cantidad")
+  const material = control.get("material")
+  
+  this._materialService.getStockMaterial(material.value).subscribe(res=>{
+    if (res.stock>=cantidad.value) {
+      console.log("si paso");
+return null;
+    }
+    else
+    { console.log("NO HAY SUFICIENTE STOCK");
+    return {
+      checaStock2: true
+    };
+    }
+  });
+  return null;
+}
 
 
 addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
@@ -256,7 +290,23 @@ addMaterial2(id:String) {
 }
 
 removeMaterial(i:number) {
-this.materiales.removeAt(i);
+//this.materiales.removeAt(i);
+console.log(this.materiales)
+}
+
+saveMaterial(i:number)
+{
+  const material : any = {material:this.materiales.controls[i].get("material").value,
+                          descripcion:this.materiales.controls[i].get("descripcion").value,
+                          costo:this.materiales.controls[i].get("costo").value,
+                          precio: this.materiales.controls[i].get("precio").value,
+                          cantidad: this.materiales.controls[i].get("cantidad").value};
+console.log (material);
+
+this._mantenimientoService.agregaMaterial(this.mantenimiento._id,material).subscribe(res => {
+  
+});
+
 }
 
 guardarRegistro() {
@@ -266,11 +316,10 @@ guardarRegistro() {
         this.regForm.get('_id').setValue(res._id);
       this.regForm.markAsPristine();
     });
-    this.close(this.regForm.value);
+    if(this.dialogR) this.close(this.regForm.value);
   };
 }
-
-  
+ 
 
   
 onChangeTipoMantenimiento(event: { value: string; }) {
@@ -304,8 +353,22 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   //   }
   // }
 
+  salir(){
+    if (this.dialogR) this.close(undefined);
+    else this.back()
+
+  }
   close(result: any) {
     this.dialogRef.close(result);
+  }
+  
+  back() {
+    if (localStorage.getItem('history')) {
+      this.url = localStorage.getItem('history');
+    }
+    this.router.navigate([this.url]);
+    localStorage.removeItem('history');
+    
   }
   
 }

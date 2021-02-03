@@ -21,5 +21,15 @@ export class Mantenimiento {
   ) {}
 
 }
+// export class Material {
+//   constructor (
+//     public material: string,
+//     public descripcion: string,
+//     public cantidad: number ,
+//     public costo: number,
+//     public precio: number,
+//     public usuarioAlta: string
+//   ){}
+// }
 
 

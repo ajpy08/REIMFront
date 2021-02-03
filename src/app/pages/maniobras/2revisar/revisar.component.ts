@@ -475,8 +475,7 @@ export class RevisarComponent implements OnInit {
 
 
   cargaMantenimientos(id:string): void {
-    this._mantenimientoService.getMantenimientos(id).subscribe(mantenimientos => {
-      console.log(mantenimientos);
+    this._mantenimientoService.getMantenimientosxManiobra(id).subscribe(mantenimientos => {
       this.listaMantenimientos = mantenimientos.mantenimientos;
     });
 

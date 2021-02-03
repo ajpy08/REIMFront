@@ -37,7 +37,9 @@ import {
   MatSelectModule,
   MatTableModule,
   MatSnackBarModule,
-  MatDialogModule
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA
 } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { HttpClientModule } from '@angular/common/http';
@@ -125,8 +127,11 @@ export function getErrorHandler(): ErrorHandler {
       multi: true
     },
     { provide: ErrorHandler, useFactory: getErrorHandler },
+    { provide: MatDialogRef, useValue: {} },
+    { provide: MAT_DIALOG_DATA, useValue: [] },
     ValidationService
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

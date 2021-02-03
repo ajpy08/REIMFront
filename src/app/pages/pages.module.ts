@@ -172,8 +172,10 @@ import { DetalleMermaComponent } from './almacen/mermas/detalleMerma.component';
 
 import { ProveedoresComponent } from './proveedores/proveedores.component';
 import { ProveedorComponent } from './proveedores/proveedor.component';
+
 import { MantenimientosComponent } from './maniobras/mantenimientos/mantenimientos.component';
 import { MantenimientoComponent } from './maniobras/mantenimientos/mantenimiento.component';
+import { Fotos2Component } from './maniobras/mantenimientos/fotos2.component';
 
 
 import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltantes-material.component';
@@ -289,6 +291,7 @@ import { MermaComponent } from './almacen/mermas/merma.component';
         ProveedoresComponent,
         MantenimientosComponent,
         MantenimientoComponent,
+        Fotos2Component,
         FaltantesMaterialComponent,
         ReporteMovimientosComponent,
         MermasComponent,
