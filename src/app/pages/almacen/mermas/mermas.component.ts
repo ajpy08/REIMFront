@@ -70,7 +70,7 @@ export class MermasComponent implements OnInit {
       this.cargarMermas();
     }.bind(this));
 
-    this.socket.on('aprobar-merma', function () {
+    this.socket.on('desaprobar-merma', function () {
       this.cargarMermas();
     }.bind(this));
   }
