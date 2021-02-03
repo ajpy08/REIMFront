@@ -49,12 +49,12 @@
                   <i class="fa fa-lock"></i>
                 </button>
 
-                <button matTooltip="Editar Merma" [routerLink]="['/mermas/merma', merma._id ]"
+                <button matTooltip="Editar Merma" *ngIf="!merma.fAprobacion" [routerLink]="['/mermas/merma', merma._id ]"
                   class="btn btn-primary m-r-5">
                   <i class="fa fa-edit"></i>
                 </button>
                 
-                <button matTooltip="Eliminar Merma" (click)="borrarMerma( merma )"
+                <button matTooltip="Eliminar Merma" *ngIf="!merma.fAprobacion" (click)="borrarMerma( merma )"
                   class="btn btn-danger m-r-5">
                   <i class="fa fa-trash-o"></i>
                 </button>
