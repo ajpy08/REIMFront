@@ -15,123 +15,121 @@
 
 </button> -->
 <!-- /////////////////////////////////////// A P R O B A R  ///////////////////////////////////////////////////////////// -->
-<mat-tab-group  (selectedTabChange)="onLinkClick($event)" >
+<mat-tab-group (selectedTabChange)="onLinkClick($event)">
 
-<mat-tab label="XAprobar">
-  <ng-template mat-tab-label>
-     Devoluciones Pendientes ( <small>{{totalXAprobar}}</small> )
-  </ng-template>
+  <mat-tab label="XAprobar">
+    <ng-template mat-tab-label>
+      Devoluciones Pendientes ( <small>{{totalXAprobar}}</small> )
+    </ng-template>
 
-  <div class="animated fadeIn" *ngIf="!cargando">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="example-header mat-elevation-z8">
-            <mat-form-field>
-              <input matInput (keyup)="applyFilterXAprobar($event.target.value)"
-                placeholder="Escriba algo para filtrar">
-            </mat-form-field>
-          </div>
-          
-          <!-- <div class="text-right">
+    <div class="animated fadeIn" *ngIf="!cargando">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="example-header mat-elevation-z8">
+              <mat-form-field>
+                <input matInput (keyup)="applyFilterXAprobar($event.target.value)" placeholder="Escriba algo para filtrar">
+              </mat-form-field>
+            </div>
+
+            <!-- <div class="text-right">
 
             <button (click)="exportAsXLSX(dtTransito, 'Transito')" class="btn btn-success m-r-5">
               <i class="fas fa-file-excel"></i>
             </button>
           </div> -->
-          <div class="contenedorParD">
-            <span class="parpa tex" *ngIf="this.tablaCargarD === true">
+            <div class="contenedorParD">
+              <span class="parpa tex" *ngIf="this.tablaCargarD === true">
               <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
             </span>
-          </div>
-          
-          <div class="example-container mat-elevation-z8">
-            <mat-table class="mat-table-big" [dataSource]="dtXAprobar" #sortXAprobar="matSort" matSort>
-              <ng-container matColumnDef="actions">
-                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                  <button matTooltip="Editar Maniobra de Transito"
-                    [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
+            </div>
+
+            <div class="example-container mat-elevation-z8">
+              <mat-table class="mat-table-big" [dataSource]="dtXAprobar" #sortXAprobar="matSort" matSort>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <button matTooltip="Editar Maniobra de Transito" [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
                     <i class="fa fa-edit"></i>
                   </button>
-                </mat-cell>
-              </ng-container>
+                  </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="cargaDescarga">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>C / D</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="cargaDescarga">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>C / D</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cargaDescarga}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="folio">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="viaje.viaje">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="viaje.buque.nombre">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="viaje.buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="naviera.nombreComercial">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="naviera.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="solicitud.blBooking">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="solicitud.blBooking">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="transportista.nombreComercial">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="transportista.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.transportista?.nombreComercial}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="contenedor">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="contenedor">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="tipo">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="tipo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="peso">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="peso">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="cliente.nombreComercial">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="cliente.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
+                </ng-container>
 
-              <ng-container matColumnDef="agencia.nombreComercial">
-                <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
-              </ng-container>
+                <ng-container matColumnDef="agencia.nombreComercial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
+                </ng-container>
 
 
-              <mat-header-row *matHeaderRowDef="displayedColumnsXAprobar" class="encabezado"></mat-header-row>
-              <mat-row *matRowDef="let row; columns: displayedColumnsXAprobar;"></mat-row>
-            </mat-table>
+                <mat-header-row *matHeaderRowDef="displayedColumnsXAprobar" class="encabezado"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsXAprobar;"></mat-row>
+              </mat-table>
+            </div>
+            <mat-paginator #pagXAprobar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+            </mat-paginator>
           </div>
-              <mat-paginator #pagXAprobar  [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-              </mat-paginator>
         </div>
       </div>
     </div>
-  </div>
-</mat-tab>
+  </mat-tab>
   <!-- /////////////////////////////////////// A P R O B A R  ///////////////////////////////////////////////////////////// -->
 
-<!-- ///////////////////////////////////////T R A N S I T O ///////////////////////////////////////////////////////////// -->
+  <!-- ///////////////////////////////////////T R A N S I T O ///////////////////////////////////////////////////////////// -->
 
 
   <mat-tab label="Transito">
@@ -145,8 +143,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterTransito($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterTransito($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -167,8 +164,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Transito"
-                      [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Transito" [routerLink]="['/maniobras/maniobra/', row._id,'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -196,7 +192,7 @@
 
                 <ng-container matColumnDef="naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="solicitud.blBooking">
@@ -239,8 +235,8 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsTransito;"></mat-row>
               </mat-table>
             </div>
-                <mat-paginator #pagTransito [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-                </mat-paginator>
+            <mat-paginator #pagTransito [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+            </mat-paginator>
           </div>
         </div>
       </div>
@@ -260,8 +256,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterEspera($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterEspera($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -282,8 +277,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Espera"
-                      [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Espera" [routerLink]="['/maniobras/maniobra/', row._id, 'llegada_entrada']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -311,7 +305,7 @@
 
                 <ng-container matColumnDef="naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="solicitud.blBooking">
@@ -353,8 +347,8 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsEspera;"></mat-row>
               </mat-table>
             </div>
-                <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-                </mat-paginator>
+            <mat-paginator #pagEspera [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+            </mat-paginator>
           </div>
         </div>
       </div>
@@ -373,8 +367,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterRevision($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterRevision($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
 
@@ -395,8 +388,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Editar Maniobra de Revisión" (click)="open(row._id, 'revisar')"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra de Revisión" (click)="open(row._id, 'revisar')" class="btn btn-primary m-r-5">
 
                       <i class="fa fa-edit"></i>
                     </button>
@@ -408,8 +400,7 @@
                 <ng-container matColumnDef="descargaAutorizada">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Descarga Autorizada</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.descargaAutorizada"
-                      (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.descargaAutorizada" (change)="habilitaDeshabilitaPermisoDescargaManiobra(row, $event)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="folio">
@@ -432,7 +423,7 @@
                   <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
                 </ng-container>
 
-                
+
                 <ng-container matColumnDef="naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
@@ -481,8 +472,7 @@
                 <ng-container matColumnDef="fotosreparacion">
                   <mat-header-cell *matHeaderCellDef>Fotos Reparacion</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Ver Foto" *ngIf="row.reparaciones.length > 0"
-                      (click)="openFotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
+                    <button matTooltip="Ver Foto" *ngIf="row.reparaciones.length > 0" (click)="openFotos(row._id, 'fotos_reparacion')" class="btn btn-primary">
                       <i class="fas fa-camera-retro"></i>                      
                     </button>
                     <!-- <button [routerLink]="['/fotos', row._id]" [queryParams]="{opcion: 'fotos_reparacion'}" class="btn btn-primary">
@@ -497,8 +487,7 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsRevision;"></mat-row>
               </mat-table>
             </div>
-            <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
-              [showFirstLastButtons]>
+            <mat-paginator #pagRevision [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
             </mat-paginator>
           </div>
         </div>
@@ -506,134 +495,7 @@
     </div>
   </mat-tab>
 
-  <!-- /////////////////////////////////////// L A V A D O   /     R E P A R A C I O N ///////////////////////////////////////////////////////////// -->
 
-  <mat-tab label="LavadoReparacion">
-    <ng-template mat-tab-label>
-      Lavado / Reparación ( <small>{{totalLavadoReparacion}}</small> )
-    </ng-template>
-    <div class="animated fadeIn" *ngIf="!cargando">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="example-header mat-elevation-z8">
-              <mat-form-field>
-                <input matInput (keyup)="applyFilterLavadoRevision($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
-              </mat-form-field>
-            </div>
-            <br>
-            <div class="text-right">
-
-              <button (click)="exportAsXLSXLavado(dtLavadoReparacion, 'Lavado_Reparación')" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i>
-              </button>
-            </div>
-            <br>
-            <div class="contenedorPar">
-              <span class="parpa tex" *ngIf="this.tablaCargarLR === true">
-                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
-              </span>
-            </div>
-            <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-big" [dataSource]="dtLavadoReparacion" #sortLR="matSort" matSort>
-                <ng-container matColumnDef="actions">
-                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <!-- <button [routerLink]="['/maniobras/maniobra/',row._id, 'termina_lavado_reparacion']" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button> -->
-                    <button matTooltip="Editar Maniobra de Lavado y Reparación" (click)="open(row._id, 'termina_lavado_reparacion')"
-                      class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="contenedor">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.contenedor}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="tipo">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.tipo}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="peso">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="viaje.viaje">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.viaje}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="viaje.buque.nombre">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.viaje?.buque?.nombre}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="naviera.nombreComercial">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
-                </ng-container>
-
-
-
-                <ng-container matColumnDef="solicitud.blBooking">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>BL / Booking</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.solicitud?.blBooking}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="cliente.nombreComercial">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.cliente?.nombreComercial}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="agencia.nombreComercial">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Agencia</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.agencia?.nombreComercial}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="lavado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Lavado</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.lavado}} <br>
-                    <!-- <button [routerLink]="['/fotos',  row._id]" [queryParams]="{opcion: 'fotos_lavado'}" class="btn btn-primary">
-                      <i class="fas fa-camera-retro"></i>
-                      Fotos
-                  </button> -->
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header >Reparaciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control" [(ngModel)]=" row.reparaciones" name="reparacio" >
-                      <mat-option  *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
-                        {{rep.reparacion}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="grado">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsLavadoReparacion" class="encabezado"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsLavadoReparacion;"></mat-row>
-              </mat-table>
-            </div>
-                <mat-paginator #pagLR [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-                </mat-paginator>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-tab>
 
 
   <!-- /////////////////////////////////////// X   C A R G A R ///////////////////////////////////////////////////////////// -->
@@ -648,8 +510,7 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterXCargar($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterXCargar($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
@@ -671,9 +532,7 @@
                   <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
                   <mat-cell *matCellDef="let row">
 
-                    <button matTooltip="Editar Maniobra por Cargar"
-                      [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Maniobra por Cargar" [routerLink]="['/maniobras/maniobra/', row._id, 'carga_contenedor']" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
                   </mat-cell>
@@ -705,7 +564,7 @@
 
                 <ng-container matColumnDef="naviera.nombreComercial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Naviera</mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
+                  <mat-cell *matCellDef="let row"> {{row.naviera?.nombreComercial}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="cliente.nombreComercial">
@@ -727,8 +586,7 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsXCargar;"></mat-row>
               </mat-table>
             </div>
-            <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
-              [showFirstLastButtons]>
+            <mat-paginator #pagXCargar [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
             </mat-paginator>
           </div>
         </div>
@@ -736,5 +594,5 @@
     </div>
   </mat-tab>
 
-  
+
 </mat-tab-group>

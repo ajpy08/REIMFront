@@ -21,6 +21,9 @@ import * as _moment from 'moment';
 import { MatAccordion } from '@angular/material';
 import { ROLES, GRADOS_CONTENEDOR_ARRAY, ETAPAS_MANIOBRA_ARRAY } from 'src/app/config/config';
 import { Location } from '@angular/common';
+import { MantenimientoComponent } from '../maniobras/mantenimientos/mantenimiento.component';
+import {MantenimientoService} from '../../services/service.index'
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -68,12 +71,15 @@ export class DetalleManiobraComponent implements OnInit {
   _hDescarga;
   espera;
   url: string;
+  listaMantenimientos;
 
   constructor(private maniobraService: ManiobraService, public operadorService: OperadorService,
+    private _mantenimientoService: MantenimientoService,
     private agenciaService: AgenciaService, private transportistaService: TransportistaService,
     private camionService: CamionService, private usuarioService: UsuarioService, private location: Location,
     private activatedRoute: ActivatedRoute, private fb: FormBuilder, private datePipe: DatePipe, private router: Router,
-    private _reparacionService: ReparacionService, private _maniobraService: ManiobraService) { }
+    private _reparacionService: ReparacionService, private _maniobraService: ManiobraService,
+    public matDialog: MatDialog) { }
 
   ngOnInit() {
     if (this.usuarioService.usuario.role !== ROLES.ADMIN_ROLE) {
@@ -265,8 +271,7 @@ export class DetalleManiobraComponent implements OnInit {
       }
       this.regForm.controls['mostrarFotosRNaviera'].setValue(maniob.maniobra.mostrarFotosRNaviera);
       this.regForm.controls['mostrarFotosRAA'].setValue(maniob.maniobra.mostrarFotosRAA);
-
-      console.log(maniob.maniobra);
+      this.cargaMantenimientos(maniob.maniobra._id);
     });
     this.cargando = false;
   }
@@ -477,4 +482,30 @@ export class DetalleManiobraComponent implements OnInit {
   get hFinReparacion() {
     return this.regForm.get('hFinReparacion');
   }
+
+
+  cargaMantenimientos(id:string): void {
+    this._mantenimientoService.getMantenimientosxManiobra(id).subscribe(mantenimientos => {
+      this.listaMantenimientos = mantenimientos.mantenimientos;
+    });
+
+  }
+  openDialogMantenimiento(id: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {_id:id,maniobra:this.regForm.get('_id').value};
+    const dialogRef = this.matDialog.open(MantenimientoComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(detalle => {
+      if (detalle) {
+        this.cargaMantenimientos(this.regForm.get('_id').value);
+      }
+    });
+  }
+
+  removeMantenimiento(id: string) {
+    this._mantenimientoService.eliminaMantenimiento(id).subscribe(mantenimientos => {
+      this.cargaMantenimientos(this.regForm.get('_id').value);
+    });
+  }
+
 }

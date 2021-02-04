@@ -77,7 +77,9 @@
 
                 Fechas:
                 <p>
-                  <button type="button" (click)="addFecha()">Add</button>
+                  <button matTooltip="Nueva Fecha" mat-mini-fab class="btn btn-primary" (click)="addFecha()" type="button">
+                    <i class="fa fa-plus"></i>
+                </button>
                 </p>
                 <div formArrayName="fechas">
                   <div *ngFor="let fecha of this.fechas.controls; let i=index">
@@ -111,7 +113,11 @@
                             <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización" (focus)="ponHora($event)">
                           </mat-form-field>
                         </div>
-                        <div class="col-md-2"><button (click)="removeFecha(i)">Remove</button></div>
+                        <div class="col-md-2">
+                          <button (click)="removeFecha(i)" class="btn btn-danger" type="button">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -126,7 +132,9 @@
                   </mat-option>
                 </mat-select>
                 <p>
-                  <button type="button" (click)="addMaterial2(Material.value)">Add</button>
+                  <button matTooltip="Agrega Material" mat-mini-fab class="btn btn-primary" (click)="addMaterial2(Material.value)" type="button">
+                    <i class="fa fa-plus"></i>
+                </button>
                 </p>
                 <div formArrayName="materiales">
                   <div *ngFor="let material of this.materiales.controls; let i=index">
@@ -161,8 +169,10 @@
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="saveMaterial(i)">SAVE</button>
-                          <button (click)="removeMaterial(i)">Remove</button>
+                          <button (click)="saveMaterial(i)" class="btn btn-primary"><i class="fa fa-save"></i></button>
+                          <button (click)="removeMaterial(i)" class="btn btn-danger" type="button">
+                            <i class="fas fa-trash"></i>
+                          </button>
                         </div>
                       </div>
                     </div>

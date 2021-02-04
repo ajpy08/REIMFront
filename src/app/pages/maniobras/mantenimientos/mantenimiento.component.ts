@@ -15,6 +15,7 @@ import { Mantenimiento } from './mantenimiento.models';
 import { MantenimientoService,MaterialService } from "../../../services/service.index";
 import { Material } from '../../almacen/materiales/material.models';
 import * as _moment from 'moment';
+import { ok } from 'assert';
 
 
 const moment = _moment;
@@ -135,7 +136,7 @@ export class MantenimientoComponent implements OnInit {
             res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
             else{
               if (propiedad=="materiales"){
-                res.mantenimiento[propiedad].forEach((x: any) => {this.addMaterial(x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
+                res.mantenimiento[propiedad].forEach((x: any) => {this.addMaterial(x._id,x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
               }
               else{
               this.regForm.controls[propiedad].enable({ onlySelf: true });
@@ -223,14 +224,15 @@ export class MantenimientoComponent implements OnInit {
   this.fechas.removeAt(i);
  }
 
- newMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1): FormGroup {
+ newMaterial(id='',material='',descripcion='',costo=0, precio=0, cantidad=1): FormGroup {
   return this.fb.group({
     material: material,
     descripcion: descripcion,
     costo: costo,
     precio: precio,
     //cantidad: [cantidad, [this.checaStock(material)]]
-    cantidad: cantidad
+    cantidad: cantidad,
+    _id:id
   },{Validators : this.checaStock2})
 }
 
@@ -279,31 +281,40 @@ return null;
 }
 
 
-addMaterial(material='',descripcion='',costo=0, precio=0, cantidad=1) {
-  this.materiales.push(this.newMaterial(material,descripcion,costo, precio, cantidad));
+addMaterial(id='',material='',descripcion='',costo=0, precio=0, cantidad=1) {
+  this.materiales.push(this.newMaterial(id,material,descripcion,costo, precio, cantidad));
 }
 
 addMaterial2(id:String) {
   const rep = this.listaMateriales.find(x => x._id === id);
   console.log(rep);
-  this.materiales.push(this.newMaterial(rep._id,rep.descripcion,rep.costo.$numberDecimal,rep.precio.$numberDecimal, 1));
+  this.materiales.push(this.newMaterial('',rep._id,rep.descripcion,rep.costo.$numberDecimal,rep.precio.$numberDecimal, 1));
 }
 
 removeMaterial(i:number) {
-//this.materiales.removeAt(i);
-console.log(this.materiales)
+//
+const _id = this.materiales.controls[i].get("_id").value;
+if (_id!=="" && _id!==undefined){
+  this._mantenimientoService.eliminaMaterial(this.mantenimiento._id,_id).subscribe(res => {
+    if (res.ok)this.materiales.removeAt(i);
+  });
+}
+else  this.materiales.removeAt(i);
+
 }
 
 saveMaterial(i:number)
 {
-  const material : any = {material:this.materiales.controls[i].get("material").value,
-                          descripcion:this.materiales.controls[i].get("descripcion").value,
-                          costo:this.materiales.controls[i].get("costo").value,
-                          precio: this.materiales.controls[i].get("precio").value,
-                          cantidad: this.materiales.controls[i].get("cantidad").value};
+  const material : any = {
+    _id : this.materiales.controls[i].get("_id").value,
+    material:this.materiales.controls[i].get("material").value,
+    descripcion:this.materiales.controls[i].get("descripcion").value,
+    costo:this.materiales.controls[i].get("costo").value,
+    precio: this.materiales.controls[i].get("precio").value,
+    cantidad: this.materiales.controls[i].get("cantidad").value};
 console.log (material);
 
-this._mantenimientoService.agregaMaterial(this.mantenimiento._id,material).subscribe(res => {
+this._mantenimientoService.guardaMaterial(this.mantenimiento._id,material).subscribe(res => {
   
 });
 

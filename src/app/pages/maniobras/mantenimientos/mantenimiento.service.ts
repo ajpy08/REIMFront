@@ -45,16 +45,39 @@ export class MantenimientoService {
     }
   }
 
-  agregaMaterial(idMantenimiento: string,material: any): Observable<any> {
-    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento+"/addMaterial";
-    url += '?token=' + this._usuarioService.token;
-    return this.http.put(url, {material}).pipe(
-      map((resp: any) => {
-        swal('Material Agregado con exito', "", 'success');
-        return resp.mantenimiento;
-      })
-    );
+  guardaMaterial(idMantenimiento: string,material: any): Observable<any> {
+    if (material._id==="") {
+      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento+"/addMaterial";
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, {material}).pipe(
+        map((resp: any) => {
+          swal('Material Agregado con exito', "", 'success');
+          return resp.mantenimiento;
+        })
+      );
+    }
+    else {
+      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento+"/editMaterial/"+material._id;
+      url += '?token=' + this._usuarioService.token;
+      return this.http.put(url, {material}).pipe(
+        map((resp: any) => {
+          swal('Material Editado con exito', "", 'success');
+          return resp.mantenimiento;
+        })
+      );
+    }
   }
+
+  eliminaMaterial(idMantenimiento: string, idMaterial: string): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + "/removeMaterial/"+idMaterial;
+    url += '?token=' + this._usuarioService.token;
+    return this.http.delete(url )
+      .pipe(map((resp: any) => {
+        swal('Material Eliminado', 'success');
+        return resp;
+      }));
+  }
+  
 
   eliminaMantenimiento(idMantenimiento: string): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento;
@@ -93,7 +116,7 @@ export class MantenimientoService {
       params = params.append('finalizado', finalizado);
     }
 
-
+console.log(params);
     return this.http.get(url,{params:params});
 
     
