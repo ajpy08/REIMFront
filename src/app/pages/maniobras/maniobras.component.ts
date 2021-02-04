@@ -88,21 +88,6 @@ export class ManiobrasComponent implements OnInit {
     'fotosreparacion'
   ];
 
-  displayedColumnsLavadoReparacion = [
-    'actions',
-    'contenedor',
-    'tipo',
-    'peso',
-    'cliente.nombreComercial',
-    'viaje.viaje',
-    'viaje.buque.nombre',
-    'naviera.nombreComercial',
-    'solicitud.blBooking',
-    'agencia.nombreComercial',
-    'lavado',
-    'reparaciones',
-    'grado'
-  ];
 
   displayedColumnsXCargar = [
     'actions',
@@ -136,7 +121,7 @@ export class ManiobrasComponent implements OnInit {
   dtTransito: any;
   dtEspera: any;
   dtRevision: any;
-  dtLavadoReparacion: any;
+  
   dtXCargar: any;
   dtXAprobar: any;
   maniobrasExcel = [];
@@ -147,7 +132,6 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   @ViewChild('pagEspera', { read: MatPaginator }) pagEspera: MatPaginator;
   @ViewChild('pagRevision', { read: MatPaginator }) pagRevision: MatPaginator;
-  @ViewChild('pagLR', { read: MatPaginator }) pagLR: MatPaginator;
   @ViewChild('pagXCargar', { read: MatPaginator }) pagXCargar: MatPaginator;
   @ViewChild('pagXAprobar', { read: MatPaginator }) pagXAprobar: MatPaginator;
   @ViewChild('pagTransito', { read: MatPaginator }) pagTransito: MatPaginator;
@@ -155,7 +139,6 @@ export class ManiobrasComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('sortEspera') sortEspera: MatSort;
   @ViewChild('sortRevision') sortRevision: MatSort;
-  @ViewChild('sortLR') sortLR: MatSort;
   @ViewChild('sortXCargar') sortXCargar: MatSort;
   @ViewChild('sortXAprobar') sortXAprobar: MatSort;
   @ViewChild('sortTransito') sortTransito: MatSort;
@@ -283,26 +266,6 @@ export class ManiobrasComponent implements OnInit {
     // this.totalRevision = this.dtRevision.filteredData.length;
   }
 
-  applyFilterLavadoRevision(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-
-    if (this.dtLavadoReparacion && this.dtLavadoReparacion.data.length > 0) {
-      this.dtLavadoReparacion.filter = filterValue;
-      this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
-      if (this.dtLavadoReparacion.filteredData.length === 0 ) {
-        this.tablaCargarLR = true;
-      } else {
-        this.tablaCargarLR = false;
-      }
-    } else {
-      console.error('No se puede filtrar en un datasource vacío');
-    }
-
-    // this.dtLavadoReparacion.filter = filterValue;
-    // this.totalLavadoReparacion = this.dtLavadoReparacion.filteredData.length;
-  }
-
   applyFilterXCargar(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
@@ -414,30 +377,6 @@ export class ManiobrasComponent implements OnInit {
         this.dtRevision.paginator = this.pagRevision;
         this.totalRevision = maniobras.total;
         this.dtRevision.filterPredicate = this.Filtro();
-      });
-
-    this._maniobraService
-      .getManiobras(null, ETAPAS_MANIOBRA.LAVADO_REPARACION)
-      .subscribe(maniobras => {
-        this.dtLavadoReparacion = new MatTableDataSource(maniobras.maniobras);
-
-        this.dtLavadoReparacion.sortingDataAccessor = (item, property) => {
-          if (property.includes('.')) {
-            return property
-              .split('.')
-              .reduce((o, i) => (o ? o[i] : undefined), item);
-          }
-          return item[property];
-        };
-        if (maniobras.maniobras.length === 0) {
-          this.tablaCargarLR = true;
-        } else {
-          this.tablaCargarLR = false;
-        }
-        this.dtLavadoReparacion.sort = this.sortLR;
-        this.dtLavadoReparacion.paginator = this.pagLR;
-        this.totalLavadoReparacion = maniobras.total;
-        this.dtLavadoReparacion.filterPredicate = this.Filtro();
       });
 
     this._maniobraService
@@ -723,62 +662,7 @@ export class ManiobrasComponent implements OnInit {
     }
   }
 
-  crearDatosExcelLavado(datos) {
-    this.maniobrasExcel = [];
-    datos.forEach(d => {
-      const maniobras = {
-        Contenedor: d.contenedor,
-        Tipo: d.tipo,
-        Peso: d.peso,
-        Cliente:
-          d.cliente &&
-          d.cliente.nombreComercial &&
-          d.cliente.nombreComercial !== undefined &&
-          d.cliente.nombreComercial !== '' &&
-          d.cliente.nombreComercial,
-        Viaje:
-          d.viaje &&
-            d.viaje.viaje &&
-            d.viaje.viaje !== undefined &&
-            d.viaje.viaje !== ''
-            ? d.viaje.viaje
-            : '' && d.viaje.viaje,
-        Nombre_Buque:
-          d.viaje.buque &&
-            d.viaje.buque !== undefined &&
-            d.viaje.buque.nombre !== ''
-            ? d.viaje.buque.nombre
-            : '' && d.viaje.buque.nombre,
-        Booking:
-          d.solicitud &&
-            d.solicitud.blBooking &&
-            d.solicitud.blBooking !== undefined &&
-            d.solicitud.blBooking !== ''
-            ? d.solicitud.blBooking
-            : '' && d.solicitud.blBooking,
-        Agencia:
-          d.agencia &&
-          d.agencia.nombreComercial &&
-          d.agencia.nombreComercial !== undefined &&
-          d.agencia.nombreComercial !== '' &&
-          d.agencia.nombreComercial,
-        lavado: d.lavado,
-        Reparacion: d.reparaciones,
-        Grado: d.grado,
-        Sello: d.sello
-      };
-      this.maniobrasExcel.push(maniobras);
-    });
-  }
-
-  exportAsXLSXLavado(dtLavadoReparacion, nombre: string): void {
-    this.crearDatosExcelLavado(dtLavadoReparacion.filteredData);
-    if (this.maniobrasExcel) {
-      this.excelService.exportAsExcelFile(this.maniobrasExcel, nombre);
-    } else {
-      swal('No se puede exportar un excel vacio', '', 'error');
-    }
-  }
+  
 
   crearDatosExcelX(datos) {
     this.maniobrasExcel = [];
