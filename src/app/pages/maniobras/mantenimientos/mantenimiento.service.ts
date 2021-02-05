@@ -45,6 +45,17 @@ export class MantenimientoService {
     }
   }
 
+  finalizaMantenimiento(idMantenimiento: string, finaliza : boolean)
+  {
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + '/finaliza';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url, { finalizado: finaliza })
+      .pipe(map((resp: any) => {
+        swal('Cambio de estado del Mantenimiento realizado con éxito', resp.mensaje, 'success');
+        return true;
+      }));
+  }
+
   guardaMaterial(idMantenimiento: string,material: any): Observable<any> {
     if (material._id==="") {
       let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento+"/addMaterial";
