@@ -133,6 +133,7 @@ export class MantenimientoComponent implements OnInit {
     this._mantenimientoService.getMantenimiento(idMantenimiento).subscribe(res => {
       
       this.mantenimiento = res.mantenimiento;
+      console.log(this.mantenimiento);
       this._maniobraService.getManiobra(this.mantenimiento.maniobra).subscribe(res=>{
         this.maniobraAsociada = res.maniobra;
         console.log(this.maniobraAsociada);
