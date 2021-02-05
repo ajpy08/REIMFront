@@ -11,12 +11,14 @@ import { MAT_DIALOG_DATA, MatDialogConfig, MatDialog} from '@angular/material/di
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
+
 import { Mantenimiento } from './mantenimiento.models';
-import { MantenimientoService,MaterialService } from "../../../services/service.index";
+import { MantenimientoService,MaterialService,ManiobraService } from "../../../services/service.index";
 import { Material } from '../../almacen/materiales/material.models';
 import * as _moment from 'moment';
 import { ok } from 'assert';
-
+import { Maniobra } from '../../../models/maniobra.models';
+declare var swal: any;
 
 const moment = _moment;
 
@@ -55,6 +57,7 @@ export class MantenimientoComponent implements OnInit {
   regresar_cerrar="";
   act = true;
   mantenimiento: Mantenimiento = new Mantenimiento();
+  maniobraAsociada: Maniobra = new Maniobra();
   tiposLavado = TIPOS_LAVADO_ARRAY;
   tiposMantenimiento = TIPOS_MANTENIMIENTO_ARRAY;
   listaMateriales: Material[];
@@ -64,8 +67,9 @@ export class MantenimientoComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public _mantenimientoService: MantenimientoService,
-    public _materialService: MaterialService,
+    private _mantenimientoService: MantenimientoService,
+    private _materialService: MaterialService,
+    private _maniobraService: ManiobraService,
     public router: Router,
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -93,7 +97,7 @@ export class MantenimientoComponent implements OnInit {
 
     this.createFormGroup();
     if (this.mantenimiento._id !== 'nuevo') {
-      this.cargarRegistro(this.mantenimiento);
+      this.cargarRegistro(this.mantenimiento._id);
     } else {
       for (const control in this.regForm.controls) {
         if (control.toString()!== "fechas" && control.toString()!=="materiales")
@@ -125,10 +129,15 @@ export class MantenimientoComponent implements OnInit {
     });
   }
 
-  cargarRegistro(mantenimiento: Mantenimiento) {
-    this._mantenimientoService.getMantenimiento(mantenimiento._id).subscribe(res => {
+  cargarRegistro(idMantenimiento: string) {
+    this._mantenimientoService.getMantenimiento(idMantenimiento).subscribe(res => {
+      
       this.mantenimiento = res.mantenimiento;
-      this.mantenimiento.maniobra=mantenimiento.maniobra;
+      console.log(this.mantenimiento);
+      this._maniobraService.getManiobra(this.mantenimiento.maniobra).subscribe(res=>{
+        this.maniobraAsociada = res.maniobra;
+        console.log(this.maniobraAsociada);
+      });
      for (const propiedad in this.mantenimiento) 
         for (const control in this.regForm.controls) 
           if (propiedad === control.toString()) {         
@@ -351,6 +360,49 @@ onChangeTipoMantenimiento(event: { value: string; }) {
       this.cambioGrado.disable({ onlySelf: true });
     }
   }
+
+  onChangeFinaliza(event) {
+    console.log(event);
+    if (event.checked === false) {
+      swal({
+        title: '¿Esta seguro de esta acción?',
+        text: 'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._mantenimientoService
+            .finalizaMantenimiento(this.mantenimiento._id, event.checked)
+            .subscribe(() => {
+              //this.cargarOperadores(true);
+            });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    } else {
+      swal({
+        title: '¿Esta seguro de esta acción?',
+        text: 'El mantenimiento sera finalizado y el contenedor estara disponible ',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(borrar => {
+        if (borrar) {
+          this._mantenimientoService
+            .finalizaMantenimiento(this.mantenimiento._id, event.checked)
+            .subscribe(() => {
+              //this.acttrue = false;
+              //this.cargarOperadores(true);
+            });
+        } else {
+          event.source.checked = !event.checked;
+        }
+      });
+    }
+  }
+
 
   ponHora(event: any) {
     console.log(event);

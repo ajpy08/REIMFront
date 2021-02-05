@@ -2,7 +2,7 @@
   <div class="col-md">
     <div class="card card-body">
       <mat-dialog-content>
-        <h3 class="box-title m-b-0">Mantenimientos de Contenedor</h3><br>
+        <h3 class="box-title m-b-0">Mantenimientos de Contenedor: {{this.maniobraAsociada.contenedor}}</h3><br>
         <div class="row">
           <div class="col-sm-12 col-xs-12">
             <form [formGroup]="regForm" novalidate>
@@ -34,9 +34,10 @@
                   </mat-checkbox>
                 </div>
 
-                <mat-checkbox formControlName="finalizado" name="finalizado">
+
+                <mat-slide-toggle formControlName="finalizado" name="finalizado" (change)="onChangeFinaliza($event)">
                   Finalizado
-                </mat-checkbox>
+                </mat-slide-toggle>
 
                 <mat-form-field>
                   <mat-label>Observaciones Generales</mat-label>
