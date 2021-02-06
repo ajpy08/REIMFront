@@ -194,8 +194,10 @@ export class MermasComponent implements OnInit {
             swal("¿Quieres agregar un comentario?:", {
               content: "input",
             }).then((value) => {
-              if (value) {
+              if (value && value !== null) {
                 merma.comentarioAprobacion = value;
+              } else {
+                merma.comentarioAprobacion = '';
               }
 
               this.mermaService.aprobarMerma(merma).subscribe(() => {

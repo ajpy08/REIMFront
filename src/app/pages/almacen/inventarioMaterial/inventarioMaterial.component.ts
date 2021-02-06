@@ -70,6 +70,14 @@ export class InventarioMaterialComponent implements OnInit {
     this.socket.on('delete-material', function () {
       this.filtrado(this.activo);
     }.bind(this));
+
+    this.socket.on('aprobar-merma', function () {
+      this.filtrado(this.activo);
+    }.bind(this));
+
+    this.socket.on('desaprobar-merma', function () {
+      this.filtrado(this.activo);
+    }.bind(this));
   }
 
   applyFilter(filterValue: string) {
