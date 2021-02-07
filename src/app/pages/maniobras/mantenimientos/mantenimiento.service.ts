@@ -7,6 +7,7 @@ import { map, catchError } from 'rxjs/operators';
 import swal from 'sweetalert';
 import { FileItem } from '../../../models/file-item.models';
 import { Mantenimiento } from './mantenimiento.models';
+import { ok } from 'assert';
 
 
 @Injectable()
@@ -45,14 +46,13 @@ export class MantenimientoService {
     }
   }
 
-  finalizaMantenimiento(idMantenimiento: string, finaliza : boolean)
-  {
+  finalizaMantenimiento(idMantenimiento: string, finaliza : boolean):Observable<any>{
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + '/finaliza';
     url += '?token=' + this._usuarioService.token;
     return this.http.put(url, { finalizado: finaliza })
       .pipe(map((resp: any) => {
         swal('Cambio de estado del Mantenimiento realizado con éxito', resp.mensaje, 'success');
-        return true;
+        return resp.ok;
       }));
   }
 

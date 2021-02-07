@@ -362,45 +362,22 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   }
 
   onChangeFinaliza(event) {
-    console.log(event);
-    if (event.checked === false) {
+    
       swal({
         title: '¿Esta seguro de esta acción?',
-        text: 'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
+        text:   event.checked? 'El mantenimiento sera finalizado y el contenedor estara disponible ':'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
         icon: 'warning',
         buttons: true,
         dangerMode: true
-      }).then(borrar => {
-        if (borrar) {
-          this._mantenimientoService
-            .finalizaMantenimiento(this.mantenimiento._id, event.checked)
-            .subscribe(() => {
-              //this.cargarOperadores(true);
-            });
-        } else {
+      }).then(ok => {
           event.source.checked = !event.checked;
-        }
-      });
-    } else {
-      swal({
-        title: '¿Esta seguro de esta acción?',
-        text: 'El mantenimiento sera finalizado y el contenedor estara disponible ',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true
-      }).then(borrar => {
-        if (borrar) {
+          if (ok){
           this._mantenimientoService
-            .finalizaMantenimiento(this.mantenimiento._id, event.checked)
-            .subscribe(() => {
-              //this.acttrue = false;
-              //this.cargarOperadores(true);
+            .finalizaMantenimiento(this.mantenimiento._id, event.checked).subscribe(res => {
+              event.source.checked = event.checked;
             });
-        } else {
-          event.source.checked = !event.checked;
-        }
+          }
       });
-    }
   }
 
 
