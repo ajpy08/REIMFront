@@ -32,6 +32,13 @@ export class VariasService {
     }, {});
   }
 
+  static groupArray2(dataSource, field, subfield) {
+    return dataSource.reduce(function (groups, x) {
+      (groups[x[field][subfield]] = groups[x[field][subfield]] || []).push(x);
+      return groups;
+    }, {});
+  };
+
   static async asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
       await callback(array[index]);

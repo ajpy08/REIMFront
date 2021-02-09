@@ -12,7 +12,7 @@ import { Usuario } from '../../usuarios/usuario.model';
 import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
-import { VariasService } from '../../facturacion/varias.service';
+import { VariasService } from '../../../services/shared/varias.service';
 import { ActivatedRoute, Router } from '@angular/router';
 declare var swal: any;
 

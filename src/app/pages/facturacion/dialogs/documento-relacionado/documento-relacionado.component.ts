@@ -1,5 +1,5 @@
 import { DoctoRelacionado } from './../../models/docto-relacionado.models';
-import { VariasService } from './../../varias.service';
+import { VariasService } from '../../../../services/shared/varias.service';
 import { ValidationService } from './../../validation.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import {

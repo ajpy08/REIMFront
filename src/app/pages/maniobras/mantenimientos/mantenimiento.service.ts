@@ -127,9 +127,7 @@ export class MantenimientoService {
       params = params.append('finalizado', finalizado);
     }
 
-console.log(params);
     return this.http.get(url,{params:params});
-
     
   }
 
