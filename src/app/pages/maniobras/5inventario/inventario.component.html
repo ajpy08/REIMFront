@@ -477,11 +477,11 @@
             <br>
 
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-big" #MatSort4="matSort" [dataSource]="dataSourceM" matSort>
+              <mat-table class="mat-table-medium" #MatSort4="matSort" [dataSource]="dataSourceM" matSort>
                 <ng-container matColumnDef="lavado">
-                  <mat-header-cell *matHeaderCellDef > Lavado </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Lavado </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Ir a Lavado" (click)="openDetalleManiobra(row._id)"
+                    <button *ngIf="row.lavado" matTooltip="Ir a Lavado" (click)="openMantenimiento(row.lavado)"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit" aria-hidden="true"></i>
                     </button>
@@ -489,22 +489,22 @@
                 </ng-container>
 
                 <ng-container matColumnDef="reparacion">
-                  <mat-header-cell *matHeaderCellDef > Reparacion </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Reparacion </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <!-- <button matTooltip="Ir a Reparacion" (click)="openDetalleManiobra(row._id)"
+                    <button *ngIf="row.reparacion" matTooltip="Ir a Reparacion" (click)="openMantenimiento(row.reparacion)"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit" aria-hidden="true"></i>
-                    </button> -->
+                    </button>
                   </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="acondicionamiento">
-                  <mat-header-cell *matHeaderCellDef > Acondicionamiento </mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef >Acondicio  </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <!-- <button matTooltip="Ir a Acondicionamiento" (click)="openDetalleManiobra(row._id)"
+                    <button *ngIf="row.acondicionamiento" matTooltip="Ir a Acondicionamiento" (click)="openMantenimiento(row.acondicionamiento)"
                       class="btn btn-primary m-r-5">
                       <i class="fa fa-edit" aria-hidden="true"></i>
-                    </button> -->
+                    </button>
                   </mat-cell>
                 </ng-container>
 

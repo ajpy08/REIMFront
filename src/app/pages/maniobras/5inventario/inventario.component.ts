@@ -79,7 +79,7 @@ export class InventarioComponent implements OnInit {
   totalInventario = 0;
   totalReparaciones = 0;
   maniobras: Maniobra[] = [];
-  maniobrasMantenimientos: Maniobra[] = [];
+  maniobrasMantenimientos = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
   blockNaviera = false;
@@ -361,26 +361,64 @@ export class InventarioComponent implements OnInit {
     this.cargando = true;
 
 
-    // this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
-    this.mantenimientoService.getMantenimientos().subscribe(mantenimientos => {
+    this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
+      // this.mantenimientoService.getMantenimientos().subscribe(mantenimientos => {
 
-      // const groups = VariasService.groupArray2(mantenimientos.mantenimientos, 'maniobra', 'contenedor');
-      // for (const g in groups) {
-        
-      //   groups[g].forEach(m => {
-      //     this.maniobrasMantenimientos.push(m.maniobra);
-      //     // c.maniobras.forEach(m => {
-      //     //   con.maniobras.push(m);
-      //     // });
-      //   });
+      const groups = VariasService.groupArray2(mantenimientos.mantenimientos, 'maniobra', 'contenedor');
+      for (const g in groups) {
+        let id;
+        let viaje;
+        let ma = {}
+        let lavado;
+        let reparacion;
+        let acondicionamiento;
+        groups[g].forEach(mant => {
+          if (id !== mant.maniobra._id) {
+            id = mant.maniobra._id;
+            viaje = mant.maniobra.viaje !== undefined ? mant.maniobra.viaje._id : '';
+            let maniobra = mant.maniobra;
 
-      //   // con._id = groups[g][0]._id;
-      // }
+            if (mant.tipoMantenimiento == 'LAVADO') {
+              lavado = mant._id;
+            } else {
+              if (mant.tipoMantenimiento == 'REPARACION') {
+                reparacion = mant._id;
+              } else {
+                if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
+                  acondicionamiento = mant._id;
+                }
+              }
+            }
 
-      this.dataSourceM = new MatTableDataSource(mantenimientos.mantenimientos);
+            ma = { lavado: lavado, reparacion: reparacion, acondicionamiento: acondicionamiento, maniobra }
+            this.maniobrasMantenimientos.push(ma);
+
+          } else {
+            if (mant.tipoMantenimiento == 'LAVADO') {
+              lavado = mant._id;
+            } else {
+              if (mant.tipoMantenimiento == 'REPARACION') {
+                reparacion = mant._id;
+              } else {
+                if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
+                  acondicionamiento = mant._id;
+                }
+              }
+            }
+
+            const pos = this.maniobrasMantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
+            let maniobra = this.maniobrasMantenimientos[pos].maniobra;
+            ma = { lavado: lavado, reparacion: reparacion, acondicionamiento: acondicionamiento, maniobra }
+            this.maniobrasMantenimientos.splice(pos, 1);
+            this.maniobrasMantenimientos.push(ma);
+          }
+        });
+      }
+
+      this.dataSourceM = new MatTableDataSource(this.maniobrasMantenimientos);
       this.dataSourceM.sort = this.matSort4;
       this.dataSourceM.paginator = this.paginator.toArray()[1];
-      this.totalRegistrosM = mantenimientos.mantenimientos.length;
+      this.totalRegistrosM = this.maniobrasMantenimientos.length;
     });
     this.cargando = false;
   }
@@ -416,7 +454,6 @@ export class InventarioComponent implements OnInit {
         reparaciones = reparaciones.substring(0, reparaciones.length - 2);
       }
 
-      // console.log(d)
       const dato = {
         EntradaPatio: d.fLlegada,
         Dias_Patio: this.calculaDias(d.fLlegada),
@@ -710,6 +747,30 @@ export class InventarioComponent implements OnInit {
 
     // Voy a pagina.
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
+  }
+
+  openMantenimiento(id: string) {
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
+        array.push(history[i]);
+      }
+    }
+    // Agrego mi nueva ruta al array
+    array.push('/inventario');
+
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    // Voy a pagina.
+    this.router.navigate(['/mantenimientos/mantenimiento/' + id]);
   }
 
   calculaDias(fEnt) {
