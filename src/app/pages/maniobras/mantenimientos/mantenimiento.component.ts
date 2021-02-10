@@ -1,19 +1,19 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl,ValidationErrors, ValidatorFn  } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
 import { MatDialogRef } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialog} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 import { Mantenimiento } from './mantenimiento.models';
-import { MantenimientoService,MaterialService,ManiobraService } from "../../../services/service.index";
+import { MantenimientoService, MaterialService, ManiobraService } from "../../../services/service.index";
 import { Material } from '../../almacen/materiales/material.models';
 import * as _moment from 'moment';
 import { ok } from 'assert';
@@ -50,11 +50,11 @@ export const MY_FORMATS = {
   ]
 })
 export class MantenimientoComponent implements OnInit {
-  
+
   usuarioLogueado = new Usuario;
   regForm: FormGroup;
   url: string;
-  regresar_cerrar="";
+  regresar_cerrar = "";
   act = true;
   mantenimiento: Mantenimiento = new Mantenimiento();
   maniobraAsociada: Maniobra = new Maniobra();
@@ -63,7 +63,9 @@ export class MantenimientoComponent implements OnInit {
   listaMateriales: Material[];
   mantenimientoAgregar = new SelectionModel<Mantenimiento>(true, []);
   dialogR = false;
-
+  mensajeError: string = '';
+  mensajeExito: string = '';
+  muestraInfoAdicional = false;
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -74,7 +76,7 @@ export class MantenimientoComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private datePipe: DatePipe
-    ) {}
+  ) { }
 
   ngOnInit() {
 
@@ -100,8 +102,8 @@ export class MantenimientoComponent implements OnInit {
       this.cargarRegistro(this.mantenimiento._id);
     } else {
       for (const control in this.regForm.controls) {
-        if (control.toString()!== "fechas" && control.toString()!=="materiales")
-        this.regForm.controls[control.toString()].setValue(undefined);
+        if (control.toString() !== "fechas" && control.toString() !== "materiales")
+          this.regForm.controls[control.toString()].setValue(undefined);
       }
     }
 
@@ -109,9 +111,9 @@ export class MantenimientoComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
-      tipoMantenimiento: ['',[Validators.required]],
-      tipoLavado: [{value:'B',disabled: true}, [Validators.required]],
-      cambioGrado: [{value:false,disabled: true}],
+      tipoMantenimiento: ['', [Validators.required]],
+      tipoLavado: [{ value: 'B', disabled: true }, [Validators.required]],
+      cambioGrado: [{ value: false, disabled: true }],
       observacionesGenerales: [''],
       izquierdo: [''],
       derecho: [''],
@@ -129,33 +131,46 @@ export class MantenimientoComponent implements OnInit {
     });
   }
 
+  habilitaControles() {
+    for (const control in this.regForm.controls) {
+      if (control.toString() !== "finalizado" && control.toString() !== "_id" && control.toString() !== "tipoLavado" && control.toString() !== "cambioGrado") {
+        if (control.toString() !== "fechas" && control.toString() !== "fechas") {
+          if (this.finalizado.value) this.regForm.controls[control.toString()].disable({ onlySelf: true });
+          else this.regForm.controls[control.toString()].enable({ onlySelf: true });
+        }
+        else {
+          if (this.finalizado.value) (<FormArray>this.regForm.get(control.toString())).controls.forEach(control2 => { control2.disable({ onlySelf: true }) });
+          else (<FormArray>this.regForm.get(control.toString())).controls.forEach(control2 => { control2.enable({ onlySelf: true }) });
+        }
+
+      }
+    }
+
+  }
   cargarRegistro(idMantenimiento: string) {
     this._mantenimientoService.getMantenimiento(idMantenimiento).subscribe(res => {
-      
+
       this.mantenimiento = res.mantenimiento;
-      console.log(this.mantenimiento);
-      this._maniobraService.getManiobra(this.mantenimiento.maniobra).subscribe(res=>{
-        this.maniobraAsociada = res.maniobra;
-        console.log(this.maniobraAsociada);
-      });
-     for (const propiedad in this.mantenimiento) 
-        for (const control in this.regForm.controls) 
-          if (propiedad === control.toString()) {         
-            if (propiedad=="fechas")
-            res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; })=> this.addFecha(x.fIni,x.hIni,x.fFin,x.hFin));
-            else{
-              if (propiedad=="materiales"){
-                res.mantenimiento[propiedad].forEach((x: any) => {this.addMaterial(x._id,x.material,x.descripcion,x.costo.$numberDecimal,x.precio.$numberDecimal,x.cantidad)});
+      this._maniobraService.getManiobra(this.mantenimiento.maniobra).subscribe(res => { this.maniobraAsociada = res.maniobra; });
+      for (const propiedad in this.mantenimiento)
+        for (const control in this.regForm.controls)
+          if (propiedad === control.toString()) {
+            if (propiedad == "fechas")
+              res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; }) => this.addFecha(x.fIni, x.hIni, x.fFin, x.hFin));
+            else {
+              if (propiedad == "materiales") {
+                res.mantenimiento[propiedad].forEach((x: any) => { this.addMaterial(x._id, x.material, x.descripcion, x.costo.$numberDecimal, x.precio.$numberDecimal, x.cantidad) });
               }
-              else{
-              this.regForm.controls[propiedad].enable({ onlySelf: true });
-              this.regForm.controls[propiedad].setValue(res.mantenimiento[propiedad]);
+              else {
+                this.regForm.controls[propiedad].enable({ onlySelf: true });
+                this.regForm.controls[propiedad].setValue(res.mantenimiento[propiedad]);
               }
             }
-              
-
           }
+      this.habilitaControles();
     });
+
+
   }
 
 
@@ -169,7 +184,7 @@ export class MantenimientoComponent implements OnInit {
 
   get cambioGrado() {
     return this.regForm.get('cambioGrado');
-  }  
+  }
   get observacionesGenerales() {
     return this.regForm.get('observacionesGenerales');
   }
@@ -191,7 +206,7 @@ export class MantenimientoComponent implements OnInit {
   get techo() {
     return this.regForm.get('techo');
   }
-  
+
   get interior() {
     return this.regForm.get('interior');
   }
@@ -199,11 +214,11 @@ export class MantenimientoComponent implements OnInit {
     return this.regForm.get('puerta');
   }
 
-  get fechas() : FormArray {
+  get fechas(): FormArray {
     return this.regForm.get("fechas") as FormArray
   }
 
-  get materiales() : FormArray {
+  get materiales(): FormArray {
     return this.regForm.get("materiales") as FormArray
   }
   get finalizado() {
@@ -215,8 +230,8 @@ export class MantenimientoComponent implements OnInit {
   get maniobra() {
     return this.regForm.get('maniobra');
   }
-  
-  newFecha(fIni=moment().startOf('day'),hIni='', fFin='', hFin=''): FormGroup {
+
+  newFecha(fIni = moment().startOf('day'), hIni = '', fFin = '', hFin = ''): FormGroup {
     return this.fb.group({
       fIni: fIni,
       hIni: hIni,
@@ -224,136 +239,138 @@ export class MantenimientoComponent implements OnInit {
       hFin: hFin
     })
   }
- 
- addFecha(fIni=moment().startOf('day'),hIni='', fFin='', hFin='') {
-  this.fechas.push(this.newFecha(fIni,hIni,fFin,hFin));
- }
 
- removeFecha(i:number) {
-  this.fechas.removeAt(i);
- }
+  addFecha(fIni = moment().startOf('day'), hIni = '', fFin = '', hFin = '') {
+    this.fechas.push(this.newFecha(fIni, hIni, fFin, hFin));
+  }
 
- newMaterial(id='',material='',descripcion='',costo=0, precio=0, cantidad=1): FormGroup {
-  return this.fb.group({
-    material: material,
-    descripcion: descripcion,
-    costo: costo,
-    precio: precio,
-    //cantidad: [cantidad, [this.checaStock(material)]]
-    cantidad: cantidad,
-    _id:id
-  },{Validators : this.checaStock2})
-}
+  removeFecha(i: number) {
+    this.fechas.removeAt(i);
+  }
+
+  newMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1): FormGroup {
+    return this.fb.group({
+      material: material,
+      descripcion: descripcion,
+      costo: costo,
+      precio: precio,
+      //cantidad: [cantidad, [this.checaStock(material)]]
+      cantidad: cantidad,
+      _id: id
+    }, { Validators: this.checaStock2 })
+  }
 
 
-checaStock(id) {
-  return (control: AbstractControl): { [s: string]: any  | null} => {
-    // control.parent es el FormGroup
-    if (this.regForm) { // en las primeras llamadas control.parent es undefined
-      this._materialService.getStockMaterial(id).subscribe(res=>{
-        if (res.stock>=control.value) {
-          console.log("si paso");
-          return null;
-        }
-        else
-        { console.log("NO HAY SUFICIENTE STOCK");
-          
-          return {
-            checaStock: false
-          };
-        }
+  checaStock(id) {
+    return (control: AbstractControl): { [s: string]: any | null } => {
+      // control.parent es el FormGroup
+      if (this.regForm) { // en las primeras llamadas control.parent es undefined
+        this._materialService.getStockMaterial(id).subscribe(res => {
+          if (res.stock >= control.value) {
+            console.log("si paso");
+            return null;
+          }
+          else {
+            console.log("NO HAY SUFICIENTE STOCK");
+
+            return {
+              checaStock: false
+            };
+          }
+        });
+      }
+      return null;
+    };
+  }
+
+  checaStock2: ValidatorFn = (
+    control: FormGroup
+  ): ValidationErrors | null => {
+    const cantidad = control.get("cantidad")
+    const material = control.get("material")
+
+    this._materialService.getStockMaterial(material.value).subscribe(res => {
+      if (res.stock >= cantidad.value) {
+        console.log("si paso");
+        return null;
+      }
+      else {
+        console.log("NO HAY SUFICIENTE STOCK");
+        return {
+          checaStock2: true
+        };
+      }
+    });
+    return null;
+  }
+
+
+  addMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1) {
+    this.materiales.push(this.newMaterial(id, material, descripcion, costo, precio, cantidad));
+  }
+
+  addMaterial2(id: String) {
+    const rep = this.listaMateriales.find(x => x._id === id);
+    this.materiales.push(this.newMaterial('', rep._id, rep.descripcion, rep.costo.$numberDecimal, rep.precio.$numberDecimal, 1));
+  }
+
+  removeMaterial(i: number) {
+    //
+    const _id = this.materiales.controls[i].get("_id").value;
+    if (_id !== "" && _id !== undefined) {
+      this._mantenimientoService.eliminaMaterial(this.mantenimiento._id, _id).subscribe(res => {
+        if (res.ok) this.materiales.removeAt(i);
       });
     }
-    return null;
-  };
-}
+    else this.materiales.removeAt(i);
 
-checaStock2: ValidatorFn = (
-  control: FormGroup
-): ValidationErrors | null => {
-  const cantidad = control.get("cantidad")
-  const material = control.get("material")
-  
-  this._materialService.getStockMaterial(material.value).subscribe(res=>{
-    if (res.stock>=cantidad.value) {
-      console.log("si paso");
-return null;
-    }
-    else
-    { console.log("NO HAY SUFICIENTE STOCK");
-    return {
-      checaStock2: true
+  }
+
+  saveMaterial(i: number) {
+    const material: any = {
+      _id: this.materiales.controls[i].get("_id").value,
+      material: this.materiales.controls[i].get("material").value,
+      descripcion: this.materiales.controls[i].get("descripcion").value,
+      costo: this.materiales.controls[i].get("costo").value,
+      precio: this.materiales.controls[i].get("precio").value,
+      cantidad: this.materiales.controls[i].get("cantidad").value
     };
-    }
-  });
-  return null;
-}
+    this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
 
-
-addMaterial(id='',material='',descripcion='',costo=0, precio=0, cantidad=1) {
-  this.materiales.push(this.newMaterial(id,material,descripcion,costo, precio, cantidad));
-}
-
-addMaterial2(id:String) {
-  const rep = this.listaMateriales.find(x => x._id === id);
-  console.log(rep);
-  this.materiales.push(this.newMaterial('',rep._id,rep.descripcion,rep.costo.$numberDecimal,rep.precio.$numberDecimal, 1));
-}
-
-removeMaterial(i:number) {
-//
-const _id = this.materiales.controls[i].get("_id").value;
-if (_id!=="" && _id!==undefined){
-  this._mantenimientoService.eliminaMaterial(this.mantenimiento._id,_id).subscribe(res => {
-    if (res.ok)this.materiales.removeAt(i);
-  });
-}
-else  this.materiales.removeAt(i);
-
-}
-
-saveMaterial(i:number)
-{
-  const material : any = {
-    _id : this.materiales.controls[i].get("_id").value,
-    material:this.materiales.controls[i].get("material").value,
-    descripcion:this.materiales.controls[i].get("descripcion").value,
-    costo:this.materiales.controls[i].get("costo").value,
-    precio: this.materiales.controls[i].get("precio").value,
-    cantidad: this.materiales.controls[i].get("cantidad").value};
-console.log (material);
-
-this._mantenimientoService.guardaMaterial(this.mantenimiento._id,material).subscribe(res => {
-  
-});
-
-}
-
-guardarRegistro() {
-  this.regForm.controls["maniobra"].setValue( this.mantenimiento.maniobra);
-  if (this.regForm.valid) {
-    this._mantenimientoService.guardarMantenimiento(this.regForm.value).subscribe(res => {
-        this.regForm.get('_id').setValue(res._id);
-      this.regForm.markAsPristine();
     });
-    if(this.dialogR) this.close(this.regForm.value);
-  };
-}
- 
 
-  
-onChangeTipoMantenimiento(event: { value: string; }) {
-    if (event.value==='LAVADO') {
-      if (this.tipoLavado.value==='' || this.tipoLavado.value===undefined)
+  }
+
+  guardarRegistro() {
+    this.regForm.controls["maniobra"].setValue(this.mantenimiento.maniobra);
+    if (this.regForm.valid) {
+      this._mantenimientoService.guardarMantenimiento(this.regForm.getRawValue()).subscribe(res => {
+        this.regForm.get('_id').setValue(res.mantenimiento._id);
+        this.regForm.markAsPristine();
+        this.mensajeExito = res.mensaje;
+        this.mensajeError = '';
+      }, error => {
+        this.mensajeExito = '';
+        this.mensajeError = error.error.mensaje;
+      });
+      if (this.dialogR) this.close(this.regForm.value);
+    };
+  }
+
+
+
+  onChangeTipoMantenimiento(event: { value: string; }) {
+    if (event.value === 'LAVADO') {
+      if (this.tipoLavado.value === '' || this.tipoLavado.value === undefined)
         this.regForm.controls["tipoLavado"].setValue("B");
       this.tipoLavado.enable({ onlySelf: true });
-      
+
     } else {
       this.tipoLavado.disable({ onlySelf: true });
     }
-    if (event.value==="ACONDICIONAMIENTO") {
+    if (event.value === "ACONDICIONAMIENTO") {
 
-      if (this.cambioGrado.value===undefined)
+      if (this.cambioGrado.value === undefined)
         this.regForm.controls["cambioGrado"].setValue(false);
       this.cambioGrado.enable({ onlySelf: true });
     } else {
@@ -362,22 +379,33 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   }
 
   onChangeFinaliza(event) {
-    
-      swal({
-        title: '¿Esta seguro de esta acción?',
-        text:   event.checked? 'El mantenimiento sera finalizado y el contenedor estara disponible ':'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true
-      }).then(ok => {
-          event.source.checked = !event.checked;
-          if (ok){
-          this._mantenimientoService
-            .finalizaMantenimiento(this.mantenimiento._id, event.checked).subscribe(res => {
-              event.source.checked = event.checked;
-            });
-          }
-      });
+
+    swal({
+      title: '¿Esta seguro de esta acción?',
+      text: event.checked ? 'El mantenimiento sera finalizado y el contenedor estara disponible ' : 'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(ok => {
+      if (ok) {
+        this._mantenimientoService
+          .finalizaMantenimiento(this.mantenimiento._id, event.checked).subscribe(res => {
+            this.finalizado.setValue(event.checked);
+            this.mensajeExito = res.mensaje;
+            this.mensajeError = '';
+            this.habilitaControles();
+          }, error => {
+            this.mensajeError = error.error.mensaje;
+            this.mensajeExito = '';
+            event.source.checked = !event.checked;
+            this.finalizado.setValue(!event.checked);
+          });
+      }
+      else {
+        event.source.checked = !event.checked;
+        this.finalizado.setValue(!event.checked);
+      }
+    });
   }
 
 
@@ -393,7 +421,7 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   //   }
   // }
 
-  salir(){
+  salir() {
     if (this.dialogR) this.close(undefined);
     else this.back()
 
@@ -401,14 +429,14 @@ onChangeTipoMantenimiento(event: { value: string; }) {
   close(result: any) {
     this.dialogRef.close(result);
   }
-  
+
   back() {
     if (localStorage.getItem('history')) {
       this.url = localStorage.getItem('history');
     }
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
-    
+
   }
-  
+
 }
