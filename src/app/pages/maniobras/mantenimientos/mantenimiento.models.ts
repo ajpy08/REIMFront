@@ -19,7 +19,9 @@ export class Mantenimiento {
     public materiales?: [{ material?: string, descripcion?: string, cantidad?: number, costo?: number, precio?: {} }],
     public finalizado?: boolean,
     public costoMateriales?: string,
-    public precioMateriales?: string
+    public precioMateriales?: string,
+    public fInicio?: Date,
+    public fFinal?: Date
   ) { }
 
 }
