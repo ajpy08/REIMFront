@@ -532,17 +532,6 @@ export class InventarioComponent implements OnInit {
   CreaDatosExcel(datos) {
     this.datosExcel = [];
     datos.forEach(d => {
-
-      let reparaciones = '';
-
-      // d.reparaciones.forEach(r => {
-      //   reparaciones += r.reparacion + ', ';
-      // });
-
-      // if (reparaciones.length > 1) {
-      //   reparaciones = reparaciones.substring(0, reparaciones.length - 2);
-      // }
-
       const dato = {
         EntradaPatio: d.fLlegada,
         Dias_Patio: this.calculaDias(d.fLlegada),
@@ -556,10 +545,8 @@ export class InventarioComponent implements OnInit {
         Tipo: d.tipo,
         Estado: d.peso,
         Grado: d.grado,
-        // operador: d.operador != undefined ? d.operador.nombre : '',
         Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial !== undefined &&
           d.naviera.nombreComercial !== '' ? d.naviera.nombreComercial : '',
-        Reparaciones: reparaciones,
         FAlta: d.FAlta !== undefined ? d.fAlta.substring(0, 10) : '',
       };
       this.datosExcel.push(dato);
