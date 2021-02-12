@@ -340,13 +340,6 @@ export class InventarioComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
         this.mantenimientos = [];
-        // const tempOrder = mantenimientos.mantenimientos.sort(function (a, b) {
-        //   return (b.maniobra.contenedor > a.maniobra.contenedor)
-        // });
-
-        // console.log(tempOrder);
-
-        // const groups = VariasService.groupArray2(tempOrder, 'maniobra', 'contenedor');
         const groups = VariasService.groupArray2(mantenimientos.mantenimientos, 'maniobra', 'contenedor');
         for (const g in groups) {
           let id;
@@ -356,41 +349,26 @@ export class InventarioComponent implements OnInit {
           let reparacion;
           let acondicionamiento;
           let maniobra;
+          let consecutivo = 0;
           groups[g].forEach(mant => {
-            // if (mant._id == '5fff4a689f15780eec4c1b18' || mant._id == '5fff4a689f15780eec4c17e9') {
-            //   console.log('Aqui');
-            // }
+            consecutivo = consecutivo + 1;
+            if (id !== mant.maniobra._id) {
+              maniobra = mant.maniobra;
 
-            // if (mant.maniobra.contenedor == 'RFSU5013501') {
-            //   console.log('Aqui 2');
-            // }
-
-            if (id !== mant.maniobra._id) {    
-              const pos = this.mantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
-              if (pos > 0) {
-                // maniobra = this.mantenimientos[pos].maniobra;
-                maniobra = mant.maniobra;
-                ma = { lavado, reparacion, acondicionamiento, maniobra }
-                this.mantenimientos.splice(pos, 1);
-                this.mantenimientos.push(ma);
+              if (mant.tipoMantenimiento == 'LAVADO') {
+                lavado = mant._id;
               } else {
-                maniobra = mant.maniobra;
-
-                if (mant.tipoMantenimiento == 'LAVADO') {
-                  lavado = mant._id;
+                if (mant.tipoMantenimiento == 'REPARACION') {
+                  reparacion = mant._id;
                 } else {
-                  if (mant.tipoMantenimiento == 'REPARACION') {
-                    reparacion = mant._id;
-                  } else {
-                    if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
-                      acondicionamiento = mant._id;
-                    }
+                  if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
+                    acondicionamiento = mant._id;
                   }
                 }
-
-                ma = { lavado, reparacion, acondicionamiento, maniobra }
-                this.mantenimientos.push(ma);
               }
+
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
+              this.mantenimientos.push(ma);
 
               id = mant.maniobra._id;
               viaje = mant.maniobra.viaje !== undefined ? mant.maniobra.viaje._id : '';
@@ -408,25 +386,54 @@ export class InventarioComponent implements OnInit {
                 }
               }
 
+              maniobra = mant.maniobra;
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
               const pos = this.mantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
-
-              if(pos > 0) {
-                maniobra = this.mantenimientos[pos].maniobra;
-                ma = { lavado, reparacion, acondicionamiento, maniobra }
-                this.mantenimientos.splice(pos, 1);
-                this.mantenimientos.push(ma);
-              } else {
-                ma = { lavado, reparacion, acondicionamiento, maniobra }
-                this.mantenimientos.push(ma);
-              }
+              this.mantenimientos.splice(pos, 1);
+              this.mantenimientos.push(ma);
             }
           });
         }
 
-        this.dataSourceM = new MatTableDataSource(this.mantenimientos);
+        const mantenimientosFinal = [];
+        this.mantenimientos.forEach(m => {
+
+          const existen = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
+
+          if (existen.length == 1) {
+            if (m.consecutivo > existen[0].consecutivo) {
+              const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
+              if (pos) {
+                mantenimientosFinal.splice(pos, 1);
+                mantenimientosFinal.push(m);
+              }
+            }
+          } else {
+            if (existen.length > 1) {
+              const mayor = existen.reduce(function (prev, curr) {
+                return prev.consecutivo > curr.consecutivo ? prev : curr;
+              });
+
+              const pos = mantenimientosFinal.findIndex(m => m.maniobra._id === mayor.maniobra._id);
+
+              if (pos < 0) {
+                mantenimientosFinal.push(mayor);
+              } else {
+                if (mayor.consecutivo > mantenimientosFinal[pos].consecutivo) {
+                  mantenimientosFinal.splice(pos, 1);
+                  mantenimientosFinal.push(mayor);
+                }
+              }
+            } else {
+              mantenimientosFinal.push(m);
+            }
+          }
+        });
+
+        this.dataSourceM = new MatTableDataSource(mantenimientosFinal);
         this.dataSourceM.sort = this.matSort4;
         this.dataSourceM.paginator = this.paginator.toArray()[1];
-        this.totalRegistrosM = this.mantenimientos.length;
+        this.totalRegistrosM = mantenimientosFinal.length;
 
         if (mantenimientos) {
           resolve(true);
