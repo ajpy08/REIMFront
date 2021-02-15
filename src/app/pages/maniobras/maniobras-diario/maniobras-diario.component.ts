@@ -92,7 +92,8 @@ export class ManiobrasDiarioComponent implements OnInit {
     'viaje.naviera.nombreComercial',
     'viaje',
     'viaje.buque.nombre',
-    'estatus'
+    'estatus',
+    'facturaManiobra'
   ];
   dataSource: any;
 
