@@ -331,6 +331,7 @@ export class ManiobrasComponent implements OnInit {
         this.dtTransito.paginator = this.pagTransito;
         this.totalTransito = maniobras.total;
         this.dtTransito.filterPredicate = this.Filtro();
+        console.log(this.dtTransito);
       });
 
     this._maniobraService

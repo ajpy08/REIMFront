@@ -104,11 +104,11 @@ export class MantenimientoService {
     return this.getMantenimientos('', idManiobra);
   }
 
-  getMantenimientosxTipo(tipoMantenimiento: string, finalizados: string, fInicial?: Date, fFinal?: Date): Observable<any> {
+  getMantenimientosxTipo(tipoMantenimiento: string, finalizados: string, fInicial?: any, fFinal?: any): Observable<any> {
     return (this.getMantenimientos(tipoMantenimiento, '', finalizados, fInicial, fFinal));
   }
 
-  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: Date, fFinal?: Date): Observable<any> {
+  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: any, fFinal?: any): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
@@ -118,7 +118,7 @@ export class MantenimientoService {
     if (finalizado) params = params.append('finalizado', finalizado);
     if (fInicial) params = params.append('fInicial', fInicial.toString());
     if (fFinal) params = params.append('fFinal', fFinal.toString());
-    console.log(params);
+    
     return this.http.get(url, { params: params });
   }
 

@@ -3,9 +3,9 @@ import { MatTableDataSource, MatSort, MatPaginator, MatTabGroup, MatTabChangeEve
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { MantenimientoService, ExcelService } from '../../../services/service.index';
-
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -32,20 +32,19 @@ declare var swal: any;
   { provide: MAT_DATE_LOCALE, useValue: 'es-mx' }]
 })
 export class MantenimientosComponent implements OnInit, OnDestroy {
+  @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
+
+
   mantenimientosExcel = [];
+  
+  incluirFinalizados: boolean;
+  filtrarFechas: boolean;
+  filtroFechaIni: _moment.Moment;
+  filtroFechaFin: _moment.Moment;
 
   cargandoR: boolean;
-  incluirFinalizadosR: boolean;
-  filtrarFechasR: boolean;
-
-  cargandoL: boolean = true;
-  incluirFinalizadosL: boolean = false;
-
-  cargandoA: boolean = true;
-  incluirFinalizadosA: boolean = false;
-
-  filtroFechaIniR: Date;
-  filtroFechaFinR: Date;
+  cargandoL: boolean;
+  cargandoA: boolean;
 
   totalReparaciones = 0;
   totalLavados = 0;
@@ -60,37 +59,57 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   acttrue = false;
 
   displayedColumnsReparaciones = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
-  displayedColumnsLavados = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso'];
-  displayedColumnsAcondicionamientos = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso'];
+  displayedColumnsLavados = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsAcondicionamientos = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
 
-  dtReparaciones: any;
-  dtLavados: any;
-  dtAcondicionamientos: any;
+  dtReparaciones: MatTableDataSource<any>;
+  dtLavados: MatTableDataSource<any>;
+  dtAcondicionamientos: MatTableDataSource<any>;
 
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
-
+  
+  
   //@ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('pagReparaciones', { read: MatPaginator }) pagReparaciones: MatPaginator;
+  
+  
+  @ViewChild(MatSort) sort: MatSort;
+ 
+  @ViewChild('pagReparaciones', {read: MatPaginator  }) pagReparaciones: MatPaginator;
   @ViewChild('pagLavados', { read: MatPaginator }) pagLavados: MatPaginator;
   @ViewChild('pagAcondicionamientos', { read: MatPaginator }) pagAcondicionamientos: MatPaginator;
 
-  //  @ViewChild(MatSort) sort: MatSort;
   @ViewChild('sortReparaciones') sortReparaciones: MatSort;
   @ViewChild('sortLavados') sortLavados: MatSort;
   @ViewChild('sortAcondicionamientos') sortAcondicionamientos: MatSort;
 
+  
   constructor(
     private _mantenimientoService: MantenimientoService,
     private _excelService: ExcelService) {
+    
+    this.incluirFinalizados = false;
+    this.filtroFechaIni = moment().local().startOf('day');
+    this.filtroFechaFin = moment().local().startOf('day');
+    this.filtrarFechas = false;
+    
     this.cargandoR = true;
-    this.incluirFinalizadosR = false;
-    this.filtroFechaIniR = new Date();
-    this.filtroFechaFinR = new Date();
-    this.filtrarFechasR = false;
+    this.cargandoL = true;
+    this.cargandoA = true;
+    
   }
 
   ngOnInit() {
+
     localStorage.removeItem('historyArray');
+    const indexTAB = localStorage.getItem('MantenimientosTabs');
+    if (localStorage.getItem('MantenimientosTabs')) 
+      if (indexTAB) this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
+      else this.tabGroup.selectedIndex = 1;
+    if (localStorage.getItem('MantenimientosincluirFinalizados') && localStorage.getItem('MantenimientosincluirFinalizados')==="true") this.incluirFinalizados = true;
+    if (localStorage.getItem('MantenimientosfiltrarFechas') && localStorage.getItem('MantenimientosfiltrarFechas')==="true") this.filtrarFechas = true;
+    if (localStorage.getItem('MantenimientosfiltroFechaIni')) this.filtroFechaIni = moment(localStorage.getItem('MantenimientosfiltroFechaIni'));
+    if (localStorage.getItem('MantenimientosfiltroFechaFin')) this.filtroFechaFin = moment(localStorage.getItem('MantenimientosfiltroFechaFin'));
+
     this.cargarReparaciones();
     this.cargarLavados();
     this.cargarAcondicionamientos();
@@ -111,6 +130,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   }
 
 
+
   ngOnDestroy() {
     // this.socket.removeListener('delete-mantenimiento');
     // this.socket.removeListener('update-mantenimiento');
@@ -121,19 +141,13 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   applyFilterReparaciones(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-
     if (this.dtReparaciones && this.dtReparaciones.data.length > 0) {
       this.dtReparaciones.filter = filterValue;
       this.totalReparaciones = this.dtReparaciones.filteredData.length;
-      if (this.dtReparaciones.filteredData.length === 0) {
-        this.tablaCargarR = true;
-      } else {
-        this.tablaCargarR = false;
-      }
+      this.tablaCargarR = this.dtReparaciones.filteredData.length === 0 ? true : false;
     } else {
       console.error('No se puede filtrar en un datasource vacío');
     }
-
     this.dtReparaciones.filter = filterValue;
     this.totalReparaciones = this.dtReparaciones.filteredData.length;
   }
@@ -145,15 +159,10 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     if (this.dtLavados && this.dtLavados.data.length > 0) {
       this.dtLavados.filter = filterValue;
       this.totalLavados = this.dtLavados.filteredData.length;
-      if (this.dtLavados.filteredData.length === 0) {
-        this.tablaCargarL = true;
-      } else {
-        this.tablaCargarL = false;
-      }
+      this.tablaCargarL = this.dtLavados.filteredData.length === 0 ? true : false;
     } else {
       console.error('No se puede filtrar en un datasource vacío');
     }
-
     this.dtLavados.filter = filterValue;
     this.totalLavados = this.dtLavados.filteredData.length;
   }
@@ -178,11 +187,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     if (this.dtAcondicionamientos && this.dtAcondicionamientos.data.length > 0) {
       this.dtAcondicionamientos.filter = filterValue;
       this.totalLavados = this.dtAcondicionamientos.filteredData.length;
-      if (this.dtAcondicionamientos.filteredData.length === 0) {
-        this.tablaCargarA = true;
-      } else {
-        this.tablaCargarA = false;
-      }
+      this.tablaCargarA = this.dtAcondicionamientos.filteredData.length === 0 ? true : false;
     } else {
       console.error('No se puede filtrar en un datasource vacío');
     }
@@ -194,34 +199,41 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarReparaciones() {
     this.cargandoR = true;
-    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.incluirFinalizadosR ? "TODOS" : "PENDIENTES", this.filtrarFechasR ? this.filtroFechaIniR : null, this.filtrarFechasR ? this.filtroFechaFinR : null).subscribe(mant => {
-
+    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+      
       this.dtReparaciones = new MatTableDataSource(mant.mantenimientos);
-
-      if (mant.mantenimientos.length === 0) this.tablaCargarR = true;
-      else this.tablaCargarR = false;
-
-      this.dtReparaciones.sort = this.sortReparaciones;
-      this.dtReparaciones.paginator = this.pagReparaciones;
+      this.tablaCargarR = mant.mantenimientos.length === 0? true : false;
+      this.dtReparaciones.sortingDataAccessor = (item, property) => {
+        if (property.includes('.')) {
+          return property
+            .split('.')
+            .reduce((o, i) => (o ? o[i] : undefined), item);
+        }
+        return item[property];
+      };
       this.dtReparaciones.filterPredicate = this.Filtro();
       this.totalReparaciones = mant.mantenimientos.length;
+      setTimeout(() => {this.dtReparaciones.paginator = this.pagReparaciones,this.dtReparaciones.sort = this.sortReparaciones});
       this.cargandoR = false;
     });
-
   }
 
   cargarLavados() {
     this.cargandoL = true;
-    this._mantenimientoService.getMantenimientosxTipo("LAVADO", "PENDIENTES").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("LAVADO", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtLavados = new MatTableDataSource(mant.mantenimientos);
-      if (mant.mantenimientos.length === 0)
-        this.tablaCargarL = true;
-      else
-        this.tablaCargarL = false;
-      this.dtLavados.sort = this.sortLavados;
-      this.dtLavados.paginator = this.pagLavados;
+      this.tablaCargarL = mant.mantenimientos.length === 0? true : false;
+      this.dtLavados.sortingDataAccessor = (item, property) => {
+        if (property.includes('.')) {
+          return property
+            .split('.')
+            .reduce((o, i) => (o ? o[i] : undefined), item);
+        }
+        return item[property];
+      };
       this.dtLavados.filterPredicate = this.Filtro();
       this.totalLavados = mant.mantenimientos.length;
+      setTimeout(() => {this.dtLavados.paginator = this.pagLavados,this.dtLavados.sort = this.sortReparaciones});
       this.cargandoL = false;
     });
 
@@ -229,24 +241,21 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarAcondicionamientos() {
     this.cargandoA = true;
-    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", "PENDIENTES").subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtAcondicionamientos = new MatTableDataSource(mant.mantenimientos);
-      if (mant.mantenimientos.length === 0)
-        this.tablaCargarA = true;
-      else
-        this.tablaCargarA = false;
-      this.dtAcondicionamientos.sort = this.sortAcondicionamientos;
-      this.dtAcondicionamientos.paginator = this.pagAcondicionamientos;
+      this.tablaCargarA = mant.mantenimientos.length === 0? true : false;
+      this.dtAcondicionamientos.sortingDataAccessor = (item, property) => {
+        if (property.includes('.')) {
+          return property
+            .split('.')
+            .reduce((o, i) => (o ? o[i] : undefined), item);
+        }
+        return item[property];
+      };
       this.dtAcondicionamientos.filterPredicate = this.Filtro();
       this.totalAcondicionamientos = mant.mantenimientos.length;
+      setTimeout(() => {this.dtAcondicionamientos.paginator = this.pagAcondicionamientos,this.dtAcondicionamientos.sort = this.sortAcondicionamientos});
       this.cargandoA = false;
-    });
-
-  }
-
-  eliminaMantenimiento(id) {
-    this._mantenimientoService.eliminaMantenimiento(id).subscribe(mantenimientos => {
-      this.cargarReparaciones();
     });
 
   }
@@ -256,25 +265,48 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     localStorage.setItem('MantenimientosTabs', event.index.toString());
   }
 
-  onChangeCheckReparaciones(event) {
+  onChangeCheckFinalizados(event) {
     this.cargarReparaciones();
+    this.cargarLavados();
+    this.cargarAcondicionamientos();
+    localStorage.setItem('MantenimientosincluirFinalizados', event.checked);
+    
   }
-
-
-  onClickFiltrarR() {
+  onChangeFiltroFechas(event) {
     this.cargarReparaciones();
+    this.cargarLavados();
+    this.cargarAcondicionamientos();
+    localStorage.setItem('MantenimientosfiltrarFechas', event.checked);
+  }
+  onChangeDate(tipo:string,event: MatDatepickerInputEvent<Date>) {
+    //this.events.push(`${type}: ${event.value}`);
+    this.cargarReparaciones();
+    this.cargarLavados();
+    this.cargarAcondicionamientos();
+    if (tipo==="fInicial") localStorage.setItem('MantenimientosfiltroFechaIni', event.value.toString());
+    else localStorage.setItem('MantenimientosfiltroFechaFin', event.value.toString());
+
+  }
+  
+  eliminaMantenimiento(tipo:string,id) {
+    this._mantenimientoService.eliminaMantenimiento(id).subscribe(mantenimientos => {
+      if (tipo==="reparaciones") this.cargarReparaciones();
+      if (tipo==="lavados") this.cargarLavados();
+      if (tipo==='acondicionamientos') this.cargarAcondicionamientos();
+    });
+
   }
 
   CreaDatosExcel(datos) {
     datos.forEach(b => {
-      const buque = {
+      const reg = {
         // Id: b._id,
         Buque: b.nombre,
         Naviera: b.naviera.nombreComercial,
         UsuarioAlta: b.usuarioAlta.nombre,
         FAlta: b.fAlta.substring(0, 10)
       };
-      this.mantenimientosExcel.push(buque);
+      this.mantenimientosExcel.push(reg);
     });
   }
 
