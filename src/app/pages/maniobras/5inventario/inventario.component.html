@@ -647,21 +647,21 @@
       </div>
     </div>
     <mat-list>
-      <h3 *ngIf="dataSourceL && dataSourceR && dataSourceA" mat-line><b>Resumen de Mantenimientos</b> ( {{dataSourceL.data.length + dataSourceR.data.length +
-        dataSourceA.data.length }} )</h3>
+      <h3 *ngIf="dataSourceL && dataSourceR && dataSourceA" mat-line><b>Resumen de Mantenimientos</b> ( {{totalMantLavado + totalMantReparacion +
+        totalMantAcondicionamiento }} )</h3>
       <mat-list-item>
         <div *ngIf="dataSourceL" mat-line>
-          <h6><b>TOTAL MANTENIMIENTOS LAVADO {{dataSourceL.data.length}}</b></h6>
+          <h6><b>TOTAL MANTENIMIENTOS LAVADO {{totalMantLavado}}</b></h6>
         </div>
         <div mat-line>&nbsp;</div>
 
         <div *ngIf="dataSourceR" mat-line>
-          <h6><b>TOTAL MANTENIMIENTOS REPARACION {{dataSourceR.data.length}}</b></h6>
+          <h6><b>TOTAL MANTENIMIENTOS REPARACION {{totalMantReparacion}}</b></h6>
         </div>
         <div mat-line>&nbsp;</div>
 
         <div *ngIf="dataSourceA" mat-line>
-          <h6><b>TOTAL MANTENIMIENTOS ACONDICIONAMIENTO {{dataSourceA.data.length}}</b></h6>
+          <h6><b>TOTAL MANTENIMIENTOS ACONDICIONAMIENTO {{totalMantAcondicionamiento}}</b></h6>
         </div>
         <div mat-line>&nbsp;</div>
 
@@ -670,7 +670,7 @@
     </mat-list>
   </mat-tab>
 
-  <mat-tab>
+  <!-- <mat-tab>
     <ng-template mat-tab-label>
       <div *ngIf="totalRegistrosL > 0;else sincontL">
         <i class="fas fa-tint"> Lavado ( {{totalRegistrosL}} )</i>
@@ -767,18 +767,6 @@
                   </mat-cell>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control"
-                      [(ngModel)]=" row.reparaciones" name="reparacio">
-                      <mat-option *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
-                        {{rep.reparacion}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-cell>
-                </ng-container> -->
-
                 <ng-container matColumnDef="grado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
@@ -795,8 +783,8 @@
         </div>
       </div>
     </div>
-  </mat-tab>
-  <mat-tab>
+  </mat-tab> -->
+  <!-- <mat-tab>
     <ng-template mat-tab-label>
       <div *ngIf="totalRegistrosR > 0;else sincontL">
         <i class="fas fa-wrench"> Reparación ( {{totalRegistrosR}} )</i>
@@ -893,18 +881,6 @@
                   </mat-cell>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="reparaciones">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reparaciones</mat-header-cell>
-                  <mat-cell *matCellDef="let row">
-                    <mat-select *ngIf="row.reparaciones.length > 0 " class="form-control"
-                      [(ngModel)]=" row.reparaciones" name="reparacio">
-                      <mat-option *ngFor="let rep of row.reparaciones" [value]="row.reparaciones">
-                        {{rep.reparacion}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-cell>
-                </ng-container> -->
-
                 <ng-container matColumnDef="grado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.grado}} </mat-cell>
@@ -921,5 +897,5 @@
         </div>
       </div>
     </div>
-  </mat-tab>
+  </mat-tab> -->
 </mat-tab-group>

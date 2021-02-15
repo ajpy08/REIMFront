@@ -37,6 +37,11 @@ export class InventarioComponent implements OnInit {
   totalRegistrosR = 0;
   totalRegistrosA = 0;
   totalRegistrosM = 0;
+
+  totalMantLavado = 0;
+  totalMantReparacion = 0;
+  totalMantAcondicionamiento = 0;
+
   displayedColumns = [
     'fLlegada',
     'dias',
@@ -240,12 +245,9 @@ export class InventarioComponent implements OnInit {
         const mant = this.cargarM();
         mant.then((ok: boolean) => {
           if (ok) {
-            // let l = this.mantenimientos.filter(m => m.lavado !== undefined);
-            // let r = this.mantenimientos.filter(m => m.reparacion !== undefined);
-            // let a = this.mantenimientos.filter(m => m.acondicionamiento !== undefined);
-            this.cargarL();
-            this.cargarR();
-            this.cargarA();
+            // this.cargarL();
+            // this.cargarR();
+            // this.cargarA();
           }
         });
       }
@@ -319,8 +321,6 @@ export class InventarioComponent implements OnInit {
         .subscribe(maniobras => {
           this.maniobras = maniobras.maniobras;
 
-          // this.maniobras = this.maniobras.sort((a, b) => a.fLlegada.localeCompare(b.fLlegada));
-
           this.dataSource = new MatTableDataSource(this.maniobras);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator.toArray()[0];
@@ -334,8 +334,25 @@ export class InventarioComponent implements OnInit {
     });
   }
 
+  cuenta(tipoMantenimiento) {
+    if (tipoMantenimiento == 'LAVADO') {
+      this.totalMantLavado = this.totalMantLavado + 1;
+    } else {
+      if (tipoMantenimiento == 'REPARACION') {
+        this.totalMantReparacion = this.totalMantReparacion + 1;
+      } else {
+        if (tipoMantenimiento == 'ACONDICIONAMIENTO') {
+          this.totalMantAcondicionamiento = this.totalMantAcondicionamiento + 1;
+        }
+      }
+    }
+  }
+
   cargarM() {
     this.cargando = true;
+    this.totalMantLavado = 0;
+    this.totalMantReparacion = 0;
+    this.totalMantAcondicionamiento = 0;
 
     return new Promise((resolve, reject) => {
       this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
@@ -345,13 +362,27 @@ export class InventarioComponent implements OnInit {
           let id;
           let viaje;
           let ma = {}
-          let lavado;
-          let reparacion;
-          let acondicionamiento;
           let maniobra;
           let consecutivo = 0;
-          groups[g].forEach(mant => {
+          const grupo = groups[g].sort((o1, o2) => {
+            if (o1.maniobra.fAlta > o2.maniobra.fAlta) {
+              return 1;
+            } else if (o1.maniobra.fAlta < o2.maniobra.fAlta) {
+              return -1;
+            }
+            return 0;
+          });
+
+          grupo.forEach(mant => {
+            let lavado;
+            let reparacion;
+            let acondicionamiento;
             consecutivo = consecutivo + 1;
+
+            // if (mant.maniobra.contenedor == 'CXDU2241522') {
+            //   console.log('aq');
+            // }
+
             if (id !== mant.maniobra._id) {
               maniobra = mant.maniobra;
 
@@ -374,6 +405,7 @@ export class InventarioComponent implements OnInit {
               viaje = mant.maniobra.viaje !== undefined ? mant.maniobra.viaje._id : '';
 
             } else {
+
               if (mant.tipoMantenimiento == 'LAVADO') {
                 lavado = mant._id;
               } else {
@@ -387,30 +419,51 @@ export class InventarioComponent implements OnInit {
               }
 
               maniobra = mant.maniobra;
-              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
               const pos = this.mantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
+
+              if(!lavado && this.mantenimientos[pos].lavado){
+                lavado = this.mantenimientos[pos].lavado;
+              }
+
+              if(!reparacion && this.mantenimientos[pos].reparacion){
+                reparacion = this.mantenimientos[pos].reparacion;
+              }
+
+              if(!acondicionamiento && this.mantenimientos[pos].acondicionamiento){
+                acondicionamiento = this.mantenimientos[pos].acondicionamiento;
+              }
+
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
               this.mantenimientos.splice(pos, 1);
               this.mantenimientos.push(ma);
             }
           });
         }
 
+        // Quito repetidos
         const mantenimientosFinal = [];
         this.mantenimientos.forEach(m => {
 
-          const existen = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
+          // if (m.maniobra.contenedor == 'CXDU2241522') {
+          //   console.log('aq');
+          // }
 
-          if (existen.length == 1) {
-            if (m.consecutivo > existen[0].consecutivo) {
-              const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
+          const existe = mantenimientosFinal.filter(man => man.maniobra.contenedor == m.maniobra.contenedor);
+          // const existe = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
+
+          if (existe.length == 1) {
+            if (m.consecutivo > existe[0].consecutivo) {
+              const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra.contenedor === m.maniobra.contenedor);
+              // const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
+              
               if (pos) {
                 mantenimientosFinal.splice(pos, 1);
                 mantenimientosFinal.push(m);
               }
             }
           } else {
-            if (existen.length > 1) {
-              const mayor = existen.reduce(function (prev, curr) {
+            if (existe.length > 1) {
+              const mayor = existe.reduce(function (prev, curr) {
                 return prev.consecutivo > curr.consecutivo ? prev : curr;
               });
 
@@ -425,10 +478,26 @@ export class InventarioComponent implements OnInit {
                 }
               }
             } else {
-              mantenimientosFinal.push(m);
+              if (existe.length == 0) {
+                mantenimientosFinal.push(m);
+              }
             }
           }
         });
+
+        if (mantenimientosFinal) {
+          let l = mantenimientosFinal.filter(m => m.lavado !== undefined);
+          this.totalMantLavado = l.length;
+          // console.log(this.totalMantLavado);
+
+          let r = mantenimientosFinal.filter(m => m.reparacion !== undefined);
+          this.totalMantReparacion = r.length;
+          // console.log(this.totalMantReparacion);
+
+          let a = mantenimientosFinal.filter(m => m.acondicionamiento !== undefined);
+          this.totalMantAcondicionamiento = a.length;
+          // console.log(this.totalMantAcondicionamiento);
+        }
 
         this.dataSourceM = new MatTableDataSource(mantenimientosFinal);
         this.dataSourceM.sort = this.matSort4;
