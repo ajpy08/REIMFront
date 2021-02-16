@@ -11,7 +11,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import * as _moment from 'moment';
 import { MatDialogConfig, MatDialog } from '@angular/material';
 import { Usuario } from '../../usuarios/usuario.model';
-import { VariasService } from './../varias.service';
+import { VariasService } from '../../../services/shared/varias.service';
 import { ClienteService } from './../../../services/cliente/cliente.service';
 import { SolicitudService } from './../../solicitudes/solicitud.service';
 import { SelectionModel } from '@angular/cdk/collections';

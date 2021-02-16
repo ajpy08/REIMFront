@@ -1,3 +1,4 @@
+import { MantenimientoService } from './../mantenimientos/mantenimiento.service';
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import {
   MatPaginator,
@@ -21,6 +22,7 @@ import { Naviera } from '../../navieras/navieras.models';
 import * as _moment from 'moment';
 declare var swal: any;
 const moment = _moment;
+import { VariasService } from '../../../services/shared/varias.service';
 
 @Component({
   selector: 'app-inventario',
@@ -33,6 +35,13 @@ export class InventarioComponent implements OnInit {
   totalRegistros = 0;
   totalRegistrosL = 0;
   totalRegistrosR = 0;
+  totalRegistrosA = 0;
+  totalRegistrosM = 0;
+
+  totalMantLavado = 0;
+  totalMantReparacion = 0;
+  totalMantAcondicionamiento = 0;
+
   displayedColumns = [
     'fLlegada',
     'dias',
@@ -59,12 +68,16 @@ export class InventarioComponent implements OnInit {
     'peso',
     'grado'
   ];
+
+  displayedColumnsM;
   displayedColumnsL;
   displayedColumnsR;
 
   dataSource: any;
   dataSourceL: any;
   dataSourceR: any;
+  dataSourceA: any;
+  dataSourceM: any;
   c40: any;
   c20: any;
   groupedDisponibles20: any;
@@ -73,9 +86,14 @@ export class InventarioComponent implements OnInit {
   totalInventario = 0;
   totalReparaciones = 0;
   maniobras: Maniobra[] = [];
+  mantenimientos = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
   blockNaviera = false;
+
+  mantLavado;
+  mantReparacion;
+  mantAcondicionamiento;
 
   @ViewChild(MatTabGroup) tabGroup: MatTabGroup;
   // @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -87,12 +105,14 @@ export class InventarioComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('MatSort2') matSort2: MatSort;
   @ViewChild('MatSort3') matSort3: MatSort;
+  @ViewChild('MatSort4') matSort4: MatSort;
   constructor(
     public maniobraService: ManiobraService,
     private usuarioService: UsuarioService,
     private navieraService: NavieraService,
     private _excelService: ExcelService,
-    private router: Router
+    private router: Router,
+    private mantenimientoService: MantenimientoService
   ) { }
 
   ngOnInit() {
@@ -132,12 +152,27 @@ export class InventarioComponent implements OnInit {
         'peso',
         'grado',
         'lavado',
-        'reparaciones'
+        // 'reparaciones'
+      ];
+
+      this.displayedColumnsM = [
+        'lavado',
+        'reparacion',
+        'acondicionamiento',
+        'fLlegada',
+        'dias',
+        'viaje',
+        'nombre',
+        'nombreComercial',
+        'contenedor',
+        'tipo',
+        'peso',
+        'grado'
       ];
     } else {
       this.navieraSeleccionada = this.usuarioLogueado.empresas[0]._id;
       this.blockNaviera = true;
-      this.displayedColumnsL = [
+      this.displayedColumnsL = this.displayedColumnsR = [
         'fLlegada',
         'dias',
         'viaje',
@@ -148,7 +183,22 @@ export class InventarioComponent implements OnInit {
         'peso',
         'grado',
         'lavado',
-        'reparaciones'
+        // 'reparaciones'
+      ];
+
+      this.displayedColumnsM = [
+        'lavado',
+        'reparacion',
+        'acondicionamiento',
+        'fLlegada',
+        'dias',
+        'viaje',
+        'nombre',
+        'nombreComercial',
+        'contenedor',
+        'tipo',
+        'peso',
+        'grado'
       ];
     }
     const indexTAB = localStorage.getItem('InventarioTabs');
@@ -160,7 +210,7 @@ export class InventarioComponent implements OnInit {
     this.cargarInventario();
   }
 
-  applyFilter(filterValue: string, dataSource: any, totalRegistros: number) {
+  applyFilter(filterValue: string, dataSource: any) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     if (dataSource && dataSource.data.length > 0) {
@@ -192,8 +242,14 @@ export class InventarioComponent implements OnInit {
     promesa.then((value: boolean) => {
       if (value) {
         this.agrupa20_40(this.maniobras);
-        this.cargarL();
-        this.cargarR();
+        const mant = this.cargarM();
+        mant.then((ok: boolean) => {
+          if (ok) {
+            // this.cargarL();
+            // this.cargarR();
+            // this.cargarA();
+          }
+        });
       }
     });
   }
@@ -265,8 +321,6 @@ export class InventarioComponent implements OnInit {
         .subscribe(maniobras => {
           this.maniobras = maniobras.maniobras;
 
-          // this.maniobras = this.maniobras.sort((a, b) => a.fLlegada.localeCompare(b.fLlegada));
-
           this.dataSource = new MatTableDataSource(this.maniobras);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator.toArray()[0];
@@ -280,55 +334,272 @@ export class InventarioComponent implements OnInit {
     });
   }
 
+  cuenta(tipoMantenimiento) {
+    if (tipoMantenimiento == 'LAVADO') {
+      this.totalMantLavado = this.totalMantLavado + 1;
+    } else {
+      if (tipoMantenimiento == 'REPARACION') {
+        this.totalMantReparacion = this.totalMantReparacion + 1;
+      } else {
+        if (tipoMantenimiento == 'ACONDICIONAMIENTO') {
+          this.totalMantAcondicionamiento = this.totalMantAcondicionamiento + 1;
+        }
+      }
+    }
+  }
+
+  cargarM() {
+    this.cargando = true;
+    this.totalMantLavado = 0;
+    this.totalMantReparacion = 0;
+    this.totalMantAcondicionamiento = 0;
+
+    return new Promise((resolve, reject) => {
+      this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
+        this.mantenimientos = [];
+        const groups = VariasService.groupArray2(mantenimientos.mantenimientos, 'maniobra', 'contenedor');
+        for (const g in groups) {
+          let id;
+          let viaje;
+          let ma = {}
+          let maniobra;
+          let consecutivo = 0;
+          const grupo = groups[g].sort((o1, o2) => {
+            if (o1.maniobra.fAlta > o2.maniobra.fAlta) {
+              return 1;
+            } else if (o1.maniobra.fAlta < o2.maniobra.fAlta) {
+              return -1;
+            }
+            return 0;
+          });
+
+          grupo.forEach(mant => {
+            let lavado;
+            let reparacion;
+            let acondicionamiento;
+            consecutivo = consecutivo + 1;
+
+            // if (mant.maniobra.contenedor == 'CXDU2241522') {
+            //   console.log('aq');
+            // }
+
+            if (id !== mant.maniobra._id) {
+              maniobra = mant.maniobra;
+
+              if (mant.tipoMantenimiento == 'LAVADO') {
+                lavado = mant._id;
+              } else {
+                if (mant.tipoMantenimiento == 'REPARACION') {
+                  reparacion = mant._id;
+                } else {
+                  if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
+                    acondicionamiento = mant._id;
+                  }
+                }
+              }
+
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
+              this.mantenimientos.push(ma);
+
+              id = mant.maniobra._id;
+              viaje = mant.maniobra.viaje !== undefined ? mant.maniobra.viaje._id : '';
+
+            } else {
+
+              if (mant.tipoMantenimiento == 'LAVADO') {
+                lavado = mant._id;
+              } else {
+                if (mant.tipoMantenimiento == 'REPARACION') {
+                  reparacion = mant._id;
+                } else {
+                  if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
+                    acondicionamiento = mant._id;
+                  }
+                }
+              }
+
+              maniobra = mant.maniobra;
+              const pos = this.mantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
+
+              if(!lavado && this.mantenimientos[pos].lavado){
+                lavado = this.mantenimientos[pos].lavado;
+              }
+
+              if(!reparacion && this.mantenimientos[pos].reparacion){
+                reparacion = this.mantenimientos[pos].reparacion;
+              }
+
+              if(!acondicionamiento && this.mantenimientos[pos].acondicionamiento){
+                acondicionamiento = this.mantenimientos[pos].acondicionamiento;
+              }
+
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
+              this.mantenimientos.splice(pos, 1);
+              this.mantenimientos.push(ma);
+            }
+          });
+        }
+
+        // Quito repetidos
+        const mantenimientosFinal = [];
+        this.mantenimientos.forEach(m => {
+
+          // if (m.maniobra.contenedor == 'CXDU2241522') {
+          //   console.log('aq');
+          // }
+
+          const existe = mantenimientosFinal.filter(man => man.maniobra.contenedor == m.maniobra.contenedor);
+          // const existe = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
+
+          if (existe.length == 1) {
+            if (m.consecutivo > existe[0].consecutivo) {
+              const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra.contenedor === m.maniobra.contenedor);
+              // const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
+              
+              if (pos) {
+                mantenimientosFinal.splice(pos, 1);
+                mantenimientosFinal.push(m);
+              }
+            }
+          } else {
+            if (existe.length > 1) {
+              const mayor = existe.reduce(function (prev, curr) {
+                return prev.consecutivo > curr.consecutivo ? prev : curr;
+              });
+
+              const pos = mantenimientosFinal.findIndex(m => m.maniobra._id === mayor.maniobra._id);
+
+              if (pos < 0) {
+                mantenimientosFinal.push(mayor);
+              } else {
+                if (mayor.consecutivo > mantenimientosFinal[pos].consecutivo) {
+                  mantenimientosFinal.splice(pos, 1);
+                  mantenimientosFinal.push(mayor);
+                }
+              }
+            } else {
+              if (existe.length == 0) {
+                mantenimientosFinal.push(m);
+              }
+            }
+          }
+        });
+
+        if (mantenimientosFinal) {
+          let l = mantenimientosFinal.filter(m => m.lavado !== undefined);
+          this.totalMantLavado = l.length;
+          // console.log(this.totalMantLavado);
+
+          let r = mantenimientosFinal.filter(m => m.reparacion !== undefined);
+          this.totalMantReparacion = r.length;
+          // console.log(this.totalMantReparacion);
+
+          let a = mantenimientosFinal.filter(m => m.acondicionamiento !== undefined);
+          this.totalMantAcondicionamiento = a.length;
+          // console.log(this.totalMantAcondicionamiento);
+        }
+
+        this.dataSourceM = new MatTableDataSource(mantenimientosFinal);
+        this.dataSourceM.sort = this.matSort4;
+        this.dataSourceM.paginator = this.paginator.toArray()[1];
+        this.totalRegistrosM = mantenimientosFinal.length;
+
+        if (mantenimientos) {
+          resolve(true);
+        }
+      });
+      this.cargando = false;
+    });
+  }
+
   cargarL() {
     this.cargando = true;
 
-    this.maniobraService
-      .getManiobras(
-        null,
-        ETAPAS_MANIOBRA.LAVADO_REPARACION,
-        null,
-        null,
-        null,
-        null,
-        true,
-        null,
-        this.navieraSeleccionada
-      )
-      .subscribe(maniobras => {
-        this.maniobras = maniobras.maniobras;
+    this.mantLavado = this.mantenimientos.filter(m => m.lavado !== undefined);
+    const maniobrasLavado = [];
 
-        this.dataSourceL = new MatTableDataSource(maniobras.maniobras);
-        this.dataSourceL.sort = this.matSort2;
-        this.dataSourceL.paginator = this.paginator.toArray()[1];
-        this.totalRegistrosL = maniobras.maniobras.length;
-      });
+    this.mantLavado.forEach(m => {
+      maniobrasLavado.push(m.maniobra);
+    });
+
+    this.dataSourceL = new MatTableDataSource(maniobrasLavado);
+    this.dataSourceL.sort = this.matSort2;
+    this.dataSourceL.paginator = this.paginator.toArray()[2];
+    this.totalRegistrosL = maniobrasLavado.length;
+
+    // this.maniobraService
+    //   .getManiobras(
+    //     null,
+    //     ETAPAS_MANIOBRA.LAVADO_REPARACION,
+    //     null,
+    //     null,
+    //     null,
+    //     null,
+    //     true,
+    //     null,
+    //     this.navieraSeleccionada
+    //   )
+    //   .subscribe(maniobras => {
+    //     this.maniobras = maniobras.maniobras;
+
+    //     this.dataSourceL = new MatTableDataSource(maniobras.maniobras);
+    //     this.dataSourceL.sort = this.matSort2;
+    //     this.dataSourceL.paginator = this.paginator.toArray()[2];
+    //     this.totalRegistrosL = maniobras.maniobras.length;
+    //   });
     this.cargando = false;
   }
 
   cargarR() {
     this.cargando = true;
 
-    this.maniobraService
-      .getManiobras(
-        null,
-        ETAPAS_MANIOBRA.LAVADO_REPARACION,
-        null,
-        null,
-        null,
-        null,
-        null,
-        true,
-        this.navieraSeleccionada
-      )
-      .subscribe(maniobras => {
-        this.maniobras = maniobras.maniobras;
+    this.mantReparacion = this.mantenimientos.filter(m => m.reparacion !== undefined);
+    const maniobrasReparacion = [];
 
-        this.dataSourceR = new MatTableDataSource(maniobras.maniobras);
-        this.dataSourceR.sort = this.matSort3;
-        this.dataSourceR.paginator = this.paginator.toArray()[2];
-        this.totalRegistrosR = maniobras.maniobras.length;
-      });
+    this.mantReparacion.forEach(m => {
+      maniobrasReparacion.push(m.maniobra);
+    });
+    this.dataSourceR = new MatTableDataSource(maniobrasReparacion);
+    this.dataSourceR.sort = this.matSort3;
+    this.dataSourceR.paginator = this.paginator.toArray()[3];
+    this.totalRegistrosR = maniobrasReparacion.length;
+    // this.maniobraService
+    //   .getManiobras(
+    //     null,
+    //     ETAPAS_MANIOBRA.LAVADO_REPARACION,
+    //     null,
+    //     null,
+    //     null,
+    //     null,
+    //     null,
+    //     true,
+    //     this.navieraSeleccionada
+    //   )
+    //   .subscribe(maniobras => {
+    //     this.maniobras = maniobras.maniobras;
+
+    //     this.dataSourceR = new MatTableDataSource(maniobras.maniobras);
+    //     this.dataSourceR.sort = this.matSort3;
+    //     this.dataSourceR.paginator = this.paginator.toArray()[3];
+    //     this.totalRegistrosR = maniobras.maniobras.length;
+    //   });
+    this.cargando = false;
+  }
+
+  cargarA() {
+    this.cargando = true;
+
+    this.mantAcondicionamiento = this.mantenimientos.filter(m => m.acondicionamiento !== undefined);
+    const maniobrasAcondicionamiento = [];
+
+    this.mantAcondicionamiento.forEach(m => {
+      maniobrasAcondicionamiento.push(m.maniobra);
+    });
+    this.dataSourceA = new MatTableDataSource(maniobrasAcondicionamiento);
+    this.dataSourceA.sort = this.matSort3;
+    this.dataSourceA.paginator = this.paginator.toArray()[4];
+    this.totalRegistrosA = maniobrasAcondicionamiento.length;
+
     this.cargando = false;
   }
 
@@ -352,18 +623,6 @@ export class InventarioComponent implements OnInit {
   CreaDatosExcel(datos) {
     this.datosExcel = [];
     datos.forEach(d => {
-
-      let reparaciones = '';
-
-      d.reparaciones.forEach(r => {
-        reparaciones += r.reparacion + ', ';
-      });
-
-      if (reparaciones.length > 1) {
-        reparaciones = reparaciones.substring(0, reparaciones.length - 2);
-      }
-
-      // console.log(d)
       const dato = {
         EntradaPatio: d.fLlegada,
         Dias_Patio: this.calculaDias(d.fLlegada),
@@ -377,11 +636,9 @@ export class InventarioComponent implements OnInit {
         Tipo: d.tipo,
         Estado: d.peso,
         Grado: d.grado,
-        // operador: d.operador != undefined ? d.operador.nombre : '',
         Naviera: d.naviera && d.naviera.nombreComercial && d.naviera.nombreComercial !== undefined &&
           d.naviera.nombreComercial !== '' ? d.naviera.nombreComercial : '',
-        Reparaciones: reparaciones,
-        FAlta: d.fAlta.substring(0, 10),
+        FAlta: d.FAlta !== undefined ? d.fAlta.substring(0, 10) : '',
       };
       this.datosExcel.push(dato);
     });
@@ -396,25 +653,107 @@ export class InventarioComponent implements OnInit {
     }
   }
 
+  CreaDatosExcelMantenimientos(datos) {
+    this.datosExcel = [];
+    datos.forEach(d => {
+      let lavado = false;
+      let reparacion = false;
+      let acondicionamiento = false;
+
+      let reparaciones = '';
+
+      if (d.lavado) {
+        lavado = true
+      }
+
+      if (d.reparacion) {
+        reparacion = true
+      }
+
+      if (d.acondicionamiento) {
+        acondicionamiento = true
+      }
+
+      if (d.maniobra) {
+        const dato = {
+          Lavado: lavado ? 'SI' : 'NO',
+          Reparacion: reparacion ? 'SI' : 'NO',
+          Acondicionamiento: acondicionamiento ? 'SI' : 'NO',
+          EntradaPatio: d.maniobra.fLlegada !== undefined ? d.maniobra.fLlegada.substring(0, 10) : '',
+          Dias_Patio: this.calculaDias(d.maniobra.fLlegada),
+          Viaje: d.maniobra.viaje && d.maniobra.viaje.viaje && d.maniobra.viaje.viaje !== undefined && d.maniobra.viaje.viaje !== '' ? d.maniobra.viaje.viaje : '',
+          Buque: d.maniobra.viaje && d.maniobra.viaje.buque && d.maniobra.viaje.buque !== undefined && d.maniobra.viaje.buque !== null &&
+            d.maniobra.viaje.buque.nombre && d.maniobra.viaje.buque.nombre !== undefined &&
+            d.maniobra.viaje.buque.nombre !== '' ? d.maniobra.viaje.buque.nombre : '',
+          VigenciaTemporal: d.maniobra.viaje && d.maniobra.viaje.fVigenciaTemporal !== undefined &&
+            d.maniobra.viaje.fVigenciaTemporal !== null && d.maniobra.viaje.fVigenciaTemporal ? d.maniobra.viaje.fVigenciaTemporal : '',
+          Contenedor: d.maniobra.contenedor,
+          Tipo: d.maniobra.tipo,
+          Estado: d.maniobra.peso,
+          Grado: d.maniobra.grado,
+          // operador: d.maniobra.operador != undefined ? d.maniobra.operador.nombre : '',
+          Naviera: d.maniobra.viaje && d.maniobra.viaje.naviera.nombreComercial && d.maniobra.viaje.naviera.nombreComercial !== undefined &&
+            d.maniobra.viaje.naviera.nombreComercial !== '' ? d.maniobra.viaje.naviera.nombreComercial : '',
+        };
+        this.datosExcel.push(dato);
+      }
+    });
+  }
+
+  exportAsXLSXMantenimientos(dataSource, nombre: string): void {
+    this.CreaDatosExcelMantenimientos(dataSource.filteredData);
+    if (this.datosExcel) {
+      this._excelService.exportAsExcelFile(this.datosExcel, nombre);
+    } else {
+      swal('No se puede exportar un excel vacio', '', 'error');
+    }
+  }
+
   cuentaInventario(grado: string, estatus: string, source: any): number {
     let count = 0;
     if (source) {
       source.forEach(d => {
-        if (d.grado === grado && d.estatus === estatus) {
-          count++;
+        if (grado && grado !== '') {
+          if (d.grado === grado && d.estatus === estatus) {
+            count++;
+          }
+        } else {
+          if (d.estatus === estatus) {
+            count++;
+          }
         }
+
       });
     }
     return count;
   }
 
-  cuentaReparaciones(grado: string, tipo: string, source: any): number {
+  // cuentaManiobrasMant(grado: string, tipo: string, source: any): number {
+  //   let count = 0;
+  //   if (source) {
+  //     source.forEach(d => {
+  //       if (d.grado === grado && d.tipo === tipo && d.reparaciones.length > 0) {
+  //         count++;
+  //       }
+  //     });
+  //   }
+  //   return count;
+  // }
+
+  cuentaManiobrasMant(grado: string, tipo: string, source: any): number {
     let count = 0;
     if (source) {
       source.forEach(d => {
-        if (d.grado === grado && d.tipo === tipo && d.reparaciones.length > 0) {
-          count++;
+        if (grado && grado !== '') {
+          if (d.grado === grado && d.tipo === tipo) {
+            count++;
+          }
+        } else {
+          if (d.tipo === tipo) {
+            count++;
+          }
         }
+
       });
     }
     return count;
@@ -429,25 +768,69 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
           if (this.dataSourceL !== undefined) {
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'A',
               g20.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'B',
               g20.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'C',
               g20.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'PT',
               g20.tipo,
               this.dataSourceL.data
+            );
+          }
+          if (this.dataSourceR !== undefined) {
+            total += this.cuentaManiobrasMant(
+              'A',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'B',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'C',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PT',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+          }
+          if (this.dataSourceA !== undefined) {
+            total += this.cuentaManiobrasMant(
+              'A',
+              g20.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'B',
+              g20.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'C',
+              g20.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PT',
+              g20.tipo,
+              this.dataSourceA.data
             );
           }
         });
@@ -459,25 +842,69 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
           if (this.dataSourceL !== undefined) {
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'A',
               g40.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'B',
               g40.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'C',
               g40.tipo,
               this.dataSourceL.data
             );
-            total += this.cuentaReparaciones(
+            total += this.cuentaManiobrasMant(
               'PT',
               g40.tipo,
               this.dataSourceL.data
+            );
+          }
+          if (this.dataSourceR !== undefined) {
+            total += this.cuentaManiobrasMant(
+              'A',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'B',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'C',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PT',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+          }
+          if (this.dataSourceA !== undefined) {
+            total += this.cuentaManiobrasMant(
+              'A',
+              g40.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'B',
+              g40.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'C',
+              g40.tipo,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PT',
+              g40.tipo,
+              this.dataSourceA.data
             );
           }
         });
@@ -487,7 +914,7 @@ export class InventarioComponent implements OnInit {
     return total;
   }
 
-  obtenSubTotales(tipo: string, dataSource, dataSourceL): number {
+  obtenSubTotales(tipo: string, dataSource): number {
     let subTotal = 0;
     if (tipo.includes('20')) {
       if (dataSource !== undefined) {
@@ -495,33 +922,87 @@ export class InventarioComponent implements OnInit {
         subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceL !== undefined) {
-          subTotal += this.cuentaReparaciones(
+        if (this.dataSourceL !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
             'A',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'B',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'C',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'PT',
             tipo,
             this.dataSourceL.data
           );
         }
-      } else if (dataSourceL !== undefined) {
-        subTotal += this.cuentaReparaciones('A', tipo, dataSourceL.data);
-        subTotal += this.cuentaReparaciones('B', tipo, dataSourceL.data);
-        subTotal += this.cuentaReparaciones('C', tipo, dataSourceL.data);
-        subTotal += this.cuentaReparaciones('PT', tipo, dataSourceL.data);
+        if (this.dataSourceR !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
+            'A',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'B',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'C',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PT',
+            tipo,
+            this.dataSourceR.data
+          );
+        }
+        if (this.dataSourceA !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
+            'A',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'B',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'C',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PT',
+            tipo,
+            this.dataSourceA.data
+          );
+        }
+      } else if (this.dataSourceL !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+      } else if (this.dataSourceR !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+      } else if (this.dataSourceA !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceA.data);
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40 !== undefined) {
@@ -529,37 +1010,94 @@ export class InventarioComponent implements OnInit {
         subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (dataSourceL !== undefined) {
-          subTotal += this.cuentaReparaciones(
+        if (this.dataSourceL !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
             'A',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'B',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'C',
             tipo,
             this.dataSourceL.data
           );
-          subTotal += this.cuentaReparaciones(
+          subTotal += this.cuentaManiobrasMant(
             'PT',
             tipo,
             this.dataSourceL.data
           );
         }
-      } else if (dataSourceL !== undefined) {
-        subTotal += this.cuentaReparaciones('A', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaReparaciones('B', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaReparaciones('C', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaReparaciones('PT', tipo, this.dataSourceL.data);
+
+        if (this.dataSourceR !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
+            'A',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'B',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'C',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PT',
+            tipo,
+            this.dataSourceR.data
+          );
+        }
+
+        if (this.dataSourceA !== undefined) {
+          subTotal += this.cuentaManiobrasMant(
+            'A',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'B',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'C',
+            tipo,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PT',
+            tipo,
+            this.dataSourceA.data
+          );
+        }
+      } else if (this.dataSourceL !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+      } else if (this.dataSourceR !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+      } else if (this.dataSourceA !== undefined) {
+        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceA.data);
       }
     }
     return subTotal;
   }
+
   onLinkClick(event: MatTabChangeEvent) {
     localStorage.setItem('InventarioTabs', event.index.toString());
   }
@@ -614,11 +1152,35 @@ export class InventarioComponent implements OnInit {
     this.router.navigate(['/maniobras/maniobra/' + id + '/detalle']);
   }
 
+  openMantenimiento(id: string) {
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable history lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
+        array.push(history[i]);
+      }
+    }
+    // Agrego mi nueva ruta al array
+    array.push('/inventario');
+
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    // Voy a pagina.
+    this.router.navigate(['/mantenimientos/mantenimiento/' + id]);
+  }
+
   calculaDias(fEnt) {
     const hoy = moment();
     const fEntrada = moment(fEnt);
     let dias = 0;
-    if (fEntrada !== undefined) {
+    if (fEnt !== undefined && fEntrada !== undefined) {
       dias = hoy.diff(fEntrada, 'days');
     } else {
       dias = 0;
