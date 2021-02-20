@@ -46,6 +46,21 @@ export class MantenimientoService {
     }
   }
 
+subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
+    if (!archivo) {
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', archivo, archivo.name);
+  const url = URL_SERVICIOS + '/mantenimientos/mantenimiento/'+idMantenimiento+"/adjunta_pdf_folio"+"?token="+this._usuarioService.token;
+
+  return this.http.put( url, formData )
+  .pipe(map( (resp: any) => {
+    swal('Archivo Cargado', resp.nombreArchivo, 'success');
+    return resp.nombreArchivo;
+  }));
+}
+
   finalizaMantenimiento(idMantenimiento: string, finaliza: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + '/finaliza';
     url += '?token=' + this._usuarioService.token;

@@ -58,9 +58,9 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   acttrue = false;
 
-  displayedColumnsReparaciones = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
-  displayedColumnsLavados = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
-  displayedColumnsAcondicionamientos = ['actions', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsReparaciones = ['actions', 'folio','observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsLavados = ['actions', 'folio', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsAcondicionamientos = ['actions', 'folio', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
 
   dtReparaciones: MatTableDataSource<any>;
   dtLavados: MatTableDataSource<any>;
@@ -170,6 +170,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   Filtro(): (data: any, filter: string) => boolean {
     const filterFunction = function (data, filter): boolean {
       const dataStr =
+        data.folio.toLowerCase() +
         data.observacionesCompleto.toLowerCase() +
         (data.contenedor ? data.contenedor.toLowerCase() : '') +
         (data.maniobra ? data.maniobra.contenedor.toLowerCase() : '') +
@@ -300,22 +301,23 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   CreaDatosExcel(datos) {
     datos.forEach(b => {
       const reg = {
-        // Id: b._id,
-        Buque: b.nombre,
-        Naviera: b.naviera.nombreComercial,
-        UsuarioAlta: b.usuarioAlta.nombre,
-        FAlta: b.fAlta.substring(0, 10)
+        Folio: b.folio,
+        Observaciones: b.observacionesCompleto,
+        Contenedor: b.maniobra.contenedor,
+        Tipo: b.maniobra.tipo,
+        Peso: b.maniobra.peso,
+        Inicio: b.fInicial ? b.fInicial.substring(0, 10):"",
+        Fin: b.fFinal ? b.fFinal.substring(0, 10):"",
+        Finalizado: b.finalizado? "Listo":""
       };
       this.mantenimientosExcel.push(reg);
     });
   }
-
-  exportAsXLSX(): void {
-    this.CreaDatosExcel(this.dtAcondicionamientos.filteredData);
-    if (this.mantenimientosExcel) {
-      this._excelService.exportAsExcelFile(this.mantenimientosExcel, 'Mantenimientos');
-    } else {
+  
+  exportAsXLSX(datos,tipo:string): void {
+    this.CreaDatosExcel(datos.filteredData);
+    if (this.mantenimientosExcel) this._excelService.exportAsExcelFile(this.mantenimientosExcel, 'Mantenimientos:'+tipo);
+    else 
       swal('No se puede exportar un excel vacio', '', 'error');
-    }
   }
 }

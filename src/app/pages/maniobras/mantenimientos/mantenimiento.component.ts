@@ -10,16 +10,14 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
-
 import { Mantenimiento } from './mantenimiento.models';
-import { MantenimientoService, MaterialService, ManiobraService } from "../../../services/service.index";
+import { MantenimientoService, MaterialService, ManiobraService, UsuarioService } from "../../../services/service.index";
 import { Material } from '../../almacen/materiales/material.models';
 import * as _moment from 'moment';
-import { ok } from 'assert';
 import { Maniobra } from '../../../models/maniobra.models';
+import { ROLES } from 'src/app/config/config';
 declare var swal: any;
-
+import { URL_SERVICIOS } from '../../../../environments/environment';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -65,10 +63,14 @@ export class MantenimientoComponent implements OnInit {
   dialogR = false;
   mensajeError: string = '';
   mensajeExito: string = '';
-  muestraInfoAdicional = false;
+  mostrarInfoAdmin: boolean;
+  selectedMaterial : any;
+  filePDFFolio: File = null;
+
   constructor(
     public dialogRef: MatDialogRef<MantenimientoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private _usuarioService: UsuarioService,
     private _mantenimientoService: MantenimientoService,
     private _materialService: MaterialService,
     private _maniobraService: ManiobraService,
@@ -76,11 +78,17 @@ export class MantenimientoComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private datePipe: DatePipe
-  ) { }
+  ) { 
+    this.mostrarInfoAdmin = false;
+    
+  }
 
   ngOnInit() {
 
     this.url = '/mantenimientos';
+    this.usuarioLogueado = this._usuarioService.usuario;
+    if (this.usuarioLogueado.role === ROLES.ADMIN_ROLE || this.usuarioLogueado.role === ROLES.PATIOADMIN_ROLE) this.mostrarInfoAdmin = true;
+
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
       this.mantenimiento._id = id;
@@ -95,6 +103,7 @@ export class MantenimientoComponent implements OnInit {
 
     this._materialService.getMateriales(null, true).subscribe(materiales => {
       this.listaMateriales = materiales.materiales;
+      this.selectedMaterial = this.listaMateriales[0]._id;
     });
 
     this.createFormGroup();
@@ -114,18 +123,19 @@ export class MantenimientoComponent implements OnInit {
       tipoMantenimiento: ['', [Validators.required]],
       tipoLavado: [{ value: 'B', disabled: true }, [Validators.required]],
       cambioGrado: [{ value: false, disabled: true }],
+      folio: [''],
+      fileFolio: [''],
       observacionesGenerales: [''],
       izquierdo: [''],
       derecho: [''],
       frente: [''],
-      posterior: [''],
+      puerta: [''],      
       techo: [''],
       piso: [''],
       interior: [''],
-      puerta: [''],
       fechas: this.fb.array([]),
       materiales: this.fb.array([]),
-      finalizado: [false],
+      finalizado: [{value: false, disabled:true}],
       _id: [''],
       maniobra: ['']
     });
@@ -147,6 +157,7 @@ export class MantenimientoComponent implements OnInit {
     }
 
   }
+
   cargarRegistro(idMantenimiento: string) {
     this._mantenimientoService.getMantenimiento(idMantenimiento).subscribe(res => {
 
@@ -159,7 +170,7 @@ export class MantenimientoComponent implements OnInit {
               res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; }) => this.addFecha(x.fIni, x.hIni, x.fFin, x.hFin));
             else {
               if (propiedad == "materiales") {
-                res.mantenimiento[propiedad].forEach((x: any) => { this.addMaterial(x._id, x.material, x.descripcion, x.costo.$numberDecimal, x.precio.$numberDecimal, x.cantidad) });
+                res.mantenimiento[propiedad].forEach((x: any) => { this.addMaterial(x._id, x.material, x.descripcion, x.costo.$numberDecimal, x.precio.$numberDecimal, x.cantidad,x.unidadMedida) });
               }
               else {
                 this.regForm.controls[propiedad].enable({ onlySelf: true });
@@ -185,6 +196,12 @@ export class MantenimientoComponent implements OnInit {
   get cambioGrado() {
     return this.regForm.get('cambioGrado');
   }
+  get folio() {
+    return this.regForm.get('folio');
+  }
+  get fileFolio() {
+    return this.regForm.get('fileFolio');
+  }  
   get observacionesGenerales() {
     return this.regForm.get('observacionesGenerales');
   }
@@ -197,9 +214,10 @@ export class MantenimientoComponent implements OnInit {
   get frente() {
     return this.regForm.get('frente');
   }
-  get posterior() {
-    return this.regForm.get('posterior');
-  }
+  get puerta() {
+    return this.regForm.get('puerta');
+  }  
+  
   get piso() {
     return this.regForm.get('piso');
   }
@@ -210,9 +228,7 @@ export class MantenimientoComponent implements OnInit {
   get interior() {
     return this.regForm.get('interior');
   }
-  get puerta() {
-    return this.regForm.get('puerta');
-  }
+
 
   get fechas(): FormArray {
     return this.regForm.get("fechas") as FormArray
@@ -248,14 +264,15 @@ export class MantenimientoComponent implements OnInit {
     this.fechas.removeAt(i);
   }
 
-  newMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1): FormGroup {
+  newMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1,unidadMedida = ''): FormGroup {
     return this.fb.group({
       material: material,
-      descripcion: descripcion,
+      descripcion: [{value:descripcion,disabled: true}],
       costo: costo,
       precio: precio,
       //cantidad: [cantidad, [this.checaStock(material)]]
       cantidad: cantidad,
+      unidadMedida:  [{value:unidadMedida,disabled: true}],
       _id: id
     }, { Validators: this.checaStock2 })
   }
@@ -305,13 +322,14 @@ export class MantenimientoComponent implements OnInit {
   }
 
 
-  addMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1) {
-    this.materiales.push(this.newMaterial(id, material, descripcion, costo, precio, cantidad));
+  addMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1,unidadMedida = '') {
+    this.materiales.push(this.newMaterial(id, material, descripcion, costo, precio, cantidad,unidadMedida));
   }
 
   addMaterial2(id: String) {
     const rep = this.listaMateriales.find(x => x._id === id);
-    this.materiales.push(this.newMaterial('', rep._id, rep.descripcion, rep.costo.$numberDecimal, rep.precio.$numberDecimal, 1));
+    console.log(rep);
+    this.materiales.push(this.newMaterial('', rep._id, rep.descripcion, rep.costo.$numberDecimal, rep.precio.$numberDecimal, 1, rep.unidadMedida.descripcion));
   }
 
   removeMaterial(i: number) {
@@ -333,7 +351,8 @@ export class MantenimientoComponent implements OnInit {
       descripcion: this.materiales.controls[i].get("descripcion").value,
       costo: this.materiales.controls[i].get("costo").value,
       precio: this.materiales.controls[i].get("precio").value,
-      cantidad: this.materiales.controls[i].get("cantidad").value
+      cantidad: this.materiales.controls[i].get("cantidad").value,
+      unidadMedida: this.materiales.controls[i].get("unidadMedida").value,
     };
     this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
 
@@ -437,6 +456,20 @@ export class MantenimientoComponent implements OnInit {
     this.router.navigate([this.url]);
     localStorage.removeItem('history');
 
+  }
+
+  onFileSelected(event) {
+    this.filePDFFolio = <File>event.target.files[0];
+    
+    this._mantenimientoService.subirPDFFolio(this.mantenimiento._id,this.filePDFFolio)
+      .subscribe(nombreArchivo => {
+        this.fileFolio.setValue(nombreArchivo);
+      });
+  }
+
+  abrePDF()
+  {
+    return URL_SERVICIOS + '/mantenimientos/mantenimiento/'+ this._id.value + "/descarga_pdf_folio/" + this.fileFolio.value;
   }
 
 }
