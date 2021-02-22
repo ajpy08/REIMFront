@@ -449,14 +449,21 @@ export class MantenimientoComponent implements OnInit {
     this.dialogRef.close(result);
   }
 
+
   back() {
-    if (localStorage.getItem('history')) {
-      this.url = localStorage.getItem('history');
+    let history;
+    const array = [];
+    if (localStorage.getItem('historyArray')) {
+      history = JSON.parse(localStorage.getItem('historyArray'));
+      for (const i in history) 
+        array.push(history[i]);
+      this.url = array.pop();
+      localStorage.setItem('historyArray', JSON.stringify(array));
     }
     this.router.navigate([this.url]);
-    localStorage.removeItem('history');
-
   }
+
+
 
   onFileSelected(event) {
     this.filePDFFolio = <File>event.target.files[0];

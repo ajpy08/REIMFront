@@ -6,6 +6,7 @@ import { MantenimientoService, ExcelService } from '../../../services/service.in
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -41,6 +42,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   filtrarFechas: boolean;
   filtroFechaIni: _moment.Moment;
   filtroFechaFin: _moment.Moment;
+  durationInSeconds: number = 5;
 
   cargandoR: boolean;
   cargandoL: boolean;
@@ -85,7 +87,8 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   
   constructor(
     private _mantenimientoService: MantenimientoService,
-    private _excelService: ExcelService) {
+    private _excelService: ExcelService,
+    private _snackBar: MatSnackBar) {
     
     this.incluirFinalizados = false;
     this.filtroFechaIni = moment().local().startOf('day');
@@ -296,6 +299,41 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
       if (tipo==='acondicionamientos') this.cargarAcondicionamientos();
     });
 
+  }
+
+  
+  onChangeFinaliza(event , idMantenimiento: string) {
+  swal({
+      title: '¿Esta seguro de esta acción?',
+      text: event.checked ? 'El mantenimiento sera finalizado y el contenedor estara disponible ' : 'El mantenimiento quedara de nuevo en proceso y el contenedor ya no estará disponible',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true
+    }).then(ok => {
+      if (ok) {
+        this._mantenimientoService
+          .finalizaMantenimiento(idMantenimiento, event.checked).subscribe(res => {
+            this.openSnackBar(res.mensaje,'');
+            // this.mensajeExito = res.mensaje;
+            // this.mensajeError = '';
+            
+          }, error => {
+            this.openSnackBar(error.error.mensaje,'');
+            // this.mensajeError = error.error.mensaje;
+            // this.mensajeExito = '';
+            event.source.checked = !event.checked;
+          });
+      }
+      else {
+        event.source.checked = !event.checked;
+      }
+    });
+  }
+  
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration:this.durationInSeconds * 2000,
+    });
   }
 
   CreaDatosExcel(datos) {

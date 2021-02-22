@@ -121,7 +121,7 @@
                 <ng-container matColumnDef="finalizado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.finalizado" [disabled]="true"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumnsReparaciones" class="encabezado"></mat-header-row>
@@ -222,7 +222,7 @@
                 <ng-container matColumnDef="finalizado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.finalizado" [disabled]="true"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavados" class="encabezado"></mat-header-row>
@@ -325,7 +325,7 @@
                 <ng-container matColumnDef="finalizado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.finalizado" [disabled]="true"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumnsAcondicionamientos" class="encabezado">
