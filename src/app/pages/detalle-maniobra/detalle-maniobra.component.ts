@@ -333,14 +333,7 @@ export class DetalleManiobraComponent implements OnInit {
       });
   }
 
-  // back() {
-  //   if (localStorage.getItem('history')) {
-  //     this.url = localStorage.getItem('history')
-  //   }
-  //   this.router.navigate([this.url]);
-  //   localStorage.removeItem('history')
-  //   // this.location.back();
-  // }
+
 
   guardaCambios() {
     if (this.regForm.valid) {
@@ -506,6 +499,33 @@ export class DetalleManiobraComponent implements OnInit {
     this._mantenimientoService.eliminaMantenimiento(id).subscribe(mantenimientos => {
       this.cargaMantenimientos(this.regForm.get('_id').value);
     });
+  }
+
+  verFotografias (idManiobra:string,idMantenimiento: string) {
+
+    let history;
+    const array = [];
+    // Si tengo algo en localStorage en la variable historyArray lo obtengo
+    if (localStorage.getItem('historyArray')) {
+      // asigno a mi variable history lo que obtengo de localStorage (historyArray)
+      history = JSON.parse(localStorage.getItem('historyArray'));
+
+      // realizo este ciclo para asignar los valores del JSON al Array
+      // tslint:disable-next-line: forin
+      for (const i in history) {
+        array.push(history[i]);
+      }
+    }
+    // Agrego mi nueva ruta a donde debo regresar al array
+    array.push('/maniobras/maniobra/' + idManiobra + '/detalle');
+
+    // sobreescribo la variable historyArray de localStorage con el nuevo JSON que incluye ya, la nueva ruta.
+    localStorage.setItem('historyArray', JSON.stringify(array));
+
+    // Voy a pagina.
+    
+    this.router.navigate(['/mantenimientos/mantenimiento/', idMantenimiento,'fotos']);
+    
   }
 
 }

@@ -7,96 +7,109 @@
           <div class="col-sm-12 col-xs-12">
             <form [formGroup]="regForm" novalidate>
               <div class="my-container">
-                <div *ngIf="mensajeExito" class="alert alert-success" role="alert">
-                  {{mensajeExito}}
+                <div class="row">
+                  <div *ngIf="mensajeExito" class="alert alert-success" role="alert">
+                    {{mensajeExito}}
+                  </div>
+                  <div *ngIf="mensajeError" class="alert alert-danger">
+                    {{mensajeError}}
+                  </div><br>
                 </div>
-                <div *ngIf="mensajeError" class="alert alert-danger">
-                  {{mensajeError}}
-                </div><br>
-                <mat-form-field>
-                  <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento"
-                    name="tipoMantenimiento" (selectionChange)="onChangeTipoMantenimiento($event)">
-                    <mat-option *ngFor="let mantenimiento of tiposMantenimiento" [value]="mantenimiento.id">
-                      {{ mantenimiento.descripcion }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="tipoMantenimiento.touched && tipoMantenimiento.invalid">
-                    <sup>*</sup>Por Favor seleccionar un tipo de Mantenimiento
-                  </mat-error>
-                </mat-form-field>
-                <div *ngIf="this.tipoLavado.enabled">
-                  <mat-form-field>
-                    <mat-label>Tipo Lavado</mat-label>
-                    <mat-select formControlName="tipoLavado" tabindex="1">
-                      <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
-                        {{tipo.descripcion}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <mat-form-field>
+
+                      <mat-select placeholder="Seleccione un tipo de Mantenimiento" formControlName="tipoMantenimiento" name="tipoMantenimiento" (selectionChange)="onChangeTipoMantenimiento($event)">
+                        <mat-option *ngFor="let mantenimiento of tiposMantenimiento" [value]="mantenimiento.id">
+                          {{ mantenimiento.descripcion }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="tipoMantenimiento.touched && tipoMantenimiento.invalid">
+                        <sup>*</sup>Por Favor seleccionar un tipo de Mantenimiento
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-6">
+                    <div *ngIf="this.tipoLavado.enabled">
+                      <mat-form-field>
+                        <mat-label>Tipo Lavado</mat-label>
+                        <mat-select formControlName="tipoLavado" tabindex="1">
+                          <mat-option *ngFor="let tipo of tiposLavado" [value]="tipo.id">
+                            {{tipo.descripcion}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="this.cambioGrado.enabled">
+                      <mat-checkbox formControlName="cambioGrado" name="cambioGrado">
+                        cambio de Grado
+                      </mat-checkbox>
+                    </div>
+                  </div>
                 </div>
-                <div *ngIf="this.cambioGrado.enabled">
-                  <mat-checkbox formControlName="cambioGrado" name="cambioGrado">
-                    cambio de Grado
-                  </mat-checkbox>
+                <div class="row">
+                  <mat-slide-toggle formControlName="finalizado" name="finalizado" (change)="onChangeFinaliza($event)">
+                    Finalizado
+                  </mat-slide-toggle>
+                </div>
+                <div class=" row">
+                  <div *ngIf="this.finalizado.value" class="alert alert-danger">
+                    Mantenimiento Finalizado
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <mat-form-field>
+                      <mat-label>Folio</mat-label>
+                      <input matInput formControlName="folio" type="text" class="form-control" placeholder="Folio">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                    <a matTooltip="Descargar Formato PDF" [href]="abrePDF()" target="_blank" *ngIf="this.fileFolio.value">
+                      <img src="\assets\images\icon\pdf_32x32.png">
+                    </a>
+                    <input (change)="onFileSelected($event)" type="file" style="display:none" name="filePDFFolio" accept="pdf" #filePDFFolio>
+                    <button class="btn btn-info waves-effect waves-light" type="button" (click)="filePDFFolio.click();" [disabled]="!this._id.value || this.finalizado.value">
+                      <i class="fa fa-file"></i> Subir Folio</button>
+                  </div>
                 </div>
 
-
-                <mat-slide-toggle formControlName="finalizado" name="finalizado" (change)="onChangeFinaliza($event)">
-                  Finalizado
-                </mat-slide-toggle>
-                <div *ngIf="this.finalizado.value" class="alert alert-danger">
-                  Mantenimiento Finalizado
-                </div><br>
                 <mat-form-field>
                   <mat-label>Observaciones Generales</mat-label>
-                  <textarea matInput formControlName="observacionesGenerales" name="observacionesGenerales"
-                    class="form-control" rows="3" cols="40" placeholder="ObservacionesGenerales"></textarea>
+                  <textarea matInput formControlName="observacionesGenerales" name="observacionesGenerales" class="form-control" rows="3" cols="40" placeholder="ObservacionesGenerales"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Izquierdo</mat-label>
-                  <textarea matInput formControlName="izquierdo" name="izquierdo" class="form-control" rows="3"
-                    cols="40" placeholder="Izquierdo"></textarea>
+                  <textarea matInput formControlName="izquierdo" name="izquierdo" class="form-control" rows="3" cols="40" placeholder="Izquierdo"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Derecho</mat-label>
-                  <textarea matInput formControlName="derecho" name="derecho" class="form-control" rows="3" cols="40"
-                    placeholder="Derecho"></textarea>
+                  <textarea matInput formControlName="derecho" name="derecho" class="form-control" rows="3" cols="40" placeholder="Derecho"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Frente</mat-label>
-                  <textarea matInput formControlName="frente" name="frente" class="form-control" rows="3" cols="40"
-                    placeholder="Frente"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>Posterior</mat-label>
-                  <textarea matInput formControlName="posterior" name="posterior" class="form-control" rows="3"
-                    cols="40" placeholder="Posterior"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>Piso</mat-label>
-                  <textarea matInput formControlName="piso" name="piso" class="form-control" rows="3" cols="40"
-                    placeholder="Piso"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>Techo</mat-label>
-                  <textarea matInput formControlName="techo" name="techo" class="form-control" rows="3" cols="40"
-                    placeholder="Techo"></textarea>
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>Interior</mat-label>
-                  <textarea matInput formControlName="interior" name="interior" class="form-control" rows="3" cols="40"
-                    placeholder="Interior"></textarea>
+                  <textarea matInput formControlName="frente" name="frente" class="form-control" rows="3" cols="40" placeholder="Frente"></textarea>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Puerta</mat-label>
-                  <textarea matInput formControlName="puerta" name="puerta" class="form-control" rows="3" cols="40"
-                    placeholder="Puerta"></textarea>
+                  <textarea matInput formControlName="puerta" name="puerta" class="form-control" rows="3" cols="40" placeholder="Puerta"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Piso</mat-label>
+                  <textarea matInput formControlName="piso" name="piso" class="form-control" rows="3" cols="40" placeholder="Piso"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Techo</mat-label>
+                  <textarea matInput formControlName="techo" name="techo" class="form-control" rows="3" cols="40" placeholder="Techo"></textarea>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Interior</mat-label>
+                  <textarea matInput formControlName="interior" name="interior" class="form-control" rows="3" cols="40" placeholder="Interior"></textarea>
                 </mat-form-field>
 
                 Fechas:
                 <p>
-                  <button matTooltip="Nueva Fecha" mat-mini-fab class="btn btn-primary" (click)="addFecha()"
-                    type="button" [disabled]="this.finalizado.value">
+                  <button matTooltip="Nueva Fecha" mat-mini-fab class="btn btn-primary" (click)="addFecha()" type="button" [disabled]="this.finalizado.value">
                     <i class="fa fa-plus"></i>
                   </button>
                 </p>
@@ -107,8 +120,7 @@
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Fecha Inicio</mat-label>
-                            <input matInput formControlName="fIni" name="fIni" type="text" placeholder="Fecha Inicio"
-                              [matDatepicker]="pick">
+                            <input matInput formControlName="fIni" name="fIni" type="text" placeholder="Fecha Inicio" [matDatepicker]="pick">
                             <mat-datepicker-toggle matSuffix [for]="pick"></mat-datepicker-toggle>
                             <mat-datepicker #pick></mat-datepicker>
                           </mat-form-field>
@@ -122,8 +134,7 @@
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Fecha Inicio</mat-label>
-                            <input matInput formControlName="fFin" name="fFin" type="text" placeholder="Fecha Final"
-                              [matDatepicker]="pickf">
+                            <input matInput formControlName="fFin" name="fFin" type="text" placeholder="Fecha Final" [matDatepicker]="pickf">
                             <mat-datepicker-toggle matSuffix [for]="pickf"></mat-datepicker-toggle>
                             <mat-datepicker #pickf></mat-datepicker>
                           </mat-form-field>
@@ -131,13 +142,11 @@
                         <div class="col-md-2">
                           <mat-form-field>
                             <mat-label>Hora Fin</mat-label>
-                            <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización"
-                              (focus)="ponHora($event)">
+                            <input matInput formControlName="hFin" type="time" placeholder="Hora Finalización" (focus)="ponHora($event)">
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="removeFecha(i)" class="btn btn-danger" type="button"
-                            [disabled]="this.finalizado.value">
+                          <button (click)="removeFecha(i)" class="btn btn-danger" type="button" [disabled]="this.finalizado.value">
                             <i class="fas fa-trash"></i>
                           </button>
                         </div>
@@ -146,20 +155,25 @@
                   </div>
                 </div>
 
+                <div class="row">
+                  <div class="col-md-4">
+                    Materiales:
+                    <mat-select placeholder="Seleccione un Material" name="Material" #Material [(value)]="selectedMaterial">
+                      <mat-option *ngFor="let material of listaMateriales" [value]="material._id">
+                        {{ material.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                  <div class="col-md-4">
+                    <button matTooltip="Agrega Material" mat-mini-fab class="btn btn-primary" (click)="addMaterial2(Material.value)" type="button" [disabled]="this.finalizado.value">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div *ngIf="this.mostrarInfoAdmin">
+                  <p class="text-info">Precios es antes de IVA</p>
+                </div>
 
-                Materiales:
-
-                <mat-select placeholder="Seleccione un Material" name="Material" #Material>
-                  <mat-option *ngFor="let material of listaMateriales" [value]="material._id">
-                    {{ material.descripcion }}
-                  </mat-option>
-                </mat-select>
-                <p>
-                  <button matTooltip="Agrega Material" mat-mini-fab class="btn btn-primary"
-                    (click)="addMaterial2(Material.value)" type="button" [disabled]="this.finalizado.value">
-                    <i class="fa fa-plus"></i>
-                  </button>
-                </p>
                 <div formArrayName="materiales">
                   <div *ngFor="let material of this.materiales.controls; let i=index">
                     <div [formGroupName]="i">
@@ -176,27 +190,31 @@
                         </div>
                         <div class="col-md-2">
                           <mat-form-field>
+                            <mat-label>Unidad Medida</mat-label>
+                            <input matInput formControlName="unidadMedida" type="text" placeholder="Unidad de Medida">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                          <mat-form-field>
                             <mat-label>Descripcion</mat-label>
                             <input matInput formControlName="descripcion" type="text" placeholder="Descripcion">
                           </mat-form-field>
                         </div>
-                        <div class="col-md-2" *ngIf="this.muestraInfoAdicional">
+                        <div class="col-md-2" *ngIf="this.mostrarInfoAdmin">
                           <mat-form-field>
                             <mat-label>Costo</mat-label>
                             <input matInput formControlName="costo" type="text" placeholder="Costo">
                           </mat-form-field>
                         </div>
-                        <div class="col-md-2" *ngIf="this.muestraInfoAdicional">
+                        <div class="col-md-2" *ngIf="this.mostrarInfoAdmin">
                           <mat-form-field>
                             <mat-label>Precio</mat-label>
                             <input matInput formControlName="precio" type="text" placeholder="Precio">
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="saveMaterial(i)" class="btn btn-primary"
-                            [disabled]="this.finalizado.value"><i class="fa fa-save"></i></button>
-                          <button (click)="removeMaterial(i)" class="btn btn-danger" type="button"
-                            [disabled]="this.finalizado.value">
+                          <button (click)="saveMaterial(i)" class="btn btn-primary" [disabled]="this.finalizado.value"><i class="fa fa-save"></i></button>
+                          <button (click)="removeMaterial(i)" class="btn btn-danger" type="button" [disabled]="this.finalizado.value">
                             <i class="fas fa-trash"></i>
                           </button>
                         </div>
@@ -205,7 +223,7 @@
                   </div>
                 </div>
               </div>
-              <div class="alert alert-primary" *ngIf="this.muestraInfoAdicional">
+              <div class="alert alert-primary" *ngIf="this.mostrarInfoAdmin">
                 <h4 class="alert-heading">Costeo</h4>
                 <hr>
                 <strong>Costo : </strong>{{this.mantenimiento.costoMateriales}}<br>
@@ -213,22 +231,20 @@
                 <strong>Utilidad:</strong>{{this.mantenimiento.precioMateriales-this.mantenimiento.costoMateriales}}<br>
               </div>
               <br><br>
-              <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
-                (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid || this.finalizado.value">
+              <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10" (click)="guardarRegistro()" [disabled]="regForm.pristine || regForm.invalid || this.finalizado.value">
                 <i class="fa fa-save"></i>
                 Guardar
               </button>
-              <button type="button" class="btn btn-danger waves-effect waves-light"
-                (click)="salir()">{{regresar_cerrar}}</button>
+              <button type="button" class="btn btn-danger waves-effect waves-light" (click)="salir()">{{regresar_cerrar}}</button>
             </form>
           </div>
         </div>
       </mat-dialog-content>
-      <div class="output">
-        <!-- <p>Form Data: {{regForm.value | json}}</p>
-        <p>Is Valid: {{regForm.valid}}</p> -->
+      <!-- <div class="output">
+        <p>Form Data: {{regForm.value | json}}</p>
+        <p>Is Valid: {{regForm.valid}}</p>
 
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

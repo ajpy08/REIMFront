@@ -520,9 +520,13 @@
                       <button matTooltip="Editar Mantenimiento" (click)="openDialogMantenimiento( item._id )" class="btn btn-pramary" type="button">
                         <i class="fas fa-edit"></i>
                       </button>
+                      <button matTooltip="Ver Fotografías" (click)="verFotografias(_id.value,item._id)" class="btn btn-primary m-r-5" type="button">
+                        <i class="fas fa-camera-retro"></i>
+                      </button>
                       <button (click)="removeMantenimiento( item._id )" class="btn btn-danger" type="button">
                         <i class="fas fa-trash"></i>
                       </button>
+
                     </td>
                   </tr>
                 </tbody>

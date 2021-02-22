@@ -1,3 +1,33 @@
+<div class="row">
+  <div class="col-sm-2">
+    <mat-checkbox [(ngModel)]="incluirFinalizados" (change)="onChangeCheckFinalizados($event)">
+      Incluir finalizados
+    </mat-checkbox>
+  </div>
+  <div class="col-sm-2">
+    <mat-checkbox [(ngModel)]="filtrarFechas" (change)='onChangeFiltroFechas($event)'>
+      Filtrar Fechas
+    </mat-checkbox>
+  </div>
+  <div class="col-sm-3">
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" type="text" placeholder="Fecha Inicial" [(ngModel)]="filtroFechaIni" [disabled]='!filtrarFechas' (dateChange)="onChangeDate('fInicial',$event)">
+      <mat-datepicker-toggle matSuffix [for]="picker" [disabled]='!filtrarFechas'></mat-datepicker-toggle>
+      <mat-datepicker #picker disabled="false"></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-sm-3">
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker2" type="text" placeholder="Fecha Final" [(ngModel)]="filtroFechaFin" [disabled]='!filtrarFechas' (dateChange)="onChangeDate('fFinal',$event)">
+      <mat-datepicker-toggle matSuffix [for]="picker2" [disabled]='!filtrarFechas'></mat-datepicker-toggle>
+      <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+</div>
+
+
+
 <!-- /////////////////////////////////////// REPARACIONES  ///////////////////////////////////////////////////////////// -->
 <mat-tab-group (selectedTabChange)="onLinkClick($event)">
 
@@ -24,17 +54,11 @@
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterReparaciones($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterReparaciones($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
-            <div><br>
-              <mat-checkbox [(ngModel)]="incluirFinalizadosR" (change)="onChangeCheckReparaciones($event)">
-                Incluir finalizados
-              </mat-checkbox><br>
-            </div>
             <div class="text-right">
-              <button (click)="exportAsXLSX()" class="btn btn-success m-r-5">
+              <button (click)="exportAsXLSX(dtReparaciones,'REPARACIONES')" class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i>
               </button>
             </div>
@@ -44,28 +68,28 @@
               </span>
             </div>
             <div class="catalogo-container mat-elevation-z8">
+
+
               <mat-table class="mat-table" [dataSource]="dtReparaciones" #sortReparaciones="matSort" matSort>
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Ver Fotografías"
-                      [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
                       <i class="fas fa-camera-retro"></i>
                     </button>
-                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button (click)="eliminaMantenimiento( row._id )" class="btn btn-danger" type="button">
+                    <button (click)="eliminaMantenimiento('reparaciones', row._id )" class="btn btn-danger" type="button">
                       <i class="fas fa-trash"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="tipoMantenimiento">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.tipoMantenimiento}} </mat-cell>
-                </ng-container> -->
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
 
                 <ng-container matColumnDef="observacionesCompleto">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
@@ -86,60 +110,62 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="fInicial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fFinal">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="finalizado">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <mat-slide-toggle [checked]="row.finalizado" [disabled]="true"></mat-slide-toggle>
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
                   </mat-cell>
                 </ng-container>
-
-
                 <mat-header-row *matHeaderRowDef="displayedColumnsReparaciones" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsReparaciones;"></mat-row>
               </mat-table>
             </div>
-            <mat-paginator #pagReparaciones [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-            </mat-paginator>
+            <mat-paginator #pagReparaciones [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]></mat-paginator>
+
           </div>
         </div>
       </div>
     </div>
   </mat-tab>
-  <!-- /////////////////////////////////////// REPARACION  ///////////////////////////////////////////////////////////// -->
+  /////////////////////////////////////// REPARACION ///////////////////////////////////////////////////////////// /////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
 
-  <!-- /////////////////////////////////////// LAVADOS ///////////////////////////////////////////////////////////// -->
-
-  <div class="row animated fadeIn" *ngIf="cargandoL">
-    <div class="col-sm-12">
-      <div class="alert alert-warning text-center">
-        <strong>Cargando</strong>
-        <br>
-        <i class="fas fa-refresh fa-spin fa-2x"></i>
-        <br>
-        <span>Espere por favor</span>
-      </div>
-    </div>
-  </div>
 
   <mat-tab label="Lavados">
     <ng-template mat-tab-label>
       Lavados ( <small>{{totalLavados}}</small> )
     </ng-template>
-
+    <div class="row animated fadeIn" *ngIf="cargandoL">
+      <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+          <strong>Cargando</strong>
+          <br>
+          <i class="fas fa-refresh fa-spin fa-2x"></i>
+          <br>
+          <span>Espere por favor</span>
+        </div>
+      </div>
+    </div>
     <div class="animated fadeIn" *ngIf="!cargandoL">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterLavados($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterLavados($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
             <div class="text-right">
 
-              <button (click)="exportAsXLSX(dtLavados, 'Lavado')" class="btn btn-success m-r-5">
+              <button (click)="exportAsXLSX(dtLavados,'LAVADOS')" class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i>
               </button>
             </div>
@@ -154,20 +180,21 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Ver Fotografías"
-                      [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
                       <i class="fas fa-camera-retro"></i>
                     </button>
-                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
+                    </button>
+                    <button (click)="eliminaMantenimiento('lavados', row._id )" class="btn btn-danger" type="button">
+                      <i class="fas fa-trash"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
-                <!-- <ng-container matColumnDef="tipoMantenimiento">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.tipoMantenimiento}} </mat-cell>
-                </ng-container> -->
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="observacionesCompleto">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
@@ -183,6 +210,20 @@
                 <ng-container matColumnDef="maniobra.peso">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fInicial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fFinal">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="finalizado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
+                  </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumnsLavados" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsLavados;"></mat-row>
@@ -198,36 +239,36 @@
 
 
   <!-- /////////////////////////////////////// Acondicionamiento ///////////////////////////////////////////////////////////// -->
-  <div class="row animated fadeIn" *ngIf="cargandoA">
-    <div class="col-sm-12">
-      <div class="alert alert-warning text-center">
-        <strong>Cargando</strong>
-        <br>
-        <i class="fas fa-refresh fa-spin fa-2x"></i>
-        <br>
-        <span>Espere por favor</span>
-      </div>
-    </div>
-  </div>
+
 
   <mat-tab label="Acondicionamientos">
     <ng-template mat-tab-label>
       Acondicionamientos ( <small>{{totalAcondicionamientos}}</small> )
     </ng-template>
+    <div class="row animated fadeIn" *ngIf="cargandoA">
+      <div class="col-sm-12">
+        <div class="alert alert-warning text-center">
+          <strong>Cargando</strong>
+          <br>
+          <i class="fas fa-refresh fa-spin fa-2x"></i>
+          <br>
+          <span>Espere por favor</span>
+        </div>
+      </div>
+    </div>
     <div class="animated fadeIn" *ngIf="!cargandoA">
       <div class="col-12">
         <div class="card">
           <div class="card-body">
             <div class="example-header mat-elevation-z8">
               <mat-form-field>
-                <input matInput (keyup)="applyFilterAcondicionamientos($event.target.value)"
-                  placeholder="Escriba algo para filtrar">
+                <input matInput (keyup)="applyFilterAcondicionamientos($event.target.value)" placeholder="Escriba algo para filtrar">
               </mat-form-field>
             </div>
             <br>
             <div class="text-right">
 
-              <button (click)="exportAsXLSX(dtAcondicionamientos, 'Espera')" class="btn btn-success m-r-5">
+              <button (click)="exportAsXLSX(dtAcondicionamientos, 'ACONDICIONAMIENTOS')" class="btn btn-success m-r-5">
                 <i class="fas fa-file-excel"></i>
               </button>
             </div>
@@ -242,20 +283,21 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                   <mat-cell *matCellDef="let row">
-                    <button matTooltip="Ver Fotografías"
-                      [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+                    <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
                       <i class="fas fa-camera-retro"></i>
                     </button>
-                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
-                      class="btn btn-primary m-r-5">
+                    <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
                       <i class="fa fa-edit"></i>
+                    </button>
+                    <button (click)="eliminaMantenimiento('acondicionamientos', row._id )" class="btn btn-danger" type="button">
+                      <i class="fas fa-trash"></i>
                     </button>
                   </mat-cell>
                 </ng-container>
-                <!-- <ng-container matColumnDef="tipoMantenimiento">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.tipoMantenimiento}} </mat-cell>
-                </ng-container> -->
+                <ng-container matColumnDef="folio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="observacionesCompleto">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
@@ -272,7 +314,20 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
                 </ng-container>
-
+                <ng-container matColumnDef="fInicial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="fFinal">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="finalizado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
+                  </mat-cell>
+                </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumnsAcondicionamientos" class="encabezado">
                 </mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsAcondicionamientos;"></mat-row>
