@@ -254,7 +254,10 @@
               <mat-cell *matCellDef="let row"> {{row.peso}} </mat-cell>
             </ng-container>
 
-
+            <ng-container matColumnDef="facturaManiobra">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Factura</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.facturaManiobra}} </mat-cell>
+            </ng-container>
 
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>

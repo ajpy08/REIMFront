@@ -92,7 +92,8 @@ export class ManiobrasDiarioComponent implements OnInit {
     'viaje.naviera.nombreComercial',
     'viaje',
     'viaje.buque.nombre',
-    'estatus'
+    'estatus',
+    'facturaManiobra'
   ];
   dataSource: any;
 
@@ -345,7 +346,8 @@ export class ManiobrasDiarioComponent implements OnInit {
             ? m.viaje.naviera.nombreComercial
             : '' && m.viaje.naviera.nombreComercial,
         Peso: m.peso,
-        Estatus: m.estatus
+        Estatus: m.estatus,
+        Factura: m.facturaManiobra
         // LavadoObservacion: m.lavadoObservacion,
         // Reparaciones: reparaciones,
         // ReparacionesObservacion: m.reparacionesObservacion,

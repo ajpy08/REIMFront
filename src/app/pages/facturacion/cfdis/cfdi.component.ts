@@ -18,7 +18,7 @@ import * as io from 'socket.io-client';
 import { URL_SOCKET_IO, PARAM_SOCKET } from 'src/environments/environment';
 import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
-import { VariasService } from './../varias.service';
+import { VariasService } from '../../../services/shared/varias.service';
 import { ClienteService } from './../../../services/cliente/cliente.service';
 import { SolicitudService } from './../../solicitudes/solicitud.service';
 declare var swal: any;
