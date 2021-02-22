@@ -293,25 +293,13 @@ export class Fotos2Component implements OnInit {
   back() {
     let history;
     const array = [];
-    // Si tengo algo en localStorage en la variable historyArray lo obtengo
     if (localStorage.getItem('historyArray')) {
-      // asigno a mi variable history lo que obtengo de localStorage (history)
       history = JSON.parse(localStorage.getItem('historyArray'));
-
-      // realizo este ciclo para asignar los valores del JSON al Array
-      // tslint:disable-next-line: forin
-      for (const i in history) {
+      for (const i in history) 
         array.push(history[i]);
-      }
-
-      // Asigno a mi variable el valor del ultimo elemento del array para saber a donde regresare.
-      // pop() elimina del array el ultimo elemento
       this.url = array.pop();
-
-      // Asigno a localStorage (history) el nuevo JSON
       localStorage.setItem('historyArray', JSON.stringify(array));
     }
-
     this.router.navigate([this.url]);
   }
 

@@ -46,6 +46,21 @@ export class MantenimientoService {
     }
   }
 
+subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
+    if (!archivo) {
+    return;
+  }
+  const formData = new FormData();
+  formData.append('file', archivo, archivo.name);
+  const url = URL_SERVICIOS + '/mantenimientos/mantenimiento/'+idMantenimiento+"/adjunta_pdf_folio"+"?token="+this._usuarioService.token;
+
+  return this.http.put( url, formData )
+  .pipe(map( (resp: any) => {
+    swal('Archivo Cargado', resp.nombreArchivo, 'success');
+    return resp.nombreArchivo;
+  }));
+}
+
   finalizaMantenimiento(idMantenimiento: string, finaliza: boolean): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + '/finaliza';
     url += '?token=' + this._usuarioService.token;
@@ -101,31 +116,24 @@ export class MantenimientoService {
   }
 
   getMantenimientosxManiobra(idManiobra: string): Observable<any> {
-    // let url = URL_SERVICIOS + '/mantenimientos/xmaniobra/' + idManiobra;
-    // url += '?token=' + this._usuarioService.token;
     return this.getMantenimientos('', idManiobra);
   }
 
-  getMantenimientosxTipo(tipoMantenimiento: string, finalizados: string): Observable<any> {
-    // let url = URL_SERVICIOS + '/mantenimientos/xtipo/' + tipo;
-    // url += '?token=' + this._usuarioService.token;
-    // return this.http.get(url);
-    return (this.getMantenimientos(tipoMantenimiento, '', finalizados));
+  getMantenimientosxTipo(tipoMantenimiento: string, finalizados: string, fInicial?: any, fFinal?: any): Observable<any> {
+    return (this.getMantenimientos(tipoMantenimiento, '', finalizados, fInicial, fFinal));
   }
 
-  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string): Observable<any> {
+  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: any, fFinal?: any): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
-    if (tipoMantenimiento) {
-      params = params.append('tipoMantenimiento', tipoMantenimiento);
-    }
-    if (idManiobra) {
-      params = params.append('maniobra', idManiobra);
-    }
-    if (finalizado) {
-      params = params.append('finalizado', finalizado);
-    }
+
+    if (tipoMantenimiento) params = params.append('tipoMantenimiento', tipoMantenimiento);
+    if (idManiobra) params = params.append('maniobra', idManiobra);
+    if (finalizado) params = params.append('finalizado', finalizado);
+    if (fInicial) params = params.append('fInicial', fInicial.toString());
+    if (fFinal) params = params.append('fFinal', fFinal.toString());
+    
     return this.http.get(url, { params: params });
   }
 
