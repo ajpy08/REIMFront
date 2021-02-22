@@ -7,6 +7,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { URL_SERVICIOS } from '../../../../environments/environment';
 
 import * as _moment from 'moment';
 const moment = _moment;
@@ -334,6 +335,13 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     this._snackBar.open(message, action, {
       duration:this.durationInSeconds * 2000,
     });
+  }
+
+  
+  abrePDF(idMantenimiento: string, nameFolio: string)
+  {
+    console.log(idMantenimiento);
+    return URL_SERVICIOS + '/mantenimientos/mantenimiento/'+ idMantenimiento + "/descarga_pdf_folio/" + nameFolio;
   }
 
   CreaDatosExcel(datos) {

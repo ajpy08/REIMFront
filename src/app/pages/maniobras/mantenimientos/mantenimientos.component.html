@@ -88,7 +88,11 @@
 
                 <ng-container matColumnDef="folio">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.folio}}
+                    <a matTooltip="Descargar Formato PDF" [href]="abrePDF(row._id,row.fileFolio)" target="_blank" *ngIf="row.fileFolio">
+                      <img width="20" height="20" src="\assets\images\icon\pdf_32x32.png">
+                    </a>
+                  </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="observacionesCompleto">
