@@ -33,6 +33,7 @@ export class MaterialesComponent implements OnInit {
     // 'valPrecios',
     // 'valStock',
     'activo',
+    'codigo',
     'descripcion',
     'unidadMedida',
     'costo',
@@ -176,7 +177,7 @@ export class MaterialesComponent implements OnInit {
           }, () => {
             swal({
               title: 'No se puede eliminar Material',
-              text: 'El material  ' + material.descripcion + '  cuenta con detalles en el sistema. ' +
+              text: 'El material  ' + material.descripcion + '  cuenta con entradas (facturas) en el sistema. ' +
               'La acción permitida es DESACTIVAR, \n¿ DESEA CONTINUAR ?',
               icon: 'warning',
               buttons: true,

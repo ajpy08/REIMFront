@@ -30,7 +30,8 @@ export class EntradasComponent implements OnInit {
     'actions',
     'noFactura',
     'proveedor',
-    'fFactura'
+    'fFactura',
+    'fEntrada'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);

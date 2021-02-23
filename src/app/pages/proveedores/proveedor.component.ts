@@ -100,6 +100,11 @@ export class ProveedorComponent implements OnInit, OnDestroy {
   get razonSocial() {
     return this.regForm.get('razonSocial');
   }
+
+  get alias() {
+    return this.regForm.get('alias');
+  }
+
   get activo() {
     return this.regForm.get('activo');
   }
@@ -108,6 +113,7 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     this.regForm = this.fb.group({
       rfc: [''],
       razonSocial: ['', [Validators.required]],
+      alias: ['', [Validators.required]],
       activo: [true, [Validators.required]],
       _id: ['']
     });

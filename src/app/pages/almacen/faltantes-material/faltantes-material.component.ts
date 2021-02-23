@@ -109,7 +109,7 @@ export class FaltantesMaterialComponent implements OnInit {
   cargarMateriales(bool: boolean) {
     this.cargando = true;
 
-    this.materialService.getMateriales(null, bool).subscribe(materiales => {
+    this.materialService.getMateriales(null, bool, 'I').subscribe(materiales => {
 
       let datos = materiales.materiales;
 

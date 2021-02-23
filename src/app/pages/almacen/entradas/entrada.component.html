@@ -40,6 +40,13 @@
                 <mat-datepicker-toggle matSuffix [for]="fFactura"></mat-datepicker-toggle>
                 <mat-datepicker #fFactura></mat-datepicker>
               </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="fEntrada" [matDatepicker]="fEntrada" type="text"
+                  placeholder="Fecha Entrada">
+                <mat-datepicker-toggle matSuffix [for]="fEntrada"></mat-datepicker-toggle>
+                <mat-datepicker #fEntrada></mat-datepicker>
+              </mat-form-field>
             </div>
             <br>
 

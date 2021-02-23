@@ -245,9 +245,9 @@ export class InventarioComponent implements OnInit {
         const mant = this.cargarM();
         mant.then((ok: boolean) => {
           if (ok) {
-            // this.cargarL();
-            // this.cargarR();
-            // this.cargarA();
+            this.cargarL();
+            this.cargarR();
+            this.cargarA();
           }
         });
       }
