@@ -1,5 +1,6 @@
 export class Material {
     constructor(
+        public codigo?: string,
         public descripcion?: string,
         public unidadMedida?: any,
         public costo?: any,

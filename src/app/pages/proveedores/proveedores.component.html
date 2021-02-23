@@ -74,6 +74,10 @@
               <mat-cell *matCellDef="let row"> {{row.razonSocial}} </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="alias">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Alias</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.alias}} </mat-cell>
+            </ng-container>
 
             <ng-container matColumnDef="fAlta">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Alta</mat-header-cell>

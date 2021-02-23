@@ -8,6 +8,13 @@
           <form [formGroup]="regForm" (ngSubmit)="guardarMaterial()" novalidate>
             <div class="my-container">
               <mat-form-field>
+                <input matInput formControlName="codigo" name="codigo" type="text" class="form-control"
+                  placeholder="Codigo del material *">
+                <mat-error *ngIf="codigo.touched && codigo.invalid">
+                  <sup>*</sup>Por Favor Ingrese un codigo
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
                 <input matInput formControlName="descripcion" name="descripcion" type="text" class="form-control"
                   placeholder="Descripcion del material *">
                 <mat-error *ngIf="descripcion.touched && descripcion.invalid">
@@ -42,7 +49,7 @@
               </mat-form-field>
               <!--========Combombox Tipos=========-->
               <mat-form-field>
-                <mat-select [(value)]="tipos[0].valor" placeholder="Seleccione un tipo" formControlName="tipo" name="tipo">
+                <mat-select [(value)]="tipo.value" placeholder="Seleccione un tipo" formControlName="tipo" name="tipo">
                   <mat-option *ngFor="let tipo of tipos" [value]="tipo.valor">
                     {{ tipo.descripcion }}
                   </mat-option>

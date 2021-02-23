@@ -19,7 +19,7 @@ export class MaterialService {
     public _usuarioService: UsuarioService,
   ) { }
 
-  getMateriales(descripcion?: string, activo?: boolean): Observable<any> {
+  getMateriales(descripcion?: string, activo?: boolean, tipo?: string): Observable<any> {
     let url = URL_SERVICIOS + '/materiales/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
@@ -29,6 +29,10 @@ export class MaterialService {
     if (activo === true || activo === false) {
       const tf = activo.toString();
       params = params.append('activo', tf);
+    }
+
+    if (tipo) {
+      params = params.append('tipo', tipo);
     }
     return this.http.get(url, { params: params });
   }

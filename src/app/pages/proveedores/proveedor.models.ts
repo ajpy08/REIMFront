@@ -3,6 +3,7 @@ export class Proveedor {
     constructor(
         public rfc?: string,
         public razonSocial?: string,
+        public alias?: string,
         public usuarioAlta?: string,
         public fAlta?: string,
         public fMod?: string,
