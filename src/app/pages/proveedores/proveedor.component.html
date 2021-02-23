@@ -16,6 +16,14 @@
                   <sup>*</sup>Por Favor Ingrese un Nombre del proveedor
                 </mat-error>
               </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="alias" name="alias" type="text" class="form-control" placeholder="Alias del proveedor">
+                <mat-error *ngIf="alias.touched && alias.invalid">
+                  <sup>*</sup>Por Favor Ingrese un Alias para el proveedor
+                </mat-error>
+              </mat-form-field>
+
               <mat-checkbox formControlName="activo" [(ngModel)]="act" class="form-control" name="activo" placeholder="Activo">
                 Activo
               </mat-checkbox>

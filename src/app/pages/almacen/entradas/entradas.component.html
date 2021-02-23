@@ -67,8 +67,13 @@
             </ng-container>
 
             <ng-container matColumnDef="fFactura">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Fac.</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.fFactura | date:'dd/MM/yyyy'}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fEntrada">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Entrada</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fEntrada | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>

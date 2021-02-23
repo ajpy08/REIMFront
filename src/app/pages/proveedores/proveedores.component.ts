@@ -18,7 +18,7 @@ export class ProveedoresComponent implements OnInit, OnDestroy {
   activo = false;
   tablaCargar = false;
   acttrue = false;
-  displayedColumns = ['actions', 'activo', 'rfc', 'razonSocial', 'fAlta','usuarioAlta'];
+  displayedColumns = ['actions', 'activo', 'rfc', 'razonSocial', 'alias', 'fAlta','usuarioAlta'];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
 
@@ -137,7 +137,7 @@ export class ProveedoresComponent implements OnInit, OnDestroy {
   borrarProveedor(proveedor: Proveedor) {
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta apunto de borrar a ' + proveedor.razonSocial,
+      text: 'Esta apunto de borrar a ' + proveedor.alias,
       icon: 'warning',
       buttons: true,
       dangerMode: true
@@ -151,7 +151,7 @@ export class ProveedoresComponent implements OnInit, OnDestroy {
           }, (error) => {
             swal({
               title: 'No se permite eliminar el proveedor',
-              text: 'El proveedor  ' + proveedor.razonSocial + '  cuenta con historial de registro en el sistema.' +
+              text: 'El proveedor  ' + proveedor.alias + '  cuenta con historial de registro en el sistema.' +
                 '  La acción permitida es DESACTIVAR,  ¿  DESEA CONTINUAR ?',
               icon: 'warning',
               buttons: true,
@@ -159,7 +159,7 @@ export class ProveedoresComponent implements OnInit, OnDestroy {
             }).then(borrado => {
               if (borrado) {
                 this._proveedorService.habilitaDeshabilitaProveedor(proveedor, false).subscribe(() => {
-                  swal('Correcto', 'Cambio de estado del proveedor ' + proveedor.razonSocial + 'realizado con exito', 'success');
+                  swal('Correcto', 'Cambio de estado del proveedor ' + proveedor.alias + 'realizado con exito', 'success');
                   this.filtrado(this.acttrue);
                 });
               }
@@ -174,8 +174,9 @@ export class ProveedoresComponent implements OnInit, OnDestroy {
     datos.forEach(b => {
       const proveedor = {
         // Id: b._id,
-        rfc: b.rfc,
-        razonSocial: b.razonSocial,
+        RFC: b.rfc,
+        RazonSocial: b.razonSocial,
+        Alias: b.alias,
         UsuarioAlta: b.usuarioAlta.nombre,
         FAlta: b.fAlta.substring(0, 10)
       };

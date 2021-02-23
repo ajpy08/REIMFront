@@ -74,7 +74,7 @@ export class MaterialComponent implements OnInit {
       // tslint:disable-next-line: forin
       for (const control in this.regForm.controls) {
         this.regForm.controls[control.toString()].setValue(undefined);
-      }
+      }      
 
       this.tipo.setValue('I');
       this.minimo.setValue(1);
@@ -137,6 +137,7 @@ export class MaterialComponent implements OnInit {
 
   createFormGroup() {
     this.regForm = this.fb.group({
+      codigo: ['', [Validators.required]],
       descripcion: ['', [Validators.required]],
       unidadMedida: ['', [Validators.required]],
       costo: ['', [Validators.required]],
@@ -175,6 +176,10 @@ export class MaterialComponent implements OnInit {
   }
 
   /* #region Properties */
+  get codigo() {
+    return this.regForm.get('codigo');
+  }
+
   get descripcion() {
     return this.regForm.get('descripcion');
   }

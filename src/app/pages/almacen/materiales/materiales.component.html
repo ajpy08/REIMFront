@@ -77,6 +77,11 @@
               </mat-cell>
             </ng-container>
 
+            <ng-container matColumnDef="codigo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Codigo</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.codigo}} </mat-cell>
+            </ng-container>
+
             <ng-container matColumnDef="descripcion">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Descripcion</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.descripcion}} </mat-cell>

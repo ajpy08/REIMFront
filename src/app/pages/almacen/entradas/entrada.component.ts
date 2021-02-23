@@ -95,6 +95,7 @@ export class EntradaComponent implements OnInit {
       const timeZone = moment().format('Z');
       const fecha = moment().utcOffset(timeZone).format('YYYY-MM-DDTHH:mm:ss');
       this.fFactura.setValue(fecha);
+      this.fEntrada.setValue(fecha);
     }
 
     this.url = '/entradas';
@@ -156,7 +157,7 @@ export class EntradaComponent implements OnInit {
 
                   detalles.forEach(det => {
                     for (const prop in det) {
-                      if (det[prop].$numberDecimal) {
+                      if (det[prop] && det[prop].$numberDecimal) {
                         det[prop] = parseFloat(det[prop].$numberDecimal);
                       }
                     }
@@ -175,6 +176,7 @@ export class EntradaComponent implements OnInit {
       noFactura: ['', [Validators.required]],
       proveedor: ['', [Validators.required]],
       fFactura: ['', [Validators.required]],
+      fEntrada: ['', [Validators.required]],
       detalles: this.fb.array([this.agregarArray(new DetalleMaterial)], { validators: Validators.required }),
       _id: [''],
       usuarioMod: ['']
@@ -216,7 +218,7 @@ export class EntradaComponent implements OnInit {
       this.ObjetoSelect.splice(pos, 1);
       this.ObjetoSelect.length === 0 ? this.idSelect = undefined : this.idSelect = this.ObjetoSelect[0].detalle;
     } else {
-      console.log('Entreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+      // console.log('Entreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
     }
   }
 
@@ -311,6 +313,10 @@ export class EntradaComponent implements OnInit {
 
   get fFactura() {
     return this.regForm.get('fFactura');
+  }
+
+  get fEntrada() {
+    return this.regForm.get('fEntrada');
   }
 
   get detalles() {
