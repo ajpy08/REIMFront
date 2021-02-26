@@ -80,12 +80,17 @@ export class InventarioComponent implements OnInit {
   dataSourceM: any;
   c40: any;
   c20: any;
+  c40Gral: any;
+  c20Gral: any;
   groupedDisponibles20: any;
   groupedDisponibles40: any;
+  groupedDisponibles20Gral: any;
+  groupedDisponibles40Gral: any;
   datosExcel = [];
   totalInventario = 0;
   totalReparaciones = 0;
   maniobras: Maniobra[] = [];
+  maniobrasGral: Maniobra[] = [];
   mantenimientos = [];
   navieras: Naviera[] = [];
   navieraSeleccionada: string = undefined;
@@ -238,6 +243,13 @@ export class InventarioComponent implements OnInit {
 
   cargarInventario() {
     const promesa = this.cargaManiobras();
+    const promesa2 = this.cargaManiobrasTiposContenedores();
+
+    promesa2.then((value: boolean) => {
+      if (value) {
+        this.agrupa20_40Gral(this.maniobrasGral);
+      }
+    });
 
     promesa.then((value: boolean) => {
       if (value) {
@@ -293,7 +305,56 @@ export class InventarioComponent implements OnInit {
 
     // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
     if (grouped40) {
+      // console.log(grouped40);
       this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
+        return {
+          tipo: tipo,
+          maniobras: grouped40[tipo]
+        };
+      });
+    }
+  }
+
+  agrupa20_40Gral(maniobras) {
+    this.c20Gral = maniobras.filter(m => m.tipo.includes('20'));
+
+    const grouped20 = this.c20Gral.reduce((curr, m) => {
+      if (!curr[m.tipo]) {
+        // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+        curr[m.tipo] = [m];
+      } else {
+        // Si ya tienes ese tipo lo agregas al final del arreglo
+        curr[m.tipo].push(m);
+      }
+      return curr;
+    }, {});
+
+    // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+    if (grouped20) {
+      this.groupedDisponibles20Gral = Object.keys(grouped20).map(tipo => {
+        return {
+          tipo: tipo,
+          maniobras: grouped20[tipo]
+        };
+      });
+    }
+
+    this.c40Gral = maniobras.filter(m => m.tipo.includes('40'));
+
+    const grouped40 = this.c40Gral.reduce((curr, m) => {
+      if (!curr[m.tipo]) {
+        // Si no has tenido ninguna entrada de ese tipo la agregas pero usando un arreglo
+        curr[m.tipo] = [m];
+      } else {
+        // Si ya tienes ese tipo lo agregas al final del arreglo
+        curr[m.tipo].push(m);
+      }
+      return curr;
+    }, {});
+
+    // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
+    if (grouped40) {
+      this.groupedDisponibles40Gral = Object.keys(grouped40).map(tipo => {
         return {
           tipo: tipo,
           maniobras: grouped40[tipo]
@@ -334,6 +395,38 @@ export class InventarioComponent implements OnInit {
     });
   }
 
+  cargaManiobrasTiposContenedores() {
+    return new Promise((resolve, reject) => {
+      this.cargando = true;
+
+      this.maniobraService
+        .getManiobras(
+          'D',
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          this.navieraSeleccionada
+        )
+        .subscribe(maniobras => {
+          this.maniobrasGral = maniobras.maniobras;
+
+          // this.dataSource = new MatTableDataSource(this.maniobrasGral);
+          // this.dataSource.sort = this.sort;
+          // this.dataSource.paginator = this.paginator.toArray()[0];
+          // this.totalRegistros = maniobras.maniobras.length;
+
+          if (this.maniobrasGral) {
+            resolve(true);
+          }
+        });
+      this.cargando = false;
+    });
+  }
+
   cuenta(tipoMantenimiento) {
     if (tipoMantenimiento == 'LAVADO') {
       this.totalMantLavado = this.totalMantLavado + 1;
@@ -357,6 +450,7 @@ export class InventarioComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.mantenimientoService.getMantenimientos('', '', 'PROCESO').subscribe(mantenimientos => {
         this.mantenimientos = [];
+
         const groups = VariasService.groupArray2(mantenimientos.mantenimientos, 'maniobra', 'contenedor');
         for (const g in groups) {
           let id;
@@ -375,11 +469,13 @@ export class InventarioComponent implements OnInit {
 
           grupo.forEach(mant => {
             let lavado;
+            let tipoLavado;
             let reparacion;
             let acondicionamiento;
+            let cambioGrado;
             consecutivo = consecutivo + 1;
 
-            // if (mant.maniobra.contenedor == 'CXDU2241522') {
+            // if (mant.maniobra.contenedor == 'MECU5500477') {
             //   console.log('aq');
             // }
 
@@ -388,17 +484,19 @@ export class InventarioComponent implements OnInit {
 
               if (mant.tipoMantenimiento == 'LAVADO') {
                 lavado = mant._id;
+                tipoLavado = mant.tipoLavado;
               } else {
                 if (mant.tipoMantenimiento == 'REPARACION') {
                   reparacion = mant._id;
                 } else {
                   if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
                     acondicionamiento = mant._id;
+                    cambioGrado = mant.cambioGrado;
                   }
                 }
               }
 
-              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra, tipoLavado, cambioGrado }
               this.mantenimientos.push(ma);
 
               id = mant.maniobra._id;
@@ -408,12 +506,14 @@ export class InventarioComponent implements OnInit {
 
               if (mant.tipoMantenimiento == 'LAVADO') {
                 lavado = mant._id;
+                tipoLavado = mant.tipoLavado;
               } else {
                 if (mant.tipoMantenimiento == 'REPARACION') {
                   reparacion = mant._id;
                 } else {
                   if (mant.tipoMantenimiento == 'ACONDICIONAMIENTO') {
                     acondicionamiento = mant._id;
+                    cambioGrado = mant.cambioGrado;
                   }
                 }
               }
@@ -421,19 +521,19 @@ export class InventarioComponent implements OnInit {
               maniobra = mant.maniobra;
               const pos = this.mantenimientos.findIndex(m => m.maniobra._id === id && m.maniobra.viaje._id === viaje);
 
-              if(!lavado && this.mantenimientos[pos].lavado){
+              if (!lavado && this.mantenimientos[pos].lavado) {
                 lavado = this.mantenimientos[pos].lavado;
               }
 
-              if(!reparacion && this.mantenimientos[pos].reparacion){
+              if (!reparacion && this.mantenimientos[pos].reparacion) {
                 reparacion = this.mantenimientos[pos].reparacion;
               }
 
-              if(!acondicionamiento && this.mantenimientos[pos].acondicionamiento){
+              if (!acondicionamiento && this.mantenimientos[pos].acondicionamiento) {
                 acondicionamiento = this.mantenimientos[pos].acondicionamiento;
               }
 
-              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra }
+              ma = { consecutivo, lavado, reparacion, acondicionamiento, maniobra, tipoLavado, cambioGrado }
               this.mantenimientos.splice(pos, 1);
               this.mantenimientos.push(ma);
             }
@@ -455,7 +555,7 @@ export class InventarioComponent implements OnInit {
             if (m.consecutivo > existe[0].consecutivo) {
               const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra.contenedor === m.maniobra.contenedor);
               // const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
-              
+
               if (pos) {
                 mantenimientosFinal.splice(pos, 1);
                 mantenimientosFinal.push(m);
@@ -519,34 +619,17 @@ export class InventarioComponent implements OnInit {
     const maniobrasLavado = [];
 
     this.mantLavado.forEach(m => {
-      maniobrasLavado.push(m.maniobra);
+      let maniobra = m.maniobra;
+      let tipoLavado = m.tipoLavado;
+      maniobrasLavado.push({ maniobra, tipoLavado });
+
+      // maniobrasLavado.push(m.maniobra);
     });
 
     this.dataSourceL = new MatTableDataSource(maniobrasLavado);
     this.dataSourceL.sort = this.matSort2;
     this.dataSourceL.paginator = this.paginator.toArray()[2];
     this.totalRegistrosL = maniobrasLavado.length;
-
-    // this.maniobraService
-    //   .getManiobras(
-    //     null,
-    //     ETAPAS_MANIOBRA.LAVADO_REPARACION,
-    //     null,
-    //     null,
-    //     null,
-    //     null,
-    //     true,
-    //     null,
-    //     this.navieraSeleccionada
-    //   )
-    //   .subscribe(maniobras => {
-    //     this.maniobras = maniobras.maniobras;
-
-    //     this.dataSourceL = new MatTableDataSource(maniobras.maniobras);
-    //     this.dataSourceL.sort = this.matSort2;
-    //     this.dataSourceL.paginator = this.paginator.toArray()[2];
-    //     this.totalRegistrosL = maniobras.maniobras.length;
-    //   });
     this.cargando = false;
   }
 
@@ -563,26 +646,6 @@ export class InventarioComponent implements OnInit {
     this.dataSourceR.sort = this.matSort3;
     this.dataSourceR.paginator = this.paginator.toArray()[3];
     this.totalRegistrosR = maniobrasReparacion.length;
-    // this.maniobraService
-    //   .getManiobras(
-    //     null,
-    //     ETAPAS_MANIOBRA.LAVADO_REPARACION,
-    //     null,
-    //     null,
-    //     null,
-    //     null,
-    //     null,
-    //     true,
-    //     this.navieraSeleccionada
-    //   )
-    //   .subscribe(maniobras => {
-    //     this.maniobras = maniobras.maniobras;
-
-    //     this.dataSourceR = new MatTableDataSource(maniobras.maniobras);
-    //     this.dataSourceR.sort = this.matSort3;
-    //     this.dataSourceR.paginator = this.paginator.toArray()[3];
-    //     this.totalRegistrosR = maniobras.maniobras.length;
-    //   });
     this.cargando = false;
   }
 
@@ -593,7 +656,11 @@ export class InventarioComponent implements OnInit {
     const maniobrasAcondicionamiento = [];
 
     this.mantAcondicionamiento.forEach(m => {
-      maniobrasAcondicionamiento.push(m.maniobra);
+      let maniobra = m.maniobra;
+      let cambioGrado = m.cambioGrado;
+      maniobrasAcondicionamiento.push({ maniobra, cambioGrado });
+
+      // maniobrasAcondicionamiento.push(m.maniobra);
     });
     this.dataSourceA = new MatTableDataSource(maniobrasAcondicionamiento);
     this.dataSourceA.sort = this.matSort3;
@@ -728,17 +795,65 @@ export class InventarioComponent implements OnInit {
     return count;
   }
 
-  // cuentaManiobrasMant(grado: string, tipo: string, source: any): number {
-  //   let count = 0;
-  //   if (source) {
-  //     source.forEach(d => {
-  //       if (d.grado === grado && d.tipo === tipo && d.reparaciones.length > 0) {
-  //         count++;
-  //       }
-  //     });
-  //   }
-  //   return count;
-  // }
+  cuentaManiobrasMantLav(grado: string, tipo: string, tipoLavado: string, source: any): number {
+    let count = 0;
+    if (source) {
+      source.forEach(d => {
+        if (grado && grado !== '') {
+          if (d.maniobra && d.maniobra.grado === grado && d.maniobra.tipo === tipo) {
+            if (tipoLavado != undefined && tipoLavado != null && tipoLavado != '') {
+              if (d.tipoLavado === tipoLavado) {
+                count++;
+              }
+            } else {
+              count++;
+            }
+          }
+        } else {
+          if (d.maniobra && d.maniobra.tipo === tipo) {
+            if (tipoLavado != undefined && tipoLavado != null && tipoLavado != '') {
+              if (d.tipoLavado === tipoLavado) {
+                count++;
+              }
+            } else {
+              count++;
+            }
+          }
+        }
+      });
+    }
+    return count;
+  }
+
+  cuentaManiobrasMantAcon(grado: string, tipo: string, cambioGrado: boolean, source: any): number {
+    let count = 0;
+    if (source) {
+      source.forEach(d => {
+        if (grado && grado !== '') {
+          if (d.maniobra && d.maniobra.grado === grado && d.maniobra.tipo === tipo) {
+            if (cambioGrado && cambioGrado != null) {
+              if (d.cambioGrado == cambioGrado) {
+                count++;                
+              }
+            } else {
+              count++;
+            }
+          }
+        } else {
+          if (d.maniobra && d.maniobra.tipo === tipo) {
+            if (cambioGrado && cambioGrado != null) {
+              if (d.cambioGrado === cambioGrado) {
+                count++;
+              }
+            } else {
+              count++;
+            }
+          }
+        }
+      });
+    }
+    return count;
+  }
 
   cuentaManiobrasMant(grado: string, tipo: string, source: any): number {
     let count = 0;
@@ -768,24 +883,28 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
           if (this.dataSourceL !== undefined) {
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'A',
               g20.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'B',
               g20.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'C',
               g20.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'PT',
               g20.tipo,
+              '',
               this.dataSourceL.data
             );
           }
@@ -812,24 +931,28 @@ export class InventarioComponent implements OnInit {
             );
           }
           if (this.dataSourceA !== undefined) {
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'A',
               g20.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'B',
               g20.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'C',
               g20.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'PT',
               g20.tipo,
+              undefined,
               this.dataSourceA.data
             );
           }
@@ -842,24 +965,28 @@ export class InventarioComponent implements OnInit {
           total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
           total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
           if (this.dataSourceL !== undefined) {
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'A',
               g40.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'B',
               g40.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'C',
               g40.tipo,
+              '',
               this.dataSourceL.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantLav(
               'PT',
               g40.tipo,
+              '',
               this.dataSourceL.data
             );
           }
@@ -886,24 +1013,28 @@ export class InventarioComponent implements OnInit {
             );
           }
           if (this.dataSourceA !== undefined) {
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'A',
               g40.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'B',
               g40.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'C',
               g40.tipo,
+              undefined,
               this.dataSourceA.data
             );
-            total += this.cuentaManiobrasMant(
+            total += this.cuentaManiobrasMantAcon(
               'PT',
               g40.tipo,
+              undefined,
               this.dataSourceA.data
             );
           }
@@ -923,24 +1054,28 @@ export class InventarioComponent implements OnInit {
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
         if (this.dataSourceL !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'A',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'B',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'C',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'PT',
             tipo,
+            '',
             this.dataSourceL.data
           );
         }
@@ -967,42 +1102,46 @@ export class InventarioComponent implements OnInit {
           );
         }
         if (this.dataSourceA !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'A',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'B',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'C',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'PT',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
         }
       } else if (this.dataSourceL !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('A', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('B', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('C', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('PT', tipo, '', this.dataSourceL.data);
       } else if (this.dataSourceR !== undefined) {
         subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40 !== undefined) {
@@ -1011,24 +1150,28 @@ export class InventarioComponent implements OnInit {
         subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
         if (this.dataSourceL !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'A',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'B',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'C',
             tipo,
+            '',
             this.dataSourceL.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantLav(
             'PT',
             tipo,
+            '',
             this.dataSourceL.data
           );
         }
@@ -1057,24 +1200,28 @@ export class InventarioComponent implements OnInit {
         }
 
         if (this.dataSourceA !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'A',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'B',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'C',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
-          subTotal += this.cuentaManiobrasMant(
+          subTotal += this.cuentaManiobrasMantAcon(
             'PT',
             tipo,
+            undefined,
             this.dataSourceA.data
           );
         }
@@ -1089,10 +1236,10 @@ export class InventarioComponent implements OnInit {
         subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
       }
     }
     return subTotal;
@@ -1177,11 +1324,13 @@ export class InventarioComponent implements OnInit {
   }
 
   calculaDias(fEnt) {
-    const hoy = moment();
-    const fEntrada = moment(fEnt);
     let dias = 0;
-    if (fEnt !== undefined && fEntrada !== undefined) {
-      dias = hoy.diff(fEntrada, 'days');
+    if (fEnt !== undefined) {
+      const hoy = moment();
+      const fEntrada = moment(fEnt);
+      if (fEntrada !== undefined) {
+        dias = hoy.diff(fEntrada, 'days');
+      }
     } else {
       dias = 0;
     }
