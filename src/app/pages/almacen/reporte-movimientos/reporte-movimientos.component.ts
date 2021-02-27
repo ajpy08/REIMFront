@@ -47,6 +47,7 @@ export class ReporteMovimientosComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  
   constructor(
     public entradaService: EntradaService,
     private usuarioService: UsuarioService,

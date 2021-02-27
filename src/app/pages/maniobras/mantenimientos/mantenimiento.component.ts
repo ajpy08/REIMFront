@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { TIPOS_LAVADO_ARRAY, TIPOS_MANTENIMIENTO_ARRAY } from '../../../config/config';
-import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from '../../usuarios/usuario.model';
 import { DatePipe } from '@angular/common';
@@ -18,6 +18,7 @@ import { Maniobra } from '../../../models/maniobra.models';
 import { ROLES } from 'src/app/config/config';
 declare var swal: any;
 import { URL_SERVICIOS } from '../../../../environments/environment';
+import { map } from 'rxjs/operators';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -167,7 +168,7 @@ export class MantenimientoComponent implements OnInit {
         for (const control in this.regForm.controls)
           if (propiedad === control.toString()) {
             if (propiedad == "fechas")
-              res.mantenimiento[propiedad].forEach((x: { fIni: _moment.Moment; hIni: string; fFin: string; hFin: string; }) => this.addFecha(x.fIni, x.hIni, x.fFin, x.hFin));
+              res.mantenimiento[propiedad].forEach((x: { fIni: string ; hIni: string; fFin: string; hFin: string; }) => this.addFecha(x.fIni, x.hIni, x.fFin, x.hFin));
             else {
               if (propiedad == "materiales") {
                 res.mantenimiento[propiedad].forEach((x: any) => { this.addMaterial(x._id, x.material, x.descripcion, x.costo.$numberDecimal, x.precio.$numberDecimal, x.cantidad,x.unidadMedida) });
@@ -247,21 +248,27 @@ export class MantenimientoComponent implements OnInit {
     return this.regForm.get('maniobra');
   }
 
-  newFecha(fIni = moment().startOf('day'), hIni = '', fFin = '', hFin = ''): FormGroup {
+  newFecha(fIni ='', hIni = '', fFin = '', hFin = ''): FormGroup {
     return this.fb.group({
-      fIni: fIni,
+      fIni: fIni=='' ? moment().startOf('day'):fIni,
       hIni: hIni,
       fFin: fFin,
       hFin: hFin
     })
   }
 
-  addFecha(fIni = moment().startOf('day'), hIni = '', fFin = '', hFin = '') {
+  addFecha(fIni ='', hIni = '', fFin = '', hFin = '') {
     this.fechas.push(this.newFecha(fIni, hIni, fFin, hFin));
+  }
+
+  addFecha2() {
+    this.fechas.push(this.newFecha());
+    this.regForm.markAsDirty();
   }
 
   removeFecha(i: number) {
     this.fechas.removeAt(i);
+    this.regForm.markAsDirty();
   }
 
   newMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1,unidadMedida = ''): FormGroup {
@@ -270,57 +277,24 @@ export class MantenimientoComponent implements OnInit {
       descripcion: [{value:descripcion,disabled: true}],
       costo: costo,
       precio: precio,
-      //cantidad: [cantidad, [this.checaStock(material)]]
-      cantidad: cantidad,
+      cantidad: [cantidad,[], [this.stockAsyncValidator(material)]],
+      //cantidad: cantidad,
       unidadMedida:  [{value:unidadMedida,disabled: true}],
       _id: id
-    }, { Validators: this.checaStock2 })
+    })
   }
 
 
-  checaStock(id) {
-    return (control: AbstractControl): { [s: string]: any | null } => {
-      // control.parent es el FormGroup
-      if (this.regForm) { // en las primeras llamadas control.parent es undefined
-        this._materialService.getStockMaterial(id).subscribe(res => {
-          if (res.stock >= control.value) {
-            console.log("si paso");
-            return null;
-          }
-          else {
-            console.log("NO HAY SUFICIENTE STOCK");
-
-            return {
-              checaStock: false
-            };
-          }
-        });
-      }
-      return null;
+  stockAsyncValidator = 
+  (idMaterial: string) => {
+    return (input: FormControl) => {
+      return this._materialService.getStockMaterial(idMaterial).pipe(map((resp: any) => {
+        return resp.stock >= input.value ? null : {stock: resp.stock }
+      }));
     };
   }
 
-  checaStock2: ValidatorFn = (
-    control: FormGroup
-  ): ValidationErrors | null => {
-    const cantidad = control.get("cantidad")
-    const material = control.get("material")
-
-    this._materialService.getStockMaterial(material.value).subscribe(res => {
-      if (res.stock >= cantidad.value) {
-        console.log("si paso");
-        return null;
-      }
-      else {
-        console.log("NO HAY SUFICIENTE STOCK");
-        return {
-          checaStock2: true
-        };
-      }
-    });
-    return null;
-  }
-
+  
 
   addMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1,unidadMedida = '') {
     this.materiales.push(this.newMaterial(id, material, descripcion, costo, precio, cantidad,unidadMedida));
@@ -328,8 +302,9 @@ export class MantenimientoComponent implements OnInit {
 
   addMaterial2(id: String) {
     const rep = this.listaMateriales.find(x => x._id === id);
-    console.log(rep);
     this.materiales.push(this.newMaterial('', rep._id, rep.descripcion, rep.costo.$numberDecimal, rep.precio.$numberDecimal, 1, rep.unidadMedida.descripcion));
+    this.materiales.controls[this.materiales.length-1].markAsDirty({onlySelf:true});
+    
   }
 
   removeMaterial(i: number) {
@@ -345,19 +320,19 @@ export class MantenimientoComponent implements OnInit {
   }
 
   saveMaterial(i: number) {
-    const material: any = {
-      _id: this.materiales.controls[i].get("_id").value,
-      material: this.materiales.controls[i].get("material").value,
-      descripcion: this.materiales.controls[i].get("descripcion").value,
-      costo: this.materiales.controls[i].get("costo").value,
-      precio: this.materiales.controls[i].get("precio").value,
-      cantidad: this.materiales.controls[i].get("cantidad").value,
-      unidadMedida: this.materiales.controls[i].get("unidadMedida").value,
-    };
-    this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
+    // const material: any = {
+    //   _id: this.materiales.controls[i].get("_id").value,
+    //   material: this.materiales.controls[i].get("material").value,
+    //   descripcion: this.materiales.controls[i].get("descripcion").value,
+    //   costo: this.materiales.controls[i].get("costo").value,
+    //   precio: this.materiales.controls[i].get("precio").value,
+    //   cantidad: this.materiales.controls[i].get("cantidad").value,
+    //   unidadMedida: this.materiales.controls[i].get("unidadMedida").value,
+    // };
+    // this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
 
-    });
-
+    // });
+console.log( this.materiales.controls[i]);
   }
 
   guardarRegistro() {
