@@ -1,3 +1,4 @@
+import { MantenimientoService } from './../../maniobras/mantenimientos/mantenimiento.service';
 import { MaterialService } from './../materiales/material.service';
 import { AlmacenService } from './../almacen.service';
 import { Movimiento } from './movimiento.models';
@@ -6,7 +7,8 @@ import { Entrada } from '../entradas/entrada.models';
 import {
   EntradaService,
   UsuarioService,
-  ExcelService
+  ExcelService,
+  MermaService
 } from '../../../services/service.index';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -33,14 +35,17 @@ export class ReporteMovimientosComponent implements OnInit {
   entradasExcel = [];
   materiales = [];
   material;
+  movimientos = [];
 
   displayedColumns = [
-    'fFactura',
+    'IO',
+    'fEntrada',
     'noFactura',
+    'fFactura',
     'cantidad',
     'material',
-    'proveedor',
-    'costo'
+    // 'proveedor',
+    // 'costo'
   ];
   dataSource: any;
   socket = io(URL_SOCKET_IO, PARAM_SOCKET);
@@ -53,11 +58,13 @@ export class ReporteMovimientosComponent implements OnInit {
     private excelService: ExcelService,
     public activatedRoute: ActivatedRoute,
     private almacenService: AlmacenService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private mantenimientoService: MantenimientoService,
+    private mermaService: MermaService
   ) { }
 
   ngOnInit() {
-    this.usuarioLogueado = this.usuarioService.usuario;    
+    this.usuarioLogueado = this.usuarioService.usuario;
 
     this.materialService.getMateriales().subscribe(materiales => {
       this.materiales = materiales.materiales;
@@ -66,23 +73,32 @@ export class ReporteMovimientosComponent implements OnInit {
     if (this.almacenService.material) {
       this.material = this.almacenService.material._id;
       this.cargarEntradas(this.almacenService.material._id);
+      this.cargarMantenimientos(this.almacenService.material._id);
+      this.cargarMermas(this.almacenService.material._id);
     } else {
       this.cargarEntradas(undefined);
-    }  
-    
+      this.cargarMantenimientos(undefined);
+      this.cargarMermas(undefined);
+    }
+
+    /* #region  Socket.IO */
     this.socket.on('new-entrada', function () {
       this.cargarEntradas();
+      this.cargarMantenimientos();
     }.bind(this));
 
     this.socket.on('update-entrada', function (data: any) {
       if (data.data._id) {
         this.cargarEntradas();
+        this.cargarMantenimientos();
       }
     }.bind(this));
 
     this.socket.on('delete-entrada', function () {
       this.cargarEntradas();
+      this.cargarMantenimientos();
     }.bind(this));
+    /* #endregion */
   }
 
   applyFilter(filterValue: string) {
@@ -113,30 +129,34 @@ export class ReporteMovimientosComponent implements OnInit {
   cargarEntradas(material) {
     this.cargando = true;
 
-    this.entradaService.getEntradas('','', material).subscribe(entradas => {
-
-      let movimientos = [];
+    this.entradaService.getEntradas('', '', material, 'I').subscribe(entradas => {
       entradas.entradas.forEach(e => {
         e.detalles.forEach(d => {
-          this.movimiento = new Movimiento();
-          this.movimiento.fFactura = e.fFactura;
-          this.movimiento.noFactura = e.noFactura;
-          this.movimiento.cantidad = d.cantidad;
-          this.movimiento.idMaterial = d.material._id;
-          this.movimiento.material = d.material.descripcion;
-          this.movimiento.costo = d.costo.$numberDecimal;
-          this.movimiento.proveedor = e.proveedor;
-          movimientos.push(this.movimiento);
+          if (d.material.tipo === 'I') {
+            this.movimiento = new Movimiento();
+            this.movimiento.tipo = 'Entrada';
+            this.movimiento.IO = 'I';
+            this.movimiento.fEntrada = e.fEntrada;
+            this.movimiento.noFactura = e.noFactura;
+            this.movimiento.fFactura = e.fFactura;
+            this.movimiento.cantidad = d.cantidad;
+
+            this.movimiento.idMaterial = d.material._id;
+            this.movimiento.material = d.material.descripcion;
+            // this.movimiento.costo = d.costo.$numberDecimal;
+            // this.movimiento.proveedor = e.proveedor;
+            this.movimientos.push(this.movimiento);
+          }
         });
 
       });
 
       if (material != undefined && material !== '') {
-        movimientos = movimientos.filter(m => { return m.idMaterial == material });
+        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
       } else {
       }
 
-      this.dataSource = new MatTableDataSource(movimientos);
+      this.dataSource = new MatTableDataSource(this.movimientos);
       if (entradas.entradas.length === 0 || entradas.entradas === undefined) {
         this.tablaCargar = true;
       } else {
@@ -144,7 +164,95 @@ export class ReporteMovimientosComponent implements OnInit {
       }
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.totalRegistros = movimientos.length;
+      this.totalRegistros = this.movimientos.length;
+    });
+    this.cargando = false;
+  }
+
+  cargarMantenimientos(material) {
+    this.cargando = true;
+
+    this.mantenimientoService.getMantenimientos('', '', '', '', '', material).subscribe(mantenimientos => {
+
+
+      mantenimientos.mantenimientos.forEach(mant => {
+        mant.materiales.forEach(material => {
+          if (material.material.tipo === 'I') {
+            this.movimiento = new Movimiento();
+            this.movimiento.tipo = 'Mantenimiento';
+            this.movimiento.IO = 'O';
+            this.movimiento.fEntrada = material.fAlta;
+            this.movimiento.noFactura = mant.maniobra.contenedor;
+            this.movimiento.fFactura = mant.fAlta;
+            this.movimiento.cantidad = material.cantidad;
+            this.movimiento.idMaterial = material._id;
+            this.movimiento.material = material.descripcion;
+            // this.movimiento.costo = material.costo.$numberDecimal;
+            // this.movimiento.proveedor = mant.proveedor;
+            this.movimientos.push(this.movimiento);
+          }
+        });
+
+      });
+
+      if (material != undefined && material !== '') {
+        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
+      } else {
+      }
+
+      this.dataSource = new MatTableDataSource(this.movimientos);
+      if (mantenimientos.mantenimientos.length === 0 || mantenimientos.mantenimientos === undefined) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = this.movimientos.length;
+    });
+    this.cargando = false;
+  }
+
+  cargarMermas(material) {
+    this.cargando = true;
+
+    this.mermaService.getMermas('', '', material).subscribe(mermas => {
+
+
+      mermas.mermas.forEach(merma => {
+        merma.materiales.forEach(material => {
+          if (material.material.tipo === 'I') {
+            this.movimiento = new Movimiento();
+            this.movimiento.tipo = 'Merma';
+            this.movimiento.IO = 'O';
+            this.movimiento.fEntrada = material.material.fAlta;
+            this.movimiento.noFactura = merma.motivo;
+            this.movimiento.fFactura = merma.fAlta;
+            this.movimiento.cantidad = material.cantidad;
+            this.movimiento.idMaterial = material.material._id;
+            this.movimiento.material = material.material.descripcion;
+            // this.movimiento.costo = material.material.costo.$numberDecimal;
+            // this.movimiento.proveedor = merma.proveedor;
+            this.movimientos.push(this.movimiento);
+          }
+        });
+
+      });
+
+      if (material != undefined && material !== '') {
+        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
+      } else {
+      }
+
+      this.dataSource = new MatTableDataSource(this.movimientos);
+      if (mermas.mermas.length === 0 || mermas.mermas === undefined) {
+        this.tablaCargar = true;
+      } else {
+        this.tablaCargar = false;
+      }
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.totalRegistros = this.movimientos.length;
     });
     this.cargando = false;
   }
