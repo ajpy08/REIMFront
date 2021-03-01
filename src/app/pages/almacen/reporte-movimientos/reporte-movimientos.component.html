@@ -56,14 +56,38 @@
         <div class="catalogo-container mat-elevation-z8">
           <mat-table class="mat-table-medium" #table [dataSource]="dataSource" matSort>
 
-            <ng-container matColumnDef="fFactura">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.fFactura | date:'dd/MM/yyyy'}} </mat-cell>
+            <ng-container matColumnDef="IO">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>I/O</mat-header-cell>
+              <mat-cell *matCellDef="let row">               
+                <button *ngIf="row.tipo === 'Entrada'" matTooltip="Editar Entrada" [routerLink]="['/entradas/entrada', row._id ]"
+                  class="btn btn-success m-r-5">
+                  <i class="fas fa-chart-line"> Entrada</i>
+                </button>
+                <button *ngIf="row.tipo === 'Mantenimiento'" matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento', row._id ]"
+                  class="btn btn-danger m-r-5">
+                  <i class="fas fa-wrench"> Mantenimiento</i>
+                </button>
+                <button *ngIf="row.tipo === 'Merma'" matTooltip="Editar Merma" [routerLink]="['/mermas/merma', row._id ]"
+                  class="btn btn-warning m-r-5">
+                  <i class="fab fa-maxcdn">erma</i>
+                </button>
+                
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fEntrada">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fEntrada | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="noFactura">
               <mat-header-cell *matHeaderCellDef mat-sort-header>No. Factura</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.noFactura}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fFactura">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Factura</mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.fFactura | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="cantidad">
@@ -76,7 +100,7 @@
               <mat-cell *matCellDef="let row"> {{row.material}} </mat-cell>
             </ng-container>
 
-            <ng-container matColumnDef="proveedor">
+            <!-- <ng-container matColumnDef="proveedor">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Proveedor</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.proveedor?.razonSocial}} </mat-cell>
             </ng-container>
@@ -84,7 +108,7 @@
             <ng-container matColumnDef="costo">
               <mat-header-cell *matHeaderCellDef mat-sort-header>costo</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.costo}} </mat-cell>
-            </ng-container>
+            </ng-container> -->
 
             <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

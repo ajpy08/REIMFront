@@ -123,7 +123,7 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
     return (this.getMantenimientos(tipoMantenimiento, '', finalizados, fInicial, fFinal));
   }
 
-  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: any, fFinal?: any): Observable<any> {
+  getMantenimientos(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: any, fFinal?: any, material?: string): Observable<any> {
     let url = URL_SERVICIOS + '/mantenimientos/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
@@ -133,6 +133,7 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
     if (finalizado) params = params.append('finalizado', finalizado);
     if (fInicial) params = params.append('fInicial', fInicial.toString());
     if (fFinal) params = params.append('fFinal', fFinal.toString());
+    if (material) params = params.append('material', material.toString());
     
     return this.http.get(url, { params: params });
   }
