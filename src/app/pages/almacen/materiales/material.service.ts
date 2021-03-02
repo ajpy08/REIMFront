@@ -55,12 +55,15 @@ export class MaterialService {
     url += '?token=' + this._usuarioService.token;
     return this.http.get(url);
   }
+  
   getStockMaterial(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/materiales/material/stock/' + id;
     url += '?token=' + this._usuarioService.token;
-    console.log (url);
     return this.http.get(url);
   }
+
+  
+
   async getStockMaterialAsync(id: string) {
     let url = URL_SERVICIOS + '/materiales/material/stock/' + id;
     url += '?token=' + this._usuarioService.token;

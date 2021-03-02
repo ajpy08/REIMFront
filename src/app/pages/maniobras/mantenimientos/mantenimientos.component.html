@@ -88,7 +88,11 @@
 
                 <ng-container matColumnDef="folio">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+                  <mat-cell *matCellDef="let row">{{row.folio}}
+                    <a matTooltip="Descargar Formato PDF" [href]="abrePDF(row._id,row.fileFolio)" target="_blank" *ngIf="row.fileFolio">
+                      <img width="20" height="20" src="\assets\images\icon\pdf_32x32.png">
+                    </a>
+                  </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="observacionesCompleto">
@@ -110,6 +114,21 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
                 </ng-container>
+
+                <ng-container matColumnDef="maniobra.grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="maniobra.viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="fInicial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
@@ -199,6 +218,10 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="tipoLavado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Lavado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.tipoLavado}} </mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="maniobra.contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
@@ -211,6 +234,21 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
                 </ng-container>
+
+                <ng-container matColumnDef="maniobra.grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="maniobra.viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="fInicial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
@@ -302,6 +340,10 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
                 </ng-container>
+                <ng-container matColumnDef="cambioGrado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>CambioGrado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.cambioGrado?'CAMBIO GRADO':'BASICO'}} </mat-cell>
+                </ng-container>
                 <ng-container matColumnDef="maniobra.contenedor">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
@@ -314,6 +356,21 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
                 </ng-container>
+
+                <ng-container matColumnDef="maniobra.grado">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="maniobra.viaje.viaje">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="fInicial">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>

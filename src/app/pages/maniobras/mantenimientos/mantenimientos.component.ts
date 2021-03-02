@@ -7,8 +7,10 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { URL_SERVICIOS } from '../../../../environments/environment';
 
 import * as _moment from 'moment';
+import { Mantenimiento } from './mantenimiento.models';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -42,7 +44,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   filtrarFechas: boolean;
   filtroFechaIni: _moment.Moment;
   filtroFechaFin: _moment.Moment;
-  durationInSeconds: number = 5;
+  durationInSeconds: number = 4;
 
   cargandoR: boolean;
   cargandoL: boolean;
@@ -60,9 +62,9 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   acttrue = false;
 
-  displayedColumnsReparaciones = ['actions', 'folio','observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
-  displayedColumnsLavados = ['actions', 'folio', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
-  displayedColumnsAcondicionamientos = ['actions', 'folio', 'observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsReparaciones = ['actions', 'folio','observacionesCompleto', 'maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso', 'maniobra.grado','maniobra.viaje.buque.nombre','maniobra.viaje.viaje', 'fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsLavados = ['actions', 'folio', 'observacionesCompleto', 'tipoLavado','maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso',  'maniobra.grado','maniobra.viaje.buque.nombre','maniobra.viaje.viaje','fInicial', 'fFinal', 'finalizado'];
+  displayedColumnsAcondicionamientos = ['actions', 'folio', 'observacionesCompleto','cambioGrado','maniobra.contenedor', 'maniobra.tipo', 'maniobra.peso',  'maniobra.grado','maniobra.viaje.buque.nombre','maniobra.viaje.viaje', 'fInicial', 'fFinal', 'finalizado'];
 
   dtReparaciones: MatTableDataSource<any>;
   dtLavados: MatTableDataSource<any>;
@@ -173,14 +175,14 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   Filtro(): (data: any, filter: string) => boolean {
     const filterFunction = function (data, filter): boolean {
       const dataStr =
-        data.folio.toLowerCase() +
+        data.folio ? data.folio.toLowerCase() : '' +
         data.observacionesCompleto.toLowerCase() +
-        (data.contenedor ? data.contenedor.toLowerCase() : '') +
-        (data.maniobra ? data.maniobra.contenedor.toLowerCase() : '') +
-        (data.maniobra ? data.maniobra.tipo.toLowerCase() : '') +
-        (data.maniobra ? data.maniobra.peso.toLowerCase() : '');
+        data.tipoLavado ? data.tipoLavado.toLowerCase() : '' +
+        (data.maniobra ? data.maniobra.contenedor.toLowerCase() +  data.maniobra.tipo.toLowerCase() + data.maniobra.peso.toLowerCase()+ data.maniobra.grado.toLowerCase() : '') +
+        (data.maniobra.viaje ? data.maniobra.viaje.buque.nombre.toLowerCase() + data.maniobra.viaje.viaje.toLowerCase() : '');
       return dataStr.indexOf(filter) !== -1;
     };
+    
     return filterFunction;
   }
 
@@ -237,7 +239,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
       };
       this.dtLavados.filterPredicate = this.Filtro();
       this.totalLavados = mant.mantenimientos.length;
-      setTimeout(() => {this.dtLavados.paginator = this.pagLavados,this.dtLavados.sort = this.sortReparaciones});
+      setTimeout(() => {this.dtLavados.paginator = this.pagLavados,this.dtLavados.sort = this.sortLavados});
       this.cargandoL = false;
     });
 
@@ -297,6 +299,12 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
       if (tipo==="reparaciones") this.cargarReparaciones();
       if (tipo==="lavados") this.cargarLavados();
       if (tipo==='acondicionamientos') this.cargarAcondicionamientos();
+      this.openSnackBar(mantenimientos.mensaje,'Cerrar');
+    }, error => {
+      this.openSnackBar(error.error.mensaje,'Cerrar');
+      // this.mensajeError = error.error.mensaje;
+      // this.mensajeExito = '';
+      
     });
 
   }
@@ -336,6 +344,12 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     });
   }
 
+  
+  abrePDF(idMantenimiento: string, nameFolio: string)
+  {
+    return URL_SERVICIOS + '/mantenimientos/mantenimiento/'+ idMantenimiento + "/descarga_pdf_folio/" + nameFolio;
+  }
+
   CreaDatosExcel(datos) {
     datos.forEach(b => {
       const reg = {
@@ -344,6 +358,9 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
         Contenedor: b.maniobra.contenedor,
         Tipo: b.maniobra.tipo,
         Peso: b.maniobra.peso,
+        Grado: b.maniobra.grado,
+        Buque: b.maniobra.viaje ? b.maniobra.viaje.buque.nombre : '',
+        Viaje: b.maniobra.viaje ? b.maniobra.viaje.viaje : '',
         Inicio: b.fInicial ? b.fInicial.substring(0, 10):"",
         Fin: b.fFinal ? b.fFinal.substring(0, 10):"",
         Finalizado: b.finalizado? "Listo":""
