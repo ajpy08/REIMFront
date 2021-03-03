@@ -180,11 +180,8 @@
                           <mat-form-field>
                             <mat-label>Cantidad</mat-label>
                             <input matInput formControlName="cantidad" type="text" placeholder="Cantidad">
-                            <mat-error>
-                              <sup>*</sup>Aún no se ha guardado
-                            </mat-error>
                             <mat-error *ngIf="this.materiales.controls[i].get('cantidad').invalid">
-                              <sup>*</sup>No hay stock suficiente, DISPONIBLE: {{this.materiales.controls[i].get('cantidad').errors.stock}}
+                              <sup>*</sup>stock DISPONIBLE: {{this.materiales.controls[i].get('cantidad').errors.stock}}
                             </mat-error>
 
                           </mat-form-field>
@@ -215,7 +212,7 @@
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <button (click)="saveMaterial(i)" class="btn btn-primary" [disabled]="this.materiales.controls[i].pristine || this.finalizado.value"><i class="fa fa-save"></i></button>
+                          <button (click)="saveMaterial(i)" class="btn btn-primary"><i class="fa fa-save"></i></button>
                           <button (click)="removeMaterial(i)" class="btn btn-danger" type="button" [disabled]="this.finalizado.value">
                             <i class="fas fa-trash"></i>
                           </button>
@@ -245,15 +242,12 @@
           </div>
         </div>
       </mat-dialog-content>
-      <div class="output">
+      <!-- <div class="output">
         <p>Form Data: {{regForm.value | json}}</p>
         <p>Is Valid: {{regForm.valid}}</p>
         <p>pristine: {{regForm.pristine}}</p>
         <p>Invalid: {{regForm.invalid}}</p>
-
-
-
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

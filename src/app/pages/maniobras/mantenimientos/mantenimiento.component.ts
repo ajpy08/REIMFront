@@ -144,8 +144,8 @@ export class MantenimientoComponent implements OnInit {
 
   habilitaControles() {
     for (const control in this.regForm.controls) {
-      if (control.toString() !== "finalizado" && control.toString() !== "_id" && control.toString() !== "tipoLavado" && control.toString() !== "cambioGrado") {
-        if (control.toString() !== "fechas" && control.toString() !== "fechas") {
+      if (control.toString() !== "finalizado" && control.toString() !== "_id" && control.toString() !== "tipoLavado" && control.toString() !== "cambioGrado" && control.toString() !== "materiales") {
+        if (control.toString() !== "fechas" && control.toString() !== "materiales") {
           if (this.finalizado.value) this.regForm.controls[control.toString()].disable({ onlySelf: true });
           else this.regForm.controls[control.toString()].enable({ onlySelf: true });
         }
@@ -179,10 +179,17 @@ export class MantenimientoComponent implements OnInit {
               }
             }
           }
-      this.habilitaControles();
+          this.habilitaControles();
     });
+  }
 
-
+  cargaMateriales (){
+    this._mantenimientoService.getMaterialesxManiobra(this._id.value).subscribe(res => {
+      (<FormArray>this.regForm.get("materiales")).controls.forEach(control2 => { control2.enable({ onlySelf: true }) });
+      for (let index = this.materiales.length-1; index>=0; index++)
+        this.materiales.removeAt(index);
+      res.materiales.forEach((x: any) => { this.addMaterial(x._id, x.material, x.descripcion, x.costo.$numberDecimal, x.precio.$numberDecimal, x.cantidad,x.unidadMedida) });
+    });
   }
 
 
@@ -275,10 +282,9 @@ export class MantenimientoComponent implements OnInit {
     return this.fb.group({
       material: material,
       descripcion: [{value:descripcion,disabled: true}],
-      costo: costo,
+      costo: [{value:costo,disabled: true}],
       precio: precio,
       cantidad: [cantidad,[], [this.stockAsyncValidator(material)]],
-      //cantidad: cantidad,
       unidadMedida:  [{value:unidadMedida,disabled: true}],
       _id: id
     })
@@ -294,10 +300,10 @@ export class MantenimientoComponent implements OnInit {
     };
   }
 
-  
-
   addMaterial(id = '', material = '', descripcion = '', costo = 0, precio = 0, cantidad = 1,unidadMedida = '') {
     this.materiales.push(this.newMaterial(id, material, descripcion, costo, precio, cantidad,unidadMedida));
+    this.materiales.controls[this.materiales.length-1].disable({onlySelf:true});
+    
   }
 
   addMaterial2(id: String) {
@@ -320,19 +326,20 @@ export class MantenimientoComponent implements OnInit {
   }
 
   saveMaterial(i: number) {
-    // const material: any = {
-    //   _id: this.materiales.controls[i].get("_id").value,
-    //   material: this.materiales.controls[i].get("material").value,
-    //   descripcion: this.materiales.controls[i].get("descripcion").value,
-    //   costo: this.materiales.controls[i].get("costo").value,
-    //   precio: this.materiales.controls[i].get("precio").value,
-    //   cantidad: this.materiales.controls[i].get("cantidad").value,
-    //   unidadMedida: this.materiales.controls[i].get("unidadMedida").value,
-    // };
-    // this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
+    const material: any = {
+      _id: this.materiales.controls[i].get("_id").value,
+      material: this.materiales.controls[i].get("material").value,
+      descripcion: this.materiales.controls[i].get("descripcion").value,
+      costo: this.materiales.controls[i].get("costo").value,
+      precio: this.materiales.controls[i].get("precio").value,
+      cantidad: this.materiales.controls[i].get("cantidad").value,
+      unidadMedida: this.materiales.controls[i].get("unidadMedida").value,
+    };
+    this._mantenimientoService.guardaMaterial(this.mantenimiento._id, material).subscribe(res => {
+      console.log(res);
+      
+    });
 
-    // });
-console.log( this.materiales.controls[i]);
   }
 
   guardarRegistro() {
