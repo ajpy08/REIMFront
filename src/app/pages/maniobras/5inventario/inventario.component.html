@@ -149,19 +149,19 @@
       <div class="row">
         <div class="col-sm">
           <img src="../../../../assets/images/logo_reim_container_park.jpg" width=224 height=60>
-          <h2 class="text-center" mat-header>STOCK GENERAL REIM CONTAINER PARK</h2>
-          <h3 class="text-center">( {{obtenTotales("20") + obtenTotales("40")}} )</h3>
+          <h2 class="text-center" mat-header>STOCK GENERAL DE CONTENEDORES REIM CONTAINER PARK</h2>
+          <h3 class="text-center">( {{obtenTotales2("20") + obtenTotales2("40")}} )</h3>
         </div>
       </div>
     </div>
     <mat-divider></mat-divider>
     <mat-list>
-      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{ obtenTotales("20")}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{ obtenTotales2("20")}} )</h3>
       <mat-list-item *ngFor="let g20 of groupedDisponibles20">
-        <div *ngIf="obtenSubTotales(g20.tipo, g20.maniobras) > 0">
+        <div *ngIf="obtenSubTotales2(g20.tipo, g20.maniobras) > 0">
 
           <div class="row">
-            <h4 class="card-title">Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras)}} )</h4>
+            <h4 class="card-title">Contenedores {{g20.tipo}}: ( {{obtenSubTotales2(g20.tipo, g20.maniobras)}} )</h4>
           </div>
           <div class="row">
             <div class="col-md mat-elevation-z8 m-r-20">
@@ -190,117 +190,31 @@
             <div class="col-md mat-elevation-z8 m-r-20">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">LAVADOS</h5>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('A', g20.tipo, 'BASICO', dataSourceL.data)}} | 'A' | LAVADO
-                        BASICO</i></span>
+                  <h5 class="card-title">MANTENIMIENTOS</h5>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('A', g20.tipo)}} | 'A' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('A', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'A' | LAVADO
-                        ESPECIAL</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('B', g20.tipo)}} | 'B' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('B', g20.tipo, 'BASICO', dataSourceL.data)}} | 'B' | LAVADO
-                        BASICO</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('C', g20.tipo)}} | 'C' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('B', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'B' | LAVADO
-                        ESPECIAL</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('PT', g20.tipo)}} | 'PT' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('C', g20.tipo, 'BASICO', dataSourceL.data)}} | 'C' | LAVADO
-                        BASICO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('C', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'C' | LAVADO
-                        ESPECIAL</i></span>
-                  </p>
-                  <!-- <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                {{cuentaManiobrasMantLav('PT', g20.tipo, 'BASICO', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO BASICO</i></span></p>
-              <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMantLav('PT', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO ESPECIAL</i></span>
-              </p> -->
-
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADOS {{cuentaManiobrasMantLav('', g20.tipo, '', dataSourceL.data)}}</b></h6>
+                  <div *ngIf="mantenimientos" mat-line>
+                    <h6><b>TOTAL MANTENIMIENTOS {{
+                        obtenTotalContenedoresMant('A', g20.tipo) +
+                        obtenTotalContenedoresMant('B', g20.tipo) +
+                        obtenTotalContenedoresMant('C', g20.tipo)+
+                        obtenTotalContenedoresMant('PT', g20.tipo)
+                        }}</b></h6>
                   </div>
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADO BASICO {{cuentaManiobrasMantLav('', g20.tipo, 'BASICO', dataSourceL.data)}}</b>
-                    </h6>
-                  </div>
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADO ESPECIAL {{cuentaManiobrasMantLav('', g20.tipo, 'ESPECIAL',
-                        dataSourceL.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md mat-elevation-z8 m-r-20">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">REPARACIONES</h5>
-                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('A', g20.tipo, dataSourceR.data)}} | 'A' | REPARACION</i></span></p>
-                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('B', g20.tipo, dataSourceR.data)}} | 'B' | REPARACION</i></span></p>
-                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('C', g20.tipo, dataSourceR.data)}} | 'C' | REPARACION</i></span></p>
-                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('PT', g20.tipo, dataSourceR.data)}} | 'PT' | PERDIDA TOTAL</i></span></p>
-
-                  <div *ngIf="dataSourceR" mat-line>
-                    <h6><b>TOTAL REPARACIONES {{cuentaManiobrasMant('', g20.tipo, dataSourceR.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md mat-elevation-z8 m-r-20">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">ACONDICIONAMIENTOS</h5>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('A', g20.tipo, false, dataSourceA.data)}} | 'A' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('A', g20.tipo, true, dataSourceA.data)}} | 'A' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('B', g20.tipo, false, dataSourceA.data)}} | 'B' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('B', g20.tipo, true, dataSourceA.data)}} | 'B' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('C', g20.tipo, false, dataSourceA.data)}} | 'C' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('C', g20.tipo, true, dataSourceA.data)}} | 'C' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-
-                  <!-- <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('A', g20.tipo, dataSourceA.data)}} | 'A' | ACONDICIONAMIENTO</i></span></p>
-              <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('B', g20.tipo, dataSourceA.data)}} | 'B' | ACONDICIONAMIENTO</i></span></p>
-              <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('C', g20.tipo, dataSourceA.data)}} | 'C' | ACONDICIONAMIENTO</i></span></p> -->
-
-
-                  <!-- <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('PT', g20.tipo, dataSourceA.data)}} | 'PT' | PERDIDA TOTAL</i></span></p> -->
-
-                  <div *ngIf="dataSourceA" mat-line>
-                    <h6><b>TOTAL ACONDICIONAMIENTOS {{cuentaManiobrasMantAcon('', g20.tipo, undefined,
-                        dataSourceA.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                 </div>
               </div>
             </div>
@@ -308,13 +222,13 @@
         </div>
       </mat-list-item>
       <mat-divider></mat-divider>
-    </mat-list>
+    </mat-list><br><br>
     <mat-list>
-      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
+      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales2('40')}} )</h3>
       <mat-list-item *ngFor="let g40 of groupedDisponibles40Gral">
-        <div class="card" *ngIf="obtenSubTotales(g40.tipo, g40.maniobras) > 0">
+        <div class="card" *ngIf="obtenSubTotales2(g40.tipo, g40.maniobras) > 0">
           <div class="row">
-            <h4 class="card-title"><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras)}} )</b>
+            <h4 class="card-title"><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales2(g40.tipo, g40.maniobras)}} )</b>
             </h4>
           </div>
 
@@ -344,118 +258,31 @@
             <div class="col-md mat-elevation-z8 m-r-20">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">LAVADOS</h5>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('A', g40.tipo, 'BASICO', dataSourceL.data)}} | 'A' | LAVADO
-                        BASICO</i></span>
+                  <h5 class="card-title">MANTENIMIENTOS</h5>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('A', g40.tipo)}} | 'A' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('A', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'A' | LAVADO
-                        ESPECIAL</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('B', g40.tipo)}} | 'B' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('B', g40.tipo, 'BASICO', dataSourceL.data)}} | 'B' | LAVADO
-                        BASICO</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('C', g40.tipo)}} | 'C' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('B', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'B' | LAVADO
-                        ESPECIAL</i></span>
+                  <p *ngIf="mantenimientos" matLine><span><i class="fas fa-caret-right">
+                        {{obtenTotalContenedoresMant('PT', g40.tipo)}} | 'PT' |
+                      </i></span>
                   </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('C', g40.tipo, 'BASICO', dataSourceL.data)}} | 'C' | LAVADO
-                        BASICO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantLav('C', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'C' | LAVADO
-                        ESPECIAL</i></span>
-                  </p>
-
-                  <!-- <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                {{cuentaManiobrasMantLav('PT', g40.tipo, 'BASICO', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO BASICO</i></span></p>
-              <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMantLav('PT', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO ESPECIAL</i></span>
-              </p> -->
-
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADOS {{cuentaManiobrasMantLav('', g40.tipo, '', dataSourceL.data)}}</b></h6>
+                  <div *ngIf="mantenimientos" mat-line>
+                    <h6><b>TOTAL MANTENIMIENTOS {{
+                        obtenTotalContenedoresMant('A', g40.tipo) +
+                        obtenTotalContenedoresMant('B', g40.tipo) +
+                        obtenTotalContenedoresMant('C', g40.tipo)+
+                        obtenTotalContenedoresMant('PT', g40.tipo)
+                        }}</b></h6>
                   </div>
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADO BASICO {{cuentaManiobrasMantLav('', g40.tipo, 'BASICO', dataSourceL.data)}}</b>
-                    </h6>
-                  </div>
-                  <div *ngIf="dataSourceL" mat-line>
-                    <h6><b>TOTAL LAVADO ESPECIAL {{cuentaManiobrasMantLav('', g40.tipo, 'ESPECIAL',
-                        dataSourceL.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md mat-elevation-z8 m-r-20">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">REPARACIONES</h5>
-                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('A', g40.tipo, dataSourceR.data)}} | 'A' | REPARACION</i></span></p>
-                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('B', g40.tipo, dataSourceR.data)}} | 'B' | REPARACION</i></span></p>
-                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('C', g40.tipo, dataSourceR.data)}} | 'C' | REPARACION</i></span></p>
-                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMant('PT', g40.tipo, dataSourceR.data)}} | 'PT' | PERDIDA TOTAL</i></span></p>
-
-                  <div *ngIf="dataSourceR" mat-line>
-                    <h6><b>TOTAL REPARACIONES {{cuentaManiobrasMant('', g40.tipo, dataSourceR.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                </div>
-              </div>
-            </div>
-            <div class="col-md mat-elevation-z8 m-r-20">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">ACONDICIONAMIENTOS</h5>
-                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('A', g40.tipo, false, dataSourceA.data)}} | 'A' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('A', g40.tipo, true, dataSourceA.data)}} | 'A' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('B', g40.tipo, false, dataSourceA.data)}} | 'B' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('B', g40.tipo, true, dataSourceA.data)}} | 'B' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('C', g40.tipo, false, dataSourceA.data)}} | 'C' |
-                        ACONDICIONAMIENTO</i></span>
-                  </p>
-                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
-                        {{cuentaManiobrasMantAcon('C', g40.tipo, true, dataSourceA.data)}} | 'C' | CAMBIO DE
-                        GRADO</i></span>
-                  </p>
-
-                  <!-- <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('A', g40.tipo, dataSourceA.data)}} | 'A' | ACONDICIONAMIENTO</i></span></p>
-              <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('B', g40.tipo, dataSourceA.data)}} | 'B' | ACONDICIONAMIENTO</i></span></p>
-              <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('C', g40.tipo, dataSourceA.data)}} | 'C' | ACONDICIONAMIENTO</i></span></p> -->
-
-
-                  <!-- <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
-                    {{cuentaManiobrasMant('PT', g40.tipo, dataSourceA.data)}} | 'PT' | PERDIDA TOTAL</i></span></p> -->
-
-                  <div *ngIf="dataSourceA" mat-line>
-                    <h6><b>TOTAL ACONDICIONAMIENTOS {{cuentaManiobrasMantAcon('', g40.tipo, undefined,
-                        dataSourceA.data)}}</b></h6>
-                  </div>
-                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                 </div>
               </div>
             </div>
@@ -724,7 +551,7 @@
             <br>
 
             <div class="example-container mat-elevation-z8">
-              <mat-table class="mat-table-medium" #MatSort4="matSort" [dataSource]="dataSourceM" matSort>
+              <mat-table class="mat-table-big" #MatSort4="matSort" [dataSource]="dataSourceM" matSort>
                 <ng-container matColumnDef="lavado">
                   <mat-header-cell *matHeaderCellDef>Lavado </mat-header-cell>
                   <mat-cell *matCellDef="let row">
@@ -737,7 +564,7 @@
 
                     <ng-template #tachita>
                       <!-- <img src="assets/images/cancel_32x32.png" width="25px" height="25px"/> -->
-                     -
+                      -
                     </ng-template>
                   </mat-cell>
                 </ng-container>
@@ -753,7 +580,7 @@
                     </div>
                     <ng-template #tachita2>
                       <!-- <img src="assets/images/cancel_32x32.png" width="25px" height="25px"/> -->
-                     -
+                      -
                     </ng-template>
                   </mat-cell>
                 </ng-container>
@@ -769,7 +596,7 @@
                     </div>
                     <ng-template #tachita3>
                       <!-- <img src="assets/images/cancel_32x32.png" width="25px" height="25px"/> -->
-                     -
+                      -
                     </ng-template>
                   </mat-cell>
                 </ng-container>
@@ -842,26 +669,346 @@
     </div>
     <mat-list>
       <h3 *ngIf="dataSourceL && dataSourceR && dataSourceA" mat-line><b>Resumen de Mantenimientos</b> (
-        {{totalMantLavado + totalMantReparacion +
-        totalMantAcondicionamiento }} )</h3>
+        {{totalMantLavado + totalMantReparacion + totalMantAcondicionamiento }} )</h3>
       <mat-list-item>
         <div *ngIf="dataSourceL" mat-line>
-          <h6><b>TOTAL LAVADO {{totalMantLavado}}</b></h6>
+          <h6><b>TOTAL LAVADO: {{totalMantLavado}}</b></h6>
         </div>
         <div mat-line>&nbsp;</div>
 
         <div *ngIf="dataSourceR" mat-line>
-          <h6><b>TOTAL REPARACION {{totalMantReparacion}}</b></h6>
+          <h6><b>TOTAL REPARACION: {{totalMantReparacion}}</b></h6>
         </div>
         <div mat-line>&nbsp;</div>
 
         <div *ngIf="dataSourceA" mat-line>
-          <h6><b>TOTAL ACONDICIONAMIENTO {{totalMantAcondicionamiento}}</b></h6>
+          <h6><b>TOTAL ACONDICIONAMIENTO: {{totalMantAcondicionamiento}}</b></h6>
+        </div>
+        <div mat-line>&nbsp;</div>
+
+        <div *ngIf="dataSourceA" mat-line>
+          <small><b>CONTENEDORES QUE TIENEN MAS DE UN MANTENIMIENTO: {{cuentaRepetidos()}}</b></small>
         </div>
         <div mat-line>&nbsp;</div>
 
       </mat-list-item>
       <mat-divider></mat-divider><br>
+    </mat-list>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <img src="../../../../assets/images/logo_reim_container_park.jpg" width=224 height=60>
+          <h2 class="text-center" mat-header>MANTENIMIENTOS REIM CONTAINER PARK</h2>
+          <h3 class="text-center">( {{obtenTotales("20") + obtenTotales("40")}} )</h3>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <mat-list>
+      <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{ obtenTotales("20")}} )</h3>
+      <mat-list-item *ngFor="let g20 of groupedDisponibles20">
+        <div *ngIf="obtenSubTotales(g20.tipo, g20.maniobras) > 0">
+
+          <div class="row">
+            <h4 class="card-title">Contenedores {{g20.tipo}}: ( {{obtenSubTotales(g20.tipo, g20.maniobras)}} )</h4>
+          </div>
+          <div class="row">
+            <!--<div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                 <div class="card-body">
+                  <h5 class="card-title">DISPONIBLES</h5>
+                  <p matLine> <span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE',
+                        g20.maniobras)}} | 'A'
+                        |
+                        DISPONIBLES</i></span></p>
+                  <p matLine> <span><i class="fas fa-caret-right"> {{cuentaInventario('B', 'DISPONIBLE',
+                        g20.maniobras)}} | 'B'
+                        |
+                        DISPONIBLES</i></span></p>
+                  <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g20.maniobras)}}
+                        | 'C' |
+                        DISPONIBLES</i></span></p>
+
+                  <div mat-line>
+                    <h6><b>TOTAL DISPONIBLES {{cuentaInventario('', 'DISPONIBLE', g20.maniobras)}}</b></h6>
+                  </div>
+                </div> 
+              </div>
+            </div>-->
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">LAVADOS</h5>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('A', g20.tipo, 'BASICO', dataSourceL.data)}} | 'A' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('A', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'A' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('B', g20.tipo, 'BASICO', dataSourceL.data)}} | 'B' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('B', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'B' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('C', g20.tipo, 'BASICO', dataSourceL.data)}} | 'C' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('C', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'C' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+                  <!-- <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                {{cuentaManiobrasMantLav('PT', g20.tipo, 'BASICO', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO BASICO</i></span></p>
+              <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMantLav('PT', g20.tipo, 'ESPECIAL', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO ESPECIAL</i></span>
+              </p> -->
+
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADOS {{cuentaManiobrasMantLav('', g20.tipo, '', dataSourceL.data)}}</b></h6>
+                  </div>
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADO BASICO {{cuentaManiobrasMantLav('', g20.tipo, 'BASICO', dataSourceL.data)}}</b>
+                    </h6>
+                  </div>
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADO ESPECIAL {{cuentaManiobrasMantLav('', g20.tipo, 'ESPECIAL',
+                        dataSourceL.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">REPARACIONES</h5>
+                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('A', g20.tipo, dataSourceR.data)}} | 'A' | REPARACION</i></span></p>
+                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('B', g20.tipo, dataSourceR.data)}} | 'B' | REPARACION</i></span></p>
+                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('C', g20.tipo, dataSourceR.data)}} | 'C' | REPARACION</i></span></p>
+                  <p *ngIf="dataSourceR" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('PT', g20.tipo, dataSourceR.data)}} | 'PT' | PERDIDA TOTAL</i></span></p>
+
+                  <div *ngIf="dataSourceR" mat-line>
+                    <h6><b>TOTAL REPARACIONES {{cuentaManiobrasMant('', g20.tipo, dataSourceR.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">ACONDICIONAMIENTOS</h5>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('A', g20.tipo, false, dataSourceA.data)}} | 'A' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('A', g20.tipo, true, dataSourceA.data)}} | 'A' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('B', g20.tipo, false, dataSourceA.data)}} | 'B' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('B', g20.tipo, true, dataSourceA.data)}} | 'B' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('C', g20.tipo, false, dataSourceA.data)}} | 'C' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('C', g20.tipo, true, dataSourceA.data)}} | 'C' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+
+                  <!-- <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('A', g20.tipo, dataSourceA.data)}} | 'A' | ACONDICIONAMIENTO</i></span></p>
+              <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('B', g20.tipo, dataSourceA.data)}} | 'B' | ACONDICIONAMIENTO</i></span></p>
+              <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('C', g20.tipo, dataSourceA.data)}} | 'C' | ACONDICIONAMIENTO</i></span></p> -->
+
+
+                  <!-- <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('PT', g20.tipo, dataSourceA.data)}} | 'PT' | PERDIDA TOTAL</i></span></p> -->
+
+                  <div *ngIf="dataSourceA" mat-line>
+                    <h6><b>TOTAL ACONDICIONAMIENTOS {{cuentaManiobrasMantAcon('', g20.tipo, undefined,
+                        dataSourceA.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list><br><br>
+    <mat-list>
+      <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales('40')}} )</h3>
+      <mat-list-item *ngFor="let g40 of groupedDisponibles40Gral">
+        <div class="card" *ngIf="obtenSubTotales(g40.tipo, g40.maniobras) > 0">
+          <div class="row">
+            <h4 class="card-title"><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales(g40.tipo, g40.maniobras)}} )</b>
+            </h4>
+          </div>
+
+          <div class="row">
+            <!-- <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">DISPONIBLES</h5>
+                  <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('A', 'DISPONIBLE', g40.maniobras)}}
+                        | 'A' |
+                        DISPONIBLES</i></span></p>
+                  <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('B', 'DISPONIBLE', g40.maniobras)}}
+                        | 'B' |
+                        DISPONIBLES</i></span></p>
+                  <p matLine><span><i class="fas fa-caret-right"> {{cuentaInventario('C', 'DISPONIBLE', g40.maniobras)}}
+                        | 'C' |
+                        DISPONIBLES</i></span></p>
+
+                  <div mat-line>
+                    <h6><b>TOTAL DISPONIBLES {{cuentaInventario('', 'DISPONIBLE', g40.maniobras)}}</b></h6>
+                  </div>
+                </div>
+              </div> 
+            </div>-->
+
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">LAVADOS</h5>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('A', g40.tipo, 'BASICO', dataSourceL.data)}} | 'A' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('A', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'A' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('B', g40.tipo, 'BASICO', dataSourceL.data)}} | 'B' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('B', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'B' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('C', g40.tipo, 'BASICO', dataSourceL.data)}} | 'C' | LAVADO
+                        BASICO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantLav('C', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'C' | LAVADO
+                        ESPECIAL</i></span>
+                  </p>
+
+                  <!-- <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                {{cuentaManiobrasMantLav('PT', g40.tipo, 'BASICO', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO BASICO</i></span></p>
+              <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMantLav('PT', g40.tipo, 'ESPECIAL', dataSourceL.data)}} | 'PT' | PERDIDA TOTAL - LAVADO ESPECIAL</i></span>
+              </p> -->
+
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADOS {{cuentaManiobrasMantLav('', g40.tipo, '', dataSourceL.data)}}</b></h6>
+                  </div>
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADO BASICO {{cuentaManiobrasMantLav('', g40.tipo, 'BASICO', dataSourceL.data)}}</b>
+                    </h6>
+                  </div>
+                  <div *ngIf="dataSourceL" mat-line>
+                    <h6><b>TOTAL LAVADO ESPECIAL {{cuentaManiobrasMantLav('', g40.tipo, 'ESPECIAL',
+                        dataSourceL.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">REPARACIONES</h5>
+                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('A', g40.tipo, dataSourceR.data)}} | 'A' | REPARACION</i></span></p>
+                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('B', g40.tipo, dataSourceR.data)}} | 'B' | REPARACION</i></span></p>
+                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('C', g40.tipo, dataSourceR.data)}} | 'C' | REPARACION</i></span></p>
+                  <p matLine><span *ngIf="dataSourceR"><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMant('PT', g40.tipo, dataSourceR.data)}} | 'PT' | PERDIDA TOTAL</i></span></p>
+
+                  <div *ngIf="dataSourceR" mat-line>
+                    <h6><b>TOTAL REPARACIONES {{cuentaManiobrasMant('', g40.tipo, dataSourceR.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-md mat-elevation-z8 m-r-20">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">ACONDICIONAMIENTOS</h5>
+                  <p *ngIf="dataSourceL" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('A', g40.tipo, false, dataSourceA.data)}} | 'A' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('A', g40.tipo, true, dataSourceA.data)}} | 'A' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('B', g40.tipo, false, dataSourceA.data)}} | 'B' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('B', g40.tipo, true, dataSourceA.data)}} | 'B' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('C', g40.tipo, false, dataSourceA.data)}} | 'C' |
+                        ACONDICIONAMIENTO</i></span>
+                  </p>
+                  <p *ngIf="dataSourceA" matLine><span><i class="fas fa-caret-right">
+                        {{cuentaManiobrasMantAcon('C', g40.tipo, true, dataSourceA.data)}} | 'C' | CAMBIO DE
+                        GRADO</i></span>
+                  </p>
+
+                  <!-- <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('A', g40.tipo, dataSourceA.data)}} | 'A' | ACONDICIONAMIENTO</i></span></p>
+              <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('B', g40.tipo, dataSourceA.data)}} | 'B' | ACONDICIONAMIENTO</i></span></p>
+              <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('C', g40.tipo, dataSourceA.data)}} | 'C' | ACONDICIONAMIENTO</i></span></p> -->
+
+
+                  <!-- <p matLine><span *ngIf="dataSourceA"><i class="fas fa-caret-right">
+                    {{cuentaManiobrasMant('PT', g40.tipo, dataSourceA.data)}} | 'PT' | PERDIDA TOTAL</i></span></p> -->
+
+                  <div *ngIf="dataSourceA" mat-line>
+                    <h6><b>TOTAL ACONDICIONAMIENTOS {{cuentaManiobrasMantAcon('', g40.tipo, undefined,
+                        dataSourceA.data)}}</b></h6>
+                  </div>
+                  <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-list-item>
     </mat-list>
   </mat-tab>
 </mat-tab-group>
