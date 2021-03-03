@@ -161,8 +161,8 @@ export class InventarioComponent implements OnInit {
       ];
 
       this.displayedColumnsM = [
-        'lavado',
         'reparacion',
+        'lavado',
         'acondicionamiento',
         'fLlegada',
         'dias',
@@ -305,7 +305,6 @@ export class InventarioComponent implements OnInit {
 
     // Luego conviertes ese objeto en un arreglo que *ngFor puede iterar
     if (grouped40) {
-      // console.log(grouped40);
       this.groupedDisponibles40 = Object.keys(grouped40).map(tipo => {
         return {
           tipo: tipo,
@@ -441,6 +440,21 @@ export class InventarioComponent implements OnInit {
     }
   }
 
+  cuentaRepetidos() {
+    const repetidos = [];
+    let copyArray = [];
+    copyArray = { ...this.mantenimientos };
+    this.mantenimientos.forEach(m => {
+      const existe = Object.values(copyArray).filter(man => man.maniobra.contenedor == m.maniobra.contenedor);
+
+      if (existe.length > 1) {
+        repetidos.push(m);
+      }
+    });
+
+    return repetidos.length;
+  }
+
   cargarM() {
     this.cargando = true;
     this.totalMantLavado = 0;
@@ -474,10 +488,6 @@ export class InventarioComponent implements OnInit {
             let acondicionamiento;
             let cambioGrado;
             consecutivo = consecutivo + 1;
-
-            // if (mant.maniobra.contenedor == 'MECU5500477') {
-            //   console.log('aq');
-            // }
 
             if (id !== mant.maniobra._id) {
               maniobra = mant.maniobra;
@@ -540,69 +550,85 @@ export class InventarioComponent implements OnInit {
           });
         }
 
-        // Quito repetidos
-        const mantenimientosFinal = [];
-        this.mantenimientos.forEach(m => {
+        /* #region  Quito Repetidos (se uso para eliminar contenedores repetidos de viajes distintos) */
+        // const mantenimientosFinal = [];
+        // this.mantenimientos.forEach(m => {
 
-          // if (m.maniobra.contenedor == 'CXDU2241522') {
-          //   console.log('aq');
-          // }
+        //   const existe = mantenimientosFinal.filter(man => man.maniobra.contenedor == m.maniobra.contenedor);
+        //   // const existe = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
 
-          const existe = mantenimientosFinal.filter(man => man.maniobra.contenedor == m.maniobra.contenedor);
-          // const existe = mantenimientosFinal.filter(man => man.maniobra._id == m.maniobra._id);
+        //   if (existe.length == 1) {
+        //     if (m.consecutivo > existe[0].consecutivo) {
+        //       const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra.contenedor === m.maniobra.contenedor);
+        //       // const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
 
-          if (existe.length == 1) {
-            if (m.consecutivo > existe[0].consecutivo) {
-              const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra.contenedor === m.maniobra.contenedor);
-              // const pos = mantenimientosFinal.findIndex(m2 => m2.maniobra._id === m.maniobra._id);
+        //       if (pos) {
+        //         mantenimientosFinal.splice(pos, 1);
+        //         mantenimientosFinal.push(m);
+        //       }
+        //     }
+        //   } else {
+        //     if (existe.length > 1) {
+        //       const mayor = existe.reduce(function (prev, curr) {
+        //         return prev.consecutivo > curr.consecutivo ? prev : curr;
+        //       });
 
-              if (pos) {
-                mantenimientosFinal.splice(pos, 1);
-                mantenimientosFinal.push(m);
-              }
-            }
-          } else {
-            if (existe.length > 1) {
-              const mayor = existe.reduce(function (prev, curr) {
-                return prev.consecutivo > curr.consecutivo ? prev : curr;
-              });
+        //       const pos = mantenimientosFinal.findIndex(m => m.maniobra._id === mayor.maniobra._id);
 
-              const pos = mantenimientosFinal.findIndex(m => m.maniobra._id === mayor.maniobra._id);
+        //       if (pos < 0) {
+        //         mantenimientosFinal.push(mayor);
+        //       } else {
+        //         if (mayor.consecutivo > mantenimientosFinal[pos].consecutivo) {
+        //           mantenimientosFinal.splice(pos, 1);
+        //           mantenimientosFinal.push(mayor);
+        //         }
+        //       }
+        //     } else {
+        //       if (existe.length == 0) {
+        //         mantenimientosFinal.push(m);
+        //       }
+        //     }
+        //   }
+        // });
 
-              if (pos < 0) {
-                mantenimientosFinal.push(mayor);
-              } else {
-                if (mayor.consecutivo > mantenimientosFinal[pos].consecutivo) {
-                  mantenimientosFinal.splice(pos, 1);
-                  mantenimientosFinal.push(mayor);
-                }
-              }
-            } else {
-              if (existe.length == 0) {
-                mantenimientosFinal.push(m);
-              }
-            }
-          }
-        });
+        // if (mantenimientosFinal) {
+        //   let l = mantenimientosFinal.filter(m => m.lavado !== undefined);
+        //   this.totalMantLavado = l.length;
 
-        if (mantenimientosFinal) {
-          let l = mantenimientosFinal.filter(m => m.lavado !== undefined);
+        //   let r = mantenimientosFinal.filter(m => m.reparacion !== undefined);
+        //   this.totalMantReparacion = r.length;
+
+        //   let a = mantenimientosFinal.filter(m => m.acondicionamiento !== undefined);
+        //   this.totalMantAcondicionamiento = a.length;
+        // }
+
+        // this.dataSourceM = new MatTableDataSource(mantenimientosFinal);
+        // this.dataSourceM.sort = this.matSort4;
+        // this.dataSourceM.paginator = this.paginator.toArray()[1];
+        // this.totalRegistrosM = mantenimientosFinal.length;
+        /* #endregion */
+
+
+        if (this.mantenimientos) {
+          let l = this.mantenimientos.filter(m => m.lavado !== undefined);
           this.totalMantLavado = l.length;
-          // console.log(this.totalMantLavado);
+          // console.log('TOTAL LAVADO ' + this.totalMantLavado);
 
-          let r = mantenimientosFinal.filter(m => m.reparacion !== undefined);
+          let r = this.mantenimientos.filter(m => m.reparacion !== undefined);
           this.totalMantReparacion = r.length;
-          // console.log(this.totalMantReparacion);
+          // console.log('TOTAL REPARACION ' + this.totalMantReparacion);
 
-          let a = mantenimientosFinal.filter(m => m.acondicionamiento !== undefined);
+          let a = this.mantenimientos.filter(m => m.acondicionamiento !== undefined);
           this.totalMantAcondicionamiento = a.length;
-          // console.log(this.totalMantAcondicionamiento);
+          // console.log('TOTAL ACONDICIONAMIENTO ' + this.totalMantAcondicionamiento);
+
+          // console.log('TOTAL ' + (this.totalMantLavado + this.totalMantReparacion + this.totalMantAcondicionamiento))
         }
 
-        this.dataSourceM = new MatTableDataSource(mantenimientosFinal);
+        this.dataSourceM = new MatTableDataSource(this.mantenimientos);
         this.dataSourceM.sort = this.matSort4;
         this.dataSourceM.paginator = this.paginator.toArray()[1];
-        this.totalRegistrosM = mantenimientosFinal.length;
+        this.totalRegistrosM = this.mantenimientos.length;
 
         if (mantenimientos) {
           resolve(true);
@@ -759,7 +785,8 @@ export class InventarioComponent implements OnInit {
           Estado: d.maniobra.peso,
           Grado: d.maniobra.grado,
           // operador: d.maniobra.operador != undefined ? d.maniobra.operador.nombre : '',
-          Naviera: d.maniobra.viaje && d.maniobra.viaje.naviera.nombreComercial && d.maniobra.viaje.naviera.nombreComercial !== undefined &&
+          Naviera: d.maniobra.viaje && d.maniobra.viaje.naviera &&
+            d.maniobra.viaje.naviera.nombreComercial && d.maniobra.viaje.naviera.nombreComercial !== undefined &&
             d.maniobra.viaje.naviera.nombreComercial !== '' ? d.maniobra.viaje.naviera.nombreComercial : '',
         };
         this.datosExcel.push(dato);
@@ -833,7 +860,7 @@ export class InventarioComponent implements OnInit {
           if (d.maniobra && d.maniobra.grado === grado && d.maniobra.tipo === tipo) {
             if (cambioGrado && cambioGrado != null) {
               if (d.cambioGrado == cambioGrado) {
-                count++;                
+                count++;
               }
             } else {
               count++;
@@ -873,15 +900,15 @@ export class InventarioComponent implements OnInit {
     }
     return count;
   }
-
+ // este metodo sirve para la cuenta total del dashboard del tab de mantenimientos
   obtenTotales(tipo: string): number {
     let total = 0;
     if (tipo.includes('20')) {
-      if (this.groupedDisponibles20 !== undefined) {
-        this.groupedDisponibles20.forEach(g20 => {
-          total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
-          total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
-          total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
+      if (this.groupedDisponibles20Gral !== undefined) {
+        this.groupedDisponibles20Gral.forEach(g20 => {
+          // total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
+          // total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
+          // total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
           if (this.dataSourceL !== undefined) {
             total += this.cuentaManiobrasMantLav(
               'A',
@@ -959,11 +986,11 @@ export class InventarioComponent implements OnInit {
         });
       }
     } else if (tipo.includes('40')) {
-      if (this.groupedDisponibles40 !== undefined) {
-        this.groupedDisponibles40.forEach(g40 => {
-          total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
-          total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
-          total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
+      if (this.groupedDisponibles40Gral !== undefined) {
+        this.groupedDisponibles40Gral.forEach(g40 => {
+          // total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
+          // total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
+          // total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
           if (this.dataSourceL !== undefined) {
             total += this.cuentaManiobrasMantLav(
               'A',
@@ -1045,13 +1072,74 @@ export class InventarioComponent implements OnInit {
     return total;
   }
 
+  // este metodo sirve para la cuenta total del dashboard del primer tab
+  obtenTotales2(tipo: string): number {
+    let total = 0;
+    if (tipo.includes('20')) {
+      if (this.groupedDisponibles20Gral !== undefined) {
+        this.groupedDisponibles20Gral.forEach(g20 => {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
+          if (this.mantenimientos !== undefined) {
+            total += this.obtenTotalContenedoresMant(
+              'A',
+              g20.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'B',
+              g20.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'C',
+              g20.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'PT',
+              g20.tipo
+            );
+          }
+        });
+      }
+    } else if (tipo.includes('40')) {
+      if (this.groupedDisponibles40Gral !== undefined) {
+        this.groupedDisponibles40Gral.forEach(g40 => {
+          total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
+          total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
+          if (this.mantenimientos !== undefined) {
+            total += this.obtenTotalContenedoresMant(
+              'A',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'B',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'C',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'PT',
+              g40.tipo
+            );
+          }
+        });
+      }
+    }
+
+    return total;
+  }
+
+  // este metodo sirve para la cuenta subtotal del dashboard del tab de mantenimientos
   obtenSubTotales(tipo: string, dataSource): number {
     let subTotal = 0;
     if (tipo.includes('20')) {
       if (dataSource !== undefined) {
-        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
         if (this.dataSourceL !== undefined) {
           subTotal += this.cuentaManiobrasMantLav(
@@ -1145,9 +1233,9 @@ export class InventarioComponent implements OnInit {
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40 !== undefined) {
-        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        // subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
         if (this.dataSourceL !== undefined) {
           subTotal += this.cuentaManiobrasMantLav(
@@ -1243,6 +1331,55 @@ export class InventarioComponent implements OnInit {
       }
     }
     return subTotal;
+  }
+
+  // este metodo sirve para la cuenta subtotal del dashboard del primer tab
+  obtenSubTotales2(tipo: string, dataSource): number {
+    let subTotal = 0;
+      if (dataSource !== undefined) {
+        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+
+        if (this.mantenimientos !== undefined) {
+          subTotal += this.obtenTotalContenedoresMant(
+            'A',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'B',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'C',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'PT',
+            tipo
+          );
+        }
+      }
+    return subTotal;
+  }
+
+  obtenTotalContenedoresMant(grado, tipo) {
+    let count = 0;
+    if (this.mantenimientos) {
+      this.mantenimientos.forEach(d => {
+        if (grado && grado !== '') {
+          if (d.maniobra.grado === grado && d.maniobra.tipo === tipo) {
+            count++;
+          }
+        } else {
+          if (d.tipo === tipo) {
+            count++;
+          }
+        }
+
+      });
+    }
+    return count;
   }
 
   onLinkClick(event: MatTabChangeEvent) {
