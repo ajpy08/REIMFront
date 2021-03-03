@@ -71,11 +71,17 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
       }));
   }
 
+  getMaterialesxManiobra(idManiobra: string): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/'+idManiobra+'/materiales';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.get(url);
+  }
+
   guardaMaterial(idMantenimiento: string, material: any): Observable<any> {
     if (material._id === "") {
-      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + "/addMaterial";
+      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + "/addMaterial/" + material.material;
       url += '?token=' + this._usuarioService.token;
-      return this.http.put(url, { material }).pipe(
+      return this.http.put(url,{material}).pipe(
         map((resp: any) => {
           swal('Material Agregado con exito', "", 'success');
           return resp.mantenimiento;
@@ -83,7 +89,7 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
       );
     }
     else {
-      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + "/editMaterial/" + material._id;
+      let url = URL_SERVICIOS + '/mantenimientos/mantenimiento/' + idMantenimiento + "/editMaterial/" + material.material;
       url += '?token=' + this._usuarioService.token;
       return this.http.put(url, { material }).pipe(
         map((resp: any) => {
@@ -114,6 +120,8 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
         return resp;
       }));
   }
+
+
 
   getMantenimientosxManiobra(idManiobra: string): Observable<any> {
     return this.getMantenimientos('', idManiobra);
