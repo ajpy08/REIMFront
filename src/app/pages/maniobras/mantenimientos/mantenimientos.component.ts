@@ -40,7 +40,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   mantenimientosExcel = [];
   
-  incluirFinalizados: boolean;
+  soloFinalizados: boolean;
   filtrarFechas: boolean;
   filtroFechaIni: _moment.Moment;
   filtroFechaFin: _moment.Moment;
@@ -92,8 +92,8 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     private _excelService: ExcelService,
     private _snackBar: MatSnackBar) {
     
-    this.incluirFinalizados = false;
-    this.filtroFechaIni = moment().local().startOf('day');
+    this.soloFinalizados = false;
+    this.filtroFechaIni = moment().subtract(5,'d').local().startOf('day');
     this.filtroFechaFin = moment().local().startOf('day');
     this.filtrarFechas = false;
     
@@ -110,7 +110,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     if (localStorage.getItem('MantenimientosTabs')) 
       if (indexTAB) this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
       else this.tabGroup.selectedIndex = 1;
-    if (localStorage.getItem('MantenimientosincluirFinalizados') && localStorage.getItem('MantenimientosincluirFinalizados')==="true") this.incluirFinalizados = true;
+    if (localStorage.getItem('MantenimientossoloFinalizados') && localStorage.getItem('MantenimientossoloFinalizados')==="true") this.soloFinalizados = true;
     if (localStorage.getItem('MantenimientosfiltrarFechas') && localStorage.getItem('MantenimientosfiltrarFechas')==="true") this.filtrarFechas = true;
     if (localStorage.getItem('MantenimientosfiltroFechaIni')) this.filtroFechaIni = moment(localStorage.getItem('MantenimientosfiltroFechaIni'));
     if (localStorage.getItem('MantenimientosfiltroFechaFin')) this.filtroFechaFin = moment(localStorage.getItem('MantenimientosfiltroFechaFin'));
@@ -205,7 +205,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarReparaciones() {
     this.cargandoR = true;
-    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       
       this.dtReparaciones = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarR = mant.mantenimientos.length === 0? true : false;
@@ -226,7 +226,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarLavados() {
     this.cargandoL = true;
-    this._mantenimientoService.getMantenimientosxTipo("LAVADO", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("LAVADO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtLavados = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarL = mant.mantenimientos.length === 0? true : false;
       this.dtLavados.sortingDataAccessor = (item, property) => {
@@ -247,7 +247,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarAcondicionamientos() {
     this.cargandoA = true;
-    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", this.incluirFinalizados ? "TODOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtAcondicionamientos = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarA = mant.mantenimientos.length === 0? true : false;
       this.dtAcondicionamientos.sortingDataAccessor = (item, property) => {
@@ -275,7 +275,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     this.cargarReparaciones();
     this.cargarLavados();
     this.cargarAcondicionamientos();
-    localStorage.setItem('MantenimientosincluirFinalizados', event.checked);
+    localStorage.setItem('MantenimientossoloFinalizados', event.checked);
     
   }
   onChangeFiltroFechas(event) {
