@@ -10,3 +10,7 @@ mat-footer-row {
     font-size: 35px;
     color: black;
 }
+
+.link {
+    cursor: pointer;
+}
