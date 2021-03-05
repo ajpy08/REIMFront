@@ -161,7 +161,7 @@ export class MantenimientoComponent implements OnInit {
 
   cargarRegistro(idMantenimiento: string) {
     this._mantenimientoService.getMantenimiento(idMantenimiento).subscribe(res => {
-
+      console.log(res.mantenimiento);
       this.mantenimiento = res.mantenimiento;
       this._maniobraService.getManiobra(this.mantenimiento.maniobra).subscribe(res => { this.maniobraAsociada = res.maniobra; });
       for (const propiedad in this.mantenimiento)
