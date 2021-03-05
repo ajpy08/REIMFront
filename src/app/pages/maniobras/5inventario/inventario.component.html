@@ -137,7 +137,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns" class="encabezado"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
               </mat-table>
-              <mat-paginator [pageSizeOptions]="[50, 100, 200]" [pageSize]="200" [showFirstLastButtons]>
+              <mat-paginator [pageSizeOptions]="[50, 100, 200]" [pageSize]="50" [showFirstLastButtons]>
               </mat-paginator>
             </div>
           </div>
@@ -157,7 +157,7 @@
     <mat-divider></mat-divider>
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 20" ( {{ obtenTotales2("20")}} )</h3>
-      <mat-list-item *ngFor="let g20 of groupedDisponibles20">
+      <mat-list-item *ngFor="let g20 of this.groupedDisponibles20Gral">
         <div *ngIf="obtenSubTotales2(g20.tipo, g20.maniobras) > 0">
 
           <div class="row">
@@ -240,7 +240,7 @@
     </mat-list><br><br>
     <mat-list>
       <h3 mat-line><b>TOTAL</b> Contenedores 40" ( {{obtenTotales2('40')}} )</h3>
-      <mat-list-item *ngFor="let g40 of groupedDisponibles40Gral">
+      <mat-list-item *ngFor="let g40 of this.groupedDisponibles40Gral">
         <div class="card" *ngIf="obtenSubTotales2(g40.tipo, g40.maniobras) > 0">
           <div class="row">
             <h4 class="card-title"><b>Contenedores {{g40.tipo}}: ( {{obtenSubTotales2(g40.tipo, g40.maniobras)}} )</b>

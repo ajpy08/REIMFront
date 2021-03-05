@@ -934,6 +934,24 @@ export class InventarioComponent implements OnInit {
               '',
               this.dataSourceL.data
             );
+            total += this.cuentaManiobrasMantLav(
+              'DM',
+              g20.tipo,
+              '',
+              this.dataSourceL.data
+            );
+            total += this.cuentaManiobrasMantLav(
+              'DD',
+              g20.tipo,
+              '',
+              this.dataSourceL.data
+            );
+            total += this.cuentaManiobrasMantLav(
+              'PIA',
+              g20.tipo,
+              '',
+              this.dataSourceL.data
+            );
           }
           if (this.dataSourceR !== undefined) {
             total += this.cuentaManiobrasMant(
@@ -953,6 +971,21 @@ export class InventarioComponent implements OnInit {
             );
             total += this.cuentaManiobrasMant(
               'PT',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'DM',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'DD',
+              g20.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PIA',
               g20.tipo,
               this.dataSourceR.data
             );
@@ -978,6 +1011,24 @@ export class InventarioComponent implements OnInit {
             );
             total += this.cuentaManiobrasMantAcon(
               'PT',
+              g20.tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMantAcon(
+              'DM',
+              g20.tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMantAcon(
+              'DD',
+              g20.tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMantAcon(
+              'PIA',
               g20.tipo,
               undefined,
               this.dataSourceA.data
@@ -1016,6 +1067,24 @@ export class InventarioComponent implements OnInit {
               '',
               this.dataSourceL.data
             );
+            total += this.cuentaManiobrasMantLav(
+              'DM',
+              g40.tipo,
+              '',
+              this.dataSourceL.data
+            );
+            total += this.cuentaManiobrasMantLav(
+              'DD',
+              g40.tipo,
+              '',
+              this.dataSourceL.data
+            );
+            total += this.cuentaManiobrasMantLav(
+              'PIA',
+              g40.tipo,
+              '',
+              this.dataSourceL.data
+            );
           }
           if (this.dataSourceR !== undefined) {
             total += this.cuentaManiobrasMant(
@@ -1035,6 +1104,21 @@ export class InventarioComponent implements OnInit {
             );
             total += this.cuentaManiobrasMant(
               'PT',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'DM',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'DD',
+              g40.tipo,
+              this.dataSourceR.data
+            );
+            total += this.cuentaManiobrasMant(
+              'PIA',
               g40.tipo,
               this.dataSourceR.data
             );
@@ -1064,6 +1148,24 @@ export class InventarioComponent implements OnInit {
               undefined,
               this.dataSourceA.data
             );
+            total += this.cuentaManiobrasMantAcon(
+              'DM',
+              g40.tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMantAcon(
+              'DD',
+              g40.tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+            total += this.cuentaManiobrasMantAcon(
+              'PIA',
+              g40.tipo,
+              undefined,
+              this.dataSourceA.data
+            );            
           }
         });
       }
@@ -1098,6 +1200,18 @@ export class InventarioComponent implements OnInit {
               'PT',
               g20.tipo
             );
+            total += this.obtenTotalContenedoresMant(
+              'DM',
+              g20.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'DD',
+              g20.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'PIA',
+              g20.tipo
+            );
           }
         });
       }
@@ -1122,6 +1236,18 @@ export class InventarioComponent implements OnInit {
             );
             total += this.obtenTotalContenedoresMant(
               'PT',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'DM',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'DD',
+              g40.tipo
+            );
+            total += this.obtenTotalContenedoresMant(
+              'PIA',
               g40.tipo
             );
           }
@@ -1166,6 +1292,24 @@ export class InventarioComponent implements OnInit {
             '',
             this.dataSourceL.data
           );
+          subTotal += this.cuentaManiobrasMantLav(
+            'DM',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
+          subTotal += this.cuentaManiobrasMantLav(
+            'DD',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
+          subTotal += this.cuentaManiobrasMantLav(
+            'PIA',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
         }
         if (this.dataSourceR !== undefined) {
           subTotal += this.cuentaManiobrasMant(
@@ -1185,6 +1329,21 @@ export class InventarioComponent implements OnInit {
           );
           subTotal += this.cuentaManiobrasMant(
             'PT',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'DM',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'DD',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PIA',
             tipo,
             this.dataSourceR.data
           );
@@ -1214,22 +1373,49 @@ export class InventarioComponent implements OnInit {
             undefined,
             this.dataSourceA.data
           );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'DM',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'DD',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'PIA',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
         }
       } else if (this.dataSourceL !== undefined) {
         subTotal += this.cuentaManiobrasMantLav('A', tipo, '', this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMantLav('B', tipo, '', this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMantLav('C', tipo, '', this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMantLav('PT', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('DM', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('DD', tipo, '', this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMantLav('PIA', tipo, '', this.dataSourceL.data);
       } else if (this.dataSourceR !== undefined) {
         subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
         subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('DM', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('DD', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('PIA', tipo, undefined, this.dataSourceA.data);
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40 !== undefined) {
@@ -1262,6 +1448,24 @@ export class InventarioComponent implements OnInit {
             '',
             this.dataSourceL.data
           );
+          subTotal += this.cuentaManiobrasMantLav(
+            'DM',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
+          subTotal += this.cuentaManiobrasMantLav(
+            'DD',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
+          subTotal += this.cuentaManiobrasMantLav(
+            'PIA',
+            tipo,
+            '',
+            this.dataSourceL.data
+          );
         }
 
         if (this.dataSourceR !== undefined) {
@@ -1282,6 +1486,21 @@ export class InventarioComponent implements OnInit {
           );
           subTotal += this.cuentaManiobrasMant(
             'PT',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'DM',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'DD',
+            tipo,
+            this.dataSourceR.data
+          );
+          subTotal += this.cuentaManiobrasMant(
+            'PIA',
             tipo,
             this.dataSourceR.data
           );
@@ -1312,22 +1531,49 @@ export class InventarioComponent implements OnInit {
             undefined,
             this.dataSourceA.data
           );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'DM',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'DD',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
+          subTotal += this.cuentaManiobrasMantAcon(
+            'PIA',
+            tipo,
+            undefined,
+            this.dataSourceA.data
+          );
         }
       } else if (this.dataSourceL !== undefined) {
         subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
         subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceL.data);
+        subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceL.data);
       } else if (this.dataSourceR !== undefined) {
         subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
         subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceR.data);
+        subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
         subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
         subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('DM', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('DD', tipo, undefined, this.dataSourceA.data);
+        subTotal += this.cuentaManiobrasMantAcon('PIA', tipo, undefined, this.dataSourceA.data);
       }
     }
     return subTotal;
@@ -1356,6 +1602,18 @@ export class InventarioComponent implements OnInit {
           );
           subTotal += this.obtenTotalContenedoresMant(
             'PT',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'DM',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'DD',
+            tipo
+          );
+          subTotal += this.obtenTotalContenedoresMant(
+            'PIA',
             tipo
           );
         }
