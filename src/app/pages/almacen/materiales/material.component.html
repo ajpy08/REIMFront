@@ -49,9 +49,9 @@
               </mat-form-field>
               <!--========Combombox Tipos=========-->
               <mat-form-field>
-                <mat-select [(value)]="tipo.value" placeholder="Seleccione un tipo" formControlName="tipo" name="tipo">
-                  <mat-option *ngFor="let tipo of tipos" [value]="tipo.valor">
-                    {{ tipo.descripcion }}
+                <mat-select placeholder="Seleccione un tipo" formControlName="tipo" name="tipo">
+                  <mat-option *ngFor="let t of tipos" [value]="t.valor">
+                    {{ t.descripcion }}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="tipo.touched && tipo.invalid">

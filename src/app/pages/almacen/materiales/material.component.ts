@@ -120,7 +120,6 @@ export class MaterialComponent implements OnInit {
   cargarMaterial(id: string) {
     this.materialService.getMaterial(id)
       .subscribe(res => {
-        console.log(res);
         // tslint:disable-next-line: forin
         for (const propiedad in this.material) {
           for (const control in this.regForm.controls) {
