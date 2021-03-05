@@ -103,7 +103,7 @@ export const PERMISOS = [
   { _id: 'ASIGNACION_TRANSPORTISTA', descripcion: 'ASIGNACION_TRANSPORTISTA' }
 ];
 
-export const TIPOS_LAVADO_ARRAY = [new Lavado('B', 'Basico'), new Lavado('E', 'Especial')];
+export const TIPOS_LAVADO_ARRAY = [new Lavado('BASICO', 'Basico'), new Lavado('ESPECIAL', 'Especial')];
 
 export const TIPOS_MANTENIMIENTO_ARRAY = [new TipoEvento('LAVADO', 'Lavado'), new TipoEvento('REPARACION', 'Reparacion'), new TipoEvento('ACONDICIONAMIENTO', 'Acondicionamiento')];
 

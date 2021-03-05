@@ -102,7 +102,6 @@ export class UsuarioService {
     localStorage.removeItem('IE');
     localStorage.removeItem('urlMain');
     localStorage.removeItem('MantenimientossoloFinalizados');
-    localStorage.removeItem('MantenimientosfiltrarFechas');
     localStorage.removeItem('MantenimientosfiltroFechaIni');
     localStorage.removeItem('MantenimientosfiltroFechaFin');
     

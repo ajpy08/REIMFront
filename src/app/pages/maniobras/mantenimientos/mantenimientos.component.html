@@ -4,22 +4,17 @@
             Finalizados
         </mat-checkbox>
     </div>
-    <div class="col-sm-2">
-        <mat-checkbox [(ngModel)]="filtrarFechas" (change)='onChangeFiltroFechas($event)'>
-            Filtrar Fechas
-        </mat-checkbox>
-    </div>
     <div class="col-sm-3">
         <mat-form-field>
-            <input matInput [matDatepicker]="picker" type="text" placeholder="Fecha Inicial" [(ngModel)]="filtroFechaIni" [disabled]='!filtrarFechas' (dateChange)="onChangeDate('fInicial',$event)">
-            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]='!filtrarFechas'></mat-datepicker-toggle>
+            <input matInput [matDatepicker]="picker" type="text" placeholder="Fecha Inicial" [(ngModel)]="filtroFechaIni" [disabled]='!soloFinalizados' (dateChange)="onChangeDate('fInicial',$event)">
+            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
             <mat-datepicker #picker disabled="false"></mat-datepicker>
         </mat-form-field>
     </div>
     <div class="col-sm-3">
         <mat-form-field>
-            <input matInput [matDatepicker]="picker2" type="text" placeholder="Fecha Final" [(ngModel)]="filtroFechaFin" [disabled]='!filtrarFechas' (dateChange)="onChangeDate('fFinal',$event)">
-            <mat-datepicker-toggle matSuffix [for]="picker2" [disabled]='!filtrarFechas'></mat-datepicker-toggle>
+            <input matInput [matDatepicker]="picker2" type="text" placeholder="Fecha Final" [(ngModel)]="filtroFechaFin" [disabled]='!soloFinalizados' (dateChange)="onChangeDate('fFinal',$event)">
+            <mat-datepicker-toggle matSuffix [for]="picker2" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
             <mat-datepicker #picker2 disabled="false"></mat-datepicker>
         </mat-form-field>
     </div>
@@ -70,7 +65,7 @@
                         <div class="catalogo-container mat-elevation-z8">
 
 
-                            <mat-table class="mat-table" [dataSource]="dtReparaciones" #sortReparaciones="matSort" matSort>
+                            <mat-table class="mat-table-medium" [dataSource]="dtReparaciones" #sortReparaciones="matSort" matSort>
                                 <ng-container matColumnDef="actions">
                                     <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                                     <mat-cell *matCellDef="let row">
@@ -154,7 +149,7 @@
             </div>
         </div>
     </mat-tab>
-    /////////////////////////////////////// REPARACION ///////////////////////////////////////////////////////////// /////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
+    /////////////////////////////////////// LAVADOS ///////////////////////////////////////////////////////////// /////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
 
 
     <mat-tab label="Lavados">
@@ -195,7 +190,7 @@
                         </div>
                         <br>
                         <div class="catalogo-container mat-elevation-z8">
-                            <mat-table class="mat-table" [dataSource]="dtLavados" #sortLavados="matSort" matSort>
+                            <mat-table class="mat-table-medium" [dataSource]="dtLavados" #sortLavados="matSort" matSort>
                                 <ng-container matColumnDef="actions">
                                     <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                                     <mat-cell *matCellDef="let row">
@@ -317,7 +312,7 @@
               </span>
                         </div>
                         <div class="catalogo-container mat-elevation-z8">
-                            <mat-table class="mat-table" [dataSource]="dtAcondicionamientos" #sortAcondicionamientos="matSort" matSort>
+                            <mat-table class="mat-table-medium" [dataSource]="dtAcondicionamientos" #sortAcondicionamientos="matSort" matSort>
                                 <ng-container matColumnDef="actions">
                                     <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
                                     <mat-cell *matCellDef="let row">

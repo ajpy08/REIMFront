@@ -11,6 +11,7 @@ import { URL_SERVICIOS } from '../../../../environments/environment';
 
 import * as _moment from 'moment';
 import { Mantenimiento } from './mantenimiento.models';
+import { Console } from 'console';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -41,7 +42,6 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   mantenimientosExcel = [];
   
   soloFinalizados: boolean;
-  filtrarFechas: boolean;
   filtroFechaIni: _moment.Moment;
   filtroFechaFin: _moment.Moment;
   durationInSeconds: number = 4;
@@ -95,7 +95,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     this.soloFinalizados = false;
     this.filtroFechaIni = moment().subtract(5,'d').local().startOf('day');
     this.filtroFechaFin = moment().local().startOf('day');
-    this.filtrarFechas = false;
+    
     
     this.cargandoR = true;
     this.cargandoL = true;
@@ -111,7 +111,6 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
       if (indexTAB) this.tabGroup.selectedIndex = Number.parseInt(indexTAB);
       else this.tabGroup.selectedIndex = 1;
     if (localStorage.getItem('MantenimientossoloFinalizados') && localStorage.getItem('MantenimientossoloFinalizados')==="true") this.soloFinalizados = true;
-    if (localStorage.getItem('MantenimientosfiltrarFechas') && localStorage.getItem('MantenimientosfiltrarFechas')==="true") this.filtrarFechas = true;
     if (localStorage.getItem('MantenimientosfiltroFechaIni')) this.filtroFechaIni = moment(localStorage.getItem('MantenimientosfiltroFechaIni'));
     if (localStorage.getItem('MantenimientosfiltroFechaFin')) this.filtroFechaFin = moment(localStorage.getItem('MantenimientosfiltroFechaFin'));
 
@@ -146,6 +145,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   applyFilterReparaciones(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    console.log(1);
     if (this.dtReparaciones && this.dtReparaciones.data.length > 0) {
       this.dtReparaciones.filter = filterValue;
       this.totalReparaciones = this.dtReparaciones.filteredData.length;
@@ -153,8 +153,8 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     } else {
       console.error('No se puede filtrar en un datasource vacío');
     }
-    this.dtReparaciones.filter = filterValue;
-    this.totalReparaciones = this.dtReparaciones.filteredData.length;
+    // this.dtReparaciones.filter = filterValue;
+    // this.totalReparaciones = this.dtReparaciones.filteredData.length;
   }
 
   applyFilterLavados(filterValue: string) {
@@ -168,18 +168,19 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     } else {
       console.error('No se puede filtrar en un datasource vacío');
     }
-    this.dtLavados.filter = filterValue;
-    this.totalLavados = this.dtLavados.filteredData.length;
+    // this.dtLavados.filter = filterValue;
+    // this.totalLavados = this.dtLavados.filteredData.length;
   }
 
   Filtro(): (data: any, filter: string) => boolean {
     const filterFunction = function (data, filter): boolean {
+
       const dataStr =
-        data.folio ? data.folio.toLowerCase() : '' +
-        data.observacionesCompleto.toLowerCase() +
-        data.tipoLavado ? data.tipoLavado.toLowerCase() : '' +
-        (data.maniobra ? data.maniobra.contenedor.toLowerCase() +  data.maniobra.tipo.toLowerCase() + data.maniobra.peso.toLowerCase()+ data.maniobra.grado.toLowerCase() : '') +
-        (data.maniobra.viaje ? data.maniobra.viaje.buque.nombre.toLowerCase() + data.maniobra.viaje.viaje.toLowerCase() : '');
+        (data.folio ? data.folio.toLowerCase()+ ' ' : '') +
+        data.observacionesCompleto.toLowerCase() + ' ' +
+        (data.tipoLavado ? data.tipoLavado.toLowerCase() + ' ' : '') +
+        (data.maniobra ? data.maniobra.contenedor.toLowerCase() + ' ' +  data.maniobra.tipo.toLowerCase() + ' ' + data.maniobra.peso.toLowerCase() + ' ' + data.maniobra.grado.toLowerCase() + ' ' : '') +
+        (data.maniobra.viaje ? data.maniobra.viaje.buque.nombre.toLowerCase() + ' ' + data.maniobra.viaje.viaje.toLowerCase() + ' ' : '');
       return dataStr.indexOf(filter) !== -1;
     };
     
@@ -198,14 +199,14 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
       console.error('No se puede filtrar en un datasource vacío');
     }
 
-    this.dtAcondicionamientos.filter = filterValue;
-    this.totalAcondicionamientos = this.dtAcondicionamientos.filteredData.length;
+    // this.dtAcondicionamientos.filter = filterValue;
+    // this.totalAcondicionamientos = this.dtAcondicionamientos.filteredData.length;
   }
 
 
   cargarReparaciones() {
     this.cargandoR = true;
-    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("REPARACION", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.soloFinalizados ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.soloFinalizados ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       
       this.dtReparaciones = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarR = mant.mantenimientos.length === 0? true : false;
@@ -226,7 +227,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarLavados() {
     this.cargandoL = true;
-    this._mantenimientoService.getMantenimientosxTipo("LAVADO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("LAVADO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.soloFinalizados ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.soloFinalizados ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtLavados = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarL = mant.mantenimientos.length === 0? true : false;
       this.dtLavados.sortingDataAccessor = (item, property) => {
@@ -247,7 +248,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
 
   cargarAcondicionamientos() {
     this.cargandoA = true;
-    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.filtrarFechas ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.filtrarFechas ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
+    this._mantenimientoService.getMantenimientosxTipo("ACONDICIONAMIENTO", this.soloFinalizados ? "FINALIZADOS" : "PENDIENTES", this.soloFinalizados ? this.filtroFechaIni.utc().format('DD-MM-YYYY') : null, this.soloFinalizados ? this.filtroFechaFin.utc().format('DD-MM-YYYY') : null).subscribe(mant => {
       this.dtAcondicionamientos = new MatTableDataSource(mant.mantenimientos);
       this.tablaCargarA = mant.mantenimientos.length === 0? true : false;
       this.dtAcondicionamientos.sortingDataAccessor = (item, property) => {
@@ -278,12 +279,7 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     localStorage.setItem('MantenimientossoloFinalizados', event.checked);
     
   }
-  onChangeFiltroFechas(event) {
-    this.cargarReparaciones();
-    this.cargarLavados();
-    this.cargarAcondicionamientos();
-    localStorage.setItem('MantenimientosfiltrarFechas', event.checked);
-  }
+
   onChangeDate(tipo:string,event: MatDatepickerInputEvent<Date>) {
     //this.events.push(`${type}: ${event.value}`);
     this.cargarReparaciones();
