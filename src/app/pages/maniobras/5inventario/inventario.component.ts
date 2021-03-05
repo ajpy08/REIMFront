@@ -15,7 +15,7 @@ import {
   ExcelService,
   NavieraService
 } from 'src/app/services/service.index';
-import { ROLES } from 'src/app/config/config';
+import { ROLES, GRADOS_CONTENEDOR_ARRAY } from 'src/app/config/config';
 import { Usuario } from '../../usuarios/usuario.model';
 import { Router } from '@angular/router';
 import { Naviera } from '../../navieras/navieras.models';
@@ -41,6 +41,7 @@ export class InventarioComponent implements OnInit {
   totalMantLavado = 0;
   totalMantReparacion = 0;
   totalMantAcondicionamiento = 0;
+  gradoContenedores = [];
 
   displayedColumns = [
     'fLlegada',
@@ -121,6 +122,7 @@ export class InventarioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.gradoContenedores = GRADOS_CONTENEDOR_ARRAY;
     this.usuarioLogueado = this.usuarioService.usuario;
     this.cargarNavieras();
 
@@ -900,7 +902,7 @@ export class InventarioComponent implements OnInit {
     }
     return count;
   }
- // este metodo sirve para la cuenta total del dashboard del tab de mantenimientos
+  // este metodo sirve para la cuenta total del dashboard del tab de mantenimientos
   obtenTotales(tipo: string): number {
     let total = 0;
     if (tipo.includes('20')) {
@@ -909,80 +911,167 @@ export class InventarioComponent implements OnInit {
           // total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
           // total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
           // total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
-          if (this.dataSourceL !== undefined) {
-            total += this.cuentaManiobrasMantLav(
-              'A',
-              g20.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'B',
-              g20.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'C',
-              g20.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'PT',
-              g20.tipo,
-              '',
-              this.dataSourceL.data
-            );
-          }
-          if (this.dataSourceR !== undefined) {
-            total += this.cuentaManiobrasMant(
-              'A',
-              g20.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'B',
-              g20.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'C',
-              g20.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'PT',
-              g20.tipo,
-              this.dataSourceR.data
-            );
-          }
-          if (this.dataSourceA !== undefined) {
-            total += this.cuentaManiobrasMantAcon(
-              'A',
-              g20.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'B',
-              g20.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'C',
-              g20.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'PT',
-              g20.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-          }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceL !== undefined) {
+              total += this.cuentaManiobrasMantLav(
+                contenedor,
+                g20.tipo,
+                '',
+                this.dataSourceL.data
+              );
+            }
+          });
+
+
+          // if (this.dataSourceL !== undefined) {
+          //   total += this.cuentaManiobrasMantLav(
+          //     'A',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'B',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'C',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'PT',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'DM',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'DD',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'PIA',
+          //     g20.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          // }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceR !== undefined) {
+              total += this.cuentaManiobrasMant(
+                contenedor,
+                g20.tipo,
+                this.dataSourceR.data
+              );
+            }
+          });
+
+          // if (this.dataSourceR !== undefined) {
+          //   total += this.cuentaManiobrasMant(
+          //     'A',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'B',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'C',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'PT',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'DM',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'DD',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'PIA',
+          //     g20.tipo,
+          //     this.dataSourceR.data
+          //   );
+          // }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceA !== undefined) {
+              total += this.cuentaManiobrasMantAcon(
+                contenedor,
+                g20.tipo,
+                undefined,
+                this.dataSourceA.data
+              );
+            }
+          });
+
+          // if (this.dataSourceA !== undefined) {
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'A',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'B',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'C',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'PT',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'DM',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'DD',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'PIA',
+          //     g20.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          // }
         });
       }
     } else if (tipo.includes('40')) {
@@ -991,80 +1080,166 @@ export class InventarioComponent implements OnInit {
           // total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
           // total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
           // total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
-          if (this.dataSourceL !== undefined) {
-            total += this.cuentaManiobrasMantLav(
-              'A',
-              g40.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'B',
-              g40.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'C',
-              g40.tipo,
-              '',
-              this.dataSourceL.data
-            );
-            total += this.cuentaManiobrasMantLav(
-              'PT',
-              g40.tipo,
-              '',
-              this.dataSourceL.data
-            );
-          }
-          if (this.dataSourceR !== undefined) {
-            total += this.cuentaManiobrasMant(
-              'A',
-              g40.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'B',
-              g40.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'C',
-              g40.tipo,
-              this.dataSourceR.data
-            );
-            total += this.cuentaManiobrasMant(
-              'PT',
-              g40.tipo,
-              this.dataSourceR.data
-            );
-          }
-          if (this.dataSourceA !== undefined) {
-            total += this.cuentaManiobrasMantAcon(
-              'A',
-              g40.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'B',
-              g40.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'C',
-              g40.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-            total += this.cuentaManiobrasMantAcon(
-              'PT',
-              g40.tipo,
-              undefined,
-              this.dataSourceA.data
-            );
-          }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceL !== undefined) {
+              total += this.cuentaManiobrasMantLav(
+                contenedor,
+                g40.tipo,
+                '',
+                this.dataSourceL.data
+              );
+            }
+          });
+
+          // if (this.dataSourceL !== undefined) {
+          //   total += this.cuentaManiobrasMantLav(
+          //     'A',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'B',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'C',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'PT',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'DM',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'DD',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          //   total += this.cuentaManiobrasMantLav(
+          //     'PIA',
+          //     g40.tipo,
+          //     '',
+          //     this.dataSourceL.data
+          //   );
+          // }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceR !== undefined) {
+              total += this.cuentaManiobrasMant(
+                contenedor,
+                g40.tipo,
+                this.dataSourceR.data
+              );
+            }
+          });
+
+          // if (this.dataSourceR !== undefined) {
+          //   total += this.cuentaManiobrasMant(
+          //     'A',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'B',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'C',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'PT',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'DM',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'DD',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          //   total += this.cuentaManiobrasMant(
+          //     'PIA',
+          //     g40.tipo,
+          //     this.dataSourceR.data
+          //   );
+          // }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.dataSourceA !== undefined) {
+              total += this.cuentaManiobrasMantAcon(
+                contenedor,
+                g40.tipo,
+                undefined,
+                this.dataSourceA.data
+              );
+            }
+          });
+
+          // if (this.dataSourceA !== undefined) {
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'A',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'B',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'C',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'PT',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'DM',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'DD',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          //   total += this.cuentaManiobrasMantAcon(
+          //     'PIA',
+          //     g40.tipo,
+          //     undefined,
+          //     this.dataSourceA.data
+          //   );
+          // }
         });
       }
     }
@@ -1078,53 +1253,107 @@ export class InventarioComponent implements OnInit {
     if (tipo.includes('20')) {
       if (this.groupedDisponibles20Gral !== undefined) {
         this.groupedDisponibles20Gral.forEach(g20 => {
-          total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
-          total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
-          total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
-          if (this.mantenimientos !== undefined) {
-            total += this.obtenTotalContenedoresMant(
-              'A',
-              g20.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'B',
-              g20.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'C',
-              g20.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'PT',
-              g20.tipo
-            );
-          }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            total += this.cuentaInventario(contenedor, 'DISPONIBLE', g20.maniobras);
+          });
+
+          // total += this.cuentaInventario('A', 'DISPONIBLE', g20.maniobras);
+          // total += this.cuentaInventario('B', 'DISPONIBLE', g20.maniobras);
+          // total += this.cuentaInventario('C', 'DISPONIBLE', g20.maniobras);
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.mantenimientos !== undefined) {
+              total += this.obtenTotalContenedoresMant(
+                contenedor,
+                g20.tipo
+              );
+            }
+          });
+
+          // if (this.mantenimientos !== undefined) {
+          //   total += this.obtenTotalContenedoresMant(
+          //     'A',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'B',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'C',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'PT',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'DM',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'DD',
+          //     g20.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'PIA',
+          //     g20.tipo
+          //   );
+          // }
         });
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40Gral !== undefined) {
         this.groupedDisponibles40Gral.forEach(g40 => {
-          total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
-          total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
-          total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
-          if (this.mantenimientos !== undefined) {
-            total += this.obtenTotalContenedoresMant(
-              'A',
-              g40.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'B',
-              g40.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'C',
-              g40.tipo
-            );
-            total += this.obtenTotalContenedoresMant(
-              'PT',
-              g40.tipo
-            );
-          }
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            total += this.cuentaInventario(contenedor, 'DISPONIBLE', g40.maniobras);
+          });
+
+          // total += this.cuentaInventario('A', 'DISPONIBLE', g40.maniobras);
+          // total += this.cuentaInventario('B', 'DISPONIBLE', g40.maniobras);
+          // total += this.cuentaInventario('C', 'DISPONIBLE', g40.maniobras);
+
+          GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+            if (this.mantenimientos !== undefined) {
+              total += this.obtenTotalContenedoresMant(
+                contenedor,
+                g40.tipo
+              );
+            }
+          });
+
+          // if (this.mantenimientos !== undefined) {
+          //   total += this.obtenTotalContenedoresMant(
+          //     'A',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'B',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'C',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'PT',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'DM',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'DD',
+          //     g40.tipo
+          //   );
+          //   total += this.obtenTotalContenedoresMant(
+          //     'PIA',
+          //     g40.tipo
+          //   );
+          // }
         });
       }
     }
@@ -1141,95 +1370,199 @@ export class InventarioComponent implements OnInit {
         // subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         // subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (this.dataSourceL !== undefined) {
-          subTotal += this.cuentaManiobrasMantLav(
-            'A',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'B',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'C',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'PT',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-        }
-        if (this.dataSourceR !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
-            'A',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'B',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'C',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'PT',
-            tipo,
-            this.dataSourceR.data
-          );
-        }
-        if (this.dataSourceA !== undefined) {
-          subTotal += this.cuentaManiobrasMantAcon(
-            'A',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'B',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'C',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'PT',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-        }
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceL !== undefined) {
+            subTotal += this.cuentaManiobrasMantLav(
+              contenedor,
+              tipo,
+              '',
+              this.dataSourceL.data
+            );
+          }
+        });
+
+
+        // if (this.dataSourceL !== undefined) {
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'A',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'B',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'C',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'PT',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'DM',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'DD',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'PIA',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        // }
+
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceR !== undefined) {
+            subTotal += this.cuentaManiobrasMant(
+              contenedor,
+              tipo,
+              this.dataSourceR.data
+            );
+          }
+        });
+
+        // if (this.dataSourceR !== undefined) {
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'A',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'B',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'C',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'PT',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'DM',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'DD',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'PIA',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        // }
+
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceA !== undefined) {
+            subTotal += this.cuentaManiobrasMantAcon(
+              contenedor,
+              tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+          }
+        });
+
+        // if (this.dataSourceA !== undefined) {
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'A',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'B',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'C',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'PT',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'DM',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'DD',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'PIA',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        // }
       } else if (this.dataSourceL !== undefined) {
-        subTotal += this.cuentaManiobrasMantLav('A', tipo, '', this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMantLav('B', tipo, '', this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMantLav('C', tipo, '', this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMantLav('PT', tipo, '', this.dataSourceL.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMantLav(contenedor, tipo, '', this.dataSourceL.data);
+        });
+        // subTotal += this.cuentaManiobrasMantLav('A', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('B', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('C', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('PT', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('DM', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('DD', tipo, '', this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMantLav('PIA', tipo, '', this.dataSourceL.data);
       } else if (this.dataSourceR !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMant(contenedor, tipo, this.dataSourceR.data);
+        });
+        // subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
-        subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMantAcon(contenedor, tipo, undefined, this.dataSourceA.data);
+        });
+        // subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('DM', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('DD', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('PIA', tipo, undefined, this.dataSourceA.data);
       }
     } else if (tipo.includes('40')) {
       if (this.groupedDisponibles40 !== undefined) {
@@ -1237,97 +1570,198 @@ export class InventarioComponent implements OnInit {
         // subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
         // subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
-        if (this.dataSourceL !== undefined) {
-          subTotal += this.cuentaManiobrasMantLav(
-            'A',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'B',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'C',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-          subTotal += this.cuentaManiobrasMantLav(
-            'PT',
-            tipo,
-            '',
-            this.dataSourceL.data
-          );
-        }
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceL !== undefined) {
+            subTotal += this.cuentaManiobrasMantLav(
+              contenedor,
+              tipo,
+              '',
+              this.dataSourceL.data
+            );
+          }
+        });
 
-        if (this.dataSourceR !== undefined) {
-          subTotal += this.cuentaManiobrasMant(
-            'A',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'B',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'C',
-            tipo,
-            this.dataSourceR.data
-          );
-          subTotal += this.cuentaManiobrasMant(
-            'PT',
-            tipo,
-            this.dataSourceR.data
-          );
-        }
+        // if (this.dataSourceL !== undefined) {
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'A',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'B',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'C',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'PT',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'DM',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'DD',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantLav(
+        //     'PIA',
+        //     tipo,
+        //     '',
+        //     this.dataSourceL.data
+        //   );
+        // }
 
-        if (this.dataSourceA !== undefined) {
-          subTotal += this.cuentaManiobrasMantAcon(
-            'A',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'B',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'C',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-          subTotal += this.cuentaManiobrasMantAcon(
-            'PT',
-            tipo,
-            undefined,
-            this.dataSourceA.data
-          );
-        }
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceR !== undefined) {
+            subTotal += this.cuentaManiobrasMant(
+              contenedor,
+              tipo,
+              this.dataSourceR.data
+            );
+          }
+        });
+
+        // if (this.dataSourceR !== undefined) {
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'A',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'B',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'C',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'PT',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'DM',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'DD',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMant(
+        //     'PIA',
+        //     tipo,
+        //     this.dataSourceR.data
+        //   );
+        // }
+
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          if (this.dataSourceA !== undefined) {
+            subTotal += this.cuentaManiobrasMantAcon(
+              contenedor,
+              tipo,
+              undefined,
+              this.dataSourceA.data
+            );
+          }
+        });
+
+        // if (this.dataSourceA !== undefined) {
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'A',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'B',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'C',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'PT',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'DM',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'DD',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        //   subTotal += this.cuentaManiobrasMantAcon(
+        //     'PIA',
+        //     tipo,
+        //     undefined,
+        //     this.dataSourceA.data
+        //   );
+        // }
       } else if (this.dataSourceL !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMant(contenedor, tipo, this.dataSourceL.data);
+        });
+        // subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceL.data);
+        // subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceL.data);
       } else if (this.dataSourceR !== undefined) {
-        subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
-        subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMant(contenedor, tipo, this.dataSourceR.data);
+        });
+        // subTotal += this.cuentaManiobrasMant('A', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('B', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('C', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('PT', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('DM', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('DD', tipo, this.dataSourceR.data);
+        // subTotal += this.cuentaManiobrasMant('PIA', tipo, this.dataSourceR.data);
       } else if (this.dataSourceA !== undefined) {
-        subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
-        subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
+          subTotal += this.cuentaManiobrasMantAcon(contenedor, tipo, undefined, this.dataSourceA.data);
+        });
+        // subTotal += this.cuentaManiobrasMantAcon('A', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('B', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('C', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('PT', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('DM', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('DD', tipo, undefined, this.dataSourceA.data);
+        // subTotal += this.cuentaManiobrasMantAcon('PIA', tipo, undefined, this.dataSourceA.data);
       }
     }
     return subTotal;
@@ -1336,30 +1770,51 @@ export class InventarioComponent implements OnInit {
   // este metodo sirve para la cuenta subtotal del dashboard del primer tab
   obtenSubTotales2(tipo: string, dataSource): number {
     let subTotal = 0;
-      if (dataSource !== undefined) {
-        subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
-        subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
+    if (dataSource !== undefined) {
+      subTotal += this.cuentaInventario('A', 'DISPONIBLE', dataSource);
+      subTotal += this.cuentaInventario('B', 'DISPONIBLE', dataSource);
+      subTotal += this.cuentaInventario('C', 'DISPONIBLE', dataSource);
 
+      GRADOS_CONTENEDOR_ARRAY.forEach(contenedor => {
         if (this.mantenimientos !== undefined) {
           subTotal += this.obtenTotalContenedoresMant(
-            'A',
-            tipo
-          );
-          subTotal += this.obtenTotalContenedoresMant(
-            'B',
-            tipo
-          );
-          subTotal += this.obtenTotalContenedoresMant(
-            'C',
-            tipo
-          );
-          subTotal += this.obtenTotalContenedoresMant(
-            'PT',
+            contenedor,
             tipo
           );
         }
-      }
+      });
+
+      // if (this.mantenimientos !== undefined) {
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'A',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'B',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'C',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'PT',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'DM',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'DD',
+      //     tipo
+      //   );
+      //   subTotal += this.obtenTotalContenedoresMant(
+      //     'PIA',
+      //     tipo
+      //   );
+      // }
+    }
     return subTotal;
   }
 

@@ -68,8 +68,8 @@ export const ESTADOS_CONTENEDOR_ARRAY = [
   'LLENO_EXPORT'
 ];
 
-export const GRADOS_CONTENEDOR = { A: 'A', B: 'B', C: 'C', PT: 'PT' };
-export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C', 'PT'];
+export const GRADOS_CONTENEDOR = { A: 'A', B: 'B', C: 'C', PT: 'PT', DM: 'DM', DD: 'DD', PIA: 'PIA' };
+export const GRADOS_CONTENEDOR_ARRAY = ['A', 'B', 'C', 'PT', 'DM', 'DD', 'PIA'];
 
 export const ROLES = {
   ADMIN_ROLE: 'ADMIN_ROLE',
