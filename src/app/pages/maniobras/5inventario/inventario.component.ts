@@ -630,6 +630,7 @@ export class InventarioComponent implements OnInit {
         this.dataSourceM = new MatTableDataSource(this.mantenimientos);
         this.dataSourceM.sort = this.matSort4;
         this.dataSourceM.paginator = this.paginator.toArray()[1];
+        this.dataSourceM.filterPredicate = this.filtro();
         this.totalRegistrosM = this.mantenimientos.length;
 
         if (mantenimientos) {
@@ -696,6 +697,36 @@ export class InventarioComponent implements OnInit {
     this.totalRegistrosA = maniobrasAcondicionamiento.length;
 
     this.cargando = false;
+  }
+
+  filtro(): (data: any, filter: string) => boolean {
+    const filterFunction = (data, filter): boolean => {
+
+      const dataStr =
+      (data.maniobra.viaje ? data.maniobra.viaje.buque.nombre.toLowerCase() + ' ' + data.maniobra.viaje.viaje.toLowerCase() + ' ' + data.maniobra.viaje.naviera.nombreComercial.toLowerCase() + ' ' : '') +
+      (data.maniobra ? data.maniobra.contenedor.toLowerCase() + ' ' +  data.maniobra.tipo.toLowerCase() + ' ' + data.maniobra.peso.toLowerCase() + ' ' + data.maniobra.grado.toLowerCase() + ' ' : '');
+        // (data.folio ? data.folio.toLowerCase()+ ' ' : '') +
+        // data.observacionesCompleto.toLowerCase() + ' ' +
+        // (data.tipoLavado ? data.tipoLavado.toLowerCase() + ' ' : '');
+      return dataStr.indexOf(filter) !== -1;
+    };
+    
+    return filterFunction;
+  }
+
+  applyFilterMantenimientos(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+
+    if (this.dataSourceM && this.dataSourceM.data.length > 0) {
+      this.dataSourceM.filter = filterValue;
+      this.totalRegistrosM = this.dataSourceM.filteredData.length;
+    } else {
+      console.error('No se puede filtrar en un datasource vacío');
+    }
+
+    // this.dataSourceM.filter = filterValue;
+    // this.totalAcondicionamientos = this.dataSourceM.filteredData.length;
   }
 
   mostrarFotosReparaciones(maniobra: Maniobra) {
