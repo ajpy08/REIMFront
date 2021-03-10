@@ -141,7 +141,24 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
     if (finalizado) params = params.append('finalizado', finalizado);
     if (fInicial) params = params.append('fInicial', fInicial.toString());
     if (fFinal) params = params.append('fFinal', fFinal.toString());
-    if (material) params = params.append('material', material.toString());
+    if (material) params = params.append('idMaterial', material.toString());
+    
+    return this.http.get(url, { params: params });
+  }
+
+  getMantenimientosConMaterial(tipoMantenimiento?: string, idManiobra?: string, finalizado?: string, fInicial?: any, fFinal?: any, material?: string, fAltaInicial?: any, fAltaFinal?: any): Observable<any> {
+    let url = URL_SERVICIOS + '/mantenimientos/' + material + '/con-material/';
+    url += '?token=' + this._usuarioService.token;
+    let params = new HttpParams();
+
+    if (tipoMantenimiento) params = params.append('tipoMantenimiento', tipoMantenimiento);
+    if (idManiobra) params = params.append('maniobra', idManiobra);
+    if (finalizado) params = params.append('finalizado', finalizado);
+    if (fInicial) params = params.append('fInicial', fInicial.toString());
+    if (fFinal) params = params.append('fFinal', fFinal.toString());
+    if (fAltaInicial) params = params.append('fAltaInicial', fAltaInicial.toString());
+    if (fAltaFinal) params = params.append('fAltaFinal', fAltaFinal.toString());
+    if (material) params = params.append('idMaterial', material.toString());
     
     return this.http.get(url, { params: params });
   }

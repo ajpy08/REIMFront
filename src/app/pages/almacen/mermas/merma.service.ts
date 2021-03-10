@@ -34,6 +34,25 @@ export class MermaService {
     return this.http.get(url, { params: params });
   }
 
+  getMermasAprobadas(noFactura?: string, proveedor?: string, material?: string, fInicial?: any, fFinal?: any): Observable<any> {
+    let url = URL_SERVICIOS + '/mermas/aprobadas/';
+    url += '?token=' + this._usuarioService.token;
+    let params = new HttpParams();
+    if (noFactura) {
+      params = params.append('noFactura', noFactura);
+    }
+    if (proveedor) {
+      params = params.append('proveedor', proveedor);
+    }
+    if (material) {
+      params = params.append('material', material);
+    }
+    if (fInicial) params = params.append('fInicial', fInicial.toString());
+    if (fFinal) params = params.append('fFinal', fFinal.toString());
+    
+    return this.http.get(url, { params: params });
+  }
+
   getMerma(id: string): Observable<any> {
     let url = URL_SERVICIOS + '/mermas/merma/' + id;
     url += '?token=' + this._usuarioService.token;

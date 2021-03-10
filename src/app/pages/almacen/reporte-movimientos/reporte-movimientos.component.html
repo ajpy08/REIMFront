@@ -10,22 +10,43 @@
   </div>
 </div>
 <div class="row animated fadeIn" *ngIf="!cargando">
-  <div class="col-11">
+  <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <div class="col-sm-2">
-          <span>Filtrar por Material:</span> <br>
-          <mat-select placeholder="Selecciona un Material..." (selectionChange)="cargarEntradas( $event.value )" [(value)]="this.material">
-            <mat-option [value]="">-</mat-option>
-            <mat-option *ngFor="let material of materiales" [value]="material._id">
-              {{ material.descripcion }}
-            </mat-option>
-          </mat-select>
-          <!-- <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
-            (click)="cargarEntradas(undefined)">
-            <i class="fas fa-filter"></i>
-            Filtrar
-          </button> -->
+        <div class="row">
+          <div class="col-sm-3">
+            <span>Filtrar por Material:</span> <br>
+            <mat-select placeholder="Selecciona un Material..." (selectionChange)="cargarDatos( $event.value )"
+              [(value)]="this.material">
+              <mat-option [value]="">-</mat-option>
+              <mat-option *ngFor="let material of materiales" [value]="material._id">
+                {{ material.descripcion }}
+              </mat-option>
+            </mat-select>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker3" type="text" [(ngModel)]="fIni"
+                placeholder="Fecha Inicial ">
+              <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+              <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker4" type="text" [(ngModel)]="fFin"
+                placeholder="Fecha Final">
+              <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+              <mat-datepicker #picker4></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <button type="button" class="btn btn-success waves-effect waves-light m-r-10 m-l-10"
+              (click)="cargarDatos(this.material)">
+              <i class="fas fa-filter"></i>
+              Filtrar
+            </button>
+          </div>
         </div>
         <div class="text-right">
           <button (click)="exportarXLSX()" class="btn btn-success m-r-10">
@@ -58,25 +79,25 @@
 
             <ng-container matColumnDef="IO">
               <mat-header-cell *matHeaderCellDef mat-sort-header>I/O</mat-header-cell>
-              <mat-cell *matCellDef="let row">               
-                <button *ngIf="row.tipo === 'Entrada'" matTooltip="Editar Entrada" [routerLink]="['/entradas/entrada', row._id ]"
-                  class="btn btn-success m-r-5">
+              <mat-cell *matCellDef="let row">
+                <button *ngIf="row.tipo === 'Entrada'" matTooltip="Editar Entrada"
+                  [routerLink]="['/entradas/entrada', row._id ]" class="btn btn-success m-r-5">
                   <i class="fas fa-chart-line"> Entrada</i>
                 </button>
-                <button *ngIf="row.tipo === 'Mantenimiento'" matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento', row._id ]"
-                  class="btn btn-danger m-r-5">
+                <button *ngIf="row.tipo === 'Mantenimiento'" matTooltip="Editar Mantenimiento"
+                  [routerLink]="['/mantenimientos/mantenimiento', row._id ]" class="btn btn-danger m-r-5">
                   <i class="fas fa-wrench"> Mantenimiento</i>
                 </button>
-                <button *ngIf="row.tipo === 'Merma'" matTooltip="Editar Merma" [routerLink]="['/mermas/merma', row._id ]"
-                  class="btn btn-warning m-r-5">
+                <button *ngIf="row.tipo === 'Merma'" matTooltip="Editar Merma"
+                  [routerLink]="['/mermas/merma', row._id ]" class="btn btn-warning m-r-5">
                   <i class="fab fa-maxcdn">erma</i>
                 </button>
-                
+
               </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="fEntrada">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Entrada</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>F. Entrada</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.fEntrada | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
 
@@ -86,7 +107,7 @@
             </ng-container>
 
             <ng-container matColumnDef="fFactura">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Factura</mat-header-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>F. Factura</mat-header-cell>
               <mat-cell *matCellDef="let row"> {{row.fFactura | date:'dd/MM/yyyy'}} </mat-cell>
             </ng-container>
 

@@ -11,21 +11,55 @@ import {
   MermaService
 } from '../../../services/service.index';
 
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
 import { Usuario } from '../../usuarios/usuario.model';
-import { ROLES } from 'src/app/config/config';
 import { URL_SOCKET_IO, PARAM_SOCKET } from '../../../../environments/environment';
 import * as io from 'socket.io-client';
 import { ActivatedRoute } from '@angular/router';
 import { Material } from '../materiales/material.models';
+import * as _moment from "moment";
+import { DatePipe } from "@angular/common";
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
 declare var swal: any;
+
+const moment = _moment;
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: ["l", "L"]
+  },
+  display: {
+    dateInput: "L",
+    monthYearLabel: "MMM YYYY",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM YYYY"
+  }
+};
 
 @Component({
   selector: 'app-reporte-movimientos',
   templateUrl: './reporte-movimientos.component.html',
-  styleUrls: ['./reporte-movimientos.component.css']
+  styleUrls: ['./reporte-movimientos.component.css'],
+  providers: [
+    DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: "es-mx" }
+  ]
 })
 export class ReporteMovimientosComponent implements OnInit {
+  fIni = moment()
+    .local()
+    .startOf("day")
+    .subtract(1, "month");
+  fFin = moment()
+    .local()
+    .startOf("day");
+
   entradas: Entrada[] = [];
   cargando = true;
   tablaCargar = false;
@@ -52,7 +86,7 @@ export class ReporteMovimientosComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  
+
   constructor(
     public entradaService: EntradaService,
     private usuarioService: UsuarioService,
@@ -68,38 +102,47 @@ export class ReporteMovimientosComponent implements OnInit {
     this.usuarioLogueado = this.usuarioService.usuario;
 
     this.materialService.getMateriales().subscribe(materiales => {
-      this.materiales = materiales.materiales;
-    });
 
+      materiales.materiales.forEach(m => {
+        if (m.tipo === 'I') {
+          this.materiales.push(m);
+        }
+      });
+    });
     if (this.almacenService.material) {
       this.material = this.almacenService.material._id;
-      this.cargarEntradas(this.almacenService.material._id);
-      this.cargarMantenimientos(this.almacenService.material._id);
-      this.cargarMermas(this.almacenService.material._id);
-    } else {
-      this.cargarEntradas(undefined);
-      this.cargarMantenimientos(undefined);
-      this.cargarMermas(undefined);
     }
+    this.cargarDatos(this.material);
+
+    // } else {
+    //   this.cargarEntradas(undefined);
+    //   this.cargarMantenimientos(undefined);
+    //   this.cargarMermas(undefined);
+    // }
 
     /* #region  Socket.IO */
     this.socket.on('new-entrada', function () {
-      this.cargarEntradas();
-      this.cargarMantenimientos();
+      this.cargarDatos(this.material);
     }.bind(this));
 
     this.socket.on('update-entrada', function (data: any) {
       if (data.data._id) {
-        this.cargarEntradas();
-        this.cargarMantenimientos();
+        this.cargarDatos(this.material);
       }
     }.bind(this));
 
     this.socket.on('delete-entrada', function () {
-      this.cargarEntradas();
-      this.cargarMantenimientos();
+      this.cargarDatos(this.material);
     }.bind(this));
     /* #endregion */
+  }
+
+  cargarDatos(material) {
+    this.movimientos = [];
+
+    this.cargarEntradas(material);
+    this.cargarMantenimientos(material);
+    this.cargarMermasAprobadas(material);
   }
 
   applyFilter(filterValue: string) {
@@ -130,131 +173,138 @@ export class ReporteMovimientosComponent implements OnInit {
   cargarEntradas(material) {
     this.cargando = true;
 
-    this.entradaService.getEntradas('', '', material, 'I').subscribe(entradas => {
-      entradas.entradas.forEach(e => {
-        e.detalles.forEach(d => {
-          if (d.material.tipo === 'I') {
-            this.movimiento = new Movimiento();
-            this.movimiento.tipo = 'Entrada';
-            this.movimiento.IO = 'I';
-            this.movimiento.fEntrada = e.fEntrada;
-            this.movimiento.noFactura = e.noFactura;
-            this.movimiento.fFactura = e.fFactura;
-            this.movimiento.cantidad = d.cantidad;
+    this.entradaService.getEntradas('', '', material, 'I',
+      this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
+      this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : "").subscribe(entradas => {
+        entradas.entradas.forEach(e => {
+          e.detalles.forEach(d => {
+            if (d.material.tipo === 'I') {
+              this.movimiento = new Movimiento();
+              this.movimiento.tipo = 'Entrada';
+              this.movimiento.IO = 'I';
+              this.movimiento.fEntrada = e.fEntrada;
+              this.movimiento.noFactura = e.noFactura;
+              this.movimiento.fFactura = e.fFactura;
+              this.movimiento.cantidad = d.cantidad;
 
-            this.movimiento.idMaterial = d.material._id;
-            this.movimiento.material = d.material.descripcion;
-            // this.movimiento.costo = d.costo.$numberDecimal;
-            // this.movimiento.proveedor = e.proveedor;
-            this.movimientos.push(this.movimiento);
-          }
+              this.movimiento.idMaterial = d.material._id;
+              this.movimiento.material = d.material.descripcion;
+              // this.movimiento.costo = d.costo.$numberDecimal;
+              // this.movimiento.proveedor = e.proveedor;
+              this.movimientos.push(this.movimiento);
+            }
+          });
+
         });
 
+        if (material != undefined && material !== '') {
+          this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
+        } else {
+        }
+
+        this.dataSource = new MatTableDataSource(this.movimientos);
+        if (entradas.entradas.length === 0 || entradas.entradas === undefined) {
+          this.tablaCargar = true;
+        } else {
+          this.tablaCargar = false;
+        }
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = this.movimientos.length;
       });
-
-      if (material != undefined && material !== '') {
-        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
-      } else {
-      }
-
-      this.dataSource = new MatTableDataSource(this.movimientos);
-      if (entradas.entradas.length === 0 || entradas.entradas === undefined) {
-        this.tablaCargar = true;
-      } else {
-        this.tablaCargar = false;
-      }
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.totalRegistros = this.movimientos.length;
-    });
     this.cargando = false;
   }
 
   cargarMantenimientos(material) {
     this.cargando = true;
 
-    this.mantenimientoService.getMantenimientos('', '', '', '', '', material).subscribe(mantenimientos => {
+    this.mantenimientoService.getMantenimientosConMaterial('', '', '', '', '', material,
+      this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
+      this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : "").subscribe(mantenimientos => {
 
 
-      mantenimientos.mantenimientos.forEach(mant => {
-        mant.materiales.forEach(material => {
-          if (material.material.tipo === 'I') {
-            this.movimiento = new Movimiento();
-            this.movimiento.tipo = 'Mantenimiento';
-            this.movimiento.IO = 'O';
-            this.movimiento.fEntrada = material.fAlta;
-            this.movimiento.noFactura = mant.maniobra.contenedor;
-            this.movimiento.fFactura = mant.fAlta;
-            this.movimiento.cantidad = material.cantidad;
-            this.movimiento.idMaterial = material._id;
-            this.movimiento.material = material.descripcion;
-            // this.movimiento.costo = material.costo.$numberDecimal;
-            // this.movimiento.proveedor = mant.proveedor;
-            this.movimientos.push(this.movimiento);
-          }
+        mantenimientos.mantenimientos.forEach(mant => {
+          mant.materiales.forEach(material => {
+            if (material.material.tipo === 'I') {
+              this.movimiento = new Movimiento();
+              this.movimiento.tipo = 'Mantenimiento';
+              this.movimiento.IO = 'O';
+              this.movimiento.fEntrada = mant.fAlta;
+              this.movimiento.noFactura = mant.maniobra.contenedor;
+              this.movimiento.fFactura = material.fAlta;
+              this.movimiento.cantidad = material.cantidad;
+              this.movimiento.idMaterial = material._id;
+              this.movimiento.material = material.descripcion;
+              // this.movimiento.costo = material.costo.$numberDecimal;
+              // this.movimiento.proveedor = mant.proveedor;
+              this.movimientos.push(this.movimiento);
+            }
+          });
+
         });
 
+        // if (material != undefined && material !== '') {
+        //   this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
+        // } else {
+        // }
+
+        this.dataSource = new MatTableDataSource(this.movimientos);
+        if (mantenimientos.mantenimientos.length === 0 || mantenimientos.mantenimientos === undefined) {
+          this.tablaCargar = true;
+        } else {
+          this.tablaCargar = false;
+        }
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = this.movimientos.length;
+        console.log(this.movimientos);
       });
-
-      if (material != undefined && material !== '') {
-        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
-      } else {
-      }
-
-      this.dataSource = new MatTableDataSource(this.movimientos);
-      if (mantenimientos.mantenimientos.length === 0 || mantenimientos.mantenimientos === undefined) {
-        this.tablaCargar = true;
-      } else {
-        this.tablaCargar = false;
-      }
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.totalRegistros = this.movimientos.length;
-    });
     this.cargando = false;
   }
 
-  cargarMermas(material) {
+  cargarMermasAprobadas(material) {
     this.cargando = true;
 
-    this.mermaService.getMermas('', '', material).subscribe(mermas => {
+    this.mermaService.getMermasAprobadas('', '', material,
+      this.fIni ? this.fIni.utc().format("DD-MM-YYYY") : "",
+      this.fFin ? this.fFin.utc().format("DD-MM-YYYY") : "").subscribe(mermas => {
 
 
-      mermas.mermas.forEach(merma => {
-        merma.materiales.forEach(material => {
-          if (material.material.tipo === 'I') {
-            this.movimiento = new Movimiento();
-            this.movimiento.tipo = 'Merma';
-            this.movimiento.IO = 'O';
-            this.movimiento.fEntrada = material.material.fAlta;
-            this.movimiento.noFactura = merma.motivo;
-            this.movimiento.fFactura = merma.fAlta;
-            this.movimiento.cantidad = material.cantidad;
-            this.movimiento.idMaterial = material.material._id;
-            this.movimiento.material = material.material.descripcion;
-            // this.movimiento.costo = material.material.costo.$numberDecimal;
-            // this.movimiento.proveedor = merma.proveedor;
-            this.movimientos.push(this.movimiento);
-          }
+        mermas.mermas.forEach(merma => {
+          merma.materiales.forEach(material => {
+            if (material.material.tipo === 'I') {
+              this.movimiento = new Movimiento();
+              this.movimiento.tipo = 'Merma';
+              this.movimiento.IO = 'O';
+              this.movimiento.fEntrada = merma.fAprobacion;
+              this.movimiento.noFactura = merma.motivo;
+              this.movimiento.fFactura = material.material.fAlta;
+              this.movimiento.cantidad = material.cantidad;
+              this.movimiento.idMaterial = material.material._id;
+              this.movimiento.material = material.material.descripcion;
+              // this.movimiento.costo = material.material.costo.$numberDecimal;
+              // this.movimiento.proveedor = merma.proveedor;
+              this.movimientos.push(this.movimiento);
+            }
+          });
+
         });
 
+        if (material != undefined && material !== '') {
+          this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
+        } else {
+        }
+
+        this.dataSource = new MatTableDataSource(this.movimientos);
+        if (mermas.mermas.length === 0 || mermas.mermas === undefined) {
+          this.tablaCargar = true;
+        } else {
+          this.tablaCargar = false;
+        }
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.totalRegistros = this.movimientos.length;
       });
-
-      if (material != undefined && material !== '') {
-        this.movimientos = this.movimientos.filter(m => { return m.idMaterial == material });
-      } else {
-      }
-
-      this.dataSource = new MatTableDataSource(this.movimientos);
-      if (mermas.mermas.length === 0 || mermas.mermas === undefined) {
-        this.tablaCargar = true;
-      } else {
-        this.tablaCargar = false;
-      }
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.totalRegistros = this.movimientos.length;
-    });
     this.cargando = false;
   }
 
@@ -279,12 +329,15 @@ export class ReporteMovimientosComponent implements OnInit {
   crearDatosExcel(datos) {
     datos.forEach(d => {
       const entradas = {
-        fFactura: d.fFactura.substring(0, 10),
+        IO: d.IO,
+        tipo: d.tipo,
+        fEntrada: d.fEntrada,
         noFactura: d.noFactura,
+        fFactura: d.fFactura.substring(0, 10),
         cantidad: d.cantidad,
         material: d.material,
-        costo: d.costo,
-        proveedor: d.proveedor.razonSocial,
+        // costo: d.costo,
+        // proveedor: d.proveedor !== undefined ? d.proveedor.razonSocial : '',
         // detalles: d.detalles
       };
       this.entradasExcel.push(entradas);
