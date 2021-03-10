@@ -18,7 +18,7 @@ export class EntradaService {
     public _usuarioService: UsuarioService,
   ) { }
 
-  getEntradas(noFactura?: string, proveedor?: string, material?: string, tipo?: string): Observable<any> {
+  getEntradas(noFactura?: string, proveedor?: string, material?: string, tipo?: string, fInicial?: any, fFinal?: any): Observable<any> {
     let url = URL_SERVICIOS + '/entradas/';
     url += '?token=' + this._usuarioService.token;
     let params = new HttpParams();
@@ -31,10 +31,11 @@ export class EntradaService {
     if (material) {
       params = params.append('material', material);
     }
-
     if (tipo) {
       params = params.append('tipo', tipo);
     }
+    if (fInicial) params = params.append('fInicial', fInicial.toString());
+    if (fFinal) params = params.append('fFinal', fFinal.toString());
 
     return this.http.get(url, { params: params });
   }
