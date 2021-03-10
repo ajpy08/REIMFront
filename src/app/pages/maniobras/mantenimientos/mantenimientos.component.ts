@@ -8,10 +8,12 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { URL_SERVICIOS } from '../../../../environments/environment';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 import * as _moment from 'moment';
-import { Mantenimiento } from './mantenimiento.models';
-import { Console } from 'console';
+import {GradoComponent} from '../grado.component';
+
+
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -90,7 +92,8 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   constructor(
     private _mantenimientoService: MantenimientoService,
     private _excelService: ExcelService,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    public matDialog: MatDialog) {
     
     this.soloFinalizados = false;
     this.filtroFechaIni = moment().subtract(5,'d').local().startOf('day');
@@ -145,7 +148,6 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   applyFilterReparaciones(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    console.log(1);
     if (this.dtReparaciones && this.dtReparaciones.data.length > 0) {
       this.dtReparaciones.filter = filterValue;
       this.totalReparaciones = this.dtReparaciones.filteredData.length;
@@ -344,6 +346,18 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
   abrePDF(idMantenimiento: string, nameFolio: string)
   {
     return URL_SERVICIOS + '/mantenimientos/mantenimiento/'+ idMantenimiento + "/descarga_pdf_folio/" + nameFolio;
+  }
+
+  openDialogGrado(id: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {_id:id};
+    const dialogRef = this.matDialog.open(GradoComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(detalle => {
+      // if (detalle) {
+      //   this.cargaMantenimientos(this.regForm.get('_id').value);
+      // }
+    });
   }
 
   CreaDatosExcel(datos) {

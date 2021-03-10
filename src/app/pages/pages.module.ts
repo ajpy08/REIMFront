@@ -182,6 +182,7 @@ import { FaltantesMaterialComponent } from './almacen/faltantes-material/faltant
 import { ReporteMovimientosComponent } from './almacen/reporte-movimientos/reporte-movimientos.component';
 import { MermasComponent } from './almacen/mermas/mermas.component';
 import { MermaComponent } from './almacen/mermas/merma.component';
+import { GradoComponent } from './maniobras/grado.component';
 
 
 @NgModule({
@@ -296,6 +297,7 @@ import { MermaComponent } from './almacen/mermas/merma.component';
         ReporteMovimientosComponent,
         MermasComponent,
         MermaComponent,
+        GradoComponent,
      ],
     exports: [
         DashboardComponent

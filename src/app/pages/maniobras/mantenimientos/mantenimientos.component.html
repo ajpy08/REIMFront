@@ -78,6 +78,9 @@
                                         <button (click)="eliminaMantenimiento('reparaciones', row._id )" class="btn btn-danger" type="button">
                       <i class="fas fa-trash"></i>
                     </button>
+                                        <button matTooltip="Cambio de Grado" mat-mini-fab class="btn btn-primary" (click)="openDialogGrado(row._id)" type="button">
+                      <i class="fa fa-edit"></i>
+                    </button>
                                     </mat-cell>
                                 </ng-container>
 
@@ -300,10 +303,9 @@
                         </div>
                         <br>
                         <div class="text-right">
-
                             <button (click)="exportAsXLSX(dtAcondicionamientos, 'ACONDICIONAMIENTOS')" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i>
-              </button>
+                              <i class="fas fa-file-excel"></i>
+                            </button>
                         </div>
                         <br>
                         <div class="contenedorPar">
