@@ -1,0 +1,34 @@
+<div class="row animated fadeIn">
+  <div class="col-md">
+    <div class="card card-body">
+      <mat-dialog-content>
+        <h3 class="box-title m-b-0">Contenedor: {{this.maniobra.contenedor}}</h3><br>
+        <div class="row">
+          <div class="col-sm-12">
+            <mat-form-field>
+              <mat-label>Grado</mat-label>
+              <mat-select [(ngModel)]="grado">
+                <mat-option *ngFor="let grado of grados" [value]="grado">
+                  {{grado}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-sm-12 col-xs-12">
+
+            <button type="button" class="btn btn-primary btn-success waves-effect waves-light m-r-10"
+              (click)="guardarGrado()" [disabled]="this.grado==this.maniobra.grado">
+              <i class="fa fa-save"></i>
+              Guardar
+            </button>
+            <button type="button" class="btn btn-danger waves-effect waves-light" (click)="salir()">SALIR</button>
+
+          </div>
+        </div>
+      </mat-dialog-content>
+    </div>
+  </div>
+</div>

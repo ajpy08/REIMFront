@@ -450,6 +450,17 @@ export class ManiobraService {
     );
   }
 
+  cambiaGrado(idManiobra: string, grado: string): Observable<any> {
+    let url = URL_SERVICIOS + '/maniobras/maniobra/' + idManiobra + '/cambio_grado';
+    url += '?token=' + this._usuarioService.token;
+    return this.http.put(url,{grado:grado}).pipe(
+      map((resp: any) => {
+        swal('Datos actualizados con éxito', '', 'success');
+        return resp.maniobra;
+      })
+    );
+  }
+
   cargarManiobras(desde: number = 0): Observable<any> {
     let url = URL_SERVICIOS + '/maniobras?desde=' + desde;
     url += '?token=' + this._usuarioService.token;
