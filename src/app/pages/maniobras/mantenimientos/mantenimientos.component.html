@@ -1,23 +1,25 @@
 <div class="row">
-    <div class="col-sm-2">
-        <mat-checkbox [(ngModel)]="soloFinalizados" (change)="onChangeCheckFinalizados($event)">
-            Finalizados
-        </mat-checkbox>
-    </div>
-    <div class="col-sm-3">
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker" type="text" placeholder="Fecha Inicial" [(ngModel)]="filtroFechaIni" [disabled]='!soloFinalizados' (dateChange)="onChangeDate('fInicial',$event)">
-            <mat-datepicker-toggle matSuffix [for]="picker" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
-            <mat-datepicker #picker disabled="false"></mat-datepicker>
-        </mat-form-field>
-    </div>
-    <div class="col-sm-3">
-        <mat-form-field>
-            <input matInput [matDatepicker]="picker2" type="text" placeholder="Fecha Final" [(ngModel)]="filtroFechaFin" [disabled]='!soloFinalizados' (dateChange)="onChangeDate('fFinal',$event)">
-            <mat-datepicker-toggle matSuffix [for]="picker2" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
-            <mat-datepicker #picker2 disabled="false"></mat-datepicker>
-        </mat-form-field>
-    </div>
+	<div class="col-sm-2">
+		<mat-checkbox [(ngModel)]="soloFinalizados" (change)="onChangeCheckFinalizados($event)">
+			Finalizados
+		</mat-checkbox>
+	</div>
+	<div class="col-sm-3">
+		<mat-form-field>
+			<input matInput [matDatepicker]="picker" type="text" placeholder="Fecha Inicial" [(ngModel)]="filtroFechaIni"
+				[disabled]='!soloFinalizados' (dateChange)="onChangeDate('fInicial',$event)">
+			<mat-datepicker-toggle matSuffix [for]="picker" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
+			<mat-datepicker #picker disabled="false"></mat-datepicker>
+		</mat-form-field>
+	</div>
+	<div class="col-sm-3">
+		<mat-form-field>
+			<input matInput [matDatepicker]="picker2" type="text" placeholder="Fecha Final" [(ngModel)]="filtroFechaFin"
+				[disabled]='!soloFinalizados' (dateChange)="onChangeDate('fFinal',$event)">
+			<mat-datepicker-toggle matSuffix [for]="picker2" [disabled]='!soloFinalizados'></mat-datepicker-toggle>
+			<mat-datepicker #picker2 disabled="false"></mat-datepicker>
+		</mat-form-field>
+	</div>
 
 </div>
 
@@ -26,372 +28,395 @@
 <!-- /////////////////////////////////////// REPARACIONES  ///////////////////////////////////////////////////////////// -->
 <mat-tab-group (selectedTabChange)="onLinkClick($event)">
 
-    <mat-tab label="Reparaciones">
-        <ng-template mat-tab-label>
-            Reparaciones: ( <small>{{totalReparaciones}}</small> )
-        </ng-template>
+	<mat-tab label="Reparaciones">
+		<ng-template mat-tab-label>
+			Reparaciones: ( <small>{{totalReparaciones}}</small> )
+		</ng-template>
 
-        <div class="row animated fadeIn" *ngIf="cargandoR">
-            <div class="col-sm-12">
-                <div class="alert alert-warning text-center">
-                    <strong>Cargando</strong>
-                    <br>
-                    <i class="fas fa-refresh fa-spin fa-2x"></i>
-                    <br>
-                    <span>Espere por favor</span>
-                </div>
-            </div>
-        </div>
+		<div class="row animated fadeIn" *ngIf="cargandoR">
+			<div class="col-sm-12">
+				<div class="alert alert-warning text-center">
+					<strong>Cargando</strong>
+					<br>
+					<i class="fas fa-refresh fa-spin fa-2x"></i>
+					<br>
+					<span>Espere por favor</span>
+				</div>
+			</div>
+		</div>
 
-        <div class="animated fadeIn" *ngIf="!cargandoR">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="example-header mat-elevation-z8">
-                            <mat-form-field>
-                                <input matInput (keyup)="applyFilterReparaciones($event.target.value)" placeholder="Escriba algo para filtrar">
-                            </mat-form-field>
-                        </div>
-                        <div class="text-right">
-                            <button (click)="exportAsXLSX(dtReparaciones,'REPARACIONES')" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i>
-              </button>
-                        </div>
-                        <div class="contenedorParD">
-                            <span class="parpa tex" *ngIf="this.tablaCargarR === true">
-                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
-              </span>
-                        </div>
-                        <div class="catalogo-container mat-elevation-z8">
-
-
-                            <mat-table class="mat-table-medium" [dataSource]="dtReparaciones" #sortReparaciones="matSort" matSort>
-                                <ng-container matColumnDef="actions">
-                                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
-                      <i class="fas fa-camera-retro"></i>
-                    </button>
-                                        <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                                        <button (click)="eliminaMantenimiento('reparaciones', row._id )" class="btn btn-danger" type="button">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                                        <button matTooltip="Cambio de Grado" mat-mini-fab class="btn btn-primary" (click)="openDialogGrado(row._id)" type="button">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                                    </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="folio">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">{{row.folio}}
-                                        <a matTooltip="Descargar Formato PDF" [href]="abrePDF(row._id,row.fileFolio)" target="_blank" *ngIf="row.fileFolio">
-                                            <img width="20" height="20" src="\assets\images\icon\pdf_32x32.png">
-                                        </a>
-                                    </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="observacionesCompleto">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="maniobra.contenedor">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="maniobra.tipo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="maniobra.peso">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="maniobra.grado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="maniobra.viaje.viaje">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
-                                </ng-container>
-
-                                <ng-container matColumnDef="fInicial">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="fFinal">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="finalizado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
-                                    </mat-cell>
-                                </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumnsReparaciones" class="encabezado"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsReparaciones;"></mat-row>
-                            </mat-table>
-                        </div>
-                        <mat-paginator #pagReparaciones [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]></mat-paginator>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </mat-tab>
-    /////////////////////////////////////// LAVADOS ///////////////////////////////////////////////////////////// /////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
+		<div class="animated fadeIn" *ngIf="!cargandoR">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="example-header mat-elevation-z8">
+							<mat-form-field>
+								<input matInput (keyup)="applyFilterReparaciones($event.target.value)"
+									placeholder="Escriba algo para filtrar">
+							</mat-form-field>
+						</div>
+						<div class="text-right">
+							<button (click)="exportAsXLSX(dtReparaciones,'REPARACIONES')" class="btn btn-success m-r-5">
+								<i class="fas fa-file-excel"></i>
+							</button>
+						</div>
+						<div class="contenedorParD">
+							<span class="parpa tex" *ngIf="this.tablaCargarR === true">
+								<i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+							</span>
+						</div>
+						<div class="catalogo-container mat-elevation-z8">
 
 
-    <mat-tab label="Lavados">
-        <ng-template mat-tab-label>
-            Lavados ( <small>{{totalLavados}}</small> )
-        </ng-template>
-        <div class="row animated fadeIn" *ngIf="cargandoL">
-            <div class="col-sm-12">
-                <div class="alert alert-warning text-center">
-                    <strong>Cargando</strong>
-                    <br>
-                    <i class="fas fa-refresh fa-spin fa-2x"></i>
-                    <br>
-                    <span>Espere por favor</span>
-                </div>
-            </div>
-        </div>
-        <div class="animated fadeIn" *ngIf="!cargandoL">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="example-header mat-elevation-z8">
-                            <mat-form-field>
-                                <input matInput (keyup)="applyFilterLavados($event.target.value)" placeholder="Escriba algo para filtrar">
-                            </mat-form-field>
-                        </div>
-                        <br>
-                        <div class="text-right">
+							<mat-table class="mat-table-medium" [dataSource]="dtReparaciones" #sortReparaciones="matSort" matSort>
+								<ng-container matColumnDef="actions">
+									<mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<button matTooltip="Ver Fotografías"
+											[routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+											<i class="fas fa-camera-retro"></i>
+										</button>
+										<button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
+											class="btn btn-primary m-r-5">
+											<i class="fa fa-edit"></i>
+										</button>
+										<button (click)="eliminaMantenimiento('reparaciones', row._id )" class="btn btn-danger"
+											type="button">
+											<i class="fas fa-trash"></i>
+										</button>
 
-                            <button (click)="exportAsXLSX(dtLavados,'LAVADOS')" class="btn btn-success m-r-5">
-                <i class="fas fa-file-excel"></i>
-              </button>
-                        </div>
-                        <div class="contenedorPar">
-                            <span class="parpa tex" *ngIf="this.tablaCargarL === true">
-                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
-              </span>
-                        </div>
-                        <br>
-                        <div class="catalogo-container mat-elevation-z8">
-                            <mat-table class="mat-table-medium" [dataSource]="dtLavados" #sortLavados="matSort" matSort>
-                                <ng-container matColumnDef="actions">
-                                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
-                      <i class="fas fa-camera-retro"></i>
-                    </button>
-                                        <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                                        <button (click)="eliminaMantenimiento('lavados', row._id )" class="btn btn-danger" type="button">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                                    </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="folio">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="observacionesCompleto">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="tipoLavado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Lavado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.tipoLavado}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.contenedor">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.tipo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.peso">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
-                                </ng-container>
+									</mat-cell>
+								</ng-container>
 
-                                <ng-container matColumnDef="maniobra.grado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
-                                </ng-container>
+								<ng-container matColumnDef="folio">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+									<mat-cell *matCellDef="let row">{{row.folio}}
+										<a matTooltip="Descargar Formato PDF" [href]="abrePDF(row._id,row.fileFolio)" target="_blank"
+											*ngIf="row.fileFolio">
+											<img width="20" height="20" src="\assets\images\icon\pdf_32x32.png">
+										</a>
+									</mat-cell>
+								</ng-container>
 
-                                <ng-container matColumnDef="maniobra.viaje.viaje">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
-                                </ng-container>
+								<ng-container matColumnDef="observacionesCompleto">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
+								</ng-container>
 
-                                <ng-container matColumnDef="fInicial">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="fFinal">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="finalizado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
-                                    </mat-cell>
-                                </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumnsLavados" class="encabezado"></mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsLavados;"></mat-row>
-                            </mat-table>
-                        </div>
-                        <mat-paginator #pagLavados [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-                        </mat-paginator>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </mat-tab>
+								<ng-container matColumnDef="maniobra.contenedor">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.tipo">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.peso">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.grado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+									<mat-cell *matCellDef="let row">{{row.maniobra.grado}}
+										<i class="fa fa-edit" (click)="openDialogGrado(row.maniobra._id)"></i>
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.viaje.buque.nombre">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.viaje.viaje">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="fInicial">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="fFinal">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="finalizado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)">
+										</mat-slide-toggle>
+									</mat-cell>
+								</ng-container>
+								<mat-header-row *matHeaderRowDef="displayedColumnsReparaciones" class="encabezado"></mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayedColumnsReparaciones;"></mat-row>
+							</mat-table>
+						</div>
+						<mat-paginator #pagReparaciones [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+							[showFirstLastButtons]></mat-paginator>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</mat-tab>
+	/////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
+	/////////////////////////////////////// LAVADOS /////////////////////////////////////////////////////////////
 
 
-    <!-- /////////////////////////////////////// Acondicionamiento ///////////////////////////////////////////////////////////// -->
+	<mat-tab label="Lavados">
+		<ng-template mat-tab-label>
+			Lavados ( <small>{{totalLavados}}</small> )
+		</ng-template>
+		<div class="row animated fadeIn" *ngIf="cargandoL">
+			<div class="col-sm-12">
+				<div class="alert alert-warning text-center">
+					<strong>Cargando</strong>
+					<br>
+					<i class="fas fa-refresh fa-spin fa-2x"></i>
+					<br>
+					<span>Espere por favor</span>
+				</div>
+			</div>
+		</div>
+		<div class="animated fadeIn" *ngIf="!cargandoL">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="example-header mat-elevation-z8">
+							<mat-form-field>
+								<input matInput (keyup)="applyFilterLavados($event.target.value)"
+									placeholder="Escriba algo para filtrar">
+							</mat-form-field>
+						</div>
+						<br>
+						<div class="text-right">
+
+							<button (click)="exportAsXLSX(dtLavados,'LAVADOS')" class="btn btn-success m-r-5">
+								<i class="fas fa-file-excel"></i>
+							</button>
+						</div>
+						<div class="contenedorPar">
+							<span class="parpa tex" *ngIf="this.tablaCargarL === true">
+								<i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+							</span>
+						</div>
+						<br>
+						<div class="catalogo-container mat-elevation-z8">
+							<mat-table class="mat-table-medium" [dataSource]="dtLavados" #sortLavados="matSort" matSort>
+								<ng-container matColumnDef="actions">
+									<mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<button matTooltip="Ver Fotografías"
+											[routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+											<i class="fas fa-camera-retro"></i>
+										</button>
+										<button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
+											class="btn btn-primary m-r-5">
+											<i class="fa fa-edit"></i>
+										</button>
+										<button (click)="eliminaMantenimiento('lavados', row._id )" class="btn btn-danger" type="button">
+											<i class="fas fa-trash"></i>
+										</button>
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="folio">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="observacionesCompleto">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="tipoLavado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Lavado</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.tipoLavado}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.contenedor">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.tipo">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.peso">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.grado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.grado}}
+										<i class="fa fa-edit" (click)="openDialogGrado(row.maniobra._id)"></i>
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.viaje.buque.nombre">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.viaje.viaje">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="fInicial">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="fFinal">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="finalizado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)">
+										</mat-slide-toggle>
+									</mat-cell>
+								</ng-container>
+								<mat-header-row *matHeaderRowDef="displayedColumnsLavados" class="encabezado"></mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayedColumnsLavados;"></mat-row>
+							</mat-table>
+						</div>
+						<mat-paginator #pagLavados [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
+						</mat-paginator>
+					</div>
+				</div>
+			</div>
+		</div>
+	</mat-tab>
 
 
-    <mat-tab label="Acondicionamientos">
-        <ng-template mat-tab-label>
-            Acondicionamientos ( <small>{{totalAcondicionamientos}}</small> )
-        </ng-template>
-        <div class="row animated fadeIn" *ngIf="cargandoA">
-            <div class="col-sm-12">
-                <div class="alert alert-warning text-center">
-                    <strong>Cargando</strong>
-                    <br>
-                    <i class="fas fa-refresh fa-spin fa-2x"></i>
-                    <br>
-                    <span>Espere por favor</span>
-                </div>
-            </div>
-        </div>
-        <div class="animated fadeIn" *ngIf="!cargandoA">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="example-header mat-elevation-z8">
-                            <mat-form-field>
-                                <input matInput (keyup)="applyFilterAcondicionamientos($event.target.value)" placeholder="Escriba algo para filtrar">
-                            </mat-form-field>
-                        </div>
-                        <br>
-                        <div class="text-right">
-                            <button (click)="exportAsXLSX(dtAcondicionamientos, 'ACONDICIONAMIENTOS')" class="btn btn-success m-r-5">
-                              <i class="fas fa-file-excel"></i>
-                            </button>
-                        </div>
-                        <br>
-                        <div class="contenedorPar">
-                            <span class="parpa tex" *ngIf="this.tablaCargarA === true">
-                <i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
-              </span>
-                        </div>
-                        <div class="catalogo-container mat-elevation-z8">
-                            <mat-table class="mat-table-medium" [dataSource]="dtAcondicionamientos" #sortAcondicionamientos="matSort" matSort>
-                                <ng-container matColumnDef="actions">
-                                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <button matTooltip="Ver Fotografías" [routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
-                      <i class="fas fa-camera-retro"></i>
-                    </button>
-                                        <button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]" class="btn btn-primary m-r-5">
-                      <i class="fa fa-edit"></i>
-                    </button>
-                                        <button (click)="eliminaMantenimiento('acondicionamientos', row._id )" class="btn btn-danger" type="button">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                                    </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="folio">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="observacionesCompleto">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="cambioGrado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>CambioGrado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.cambioGrado?'CAMBIO GRADO':'BASICO'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.contenedor">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.tipo">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.peso">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
-                                </ng-container>
+	<!-- /////////////////////////////////////// Acondicionamiento ///////////////////////////////////////////////////////////// -->
 
-                                <ng-container matColumnDef="maniobra.grado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra.grado}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="maniobra.viaje.buque.nombre">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
-                                </ng-container>
 
-                                <ng-container matColumnDef="maniobra.viaje.viaje">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
-                                </ng-container>
+	<mat-tab label="Acondicionamientos">
+		<ng-template mat-tab-label>
+			Acondicionamientos ( <small>{{totalAcondicionamientos}}</small> )
+		</ng-template>
+		<div class="row animated fadeIn" *ngIf="cargandoA">
+			<div class="col-sm-12">
+				<div class="alert alert-warning text-center">
+					<strong>Cargando</strong>
+					<br>
+					<i class="fas fa-refresh fa-spin fa-2x"></i>
+					<br>
+					<span>Espere por favor</span>
+				</div>
+			</div>
+		</div>
+		<div class="animated fadeIn" *ngIf="!cargandoA">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="example-header mat-elevation-z8">
+							<mat-form-field>
+								<input matInput (keyup)="applyFilterAcondicionamientos($event.target.value)"
+									placeholder="Escriba algo para filtrar">
+							</mat-form-field>
+						</div>
+						<br>
+						<div class="text-right">
+							<button (click)="exportAsXLSX(dtAcondicionamientos, 'ACONDICIONAMIENTOS')" class="btn btn-success m-r-5">
+								<i class="fas fa-file-excel"></i>
+							</button>
+						</div>
+						<br>
+						<div class="contenedorPar">
+							<span class="parpa tex" *ngIf="this.tablaCargarA === true">
+								<i class="fa fa-times-circle-o fa_customX fa-2x" aria-hidden="true"></i>SIN DATOS
+							</span>
+						</div>
+						<div class="catalogo-container mat-elevation-z8">
+							<mat-table class="mat-table-medium" [dataSource]="dtAcondicionamientos" #sortAcondicionamientos="matSort"
+								matSort>
+								<ng-container matColumnDef="actions">
+									<mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<button matTooltip="Ver Fotografías"
+											[routerLink]="['/mantenimientos/mantenimiento/', row._id,'fotos']" class="btn btn-primary m-r-5">
+											<i class="fas fa-camera-retro"></i>
+										</button>
+										<button matTooltip="Editar Mantenimiento" [routerLink]="['/mantenimientos/mantenimiento/', row._id]"
+											class="btn btn-primary m-r-5">
+											<i class="fa fa-edit"></i>
+										</button>
+										<button (click)="eliminaMantenimiento('acondicionamientos', row._id )" class="btn btn-danger"
+											type="button">
+											<i class="fas fa-trash"></i>
+										</button>
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="folio">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Folio</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.folio}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="observacionesCompleto">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Observaciones</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.observacionesCompleto}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="cambioGrado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>CambioGrado</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.cambioGrado?'CAMBIO GRADO':'BASICO'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.contenedor">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Contenedor</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.contenedor}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.tipo">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.tipo}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.peso">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Peso</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.peso}} </mat-cell>
+								</ng-container>
 
-                                <ng-container matColumnDef="fInicial">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="fFinal">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
-                                    <mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
-                                </ng-container>
-                                <ng-container matColumnDef="finalizado">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
-                                    <mat-cell *matCellDef="let row">
-                                        <mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)"></mat-slide-toggle>
-                                    </mat-cell>
-                                </ng-container>
-                                <mat-header-row *matHeaderRowDef="displayedColumnsAcondicionamientos" class="encabezado">
-                                </mat-header-row>
-                                <mat-row *matRowDef="let row; columns: displayedColumnsAcondicionamientos;"></mat-row>
-                            </mat-table>
-                        </div>
-                        <mat-paginator #pagAcondicionamientos [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50" [showFirstLastButtons]>
-                        </mat-paginator>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </mat-tab>
+								<ng-container matColumnDef="maniobra.grado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Grado</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra.grado}}
+										<i class="fa fa-edit" (click)="openDialogGrado(row.maniobra._id)"></i>
+									</mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="maniobra.viaje.buque.nombre">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Buque</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.buque?.nombre}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="maniobra.viaje.viaje">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Viaje</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.maniobra?.viaje?.viaje}} </mat-cell>
+								</ng-container>
+
+								<ng-container matColumnDef="fInicial">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Inicio</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fInicial | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="fFinal">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>Fin</mat-header-cell>
+									<mat-cell *matCellDef="let row"> {{row.fFinal | date: 'dd/MM/yyyy'}} </mat-cell>
+								</ng-container>
+								<ng-container matColumnDef="finalizado">
+									<mat-header-cell *matHeaderCellDef mat-sort-header>finalizado</mat-header-cell>
+									<mat-cell *matCellDef="let row">
+										<mat-slide-toggle [checked]="row.finalizado" (change)="onChangeFinaliza($event,row._id)">
+										</mat-slide-toggle>
+									</mat-cell>
+								</ng-container>
+								<mat-header-row *matHeaderRowDef="displayedColumnsAcondicionamientos" class="encabezado">
+								</mat-header-row>
+								<mat-row *matRowDef="let row; columns: displayedColumnsAcondicionamientos;"></mat-row>
+							</mat-table>
+						</div>
+						<mat-paginator #pagAcondicionamientos [pageSizeOptions]="[5, 10, 25, 50, 100]" [pageSize]="50"
+							[showFirstLastButtons]>
+						</mat-paginator>
+					</div>
+				</div>
+			</div>
+		</div>
+	</mat-tab>
 </mat-tab-group>

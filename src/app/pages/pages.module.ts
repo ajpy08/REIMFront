@@ -297,7 +297,7 @@ import { GradoComponent } from './maniobras/grado.component';
         ReporteMovimientosComponent,
         MermasComponent,
         MermaComponent,
-        GradoComponent,
+        GradoComponent
      ],
     exports: [
         DashboardComponent
@@ -338,7 +338,7 @@ import { GradoComponent } from './maniobras/grado.component';
     providers: [{ provide: MatPaginatorIntl, useClass: PaginatorEspañol }],
     entryComponents: [AsignarFacturaComponent, BLBookingDialog, InfoDialogComponent, ImpuestosCFDIComponent, ManiobrasCFDIComponent, PdfFacturacionComponent,
         PdfNotasDeCreditoComponent, NotasDeCreditoComponent, DetallePagoComponent, DocumentoRelacionadoComponent, PagoComponent, FacturasPpdComponent,
-        DetalleComponent, DetalleMermaComponent ]
+        DetalleComponent, DetalleMermaComponent, GradoComponent, MantenimientoComponent ]
 })
 
 export class PagesModules { }

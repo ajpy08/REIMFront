@@ -352,13 +352,22 @@ export class MantenimientosComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {_id:id};
     const dialogRef = this.matDialog.open(GradoComponent, dialogConfig);
-
     dialogRef.afterClosed().subscribe(detalle => {
-      // if (detalle) {
-      //   this.cargaMantenimientos(this.regForm.get('_id').value);
-      // }
+      if (detalle) {
+        const index = this.dtReparaciones.data.findIndex(x => x.maniobra._id==id);
+        if (index>=0) this.dtReparaciones.data[index].maniobra.grado = detalle;
+
+        const index2 = this.dtLavados.data.findIndex(x => x.maniobra._id==id);
+        if (index2>=0) this.dtLavados.data[index2].maniobra.grado = detalle;
+
+        const index3 = this.dtAcondicionamientos.data.findIndex(x => x.maniobra._id==id);
+        if (index3>=0) this.dtAcondicionamientos.data[index3].maniobra.grado = detalle;
+
+      }
     });
   }
+
+  
 
   CreaDatosExcel(datos) {
     datos.forEach(b => {
