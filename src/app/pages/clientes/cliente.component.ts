@@ -127,7 +127,7 @@ export class ClienteComponent implements OnInit {
       // rfc: ['', [Validators.required, Validators.minLength(12)]],
       rfc: [''],
       razonSocial: ['', [Validators.required, Validators.minLength(5)]],
-      nombreComercial: [''],
+      nombreComercial: ['', [Validators.required]],
       calle: [''],
       noExterior: [''],
       noInterior: [''],
