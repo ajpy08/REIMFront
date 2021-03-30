@@ -44,12 +44,12 @@
                       (change)="consultaManiobrasDescargaVacios()">Ya Descargados
                     </mat-checkbox>
                   </div>
-                  <div class="col-sm">
+                  <!-- <div class="col-sm">
                     <mat-checkbox [(ngModel)]="checkedYaLavados" #hFinLavadoVacios
                       (change)="consultaManiobrasDescargaVacios()">
                       Ya Lavados
                     </mat-checkbox>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-sm-5">
                   <button [disabled]="this.facturacionService.aFacturarV.length <= 0"
@@ -294,11 +294,11 @@
                       (change)="consultaManiobrasDescargaVaciosL()">Ya Lavados
                     </mat-checkbox>
                   </div>
-                  <div class="col-sm">
+                  <!-- <div class="col-sm">
                     <mat-checkbox [(ngModel)]="checkedConReparacion" #conReparacionR
                       (change)="consultaManiobrasDescargaVaciosL()">Con Reparacion
                     </mat-checkbox>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-sm">
                 </div>
@@ -324,8 +324,11 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-
-
+              </div>
+              <div *ngIf="faltanLavado.length > 0" class="row">
+                <div class="col-sm">
+                  <p>Le falta Lavado a : {{faltanLavado.length}} ({{ faltanLavado }})</p>
+                </div>
               </div>
             </div><br>
             <h3 class="card-title">Maniobras de Lavado Vacios( <small>{{totalRegistrosLavadoVacios}}</small> )</h3>
@@ -544,11 +547,11 @@
                       (change)="consultaManiobrasDescargaVaciosR()">Ya Descargados
                     </mat-checkbox>
                   </div>
-                  <div class="col-sm">
+                  <!-- <div class="col-sm">
                     <mat-checkbox [(ngModel)]="checkedYaLavadosR" #hFinLavadoVaciosR
                       (change)="consultaManiobrasDescargaVaciosR()">Ya Lavados
                     </mat-checkbox>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-sm">
                 </div>
@@ -798,11 +801,11 @@
                       (change)="consultaManiobrasDescargaVaciosA()">Ya Descargados
                     </mat-checkbox>
                   </div>
-                  <div class="col-sm">
+                  <!-- <div class="col-sm">
                     <mat-checkbox [(ngModel)]="checkedYaLavadosA" #hFinLavadoVaciosA
                       (change)="consultaManiobrasDescargaVaciosA()">Ya Lavados
                     </mat-checkbox>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-sm">
                 </div>

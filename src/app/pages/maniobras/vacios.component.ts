@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 import { FacturacionService } from '../facturacion/facturacion.service';
 import { Usuario } from '../usuarios/usuario.model';
 import { ROLES, ESTADOS_CONTENEDOR } from 'src/app/config/config';
+import { VariasService } from '../../services/shared/varias.service';
 
 const moment = _moment;
 
@@ -60,15 +61,13 @@ export const MY_FORMATS = {
 })
 export class VaciosComponent implements OnInit {
   date = new FormControl(moment());
-  // maniobras: any[] = [];
-  // maniobrasSeleccionadas: string[] = [];
-  maniobrasSinFacturaVacios: any[] = [];
-  maniobrasSinFacturaLavadoVacios: any[] = [];
-  maniobrasSinFacturaReparacionVacios: any[] = [];
+  // maniobrasSinFacturaVacios: any[] = [];
+  // maniobrasSinFacturaLavadoVacios: any[] = [];
+  // maniobrasSinFacturaReparacionVacios: any[] = [];
 
-  maniobrasVaciosDescargadas: any[] = [];
-  maniobrasVaciosLavadoDescargadas: any[] = [];
-  maniobrasVaciosReparacionDescargadas: any[] = [];
+  // maniobrasVaciosDescargadas: any[] = [];
+  // maniobrasVaciosLavadoDescargadas: any[] = [];
+  // maniobrasVaciosReparacionDescargadas: any[] = [];
 
   ManiobrasVaciosExcel = [];
   ManiobrasVaciosLavadoExcel = [];
@@ -161,7 +160,8 @@ export class VaciosComponent implements OnInit {
   idProdServ = '5e876ada96bb521c1429f763';
   idProdServL = '5e876b0396bb521c1429f764';
   idProdServR = '5e876b4496bb521c1429f766';
-  usuarioLogueado = new Usuario();
+  usuarioLogueado = new Usuario();  
+  faltanLavado = [];
 
   constructor(
     public _maniobraService: ManiobraService,
@@ -220,7 +220,8 @@ export class VaciosComponent implements OnInit {
   }
 
   consultaManiobrasDescargaVaciosL() {
-    let maniobrasLavado = [];
+    let maniobrasLavado = [];    
+    let tieneLavado = false;
     const cargaDescarga = 'D';
     this._maniobraService
       .getManiobrasVacios(
@@ -235,31 +236,85 @@ export class VaciosComponent implements OnInit {
         undefined
       )
       .subscribe(maniobras => {
-        // console.log('Por facturar ' + this.checkedPorFacturarL);
-        // console.log('Descargados ' + this.checkedHDescargaL);
-        // console.log(maniobras.maniobras);
-        maniobras.maniobras.forEach(m => {
-          this.mantenimientoService.getMantenimientosxManiobra(m._id).subscribe(x => {
-            x.mantenimientos.forEach(mantenimiento => {
-              if (mantenimiento.tipoMantenimiento === 'LAVADO') {
-                m.lavado = mantenimiento.tipoLavado;
-                if (this.checkedYaLavadosL) {
-                  if (mantenimiento.finalizado) {
+        let datos = maniobras.maniobras;
+
+        const start = async () => {
+          await VariasService.asyncForEach(datos, async (m) => {
+
+            const mantenimientos: any = await this.mantenimientoService.getMantenimientosxManiobraAsync(m._id);
+            if (mantenimientos.mantenimientos.length > 0) {
+
+              const pos = mantenimientos.mantenimientos.findIndex(mant => mant.tipoMantenimiento === 'LAVADO');
+              if (pos < 0) {
+                this.faltanLavado.push(m.contenedor);
+              }
+
+              mantenimientos.mantenimientos.forEach(mantenimiento => {
+                if (mantenimiento.tipoMantenimiento === 'LAVADO') {
+                  tieneLavado = true;
+                  m.lavado = mantenimiento.tipoLavado;
+                  if (this.checkedYaLavadosL) {
+                    if (mantenimiento.finalizado) {
+                      maniobrasLavado.push(m);
+                    }
+                  } else {
                     maniobrasLavado.push(m);
                   }
-                } else {
-                  maniobrasLavado.push(m);
-                }
-              }
-            });
-            if (maniobrasLavado.length > 0) {
-              this.dataSourceLavadoVacios = new MatTableDataSource(maniobrasLavado);
-              this.dataSourceLavadoVacios.sort = this.MatSortLavado;
-              this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
-              this.totalRegistrosLavadoVacios = maniobrasLavado.length;
+                } 
+              });
+              if (maniobrasLavado.length > 0) {
+                this.dataSourceLavadoVacios = new MatTableDataSource(maniobrasLavado);
+                this.dataSourceLavadoVacios.sort = this.MatSortLavado;
+                this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
+                this.totalRegistrosLavadoVacios = maniobrasLavado.length;
+              }              
+            } else {
+              this.faltanLavado.push(m.contenedor);
             }
           });
-        });
+        };
+        start();
+
+
+
+        // maniobras.maniobras.forEach(m => {
+        //   if (m.contenedor == 'LEAU4906942') {
+        //     console.log('Aqui');
+        //   }
+        //   tieneLavado = false;
+        //   this.mantenimientoService.getMantenimientosxManiobra(m._id).subscribe(x => {
+        //     x.mantenimientos.forEach(mantenimiento => {
+        //       if (mantenimiento.tipoMantenimiento === 'LAVADO') {
+        //         tieneLavado = true;
+        //         m.lavado = mantenimiento.tipoLavado;
+        //         if (this.checkedYaLavadosL) {
+        //           if (mantenimiento.finalizado) {
+        //             maniobrasLavado.push(m);
+        //           }
+        //         } else {
+        //           maniobrasLavado.push(m);
+        //         }
+        //       } else {
+        //         // const pos = maniobrasLavado.findIndex(a => a.contenedor === m.contenedor);
+        //         // if (pos < 0) {
+        //         //   faltanLavado.push(m.contenedor);
+        //         // }
+        //       }
+        //     });
+
+        //     if (maniobrasLavado.length > 0) {
+        //       this.diferenciaLavado = maniobras.maniobras.length - maniobrasLavado.length;
+        //       this.dataSourceLavadoVacios = new MatTableDataSource(maniobrasLavado);
+        //       this.dataSourceLavadoVacios.sort = this.MatSortLavado;
+        //       this.dataSourceLavadoVacios.paginator = this.MatPaginatorLavado;
+        //       this.totalRegistrosLavadoVacios = maniobrasLavado.length;
+        //     }
+
+        //   });
+        //   // if (!tieneLavado) {
+        //   //   faltanLavado.push(m.contenedor);
+        //   // }
+        // });
         // console.log(maniobrasLavado);
         this.dataSourceLavadoVacios = new MatTableDataSource(maniobrasLavado);
         this.dataSourceLavadoVacios.sort = this.MatSortLavado;
