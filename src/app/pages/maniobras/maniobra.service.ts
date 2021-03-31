@@ -209,9 +209,9 @@ export class ManiobraService {
       );
     }
 
-    if (sinFactura) {
+    // if (sinFactura) {
       params = params.append('sinFactura', sinFactura.toString());
-    }
+    // }
 
     if (descargados) {
       params = params.append('descargados', descargados.toString());
@@ -222,7 +222,7 @@ export class ManiobraService {
     }
 
     return this.http.get(url, { params: params });
-  }
+  }  
 
   // Excepto Vacios
   getOtrasManiobras(

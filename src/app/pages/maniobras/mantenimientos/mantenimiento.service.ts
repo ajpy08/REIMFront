@@ -127,6 +127,15 @@ subirPDFFolio(idMantenimiento:string,archivo: File): Observable<any> {
     return this.getMantenimientos('', idManiobra);
   }
 
+  async getMantenimientosxManiobraAsync(idManiobra: string) {
+    let url = URL_SERVICIOS + '/mantenimientos/';
+    url += '?token=' + this._usuarioService.token;
+    let params = new HttpParams();
+    if (idManiobra) params = params.append('maniobra', idManiobra);
+    
+    return await this.http.get(url, { params: params }).toPromise();
+  }
+
   getMantenimientosxTipo(tipoMantenimiento: string, finalizados: string, fInicial?: any, fFinal?: any): Observable<any> {
     return (this.getMantenimientos(tipoMantenimiento, '', finalizados, fInicial, fFinal));
   }
