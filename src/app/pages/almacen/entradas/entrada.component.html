@@ -25,7 +25,7 @@
               <mat-form-field>
                 <mat-select placeholder="Seleccione un Proveedor" formControlName="proveedor" name="proveedor">
                   <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor._id">
-                    {{ proveedor.razonSocial }}
+                    {{ proveedor.alias }}
                   </mat-option>
                 </mat-select>
                 <mat-error *ngIf="proveedor.touched && proveedor.invalid">
