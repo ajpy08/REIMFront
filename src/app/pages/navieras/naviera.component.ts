@@ -80,7 +80,7 @@ export class NavieraComponent implements OnInit {
       usoCFDI: ['', [Validators.required]],
       caat: ['', [Validators.required]],
       activo: [true, [Validators.required]],
-      nombreComercial: [''],
+      nombreComercial: ['', [Validators.required]],
       _id: ['']
     });
   }

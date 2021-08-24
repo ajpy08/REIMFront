@@ -10,7 +10,7 @@ declare var swal: any;
 
 @Injectable()
 export class VerificaTokenGuard implements CanActivateChild {
-  socket = io(URL_SOCKET_IO, PARAM_SOCKET );
+  socket = io(URL_SOCKET_IO, PARAM_SOCKET);
   constructor(
     public _usuarioService: UsuarioService,
     public router: Router
@@ -77,10 +77,14 @@ export class VerificaTokenGuard implements CanActivateChild {
   }
 
   logout() {
-    this._usuarioService.updateStatusUser(this._usuarioService.usuario).subscribe((usuario) => {
-      this._usuarioService.logout();
-      this.socket.emit('logout-user', usuario);
-    });
+    // puse la validacion de este if, por que cuando se queda abierta la sesion y el token caduca
+    // hace esta peticion desde verifica-token.guard.ts y usuario_id es undefined y marca error.
+    if (this._usuarioService.usuario && this._usuarioService.usuario._id) {
+      this._usuarioService.updateStatusUser(this._usuarioService.usuario).subscribe((usuario) => {
+        this.socket.emit('logout-user', usuario);
+      });
+    }
+    this._usuarioService.logout();
   }
 
 

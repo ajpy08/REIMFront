@@ -591,86 +591,86 @@ const pagesRoutes: Routes = [
         path: 'materiales',
         component: MaterialesComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Materiales', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Materiales', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'materiales/material/:id',
         component: MaterialComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualizacion de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualizacion de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'entradas',
         component: EntradasComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Entradas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Entradas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'entradas/entrada/:id',
         component: EntradaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualizacion de Entrada', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'mermas',
         component: MermasComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Mermas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Mermas', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'mermas/merma/:id',
         component: MermaComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualizacion de Merma', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualizacion de Merma', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'proveedores',
         component: ProveedoresComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Proveedores', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'proveedores/proveedor/:id',
         component: ProveedorComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualizacion de Proveedor', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     
     {
         path: 'mantenimientos',
         component: MantenimientosComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'mantenimientos/mantenimiento/:id',
         component: MantenimientoComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Actualización de Mantenimiento', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'mantenimientos/mantenimiento/:id/fotos',
         component: Fotos2Component,
         canActivate: [REIMGuard],
-        data: { titulo: 'Fotos de Mantenimientos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Fotos de Mantenimientos', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },    
     {
         path: 'inventario-material',
         component: InventarioMaterialComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Inventario de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Inventario de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'faltante-material',
         component: FaltantesMaterialComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Catálogo de Faltantes de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
     {
         path: 'reporte-movimientos',
         component: ReporteMovimientosComponent,
         canActivate: [REIMGuard],
-        data: { titulo: 'Reporte de Movimientos de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE] }
+        data: { titulo: 'Reporte de Movimientos de Material', roles: [ROLES.ADMIN_ROLE, ROLES.PATIOADMIN_ROLE, ROLES.PATIO_ROLE] }
     },
 
 

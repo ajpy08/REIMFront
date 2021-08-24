@@ -138,11 +138,9 @@ export class UsuarioService {
   }
 
   updateStatusUser(usuario) {
-    // if (this.usuario) {
     let url = URL_SERVICIOS + '/usuarios/usuario/' + usuario._id + '/user/logout';
     url += '?token=' + this.token;
     return this.http.put(url, usuario);
-    // }
   }
 
   login(usuario: Usuario, recordar: boolean = false, urlWithoutLogin: string): Observable<any> {

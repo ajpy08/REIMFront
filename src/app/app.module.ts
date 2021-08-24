@@ -76,16 +76,32 @@ export class SentryErrorHandler implements ErrorHandler {
   }
 
   handleError(error) {
-    Sentry.captureException(error.originalError || error);
+    /* #region  Borrar esto si falla probando para revisar error de chuck */
+    const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+
+    if (error.message && chunkFailedMessage.test(error.message)) {
+      window.location.reload();
+    } else {
+      const credenciales = 'Credenciales incorrectas';
+      if (error.error.mensaje && !error.error.mensaje.includes(credenciales)) {
+        Sentry.captureException(error.originalError || error);
+      }
+    }
+    /* #endregion */
+
+    // Sentry.captureException(error.originalError || error);
   }
 }
 
 
 export function getErrorHandler(): ErrorHandler {
+
   if (environment.production) {
+    // Entra Sentry en acción
     // return new ErrorHandler();
     return new SentryErrorHandler();
   }
+  // Excepciones locales
   return new ErrorHandler();
 }
 

@@ -186,7 +186,8 @@ export class CamionesComponent implements OnInit {
   crearDatosExcel(datos) {
     datos.forEach(d => {
       const camiones = {
-        Nombre_Comercial: d.transportista.nombreComercial,
+        Nombre_Comercial: d.transportista.nombreComercial !== undefined ? d.transportista.nombreComercial : '',
+        // nombreComercial : d.transportista.nombreComercial,
         No_Economico: d.noEconomico,
         Placa: d.placa,
         VigenciaSeguro: d.vigenciaSeguro
